@@ -1,8 +1,8 @@
-import { emptyInput } from '../types';
+import { emptyInput, type WeaponId } from '../types';
 import type { Simulation } from '../simulation/Simulation';
 export class BrowserInput {
   state=emptyInput();private keys=new Set<string>();private destroyed=false;private fallbackAttempted=false;
-  constructor(private canvas:HTMLCanvasElement,private simulation:Simulation,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void){
+  constructor(private canvas:HTMLCanvasElement,private simulation:Simulation,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onWeapons:()=>void=()=>{},private onWeapon:(id:WeaponId)=>void=()=>{}){
     document.addEventListener('keydown',this.keyDown);document.addEventListener('keyup',this.keyUp);
     document.addEventListener('mousemove',this.move);document.addEventListener('mousedown',this.mouseDown);document.addEventListener('mouseup',this.mouseUp);
     document.addEventListener('pointerlockchange',this.lockChange);document.addEventListener('pointerlockerror',this.lockError);
@@ -20,14 +20,17 @@ export class BrowserInput {
     try{await this.canvas.requestPointerLock();}catch{this.onError('마우스 잠금이 차단되었습니다. 새 창에서 열고 다시 클릭하세요.');}}
   reset(){this.keys.clear();Object.assign(this.state,emptyInput());}
   private keyDown=(event:KeyboardEvent)=>{
-    if(!this.locked)return;if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ControlLeft','ControlRight','Space','KeyR'].includes(event.code))event.preventDefault();
-    this.keys.add(event.code);if(event.code==='Space'&&!event.repeat)this.state.jump=true;if(event.code==='KeyR'&&!event.repeat)this.state.reload=true;this.updateAxes();
+    if(!this.locked)return;const b=this.simulation.settings.bindings;
+    if(Object.values(b).includes(event.code)||['Digit1','Digit2','Digit3'].includes(event.code))event.preventDefault();
+    if(event.code===b.weapons&&!event.repeat){this.reset();document.exitPointerLock();this.onWeapons();return;}
+    if(!event.repeat&&['Digit1','Digit2','Digit3'].includes(event.code)){this.reset();this.onWeapon((['rifleA','rifleB','sheriff'] as const)[Number(event.code.slice(-1))-1]);return;}
+    this.keys.add(event.code);if(event.code===b.jump&&!event.repeat)this.state.jump=true;if(event.code===b.reload&&!event.repeat)this.state.reload=true;this.updateAxes();
   };
   private keyUp=(event:KeyboardEvent)=>{this.keys.delete(event.code);this.updateAxes();};
-  private updateAxes(){this.state.forward=Number(this.keys.has('KeyW'))-Number(this.keys.has('KeyS'));this.state.strafe=Number(this.keys.has('KeyD'))-Number(this.keys.has('KeyA'));this.state.walk=this.keys.has('ShiftLeft')||this.keys.has('ShiftRight');this.state.crouch=this.keys.has('ControlLeft')||this.keys.has('ControlRight');}
+  private updateAxes(){const b=this.simulation.settings.bindings;this.state.forward=Number(this.keys.has(b.forward))-Number(this.keys.has(b.backward));this.state.strafe=Number(this.keys.has(b.right))-Number(this.keys.has(b.left));this.state.walk=this.keys.has(b.walk);this.state.crouch=this.keys.has(b.crouch);}
   private move=(event:MouseEvent)=>{if(this.locked&&this.simulation.running)this.simulation.look(event.movementX,event.movementY);};
-  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0)this.state.fire=true;if(event.button===2){event.preventDefault();this.state.ads=true;}};
-  private mouseUp=(event:MouseEvent)=>{if(event.button===0)this.state.fire=false;if(event.button===2)this.state.ads=false;};
+  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0){this.state.fire=true;this.state.firePresses=(this.state.firePresses??0)+1;}if(event.button===2){event.preventDefault();this.state.ads=this.simulation.settings.adsMode==='toggle'?!this.state.ads:true;}};
+  private mouseUp=(event:MouseEvent)=>{if(event.button===0)this.state.fire=false;if(event.button===2&&this.simulation.settings.adsMode==='hold')this.state.ads=false;};
   private lockChange=()=>{this.reset();this.onLock(this.locked);};
   private lockError=()=>{if(!this.fallbackAttempted){void this.fallbackLock();}else this.onError('마우스 잠금을 허용하지 않았습니다. 브라우저 권한과 새 창 실행을 확인하세요.');};
   private blur=()=>{this.reset();if(this.locked)document.exitPointerLock();this.onLock(false);};

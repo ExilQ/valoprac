@@ -1,11 +1,11 @@
 import { Vector3 } from 'three';
 import { MOVEMENT, type MovementProfile } from '../../config/movement';
 import type { InputState } from '../types';
-import { ENVIRONMENT } from '../collision/environment';
+import { ENVIRONMENT,type Obstacle } from '../collision/environment';
 export class Movement {
   position=new Vector3(0,0,5);previous=new Vector3(0,0,5);velocity=new Vector3();
-  grounded=true;crouch=0;eyeHeight=1.64;previousEyeHeight=1.64;speed=0;landedAt=-100;
-  constructor(public profile:MovementProfile={...MOVEMENT}){}
+  speedModifier=1;grounded=true;crouch=0;eyeHeight=1.64;previousEyeHeight=1.64;speed=0;landedAt=-100;
+  constructor(public profile:MovementProfile={...MOVEMENT},public obstacles:Obstacle[]=ENVIRONMENT){}
   get accurate(){return this.grounded&&this.speed<=this.profile.accuracyVelocityThreshold;}
   step(input:InputState,yaw:number,dt:number,time:number){
     const p=this.profile;this.previous.copy(this.position);this.previousEyeHeight=this.eyeHeight;
@@ -14,7 +14,7 @@ export class Movement {
     let forward=input.forward,side=input.strafe;const len=Math.hypot(forward,side);if(len>1){forward/=len;side/=len;}
     const sin=Math.sin(yaw),cos=Math.cos(yaw);const dx=(side*cos-forward*sin),dz=(-forward*cos-side*sin);
     const modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(forward<0?p.backwardModifier:1)*(Math.abs(side)>0?p.lateralModifier:1);
-    const targetSpeed=p.maxSpeed*modifier;
+    const targetSpeed=p.maxSpeed*modifier*this.speedModifier;
     if(this.grounded){
       if(len>0){
         const dot=dx*this.velocity.x+dz*this.velocity.z;
@@ -46,7 +46,7 @@ export class Movement {
   }
   private resolve(axis:'x'|'z'){
     const other=axis==='x'?'z':'x',p=this.profile,bodyTop=this.position.y+(this.crouch>0.5?1.35:1.85);
-    for(const {box} of ENVIRONMENT){
+    for(const {box} of this.obstacles){
       if(bodyTop<=box.min.y||this.position.y>=box.max.y)continue;
       if(this.position[other]+p.radius>box.min[other]&&this.position[other]-p.radius<box.max[other]&&this.position[axis]+p.radius>box.min[axis]&&this.position[axis]-p.radius<box.max[axis]){
         if(this.velocity[axis]>0)this.position[axis]=box.min[axis]-p.radius;

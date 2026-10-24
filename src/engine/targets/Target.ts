@@ -8,7 +8,7 @@ export class Target {
   upper=new Object3D();leftHip=new Object3D();rightHip=new Object3D();leftKnee=new Object3D();rightKnee=new Object3D();
   leftArm=new Object3D();rightArm=new Object3D();
   private hitResult:{zone:HitZone;distance:number}={zone:'miss',distance:Infinity};
-  position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
+  enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
   direction=1;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
   constructor(public id:number,public behavior:Behavior,public rng:SeededRandom){
     this.root.add(this.upper,this.leftHip,this.rightHip);
@@ -28,7 +28,7 @@ export class Target {
     const p:HitPart={zone,node,shape,size,inverse:new Matrix4(),box:new Box3(new Vector3(-w/2,-h/2,-d/2),new Vector3(w/2,h/2,d/2)),sphere:new Sphere(new Vector3(),w/2)};
     this.parts.push(p);return p;
   }
-  spawn(x:number,z:number,time:number){this.position.set(x,0,z);this.previous.copy(this.position);this.anchor.copy(this.position);this.active=true;this.spawnAt=time;this.generation++;this.shotsReceived=0;this.phase=this.rng.range(0,6.28);this.nextChange=time+this.rng.range(0.65,1.5);this.direction=this.rng.next()>0.5?1:-1;this.velocity.set(0,0,0);this.crouch=0;this.updatePose(time);}
+  spawn(x:number,z:number,time:number){this.position.set(x,0,z);this.previous.copy(this.position);this.anchor.copy(this.position);this.active=true;this.spawnAt=time;this.generation++;this.shotsReceived=0;this.health=150;this.phase=this.rng.range(0,6.28);this.nextChange=time+this.rng.range(0.65,1.5);this.direction=this.rng.next()>0.5?1:-1;this.velocity.set(0,0,0);this.crouch=0;this.changeAt=this.behavior==='appearing'?time:-100;this.reactionRecorded=this.behavior!=='appearing';this.updatePose(time);}
   eliminate(time:number){this.active=false;this.deadAt=time;}
   step(time:number,dt:number){
     this.previous.copy(this.position);if(!this.active)return;
@@ -40,6 +40,7 @@ export class Target {
     if(this.behavior!=='stationary'&&(time>=this.nextChange||Math.abs(this.position.x-this.anchor.x)>2.4)){
       this.direction*=-1;this.nextChange=time+this.rng.range(0.65,1.8);this.changeAt=time;this.reactionRecorded=false;
     }
+    desired*=this.speedMultiplier;
     this.velocity.x+=Math.sign(desired-this.velocity.x)*Math.min(Math.abs(desired-this.velocity.x),dt*12);
     this.position.x+=this.velocity.x*dt;
     const targetCrouch=this.behavior==='crouch'&&Math.sin(time*1.4+this.phase)>0.15?1:0;
@@ -47,8 +48,8 @@ export class Target {
     this.updatePose(time);
   }
   updatePose(time:number){
-    this.root.position.copy(this.position);this.root.rotation.y=0;
-    const stride=Math.sin(time*9+this.phase)*Math.min(0.32,Math.abs(this.velocity.x)*0.13);
+    this.root.position.copy(this.position);this.root.scale.setScalar(this.scale);this.root.rotation.y=0;
+    const stride=Math.sin(time*9+this.phase)*Math.min(0.32,Math.hypot(this.velocity.x,this.velocity.z)*0.13);
     this.upper.position.y=-0.43*this.crouch+Math.abs(stride)*0.025;this.upper.rotation.z=stride*0.04;
     this.leftHip.position.y=this.rightHip.position.y=0.63-0.2*this.crouch;
     this.leftHip.rotation.x=stride-0.7*this.crouch;this.rightHip.rotation.x=-stride-0.7*this.crouch;

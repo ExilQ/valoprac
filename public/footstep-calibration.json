@@ -1,0 +1,62 @@
+{
+  "benchmark": "footstep-comparison",
+  "calibration": "provisional-v1",
+  "actualValorantMeasured": false,
+  "data": [
+    {
+      "fps": 60,
+      "walk": {
+        "retained": 0.8819444444444409,
+        "distance": 0.18888888888889532
+      },
+      "stop": {
+        "retained": 0,
+        "distance": 1.8949999999999987
+      },
+      "exactGameParityVerified": false
+    },
+    {
+      "fps": 144,
+      "walk": {
+        "retained": 0.8819444444444409,
+        "distance": 0.18888888888889532
+      },
+      "stop": {
+        "retained": 0,
+        "distance": 1.8949999999999987
+      },
+      "exactGameParityVerified": false
+    },
+    {
+      "fps": 240,
+      "walk": {
+        "retained": 0.8819444444444409,
+        "distance": 0.18888888888889532
+      },
+      "stop": {
+        "retained": 0,
+        "distance": 1.8949999999999987
+      },
+      "exactGameParityVerified": false
+    }
+  ],
+  "release": "2.3.0",
+  "date": "2026-10-24",
+  "fixedTimestep": 0.008333333333333333,
+  "applicationTests": 233,
+  "brokerTests": 20,
+  "requiredScenarios": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "tolerance": {
+    "simulationTrace": "identical under the tested fixed-step schedules",
+    "eventTimingSeconds": 1e-09
+  },
+  "hardwareGameplayVerified": false
+}

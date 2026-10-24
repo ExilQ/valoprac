@@ -1,0 +1,5 @@
+{
+ "FileVersion":3,"EngineAssociation":"5.7","Category":"Training","Description":"VALOPRAC isolated Pixel Streaming 2 staging runtime",
+ "Modules":[{"Name":"VALOPRAC","Type":"Runtime","LoadingPhase":"Default"}],
+ "Plugins":[{"Name":"PixelStreaming2","Enabled":true},{"Name":"PixelStreaming","Enabled":false},{"Name":"ProceduralMeshComponent","Enabled":true},{"Name":"PythonScriptPlugin","Enabled":true,"TargetAllowList":["Editor"]},{"Name":"EditorScriptingUtilities","Enabled":true,"TargetAllowList":["Editor"]}]
+}

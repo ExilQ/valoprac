@@ -1,71 +1,51 @@
-# VALOPRAC — Production source for valoprac.global
+# VALOPRAC 2.3 — persistent footsteps and tactical corner practice
 
-A functional, browser-local tactical aim trainer built with React, TypeScript, Vite, Three.js, Zustand, Tailwind CSS, IndexedDB, Pointer Lock and Web Audio. All player-facing text is Korean. No API key, server, account integration or external asset CDN is required by the app.
+The browser trainer remains the production default. The genuine Unreal Engine 5.7 source project is in `unreal/VALOPRAC`; it has not been built or run with Unreal in this environment. See [migration documentation](docs/migration/README.md), [validation](docs/migration/VALIDATION.md) and [deployment/rollback](docs/migration/DEPLOYMENT.md). No GPU service has been purchased or activated. Release 2.2 adds the portable authoritative analytics journal, browser history/results/recoil adapter, acknowledged input admission, cancellation handling and tested worker teardown. See [protocol and limits](docs/migration/PROTOCOL.md).
 
-The movement, recoil, spread and sensitivity constants are **provisional tuning values, not verified VALORANT data**. The app should be treated as a configurable tactical mechanics trainer, not a certified replica. Neither training transfer nor 1:1 sensitivity conversion has been established.
+Release 2.3 integrates the original separate corner-map layout and hearing/peeking concept with the existing Three.js movement, weapon and 3D hitbox engine. Persistent distance-based footsteps, stationary recovery, a distinct event-radius minimap, hearing-only bot investigation, local calibration controls/comparison and Korean patch notes are functional in the browser path. See [footstep calibration and evidence](docs/FOOTSTEP_CALIBRATION.md). These additions are not ported to the unbuilt UE staging runtime.
 
-## Run
+# VALOPRAC
 
-Use Node 22.12 or later (Node 22 LTS is configured) and npm:
+A Korean browser-based tactical FPS trainer built with React, TypeScript, Vite, Three.js and Zustand. Production domain: https://valoprac.trade.
 
-```bash
-npm ci
-npm run dev
-```
+Version 2.0 extends the existing engine rather than replacing it: the 120 Hz movement simulation, braking measurements, rig-based head collision, original timed modes and IndexedDB history remain in place. Free Practice is unlimited and supports live weapon/target configuration while preserving normal magazine and reload mechanics.
 
-Open the displayed URL in a desktop browser. Choose a mode, duration and rifle. Press **훈련 시작**, then click **클릭하여 훈련 시작** to grant Pointer Lock and unlock audio. The second click deliberately supplies a fresh browser user gesture.
+## Development
 
-```bash
+Node 22.12+; dependencies are pinned by `pnpm-lock.yaml`.
+
+```sh
+pnpm install --frozen-lockfile
 npm test
 npm run typecheck
 npm run build
 ```
 
-`dist/` is a static deployment; serve it over HTTPS or localhost. Do not open `index.html` using the file protocol. `public/guide.html` supplies Korean controls and manual checks.
+`npm run build` runs tests, TypeScript and Vite. Output is `dist`. Known client routes (`/training.html`, `/settings.html`, `/statistics.html`, `/results.html`) are exported as static HTML entry documents so direct URLs and refresh work without relying on Pages-only rewrite handling. No server, account, API key or client-side secret is needed. All data and optional imported audio remain in the user's browser. Existing settings/history keys and the `rifleA`/`rifleB` IDs are retained for compatibility.
 
-## Production status
+## Systems
 
-The requested production domain **https://valoprac.global is not live yet**. Cloudflare account authorization and domain registration are required. See [production execution status and continuation](docs/PRODUCTION.md). The repository preserves the complete game and contains validated production build/hosting/CI configurations; it is not a replacement mockup.
+- `src/engine/simulation`: authoritative fixed ticks and mode lifecycle.
+- `src/engine/movement`: acceleration, friction, inertia, jumping, crouch and braking episodes.
+- `src/config/weapons.ts`: distinct Vandal, Phantom and semi-automatic Sheriff profiles, damage bands and ADS.
+- `src/engine/recoil`: stateful horizontal direction, protected bullets, smooth recovery and player compensation.
+- `src/engine/collision`, `targets`: hitscan against animated sphere/OBB hit zones and original cover geometry.
+- `src/engine/rendering`: original weapon models, instanced humanoid parts, merged range geometry, stylized PBR, reflection probe and optional post-processing.
+- `src/engine/audio`: preloaded original sound buffers, channel gains, overlapping tails and bounded active voices.
+- `src/storage/audioAssets.ts`: rights-attested local audio import. For authorized public assets, configure same-origin paths and explicit redistribution authorization in `src/config/audio.ts`.
+- `src/training/analytics`: lifetime scalar totals and capped detailed snapshots. Old history summaries remain readable.
+- `src/ui`: Korean settings, practice controls, analysis and results. React updates at HUD cadence, not on every simulation tick.
 
-`npm run build` runs typechecking and all tests before creating `dist`. GitHub CI validates pushes/PRs. Native Cloudflare Git integration must be authorized and connected before automatic public deployment is active.
+Three layers remain distinct: bullet rays/spread, camera recoil and cosmetic gun/effect animation. Audio or graphical quality changes do not consume gameplay RNG. Sheriff input uses press counts so a click shorter than a simulation frame is retained.
 
-## Implemented experience
+## Calibration and rights
 
-- WASD movement, normalized diagonals, acceleration, velocity-dependent neutral deceleration, direction reversal, walking, crouching, jumping, limited air control and floor/cover/wall collision.
-- A 120 Hz deterministic simulation independent of the rendering loop, interpolated movement/eye height, direct unsmoothed mouse-look and configurable horizontal FOV.
-- Two configurable full-auto rifles, fire-rate lattice, magazines, manual/automatic reload, ADS, seeded disk spread, independent weapon animation, camera and trajectory recoil, recovery and mouse compensation.
-- Pooled procedural humanoid rigs. Exact head spheres and oriented torso/limb boxes share authoritative joint matrices with their corresponding render geometry. Nearest-hit ordering and real cover occlusion apply. Only head hits eliminate.
-- Headshot precision, braking comparison, spray control and moving-target tracking. Six tracking behaviors include stationary, strafe, random reversal, stop-and-go, crouch and cover peek.
-- Korean menu, crosshair editor, sensitivity/graphics/audio controls, training HUD, pause/resume, results, per-mode history trend, spray impact ordinals, grouping statistics, input compensation paths and optional baseline ideal compensation.
-- Rich per-shot snapshots, per-target eliminations, tracking samples and bounded local history. Forty summaries and ten detailed sessions are retained. Training duration is clamped to ten minutes.
+See `docs/WEAPON_CALIBRATION.json` for verified published values, requested reference values and provisional estimates. No native VALORANT parity or exact sensitivity matching is asserted. The required named skin profiles are present, but **no Riot audio/model/texture recording is included**. All shipped sounds and weapon artwork are independently produced alternatives. The Phantom reference slot remains Champions 2026, not another collection.
 
-## Architecture
+Three.js' MIT-licensed procedural `RoomEnvironment` is used to generate an original reflection probe. This is a browser WebGL renderer, not Unreal Engine or Lumen. Low quality removes expensive passes; High/Ultra are optional.
 
-| Directory | Responsibility |
-| --- | --- |
-| `src/app` | Application screen flow and low-frequency Zustand state |
-| `src/config` | Movement, weapon and persisted settings profiles |
-| `src/engine/simulation` | Fixed clock, seeded RNG, authoritative world and events |
-| `src/engine/input` | Pointer Lock, relative mouse, keys, blur reset, cleanup |
-| `src/engine/movement` | Velocity integration, collision response, braking observations |
-| `src/engine/weapons`, `recoil` | Cadence, ammunition, spread, kick, recovery, compensation |
-| `src/engine/targets`, `collision` | Hierarchical target poses, exact 3D ray volumes, occlusion |
-| `src/engine/rendering`, `audio` | WebGL scene, interpolated visuals, pooled impacts, synthesized cues |
-| `src/training` | Mode metadata and pure analytics |
-| `src/storage` | IndexedDB transactions and retention |
-| `src/ui`, `components` | Korean presentation and accessible controls |
-| `src/tests` | Executable deterministic, integration, storage, markup and CPU-workload tests |
+## Validation and production
 
-Gameplay does not live in React components. HUD snapshots publish approximately ten times per second. Mouse events update base aim immediately; React is absent from the input hot path. Render resources, listeners, resize observers, audio contexts and animation frames have explicit disposal. Targets, their joint matrices, impact markers and tracer geometry are reused.
+Read `docs/UPGRADE_VALIDATION.md` for per-feature status and manual desktop QA. Tests cover mechanics, 30/60/144/240 Hz replay, storage, input contracts, audio lifecycle and one hour of simulated unlimited firing. They do not prove real GPU FPS, actual Pointer Lock, acoustic fidelity or browser soak stability.
 
-The arena is a flat floor with box walls and box cover. An axis-separated horizontal circle/AABB resolver with displacement substeps is smaller and deterministic for that geometry; Rapier is intentionally not necessary in this phase. The arena has no climbable stairs, slopes or moving rigid bodies. Cover blocks horizontal motion; jumping above cover is possible. Adding general terrain should replace the controller's environment resolver with a tested shape-casting controller rather than adding exceptions.
-
-See [mechanics](docs/MECHANICS.md), [validation and feature status](docs/VALIDATION.md), and [manual browser acceptance](docs/MANUAL_TESTING.md).
-
-## Verification boundary
-
-Automated tests and TypeScript/production builds were executed. Browser visual QA, actual hardware Pointer Lock/audio, GPU frame pacing and 144/240 Hz perceived responsiveness were not executed in the available environment. The CPU benchmark is explicitly **not** a rendering FPS benchmark. Phase 1 browser/hardware acceptance remains pending those manual checks.
-
-## Tuning
-
-Edit `src/config/movement.ts` and `src/config/weapons.ts`. Both are plain typed profiles with English technical comments. Profile changes should be validated with the same deterministic tests and calibrated against measurements before claiming fidelity to a specific commercial game.
+The authoritative production repository is the existing Sites source identified by `.openai/hosting.json`; keep its project ID and public audience. Use the existing source helper to open the latest source, validate/build, push the exact source state, package `dist`, save a version and deploy it. Do not replace the Site or move its custom-domain DNS. Previous saved versions remain rollback candidates. `public/release.json` identifies the release for public HTTP verification.

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "status": "original-substitutes",
+  "riotRecordingsIncluded": false,
+  "profiles": {
+    "rifleA": {
+      "reference": "Champions 2023 Vandal",
+      "path": "/Game/Audio/rifleA_"
+    },
+    "rifleB": {
+      "reference": "Champions 2026 Phantom",
+      "path": "/Game/Audio/rifleB_"
+    },
+    "sheriff": {
+      "reference": "Ion Sheriff",
+      "path": "/Game/Audio/sheriff_"
+    }
+  }
+}
