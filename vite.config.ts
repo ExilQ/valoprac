@@ -1,19 +1,4 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { execFileSync } from 'node:child_process';
-import { env } from 'node:process';
-import manifest from './package.json';
-let commit = env.CF_PAGES_COMMIT_SHA || env.GITHUB_SHA || '';
-if (!commit) { try { commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(); } catch { commit = 'unversioned'; } }
-export default defineConfig({
-  plugins: [react(), tailwindcss(), {
-    name: 'valoprac-release-metadata',
-    generateBundle() { this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ app: 'VALOPRAC', version: manifest.version, commit }) }); }
-  }],
-  build: {
-    target: 'es2022', manifest: true, sourcemap: false,
-    rollupOptions: { output: { manualChunks: { three: ['three'], react: ['react', 'react-dom', 'react-dom/client'] } } }
-  },
-  test: { environment: 'node', include: ['src/tests/**/*.test.ts', 'src/tests/**/*.test.tsx'] }
-});
+export default defineConfig({plugins:[react(),tailwindcss()],server:{allowedHosts:['terminal.local']},build:{manifest:true,target:'es2022',rollupOptions:{output:{manualChunks(id){if(id.includes('/node_modules/')&&id.includes('/three/'))return 'three';if(id.includes('/node_modules/')&&(/\/(react|react-dom|scheduler)(@|\/)/.test(id)))return 'react';}}}},test:{environment:'node',include:['src/tests/**/*.test.ts','src/tests/**/*.test.tsx']}});
