@@ -1,5 +1,7 @@
 import { createRoot } from 'react-dom/client';
-import { App } from './app/App';
 import { ErrorBoundary } from './app/ErrorBoundary';
+import { App } from './app/App';
 import './ui/styles.css';
-createRoot(document.getElementById('root')!).render(<ErrorBoundary><App /></ErrorBoundary>);
+import './ui/tokens.css';
+import './ui/tactical.css';
+createRoot(document.getElementById('root')!).render(<ErrorBoundary><App/></ErrorBoundary>);
