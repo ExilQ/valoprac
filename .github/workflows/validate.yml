@@ -13,19 +13,24 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .node-version
-          cache: npm
-      - name: Install locked dependencies
-        run: npm ci --no-audit
-      - name: Typecheck, test, build, and validate the static artifact
-        run: npm run build
-      - name: Audit browser-runtime dependencies
-        run: npm audit --omit=dev --audit-level=high
+      - name: Enable locked pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: Install frozen dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test browser runtime
+        run: pnpm test
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test broker and migration guard
+        run: pnpm test:broker && pnpm verify:migration
+      - name: Build browser artifact
+        run: pnpm build
       - name: Preserve the exact release artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
