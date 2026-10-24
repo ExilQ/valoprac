@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "defaultRuntime": "browser",
+  "engine": "Unreal Engine 5.7",
+  "gates": {
+    "unrealBuildPassed": false,
+    "gpuRuntimeVerified": false,
+    "webrtcInputVerified": false,
+    "weaponAndHitboxRegressionPassed": false,
+    "audioRoutingVerifiedInUnreal": false,
+    "unlimitedPracticeAndHistoryVerified": false,
+    "latencyComparedOnActualHardware": false,
+    "isolatedConcurrentSessionsVerified": false,
+    "longSessionMemorySoakPassed": false,
+    "visualComparisonReviewed": false,
+    "rollbackExercised": false,
+    "footstepAndTacticalParityVerified": false
+  },
+  "blockers": [
+    "No licensed UE 5.7 installation or UnrealBuildTool in this execution environment",
+    "No GPU or authorized GPU host available",
+    "No measured WebRTC or input-to-photon session",
+    "UE-dependent gameplay/history/recoil integration requires actual UBT, GPU and WebRTC validation",
+    "Browser footstep accumulation and tactical hearing added in 2.3 have not been ported or tested in UE"
+  ],
+  "rollback": {
+    "siteVersionNumber": 5,
+    "sourceCommit": "913a396879af7a007ecafcd49af07e2b3f46ad04",
+    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_22a859a507ac8191a5fed9882f774c01"
+  }
+}

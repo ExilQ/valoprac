@@ -1,0 +1,12 @@
+# GPU hostname is separate from valoprac.trade. Provision only after authorization.
+{$VALOPRAC_GPU_HOST} {
+ encode zstd gzip
+ header {
+  Strict-Transport-Security "max-age=31536000"
+  X-Content-Type-Options "nosniff"
+  Referrer-Policy "no-referrer"
+ }
+ request_body { max_size 1KB }
+ reverse_proxy 127.0.0.1:4242
+ # Access logging deliberately disabled: signalling paths contain ephemeral tickets.
+}
