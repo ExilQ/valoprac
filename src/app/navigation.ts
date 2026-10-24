@@ -1,10 +1,12 @@
 import type { Screen } from './store';
-export const TAB_PATHS = { training: '/', settings: '/settings', history: '/statistics' } as const;
-export function parseRoute(pathname: string): { screen: Screen; activeTab: 'training' | 'settings' | 'history' } {
-  const path = pathname.replace(/\/+$/, '') || '/';
+export const TAB_PATHS = { training: '/', settings: '/settings.html', history: '/statistics.html', weapons:'/weapons.html',stream:'/unreal.html' } as const;
+export function parseRoute(pathname: string): { screen: Screen; activeTab: keyof typeof TAB_PATHS } {
+  const path = pathname.replace(/\/+$/, '').replace(/\.html$/, '') || '/';
   if (path === '/training') return { screen: 'training', activeTab: 'training' };
   if (path === '/settings') return { screen: 'menu', activeTab: 'settings' };
   if (path === '/statistics') return { screen: 'menu', activeTab: 'history' };
+  if (path === '/weapons') return { screen: 'menu', activeTab: 'weapons' };
+  if (path === '/unreal') return { screen: 'menu', activeTab: 'stream' };
   return { screen: 'menu', activeTab: 'training' };
 }
 export function navigate(path: string) {

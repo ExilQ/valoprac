@@ -1,15 +1,50 @@
+import {synthesizeFootstep} from './footstepSynthesis';
+import type {FootstepEvent} from '../footsteps/Footsteps';
+import { AUDIO_PROFILES, AUDIO_ACTIONS, type AudioAction } from '../../config/audio';
+import { readAudioAssets } from '../../storage/audioAssets';
+import { WEAPON_ORDER } from '../../config/weapons';
+import { synthesize } from './synthesis';
+import type { Settings, ShotEvent, WeaponId } from '../types';
+type Channel='firing'|'handling'|'feedback'|'footsteps';
+interface Voice {source:AudioBufferSourceNode;gain:GainNode;channel:Channel}
 export class TrainingAudio {
-  private context:AudioContext|null=null;private noise:AudioBuffer|null=null;private master:GainNode|null=null;
-  async unlock(){if(!this.context){this.context=new AudioContext({latencyHint:'interactive'});this.master=this.context.createGain();this.master.connect(this.context.destination);
-    this.noise=this.context.createBuffer(1,this.context.sampleRate*0.08,this.context.sampleRate);const a=this.noise.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length)**2;
-  }await this.context.resume();}
-  shot(volume:number){const c=this.context;if(!c||c.state!=='running'||!this.master)return;const now=c.currentTime;
-    const source=c.createBufferSource(),filter=c.createBiquadFilter(),gain=c.createGain();source.buffer=this.noise;filter.type='highpass';filter.frequency.value=550;
-    gain.gain.setValueAtTime(volume*0.6,now);gain.gain.exponentialRampToValueAtTime(0.001,now+0.08);source.connect(filter).connect(gain).connect(this.master);source.start();source.onended=()=>{source.disconnect();filter.disconnect();gain.disconnect();};
-    this.tone(110,volume*0.45,0.06);
+  private context:AudioContext|null=null;private channels:Record<Channel,GainNode>|null=null;private master:GainNode|null=null;private compressor:DynamicsCompressorNode|null=null;
+  private buffers=new Map<string,AudioBuffer>();private voices=new Set<Voice>();private loading:Promise<void>|null=null;private disposed=false;private lastShot='';private anchor=0;private weapon:WeaponId='rifleA';
+  private stepBuffers:AudioBuffer[]=[];private lastFootstep=0;footstepEvents=0;
+  custom=new Set<string>();events=0;
+  async unlock(){
+    if(this.disposed)return;
+    if(!this.context){const c=this.context=new AudioContext({latencyHint:'interactive'});this.master=c.createGain();this.compressor=c.createDynamicsCompressor();this.compressor.threshold.value=-6;this.compressor.ratio.value=5;this.master.connect(this.compressor).connect(c.destination);
+      this.channels={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.channels))g.connect(this.master);
+      for(const id of WEAPON_ORDER)for(const action of AUDIO_ACTIONS){const values=synthesize(id,action,c.sampleRate),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.buffers.set(`${id}:${action}`,b);}
+      for(let side=0;side<2;side++){const values=synthesizeFootstep(c.sampleRate,side),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.stepBuffers.push(b);}
+      this.loading=this.preload(c);
+    }
+    await this.context.resume();await this.loading;
   }
-  head(volume:number){this.tone(1050,volume*0.2,0.1);this.tone(1550,volume*0.1,0.12);}
-  hit(volume:number){this.tone(420,volume*0.14,0.04);}
-  private tone(frequency:number,volume:number,duration:number){const c=this.context;if(!c||!this.master)return;const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.setValueAtTime(frequency,c.currentTime);o.frequency.exponentialRampToValueAtTime(frequency*0.55,c.currentTime+duration);g.gain.setValueAtTime(Math.max(0.001,volume),c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+duration);o.connect(g).connect(this.master);o.start();o.stop(c.currentTime+duration);o.onended=()=>{o.disconnect();g.disconnect();};}
-  dispose(){void this.context?.close();this.context=null;this.noise=null;this.master=null;}
+  private async preload(c:AudioContext){
+    const install=async(id:string,bytes:ArrayBuffer)=>{const buffer=await c.decodeAudioData(bytes.slice(0));if(this.disposed||buffer.duration>8)return;if(typeof buffer.getChannelData==='function'){let peak=0;for(let ch=0;ch<buffer.numberOfChannels;ch++){const data=buffer.getChannelData(ch);for(let i=0;i<data.length;i++)peak=Math.max(peak,Math.abs(data[i]));}const scale=peak>1e-6?Math.min(2,0.78/peak):1;for(let ch=0;ch<buffer.numberOfChannels;ch++){const data=buffer.getChannelData(ch);for(let i=0;i<data.length;i++)data[i]*=scale;}}this.buffers.set(id,buffer);this.custom.add(id);};
+    const jobs:Promise<unknown>[]=[];
+    for(const id of WEAPON_ORDER)for(const action of AUDIO_ACTIONS){const asset=AUDIO_PROFILES[id].assets[action];if(asset?.redistributionAuthorized&&asset.path.startsWith('/')&&!asset.path.startsWith('//'))jobs.push(fetch(asset.path).then(r=>{if(!r.ok)throw new Error('audio');return r.arrayBuffer();}).then(b=>install(`${id}:${action}`,b)));}
+    try{const assets=await readAudioAssets();for(const a of assets)if(a.authorized)jobs.push(install(a.id,a.bytes));}catch{/* Original buffers remain available when storage is blocked. */}
+    await Promise.allSettled(jobs);
+  }
+  sync(time:number){if(this.context)this.anchor=this.context.currentTime-time;}
+  levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;this.channels.firing.gain.value=s.firingVolume;this.channels.handling.gain.value=s.handlingVolume;this.channels.feedback.gain.value=s.feedbackVolume;this.channels.footsteps.gain.value=s.footstepVolume;}
+  selectWeapon(id:WeaponId){if(this.weapon!==id){this.stop();this.weapon=id;}}
+  shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
+  footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;const b=this.stepBuffers[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65);}
+  action(id:WeaponId,action:'reload'|'equip'){this.play(id,action,'handling');}
+  private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1){
+    const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale);
+  }
+  private playBuffer(b:AudioBuffer,channel:Channel,time?:number,scale=1){
+    const c=this.context;if(!c||c.state!=='running'||!this.channels||this.disposed)return;
+    if(this.voices.size>=48){const v=this.voices.values().next().value as Voice|undefined;if(v){v.source.onended=null;v.source.stop();v.source.disconnect();v.gain.disconnect();this.voices.delete(v);}}
+    const source=c.createBufferSource(),gain=c.createGain();source.buffer=b;gain.gain.value=scale;source.connect(gain).connect(this.channels[channel]);
+    const v={source,gain,channel};this.voices.add(v);source.onended=()=>{source.disconnect();gain.disconnect();this.voices.delete(v);};source.start(time===undefined?c.currentTime:Math.max(c.currentTime,Math.min(c.currentTime+0.025,this.anchor+time)));
+  }
+  get activeVoiceCount(){return this.voices.size;}
+  stop(){for(const v of this.voices){v.source.onended=null;try{v.source.stop();}catch{/* Already ended. */}v.source.disconnect();v.gain.disconnect();}this.voices.clear();}
+  dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.length=0;this.custom.clear();}
 }

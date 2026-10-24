@@ -8,8 +8,8 @@ export const ENVIRONMENT:Obstacle[]=[
   box(6.4,1.1,-16,1.5,2.2,1.8,0x434c52,'cover')
 ];
 const tempHit=new Vector3();
-export function nearestEnvironmentHit(ray:Ray,max:number,out:Vector3){let nearest=max;let found=false;
-  for(const o of ENVIRONMENT){if(ray.intersectBox(o.box,tempHit)){const d=ray.origin.distanceTo(tempHit);if(d<nearest){nearest=d;out.copy(tempHit);found=true;}}}
+export function nearestEnvironmentHit(ray:Ray,max:number,out:Vector3,obstacles:Obstacle[]=ENVIRONMENT){let nearest=max;let found=false;
+  for(const o of obstacles){if(ray.intersectBox(o.box,tempHit)){const d=ray.origin.distanceTo(tempHit);if(d<nearest){nearest=d;out.copy(tempHit);found=true;}}}
   if(ray.direction.y<0){const d=-ray.origin.y/ray.direction.y;if(d>0&&d<nearest){nearest=d;out.copy(ray.direction).multiplyScalar(d).add(ray.origin);found=true;}}
   return found?nearest:Infinity;
 }
