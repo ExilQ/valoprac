@@ -1,3 +1,11 @@
-https://www.valoprac.global/* https://valoprac.global/:splat 301
-http://www.valoprac.global/* https://valoprac.global/:splat 301
-http://valoprac.global/* https://valoprac.global/:splat 301
+# Canonical VALOPRAC domain (legacy valoprac.global is redirected only if hosted here)
+https://www.valoprac.trade/* https://valoprac.trade/:splat 301
+http://www.valoprac.trade/* https://valoprac.trade/:splat 301
+http://valoprac.trade/* https://valoprac.trade/:splat 301
+https://www.valoprac.global/* https://valoprac.trade/:splat 301
+http://www.valoprac.global/* https://valoprac.trade/:splat 301
+http://valoprac.global/* https://valoprac.trade/:splat 301
+https://valoprac.global/* https://valoprac.trade/:splat 301
+
+# SPA fallback; exported routes in dist take precedence
+/* /index.html 200
