@@ -1,0 +1,8 @@
+{
+  "schema":1,
+  "enabled":false,
+  "allocatorUrl":null,
+  "signallingHosts":[],
+  "engineVersion":"5.7",
+  "infrastructureCommit":"15f616198b7b33b1544f2a6a2d53b5f44e6ae707"
+}
