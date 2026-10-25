@@ -12,7 +12,7 @@ Version 2.0 extends the existing engine rather than replacing it: the 120 Hz mov
 
 ## Development
 
-Node 22.12+; dependencies are pinned by `pnpm-lock.yaml`.
+Node.js 24.22.1 LTS; dependencies are pinned by `pnpm-lock.yaml`.
 
 ```sh
 pnpm install --frozen-lockfile
