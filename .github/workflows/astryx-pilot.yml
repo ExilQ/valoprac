@@ -68,12 +68,8 @@ jobs:
           writeFileSync('artifacts/astryx-size-diff.json',JSON.stringify(result,null,2)+'\n');
           console.log(JSON.stringify(result,null,2));
           JS
-      - name: Automated settings accessibility scan (experimental)
-        continue-on-error: true
-        run: |
-          pnpm exec vite preview --host 127.0.0.1 --port 4173 > artifacts/vite-preview.log 2>&1 &
-          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/settings.html >/dev/null && break || sleep 1; done
-          pnpm dlx @axe-core/cli@4.14.0 http://127.0.0.1:4173/settings.html --chrome-options="no-sandbox,disable-dev-shm-usage" --save artifacts/astryx-axe.json --exit
+      - name: Browser input, keyboard, CSS and WCAG accessibility checks
+        run: pnpm exec playwright test tests/e2e/astryx-settings.spec.ts
       - name: Preserve verification data (never publish)
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
