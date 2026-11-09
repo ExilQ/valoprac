@@ -43,8 +43,8 @@ export function AstryxGeneralSettings() {
               step={0.05}
               width="100%"
               valueDisplay="text"
-              formatValue={value => `${value.toFixed(2)}배`}
-              onChange={value => updateSettings({hudScale: value})}
+              formatValue={(value: number) => `${value.toFixed(2)}배`}
+              onChange={(value: number) => updateSettings({hudScale: value})}
             />
           </div>
           <div className="astryx-pilot-switches" role="group" aria-label="훈련 화면 표시 옵션">
