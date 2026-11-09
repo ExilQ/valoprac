@@ -12,3 +12,9 @@ worker.env
 
 __pycache__/
 *.pyc
+
+# Memorix local-only state/exports; keep source-backed memory docs committed.
+.memorix/
+.memorix-export*
+memorix-export*.json
+memorix-export*.md
