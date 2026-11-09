@@ -1,0 +1,32 @@
+/*
+ * Astryx 0.7.11 pilot. Keep the imports in named cascade layers so
+ * the site's existing unlayered tactical CSS can override defaults.
+ * No Vite StyleX compiler, component swizzling, or game HUD changes.
+ */
+@layer reset, theme, base, astryx-base, astryx-theme, components, utilities;
+@import '@astryxdesign/core/reset.css';
+@import '@astryxdesign/core/astryx.css';
+@import '@astryxdesign/theme-neutral/theme.css';
+
+.astryx-pilot-settings .astryx-pilot-card {
+  min-width: 0;
+}
+.astryx-pilot-slider {
+  margin-block: 20px 24px;
+}
+.astryx-pilot-switches {
+  display: grid;
+  gap: 17px;
+  margin-bottom: 23px;
+}
+.astryx-pilot-settings {
+  color: var(--ink);
+}
+.astryx-pilot-settings :is(button, input, [role='switch'], [role='slider']):focus-visible {
+  outline: 2px solid #b6f5d0;
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .astryx-pilot-switches { gap: 19px; }
+  .astryx-pilot-settings .astryx-pilot-card { padding: 20px; }
+}
