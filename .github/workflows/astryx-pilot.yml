@@ -1,0 +1,83 @@
+# This workflow runs only for the isolated Astryx pilot branch.
+# It does not deploy or alter live infrastructure.
+name: Astryx settings pilot checks
+on:
+  push:
+    branches:
+      - feat/astryx-settings-pilot-20261109
+  workflow_dispatch:
+permissions:
+  contents: write # Only to commit a reproducible pnpm-lock.yaml to this branch
+concurrency:
+  group: astryx-pilot-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+      - name: Activate pinned pnpm
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate
+      - name: Resolve Astryx dependencies in isolated branch
+        run: pnpm install --no-frozen-lockfile
+      - name: Save reproducible pilot lockfile on this branch only
+        run: |
+          if ! git diff --quiet -- pnpm-lock.yaml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add pnpm-lock.yaml
+            git commit -m "chore(astryx): lock pilot dependencies [pilot lock]"
+            git push origin HEAD:feat/astryx-settings-pilot-20261109
+          fi
+      - name: Verify frozen resolution
+        run: pnpm install --frozen-lockfile
+      - name: Run browser unit tests
+        run: pnpm test
+      - name: TypeScript typecheck
+        run: pnpm typecheck
+      - name: Broker and migration guards
+        run: pnpm test:broker && pnpm verify:migration
+      - name: Build pilot production bundle (not deployed)
+        run: pnpm build
+      - name: Record pilot bundle sizes
+        run: |
+          mkdir -p artifacts
+          node scripts/astryx-size.mjs dist > artifacts/pilot-size.json
+          cat artifacts/pilot-size.json | head -n 12
+      - name: Build unmodified main baseline for size comparison
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/astryx-main" origin/main
+          cd "$RUNNER_TEMP/astryx-main"
+          pnpm install --frozen-lockfile
+          pnpm build
+          node "$GITHUB_WORKSPACE/scripts/astryx-size.mjs" dist > "$GITHUB_WORKSPACE/artifacts/main-size.json"
+      - name: Compare baseline against pilot assets
+        run: |
+          node --input-type=module <<'JS'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const a=JSON.parse(readFileSync('artifacts/main-size.json','utf8')).totals;
+          const b=JSON.parse(readFileSync('artifacts/pilot-size.json','utf8')).totals;
+          const result={};
+          for(const type of ['js','css'])result[type]={before:a[type],after:b[type],deltaBytes:b[type].bytes-a[type].bytes,deltaGzipBytes:b[type].gzipBytes-a[type].gzipBytes};
+          writeFileSync('artifacts/astryx-size-diff.json',JSON.stringify(result,null,2)+'\n');
+          console.log(JSON.stringify(result,null,2));
+          JS
+      - name: Automated settings accessibility scan (experimental)
+        continue-on-error: true
+        run: |
+          pnpm exec vite preview --host 127.0.0.1 --port 4173 > artifacts/vite-preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4173/settings.html >/dev/null && break || sleep 1; done
+          pnpm dlx @axe-core/cli@4.14.0 http://127.0.0.1:4173/settings.html --chrome-options="no-sandbox,disable-dev-shm-usage" --save artifacts/astryx-axe.json --exit
+      - name: Preserve verification data (never publish)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: astryx-pilot-evidence-${{ github.sha }}
+          path: artifacts/
+          retention-days: 14
