@@ -55,6 +55,54 @@ test('direct clients cannot bypass allocation rate limits using forwarded header
  const {pool}=setup();const server=createBroker({pool,origin,publicOrigin:'https://gpu-staging.valoprac.trade'});await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
  try{for(let i=0;i<6;i++){const response=await fetch(base+'/sessions',{method:'POST',headers:{Origin:origin,'X-Forwarded-For':String(i)}});assert.equal(response.status,201);const l=await response.json();await pool.release(l.id);}assert.equal((await fetch(base+'/sessions',{method:'POST',headers:{Origin:origin,'X-Forwarded-For':'new-address'}})).status,429);}finally{await pool.close();await new Promise(r=>server.close(r));}
 });
+test('proxy clients have separate rate limits and cannot select their identity with forwarding headers',async()=>{
+ const {createServer,request}=await import('node:http');
+ const {pool}=setup();
+ const broker=createBroker({pool,origin,publicOrigin:'https://gpu-staging.valoprac.trade',trustProxy:true});
+ await new Promise(r=>broker.listen(0,'127.0.0.1',r));
+ // Match Caddy's controlled hop: overwrite the incoming header with the actual peer.
+ const proxy=createServer((req,res)=>{
+  const upstream=request({hostname:'127.0.0.1',port:broker.address().port,path:req.url,method:req.method,headers:{...req.headers,'x-forwarded-for':req.socket.remoteAddress}},response=>{res.writeHead(response.statusCode,response.headers);response.pipe(res);});
+  upstream.on('error',()=>{res.writeHead(502);res.end();});req.pipe(upstream);
+ });
+ await new Promise(r=>proxy.listen(0,'127.0.0.1',r));
+ let spoof=0;
+ const allocate=localAddress=>new Promise((resolve,reject)=>{
+  const req=request({hostname:'127.0.0.1',port:proxy.address().port,path:'/sessions',method:'POST',localAddress,headers:{Origin:origin,'X-Forwarded-For':`203.0.113.${++spoof}`}},res=>{
+   let body='';res.setEncoding('utf8');res.on('data',chunk=>body+=chunk);res.on('end',()=>resolve({status:res.statusCode,body:JSON.parse(body)}));
+  });req.on('error',reject);req.end();
+ });
+ try{
+  for(let i=0;i<6;i++){const res=await allocate('127.0.0.2');assert.equal(res.status,201);await pool.release(res.body.id);}
+  assert.equal((await allocate('127.0.0.2')).status,429);
+  const other=await allocate('127.0.0.3');assert.equal(other.status,201);await pool.release(other.body.id);
+ }finally{await pool.close();await new Promise(r=>proxy.close(r));await new Promise(r=>broker.close(r));}
+});
+test('a trusted proxy must supply one valid client IP before allocating a worker',async()=>{
+ const {pool}=setup();const server=createBroker({pool,origin,publicOrigin:'https://gpu-staging.valoprac.trade',trustProxy:true});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
+ try{
+  for(const forwarded of [undefined,'','not-an-ip','203.0.113.1, 198.51.100.2','[2001:db8::1]']){
+   const headers={Origin:origin};if(forwarded!==undefined)headers['X-Forwarded-For']=forwarded;
+   assert.equal((await fetch(base+'/sessions',{method:'POST',headers})).status,400);assert.equal(pool.leases.size,0);
+  }
+  for(const forwarded of ['203.0.113.1','2001:db8::1']){
+   const response=await fetch(base+'/sessions',{method:'POST',headers:{Origin:origin,'X-Forwarded-For':forwarded}});
+   assert.equal(response.status,201);await pool.release((await response.json()).id);
+  }
+ }finally{await pool.close();await new Promise(r=>server.close(r));}
+});
+test('enabling local proxy trust does not trust forwarding headers from another peer',async()=>{
+ const {request}=await import('node:http');const {pool}=setup();
+ const server=createBroker({pool,origin,publicOrigin:'https://gpu-staging.valoprac.trade',trustProxy:true});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const allocate=attempt=>new Promise((resolve,reject)=>{
+  const req=request({hostname:'127.0.0.1',port:server.address().port,path:'/sessions',method:'POST',localAddress:'127.0.0.2',headers:{Origin:origin,'X-Forwarded-For':`203.0.113.${attempt}`}},res=>{
+   let body='';res.setEncoding('utf8');res.on('data',chunk=>body+=chunk);res.on('end',()=>resolve({status:res.statusCode,body:JSON.parse(body)}));
+  });req.on('error',reject);req.end();
+ });
+ try{for(let i=1;i<=6;i++){const res=await allocate(i);assert.equal(res.status,201);await pool.release(res.body.id);}assert.equal((await allocate(7)).status,429);}
+ finally{await pool.close();await new Promise(r=>server.close(r));}
+});
 test('signalling upgrade validates tokens, proxies bytes and excludes private path tokens upstream',async()=>{
  const net=await import('node:net');const {createServer}=await import('node:http');const {createHash}=await import('node:crypto');const upgraded=deferred();let requestPath;
  const upstream=createServer();upstream.on('upgrade',(req,socket,head)=>{requestPath=req.url;const accept=createHash('sha1').update(req.headers['sec-websocket-key']+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');socket.write(`HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: ${accept}\r\n\r\n`);if(head.length)socket.write(head);socket.on('data',data=>socket.write(data));socket.on('end',()=>socket.destroy());socket.on('error',()=>{});upgraded.resolve();});await new Promise(r=>upstream.listen(0,'127.0.0.1',r));
