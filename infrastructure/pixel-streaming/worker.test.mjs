@@ -33,5 +33,8 @@ test('readiness timeout terminates the probe instead of leaving an unmanaged chi
  const f=fixture('timeout');try{await assert.rejects(f.worker.start('fixture',0),/timed out/);for(const pid of f.ids())assert.equal(f.alive(pid),false);}finally{f.cleanup();}
 });
 test('post-readiness worker death notifies the pool and stops remaining processes',async()=>{
- const f=fixture();let exits=0;try{const worker=await f.worker.start('fixture',1,{onExit:()=>{exits++;}});const pids=f.ids();process.kill(pids[0],'SIGTERM');await until(()=>exits===1);await worker.stop();for(const pid of pids)assert.equal(f.alive(pid),false);assert.equal(exits,1);}finally{f.cleanup();}
+ const f=fixture();let exits=0,worker;try{worker=await f.worker.start('fixture',1,{onExit:()=>{exits++;}});const pids=f.ids();
+  // Append order is not launch order: the already-finished readiness probe may be first.
+  const victim=pids.find(f.alive);assert(victim,'A live application process must exist');process.kill(victim,'SIGTERM');await until(()=>exits===1);await worker.stop();for(const pid of pids)assert.equal(f.alive(pid),false);assert.equal(exits,1);
+ }finally{await worker?.stop();f.cleanup();}
 });
