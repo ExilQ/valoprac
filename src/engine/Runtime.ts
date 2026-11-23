@@ -1,4 +1,4 @@
-import {CombatCapture} from '../aim/CombatCapture';
+import {CombatCapture,type CombatAssessmentContext} from '../aim/CombatCapture';
 import { InputLatencyProbe } from '../benchmarks/InputLatencyProbe';
 import { RenderCadence } from './rendering/RenderCadence';
 import { Simulation } from './simulation/Simulation';
@@ -15,10 +15,10 @@ export class Runtime {
   simulation:Simulation;renderer:RangeRenderer;input:BrowserInput;audio=new TrainingAudio();clock=new FixedClock();
   private cadence=new RenderCadence();private lastDraw=0;private frame=0;private previousTime=0;private hudAt=0;private frameTimes=new Float64Array(180);private sampleIndex=0;private sampleCount=0;private preview:boolean;private disposed=false;
   constructor(host:HTMLElement,mode:Mode,weapon:WeaponId,settings:Settings,preview:boolean,
-    private onTelemetry:(t:Telemetry)=>void,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onFinish:(data:SessionData)=>void,private onWeapon:(id:WeaponId)=>void=()=>{}){
+    private onTelemetry:(t:Telemetry)=>void,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onFinish:(data:SessionData)=>void,private onWeapon:(id:WeaponId)=>void=()=>{},assessment?:CombatAssessmentContext){
     this.preview=preview;this.simulation=new Simulation(mode,weapon,settings);this.renderer=new RangeRenderer(host,this.simulation,settings);
     this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,onError,()=>this.publishTelemetry(),id=>{this.switchWeapon(id);this.onWeapon(id);});
-    if(!preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode);this.input.observer=this.aimCapture;}
+    if(!preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode,assessment,()=>this.input.rawConfirmation);this.input.observer=this.aimCapture;}
     if(this.simulation.defenders)this.simulation.defenders.onShot=e=>{if(e.observed)this.audio.enemyShot(e.weapon,Math.hypot(e.origin.x-this.simulation.movement.position.x,e.origin.z-this.simulation.movement.position.z));};
     this.simulation.onFootstep=e=>this.audio.footstep(e);
     this.simulation.onShot=s=>{this.renderer.addShot(s);this.audio.shot(s);this.aimCapture?.shot(s);};
@@ -32,6 +32,7 @@ export class Runtime {
   private probeClick=(e:MouseEvent)=>{if(this.input.locked&&e.button===0)this.latency.mark('click',e.timeStamp,performance.now());};
   private handleLock=(locked:boolean)=>{if(this.preview)return;this.simulation.running=locked&&!this.simulation.completed;this.previousTime=0;if(!locked){this.audio.stop();this.latency.clearPending();}else this.audio.sync(this.simulation.time);this.onLock(locked);};
   async resume(capture=false){if(this.disposed||this.preview)return;void this.audio.unlock().then(()=>{this.audio.levels(this.simulation.settings);this.audio.sync(this.simulation.time);}).catch(()=>this.onError('소리를 활성화하지 못했습니다. 소리 없이 훈련을 진행합니다.'));this.audio.levels(this.simulation.settings);if(capture)await this.input.captureKeyboard(this.renderer.canvas.closest('.game-stage') as HTMLElement??this.renderer.canvas);await this.input.lock();}
+  flushAimAssessment(){return this.aimCapture?.flush()??Promise.resolve([]);}
   finish(){if(this.simulation.completed)return;this.simulation.completed=true;this.simulation.running=false;if(this.input.locked)document.exitPointerLock();this.onFinish(this.simulation.snapshot());}
   private contextLost=(event:Event)=>{event.preventDefault();this.simulation.running=false;this.input.reset();this.audio.stop();if(this.input.locked)document.exitPointerLock();this.onError('그래픽 연결이 중단되었습니다. 결과를 저장한 뒤 새로고침하세요.');};
   private animate=(now:number)=>{

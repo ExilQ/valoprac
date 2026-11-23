@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "6.0.1",
+  "version": "7.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -68,7 +68,15 @@
     "legacy-control-migration",
     "crouch-movement-spread-calibration",
     "html-no-transform",
-    "true-route-not-found"
+    "true-route-not-found",
+    "precision-sensitivity-laboratory",
+    "staged-baseline-coarse-fine-heldout",
+    "moving-target-click-assessment",
+    "input-calibration-profiles",
+    "segmented-aim-kinematics",
+    "goal-normalized-paired-evidence",
+    "independent-ads-assessment",
+    "longitudinal-sensitivity-stability"
   ],
   "unreal": {
     "engine": "5.7",
@@ -83,15 +91,24 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "06.01",
+  "patchLabel": "07.00",
   "aimScience": {
-    "algorithm": "aim-1.0.0",
+    "algorithm": "aim-2.0.0",
     "browserImplemented": true,
     "humanEffectivenessVerified": false,
     "directionalGain": false,
     "autoAim": false,
     "unrealPortImplemented": false,
-    "defaultOptimizer": "coarse"
+    "defaultOptimizer": "coarse",
+    "precisionProtocols": [
+      "quick",
+      "precision",
+      "longitudinal"
+    ],
+    "neutralTasks": 7,
+    "tacticalAssessment": true,
+    "configurationFingerprint": true,
+    "validation": "/precision-validation.json"
   },
   "tactical": {
     "sections": 6,

@@ -36,3 +36,16 @@ h1,h2,h3,h4{word-break:keep-all;overflow-wrap:normal;text-wrap:pretty}
 .primary-map-selection .tactical-map-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.tactical-map-selection .tactical-map-grid button{min-width:0;font-size:12px;line-height:1.6;word-break:keep-all}.tactical-map-selection .tactical-map-grid small{line-height:1.6}.advanced-map-selection{margin:20px 0}
 @media(max-width:1000px){.primary-map-selection .tactical-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.tactical-map-selection>header{display:block}.tactical-map-selection header p{margin-top:8px}.primary-map-selection .tactical-map-grid{grid-template-columns:1fr}}
+
+/* Compact navigation disclosure; keep the selected destination visible. */
+.training-navigation{min-width:0;width:100%;margin-top:20px}
+.training-navigation-toggle{display:flex;align-items:center;gap:8px;list-style:none;cursor:pointer;padding:12px 10px;border-block:1px solid var(--line);color:var(--ink);font-size:11px;line-height:1.5;user-select:none}
+.training-navigation-toggle::-webkit-details-marker{display:none}
+.training-navigation-current{flex:1;min-width:0;text-align:right;color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.training-navigation-toggle>svg{flex:none;transition:transform 140ms ease}
+.training-navigation:not([open])>.training-navigation-toggle>svg{transform:rotate(-90deg)}
+.training-navigation:not([open])>nav{display:none}
+.sidebar .training-navigation>nav{margin-top:10px}
+.training-navigation-toggle:hover{background:var(--accent-soft)}
+@media(max-width:700px){.training-navigation{margin-top:12px}.training-navigation-toggle{padding:10px 8px}.sidebar .training-navigation>nav{margin-top:8px}}
+@media(prefers-reduced-motion:reduce){.training-navigation-toggle>svg{transition:none}}

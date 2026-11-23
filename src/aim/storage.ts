@@ -1,5 +1,7 @@
 import type {AimPlan,AimRecord} from './types';
-export const AIM_RECORD_LIMIT=1500,AIM_TRACE_LIMIT=64,AIM_PLAN_LIMIT=30;
+// A full multi-stage precision protocol can exceed 1,200 trials. Preserve
+// several independent days of summaries while keeping raw trajectories small.
+export const AIM_RECORD_LIMIT=12000,AIM_TRACE_LIMIT=64,AIM_PLAN_LIMIT=180;
 let dbPromise:Promise<IDBDatabase>|null=null,epoch=0;
 export const aimDataEpoch=()=>epoch;
 function open(){if(!dbPromise)dbPromise=new Promise((resolve,reject)=>{const r=indexedDB.open('valoprac-aim-v1',2);r.onupgradeneeded=e=>{const db=r.result;if(!db.objectStoreNames.contains('records'))db.createObjectStore('records',{keyPath:'meta.id'});if(!db.objectStoreNames.contains('plans'))db.createObjectStore('plans',{keyPath:'id'});if(!db.objectStoreNames.contains('traces'))db.createObjectStore('traces',{keyPath:'id'});if((e as IDBVersionChangeEvent).oldVersion===1){const request=r.transaction!.objectStore('records').openCursor();request.onsuccess=()=>{const cursor=request.result;if(!cursor)return;const record=cursor.value as AimRecord;if(record.trace.length)r.transaction!.objectStore('traces').put({id:record.meta.id,data:record.trace});cursor.update({...record,trace:[]});cursor.continue();};}};r.onsuccess=()=>{r.result.onversionchange=()=>{r.result.close();dbPromise=null;};resolve(r.result);};r.onerror=()=>{dbPromise=null;reject(r.error);};});return dbPromise;}

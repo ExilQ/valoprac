@@ -18,7 +18,7 @@ for(const file of readdirSync(join(root,'assets'))){const path=join(root,'assets
 const tactical=JSON.parse(read('tactical-validation.json'));assert.equal(tactical.release,release.version);assert.equal(tactical.ads.length,2);assert(tactical.ads.every(x=>x.blocked===0));assert(read('tactical-guide.html').includes('톡브레이킹 순서'));
 assert(read('guide.html').includes('자체 제작 대체음'));
 assert(read('footsteps.html').includes('누적'));
-assert(read('aim-methodology.html').includes('사람의 향상 효과는 아직 미검증'));
+assert(read('aim-methodology.html').includes('실제 참가자의 향상 효과는 미검증'));
 const aim=JSON.parse(read('aim-validation.json'));assert.equal(aim.release,release.version);assert(aim.tests.passed);assert.equal(aim.humanEvidence.participants,0);assert.equal(aim.humanEvidence.humanEffectivenessVerified,false);assert(Object.keys(manifest).some(k=>k.includes('AimDashboard')),'Aim science must be a lazy connected module');
 assert(readdirSync(join(root,'assets')).some(f=>f.includes('analysis.worker')),'Completed trajectory analysis needs its worker chunk');
 assert.equal(JSON.parse(read('footstep-calibration.json')).actualValorantMeasured,false);
@@ -29,3 +29,5 @@ assert(existsSync(join(root,'downloads/valoprac-unreal-source.zip')));
 assert(Object.keys(manifest).some(k=>k.includes('EpicSession')),'Official streaming client must remain lazy loaded');
 assert.equal(JSON.parse(read('streaming-config.json')).enabled,release.unreal.productionEnabled,'Release metadata must match the actual streaming configuration');
 console.log(JSON.stringify({release:release.version,manifestEntries:Object.keys(manifest).length,assetCount:readdirSync(join(root,'assets')).length,passed:true}));
+
+const precision=JSON.parse(read('precision-validation.json'));assert.equal(precision.release,release.version);assert.equal(precision.algorithm,'aim-2.0.0');assert.equal(precision.optimizer.humanParticipants,0);assert.equal(precision.optimizer.profiles,9);assert.equal(precision.optimizer.methods.length,4);assert.equal(precision.tests.passed,true);assert(Object.keys(manifest).some(k=>k.includes('TacticalAssessment')),'Real FPS calibration must load on demand');

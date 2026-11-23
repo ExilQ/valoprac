@@ -1,0 +1,884 @@
+{
+  "schema": 1,
+  "release": "7.0.0",
+  "patchLabel": "07.00",
+  "algorithm": "aim-2.0.0",
+  "generatedAt": "2026-10-27T06:46:55.301Z",
+  "tests": {
+    "application": 607,
+    "broker": 20,
+    "hosting": 12,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "optimizer": {
+    "benchmark": "precision-optimizer-comparison",
+    "schema": 1,
+    "synthetic": true,
+    "humanParticipants": 0,
+    "seedRuns": 12,
+    "profiles": 9,
+    "methods": [
+      "grid",
+      "random",
+      "coarse",
+      "bayesian"
+    ],
+    "baseSensitivity": 0.35,
+    "ratioDomain": [
+      0.65,
+      1.35
+    ],
+    "practicalMargin": 0.02,
+    "budgetUnit": "One baseline or candidate synthetic block observation; each AB/BA pair costs two",
+    "selectionFraction": 0.5,
+    "heldout": "Two frozen leaders; fresh noise seeds, reversed candidate order by round, paired baseline retest",
+    "interval": "Student-t paired-difference CI; Bonferroni across two frozen candidates; at least six validation pairs",
+    "gp": "Existing fixed-kernel GP-UCB proposal; default simple coarse search remains unchanged",
+    "limits": [
+      "Analytic surfaces and Gaussian errors are software stress tests, not measured people.",
+      "Confidence coverage is empirical for this simulation, not a universal confidence guarantee.",
+      "GP latent intervals are model-based; observed coverage is reported even when poor.",
+      "An untested continuous region is not inferred from two tested endpoints."
+    ],
+    "results": [
+      {
+        "profile": "low-sensitivity-precision",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.008744769947539921,
+        "p90Regret": 0.008744769947539921,
+        "medianRecommendedRatio": 0.8250000000000001,
+        "recommendationLogSD": 0,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 3.359978000000069
+      },
+      {
+        "profile": "low-sensitivity-precision",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.03751865776743651,
+        "p90Regret": 0.15314569506656422,
+        "medianRecommendedRatio": 0.7934335160634579,
+        "recommendationLogSD": 0.07326154270414438,
+        "withinPracticalRegionRate": 0.5833333333333334,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.321192000000224
+      },
+      {
+        "profile": "low-sensitivity-precision",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.04158711010522165,
+        "p90Regret": 0.08556415277635031,
+        "medianRecommendedRatio": 0.766183772090534,
+        "recommendationLogSD": 0.07286346193394957,
+        "withinPracticalRegionRate": 0.5,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 5.531616000000099
+      },
+      {
+        "profile": "low-sensitivity-precision",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.005279547472284356,
+        "p90Regret": 0.016174150652261424,
+        "medianRecommendedRatio": 0.7947013849986586,
+        "recommendationLogSD": 0.02504548366598059,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 1,
+        "cpuMilliseconds": 115.95547000000022
+      },
+      {
+        "profile": "high-sensitivity-tracking",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.00521094214351836,
+        "p90Regret": 0.00521094214351836,
+        "medianRecommendedRatio": 1.175,
+        "recommendationLogSD": 2.8989753257218837e-17,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.090619999999831
+      },
+      {
+        "profile": "high-sensitivity-tracking",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.01668802859989126,
+        "p90Regret": 0.047770489888860734,
+        "medianRecommendedRatio": 1.1775009876577747,
+        "recommendationLogSD": 0.037289296613783586,
+        "withinPracticalRegionRate": 0.75,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.0936879999998155
+      },
+      {
+        "profile": "high-sensitivity-tracking",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.005751460396149173,
+        "p90Regret": 0.00942814287083249,
+        "medianRecommendedRatio": 1.1879145354020015,
+        "recommendationLogSD": 0.019800193371260634,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 10.125700999999822
+      },
+      {
+        "profile": "high-sensitivity-tracking",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.006634658668251359,
+        "p90Regret": 0.021602008232619832,
+        "medianRecommendedRatio": 1.2098198523496606,
+        "recommendationLogSD": 0.024432031748304925,
+        "withinPracticalRegionRate": 0.8333333333333334,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 1,
+        "cpuMilliseconds": 93.8831429999999
+      },
+      {
+        "profile": "broad-plateau",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.005229166666666683,
+        "p90Regret": 0.01012500000000005,
+        "medianRecommendedRatio": 1.0875,
+        "recommendationLogSD": 0.1775708936817176,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 7.212562000000162
+      },
+      {
+        "profile": "broad-plateau",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.0009590467885593756,
+        "p90Regret": 0.003403100233958656,
+        "medianRecommendedRatio": 1.0885732475897543,
+        "recommendationLogSD": 0.12748469104457752,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 0.9398470000000998
+      },
+      {
+        "profile": "broad-plateau",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.006696638983816404,
+        "p90Regret": 0.01658413689844595,
+        "medianRecommendedRatio": 1.045289587718039,
+        "recommendationLogSD": 0.19121750725266923,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 26.355437999999822
+      },
+      {
+        "profile": "broad-plateau",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.0018849978304794623,
+        "p90Regret": 0.006374464098054667,
+        "medianRecommendedRatio": 1.0420978056071686,
+        "recommendationLogSD": 0.14411817221207798,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 1,
+        "cpuMilliseconds": 130.75590099999977
+      },
+      {
+        "profile": "narrow-optimum",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.06026180371302625,
+        "p90Regret": 0.06026180371302625,
+        "medianRecommendedRatio": 0.9125000000000001,
+        "recommendationLogSD": 1.4494876628609418e-17,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 3.5212220000005345
+      },
+      {
+        "profile": "narrow-optimum",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.10896069820570642,
+        "p90Regret": 0.35564603881410917,
+        "medianRecommendedRatio": 0.9295045502007391,
+        "recommendationLogSD": 0.06701076370390303,
+        "withinPracticalRegionRate": 0.3333333333333333,
+        "inconclusiveRate": 0.08333333333333333,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 1.7919449999997141
+      },
+      {
+        "profile": "narrow-optimum",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.08409277372508832,
+        "p90Regret": 0.39813557928461024,
+        "medianRecommendedRatio": 0.9367496997597597,
+        "recommendationLogSD": 0.12006126393977547,
+        "withinPracticalRegionRate": 0.5833333333333334,
+        "inconclusiveRate": 0.16666666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.086985000000823
+      },
+      {
+        "profile": "narrow-optimum",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.048198937810367555,
+        "p90Regret": 0.02135587449336529,
+        "medianRecommendedRatio": 0.9367496997597597,
+        "recommendationLogSD": 0.04674772211900718,
+        "withinPracticalRegionRate": 0.6666666666666666,
+        "inconclusiveRate": 0.08333333333333333,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 0.7380952380952381,
+        "cpuMilliseconds": 126.03033600000026
+      },
+      {
+        "profile": "multiple-equivalent-regions",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.03093200950178554,
+        "p90Regret": 0.03093200950178554,
+        "medianRecommendedRatio": 1.2625000000000002,
+        "recommendationLogSD": 2.8989753257218837e-17,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.861820999999509
+      },
+      {
+        "profile": "multiple-equivalent-regions",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.018643185658351536,
+        "p90Regret": 0.048178147772835286,
+        "medianRecommendedRatio": 1.001171721304241,
+        "recommendationLogSD": 0.2334247168047085,
+        "withinPracticalRegionRate": 0.6666666666666666,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 2.13345500000014
+      },
+      {
+        "profile": "multiple-equivalent-regions",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.004819669805842401,
+        "p90Regret": 0.01274402968498689,
+        "medianRecommendedRatio": 1.2321291065304096,
+        "recommendationLogSD": 0.010549452495112889,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 25.220940999999584
+      },
+      {
+        "profile": "multiple-equivalent-regions",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.00714391465437722,
+        "p90Regret": 0.01274402968498689,
+        "medianRecommendedRatio": 1.0095878232828852,
+        "recommendationLogSD": 0.23250171746754084,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 0,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 0.626984126984127,
+        "cpuMilliseconds": 94.74831399999994
+      },
+      {
+        "profile": "high-noise",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.04033845960545166,
+        "p90Regret": 0.11557806240522205,
+        "medianRecommendedRatio": 0.9125000000000001,
+        "recommendationLogSD": 0.197539275705293,
+        "withinPracticalRegionRate": 0.25,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 2.85850900000014
+      },
+      {
+        "profile": "high-noise",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.04375662354283838,
+        "p90Regret": 0.1034289564459701,
+        "medianRecommendedRatio": 0.8767333517384092,
+        "recommendationLogSD": 0.17379092244805647,
+        "withinPracticalRegionRate": 0.3333333333333333,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 1.1936760000000959
+      },
+      {
+        "profile": "high-noise",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.0676170017500504,
+        "p90Regret": 0.11538089437622778,
+        "medianRecommendedRatio": 0.9989895659409457,
+        "recommendationLogSD": 0.23210430160889692,
+        "withinPracticalRegionRate": 0.16666666666666666,
+        "inconclusiveRate": 0.9166666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 5.988081000000193
+      },
+      {
+        "profile": "high-noise",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.03607823446273345,
+        "p90Regret": 0.0794178155811178,
+        "medianRecommendedRatio": 0.9037378585378166,
+        "recommendationLogSD": 0.15395597608702644,
+        "withinPracticalRegionRate": 0.25,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 0.6626984126984127,
+        "cpuMilliseconds": 115.60788900000034
+      },
+      {
+        "profile": "learning",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.0006826460695503744,
+        "p90Regret": 0.0006826460695503744,
+        "medianRecommendedRatio": 0.9125000000000001,
+        "recommendationLogSD": 1.4494876628609418e-17,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0.8333333333333334,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 0.9583333333333334,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 1.727516999999125
+      },
+      {
+        "profile": "learning",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.012847090923956408,
+        "p90Regret": 0.031871902457339354,
+        "medianRecommendedRatio": 0.9352235377697398,
+        "recommendationLogSD": 0.03618643630466405,
+        "withinPracticalRegionRate": 0.8333333333333334,
+        "inconclusiveRate": 0.9166666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 0.9583333333333334,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 2.0077850000000126
+      },
+      {
+        "profile": "learning",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.008284659644819226,
+        "p90Regret": 0.013530426811315577,
+        "medianRecommendedRatio": 0.9367496997597597,
+        "recommendationLogSD": 0.027362100776690868,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 0.8333333333333334,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 0.9583333333333334,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 10.352640000000065
+      },
+      {
+        "profile": "learning",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.007829795720287561,
+        "p90Regret": 0.0135635472286606,
+        "medianRecommendedRatio": 0.9197886629293511,
+        "recommendationLogSD": 0.029152326630239866,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0.75,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 0.9583333333333334,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 1,
+        "cpuMilliseconds": 104.05456799999979
+      },
+      {
+        "profile": "fatigue",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.010608854755269423,
+        "p90Regret": 0.050533338674823056,
+        "medianRecommendedRatio": 1.0875000000000001,
+        "recommendationLogSD": 0.03440571283962867,
+        "withinPracticalRegionRate": 0.8333333333333334,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 5.611190000000079
+      },
+      {
+        "profile": "fatigue",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.019362083782927347,
+        "p90Regret": 0.04797230688419503,
+        "medianRecommendedRatio": 1.1094811564503715,
+        "recommendationLogSD": 0.041969435135088815,
+        "withinPracticalRegionRate": 0.6666666666666666,
+        "inconclusiveRate": 0.9166666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.722230000000081
+      },
+      {
+        "profile": "fatigue",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.00457864207165055,
+        "p90Regret": 0.010165195064447755,
+        "medianRecommendedRatio": 1.0743802455420073,
+        "recommendationLogSD": 0.022208584974773054,
+        "withinPracticalRegionRate": 1,
+        "inconclusiveRate": 0.9166666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 5.215184999999565
+      },
+      {
+        "profile": "fatigue",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 48,
+        "observationsPerRun": [
+          48
+        ],
+        "meanRegret": 0.003893638125002652,
+        "p90Regret": 0.004974573639362934,
+        "medianRecommendedRatio": 1.0743802455420073,
+        "recommendationLogSD": 0.019863962275069272,
+        "withinPracticalRegionRate": 0.9166666666666666,
+        "inconclusiveRate": 0.9166666666666666,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": 1,
+        "heldoutIntervals": 24,
+        "gpLatentIntervalCoverage": 1,
+        "cpuMilliseconds": 119.21474000000012
+      },
+      {
+        "profile": "insufficient-data",
+        "method": "grid",
+        "runs": 12,
+        "measurementBudget": 8,
+        "observationsPerRun": [
+          8
+        ],
+        "meanRegret": 0.24646235374636816,
+        "p90Regret": 0.34851032535349835,
+        "medianRecommendedRatio": 1,
+        "recommendationLogSD": 0.27204652734049856,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": null,
+        "heldoutIntervals": 0,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 3.7507160000002386
+      },
+      {
+        "profile": "insufficient-data",
+        "method": "random",
+        "runs": 12,
+        "measurementBudget": 8,
+        "observationsPerRun": [
+          8
+        ],
+        "meanRegret": 0.24646235374636816,
+        "p90Regret": 0.34851032535349835,
+        "medianRecommendedRatio": 1,
+        "recommendationLogSD": 0.27204652734049856,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": null,
+        "heldoutIntervals": 0,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 4.081686999999874
+      },
+      {
+        "profile": "insufficient-data",
+        "method": "coarse",
+        "runs": 12,
+        "measurementBudget": 8,
+        "observationsPerRun": [
+          8
+        ],
+        "meanRegret": 0.24646235374636816,
+        "p90Regret": 0.34851032535349835,
+        "medianRecommendedRatio": 1,
+        "recommendationLogSD": 0.27204652734049856,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": null,
+        "heldoutIntervals": 0,
+        "gpLatentIntervalCoverage": null,
+        "cpuMilliseconds": 2.0367299999998068
+      },
+      {
+        "profile": "insufficient-data",
+        "method": "bayesian",
+        "runs": 12,
+        "measurementBudget": 8,
+        "observationsPerRun": [
+          8
+        ],
+        "meanRegret": 0.24646235374636816,
+        "p90Regret": 0.34851032535349835,
+        "medianRecommendedRatio": 1,
+        "recommendationLogSD": 0.27204652734049856,
+        "withinPracticalRegionRate": 0,
+        "inconclusiveRate": 1,
+        "falseImprovementRate": 0,
+        "failureRate": 0,
+        "heldoutIntervalCoverage": null,
+        "heldoutIntervals": 0,
+        "gpLatentIntervalCoverage": 0.9325396825396826,
+        "cpuMilliseconds": 1.8064239999996516
+      }
+    ]
+  },
+  "coverage": {
+    "benchmark": "precision-interval-coverage",
+    "synthetic": true,
+    "humanParticipants": 0,
+    "model": "iid Gaussian paired differences",
+    "replications": 800,
+    "pairsPerReplication": 12,
+    "nominal": 0.95,
+    "covered": 762,
+    "empirical": 0.9525
+  },
+  "telemetry": {
+    "benchmark": "aim-telemetry-cpu",
+    "events": 200000,
+    "elapsedMs": 40.152046999999925,
+    "bytes": 2883584,
+    "columns": 22,
+    "hardwareInputLatencyMeasured": false,
+    "webglFPSMeasured": false
+  },
+  "humanEvidence": {
+    "participants": 0,
+    "baseline": null,
+    "optimized": null,
+    "pairedDifference": null,
+    "confidenceInterval": null,
+    "effectSize": null,
+    "sessions": 0,
+    "conclusion": "inconclusive",
+    "humanEffectivenessVerified": false
+  },
+  "protocols": {
+    "quick": {
+      "targetMinutes": [
+        5,
+        8
+      ],
+      "tasks": 3,
+      "rounds": 2
+    },
+    "precision": {
+      "targetMinutes": [
+        20,
+        40
+      ],
+      "tasks": 7,
+      "rounds": 3
+    },
+    "longitudinal": {
+      "minimumSessions": 3,
+      "minimumDays": 2,
+      "minimumSpanHours": 24
+    },
+    "stages": [
+      "baseline",
+      "coarse",
+      "fine",
+      "heldout",
+      "retention"
+    ]
+  },
+  "storage": {
+    "summaries": 12000,
+    "traces": 64,
+    "plans": 180,
+    "profiles": 20
+  },
+  "limits": {
+    "humanImprovementVerified": false,
+    "nativeGameTransferVerified": false,
+    "physicalSensorCountsVerified": false,
+    "physicalInputLatencyVerified": false,
+    "universalTaskWeightsVerified": false,
+    "GPConfidenceGuarantee": false
+  },
+  "methodology": "/aim-methodology.html"
+}

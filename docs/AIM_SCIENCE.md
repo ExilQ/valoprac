@@ -1,3 +1,5 @@
+> Historical 03.00 / aim-1.0.0 design record. For current 07.00 / aim-2.0.0 protocols, statistics, sources and executed validation, see [precision research](precision/RESEARCH.md), [benchmark method](precision/BENCHMARK_METHOD.md), and `/aim-methodology.html`. Earlier six-task/bootstrap/storage descriptions below apply to the archived implementation.
+
 # VALOPRAC aim measurement system
 
 Release: 3.0.0, displayed as major patch **03.00**. Algorithm: `aim-1.0.0`.
