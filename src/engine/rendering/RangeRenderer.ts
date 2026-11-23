@@ -30,6 +30,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import {colorBatchSignature,mergeStaticArchitecture} from './StaticGeometry';
 import {GroundContacts} from './GroundContacts';
 import {createCharacterBatches,useMultiDrawCharacters,type CharacterBatches,type CharacterBatchObject} from './CharacterBatches';
+import { loadWeaponFinishes, WEAPON_FINISHES } from '../../config/weaponFinishes';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
 import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
 import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
@@ -68,6 +69,7 @@ export class RangeRenderer {
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
   private shells:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private shellIndex=0;
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
+  private viewport={ width:0, height:0, ratio:0, composer:null as EffectComposer|null };
   private materialRevision=0;private preparedRevision=-1;private shaderKey='';private preparationPromise:Promise<ShaderPreparationReport>|null=null;
   private canvasWarmHidden=false;private canvasVisibility='';
   private preparationPhase:ShaderPreparationStatus['stage']='idle';private preparationStarted=0;private preparationRevision=-1;private completedPrograms:number|null=null;
@@ -296,7 +298,13 @@ export class RangeRenderer {
   }
   private buildWeapon(){
     this.weaponCamera.add(this.weapon);this.weaponScene.add(this.weaponCamera);this.weaponScene.environment=this.scene.environment;this.weaponScene.environmentIntensity=.8;this.weaponScene.add(new THREE.HemisphereLight(0xddefff,0x506565,2.4));const light=new THREE.DirectionalLight(0xffead4,3);light.position.set(-3,5,4);this.weaponScene.add(light);
-    for(const id of WEAPON_ORDER){const v=createWeaponView(id,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},this.materialLibrary);this.visuals[id]=v;this.weapon.add(v.root);}
+    const finishes=loadWeaponFinishes();
+    for(const id of WEAPON_ORDER){
+      const finish=finishes[id];
+      const visual=createWeaponView(id,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},this.materialLibrary,finish&&finish!=='original'?WEAPON_FINISHES[finish]:undefined);
+      this.visuals[id]=visual;
+      this.weapon.add(visual.root);
+    }
   }
   private buildShells(){
     const g=new THREE.CylinderGeometry(0.008,0.008,0.03,6);this.geometries.add(g);const m=this.material(0xa58e52,0.28,'brushed-metal');
@@ -391,7 +399,9 @@ export class RangeRenderer {
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};
     const shaderKey=[settings.graphicsPreset,settings.shadowQuality,settings.textureQuality,settings.postProcessing,settings.ambientOcclusion,settings.antialias,settings.effectsQuality,settings.renderScale].join(':');
     if(shaderKey!==this.shaderKey){this.shaderKey=shaderKey;this.materialRevision++;}
-    this.settings={...settings};this.materialLibrary.setQuality(settings.textureQuality);this.ensureEnvironment(settings.graphicsPreset);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
+    this.settings={...settings};this.materialLibrary.setQuality(settings.textureQuality);this.ensureEnvironment(settings.graphicsPreset);
+    const pixelRatio=Math.min(window.devicePixelRatio||1,2)*settings.renderScale;
+    if(this.renderer.getPixelRatio()!==pixelRatio)this.renderer.setPixelRatio(pixelRatio);
     const shadows=settings.shadowQuality!=='off';this.renderer.shadowMap.enabled=shadows;this.sun.castShadow=shadows;
     for(const batch of [...this.targetBatches,...this.defenderWeapons.values()])batch.castShadow=shadows;
     const resolution={off:256,low:512,medium:1024,high:2048,ultra:2048}[settings.shadowQuality];
@@ -460,7 +470,28 @@ export class RangeRenderer {
     const tracer=this.tracers[this.tracerIndex++%this.tracers.length];const a=tracer.geometry.getAttribute('position') as THREE.BufferAttribute;
     a.setXYZ(0,shot.position.x+0.2,shot.position.y+this.simulation.movement.eyeHeight-0.16,shot.position.z-0.35);a.setXYZ(1,shot.impact.x,shot.impact.y,shot.impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+0.045;
   }
-  resize(){if(!this.mounted)return;const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.weaponCamera.aspect=w/h;this.weaponCamera.fov=2*Math.atan(Math.tan(VIEWMODEL_HFOV*DEG/2)/this.weaponCamera.aspect)/DEG;this.weaponCamera.updateProjectionMatrix();this.updateFov();this.composer?.setPixelRatio(this.renderer.getPixelRatio());this.composer?.setSize(w,h);if(this.ao)this.ao.setSize(Math.ceil(w*this.renderer.getPixelRatio()*0.5),Math.ceil(h*this.renderer.getPixelRatio()*0.5));if(this.fxaa)this.fxaa.uniforms.resolution.value.set(1/(w*this.renderer.getPixelRatio()),1/(h*this.renderer.getPixelRatio()));}
+  resize(){
+    if(!this.mounted)return;
+    const width=this.host.clientWidth,height=this.host.clientHeight,ratio=this.renderer.getPixelRatio();
+    if(!width||!height)return;
+    const sizeChanged=width!==this.viewport.width||height!==this.viewport.height;
+    const ratioChanged=ratio!==this.viewport.ratio;
+    if(sizeChanged){
+      this.renderer.setSize(width,height);
+      this.camera.aspect=width/height;
+      this.weaponCamera.aspect=width/height;
+      this.weaponCamera.fov=2*Math.atan(Math.tan(VIEWMODEL_HFOV*DEG/2)/this.weaponCamera.aspect)/DEG;
+      this.weaponCamera.updateProjectionMatrix();
+    }
+    if(this.composer&&(sizeChanged||ratioChanged||this.composer!==this.viewport.composer)){
+      if(ratioChanged||this.composer!==this.viewport.composer)this.composer.setPixelRatio(ratio);
+      this.composer.setSize(width,height);
+      this.ao?.setSize(Math.ceil(width*ratio*.5),Math.ceil(height*ratio*.5));
+      this.fxaa?.uniforms.resolution.value.set(1/(width*ratio),1/(height*ratio));
+    }
+    this.updateFov();
+    this.viewport={width,height,ratio,composer:this.composer};
+  }
   private updateFov(){this.camera.fov=cameraVerticalFov(this.settings.fov,1,this.camera.aspect);this.camera.updateProjectionMatrix();}
   private updateCharacters(alpha:number){
     const s=this.simulation;

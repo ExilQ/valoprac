@@ -1,7 +1,7 @@
 import {SeededRandom} from '../../engine/simulation/random';
 import type {AngleSector} from '../../engine/tactical/levels';
 import {scenarioRoute} from './templates';
-import {validateScenario,analyzeScenarioGeometry,scenarioApproach} from './validation';
+import {validateScenarioWithGeometry,scenarioApproach} from './validation';
 import type {CompiledScenario,ScenarioDefinition} from './types';
 import type {Vec3} from '../../engine/types';
 
@@ -17,6 +17,21 @@ export function selectScenarioPlacements(def:ScenarioDefinition,attempt:number):
  });
 }
 export function compileScenario(raw:ScenarioDefinition):CompiledScenario{
- const definition=validateScenario(raw),rules=definition.rules,route=scenarioRoute(definition.routeId);
- return{definition,settingsPatch:{practiceMap:definition.template,seed:definition.seed,targetCount:definition.bots.length,targetSize:1,targetSpeed:1,analysisWall:false,drill:'none',behavior:'stationary',defenderSkill:rules.difficulty,defenderWeapon:'mixed',combatMode:rules.combatMode,exposureEnabled:rules.combatMode==='exposure',exposureLimit:rules.exposureLimit,exposureMode:'continuous',duration:rules.duration??60,peekingTimed:rules.duration!==null,randomDefenders:rules.randomSpawns,defenderReposition:definition.bots.some(b=>b.movement==='reposition')?.45:0,infiniteReserve:rules.infiniteReserve,autoReload:rules.autoReload,eliminationRule:'damage',peekScenario:route.template==='complex'?'slicing':'free'},sectors:selectScenarioPlacements(definition,0),spawn:copy(definition.player.position),yaw:definition.player.yaw,pitch:definition.player.pitch,weapon:definition.player.weapon,route:scenarioApproach(definition),geometry:analyzeScenarioGeometry(definition)};
+ const {definition,geometry}=validateScenarioWithGeometry(raw),rules=definition.rules,route=scenarioRoute(definition.routeId);
+ return{definition,settingsPatch:{practiceMap:definition.template,seed:definition.seed,targetCount:definition.bots.length,targetSize:1,targetSpeed:1,analysisWall:false,drill:'none',behavior:'stationary',defenderSkill:rules.difficulty,defenderWeapon:'mixed',combatMode:rules.combatMode,exposureEnabled:rules.combatMode==='exposure',exposureLimit:rules.exposureLimit,exposureMode:'continuous',duration:rules.duration??60,peekingTimed:rules.duration!==null,randomDefenders:rules.randomSpawns,defenderReposition:definition.bots.some(b=>b.movement==='reposition')?.45:0,infiniteReserve:rules.infiniteReserve,autoReload:rules.autoReload,eliminationRule:'damage',peekScenario:route.template==='complex'?'slicing':'free'},sectors:selectScenarioPlacements(definition,0),spawn:copy(definition.player.position),yaw:definition.player.yaw,pitch:definition.player.pitch,weapon:definition.player.weapon,route:scenarioApproach(definition),geometry};
+}
+
+/** Find a replayable first layout that differs from the current starting layout. */
+export function scenarioWithDifferentPlacement(definition: ScenarioDefinition): ScenarioDefinition | null {
+ if (!definition.bots.some(bot => bot.alternatives.some(p => p.x !== bot.position.x || p.y !== bot.position.y || p.z !== bot.position.z))) return null;
+ const initial = selectScenarioPlacements(definition, 0);
+ for (let offset = 1; offset <= 64; offset++) {
+  const seed = (definition.seed - 1 + offset) % 2147483647 + 1;
+  const candidate = { ...definition, seed, rules: { ...definition.rules, randomSpawns:true } };
+  if (selectScenarioPlacements(candidate, 0).some(({position:p}, i) => {
+   const previous = initial[i].position;
+   return p.x !== previous.x || p.y !== previous.y || p.z !== previous.z;
+  })) return candidate;
+ }
+ return null;
 }

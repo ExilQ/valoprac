@@ -39,7 +39,7 @@ export interface ShotEvent {
   penetrationSegments?:import('./collision/Ballistics').PenetrationSegment[];penetrationStop?:string;lifeGeneration?:number;
   timestamp: number; weapon: WeaponId; damage?:number; ads?:boolean; scopeZoom?:number; recoveryUntil?:number;penetratedLayers?:number; accuracyState?:string; horizontalDirection?:number; shotIndex: number; magazineShot: number; firstShot: boolean;
   position: Vec3; velocity: Vec3; direction: Vec3; aim: {yaw:number;pitch:number};
-  recoil: {pitch:number;yaw:number}; spread: {base:number;movement:number;bloom:number;air:number;total:number;x:number;y:number};
+  recoil: {pitch:number;yaw:number}; spread: {base:number;movement:number;bloom:number;air:number;landing?:number;total:number;x:number;y:number};
   hit: HitZone; impact: Vec3; targetId: number | null; targetPosition: Vec3 | null; targetState: Behavior | null;
   targetGeneration: number | null; playerCompensation: {pitch:number;yaw:number};
   adsTransition?:number; targetElevation?:number; stoppedFor?:number; accurate: boolean; releaseTime: number | null; thresholdDelta: number | null;

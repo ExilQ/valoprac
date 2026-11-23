@@ -5,7 +5,7 @@ import {compileScenario,selectScenarioPlacements} from '../training/scenarios/co
 import {Movement} from '../engine/movement/Movement';
 import {emptyInput} from '../engine/types';
 
-describe('A4 five original tactical routes have real traversable cover and sightlines',()=>{
+describe('Original tactical routes have real traversable cover and sightlines',()=>{
  for(const route of SCENARIO_ROUTES)it(`${route.id}: validates cover, exposure progression and actual manual-controller traversal`,()=>{
   const def=validateScenario(createScenario(route.id)),plan=compileScenario(def),geometry=plan.geometry,level=scenarioLevel(def),m=new Movement(undefined,level.obstacles);m.reset(plan.spawn,0,true);
   expect(geometry.spawnThreats).toEqual([]);expect(geometry.maxSimultaneousThreats).toBeLessThanOrEqual(1);expect(geometry.revealed).toHaveLength(def.bots.length);

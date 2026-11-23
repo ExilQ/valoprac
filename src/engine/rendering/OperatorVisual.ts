@@ -1,13 +1,13 @@
 import * as T from 'three';
-import type {WeaponVisual} from './WeaponView';
+import type {WeaponFinish,WeaponVisual} from './WeaponView';
 import {mergeStaticArchitecture} from './StaticGeometry';
 import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
-export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,armsFactory:(p:T.Group,s:boolean,g:typeof geometry,m:typeof material,surfaces:SurfaceMaterialLibrary)=>{animate:(...args:number[])=>void;animateBolt?:(phase:number)=>void;dispose:()=>void},surfaceLibrary?:SurfaceMaterialLibrary):WeaponVisual{
+export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,armsFactory:(p:T.Group,s:boolean,g:typeof geometry,m:typeof material,surfaces:SurfaceMaterialLibrary)=>{animate:(...args:number[])=>void;animateBolt?:(phase:number)=>void;dispose:()=>void},surfaceLibrary?:SurfaceMaterialLibrary,finish?:WeaponFinish):WeaponVisual{
  const surfaces=surfaceLibrary??new SurfaceMaterialLibrary();
  const root=new T.Group(),sights=new T.Group(),magazine=new T.Group(),cylinder=new T.Group(),hammer=new T.Group(),bolt=new T.Group();root.add(sights,magazine,cylinder,hammer,bolt);root.name='original VALOPRAC precision bolt rifle';bolt.name='articulated bolt assembly';
  const mat=(family:VisualMaterialId,color:number,roughness?:number,metalness?:number)=>material(surfaces.material(family,{tint:color,roughness,metalness})) as T.MeshStandardMaterial;
- const steel=mat('steel',0x43545c,.32),edge=mat('brushed-metal',0x869499,.28),polymer=mat('plastic',0x30444b,.85),rubber=mat('rubber',0x1c2c33,.96),glass=mat('glass',0x385d68,.2),accent=mat('painted-metal',0xa59575,.5,.5);
+ const steel=mat('steel',finish?.steel??0x43545c,.32),edge=mat('brushed-metal',finish?.edge??0x869499,.28),polymer=mat('plastic',finish?.polymer??0x30444b,.85),rubber=mat('rubber',finish?.dark??0x1c2c33,.96),glass=mat('glass',0x385d68,.2),accent=mat('painted-metal',0xa59575,.5,.5);
  const mesh=(g:T.BufferGeometry,m:T.Material,p:T.Group=root)=>{const family=m.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);const o=new T.Mesh(geometry(g),m);p.add(o);return o;};
  const profile=(pts:[number,number][],w:number,m:T.Material,p:T.Group=root,holes:[number,number][][]=[])=>{const sh=new T.Shape();pts.forEach(([z,y],i)=>i?sh.lineTo(-z,y):sh.moveTo(-z,y));sh.closePath();for(const points of holes){const hole=new T.Path();points.forEach(([z,y],i)=>i?hole.lineTo(-z,y):hole.moveTo(-z,y));hole.closePath();sh.holes.push(hole);}const g=new T.ExtrudeGeometry(sh,{depth:w-.004,bevelEnabled:true,bevelSize:.002,bevelThickness:.002,bevelSegments:1,steps:1});g.translate(0,0,-(w-.004)/2);g.rotateY(Math.PI/2);return mesh(g,m,p);};
  const tube=(r:number,len:number,x:number,y:number,z:number,m:T.Material,p:T.Group=root,n=16)=>{const o=mesh(new T.CylinderGeometry(r,r,len,n),m,p);o.rotation.x=Math.PI/2;o.position.set(x,y,z);return o;};

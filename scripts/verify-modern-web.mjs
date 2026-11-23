@@ -15,6 +15,7 @@ assert.deepEqual(report.guidance.guides,['accessibility','size-aware-styling','p
 const [before,after]=report.initialLoad.rows;assert.equal(before.name,'before');assert.equal(after.name,'after');assert.equal(before.canvas,1);assert.equal(after.canvas,0);assert(after.decoded<before.decoded&&after.gzipEstimate<before.gzipEstimate);
 const archivedSources={
  'src/ui/MainMenu.tsx':'docs/modern-web-baseline/MainMenu.tsx.txt',
+ 'src/ui/Results.tsx':'docs/modern-web-baseline/Results.tsx.txt',
  'src/app/navigation.ts':'docs/modern-web-baseline/navigation.ts.txt',
  'src/ui/TrainingPlatform.tsx':'docs/modern-web-baseline/TrainingPlatform.tsx.txt'
 };

@@ -1,3 +1,5 @@
+import {scenarioComparisonKey, sessionScenario} from '../training/scenarios/library';
+import {scenarioWithDifferentPlacement} from '../training/scenarios/compile';
 import {localeTag} from '../i18n/locale';
 import {HopFeedback} from './MechanicsFeedback';
 import {PeekingFeedback,OperatorFeedback} from './PeekingFeedback';
@@ -38,5 +40,12 @@ export function ResultDetails({session}:{session:SessionData}){
   </>;
 }
 export function Results(){const session=useApp(x=>x.result),start=useApp(x=>x.start),menu=useApp(x=>x.menu),history=useApp(x=>x.history),notice=useApp(x=>x.notice),setTab=useApp(x=>x.setTab),startSession=useApp(x=>x.startSession);if(!session)return null;
-  return <section className="results-page"><button className="back-button" onClick={menu}><ArrowLeft size={16}/> 훈련장으로</button><div className="results-heading"><div><p className="eyebrow"><CheckCircle2 size={14}/> 훈련 완료</p><h1>훈련 결과</h1><p><span data-locale={scenarioTitleIsLiteral(session.sessionOptions)?'literal':undefined}>{trainingTitle(session.mode,session.settings,session.sessionOptions)}</span> <span>·</span> {Math.round(session.duration)}초 <span>·</span> {WEAPONS[session.weapon].name}</p></div><button className="primary-button" onClick={()=>session.runtime==='unreal'?setTab('stream'):session.sessionOptions?.scenario||session.sessionOptions?.exercise?startSession(session.sessionOptions,session.weapon):start()}><RotateCcw size={17}/> {session.runtime==='unreal'?'언리얼 연결 화면으로':'다시 훈련하기'}</button></div>{notice&&<div className="inline-notice">{notice}</div>}<ResultDetails session={session}/><section className="data-card"><h3>최근 기록과 비교<span>같은 모드 · 최근 14회</span></h3><Trend sessions={history.filter(s=>s.mode===session.mode&&(s.runtime??'browser')===(session.runtime??'browser'))}/></section><p className="result-footnote">이동·반동 곡선과 회복 계수는 조정 가능한 추정 모델입니다. 결과는 이 훈련장 안에서의 성과를 나타냅니다.</p></section>;
+  const scenario=sessionScenario(session);
+  const comparison=scenarioComparisonKey(session);
+  const related=history.filter(record=>comparison!==null
+    ? scenarioComparisonKey(record)===comparison
+    : !sessionScenario(record)&&record.mode===session.mode&&(record.runtime??'browser')===(session.runtime??'browser'));
+  const different=scenario&&session.runtime!=='unreal'?scenarioWithDifferentPlacement(scenario):null;
+  const best=related.reduce<number|null>((top, record)=>record.tactical?Math.max(top??0,record.tactical.clears):top,null);
+  return <section className="results-page"><button className="back-button" onClick={menu}><ArrowLeft size={16}/> 훈련장으로</button><div className="results-heading"><div><p className="eyebrow"><CheckCircle2 size={14}/> 훈련 완료</p><h1>훈련 결과</h1><p><span data-locale={scenarioTitleIsLiteral(session.sessionOptions)?'literal':undefined}>{trainingTitle(session.mode,session.settings,session.sessionOptions)}</span> <span>·</span> {Math.round(session.duration)}초 <span>·</span> {WEAPONS[session.weapon].name}</p></div><div className="scenario-route-actions"><button className="primary-button" onClick={()=>session.runtime==='unreal'?setTab('stream'):scenario?startSession({scenario},session.weapon):session.sessionOptions?.exercise?startSession(session.sessionOptions,session.weapon):start()}><RotateCcw size={17}/> {session.runtime==='unreal'?'언리얼 연결 화면으로':'다시 훈련하기'}</button>{different&&<button className="secondary-button" onClick={()=>startSession({scenario:different})}>다른 배치로 훈련</button>}</div></div>{notice&&<div className="inline-notice">{notice}</div>}<ResultDetails session={session}/><section className="data-card"><h3>최근 기록과 비교<span>{scenario?'같은 조건':'같은 모드'} · 최근 14회</span></h3>{scenario&&best!==null&&<p>개인 최고 · {best}각 클리어</p>}<Trend sessions={related}/></section><p className="result-footnote">이동·반동 곡선과 회복 계수는 조정 가능한 추정 모델입니다. 결과는 이 훈련장 안에서의 성과를 나타냅니다.</p></section>;
 }

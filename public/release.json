@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.7",
+  "version": "12.0.8",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -150,7 +150,15 @@
     "intent-loaded-training-preview",
     "container-sized-training-workspace",
     "native-route-links-and-skip-navigation",
-    "native-history-delete-confirmation"
+    "native-history-delete-confirmation",
+    "local-saved-drill-library",
+    "scenario-condition-comparisons",
+    "shot-spread-review-timeline",
+    "scenario-after-clear-activation",
+    "two-additional-original-tactical-routes",
+    "original-per-weapon-finishes",
+    "local-valorant-settings-preview",
+    "indexed-ground-support-queries"
   ],
   "unreal": {
     "engine": "5.7",
@@ -165,7 +173,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.07",
+  "patchLabel": "12.08",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -485,6 +493,7 @@
   },
   "agentReview": {
     "report": "/agent-validation.json",
+    "captureRelease": "12.0.7",
     "baseline": "12.06",
     "geometryVersion": "field-agent-2",
     "reference": "https://playvalorant.com/en-us/agents/phoenix/"

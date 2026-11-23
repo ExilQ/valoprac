@@ -110,14 +110,30 @@ export class Simulation {
     return result;
   }
   trainingState(){return{options:this.options,exercise:this.exercise?.integrityState()??null,movement:this.movementPractice.trainingState()};}
+  private scenarioSectors:ReturnType<typeof selectScenarioPlacements>=[];
   private applyScenarioTargets(){
     if(!this.options.scenario||!this.scenario)return;
     const sectors=selectScenarioPlacements(this.options.scenario,this.lifeGeneration);
     this.exposureLabels=sectors.map(a=>a.label);
-    for(const target of this.targets){const sector=sectors[target.id];target.enabled=!!sector;target.active=!!sector;if(!sector)continue;target.scale=1;target.behavior='stationary';target.speedMultiplier=1;target.spawn(sector.position.x,sector.position.z,this.time,sector.position.y);}
+    this.scenarioSectors=sectors;
+    const chained=this.options.scenario.rules.arrival==='after-clear';
+    for(const target of this.targets){
+      target.enabled=false;
+      target.active=false;
+      if(!chained||target.id===0)this.activateScenarioTarget(target.id);
+    }
     if(this.defenders){this.defenders.setSectors(sectors);this.defenders.retry();}
     else this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.scenario.spawn,this.settings.seed,sectors);
     this.defenders.setSimulationRules(this.rules);this.exposure.reset();
+  }
+  private activateScenarioTarget(index:number){
+    const sector=this.scenarioSectors[index],target=this.targets[index];
+    if(!sector||!target||target.enabled)return;
+    target.enabled=true;
+    target.scale=1;
+    target.behavior='stationary';
+    target.speedMultiplier=1;
+    target.spawn(sector.position.x,sector.position.z,this.time,sector.position.y);
   }
   private spawn(t:Target){
     t.difficulty=this.settings.botDifficulty;t.scale=this.mode==='free'?this.settings.targetSize:1;t.speedMultiplier=this.mode==='free'?this.settings.targetSpeed:1;
@@ -217,7 +233,7 @@ export class Simulation {
     this.defenders?.shot(s);this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
     if(!m.accurate)this.lastEarlyAt=this.time;
     if(t){if(!t.reactionRecorded&&this.time-t.changeAt>=0&&this.time-t.changeAt<2){this.reactions.push({targetId:t.id,changeTime:t.changeAt,latency:this.time-t.changeAt});if(this.reactions.length>256)this.reactions.shift();t.reactionRecorded=true;}this.lastHitAt=this.time;this.lastHit=s.hit;t.health-=s.damage??0;const rule=this.mode==='free'?this.settings.eliminationRule:'head';if(s.hit==='head'&&(this.weaponId!=='operator'||rule!=='damage'||t.health<=0)||rule==='any'||rule==='damage'&&t.health<=0){
-      const kill={timestamp:this.time,targetId:t.id,generation:t.generation,elapsed:this.time-t.spawnAt,firstShot:t.shotsReceived===0};this.kills.push(kill);this.stats.kill(kill);if(this.kills.length>256)this.kills.shift();t.eliminate(this.time);this.angles?.eliminated(t.id);this.defenders?.eliminated(t.id);this.onKill?.();
+      const kill={timestamp:this.time,targetId:t.id,generation:t.generation,elapsed:this.time-t.spawnAt,firstShot:t.shotsReceived===0};this.kills.push(kill);this.stats.kill(kill);if(this.kills.length>256)this.kills.shift();t.eliminate(this.time);this.angles?.eliminated(t.id);this.defenders?.eliminated(t.id);if(this.options.scenario?.rules.arrival==='after-clear')this.activateScenarioTarget(t.id+1);this.onKill?.();
     }t.shotsReceived++;}
     this.onShot?.(s);
   };

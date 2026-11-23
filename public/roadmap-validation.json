@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.7",
-  "patchLabel": "12.07",
-  "generatedAt": "2026-11-22T02:35:11.969Z",
+  "release": "12.0.8",
+  "patchLabel": "12.08",
+  "generatedAt": "2026-11-22T02:46:26.158Z",
   "tests": {
-    "application": 1470,
+    "application": 1485,
     "broker": 28,
     "hosting": 28,
     "passed": true,
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3107
+        "replayGzipBytes": 3106
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18229,7 +18229,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3104
+        "replayGzipBytes": 3103
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18245,7 +18245,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2955
+        "replayGzipBytes": 2954
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18261,7 +18261,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 790,
-        "replayGzipBytes": 2953
+        "replayGzipBytes": 2954
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18277,7 +18277,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 3000
+        "replayGzipBytes": 2999
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 2999
+        "replayGzipBytes": 2998
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18309,7 +18309,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 769,
-        "replayGzipBytes": 3378
+        "replayGzipBytes": 3377
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18325,7 +18325,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 768,
-        "replayGzipBytes": 3375
+        "replayGzipBytes": 3373
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,71 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4509
+        "replayGzipBytes": 4507
+      },
+      {
+        "benchmark": "scenario-common-replay",
+        "route": "sniper-jamb",
+        "random": false,
+        "seed": 1947,
+        "ticks": 806,
+        "bots": 1,
+        "score": 1,
+        "hits": 1,
+        "checksum": "361917aa53ba585c",
+        "passed": true,
+        "routeSamples": 291,
+        "maxThreats": 1,
+        "codeBytes": 836,
+        "replayGzipBytes": 5466
+      },
+      {
+        "benchmark": "scenario-common-replay",
+        "route": "sniper-jamb",
+        "random": true,
+        "seed": 7319,
+        "ticks": 806,
+        "bots": 1,
+        "score": 1,
+        "hits": 1,
+        "checksum": "fd26f850240f7b7e",
+        "passed": true,
+        "routeSamples": 291,
+        "maxThreats": 1,
+        "codeBytes": 834,
+        "replayGzipBytes": 5461
+      },
+      {
+        "benchmark": "scenario-common-replay",
+        "route": "ramp-approach",
+        "random": false,
+        "seed": 1947,
+        "ticks": 1119,
+        "bots": 1,
+        "score": 1,
+        "hits": 1,
+        "checksum": "087f4c01ef38ae91",
+        "passed": true,
+        "routeSamples": 421,
+        "maxThreats": 1,
+        "codeBytes": 868,
+        "replayGzipBytes": 5324
+      },
+      {
+        "benchmark": "scenario-common-replay",
+        "route": "ramp-approach",
+        "random": true,
+        "seed": 7319,
+        "ticks": 1119,
+        "bots": 1,
+        "score": 1,
+        "hits": 1,
+        "checksum": "2f64d1048e32a23e",
+        "passed": true,
+        "routeSamples": 421,
+        "maxThreats": 1,
+        "codeBytes": 866,
+        "replayGzipBytes": 5319
       }
     ],
     "browser": {

@@ -1,3 +1,5 @@
+import { useId, useState, type CSSProperties } from 'react';
+import { equipWeaponFinish, loadWeaponFinishes, WEAPON_FINISHES } from '../config/weaponFinishes';
 import { Check, ArrowRight } from 'lucide-react';
 import { WEAPONS, WEAPON_ORDER } from '../config/weapons';
 import { AUDIO_PROFILES } from '../config/audio';
@@ -19,6 +21,12 @@ const distanceLabel=(id:WeaponId,index:number)=>{const values=WEAPONS[id].damage
 /** The inventory changes only the existing equipped-weapon state. */
 export function WeaponSelection({compact=false}:{compact?:boolean}) {
  const selected=useApp(s=>s.weapon),choose=useApp(s=>s.setWeapon),setTab=useApp(s=>s.setTab),weapon=WEAPONS[selected],closeDamage=weapon.damage[0];
+ const finishGroup=useId();
+ const [finishes,setFinishes]=useState(loadWeaponFinishes);
+ const [finishMessage,setFinishMessage]=useState('');
+ const finishId=finishes[selected]??'original',finish=WEAPON_FINISHES[finishId];
+ const color=(value:number)=>`#${value.toString(16).padStart(6,'0')}`;
+ const swatches=finishId==='original'?undefined:{'--weapon-metal':color(finish.steel),'--weapon-polymer':color(finish.polymer),'--weapon-edge':color(finish.edge),'--weapon-dark-metal':color(finish.dark)} as CSSProperties;
  return <section className={`weapon-selection precision-weapons ${compact?'compact':''}`}>
   {!compact&&<header className="view-title weapon-utility-heading"><p className="eyebrow">훈련 장비</p><h1>무기 선택</h1><p>조준 방식과 훈련 목적에 맞춰 선택하세요. 장착은 바로 적용됩니다.</p></header>}
   <div className="inventory-layout weapon-utility-layout">
@@ -30,7 +38,9 @@ export function WeaponSelection({compact=false}:{compact?:boolean}) {
     </button>;})}
    </div><p className="weapon-inventory-note">무기를 바꿔도 감도와 훈련 설정은 유지됩니다.</p></div>
    {!compact&&<article className="weapon-equipment-sheet" aria-label="선택한 무기 정보"><header className="weapon-sheet-header"><div><p>{CATEGORY[selected]}</p><h2>{weapon.name}</h2></div><span className="weapon-equipped"><Check size={14} aria-hidden="true"/> 현재 장착</span></header>
-    <div className="weapon-sheet-art"><WeaponSilhouette id={selected}/><span>자체 제작 무기 도식</span></div>
+    <div className="weapon-sheet-art" style={swatches}><WeaponSilhouette id={selected}/><span>{finish.title}</span></div>
+    <fieldset className="weapon-finishes"><legend>무기 스킨</legend>{(Object.keys(WEAPON_FINISHES) as (keyof typeof WEAPON_FINISHES)[]).map(id=><label key={id}><input type="radio" name={finishGroup} checked={id===finishId} onChange={()=>{try{setFinishes(equipWeaponFinish(selected,id));setFinishMessage('');}catch{setFinishMessage('무기 스킨을 저장하지 못했습니다.');}}}/><i aria-hidden="true" style={{background:color(WEAPON_FINISHES[id].steel),borderColor:color(WEAPON_FINISHES[id].edge)}}/>{WEAPON_FINISHES[id].title}</label>)}</fieldset>
+    {finishMessage&&<p className="inline-notice" role="status">{finishMessage}</p>}
     <p className="weapon-sheet-purpose">{PURPOSE[selected]}</p>
     <dl className="weapon-utility-specs"><div><dt>발사 속도</dt><dd>{decimal(weapon.fireRate)}<small>발/초</small></dd></div><div><dt>탄창</dt><dd>{weapon.magazine}<small>발</small></dd></div><div><dt>정조준</dt><dd className="weapon-zoom-value">{selected==='operator'?'2.5 · 5':weapon.adsZoom>1?decimal(weapon.adsZoom):'없음'}{weapon.adsZoom>1&&<small>배</small>}</dd></div><div><dt>비조준 초탄 산포</dt><dd>{decimal(weapon.firstSpread)}<small>도</small></dd></div></dl>
     <div className="weapon-near-damage"><div><span>근거리 피해</span><small>{distanceLabel(selected,0)}</small></div><dl><div><dt>머리</dt><dd>{decimal(closeDamage.head)}</dd></div><div><dt>몸통</dt><dd>{decimal(closeDamage.body)}</dd></div><div><dt>다리</dt><dd>{decimal(closeDamage.leg)}</dd></div></dl></div>

@@ -74,3 +74,9 @@
  .precision-settings .settings-tabs[aria-orientation=vertical]>button[aria-selected=true]{border-left-color:Highlight}
  .precision-settings .settings-tabs[aria-orientation=horizontal]>button[aria-selected=true]{border-bottom-color:Highlight}
 }
+
+.valorant-import { margin-top: 1rem; }
+.valorant-import label { display: grid; gap: .4rem; }
+.valorant-import input { max-inline-size: 100%; }
+.valorant-import ul { padding-inline-start: 1.25rem; }
+.valorant-import > button { margin-top: .6rem; }

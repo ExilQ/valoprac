@@ -1,9 +1,11 @@
+import type { WEAPON_FINISHES } from '../../config/weaponFinishes';
 import {createOperatorVisual} from './OperatorVisual';
 import * as T from 'three';
 import type { WeaponId } from '../types';
 import {mergeStaticArchitecture} from './StaticGeometry';
 import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
+export type WeaponFinish = (typeof WEAPON_FINISHES)['slate' | 'ceramic'];
 export interface WeaponVisual {
   root:T.Group;sights:T.Group;magazine:T.Group;cylinder:T.Group;hammer:T.Group;muzzle:T.Mesh;accent:T.MeshStandardMaterial;
   animate?:(time:number,speed:number,reload:number,kick:number,ads:number)=>void;
@@ -12,14 +14,14 @@ export interface WeaponVisual {
 }
 // Independently authored, meter-scale weapon artwork. No downloaded game assets.
 // Receivers, stocks, magazines and grips use their own side-profile topology, not scaled cubes.
-export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,surfaceLibrary?:SurfaceMaterialLibrary):WeaponVisual {
-  if(id==='operator')return createOperatorVisual(geometry,material,createArms,surfaceLibrary);
+export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,surfaceLibrary?:SurfaceMaterialLibrary,finish?:WeaponFinish):WeaponVisual {
+  if(id==='operator')return createOperatorVisual(geometry,material,createArms,surfaceLibrary,finish);
   const surfaces=surfaceLibrary??new SurfaceMaterialLibrary();
   const root=new T.Group(),sights=new T.Group(),magazine=new T.Group(),cylinder=new T.Group(),hammer=new T.Group();
   root.name=`VALOPRAC ${id} original viewmodel`;sights.name="open sight posts";magazine.name="magazine";cylinder.name="revolver cylinder";hammer.name="hammer";root.add(sights,magazine,cylinder,hammer);
   const sheriff=id==='sheriff',phantom=id==='rifleB';
   const mat=(family:VisualMaterialId,color:number,roughness?:number,metalness?:number)=>material(surfaces.material(family,{tint:color,roughness,metalness})) as T.MeshStandardMaterial;
-  const steel=mat('steel',sheriff?0x77858a:phantom?0x344549:0x3e484d,.34),edge=mat('brushed-metal',0x8d999b,.31),dark=mat('painted-metal',0x1c282f,.51),polymer=mat('plastic',phantom?0x2e4148:0x303e44,.83),rubber=mat('rubber',0x19252a,.95),brass=mat('steel',0x9c8863,.46,.82);
+  const steel=mat('steel',finish?.steel??(sheriff?0x77858a:phantom?0x344549:0x3e484d),.34),edge=mat('brushed-metal',finish?.edge??0x8d999b,.31),dark=mat('painted-metal',finish?.dark??0x1c282f,.51),polymer=mat('plastic',finish?.polymer??(phantom?0x2e4148:0x303e44),.83),rubber=mat('rubber',0x19252a,.95),brass=mat('steel',0x9c8863,.46,.82);
   // Kept for existing theme API; no decorative emissive stripes are used.
   const accent=mat('painted-metal',phantom?0x6e8c90:0xa79570,.49,.6);accent.emissive.set(0x000000);
   const mesh=(g:T.BufferGeometry,m:T.Material,parent:T.Group=root)=>{const family=m.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);const o=new T.Mesh(geometry(g),m);o.castShadow=false;o.receiveShadow=false;parent.add(o);return o;};

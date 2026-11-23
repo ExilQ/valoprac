@@ -39,8 +39,11 @@ export class CollisionController {
  support(position:Vector3,maxY:number,maxSlopeCos=Math.SQRT1_2,out:GroundContact=this.contact):GroundContact{
   out.height=0;out.normal.set(0,1,0);out.obstacle=null;out.walkable=true;
   const slopeLimit=Math.min(1,Math.max(0,maxSlopeCos));
-  for(const obstacle of this.obstacles){
-   const b=obstacle.box;
+  // The authored-order broadphase only restricts the X/Z footprint.
+  // Exact ramp planes, height tolerances and tie ordering stay in the narrow phase.
+  const indices=this.nearby(position.x-EPS,-Infinity,position.z-EPS,position.x+EPS,Infinity,position.z+EPS);
+  for(const index of indices){
+   const obstacle=this.obstacles[index],b=obstacle.box;
    if(position.x<b.min.x-EPS||position.x>b.max.x+EPS||position.z<b.min.z-EPS||position.z>b.max.z+EPS)continue;
    const height=surfaceHeight(obstacle,position.x,position.z);
    if(height>maxY+EPS||height<=out.height+EPS)continue;

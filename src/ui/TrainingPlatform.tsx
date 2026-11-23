@@ -3,16 +3,17 @@ import {lazy,Suspense,useRef,useState} from 'react';
 import {useApp} from '../app/store';
 import {ExerciseSetup} from './ExerciseTraining';
 import {ScenarioRoutes} from './ScenarioRoutes';
+import {DrillLibrary} from './DrillLibrary';
 import {ScenarioEditor} from './ScenarioEditor';
 import type {ScenarioDefinition} from '../training/scenarios/types';
 import type {PracticeMap} from '../engine/types';
 import {trainingMapTitle} from './trainingPresentation';
 import './trainingPlatform.css';
 const ReplayLibrary=lazy(()=>import('./ReplayViewer').then(m=>({default:m.ReplayLibrary})));
-const TABS={warmup:'1분 워밍업',movement:'이동 도구',routes:'전술 경로',editor:'시나리오 편집',flash:'플래시 회피',replays:'리플레이'} as const;
+const TABS={warmup:'1분 워밍업',movement:'이동 도구',routes:'전술 경로',drills:'내 드릴',editor:'시나리오 편집',flash:'플래시 회피',replays:'리플레이'} as const;
 const TOOL_TABS=Object.entries(TABS).map(([id,label])=>({id:id as keyof typeof TABS,label}));
 export function TrainingPlatform(){
- const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
+ const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':typeof location!=='undefined'&&location.hash==='#drills'?'drills':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
  const start=useApp(s=>s.startSession),settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),history=useApp(s=>s.history);
  const tools=settings.movementTools;
  const platform=useRef<HTMLElement>(null);
@@ -28,6 +29,7 @@ export function TrainingPlatform(){
    {tab==='warmup'&&<ExerciseSetup kind="warmup" onStart={(exercise,weapon)=>start({exercise},weapon)}/>}
    {tab==='flash'&&<ExerciseSetup kind="flash" onStart={(exercise,weapon)=>start({exercise},weapon)}/>}
    {tab==='routes'&&<ScenarioRoutes history={history} onStart={scenario=>start({scenario})} onEdit={editRoute}/>}
+   {tab==='drills'&&<DrillLibrary onStart={scenario=>start({scenario})} onEdit={editRoute}/>}
    {tab==='editor'&&<ScenarioEditor initialScenario={draft} onStart={scenario=>start({scenario})}/>}
    {tab==='replays'&&<Suspense fallback={<p role="status">리플레이 보관함을 준비합니다…</p>}><ReplayLibrary sessions={history}/></Suspense>}
    {tab==='movement'&&<Panel className="movement-tool-setup"><h2>기존 맵에서 이동 연습</h2><p>점프와 공중 조향은 직접 조작합니다. 저장 위치·이륙점으로 돌아와 같은 구간을 다시 시도하고, 이전 시도를 고스트로 비교하세요.</p>

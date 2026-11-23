@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 function run(args){const result=spawnSync('npm',args,{encoding:'utf8',maxBuffer:12*1024*1024});process.stdout.write(result.stdout??'');process.stderr.write(result.stderr??'');if(result.status!==0)process.exit(result.status??1);return (result.stdout??'').replace(/\u001b\[[0-9;?]*[a-zA-Z]/g,'');}
 const packageRelease=JSON.parse(readFileSync('package.json','utf8')),publicRelease=JSON.parse(readFileSync('public/release.json','utf8'));
 assert.equal(publicRelease.version,packageRelease.version,'Public and package releases must match before testing');
-assert.equal(publicRelease.patchLabel,'12.07');assert.equal(publicRelease.roadmap.replay.simulationVersion,'valoprac-replay-simulation-3');
+assert.equal(publicRelease.patchLabel,'12.08');assert.equal(publicRelease.roadmap.replay.simulationVersion,'valoprac-replay-simulation-3');
 assert.deepEqual(publicRelease.roadmap.replay.acceptedLegacyVersions,[{gameVersion:'10.0.0',simulationVersion:'valoprac-replay-simulation-2',rules:'legacy-v2'}]);
 const app=run(['test']),broker=run(['run','test:broker']),hosting=run(['run','test:hosting']);run(['run','verify:migration']);
 const summary=[...app.matchAll(/Tests\s+(\d+)\s+passed\s+\((\d+)\)/g)].at(-1);assert(summary&&summary[1]===summary[2],'Test summary must show all passing');
@@ -88,7 +88,7 @@ assert(warmup.report.completed&&warmup.replay.passed&&warmup.replay.score>0);
 assert(flash.report.completed&&flash.replay.passed&&flash.replay.score===flash.report.score&&flash.report.score>0);
 assert(ghost.repeatEqual&&ghost.liveStateUnchanged&&ghost.sourceFinalVerified&&!ghost.independentGhostRecorder);
 const scenarioRuns=lines.filter(x=>x.benchmark==='scenario-common-replay');
-assert.equal(new Set(scenarioRuns.map(x=>x.route)).size,5);assert.equal(scenarioRuns.length,10);assert(scenarioRuns.every(x=>x.passed&&x.score===1&&x.hits===1));
+assert.equal(new Set(scenarioRuns.map(x=>x.route)).size,7);assert.equal(scenarioRuns.length,14);assert(scenarioRuns.every(x=>x.passed&&x.score===1&&x.hits===1));
 const stage1UI=evidence('STAGE1_UI_ACCURACY'),stage1HUD=evidence('STAGE1_HUD_LAYOUT'),stage1Audio=evidence('STAGE1_AUDIO_ONSETS');
 assert(stage1UI.projection.every(x=>x.passed)&&stage1UI.spread.every(x=>x.passed)&&stage1HUD.passed&&stage1Audio.passed);
 const spatial=evidence('STAGE2_AUDIO_SPATIAL'),environment=evidence('STAGE2_ENVIRONMENT'),crosshair=evidence('STAGE2_CROSSHAIR_BROWSER'),rendering=evidence('STAGE2_RENDERING');

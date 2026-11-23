@@ -39,6 +39,29 @@ describe('A4/A5 scenario options execute and replay through the common authority
   expect(a.passed).toBe(true);expect(a).toEqual(b);expect(a.checksum).toBe(simulationChecksum(sim));expect(a.score).toBe(1);expect(a.hits).toBe(1);
   console.log(JSON.stringify({benchmark:'scenario-common-replay',route:route.id,random,seed:def.seed,ticks:sim.ticks,bots:def.bots.length,score:a.score,hits:a.hits,checksum:a.checksum,passed:a.passed,routeSamples:plan.geometry.routeSamples,maxThreats:plan.geometry.maxSimultaneousThreats,codeBytes:encodeScenario(def).length,replayGzipBytes:encoded.length}));
  },15000);
+ it('activates the next defender only after a clear and reconstructs the transition and retry',async()=>{
+  const def=createScenario('sequential');
+  def.rules.arrival='after-clear';def.rules.combatMode='learning';
+  const sim=new Simulation('free','rifleA',structuredClone(DEFAULT_SETTINGS),{scenario:def});
+  const recorder=new ReplayRecorder(sim);
+  sim.running=true;
+  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([0]);
+  for(const destination of compileScenario(def).route.slice(1,4)){
+   let attempts=0;
+   while(Math.hypot(destination.x-sim.movement.position.x,destination.z-sim.movement.position.z)>.08&&attempts++<2000){
+    const dx=destination.x-sim.movement.position.x,dz=destination.z-sim.movement.position.z;
+    step(sim,{forward:1,movementYaw:Math.atan2(-dx,-dz)});
+   }
+   expect(attempts).toBeLessThan(2000);
+  }
+  for(let i=0;i<90;i++)step(sim);
+  aim(sim,sim.targets[0].headPosition(new Vector3()));step(sim,{fire:true,firePresses:1});
+  expect(sim.kills.at(-1)?.targetId).toBe(0);
+  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([1]);
+  sim.retryTactical();sim.running=true;step(sim);
+  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([0]);
+  expect((await new ReplayPlayer(recorder.finish()!).verify()).passed).toBe(true);
+ });
  it('keeps a real custom Operator death separate from reset and reconstructs it',async()=>{
   const def=createScenario('long-lane');def.rules.difficulty='expert';const sim=new Simulation('free','rifleA',structuredClone({...DEFAULT_SETTINGS,defenderReaction:.15,defenderFirstShotError:.05,defenderAccuracy:.98}),{scenario:def}),recorder=new ReplayRecorder(sim);sim.running=true;
   for(let n=0;n<2400&&!sim.exposure.death;n++){const dx=-sim.movement.position.x,dz=(Math.abs(dx)>.1?5:-3)-sim.movement.position.z;step(sim,{forward:1,movementYaw:Math.atan2(-dx,-dz)});}
