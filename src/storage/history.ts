@@ -16,7 +16,7 @@ export async function saveSession(session:SessionData){
   const db=await open();const existing=await loadHistory();const records=[session,...existing.filter(s=>s.id!==session.id)].sort((a,b)=>b.createdAt-a.createdAt);
   return new Promise<void>((resolve,reject)=>{
     const tx=db.transaction('sessions','readwrite'),store=tx.objectStore('sessions');
-    records.forEach((record,i)=>{if(i>=MAX_SESSIONS)store.delete(record.id);else if(i>=MAX_DETAILED_SESSIONS)store.put({...record,shots:[],kills:[],reactions:[]});else if(record.id===session.id)store.put(record);});
+    records.forEach((record,i)=>{if(i>=MAX_SESSIONS)store.delete(record.id);else if(i>=MAX_DETAILED_SESSIONS)store.put({...record,replay:undefined,shots:[],kills:[],reactions:[]});else if(record.id===session.id)store.put(record);});
     tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);
   });
 }

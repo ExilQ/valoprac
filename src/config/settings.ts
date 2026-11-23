@@ -1,6 +1,9 @@
+import {defaultMovementTools,sanitizeMovementTools} from '../training/movementTools/types';
 import type { Settings, Quality } from '../engine/types';
+import {defaultCrosshairAdvanced,sanitizeCrosshairAdvanced} from './crosshair';
 export const CURRENT_SETTINGS_REVISION=2;
 export const DEFAULT_SETTINGS: Settings = {
+  movementTools:defaultMovementTools(),
   movementPhysics:'valorant',csMovementPreset:'cs2',physicsDiagnostics:false,wheelJump:'off',
   combatMode:'gunfight',defenderSkill:'normal',defenderAimSpeed:180,defenderAimAcceleration:1200,defenderStability:.7,defenderFirstShotError:.8,defenderRecoilControl:.6,defenderTactics:.55,botDiagnostics:false,jumpBufferMs:80,penetrationDiagnostics:false,
   gameplayRevision:CURRENT_SETTINGS_REVISION,aimTelemetry:true,peekingTimed:false,operatorScopeMode:'toggle',operatorAutoRescope:false,operatorZoomBinding:'KeyV',peekScenario:'free',defenderWeapon:'mixed',defenderReaction:.42,defenderAccuracy:.75,defenderReposition:.45,randomDefenders:true,
@@ -14,12 +17,13 @@ export const DEFAULT_SETTINGS: Settings = {
   targetCount:5,targetSize:1,targetSpeed:1,targetDistance:20,spawnInterval:0.6,eliminationRule:'head',infiniteReserve:true,autoReload:true,practiceHud:true,recoilAnalysis:false,analysisWall:false,
   sensitivity:0.35,degreesPerCount:0.07,dpi:800,fov:103,duration:60,seed:1947,
   crosshairColor:'#e8fcf3',crosshairThickness:2,crosshairGap:5,crosshairLength:7,
+  crosshairAdvanced:defaultCrosshairAdvanced(),
   dynamicCrosshair:true,brakingHud:true,idealCompensation:false,volume:0.35,
   renderScale:1,antialias:true,showPerformance:true,behavior:'random'
 };
 const storedRevision=(o:Record<string,unknown>)=>typeof o.gameplayRevision==='number'&&Number.isSafeInteger(o.gameplayRevision)&&o.gameplayRevision>=0?o.gameplayRevision:0;
 export function sanitizeSettings(raw: unknown): Settings {
-  const s={...DEFAULT_SETTINGS,bindings:{...DEFAULT_SETTINGS.bindings}}; if(!raw || typeof raw!=='object')return s;
+  const s={...DEFAULT_SETTINGS,bindings:{...DEFAULT_SETTINGS.bindings},crosshairAdvanced:defaultCrosshairAdvanced(),movementTools:defaultMovementTools()}; if(!raw || typeof raw!=='object')return s;
   const o=raw as Record<string,unknown>,revision=storedRevision(o);
   // A future client may already have written a newer revision. Never turn that
   // profile back into an old migration candidate when saving supported fields.
@@ -28,7 +32,7 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(typeof o.hudScale==='number'&&Number.isFinite(o.hudScale))s.hudScale=Math.max(0.75,Math.min(1.25,o.hudScale));
   if(typeof o.interfaceVolume==='number'&&Number.isFinite(o.interfaceVolume))s.interfaceVolume=Math.max(0,Math.min(1,o.interfaceVolume));
   for(const k of ['showHeadshotConfirmation','showControlHints'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
-  const ranges:Partial<Record<keyof Settings,[number,number]>>={defenderAimSpeed:[30,480],defenderAimAcceleration:[100,4000],defenderStability:[.1,.98],defenderFirstShotError:[.05,4],defenderRecoilControl:[0,.98],defenderTactics:[0,1],jumpBufferMs:[0,140],defenderReaction:[.15,1.5],defenderAccuracy:[.1,.98],defenderReposition:[0,1],adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[1,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],scopeSensitivity25:[0.1,2],scopeSensitivity5:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10]};
+  const ranges:Partial<Record<keyof Settings,[number,number]>>={defenderAimSpeed:[30,480],defenderAimAcceleration:[100,4000],defenderStability:[.1,.98],defenderFirstShotError:[.05,4],defenderRecoilControl:[0,.98],defenderTactics:[0,1],jumpBufferMs:[0,140],defenderReaction:[.15,1.5],defenderAccuracy:[.1,.98],defenderReposition:[0,1],adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[0,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],scopeSensitivity25:[0.1,2],scopeSensitivity5:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10]};
   for(const [k,range] of Object.entries(ranges)){const v=o[k];if(typeof v==='number'&&Number.isFinite(v))(s as unknown as Record<string,unknown>)[k]=Math.min(range[1],Math.max(range[0],v));}
   // Preserve the former shared scoped preference when new independent fields
   // were absent; explicit new per-zoom values always win.
@@ -40,6 +44,7 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(o.csMovementPreset==='cs2'||o.csMovementPreset==='sourceClassic')s.csMovementPreset=o.csMovementPreset;
   if(['off','up','down'].includes(String(o.wheelJump)))s.wheelJump=o.wheelJump as Settings['wheelJump'];
   if(typeof o.crosshairColor==='string'&&/^#[0-9a-f]{6}$/i.test(o.crosshairColor))s.crosshairColor=o.crosshairColor;
+  s.crosshairAdvanced=sanitizeCrosshairAdvanced(o.crosshairAdvanced);
   if(['learning','gunfight','exposure'].includes(String(o.combatMode)))s.combatMode=o.combatMode as Settings['combatMode'];
   if(['beginner','normal','advanced','expert'].includes(String(o.defenderSkill)))s.defenderSkill=o.defenderSkill as Settings['defenderSkill'];
   else if(o.botDifficulty==='easy')s.defenderSkill='beginner';else if(o.botDifficulty==='hard')s.defenderSkill='advanced';
@@ -85,6 +90,7 @@ export function sanitizeSettings(raw: unknown): Settings {
   const desired=typeof o.operatorZoomBinding==='string'&&/^Key[A-Z]$/.test(o.operatorZoomBinding)?o.operatorZoomBinding:'KeyV';
   s.operatorZoomBinding=!used.has(desired)?desired:['KeyV','KeyN','KeyM',...Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ',c=>`Key${c}`)].find(key=>!used.has(key))!;
   if(revision<1&&o.stepStationaryDecay===1.4)s.stepStationaryDecay=3.5;
+  s.movementTools=sanitizeMovementTools(o.movementTools,[...Object.values(s.bindings),s.operatorZoomBinding]);
   s.targetCount=Math.round(s.targetCount);s.seed=Math.round(s.seed);s.duration=Math.round(s.duration);return s;
 }
 export const SETTINGS_KEY='tactical-aim-settings-v1';

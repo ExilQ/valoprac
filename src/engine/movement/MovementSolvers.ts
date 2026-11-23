@@ -29,20 +29,24 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
  const dot=w.x*v.x+w.z*v.z,acceleration=dot<0?p.reverseAcceleration:p.groundAcceleration,tx=w.x*w.speed-v.x,tz=w.z*w.speed-v.z,length=Math.hypot(tx,tz),amount=Math.min(length,acceleration*dt*w.amount);
  if(length>1e-12){v.x+=tx/length*amount;v.z+=tz/length*amount;}
 }
-export function solveAirMovement(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3){
+/** A takeoff budget restricts tactical air steering only. Callers without a
+ * takeoff (unit probes / ledge fallback) retain the profile's explicit cap. */
+export function solveAirMovement(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,airSpeedCap:number|null=null){
  const beforeX=v.x,beforeZ=v.z;
  if(w.amount>0){
   const current=v.x*w.x+v.z*w.z;
   // Wish speed already includes the fraction of a short input pulse. Respect
   // walk/crouch/weapon/ADS modifiers without multiplying that fraction twice.
   const limit=p.airModel==='projection'?Math.min(w.speed,p.airWishSpeedCap):Math.min(p.airMaxSpeed*w.amount,w.speed);
-  const requested=p.airModel==='projection'?p.airAcceleration*w.speed*dt:p.airAcceleration*w.amount*dt;
+  const speed=Math.hypot(v.x,v.z),reverse=p.airModel==='tactical'&&speed>1e-9&&current/speed<=Math.cos((p.reverseAirThresholdDegrees??150)*Math.PI/180)+1e-12;
+  const steering=reverse?(p.reverseAirSteeringMultiplier??.5):1;
+  const requested=p.airModel==='projection'?p.airAcceleration*w.speed*dt:p.airAcceleration*w.amount*dt*steering;
   const add=Math.min(requested,Math.max(0,limit-current));v.x+=w.x*add;v.z+=w.z*add;
  }
  // Tactical air control has an explicit small horizontal allowance. Source
  // presets constrain contact/takeoff speed instead of rotating/clamping each
  // airborne velocity vector, retaining projection-based strafe behavior.
- if(p.airSpeedLimit!==null){const cap=p.hopSpeedCap??p.airSpeedLimit,speed=Math.hypot(v.x,v.z);if(speed>cap){v.x*=cap/speed;v.z*=cap/speed;}}
+ if(p.airSpeedLimit!==null){const cap=Math.min(p.hopSpeedCap??p.airSpeedLimit,airSpeedCap??Infinity),speed=Math.hypot(v.x,v.z);if(speed>cap){v.x*=cap/speed;v.z*=cap/speed;}}
  out.set((v.x-beforeX)/dt,0,(v.z-beforeZ)/dt);
 }
 export function limitContactSpeed(v:Vector3,limit:number|null){const speed=Math.hypot(v.x,v.z);if(limit!==null&&speed>limit&&speed>0){v.x*=limit/speed;v.z*=limit/speed;}}

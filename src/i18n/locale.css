@@ -1,0 +1,5 @@
+html:lang(en){font-family:Inter,"Arial Narrow",Arial,sans-serif}
+html:lang(en) button,html:lang(en) label,html:lang(en) p,html:lang(en) h1,html:lang(en) h2,html:lang(en) h3{word-break:normal;overflow-wrap:break-word}
+.locale-selector{display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,180px);align-items:center;gap:12px;padding:10px 0}
+.locale-selector select{min-width:0;width:100%;background:var(--surface,#1b252f);color:var(--ink,#ecedeb);border:1px solid var(--line,#38424c);padding:8px}
+@media(max-width:480px){.locale-selector{grid-template-columns:1fr}}

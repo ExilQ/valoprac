@@ -1,0 +1,3334 @@
+{
+  "schema": 1,
+  "issues": [
+    "I3",
+    "I6"
+  ],
+  "status": "software-render-workload-and-warmup-validated; physical-hardware-qualification-pending",
+  "measuredAt": "2026-11-01T02:36:22.179Z",
+  "baseline": {
+    "release": "9.0.1",
+    "commit": "8abf7b173698be249882ab34562016e640df4b3e"
+  },
+  "currentSourceSHA256": {
+    "src/engine/rendering/RangeRenderer.ts": "be0451a52288d6b0f8349cd113bc9b959261eab0dd50b91bb1fef6492be97edd",
+    "src/engine/rendering/StaticGeometry.ts": "7d7797d766e517466d9078b51be7fb768fb64137d3ab464ea24909b9495bf9c9",
+    "src/engine/rendering/GroundContacts.ts": "bb584f1d67447e1606205818780c4ab34c5feefe24d266f9705c869792df3d39"
+  },
+  "environment": {
+    "browser": "Chromium154.0.8037.57",
+    "os": "Linux headless",
+    "renderer": "ANGLE Vulkan SwiftShader Subzero",
+    "cssViewport": [
+      1366,
+      768
+    ],
+    "renderScale": 0.5,
+    "requestedTargets": 11,
+    "physicalIntegratedGPU": false,
+    "physicalInputLatencyMeasured": false
+  },
+  "workloads": {
+    "rows": [
+      {
+        "map": "complex",
+        "preset": "low",
+        "camera": {
+          "name": "entry",
+          "x": -42,
+          "y": 0,
+          "z": 4,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 54,
+          "after": 45,
+          "delta": -9
+        },
+        "triangles": {
+          "before": 93446,
+          "after": 94442,
+          "delta": 996
+        },
+        "programs": {
+          "before": 25,
+          "after": 24,
+          "firstVisibleAfter": 24,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": true,
+        "budgetPassed": true
+      },
+      {
+        "map": "complex",
+        "preset": "low",
+        "camera": {
+          "name": "gallery",
+          "x": 0,
+          "y": 0,
+          "z": 4,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 63,
+          "after": 45,
+          "delta": -18
+        },
+        "triangles": {
+          "before": 94830,
+          "after": 94574,
+          "delta": -256
+        },
+        "programs": {
+          "before": 25,
+          "after": 24,
+          "firstVisibleAfter": 24,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": true,
+        "budgetPassed": true
+      },
+      {
+        "map": "garage",
+        "preset": "low",
+        "camera": {
+          "name": "entry",
+          "x": -3,
+          "y": 0,
+          "z": 5,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 48,
+          "after": 43,
+          "delta": -5
+        },
+        "triangles": {
+          "before": 31212,
+          "after": 31084,
+          "delta": -128
+        },
+        "programs": {
+          "before": 25,
+          "after": 24,
+          "firstVisibleAfter": 24,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": false,
+        "budgetPassed": null
+      },
+      {
+        "map": "garage",
+        "preset": "low",
+        "camera": {
+          "name": "gallery",
+          "x": -3,
+          "y": 0,
+          "z": 5,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 48,
+          "after": 43,
+          "delta": -5
+        },
+        "triangles": {
+          "before": 31212,
+          "after": 31084,
+          "delta": -128
+        },
+        "programs": {
+          "before": 25,
+          "after": 24,
+          "firstVisibleAfter": 24,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": false,
+        "budgetPassed": null
+      },
+      {
+        "map": "complex",
+        "preset": "medium",
+        "camera": {
+          "name": "entry",
+          "x": -42,
+          "y": 0,
+          "z": 4,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 118,
+          "after": 101,
+          "delta": -17
+        },
+        "triangles": {
+          "before": 190189,
+          "after": 191185,
+          "delta": 996
+        },
+        "programs": {
+          "before": 38,
+          "after": 37,
+          "firstVisibleAfter": 37,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": true,
+        "budgetPassed": true
+      },
+      {
+        "map": "complex",
+        "preset": "medium",
+        "camera": {
+          "name": "gallery",
+          "x": 0,
+          "y": 0,
+          "z": 4,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 136,
+          "after": 110,
+          "delta": -26
+        },
+        "triangles": {
+          "before": 192665,
+          "after": 192409,
+          "delta": -256
+        },
+        "programs": {
+          "before": 38,
+          "after": 37,
+          "firstVisibleAfter": 37,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": true,
+        "budgetPassed": true
+      },
+      {
+        "map": "garage",
+        "preset": "medium",
+        "camera": {
+          "name": "entry",
+          "x": -3,
+          "y": 0,
+          "z": 5,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 98,
+          "after": 92,
+          "delta": -6
+        },
+        "triangles": {
+          "before": 60899,
+          "after": 60771,
+          "delta": -128
+        },
+        "programs": {
+          "before": 38,
+          "after": 37,
+          "firstVisibleAfter": 37,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": false,
+        "budgetPassed": null
+      },
+      {
+        "map": "garage",
+        "preset": "medium",
+        "camera": {
+          "name": "gallery",
+          "x": -3,
+          "y": 0,
+          "z": 5,
+          "yaw": 0
+        },
+        "calls": {
+          "before": 98,
+          "after": 92,
+          "delta": -6
+        },
+        "triangles": {
+          "before": 60899,
+          "after": 60771,
+          "delta": -128
+        },
+        "programs": {
+          "before": 38,
+          "after": 37,
+          "firstVisibleAfter": 37,
+          "newAfterPreparation": 0
+        },
+        "complexDrawCallBudget": 120,
+        "budgetApplies": false,
+        "budgetPassed": null
+      }
+    ],
+    "rawBefore": {
+      "low": {
+        "schema": 1,
+        "name": "roadmap-0901-frozen-low",
+        "base": "http://127.0.0.1:4190",
+        "quality": "low",
+        "startedAt": "2026-10-31T10:38:43.866Z",
+        "softwareGPU": true,
+        "hardwareFPSVerified": false,
+        "physicalInputLatencyVerified": false,
+        "protocol": "Actual RangeRenderer and Simulation imported directly into Chromium;1366x768 CSS viewport, renderScale.5, 11targets, free scenario, fixed120Hz frame state, two declared camera poses. gl.finish per draw measures shared software rendering, not hardwareFPS.",
+        "rows": [
+          {
+            "map": "complex",
+            "quality": "low",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 7711.800000000279,
+              "programs": 25,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 7711.899999999907,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -42,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 54,
+                "triangles": 93446,
+                "geometries": 119,
+                "textures": 17,
+                "programs": 25,
+                "samples": [
+                  {
+                    "milliseconds": 18.300000000279397,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 8.5,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 1.3999999999068677,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 1.2000000001862645,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 13.899999999906868,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 3.6000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.8999999999068677,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 2.1999999997206032,
+                    "programs": 25
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": 0,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 63,
+                "triangles": 94830,
+                "geometries": 119,
+                "textures": 17,
+                "programs": 25,
+                "samples": [
+                  {
+                    "milliseconds": 33.39999999990687,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 3.1000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 2,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 1.5,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 4.600000000093132,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 1.6000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 11.5,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 1.5,
+                    "programs": 25
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "map": "garage",
+            "quality": "low",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 10011.899999999907,
+              "programs": 25,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 10011.899999999907,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 48,
+                "triangles": 31212,
+                "geometries": 95,
+                "textures": 16,
+                "programs": 25,
+                "samples": [
+                  {
+                    "milliseconds": 2.1000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.8999999999068677,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 5.2000000001862645,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.7999999998137355,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.6000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.5,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.7999999998137355,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 3.3999999999068677,
+                    "programs": 25
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 48,
+                "triangles": 31212,
+                "geometries": 95,
+                "textures": 16,
+                "programs": 25,
+                "samples": [
+                  {
+                    "milliseconds": 0.6000000000931323,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.8999999999068677,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.5,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.7000000001862645,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.7000000001862645,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 0.39999999990686774,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 7.399999999906868,
+                    "programs": 25
+                  },
+                  {
+                    "milliseconds": 2.7000000001862645,
+                    "programs": 25
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "completedAt": "2026-10-31T10:39:13.462Z",
+        "passed": true
+      },
+      "medium": {
+        "schema": 1,
+        "name": "roadmap-0901-frozen-medium",
+        "base": "http://127.0.0.1:4190",
+        "quality": "medium",
+        "startedAt": "2026-10-31T10:25:18.136Z",
+        "softwareGPU": true,
+        "hardwareFPSVerified": false,
+        "physicalInputLatencyVerified": false,
+        "protocol": "Actual RangeRenderer and Simulation imported directly into Chromium;1366x768 CSS viewport, renderScale.5, 11targets, free scenario, fixed120Hz frame state, two declared camera poses. gl.finish per draw measures shared software rendering, not hardwareFPS.",
+        "rows": [
+          {
+            "map": "complex",
+            "quality": "medium",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 14911.800000000047,
+              "programs": 38,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 14912.100000000093,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -42,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 118,
+                "triangles": 190189,
+                "geometries": 122,
+                "textures": 31,
+                "programs": 38,
+                "samples": [
+                  {
+                    "milliseconds": 13.399999999906868,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 2.199999999953434,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 2.7000000001862645,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.8999999999068677,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.3999999999068677,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.4000000001396984,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.0999999998603016,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 31.600000000093132,
+                    "programs": 38
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": 0,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 136,
+                "triangles": 192665,
+                "geometries": 122,
+                "textures": 31,
+                "programs": 38,
+                "samples": [
+                  {
+                    "milliseconds": 2.0999999998603016,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 6.100000000093132,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.5,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 7.899999999906868,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.6999999999534339,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 7.400000000139698,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 8.300000000046566,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 5.2999999998137355,
+                    "programs": 38
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "map": "garage",
+            "quality": "medium",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 12490.300000000047,
+              "programs": 38,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 12490.300000000047,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 98,
+                "triangles": 60899,
+                "geometries": 99,
+                "textures": 30,
+                "programs": 38,
+                "samples": [
+                  {
+                    "milliseconds": 4.300000000046566,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 13.400000000139698,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 7.5,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 2.0999999998603016,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 4.5,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 9.899999999906868,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.5,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.2000000001862645,
+                    "programs": 38
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 98,
+                "triangles": 60899,
+                "geometries": 99,
+                "textures": 30,
+                "programs": 38,
+                "samples": [
+                  {
+                    "milliseconds": 6.7999999998137355,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.4000000001396984,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 40,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 5.899999999906868,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 12.300000000046566,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.8000000000465661,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 11.800000000046566,
+                    "programs": 38
+                  },
+                  {
+                    "milliseconds": 1.6999999999534339,
+                    "programs": 38
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "completedAt": "2026-10-31T10:26:16.842Z",
+        "passed": true
+      }
+    },
+    "rawAfter": {
+      "low": {
+        "schema": 1,
+        "name": "roadmap-stage2-current-low",
+        "base": "http://127.0.0.1:4189",
+        "quality": "low",
+        "startedAt": "2026-10-31T10:36:46.329Z",
+        "softwareGPU": true,
+        "hardwareFPSVerified": false,
+        "physicalInputLatencyVerified": false,
+        "protocol": "Actual RangeRenderer and Simulation imported directly into Chromium;1366x768 CSS viewport, renderScale.5, 11targets, free scenario, fixed120Hz frame state, two declared camera poses. gl.finish per draw measures shared software rendering, not hardwareFPS.",
+        "rows": [
+          {
+            "map": "complex",
+            "quality": "low",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 4822,
+              "programs": 24,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 4822.300000000047,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -42,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 45,
+                "triangles": 94442,
+                "geometries": 100,
+                "textures": 17,
+                "programs": 24,
+                "samples": [
+                  {
+                    "milliseconds": 4.599999999860302,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.1000000000931323,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.1999999999534339,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 4.800000000046566,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.0999999998603016,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.8000000000465661,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 3.300000000046566,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.6999999999534339,
+                    "programs": 24
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": 0,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 45,
+                "triangles": 94574,
+                "geometries": 100,
+                "textures": 17,
+                "programs": 24,
+                "samples": [
+                  {
+                    "milliseconds": 0.5999999998603016,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.6000000000931323,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.6000000000931323,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.5,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.5,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.5999999998603016,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 0.5,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.1000000000931323,
+                    "programs": 24
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "map": "garage",
+            "quality": "low",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 5163.200000000186,
+              "programs": 24,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 5163.200000000186,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 43,
+                "triangles": 31084,
+                "geometries": 83,
+                "textures": 16,
+                "programs": 24,
+                "samples": [
+                  {
+                    "milliseconds": 6.5,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 2.099999999627471,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 5.600000000093132,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.8999999999068677,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 3.3000000002793968,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 3.5,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.6999999997206032,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.7000000001862645,
+                    "programs": 24
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 43,
+                "triangles": 31084,
+                "geometries": 83,
+                "textures": 16,
+                "programs": 24,
+                "samples": [
+                  {
+                    "milliseconds": 1.2999999998137355,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.1000000000931323,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 5.399999999906868,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 6.2999999998137355,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 1.6000000000931323,
+                    "programs": 24
+                  },
+                  {
+                    "milliseconds": 4,
+                    "programs": 24
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "completedAt": "2026-10-31T10:37:02.214Z",
+        "passed": true
+      },
+      "medium": {
+        "schema": 1,
+        "name": "roadmap-stage2-current-medium",
+        "base": "http://127.0.0.1:4189",
+        "quality": "medium",
+        "startedAt": "2026-10-31T10:35:56.969Z",
+        "softwareGPU": true,
+        "hardwareFPSVerified": false,
+        "physicalInputLatencyVerified": false,
+        "protocol": "Actual RangeRenderer and Simulation imported directly into Chromium;1366x768 CSS viewport, renderScale.5, 11targets, free scenario, fixed120Hz frame state, two declared camera poses. gl.finish per draw measures shared software rendering, not hardwareFPS.",
+        "rows": [
+          {
+            "map": "complex",
+            "quality": "medium",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 6146.300000000047,
+              "programs": 37,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 6146.699999999953,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -42,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 101,
+                "triangles": 191185,
+                "geometries": 103,
+                "textures": 31,
+                "programs": 37,
+                "samples": [
+                  {
+                    "milliseconds": 5.800000000046566,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 4.699999999953434,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.699999999953434,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.1000000000931323,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 5,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 5.899999999906868,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 4.2000000001862645,
+                    "programs": 37
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": 0,
+                  "y": 0,
+                  "z": 4,
+                  "yaw": 0
+                },
+                "calls": 110,
+                "triangles": 192409,
+                "geometries": 103,
+                "textures": 31,
+                "programs": 37,
+                "samples": [
+                  {
+                    "milliseconds": 1.1999999999534339,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 5.2000000001862645,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.199999999953434,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.3000000000465661,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.0999999998603016,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 4.100000000093132,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 0.8000000000465661,
+                    "programs": 37
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "map": "garage",
+            "quality": "medium",
+            "prepare": {
+              "revision": 1,
+              "milliseconds": 10337.600000000093,
+              "programs": 37,
+              "method": "synchronous",
+              "disposed": false
+            },
+            "preparationTime": 10337.600000000093,
+            "capabilities": {
+              "kind": "software",
+              "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+              "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+              "recommendLow": true,
+              "heuristic": false
+            },
+            "results": [
+              {
+                "camera": {
+                  "name": "entry",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 92,
+                "triangles": 60771,
+                "geometries": 87,
+                "textures": 30,
+                "programs": 37,
+                "samples": [
+                  {
+                    "milliseconds": 6.5,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 6.5,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.300000000046566,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.0999999998603016,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 4.400000000139698,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 30.800000000046566,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 6.899999999906868,
+                    "programs": 37
+                  }
+                ]
+              },
+              {
+                "camera": {
+                  "name": "gallery",
+                  "x": -3,
+                  "y": 0,
+                  "z": 5,
+                  "yaw": 0
+                },
+                "calls": 92,
+                "triangles": 60771,
+                "geometries": 87,
+                "textures": 30,
+                "programs": 37,
+                "samples": [
+                  {
+                    "milliseconds": 5.300000000046566,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 2.5999999998603016,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.6999999999534339,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.7000000001862645,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.7999999998137355,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 0.7000000001862645,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.1999999999534339,
+                    "programs": 37
+                  },
+                  {
+                    "milliseconds": 1.5,
+                    "programs": 37
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "errors": [],
+        "completedAt": "2026-10-31T10:36:31.195Z",
+        "passed": true
+      }
+    }
+  },
+  "startup": {
+    "original": {
+      "baseline": {
+        "schema": 1,
+        "name": "roadmap-startup-baseline-low",
+        "base": "http://127.0.0.1:4190",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 3107.4000000003725,
+          "programs": 25,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 363,
+        "frames": 42,
+        "windowMs": 3040.2000000001863,
+        "maxRafIntervalMs": 163.20000000018626,
+        "p95RafIntervalMs": 103.39999999990687,
+        "maxCpuRenderMs": 38.6999999997206,
+        "p95CpuRenderMs": 6.399999999906868,
+        "framesOver100ms": 3,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 4.600000000093132,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 15.499999999720785,
+            "renderCpuMs": 4.100000000093132,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 7.899999999906868,
+            "rafIntervalMs": 5.100000000093132,
+            "rafTimestampIntervalMs": 16.600000000000364,
+            "callbackTimestampAgeMs": 3.9999999998135536,
+            "renderCpuMs": 2.2999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 48.10000000009313,
+            "rafIntervalMs": 13.100000000093132,
+            "rafTimestampIntervalMs": 16.699999999999818,
+            "callbackTimestampAgeMs": 0.39999999990686774,
+            "renderCpuMs": 3.1000000000931323,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 153.60000000009313,
+            "rafIntervalMs": 120,
+            "rafTimestampIntervalMs": 99.89999999999964,
+            "callbackTimestampAgeMs": 20.49999999990723,
+            "renderCpuMs": 6.399999999906868,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 225.10000000009313,
+            "rafIntervalMs": 76,
+            "rafTimestampIntervalMs": 83.40000000000055,
+            "callbackTimestampAgeMs": 13.099999999906686,
+            "renderCpuMs": 2.1000000000931323,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 318,
+            "rafIntervalMs": 95.6999999997206,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 8.799999999627289,
+            "renderCpuMs": 4.2999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 409.39999999990687,
+            "rafIntervalMs": 88.20000000018626,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 13.699999999813372,
+            "renderCpuMs": 4,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 489.5,
+            "rafIntervalMs": 50.799999999813735,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 14.499999999627107,
+            "renderCpuMs": 1.5,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 530.3999999999069,
+            "rafIntervalMs": 76.90000000037253,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 8.100000000000364,
+            "renderCpuMs": 1.2999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 616.3000000002794,
+            "rafIntervalMs": 81.89999999990687,
+            "rafTimestampIntervalMs": 83.40000000000055,
+            "callbackTimestampAgeMs": 6.599999999906686,
+            "renderCpuMs": 5.900000000372529,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 692.6000000000931,
+            "rafIntervalMs": 80,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 3.299999999906504,
+            "renderCpuMs": 1,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 788.5,
+            "rafIntervalMs": 58.299999999813735,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 11.59999999972024,
+            "renderCpuMs": 38.6999999997206,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 846.3999999999069,
+            "rafIntervalMs": 90.5,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 2.0999999997202394,
+            "renderCpuMs": 4.099999999627471,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 946.5,
+            "rafIntervalMs": 98.39999999990687,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 0.4999999996271072,
+            "renderCpuMs": 6,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1105.2000000001863,
+            "rafIntervalMs": 163.20000000018626,
+            "rafTimestampIntervalMs": 150,
+            "callbackTimestampAgeMs": 13.699999999813372,
+            "renderCpuMs": 2.2000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1147.6000000000931,
+            "rafIntervalMs": 41.700000000186265,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 5.399999999999636,
+            "renderCpuMs": 6,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1227.1000000000931,
+            "rafIntervalMs": 78.29999999981374,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 0.3999999998140993,
+            "renderCpuMs": 6.100000000093132,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1290.2000000001863,
+            "rafIntervalMs": 67.10000000009313,
+            "rafTimestampIntervalMs": 66.70000000000073,
+            "callbackTimestampAgeMs": 0.799999999906504,
+            "renderCpuMs": 1.8999999999068677,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1326.3999999999069,
+            "rafIntervalMs": 37.1999999997206,
+            "rafTimestampIntervalMs": 33.29999999999927,
+            "callbackTimestampAgeMs": 4.699999999627835,
+            "renderCpuMs": 1.8999999999068677,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1406.3999999999069,
+            "rafIntervalMs": 79.90000000037253,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 1.300000000000182,
+            "renderCpuMs": 1.2999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1488.5,
+            "rafIntervalMs": 82,
+            "rafTimestampIntervalMs": 66.69999999999982,
+            "callbackTimestampAgeMs": 16.600000000000364,
+            "renderCpuMs": 1.3999999999068677,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1528.2000000001863,
+            "rafIntervalMs": 41.1999999997206,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 7.799999999720967,
+            "renderCpuMs": 1.2000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1606.3999999999069,
+            "rafIntervalMs": 77.3000000002794,
+            "rafTimestampIntervalMs": 83.40000000000055,
+            "callbackTimestampAgeMs": 1.699999999999818,
+            "renderCpuMs": 1.3999999999068677,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1696.7000000001863,
+            "rafIntervalMs": 84.1999999997206,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 2.5999999997202394,
+            "renderCpuMs": 1.7000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1745.3000000002794,
+            "rafIntervalMs": 55,
+            "rafTimestampIntervalMs": 49.899999999999636,
+            "callbackTimestampAgeMs": 7.699999999720603,
+            "renderCpuMs": 1.400000000372529,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1826.2000000001863,
+            "rafIntervalMs": 79.70000000018626,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 3.9999999999072315,
+            "renderCpuMs": 2.2000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1918,
+            "rafIntervalMs": 91.29999999981374,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 11.999999999720785,
+            "renderCpuMs": 1.1999999997206032,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1992.8999999999069,
+            "rafIntervalMs": 72,
+            "rafTimestampIntervalMs": 83.40000000000055,
+            "callbackTimestampAgeMs": 0.5999999997202394,
+            "renderCpuMs": 1.1999999997206032,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2038,
+            "rafIntervalMs": 49.8000000002794,
+            "rafTimestampIntervalMs": 49.899999999999636,
+            "callbackTimestampAgeMs": 0.5,
+            "renderCpuMs": 1.3999999999068677,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2118.8000000002794,
+            "rafIntervalMs": 76.1999999997206,
+            "rafTimestampIntervalMs": 66.69999999999982,
+            "callbackTimestampAgeMs": 9.999999999720785,
+            "renderCpuMs": 5.300000000279397,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2193.8000000002794,
+            "rafIntervalMs": 79.39999999990687,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 6.099999999627471,
+            "renderCpuMs": 1.1000000000931323,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2249.3000000002794,
+            "rafIntervalMs": 55.90000000037253,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 12,
+            "renderCpuMs": 1.2000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2324.899999999907,
+            "rafIntervalMs": 75.09999999962747,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 3.799999999627289,
+            "renderCpuMs": 1.1999999997206032,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2418.899999999907,
+            "rafIntervalMs": 87.3000000002794,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 7.69999999990705,
+            "renderCpuMs": 4.7999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2521,
+            "rafIntervalMs": 103.39999999990687,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 11.099999999813917,
+            "renderCpuMs": 1.2999999998137355,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2603.7000000001863,
+            "rafIntervalMs": 83.60000000009313,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 11.399999999906868,
+            "renderCpuMs": 5.5,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2683,
+            "rafIntervalMs": 52.1999999997206,
+            "rafTimestampIntervalMs": 50.100000000000364,
+            "callbackTimestampAgeMs": 13.499999999627107,
+            "renderCpuMs": 33.39999999990687,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2733.3000000002794,
+            "rafIntervalMs": 79.90000000037253,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 10.100000000000364,
+            "renderCpuMs": 1.1000000000931323,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2822,
+            "rafIntervalMs": 90.09999999962747,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 0.19999999962783477,
+            "renderCpuMs": 1.1999999997206032,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2906.899999999907,
+            "rafIntervalMs": 81.40000000037253,
+            "rafTimestampIntervalMs": 66.60000000000036,
+            "callbackTimestampAgeMs": 15,
+            "renderCpuMs": 5.399999999906868,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2986.600000000093,
+            "rafIntervalMs": 83.6999999997206,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 15.399999999720421,
+            "renderCpuMs": 1.2000000001862645,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 3039.899999999907,
+            "rafIntervalMs": 49.39999999990687,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 14.799999999627289,
+            "renderCpuMs": 5.5,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-10-31T10:39:45.444Z"
+      },
+      "current": {
+        "schema": 1,
+        "name": "roadmap-startup-current-low",
+        "base": "http://127.0.0.1:4189",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 5899.4000000003725,
+          "programs": 24,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [
+          {
+            "stage": "idle",
+            "revision": -1,
+            "requestedRevision": 1,
+            "elapsedMs": 0,
+            "completedPrograms": null,
+            "totalPrograms": 0,
+            "observedAt": 4547
+          },
+          {
+            "stage": "gpu",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 1243,
+            "completedPrograms": null,
+            "totalPrograms": 24,
+            "observedAt": 5790.0999999996275
+          },
+          {
+            "stage": "ready",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 5899.4000000003725,
+            "completedPrograms": 24,
+            "totalPrograms": 24,
+            "observedAt": 10447.69999999972
+          }
+        ],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 384,
+        "frames": 14,
+        "windowMs": 3244.7999999998137,
+        "maxRafIntervalMs": 520.7000000001863,
+        "p95RafIntervalMs": 520.7000000001863,
+        "maxCpuRenderMs": 41.299999999813735,
+        "p95CpuRenderMs": 41.299999999813735,
+        "framesOver100ms": 11,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 10.799999999813735,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 10.999999999627107,
+            "renderCpuMs": 9.100000000093132,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 135.20000000018626,
+            "rafIntervalMs": 26.600000000093132,
+            "rafTimestampIntervalMs": 33.29999999999927,
+            "callbackTimestampAgeMs": 4.299999999720967,
+            "renderCpuMs": 7.599999999627471,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 523.3999999999069,
+            "rafIntervalMs": 381.8000000002794,
+            "rafTimestampIntervalMs": 383.39999999999964,
+            "callbackTimestampAgeMs": 2.7000000000007276,
+            "renderCpuMs": 4.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 810.7000000001863,
+            "rafIntervalMs": 339.6999999997206,
+            "rafTimestampIntervalMs": 333.3000000000011,
+            "callbackTimestampAgeMs": 9.09999999972024,
+            "renderCpuMs": 4.7000000001862645,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1037.7000000001863,
+            "rafIntervalMs": 263.39999999990687,
+            "rafTimestampIntervalMs": 266.60000000000036,
+            "callbackTimestampAgeMs": 5.899999999626743,
+            "renderCpuMs": 4.2000000001862645,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1042.1000000000931,
+            "rafIntervalMs": 26.600000000093132,
+            "rafTimestampIntervalMs": 16.69999999999891,
+            "callbackTimestampAgeMs": 15.799999999720967,
+            "renderCpuMs": 1.7000000001862645,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1241.5,
+            "rafIntervalMs": 188.8000000002794,
+            "rafTimestampIntervalMs": 200,
+            "callbackTimestampAgeMs": 4.600000000000364,
+            "renderCpuMs": 3.8999999999068677,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1409.7999999998137,
+            "rafIntervalMs": 170.09999999962747,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 8.099999999627471,
+            "renderCpuMs": 3.7999999998137355,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1995.3999999999069,
+            "rafIntervalMs": 520.7000000001863,
+            "rafTimestampIntervalMs": 516.6000000000004,
+            "callbackTimestampAgeMs": 12.199999999813372,
+            "renderCpuMs": 41.299999999813735,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2037.1000000000931,
+            "rafIntervalMs": 107.60000000009313,
+            "rafTimestampIntervalMs": 116.69999999999891,
+            "callbackTimestampAgeMs": 3.0999999999075953,
+            "renderCpuMs": 7.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2403.899999999907,
+            "rafIntervalMs": 316,
+            "rafTimestampIntervalMs": 300,
+            "callbackTimestampAgeMs": 19.099999999907595,
+            "renderCpuMs": 7.199999999720603,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2624.399999999907,
+            "rafIntervalMs": 265.1999999997206,
+            "rafTimestampIntervalMs": 283.40000000000146,
+            "callbackTimestampAgeMs": 0.8999999996267434,
+            "renderCpuMs": 1.2999999998137355,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2727.2999999998137,
+            "rafIntervalMs": 106.60000000009313,
+            "rafTimestampIntervalMs": 99.89999999999964,
+            "callbackTimestampAgeMs": 7.599999999720239,
+            "renderCpuMs": 7,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 3244.600000000093,
+            "rafIntervalMs": 488.20000000018626,
+            "rafTimestampIntervalMs": 483.2999999999993,
+            "callbackTimestampAgeMs": 12.499999999907232,
+            "renderCpuMs": 6.300000000279397,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-10-31T10:40:37.726Z"
+      }
+    },
+    "sequential": {
+      "baseline1": {
+        "schema": 1,
+        "name": "roadmap-startup-baseline-low-r1",
+        "base": "http://127.0.0.1:4190",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 4051.300000000003,
+          "programs": 25,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 372,
+        "frames": 18,
+        "windowMs": 3166.6999999999825,
+        "maxRafIntervalMs": 391.30000000001746,
+        "p95RafIntervalMs": 391.30000000001746,
+        "maxCpuRenderMs": 50.59999999997672,
+        "p95CpuRenderMs": 50.59999999997672,
+        "framesOver100ms": 14,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 51.19999999998254,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 2.900000000008731,
+            "renderCpuMs": 50.59999999997672,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 89.69999999998254,
+            "rafIntervalMs": 55.89999999999418,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 8.80000000000291,
+            "renderCpuMs": 1.6999999999825377,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 346.29999999998836,
+            "rafIntervalMs": 234.20000000001164,
+            "rafTimestampIntervalMs": 233.39999999999964,
+            "callbackTimestampAgeMs": 9.600000000014916,
+            "renderCpuMs": 1.6999999999825377,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 360.69999999998254,
+            "rafIntervalMs": 61.79999999998836,
+            "rafTimestampIntervalMs": 16.5,
+            "callbackTimestampAgeMs": 54.900000000003274,
+            "renderCpuMs": 6.099999999976717,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 500.79999999998836,
+            "rafIntervalMs": 132.29999999998836,
+            "rafTimestampIntervalMs": 183.40000000000055,
+            "callbackTimestampAgeMs": 3.799999999991087,
+            "renderCpuMs": 4.100000000005821,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 669.7999999999884,
+            "rafIntervalMs": 164.70000000001164,
+            "rafTimestampIntervalMs": 166.69999999999982,
+            "callbackTimestampAgeMs": 1.8000000000029104,
+            "renderCpuMs": 11.199999999982538,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 903.8999999999942,
+            "rafIntervalMs": 222.89999999999418,
+            "rafTimestampIntervalMs": 216.60000000000036,
+            "callbackTimestampAgeMs": 8.099999999996726,
+            "renderCpuMs": 11,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1088.6999999999825,
+            "rafIntervalMs": 203.89999999999418,
+            "rafTimestampIntervalMs": 200,
+            "callbackTimestampAgeMs": 11.999999999990905,
+            "renderCpuMs": 2.7999999999883585,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1201.6000000000058,
+            "rafIntervalMs": 112.90000000002328,
+            "rafTimestampIntervalMs": 116.69999999999982,
+            "callbackTimestampAgeMs": 8.20000000001437,
+            "renderCpuMs": 3.6000000000058208,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1408.2999999999884,
+            "rafIntervalMs": 202.69999999998254,
+            "rafTimestampIntervalMs": 200,
+            "callbackTimestampAgeMs": 10.899999999996908,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1456.6999999999825,
+            "rafIntervalMs": 56.5,
+            "rafTimestampIntervalMs": 66.59999999999945,
+            "callbackTimestampAgeMs": 0.7999999999974534,
+            "renderCpuMs": 6.399999999994179,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1682.1000000000058,
+            "rafIntervalMs": 214.30000000001746,
+            "rafTimestampIntervalMs": 200,
+            "callbackTimestampAgeMs": 15.100000000014916,
+            "renderCpuMs": 4.2000000000116415,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1886.6999999999825,
+            "rafIntervalMs": 214.89999999999418,
+            "rafTimestampIntervalMs": 216.70000000000073,
+            "callbackTimestampAgeMs": 13.300000000008367,
+            "renderCpuMs": 1.1999999999825377,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2105.399999999994,
+            "rafIntervalMs": 217.29999999998836,
+            "rafTimestampIntervalMs": 216.69999999999982,
+            "callbackTimestampAgeMs": 13.899999999996908,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2501.600000000006,
+            "rafIntervalMs": 391.30000000001746,
+            "rafTimestampIntervalMs": 399.89999999999964,
+            "callbackTimestampAgeMs": 5.300000000014734,
+            "renderCpuMs": 1.400000000023283,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2696,
+            "rafIntervalMs": 196.29999999998836,
+            "rafTimestampIntervalMs": 183.40000000000055,
+            "callbackTimestampAgeMs": 18.200000000002547,
+            "renderCpuMs": 5.300000000017462,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2796.899999999994,
+            "rafIntervalMs": 104.79999999998836,
+            "rafTimestampIntervalMs": 116.60000000000036,
+            "callbackTimestampAgeMs": 6.399999999990541,
+            "renderCpuMs": 7.2000000000116415,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 3166.5,
+            "rafIntervalMs": 313.4000000000233,
+            "rafTimestampIntervalMs": 300.09999999999854,
+            "callbackTimestampAgeMs": 19.70000000001528,
+            "renderCpuMs": 11.10000000000582,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-11-01T02:34:57.536Z"
+      },
+      "current1": {
+        "schema": 1,
+        "name": "roadmap-startup-current-low-r1",
+        "base": "http://127.0.0.1:4189",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 4277.600000000006,
+          "programs": 24,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [
+          {
+            "stage": "idle",
+            "revision": -1,
+            "requestedRevision": 1,
+            "elapsedMs": 0,
+            "completedPrograms": null,
+            "totalPrograms": 0,
+            "observedAt": 2760.2000000000116
+          },
+          {
+            "stage": "gpu",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 1805.2000000000116,
+            "completedPrograms": null,
+            "totalPrograms": 24,
+            "observedAt": 4565.600000000006
+          },
+          {
+            "stage": "ready",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 4277.600000000006,
+            "completedPrograms": 24,
+            "totalPrograms": 24,
+            "observedAt": 7038
+          }
+        ],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 364,
+        "frames": 37,
+        "windowMs": 3043.899999999994,
+        "maxRafIntervalMs": 194.20000000001164,
+        "p95RafIntervalMs": 188.5,
+        "maxCpuRenderMs": 6.5,
+        "p95CpuRenderMs": 6,
+        "framesOver100ms": 10,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 5.5,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 8.799999999988358,
+            "renderCpuMs": 4.800000000017462,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 14.10000000000582,
+            "rafIntervalMs": 8.200000000011642,
+            "rafTimestampIntervalMs": 16.699999999999818,
+            "callbackTimestampAgeMs": 0.3000000000001819,
+            "renderCpuMs": 5.100000000005821,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 136.5,
+            "rafIntervalMs": 95.60000000000582,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 12.60000000000582,
+            "renderCpuMs": 5.300000000017462,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 230.60000000000582,
+            "rafIntervalMs": 115.19999999998254,
+            "rafTimestampIntervalMs": 116.69999999999982,
+            "callbackTimestampAgeMs": 11.09999999998854,
+            "renderCpuMs": 6,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 232.10000000000582,
+            "rafIntervalMs": 11.300000000017462,
+            "rafTimestampIntervalMs": 16.600000000000364,
+            "callbackTimestampAgeMs": 5.800000000005639,
+            "renderCpuMs": 0.8000000000174623,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 325.29999999998836,
+            "rafIntervalMs": 85.89999999999418,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 8.300000000000182,
+            "renderCpuMs": 1.1999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 413.69999999998254,
+            "rafIntervalMs": 92.10000000000582,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 0.40000000000600267,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 573.2999999999884,
+            "rafIntervalMs": 150,
+            "rafTimestampIntervalMs": 133.30000000000018,
+            "callbackTimestampAgeMs": 17.10000000000582,
+            "renderCpuMs": 6.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 607.2999999999884,
+            "rafIntervalMs": 43.29999999998836,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 10.39999999999418,
+            "renderCpuMs": 3.3999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 657.6000000000058,
+            "rafIntervalMs": 49.10000000000582,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 9.5,
+            "renderCpuMs": 1.1000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 859.3999999999942,
+            "rafIntervalMs": 194.20000000001164,
+            "rafTimestampIntervalMs": 200,
+            "callbackTimestampAgeMs": 3.7000000000116415,
+            "renderCpuMs": 3.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 939.3999999999942,
+            "rafIntervalMs": 86.5,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 6.90000000001146,
+            "renderCpuMs": 1.1000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1023.1999999999825,
+            "rafIntervalMs": 84.09999999997672,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 7.59999999998854,
+            "renderCpuMs": 1.1999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1070,
+            "rafIntervalMs": 51,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 8.59999999998854,
+            "renderCpuMs": 1.3999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1153.8999999999942,
+            "rafIntervalMs": 79.80000000001746,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 5.100000000005821,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1165.7999999999884,
+            "rafIntervalMs": 17.199999999982538,
+            "rafTimestampIntervalMs": 16.700000000000728,
+            "callbackTimestampAgeMs": 5.599999999987631,
+            "renderCpuMs": 0.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1248.7999999999884,
+            "rafIntervalMs": 80.60000000000582,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 2.8999999999941792,
+            "renderCpuMs": 1.6999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1331.3999999999942,
+            "rafIntervalMs": 80.60000000000582,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 0.2000000000007276,
+            "renderCpuMs": 1.2000000000116415,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1416.1999999999825,
+            "rafIntervalMs": 84.10000000000582,
+            "rafTimestampIntervalMs": 83.40000000000146,
+            "callbackTimestampAgeMs": 0.9000000000050932,
+            "renderCpuMs": 1.099999999976717,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1509.2999999999884,
+            "rafIntervalMs": 92.19999999998254,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 9.799999999988358,
+            "renderCpuMs": 5.100000000005821,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1639,
+            "rafIntervalMs": 125.90000000002328,
+            "rafTimestampIntervalMs": 133.29999999999927,
+            "callbackTimestampAgeMs": 2.400000000012369,
+            "renderCpuMs": 1.6000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1644.6999999999825,
+            "rafIntervalMs": 15.699999999982538,
+            "rafTimestampIntervalMs": 16.700000000000728,
+            "callbackTimestampAgeMs": 1.3999999999941792,
+            "renderCpuMs": 0.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1737.1000000000058,
+            "rafIntervalMs": 86.39999999999418,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 4.499999999989086,
+            "renderCpuMs": 5.400000000023283,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1831.6000000000058,
+            "rafIntervalMs": 96.5,
+            "rafTimestampIntervalMs": 83.40000000000146,
+            "callbackTimestampAgeMs": 17.59999999998763,
+            "renderCpuMs": 1,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1928.7999999999884,
+            "rafIntervalMs": 95.30000000001746,
+            "rafTimestampIntervalMs": 99.89999999999964,
+            "callbackTimestampAgeMs": 13.000000000005457,
+            "renderCpuMs": 5.199999999982538,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2028,
+            "rafIntervalMs": 102.39999999999418,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 15.399999999999636,
+            "renderCpuMs": 1.1000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2156,
+            "rafIntervalMs": 128,
+            "rafTimestampIntervalMs": 133.39999999999964,
+            "callbackTimestampAgeMs": 10,
+            "renderCpuMs": 1.1000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2174,
+            "rafIntervalMs": 17.79999999998836,
+            "rafTimestampIntervalMs": 16.600000000000364,
+            "callbackTimestampAgeMs": 11.199999999987995,
+            "renderCpuMs": 3.6000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2366.600000000006,
+            "rafIntervalMs": 188.5,
+            "rafTimestampIntervalMs": 183.39999999999964,
+            "callbackTimestampAgeMs": 16.29999999998836,
+            "renderCpuMs": 2.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2450.2999999999884,
+            "rafIntervalMs": 84.5,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 17.499999999989086,
+            "renderCpuMs": 0.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2455.100000000006,
+            "rafIntervalMs": 11.10000000000582,
+            "rafTimestampIntervalMs": 16.700000000000728,
+            "callbackTimestampAgeMs": 11.89999999999418,
+            "renderCpuMs": 0.9000000000232831,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2631.7999999999884,
+            "rafIntervalMs": 168.20000000001164,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 13.500000000005457,
+            "renderCpuMs": 0.7999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2711.1999999999825,
+            "rafIntervalMs": 80.89999999999418,
+            "rafTimestampIntervalMs": 83.29999999999927,
+            "callbackTimestampAgeMs": 11.100000000000364,
+            "renderCpuMs": 1.3999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2750.6999999999825,
+            "rafIntervalMs": 44.79999999998836,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 5.899999999988722,
+            "renderCpuMs": 1.099999999976717,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2927.399999999994,
+            "rafIntervalMs": 169.20000000001164,
+            "rafTimestampIntervalMs": 166.70000000000073,
+            "callbackTimestampAgeMs": 8.399999999999636,
+            "renderCpuMs": 2.2000000000116415,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2930.7999999999884,
+            "rafIntervalMs": 12.799999999988358,
+            "rafTimestampIntervalMs": 16.69999999999891,
+            "callbackTimestampAgeMs": 4.499999999989086,
+            "renderCpuMs": 0.6999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 3043.600000000006,
+            "rafIntervalMs": 110.30000000001746,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 14.800000000006548,
+            "renderCpuMs": 0.9000000000232831,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-11-01T02:35:09.354Z"
+      },
+      "current2": {
+        "schema": 1,
+        "name": "roadmap-startup-current-low-r2",
+        "base": "http://127.0.0.1:4189",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 3009.6999999999825,
+          "programs": 24,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [
+          {
+            "stage": "idle",
+            "revision": -1,
+            "requestedRevision": 1,
+            "elapsedMs": 0,
+            "completedPrograms": null,
+            "totalPrograms": 0,
+            "observedAt": 1875.1000000000058
+          },
+          {
+            "stage": "gpu",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 3009.600000000006,
+            "completedPrograms": null,
+            "totalPrograms": 24,
+            "observedAt": 4884.8000000000175
+          },
+          {
+            "stage": "ready",
+            "revision": 1,
+            "requestedRevision": 1,
+            "elapsedMs": 3009.6999999999825,
+            "completedPrograms": 24,
+            "totalPrograms": 24,
+            "observedAt": 4885.100000000006
+          }
+        ],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 362,
+        "frames": 36,
+        "windowMs": 3062.7999999999884,
+        "maxRafIntervalMs": 187.29999999998836,
+        "p95RafIntervalMs": 177.30000000001746,
+        "maxCpuRenderMs": 37.5,
+        "p95CpuRenderMs": 35.09999999997672,
+        "framesOver100ms": 11,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 6,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 13.800000000000182,
+            "renderCpuMs": 5.399999999994179,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 8.60000000000582,
+            "rafIntervalMs": 6.300000000017462,
+            "rafTimestampIntervalMs": 16.600000000000364,
+            "callbackTimestampAgeMs": 3.5000000000172804,
+            "renderCpuMs": 1.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 61.89999999999418,
+            "rafIntervalMs": 15.39999999999418,
+            "rafTimestampIntervalMs": 16.599999999999454,
+            "callbackTimestampAgeMs": 2.3000000000120053,
+            "renderCpuMs": 17.60000000000582,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 146.29999999998836,
+            "rafIntervalMs": 109.39999999999418,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 11.700000000006185,
+            "renderCpuMs": 4.399999999994179,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 312.8999999999942,
+            "rafIntervalMs": 164.79999999998836,
+            "rafTimestampIntervalMs": 166.70000000000073,
+            "callbackTimestampAgeMs": 9.799999999993815,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 318.79999999998836,
+            "rafIntervalMs": 18.10000000000582,
+            "rafTimestampIntervalMs": 16.699999999999818,
+            "callbackTimestampAgeMs": 11.199999999999818,
+            "renderCpuMs": 3.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 397.70000000001164,
+            "rafIntervalMs": 75.89999999999418,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 3.7999999999938154,
+            "renderCpuMs": 1.6000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 474.8999999999942,
+            "rafIntervalMs": 72.80000000001746,
+            "rafTimestampIntervalMs": 66.69999999999982,
+            "callbackTimestampAgeMs": 9.90000000001146,
+            "renderCpuMs": 3.6999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 563.7999999999884,
+            "rafIntervalMs": 59.69999999998254,
+            "rafTimestampIntervalMs": 66.59999999999945,
+            "callbackTimestampAgeMs": 2.999999999994543,
+            "renderCpuMs": 35.09999999997672,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 625.7000000000116,
+            "rafIntervalMs": 93.10000000000582,
+            "rafTimestampIntervalMs": 83.40000000000055,
+            "callbackTimestampAgeMs": 12.699999999999818,
+            "renderCpuMs": 1.400000000023283,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 777.7000000000116,
+            "rafIntervalMs": 154.10000000000582,
+            "rafTimestampIntervalMs": 149.89999999999964,
+            "callbackTimestampAgeMs": 16.900000000006003,
+            "renderCpuMs": 1.1000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 819.8999999999942,
+            "rafIntervalMs": 46.20000000001164,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 13.100000000017644,
+            "renderCpuMs": 1.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 915.3999999999942,
+            "rafIntervalMs": 88.79999999998836,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 1.9000000000060027,
+            "renderCpuMs": 1.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 995.5,
+            "rafIntervalMs": 81.70000000001164,
+            "rafTimestampIntervalMs": 66.69999999999982,
+            "callbackTimestampAgeMs": 16.900000000017826,
+            "renderCpuMs": 1.6000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1085.7999999999884,
+            "rafIntervalMs": 95.59999999997672,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 12.499999999994543,
+            "renderCpuMs": 1.1999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1180.2000000000116,
+            "rafIntervalMs": 91.70000000001164,
+            "rafTimestampIntervalMs": 100,
+            "callbackTimestampAgeMs": 4.200000000006185,
+            "renderCpuMs": 2.6000000000058208,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1272.8999999999942,
+            "rafIntervalMs": 89.29999999998836,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 10.199999999994361,
+            "renderCpuMs": 3.1999999999825377,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1379.5,
+            "rafIntervalMs": 100.70000000001164,
+            "rafTimestampIntervalMs": 100.10000000000036,
+            "callbackTimestampAgeMs": 10.800000000005639,
+            "renderCpuMs": 6,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1412.6000000000058,
+            "rafIntervalMs": 43.20000000001164,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 4.00000000001728,
+            "renderCpuMs": 4.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1497,
+            "rafIntervalMs": 79.5,
+            "rafTimestampIntervalMs": 83.19999999999982,
+            "callbackTimestampAgeMs": 0.3000000000174623,
+            "renderCpuMs": 8.10000000000582,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1574.3999999999942,
+            "rafIntervalMs": 79.69999999998254,
+            "rafTimestampIntervalMs": 66.69999999999982,
+            "callbackTimestampAgeMs": 13.300000000000182,
+            "renderCpuMs": 6,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1685.8999999999942,
+            "rafIntervalMs": 113.20000000001164,
+            "rafTimestampIntervalMs": 116.60000000000036,
+            "callbackTimestampAgeMs": 9.90000000001146,
+            "renderCpuMs": 0.7999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1709.5,
+            "rafIntervalMs": 27.79999999998836,
+            "rafTimestampIntervalMs": 33.399999999999636,
+            "callbackTimestampAgeMs": 4.300000000000182,
+            "renderCpuMs": 0.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1777.1000000000058,
+            "rafIntervalMs": 66.39999999999418,
+            "rafTimestampIntervalMs": 66.60000000000036,
+            "callbackTimestampAgeMs": 4.099999999993997,
+            "renderCpuMs": 1.3000000000174623,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1867.2999999999884,
+            "rafIntervalMs": 89.10000000000582,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 9.800000000000182,
+            "renderCpuMs": 2.099999999976717,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 1920.6000000000058,
+            "rafIntervalMs": 53.10000000000582,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 12.900000000006003,
+            "renderCpuMs": 1,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2090.2000000000116,
+            "rafIntervalMs": 154.10000000000582,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 0.40000000001145963,
+            "renderCpuMs": 6.800000000017462,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2208.600000000006,
+            "rafIntervalMs": 130.69999999998254,
+            "rafTimestampIntervalMs": 116.69999999999982,
+            "callbackTimestampAgeMs": 14.39999999999418,
+            "renderCpuMs": 1,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2384.5,
+            "rafIntervalMs": 177.30000000001746,
+            "rafTimestampIntervalMs": 166.69999999999982,
+            "callbackTimestampAgeMs": 25.000000000011823,
+            "renderCpuMs": 2.7000000000116415,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2479.7000000000116,
+            "rafIntervalMs": 94.5,
+            "rafTimestampIntervalMs": 116.60000000000036,
+            "callbackTimestampAgeMs": 2.9000000000114596,
+            "renderCpuMs": 0.9000000000232831,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2575.7999999999884,
+            "rafIntervalMs": 95.39999999999418,
+            "rafTimestampIntervalMs": 83.39999999999964,
+            "callbackTimestampAgeMs": 14.900000000006003,
+            "renderCpuMs": 1.2999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2683.7999999999884,
+            "rafIntervalMs": 111.29999999998836,
+            "rafTimestampIntervalMs": 116.60000000000036,
+            "callbackTimestampAgeMs": 9.599999999993997,
+            "renderCpuMs": 2.2999999999883585,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2715.600000000006,
+            "rafIntervalMs": 29.800000000017462,
+            "rafTimestampIntervalMs": 33.399999999999636,
+            "callbackTimestampAgeMs": 6.000000000011823,
+            "renderCpuMs": 0.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2908.5,
+            "rafIntervalMs": 187.29999999998836,
+            "rafTimestampIntervalMs": 183.30000000000018,
+            "callbackTimestampAgeMs": 10,
+            "renderCpuMs": 2.2000000000116415,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 2926.7999999999884,
+            "rafIntervalMs": 23.70000000001164,
+            "rafTimestampIntervalMs": 33.399999999999636,
+            "callbackTimestampAgeMs": 0.30000000001200533,
+            "renderCpuMs": 3.8999999999941792,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          },
+          {
+            "sinceStartMs": 3062.600000000006,
+            "rafIntervalMs": 100.39999999999418,
+            "rafTimestampIntervalMs": 83.30000000000018,
+            "callbackTimestampAgeMs": 17.400000000006003,
+            "renderCpuMs": 37.5,
+            "calls": 45,
+            "triangles": 94574,
+            "programs": 24
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-11-01T02:35:18.575Z"
+      },
+      "baseline2": {
+        "schema": 1,
+        "name": "roadmap-startup-baseline-low-r2",
+        "base": "http://127.0.0.1:4190",
+        "quality": "low",
+        "softwareGPU": true,
+        "physicalIntegratedGPUValidated": false,
+        "physicalInputLatencyMeasured": false,
+        "protocol": "Actual Simulation + FixedClock120Hz + RangeRenderer in Chromium1366x768 at renderScale.5, complex gallery camera0,0,4 yaw0,11requested targets, noinput, learning mode. Await actual shader preparation, then rAF render for3seconds with ordinary asynchronous WebGL submission(no gl.finish perframe). Reports CPUrender durations and actual rAF callback-arrival intervals; also retains potentially stale rAF opportunity timestamps separately. First simulation interval is0. Not GPUcompletion/display latency.",
+        "errors": [],
+        "prepared": {
+          "revision": 1,
+          "milliseconds": 5098.600000000006,
+          "programs": 25,
+          "method": "synchronous",
+          "disposed": false
+        },
+        "phases": [],
+        "capabilities": {
+          "kind": "software",
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "reason": "소프트웨어 렌더러가 보고되었습니다. CPU로 그래픽을 처리할 수 있어 낮음 설정을 권장합니다.",
+          "recommendLow": true,
+          "heuristic": false
+        },
+        "simulationTicks": 370,
+        "frames": 23,
+        "windowMs": 3108.8000000000175,
+        "maxRafIntervalMs": 259.20000000001164,
+        "p95RafIntervalMs": 233.89999999999418,
+        "maxCpuRenderMs": 43.90000000002328,
+        "p95CpuRenderMs": 39.70000000001164,
+        "framesOver100ms": 19,
+        "newProgramsAfterPreparation": 0,
+        "samples": [
+          {
+            "sinceStartMs": 11.800000000017462,
+            "rafIntervalMs": 0,
+            "rafTimestampIntervalMs": null,
+            "callbackTimestampAgeMs": 14.400000000006003,
+            "renderCpuMs": 9.700000000011642,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 107.90000000002328,
+            "rafIntervalMs": 13.89999999999418,
+            "rafTimestampIntervalMs": 16.600000000000364,
+            "callbackTimestampAgeMs": 11.699999999999818,
+            "renderCpuMs": 8.5,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 312.1000000000058,
+            "rafIntervalMs": 259.20000000001164,
+            "rafTimestampIntervalMs": 266.6999999999998,
+            "callbackTimestampAgeMs": 4.2000000000116415,
+            "renderCpuMs": 4.399999999994179,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 466.80000000001746,
+            "rafIntervalMs": 137,
+            "rafTimestampIntervalMs": 133.39999999999964,
+            "callbackTimestampAgeMs": 7.800000000012005,
+            "renderCpuMs": 39.70000000001164,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 584,
+            "rafIntervalMs": 154.79999999998836,
+            "rafTimestampIntervalMs": 149.89999999999964,
+            "callbackTimestampAgeMs": 12.700000000000728,
+            "renderCpuMs": 6.5,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 588,
+            "rafIntervalMs": 18.300000000017462,
+            "rafTimestampIntervalMs": 16.700000000000728,
+            "callbackTimestampAgeMs": 14.300000000017462,
+            "renderCpuMs": 2,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 714.9000000000233,
+            "rafIntervalMs": 116.5,
+            "rafTimestampIntervalMs": 116.70000000000073,
+            "callbackTimestampAgeMs": 14.100000000016735,
+            "renderCpuMs": 1.7000000000116415,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 893.4000000000233,
+            "rafIntervalMs": 169.89999999999418,
+            "rafTimestampIntervalMs": 183.29999999999927,
+            "callbackTimestampAgeMs": 0.7000000000116415,
+            "renderCpuMs": 3.7000000000116415,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1014.9000000000233,
+            "rafIntervalMs": 133.5,
+            "rafTimestampIntervalMs": 133.29999999999927,
+            "callbackTimestampAgeMs": 0.9000000000123691,
+            "renderCpuMs": 2,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1197.5,
+            "rafIntervalMs": 174.70000000001164,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 9.000000000023647,
+            "renderCpuMs": 1.6999999999825377,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1324,
+            "rafIntervalMs": 127.09999999997672,
+            "rafTimestampIntervalMs": 133.39999999999964,
+            "callbackTimestampAgeMs": 2.7000000000007276,
+            "renderCpuMs": 5.599999999976717,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1474,
+            "rafIntervalMs": 158.20000000001164,
+            "rafTimestampIntervalMs": 150,
+            "callbackTimestampAgeMs": 10.90000000001237,
+            "renderCpuMs": 1.1999999999825377,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1608.3000000000175,
+            "rafIntervalMs": 128.10000000000582,
+            "rafTimestampIntervalMs": 133.40000000000146,
+            "callbackTimestampAgeMs": 5.600000000016735,
+            "renderCpuMs": 7.600000000005821,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1717.7000000000116,
+            "rafIntervalMs": 115.39999999999418,
+            "rafTimestampIntervalMs": 116.59999999999854,
+            "callbackTimestampAgeMs": 4.400000000012369,
+            "renderCpuMs": 6.2999999999883585,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 1879,
+            "rafIntervalMs": 154.70000000001164,
+            "rafTimestampIntervalMs": 116.70000000000073,
+            "callbackTimestampAgeMs": 42.40000000002328,
+            "renderCpuMs": 12.299999999988358,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2118,
+            "rafIntervalMs": 233.89999999999418,
+            "rafTimestampIntervalMs": 266.60000000000036,
+            "callbackTimestampAgeMs": 9.700000000017099,
+            "renderCpuMs": 2,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2273.4000000000233,
+            "rafIntervalMs": 129.29999999998836,
+            "rafTimestampIntervalMs": 133.39999999999964,
+            "callbackTimestampAgeMs": 5.600000000005821,
+            "renderCpuMs": 43.90000000002328,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2288.7000000000116,
+            "rafIntervalMs": 51.5,
+            "rafTimestampIntervalMs": 50,
+            "callbackTimestampAgeMs": 7.100000000005821,
+            "renderCpuMs": 9.200000000011642,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2509.2000000000116,
+            "rafIntervalMs": 218.30000000001746,
+            "rafTimestampIntervalMs": 216.60000000000036,
+            "callbackTimestampAgeMs": 8.80000000002292,
+            "renderCpuMs": 4.7000000000116415,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2681.3000000000175,
+            "rafIntervalMs": 171.39999999999418,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 13.600000000016735,
+            "renderCpuMs": 9.60000000000582,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2821.5,
+            "rafIntervalMs": 141.5,
+            "rafTimestampIntervalMs": 150.09999999999854,
+            "callbackTimestampAgeMs": 5.00000000001819,
+            "renderCpuMs": 7.199999999982538,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 2983.8000000000175,
+            "rafIntervalMs": 154.5,
+            "rafTimestampIntervalMs": 116.60000000000036,
+            "callbackTimestampAgeMs": 42.900000000017826,
+            "renderCpuMs": 3,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          },
+          {
+            "sinceStartMs": 3108.7000000000116,
+            "rafIntervalMs": 125.60000000000582,
+            "rafTimestampIntervalMs": 166.60000000000036,
+            "callbackTimestampAgeMs": 1.900000000023283,
+            "renderCpuMs": 2.6000000000058208,
+            "calls": 63,
+            "triangles": 94830,
+            "programs": 25
+          }
+        ],
+        "passed": true,
+        "completedAt": "2026-11-01T02:35:31.317Z"
+      }
+    }
+  },
+  "acceptance": {
+    "drawCalls": {
+      "target": "complex entry/gallery <=120 at the matched preset/camera",
+      "passed": true
+    },
+    "shaderPrograms": {
+      "target": "no additional shader program on the first visible frames after preparation",
+      "passed": true
+    },
+    "integratedGPU100ms": {
+      "target": "no frame >100ms in the first3seconds on a validated integrated GPU",
+      "passed": null,
+      "status": "not-verified: physical integrated GPU unavailable; software renderer exceeds100ms in all observed runs"
+    },
+    "physicalInputLatency": {
+      "passed": null,
+      "status": "not-measured"
+    }
+  },
+  "tests": {
+    "command": "vitest run roadmap-stage2-rendering rendering-corrections operator-art static-geometry peeking-geometry mechanics-maps",
+    "files": 6,
+    "passed": 61,
+    "failed": 0
+  },
+  "limits": [
+    "Counts are actual WebGL submissions and submitted triangles, not FPS or GPU-time claims.",
+    "The broader exact-palette batch raises complex entry submitted triangles by996, while reducing calls. Collision meshes, spawns, sightlines and character/weapon geometry are unchanged.",
+    "Startup rAF callback-arrival intervals are observational on shared software rendering. Original and two sequential pairs are retained; no cherry-picked FPS improvement or physical input-to-photon result is claimed.",
+    "Original appearance comparisons are screenshots from the matched actual renderer fixture, not generated art."
+  ]
+}

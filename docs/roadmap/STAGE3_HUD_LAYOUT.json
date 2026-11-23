@@ -1,0 +1,4623 @@
+{
+  "origin": "http://127.0.0.1:4217",
+  "environment": "Headless Chromium154 Linux, production React HUD/Crosshair/ExerciseHUD CSS without a GPU renderer. Deterministically stepped real Simulation fixture, not a gameplay/performance capture.",
+  "layouts": [
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 497.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 612.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 468.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 811.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1042.40625,
+        "y": 61,
+        "width": 217.59375,
+        "height": 127.375,
+        "right": 1260,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 96,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 117.59375,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 139.1875,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 160.78125,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 497.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 612.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 468.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 811.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1042.40625,
+        "y": 61,
+        "width": 217.59375,
+        "height": 127.375,
+        "right": 1260,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 96,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 117.59375,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 139.1875,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 160.78125,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 462.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 605.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 425.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 854.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 988.0078125,
+        "y": 71.75,
+        "width": 271.9921875,
+        "height": 159.21875,
+        "right": 1260,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 115.5,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 142.4921875,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 169.484375,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 196.4765625,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 462.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 605.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 425.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 854.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 988.0078125,
+        "y": 71.75,
+        "width": 271.9921875,
+        "height": 159.21875,
+        "right": 1260,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 115.5,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 142.4921875,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 169.484375,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 196.4765625,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 540.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 655.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 511.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 854.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1113.78125,
+        "y": 61,
+        "width": 232.21875,
+        "height": 127.375,
+        "right": 1346,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 96,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 117.59375,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 139.1875,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 160.78125,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 540.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 655.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 511.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 854.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1113.78125,
+        "y": 61,
+        "width": 232.21875,
+        "height": 127.375,
+        "right": 1346,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 96,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 117.59375,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 139.1875,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 160.78125,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 505.01953125,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 648.76953125,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 468.76953125,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 897.2265625,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1055.72265625,
+        "y": 71.75,
+        "width": 290.2734375,
+        "height": 159.21875,
+        "right": 1345.99609375,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 115.5,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 142.4921875,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 169.484375,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 196.4765625,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 505.01953125,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 648.76953125,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 468.76953125,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 897.2265625,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1055.72265625,
+        "y": 71.75,
+        "width": 290.2734375,
+        "height": 159.21875,
+        "right": 1345.99609375,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 115.5,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 142.4921875,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 169.484375,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 196.4765625,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 817.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 932.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 788.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1131.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1640,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 1900,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1652,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1652,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1652,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1652,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 817.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 932.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 788.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1131.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1640,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 1900,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1652,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1652,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1652,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1652,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 782.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 925.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 745.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1174.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1575,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 1900,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1590,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1590,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1590,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1590,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 782.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 925.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 745.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1174.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1575,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 1900,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1590,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 1590,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1590,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1590,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1137.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 1252.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1108.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1451.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 2280,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 2540,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2292,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 2292,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2292,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2292,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1137.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 1252.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1108.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1451.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 2280,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 2540,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2292,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 2292,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2292,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2292,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1102.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 1245.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1065.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1494.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 2215,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 2540,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2230,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 2230,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2230,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2230,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1102.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 1245.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1065.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1494.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 2215,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 2540,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2230,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 2230,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2230,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2230,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1577.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 1692.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1548.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1891.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 3160,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 3420,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3172,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 3172,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3172,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3172,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1577.609375,
+          "y": 76.640625,
+          "width": 115,
+          "height": 14,
+          "right": 1692.609375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1548.609375,
+        "y": 48.5,
+        "width": 342.765625,
+        "height": 70.296875,
+        "right": 1891.375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 3160,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 3420,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3172,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 3172,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3172,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3172,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1542.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 1685.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1505.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1934.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 3095,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 3420,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3110,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 3110,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3110,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3110,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "scenario",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가 직접 정한 아주 긴 전술 훈련 시나리오 제목 사용자가",
+        "length": 64,
+        "bounds": {
+          "x": 1542.01171875,
+          "y": 91.30078125,
+          "width": 143.75,
+          "height": 17.5,
+          "right": 1685.76171875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 470,
+        "clientWidth": 115,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden",
+        "literal": "literal"
+      },
+      "top": {
+        "x": 1505.76171875,
+        "y": 56.125,
+        "width": 428.45703125,
+        "height": 87.87109375,
+        "right": 1934.21875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 3095,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 3420,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3110,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지2.49초 · 1.85초",
+          "bounds": {
+            "x": 3110,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3110,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3110,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": null,
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 508.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 578.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 479.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 800.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1042.40625,
+        "y": 61,
+        "width": 217.59375,
+        "height": 127.375,
+        "right": 1260,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 96,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 117.59375,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 139.1875,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 160.78125,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 538.3828125,
+        "y": 180,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 741.6171875,
+        "bottom": 250.859375
+      },
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 508.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 578.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 479.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 800.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1042.40625,
+        "y": 61,
+        "width": 217.59375,
+        "height": 127.375,
+        "right": 1260,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 96,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 117.59375,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 139.1875,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1054.40625,
+            "y": 160.78125,
+            "width": 193.59375,
+            "height": 17.59375,
+            "right": 1248,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 538.3828125,
+        "y": 180,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 741.6171875,
+        "bottom": 250.859375
+      },
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 475.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 562.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 439.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 840.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 988.0078125,
+        "y": 71.75,
+        "width": 271.9921875,
+        "height": 159.21875,
+        "right": 1260,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 115.5,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 142.4921875,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 169.484375,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 196.4765625,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 538.3828125,
+        "y": 180,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 741.6171875,
+        "bottom": 250.859375
+      },
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 475.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 562.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 439.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 840.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 988.0078125,
+        "y": 71.75,
+        "width": 271.9921875,
+        "height": 159.21875,
+        "right": 1260,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 115.5,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 142.4921875,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 169.484375,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1003.0078125,
+            "y": 196.4765625,
+            "width": 241.9921875,
+            "height": 21.9921875,
+            "right": 1245,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 538.3828125,
+        "y": 180,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 741.6171875,
+        "bottom": 250.859375
+      },
+      "crosshair": {
+        "x": 580,
+        "y": 300,
+        "width": 120,
+        "height": 120,
+        "right": 700,
+        "bottom": 420
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 551.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 621.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 522.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 843.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1113.78125,
+        "y": 61,
+        "width": 232.21875,
+        "height": 127.375,
+        "right": 1346,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 96,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 117.59375,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 139.1875,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 160.78125,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 581.3828125,
+        "y": 192,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 784.6171875,
+        "bottom": 262.859375
+      },
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 551.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 621.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 522.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 843.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1113.78125,
+        "y": 61,
+        "width": 232.21875,
+        "height": 127.375,
+        "right": 1346,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 96,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 117.59375,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 139.1875,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1125.78125,
+            "y": 160.78125,
+            "width": 208.21875,
+            "height": 17.59375,
+            "right": 1334,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 581.3828125,
+        "y": 192,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 784.6171875,
+        "bottom": 262.859375
+      },
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 518.9453125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 605.95703125,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 482.6953125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 883.28125,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1055.72265625,
+        "y": 71.75,
+        "width": 290.2734375,
+        "height": 159.21875,
+        "right": 1345.99609375,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 115.5,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 142.4921875,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 169.484375,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 196.4765625,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 581.3828125,
+        "y": 192,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 784.6171875,
+        "bottom": 262.859375
+      },
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 518.9453125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 605.95703125,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 482.6953125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 883.28125,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1055.72265625,
+        "y": 71.75,
+        "width": 290.2734375,
+        "height": 159.21875,
+        "right": 1345.99609375,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 115.5,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 142.4921875,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 169.484375,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1070.72265625,
+            "y": 196.4765625,
+            "width": 260.2734375,
+            "height": 21.9921875,
+            "right": 1330.99609375,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 581.3828125,
+        "y": 192,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 784.6171875,
+        "bottom": 262.859375
+      },
+      "crosshair": {
+        "x": 623,
+        "y": 324,
+        "width": 120,
+        "height": 120,
+        "right": 743,
+        "bottom": 444
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 828.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 898.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 799.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1120.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1640,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 1900,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1652,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1652,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1652,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1652,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 858.3828125,
+        "y": 270,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1061.6171875,
+        "bottom": 340.859375
+      },
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 828.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 898.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 799.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1120.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 1640,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 1900,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1652,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1652,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1652,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1652,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 1888,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 858.3828125,
+        "y": 270,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1061.6171875,
+        "bottom": 340.859375
+      },
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 795.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 882.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 759.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1160.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1575,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 1900,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1590,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1590,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1590,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1590,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 858.3828125,
+        "y": 270,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1061.6171875,
+        "bottom": 340.859375
+      },
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 795.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 882.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 759.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1160.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 1575,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 1900,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 1590,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 1590,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 1590,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 1590,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 1885,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 858.3828125,
+        "y": 270,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1061.6171875,
+        "bottom": 340.859375
+      },
+      "crosshair": {
+        "x": 900,
+        "y": 480,
+        "width": 120,
+        "height": 120,
+        "right": 1020,
+        "bottom": 600
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1148.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 1218.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1119.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1440.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 2280,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 2540,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2292,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 2292,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2292,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2292,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1178.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1381.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1148.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 1218.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1119.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1440.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 2280,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 2540,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2292,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 2292,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2292,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2292,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 2528,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1178.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1381.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1115.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 1202.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1079.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1480.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 2215,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 2540,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2230,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 2230,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2230,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2230,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1178.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1381.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 2560,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1115.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 1202.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1079.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1480.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 2215,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 2540,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 2230,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 2230,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 2230,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 2230,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 2525,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1178.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1381.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1220,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1340,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "windowed",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1588.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 1658.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1559.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1880.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 3160,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 3420,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3172,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 3172,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3172,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3172,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1618.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1821.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1588.765625,
+          "y": 76.640625,
+          "width": 69.609375,
+          "height": 14,
+          "right": 1658.375,
+          "bottom": 90.640625
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1559.765625,
+        "y": 48.5,
+        "width": 320.46875,
+        "height": 70.296875,
+        "right": 1880.234375,
+        "bottom": 118.796875
+      },
+      "physics": {
+        "x": 3160,
+        "y": 61,
+        "width": 260,
+        "height": 127.375,
+        "right": 3420,
+        "bottom": 188.375
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3172,
+            "y": 96,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 113.59375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 3172,
+            "y": 117.59375,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 135.1875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3172,
+            "y": 139.1875,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 156.78125
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3172,
+            "y": 160.78125,
+            "width": 236,
+            "height": 17.59375,
+            "right": 3408,
+            "bottom": 178.375
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1618.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1821.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "windowed",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": false,
+      "pointerLock": false,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1555.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 1642.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1519.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1920.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 3095,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 3420,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3110,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 3110,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3110,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3110,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1618.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1821.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    },
+    {
+      "task": "flash",
+      "scale": 1.25,
+      "mode": "fullscreen-pointerlock",
+      "viewport": {
+        "width": 3440,
+        "height": 1440
+      },
+      "fullscreen": true,
+      "pointerLock": true,
+      "overflow": false,
+      "title": {
+        "text": "플래시 회피 훈련",
+        "length": 9,
+        "bounds": {
+          "x": 1555.95703125,
+          "y": 91.30078125,
+          "width": 87.01171875,
+          "height": 17.5,
+          "right": 1642.96875,
+          "bottom": 108.80078125
+        },
+        "scrollWidth": 70,
+        "clientWidth": 70,
+        "textOverflow": "ellipsis",
+        "whiteSpace": "nowrap",
+        "overflowX": "hidden"
+      },
+      "top": {
+        "x": 1519.70703125,
+        "y": 56.125,
+        "width": 400.5859375,
+        "height": 87.87109375,
+        "right": 1920.29296875,
+        "bottom": 143.99609375
+      },
+      "physics": {
+        "x": 3095,
+        "y": 71.75,
+        "width": 325,
+        "height": 159.21875,
+        "right": 3420,
+        "bottom": 230.96875
+      },
+      "essential": [
+        {
+          "text": "수평 · 수직 속도0.00 · 0.00m/s",
+          "bounds": {
+            "x": 3110,
+            "y": 115.5,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 137.4921875
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "최근 점프 · 착지1.14초 · 0.50초",
+          "bounds": {
+            "x": 3110,
+            "y": 142.4921875,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 164.484375
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "연속 점프 · 입력0회 · —",
+          "bounds": {
+            "x": 3110,
+            "y": 169.484375,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 191.4765625
+          },
+          "visible": true,
+          "clipped": []
+        },
+        {
+          "text": "공중 가속 · 입력 창0.00m/s² · 80ms",
+          "bounds": {
+            "x": 3110,
+            "y": 196.4765625,
+            "width": 295,
+            "height": 21.9921875,
+            "right": 3405,
+            "bottom": 218.46875
+          },
+          "visible": true,
+          "clipped": []
+        }
+      ],
+      "cue": {
+        "x": 1618.3828125,
+        "y": 360,
+        "width": 203.234375,
+        "height": 70.859375,
+        "right": 1821.6171875,
+        "bottom": 430.859375
+      },
+      "crosshair": {
+        "x": 1660,
+        "y": 660,
+        "width": 120,
+        "height": 120,
+        "right": 1780,
+        "bottom": 780
+      },
+      "issues": []
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "The development fixture draws actual production React components and CSS but no 3D scene.",
+    "Fullscreen and Pointer Lock require real trusted browser gestures here; display dimensions remain the requested emulated viewport.",
+    "This checks geometry/accessibility of named essential HUD rows, long custom titles and an actual active flash cue; it is not a font-size or physical-device usability study."
+  ],
+  "passed": true,
+  "completedAt": "2026-11-04T10:20:05.691Z",
+  "issueIds": [
+    "F6",
+    "A4",
+    "A5",
+    "A6"
+  ],
+  "sourcePatchAtCapture": "09.01 / 9.0.1 unreleased Stage3 tree",
+  "summary": {
+    "layoutsPassed": 40,
+    "layoutsFailed": 0,
+    "viewportSizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3440,
+        1440
+      ]
+    ],
+    "hudScales": [
+      1,
+      1.25
+    ],
+    "tasks": [
+      "scenario with64-character literal Korean custom title",
+      "flash with actual first active exercise cue"
+    ],
+    "displayStates": [
+      "windowed",
+      "trusted-gesture fullscreen with Pointer Lock"
+    ],
+    "requiredDiagnosticRowsPerLayout": 4,
+    "essentialRowsFullyVisible": 160,
+    "horizontalOverflowCases": 0
+  },
+  "fixtureChanges": [
+    "Import premium.css and operator.css after styles/tokens/tactical, matching production global stylesheet order.",
+    "Enable physicsDiagnostics to make all four essential rows measurable.",
+    "Use a real jump/landing in the frozen fixture.",
+    "Stop flash simulation at its first actual active cue instead of assuming a cue remains active at300ticks.",
+    "Use actual simulation.time for the task countdown so an active flash cue is not shown alongside a synthetic expired timer."
+  ],
+  "harnessCorrection": "Initial fullscreen probe walked clipping ancestors above the top-layer fullscreen element and incorrectly treated its zero-height body as a clip. Corrected traversal stops at document.fullscreenElement; no production CSS change was needed. Raw initial probe retained at /workspace/roadmap-qa/stage3-hud-layout-initial-probe.json.",
+  "sourceHashes": {
+    "src/dev/hud.tsx": "76cef9c10918e36e52a7ab515189fc9f55b90aabb8ed526197a4dc90bfb05daf",
+    "src/ui/GameHUD.tsx": "0c3452c2cbab15d3bdf90259031b7e9051e9237961c771ff39e837cdf95d7aa0",
+    "src/ui/MovementPhysicsFeedback.tsx": "c918789719242ef40ba054c43da1cb774baa9e1bf77d2a3fa44f1f89881274f2",
+    "src/ui/ExerciseTraining.tsx": "465c1e02c0cca42dd9505a3974eb93a052c2e20d1f56959f8a566bd2ceab6426",
+    "src/ui/exerciseTraining.css": "55a7d5fd5ab34768a435375c94425d0e92ca988279715f20e42fecc6e95616b3",
+    "src/ui/operator.css": "42c645279e7e9f4e5f9bd77e6a8f8ff24953e3fd79ac2bcb21453ad6b27532cc",
+    "src/ui/premium.css": "142d4d35c552c97d1bb72facbf3c199e7cdcba380be976540f70c2ee2baf6b8e"
+  },
+  "harness": "measure-stage3-hud-layout.mjs",
+  "screenshots": [
+    {
+      "path": "rendering/stage3-hud-scenario-1366-768-125.png",
+      "sha256": "82f19f3d3cdfd5da9086b8aadc0db61e5563e4d87b1acbaaa76c9b8ec89e52f3",
+      "width": 1366,
+      "height": 768,
+      "hudScale": 1.25,
+      "state": "windowed"
+    },
+    {
+      "path": "rendering/stage3-hud-flash-1366-768-125.png",
+      "sha256": "8b2fed8a31deab544fcc67611fc385803cfa9c38e49f07d0881512f92bed360d",
+      "width": 1366,
+      "height": 768,
+      "hudScale": 1.25,
+      "state": "windowed"
+    }
+  ],
+  "typecheck": {
+    "command": "node_modules/.bin/tsc -b",
+    "exitCode": 0,
+    "logBytes": 0
+  }
+}

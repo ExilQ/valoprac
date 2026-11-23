@@ -1,6 +1,6 @@
 import type {CalibrationConfig} from './precision/calibration';
 export const AIM_VERSION='aim-2.0.0';
-export const GAME_VERSION='9.0.1';
+export const GAME_VERSION='10.0.0';
 export const TASKS=['large','small','micro','smooth','reactive','switch','dynamic'] as const;
 export type AimTask=typeof TASKS[number]|'tactical';
 export const TASK_LABELS:Record<AimTask,string>={large:'큰 각도 플릭',small:'작은 머리 표적',micro:'미세 조정',smooth:'부드러운 트래킹',reactive:'반응형 트래킹',switch:'표적 전환',dynamic:'이동 표적 클릭',tactical:'전술 사격 전이'};

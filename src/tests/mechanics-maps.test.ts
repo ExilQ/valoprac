@@ -44,7 +44,9 @@ describe('Original mechanics training maps',()=>{
   expect(move.position.z).toBeLessThan(-19);expect(move.position.z).toBeGreaterThan(-20);
   move.step({...emptyInput(),forward:1,jump:true,jumpPresses:1},0,dt,.5);
   expect(move.grounded).toBe(false);
-  for(let i=1;i<=68;i++)move.step({...emptyInput(),forward:1},0,dt,.5+i*dt);
+  // F2 changes flight time; validate real support contact rather than assuming the old 68-tick apex/landing schedule.
+  let flightTicks=0;while(!move.grounded&&flightTicks<120)move.step({...emptyInput(),forward:1},0,dt,.5+(++flightTicks)*dt);
+  expect(flightTicks*dt).toBeGreaterThanOrEqual(.6);expect(flightTicks*dt).toBeLessThanOrEqual(.7);
   expect(move.position.z).toBeLessThan(-22);expect(move.position.z).toBeGreaterThan(-26);expect(move.position.y).toBeCloseTo(.8);expect(move.grounded).toBe(true);
   expect(move.hopSnapshot().jumps).toBe(1);expect(move.speed).toBeLessThanOrEqual(5.5+1e-8);
  });

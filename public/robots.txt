@@ -1,3 +1,9 @@
+User-agent: GPTBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: *
 Allow: /
 Sitemap: https://valoprac.trade/sitemap.xml

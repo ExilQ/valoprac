@@ -1,0 +1,237 @@
+{
+  "origin": "http://127.0.0.1:4333",
+  "checks": [
+    "compiled English settings tab 0",
+    "compiled English settings tab 1",
+    "compiled English settings tab 2",
+    "compiled English settings tab 3",
+    "compiled English settings tab 4",
+    "compiled English settings tab 5",
+    "compiled English tool tab 0",
+    "compiled English tool tab 1",
+    "compiled English tool tab 2",
+    "compiled English tool tab 3",
+    "compiled English tool tab 4",
+    "compiled English tool tab 5",
+    "compiled English 10.00 patch notes",
+    "actual compiled 10.00 release metadata",
+    "English remains a same-origin lazy chunk; no uploads"
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "overflow": false
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4333/settings.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/search.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/index-B6Ku2Nk1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/react-Bg9W9dCp.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/three-BHp-Rk9X.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/index-l5a726kF.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/GameStage-CWx4Vpue.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ExerciseTraining-C98IZaN5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/validation-CZt2GFGM.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/types-CY1nDbXe.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ExerciseTraining-DzX4EEW6.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/Runtime-3J5HaIXq.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/Input-IKr0YB-P.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/projection-CT4dA78w.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/RangeRenderer-BjNeNE6m.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/statistics-zktoDNT8.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/LiveRecoil-Bv_5ce-J.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/GameStage-DIEkjyfH.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/catalog.en-CqqFT0JH.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/tools.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/search.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/index-B6Ku2Nk1.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/react-Bg9W9dCp.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/three-BHp-Rk9X.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/index-l5a726kF.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/catalog.en-CqqFT0JH.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/GameStage-CWx4Vpue.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ExerciseTraining-C98IZaN5.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/validation-CZt2GFGM.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/types-CY1nDbXe.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ExerciseTraining-DzX4EEW6.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/Runtime-3J5HaIXq.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/Input-IKr0YB-P.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/projection-CT4dA78w.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/RangeRenderer-BjNeNE6m.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/statistics-zktoDNT8.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/LiveRecoil-Bv_5ce-J.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/GameStage-DIEkjyfH.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/TrainingPlatform-0bJQuSxa.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/TrainingPlatform-DcFjz_6x.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ReplayViewer-BXnBZcOI.js",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4333/assets/ReplayViewer-BygVZgmA.css",
+      "method": "GET"
+    }
+  ],
+  "release": "10.0.0",
+  "passed": true,
+  "completedAt": "2026-11-04T10:31:12.695Z"
+}

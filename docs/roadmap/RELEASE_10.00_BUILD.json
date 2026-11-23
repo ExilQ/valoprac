@@ -1,0 +1,222 @@
+{
+  "release": "10.0.0",
+  "measuredAt": "2026-11-04T10:30:46.819Z",
+  "method": "All emitted JS/CSS chunks including optional tools, replay viewer, streaming client and lazy English; compression defaults; not initial network transfer.",
+  "assets": [
+    {
+      "file": "AimDashboard-C2M0MM7B.css",
+      "bytes": 18952,
+      "gzipBytes": 3721,
+      "brotliBytes": 3257,
+      "sha256": "8415d3aae2e9028931fee22ecd25f6bf34f5c23d39e1bc6acee70cee329d417f"
+    },
+    {
+      "file": "AimDashboard-DVNciOaY.js",
+      "bytes": 117370,
+      "gzipBytes": 40295,
+      "brotliBytes": 34080,
+      "sha256": "089f00f4540f64c3471efe33c311e4b6bedfbd75a63c70d79f8c793378fee569"
+    },
+    {
+      "file": "EpicSession-VfTPJlrS.js",
+      "bytes": 247892,
+      "gzipBytes": 57054,
+      "brotliBytes": 48337,
+      "sha256": "b644bf2c503f61de94284d57f4a2356e60ab8b586f705d0e82cbc8561b00b686"
+    },
+    {
+      "file": "ExerciseTraining-C98IZaN5.js",
+      "bytes": 5705,
+      "gzipBytes": 2672,
+      "brotliBytes": 2248,
+      "sha256": "4eea6a5200441c15ef519619b71311bd22dccd3fe0aa2dab3f7a9895a11d99d1"
+    },
+    {
+      "file": "ExerciseTraining-DzX4EEW6.css",
+      "bytes": 1504,
+      "gzipBytes": 623,
+      "brotliBytes": 499,
+      "sha256": "3d13a5ccaee029560d1405b9943f4ebc9c4b44f612c8bc1ac5cf9700ab3657d9"
+    },
+    {
+      "file": "GameStage-CWx4Vpue.js",
+      "bytes": 42713,
+      "gzipBytes": 15115,
+      "brotliBytes": 13209,
+      "sha256": "c061deb1bdbd351fc9d8d24908712f6389794db77f638e4c805f42624d350516"
+    },
+    {
+      "file": "GameStage-DIEkjyfH.css",
+      "bytes": 4374,
+      "gzipBytes": 1168,
+      "brotliBytes": 966,
+      "sha256": "45ca24a88b57b0a30a9df9ca0a4115a40a7869ce2408990d3174bbffd489ecc5"
+    },
+    {
+      "file": "Input-IKr0YB-P.js",
+      "bytes": 49161,
+      "gzipBytes": 18204,
+      "brotliBytes": 15935,
+      "sha256": "c005d49fae79bca1f666da5c8ed1b51c8e330ef052ac7d14c38c9776f1942438"
+    },
+    {
+      "file": "LiveRecoil-Bv_5ce-J.js",
+      "bytes": 2270,
+      "gzipBytes": 1210,
+      "brotliBytes": 1041,
+      "sha256": "b101663324a0964131f361136335926af9e70c723ce8554855db3a0b739b830f"
+    },
+    {
+      "file": "RangeRenderer-BjNeNE6m.js",
+      "bytes": 143545,
+      "gzipBytes": 49435,
+      "brotliBytes": 42228,
+      "sha256": "66c83cbe08cae1ac6978c047e0d6af0f309ba90c68a91cffa51a4f79e5064f9b"
+    },
+    {
+      "file": "ReplayViewer-BXnBZcOI.js",
+      "bytes": 18439,
+      "gzipBytes": 7451,
+      "brotliBytes": 6489,
+      "sha256": "5c47da914099bbc91856c8696cba2b87977a32c935d844b3884ce075a803a7a9"
+    },
+    {
+      "file": "ReplayViewer-BygVZgmA.css",
+      "bytes": 5586,
+      "gzipBytes": 1556,
+      "brotliBytes": 1301,
+      "sha256": "09667d82a5ca42f723b65518375dee1383479bc7f6687f359af2b2745a1bfe61"
+    },
+    {
+      "file": "Runtime-3J5HaIXq.js",
+      "bytes": 48986,
+      "gzipBytes": 17043,
+      "brotliBytes": 15047,
+      "sha256": "23c1d143fb299bd39ccf4e3fbf8176f196797f6fa75d93be6cd712872d7c22ab"
+    },
+    {
+      "file": "StreamingStage-NAqwQOk3.js",
+      "bytes": 14905,
+      "gzipBytes": 5824,
+      "brotliBytes": 4994,
+      "sha256": "be6525f90e725ab6afc03c13eb8adb7af09ed493ffde6b831df4bae8cd623934"
+    },
+    {
+      "file": "TacticalAssessment-BrFGQzeh.js",
+      "bytes": 6405,
+      "gzipBytes": 3094,
+      "brotliBytes": 2618,
+      "sha256": "826eadcd6b65d1fcd583f471e6aeeb0aadfc9c5f1878395403c4a2e729e44cf0"
+    },
+    {
+      "file": "TacticalAssessment-D2Lm2P-X.css",
+      "bytes": 1469,
+      "gzipBytes": 610,
+      "brotliBytes": 481,
+      "sha256": "c9a47db6d8e8a7e9c787400bcf2ab4e655958a5e9a652756c9bee34a748bfc91"
+    },
+    {
+      "file": "TrainingPlatform-0bJQuSxa.js",
+      "bytes": 22550,
+      "gzipBytes": 8144,
+      "brotliBytes": 6988,
+      "sha256": "ee61885eb280bb76e73cc141b66f9d64a85687b50b160199d8a4d62d6650ccf1"
+    },
+    {
+      "file": "TrainingPlatform-DcFjz_6x.css",
+      "bytes": 5272,
+      "gzipBytes": 1464,
+      "brotliBytes": 1205,
+      "sha256": "506dc862281caf98d25448bcc1dcd92ed7abffb8fe4011d513a1546a81495913"
+    },
+    {
+      "file": "analysis.worker-aFOMcMeF.js",
+      "bytes": 9441,
+      "gzipBytes": 4218,
+      "brotliBytes": 3786,
+      "sha256": "e11f13ffcea03d8c659459481b750844802b9984eb9df11341808f9807c25d6f"
+    },
+    {
+      "file": "catalog.en-CqqFT0JH.js",
+      "bytes": 324772,
+      "gzipBytes": 110115,
+      "brotliBytes": 85171,
+      "sha256": "9cf81ebe0151dba092ed8343cc8c9134a0eb65cdf2df6852d266275ad38685ef"
+    },
+    {
+      "file": "index-B6Ku2Nk1.js",
+      "bytes": 230743,
+      "gzipBytes": 76467,
+      "brotliBytes": 61603,
+      "sha256": "028aedbd4d930610a7098c3212d2dcbfaca2b18855d653c6128867795bd2b8e3"
+    },
+    {
+      "file": "index-l5a726kF.css",
+      "bytes": 139766,
+      "gzipBytes": 27836,
+      "brotliBytes": 23670,
+      "sha256": "fe3d5caff09376ceae7029c97b370a1c2497e28f3be7194640c5b3c293e1a8ae"
+    },
+    {
+      "file": "projection-CT4dA78w.js",
+      "bytes": 393,
+      "gzipBytes": 245,
+      "brotliBytes": 207,
+      "sha256": "98af27bc3df7de01877ac40c0b7c34bf1d5d4ba3f3f4b320782792dd4e5f9575"
+    },
+    {
+      "file": "react-Bg9W9dCp.js",
+      "bytes": 223175,
+      "gzipBytes": 69221,
+      "brotliBytes": 59617,
+      "sha256": "ceecd45ecef6a47bb2158760e9b9546ce491445cfb69f7166257ea81eedf36b2"
+    },
+    {
+      "file": "statistics-zktoDNT8.js",
+      "bytes": 2659,
+      "gzipBytes": 1062,
+      "brotliBytes": 989,
+      "sha256": "7f2f2c4017d8290e2b6846986bb5d12074977b2edaa597ca4cdd0686661093dc"
+    },
+    {
+      "file": "three-BHp-Rk9X.js",
+      "bytes": 573981,
+      "gzipBytes": 145738,
+      "brotliBytes": 119266,
+      "sha256": "d6929adda06238da5629f202dbff8a9efefd327047dfdeb841fcfadf9d908023"
+    },
+    {
+      "file": "types-CY1nDbXe.js",
+      "bytes": 659,
+      "gzipBytes": 487,
+      "brotliBytes": 399,
+      "sha256": "74b48ac8f05ed3484fbe32fc38a86bd90fa506b644ff4273656328408773224f"
+    },
+    {
+      "file": "validation-CZt2GFGM.js",
+      "bytes": 61701,
+      "gzipBytes": 22816,
+      "brotliBytes": 19864,
+      "sha256": "a1c94565683cbe3395e45f5d506587f13aed391cc0263207cefbd3bfdafa484d"
+    }
+  ],
+  "totals": {
+    "bytes": 2324388,
+    "gzipBytes": 692888,
+    "brotliBytes": 575495
+  },
+  "baseline": {
+    "bytes": 1809589,
+    "gzipBytes": 512429,
+    "brotliBytes": 429149
+  },
+  "workerBytes": 12800222,
+  "tests": {
+    "application": 1232,
+    "broker": 20,
+    "hosting": 13
+  },
+  "physicalInputLatencyMeasured": false,
+  "hardwareFPSMeasured": false,
+  "workerMeasurementStage": "Initial package before evidence-document/source-archive repackaging; final Worker bytes are recorded in the separate publication receipt."
+}

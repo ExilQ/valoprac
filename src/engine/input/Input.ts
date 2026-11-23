@@ -1,16 +1,17 @@
+import {movementActionForKey,type MovementAction,type MovementActionResult} from '../../training/movementTools/types';
 import { emptyInput, type WeaponId } from '../types';
 import type { Settings } from '../types';
 import {InputDiagnostics} from './InputDiagnostics';
 import {monotonicEventTime} from './sensitivity';
 import {InputCommandBuffer} from './InputCommandBuffer';
-export interface InputTarget {readonly time?:number;readonly yaw?:number;readonly weaponId?:WeaponId;settings:Settings;running:boolean;look:(dx:number,dy:number)=>void;readonly viewYaw:number;readonly viewPitch:number;captureFireView?:(stamp:number)=>void;clearFireView?:()=>void;clearMovementInput?:()=>void;}
+export interface InputTarget {readonly time?:number;readonly yaw?:number;readonly weaponId?:WeaponId;settings:Settings;running:boolean;look:(dx:number,dy:number)=>void;readonly viewYaw:number;readonly viewPitch:number;captureFireView?:(stamp:number)=>void;clearFireView?:()=>void;clearMovementInput?:()=>void;trainingAction?:(action:MovementAction)=>MovementActionResult;}
 export interface InputObserver {sample:(kind:0|1,dx:number,dy:number,stamp:number,received:number,beforeYaw:number,beforePitch:number)=>void;}
 export class BrowserInput {
   readonly movementCommands=new InputCommandBuffer();private movementWall=0;private movementSimulation=0;private movementClock=false;private lastWheelAt=-Infinity;
   state=emptyInput();private keys=new Set<string>();private destroyed=false;private fallbackAttempted=false;private lockAttempt=0;private lockPending=false;private legacyLock=false;private deferredLockError:ReturnType<typeof setTimeout>|null=null;
   readonly diagnostics=new InputDiagnostics();rawConfirmation:'unverified'|'accepted'|'fallback'|'denied'='unverified';keyboardStatus:'unsupported'|'idle'|'locked'|'denied'='idle';private rightDown=false;private crouchToggle=false;private captureElement:HTMLElement|null=null;
   rawMode:'requested'|'fallback'|'unknown'='unknown';observer:InputObserver|null=null;
-  constructor(private canvas:HTMLCanvasElement,private simulation:InputTarget,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onWeapons:()=>void=()=>{},private onWeapon:(id:WeaponId)=>void=()=>{}){
+  constructor(private canvas:HTMLCanvasElement,private simulation:InputTarget,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onWeapons:()=>void=()=>{},private onWeapon:(id:WeaponId)=>void=()=>{},private onTrainingAction?:(action:MovementAction)=>void){
     document.addEventListener('fullscreenchange',this.fullscreenChange);document.addEventListener('keydown',this.keyDown);document.addEventListener('keyup',this.keyUp);
     document.addEventListener('wheel',this.wheel,{passive:false});document.addEventListener('mousemove',this.move);document.addEventListener('mousedown',this.mouseDown);document.addEventListener('mouseup',this.mouseUp);
     document.addEventListener('pointerlockchange',this.lockChange);document.addEventListener('pointerlockerror',this.lockError);
@@ -42,6 +43,8 @@ export class BrowserInput {
   reset(){this.movementCommands.reset(performance.now()/1000,this.simulation.yaw??this.simulation.viewYaw);this.movementClock=false;this.lastWheelAt=-Infinity;this.simulation.clearFireView?.();this.simulation.clearMovementInput?.();this.rightDown=false;this.crouchToggle=false;this.keys.clear();Object.assign(this.state,emptyInput());this.state.jumpHeld=false;this.state.jumpPresses=0;delete this.state.jumpRequestedAt;delete this.state.movementYaw;}
   private keyDown=(event:KeyboardEvent)=>{
     if(!this.locked)return;const b=this.simulation.settings.bindings;
+    if(event.code==='Escape'){this.reset();document.exitPointerLock();return;}
+    const tool=movementActionForKey(this.simulation.settings,event.code);if(tool){event.preventDefault();if(!event.repeat&&!this.keys.has(event.code)){this.keys.add(event.code);if(this.onTrainingAction)this.onTrainingAction(tool);else this.simulation.trainingAction?.(tool);}return;}
     if(Object.values(b).includes(event.code)||['KeyC','ControlLeft','ControlRight','ShiftRight'].includes(event.code)||['Digit1','Digit2','Digit3','Digit4'].includes(event.code))event.preventDefault();
     if(event.code===b.weapons&&!event.repeat){this.reset();document.exitPointerLock();this.onWeapons();return;}
     if(!event.repeat&&['Digit1','Digit2','Digit3','Digit4'].includes(event.code)){this.reset();this.onWeapon((['rifleA','rifleB','sheriff','operator'] as const)[Number(event.code.slice(-1))-1]);return;}

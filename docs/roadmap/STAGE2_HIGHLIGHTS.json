@@ -1,0 +1,118 @@
+{
+  "issues": [
+    "I9"
+  ],
+  "schema": 1,
+  "algorithm": "session-highlights-1",
+  "measuredAt": "2026-11-01T02:34:51.626Z",
+  "environment": {
+    "runtime": "v24.22.1",
+    "platform": "linux",
+    "source": "currentStage2 working tree; fixture is synthetic retained SessionData, not a human training measurement"
+  },
+  "baseline": {
+    "release": "09.01",
+    "feature": "No selected key-moment panel; average/statistical event analysis only"
+  },
+  "fixture": {
+    "id": "highlight-fixture",
+    "durationSeconds": 12,
+    "shots": 8,
+    "kills": 3,
+    "reactions": 2,
+    "retainedDeath": true
+  },
+  "checks": {
+    "selectedCount": 5,
+    "withinTargetThreeToFive": true,
+    "repeatIdentical": true,
+    "chronological": true,
+    "timestampsWithinSession": true,
+    "uniqueIDs": true,
+    "noMutation": true,
+    "noDataReturnsNone": true,
+    "passed": true
+  },
+  "selected": [
+    {
+      "id": "longest-miss-streak-shot-1-1000000",
+      "type": "longest-miss-streak",
+      "timestamp": 1,
+      "endTimestamp": 1.4,
+      "metric": 3,
+      "unit": "shots",
+      "title": "가장 긴 연속 비명중",
+      "reason": "남아 있는 연속 사격 이벤트에서 머리·몸통·팔다리에 맞지 않은 최장 구간입니다. 기록이 끊기거나 생명이 바뀌면 구간을 나눕니다.",
+      "source": "shot",
+      "eventIndex": 1
+    },
+    {
+      "id": "slowest-elimination-kill-1-2000000",
+      "type": "slowest-elimination",
+      "timestamp": 2,
+      "metric": 1.8,
+      "unit": "seconds",
+      "title": "가장 오래 걸린 표적 제거",
+      "reason": "남아 있는 제거 이벤트 중 생성부터 제거까지 가장 긴 시간입니다.",
+      "source": "kill",
+      "eventIndex": 1
+    },
+    {
+      "id": "best-braking-shot-shot-5-3000000",
+      "type": "best-braking-shot",
+      "timestamp": 3,
+      "metric": 0.01,
+      "unit": "seconds",
+      "title": "정확도 기준에 가장 가까운 제동 헤드샷",
+      "reason": "반대 입력 제동 후 실제 정확도 기준을 통과한 뒤 10.0ms에 발사했습니다. 발사 속도 0.00m/s.",
+      "source": "shot",
+      "eventIndex": 5
+    },
+    {
+      "id": "fastest-reacquisition-reaction-0-4200000",
+      "type": "fastest-reacquisition",
+      "timestamp": 4.2,
+      "metric": 0.2,
+      "unit": "seconds",
+      "title": "가장 빠른 머리 재획득",
+      "reason": "방향 전환 후 머리를 다시 조준하거나 명중한 게임 내 지연입니다. 사람의 순수 시각 반응속도 측정은 아닙니다.",
+      "source": "reaction",
+      "eventIndex": 0
+    },
+    {
+      "id": "death-exposure-death-1-10000000",
+      "type": "death-exposure",
+      "timestamp": 10,
+      "metric": 1.1,
+      "unit": "seconds",
+      "title": "사망 직전 노출",
+      "reason": "남아 있는 사망 이벤트에 기록된 노출 시간입니다. 모든 사망의 이력이나 화면에 보인 면적을 뜻하지 않습니다.",
+      "source": "death",
+      "eventIndex": 1
+    }
+  ],
+  "selectedJSONSHA256": "ebecc34562b9b35dd8aadaed34c0bea16f1c19c9a88bbeb4f5ed85516eaaa76e",
+  "tests": {
+    "command": "vitest run src/tests/session-highlights.test.tsx src/tests/ui.test.tsx src/tests/streaming-analytics.test.ts --reporter=dot",
+    "files": 3,
+    "passed": 42,
+    "failed": 0,
+    "newI9Tests": 9
+  },
+  "limits": {
+    "maximumHighlights": 5,
+    "retainedEventsPerSource": 4096,
+    "humanEffectivenessVerified": false,
+    "pureFlickMeasurementAvailable": false,
+    "replaySeekingIntegrated": false,
+    "stage3Deferred": true,
+    "detailHistoryMayHaveBeenPruned": true
+  },
+  "browserQA": {
+    "environment": "154.0.8037.57 headless Linux; actual SSR component markup and current CSS, synthetic event fixture; not production navigation or gameplay",
+    "layouts": 8,
+    "passed": true,
+    "report": "STAGE2_HIGHLIGHTS_LAYOUT.json",
+    "productionNavigationTested": false
+  }
+}

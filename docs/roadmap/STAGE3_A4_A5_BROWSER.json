@@ -1,0 +1,1552 @@
+{
+  "checks": [
+    "five usable original route entries",
+    "edited coordinates/rules execute in real Simulation and replay identically",
+    "code export and native clipboard",
+    "code restores original equivalent layout and rules",
+    "malformed import rejected without changing layout",
+    "actual unsupported spawn disables start",
+    "actual SVG screen-to-world bot placement",
+    "validated local draft persists after reload",
+    "validated JSON file export and re-import",
+    "actual tools shared link restores equivalent rules in an independent context without auto-start",
+    "malformed shared address opens an editable safe default with an error",
+    "local GET-only requests; no uploads or external services"
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "invalidButtons": 0
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "overflow": false,
+      "invalidButtons": 0
+    },
+    {
+      "width": 1366,
+      "height": 900,
+      "overflow": false,
+      "invalidButtons": 0
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "overflow": false,
+      "invalidButtons": 0
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:4214/dev/scenario.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@vite/client",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/dev/scenario.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.pnpm/vite@6.4.4_@types+node@26.6.5_jiti@2.7.0_lightningcss@1.32.0/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/@valoprac_i18n_jsx-dev-runtime.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react-dom_client.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioEditor.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioRoutes.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/Simulation.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/recording.ts?t=1793785191394",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/playback.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/settings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/styles.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tokens.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tactical.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/weapons.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/templates.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioPlan.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/scenarios.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-PLIIQSNF.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-XDV3DWSW.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/integrity.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/validation.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/types.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/platform/SessionOptions.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/Exercises.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/compile.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/MovementPractice.ts?t=1793785090379",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/RenderedTargets.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/DefenderAI.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complex.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/locomotion.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/TapDrill.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/levels.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/AngleTraining.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Exposure.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/trajectory.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Landings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/sensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Hearing.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/map.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Braking.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/Weapon.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/Target.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/random.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/modes.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/shoot.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/statistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/LifetimeStats.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/crosshair.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/validation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/codec.ts?t=1793785290580",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/projection.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-P6TGT6FO.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-D5SH7N4G.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/BotAimMotor.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/mechanics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/tactical.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/environment.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/Ballistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/zoomSensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/recoil/Recoil.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/CharacterShape.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/CollisionController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/JumpController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/MovementSolvers.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complexValidation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/penetration.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/CharacterGeometry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_utils_BufferGeometryUtils__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/dev/scenario.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@vite/client",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/dev/scenario.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.pnpm/vite@6.4.4_@types+node@26.6.5_jiti@2.7.0_lightningcss@1.32.0/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/@valoprac_i18n_jsx-dev-runtime.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react-dom_client.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioEditor.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioRoutes.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/Simulation.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/recording.ts?t=1793785191394",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/playback.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/settings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/styles.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tokens.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tactical.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-PLIIQSNF.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-XDV3DWSW.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-P6TGT6FO.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/weapons.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/templates.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/validation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/codec.ts?t=1793785290580",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioPlan.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/scenarios.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/platform/SessionOptions.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/Exercises.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/compile.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/MovementPractice.ts?t=1793785090379",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/RenderedTargets.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/DefenderAI.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complex.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/locomotion.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/TapDrill.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/levels.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/AngleTraining.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Exposure.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/trajectory.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Landings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/sensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Hearing.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/map.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Braking.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/Weapon.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/Target.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/random.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/modes.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/shoot.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/statistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/LifetimeStats.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/integrity.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/types.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/validation.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/crosshair.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-D5SH7N4G.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/projection.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/CollisionController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complexValidation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/environment.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/Ballistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/BotAimMotor.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/mechanics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/tactical.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/zoomSensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/JumpController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/MovementSolvers.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/recoil/Recoil.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/CharacterShape.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/penetration.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/CharacterGeometry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_utils_BufferGeometryUtils__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/tools.html",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@vite/client",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/main.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/@react-refresh",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/@valoprac_i18n_jsx-dev-runtime.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react-dom_client.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/ErrorBoundary.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/App.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/styles.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tokens.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/tactical.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/premium.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/operator.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.pnpm/vite@6.4.4_@types+node@26.6.5_jiti@2.7.0_lightningcss@1.32.0/node_modules/vite/dist/client/env.mjs",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-PLIIQSNF.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-XDV3DWSW.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/react.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/i18n/locale.ts?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/i18n/locale.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/GraphicsNotice.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/graphicsNotice.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/LegalNotice.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/PatchNotes.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/lucide-react.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/useNavigation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/trainingNavigation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/store.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/Brand.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/MainMenu.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/SettingsPanel.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/History.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/WeaponSelection.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/LazyGameStage.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/Results.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/useInterfaceAudio.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/settings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/app/navigation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/graphicsPolicy.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/zustand.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/storage/history.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-P6TGT6FO.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/PeekingMapSelection.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/TacticalControls.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/TacticalMapSelection.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/PracticeControls.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/weapons.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/trainingPresentation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/modes.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/audio.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/zoomSensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/sensitivity.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/CombatControls.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/FootstepSettings.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/CrosshairDesigner.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/MovementPhysicsSettings.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/AdvancedSettings.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/MechanicsFeedback.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/PeekingFeedback.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/gameplay.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/SessionCaptureNote.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/SessionReplay.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/SprayPlot.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/analytics.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/crosshair.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/projection.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/OperatorScopeControls.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/modes/TapDrill.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complex.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/tactical.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/benchmarks/footstepComparison.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/Crosshair.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/crosshairCodes.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/storage/audioAssets.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/config/penetration.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/SessionHighlights.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/crosshair.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Movement.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Footsteps.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/FixedClock.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-D5SH7N4G.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/highlights.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/sessionHighlights.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/environment.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/CollisionController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/JumpController.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/MovementSolvers.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/GameStage.tsx?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/TrainingPlatform.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/favicon.svg",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ExerciseTraining.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/MovementPracticePanel.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/EnvironmentCheck.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/components/ScopeOverlay.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/GameHUD.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/Runtime.ts?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioRoutes.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioEditor.tsx?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/trainingPlatform.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/personalBest.ts?t=1793785151369",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/exerciseTraining.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/movementPractice.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/EnvironmentCheck.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/environmentCheck.css",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/MovementPhysicsFeedback.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/FootstepHUD.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/GameplayDiagnostics.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/LiveRecoil.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/CombatCapture.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/benchmarks/InputLatencyProbe.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/RenderCadence.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/levels.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/Simulation.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/RangeRenderer.ts?t=1793785307293",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/Input.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/Audio.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/recording.ts?t=1793785191394",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/MovementReview.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/GhostFromReplay.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/templates.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/ScenarioPlan.tsx",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/ui/scenarios.css?t=1793785680561",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/validation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/codec.ts?t=1793785290580",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/types.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/Telemetry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/AnalysisService.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/storage.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/precision/calibration.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/statistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/mechanics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/platform/SessionOptions.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/exercises/Exercises.ts?t=1793785125898",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/scenarios/compile.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/movementTools/MovementPractice.ts?t=1793785090379",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/RenderedTargets.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/DefenderAI.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/locomotion.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/AngleTraining.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Exposure.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/trajectory.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/footsteps/Landings.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/Hearing.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/map.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/movement/Braking.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/weapons/Weapon.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/Target.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/simulation/random.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/shoot.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/statistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/training/analytics/LifetimeStats.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/InputDiagnostics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/input/InputCommandBuffer.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/integrity.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/types.ts?t=1793785125905",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/playback.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/DefenderWeaponGeometry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/TacticalArchitecture.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/CharacterGeometry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/ArchitecturalBox.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/viewmodel.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_EffectComposer__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_RenderPass__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_UnrealBloomPass__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_SSAOPass__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_ShaderPass__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_shaders_FXAAShader__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_postprocessing_OutputPass__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_environments_RoomEnvironment__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/StaticGeometry.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/GroundContacts.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/WeaponView.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/GraphicsCapabilities.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/materialImpact.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/footstepSynthesis.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/landingSynthesis.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/trainingCue.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/synthesis.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/spatial.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/FiringTimeline.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/audio/occlusion.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/complexValidation.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/analyzer.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/math.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/aim/precision/statistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/collision/Ballistics.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/tactical/BotAimMotor.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/recoil/Recoil.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/targets/CharacterShape.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/replay/validation.ts?t=1793785125906",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/three_examples_jsm_utils_BufferGeometryUtils__js.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-3C5U35LN.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-3JJT33NT.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/node_modules/.vite/deps/chunk-KHTC3F2K.js?v=0742af0f",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/src/engine/rendering/OperatorVisual.ts",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:4214/favicon.svg",
+      "method": "GET"
+    }
+  ],
+  "environment": "Actual Chromium154 production React/editor/codec/Simulation/ReplayPlayer fixture; no GPU draw or native VALORANT measurement",
+  "placement": {
+    "point": {
+      "x": 198.37591552734375,
+      "y": 262.87811279296875
+    },
+    "expected": {
+      "clientX": 198,
+      "clientY": 262,
+      "x": 0.47,
+      "z": -22.66
+    },
+    "actualX": 0.47,
+    "actualZ": -22.66,
+    "svg": {
+      "rect": {
+        "x": 87,
+        "y": 215.078125,
+        "width": 484.28125,
+        "height": 470,
+        "top": 215.078125,
+        "right": 571.28125,
+        "bottom": 685.078125,
+        "left": 87
+      },
+      "viewBox": 31
+    }
+  },
+  "passed": true,
+  "completedAt": "2026-11-04T09:48:28.722Z",
+  "browserVersion": "Chromium154.0.8037.57"
+}

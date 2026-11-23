@@ -13,6 +13,8 @@
 /unreal/ /unreal/index.html 200
 /aim /aim/index.html 200
 /aim/ /aim/index.html 200
+/tools /tools/index.html 200
+/tools/ /tools/index.html 200
 /guide /guide.html 200
 /guide/ /guide.html 200
 /footsteps /footsteps.html 200
@@ -23,3 +25,5 @@
 /aim-methodology/ /aim-methodology.html 200
 /migration /migration.html 200
 /migration/ /migration.html 200
+/valorant-aim-trainer /valorant-aim-trainer.html 200
+/valorant-aim-trainer/ /valorant-aim-trainer.html 200

@@ -1,0 +1,114 @@
+{
+  "measuredAt": "2026-11-01T09:38:25.255Z",
+  "stage": 2,
+  "method": "All emitted JS/CSS chunks, including optional modules; Nodecompression defaults, not initial network transfer.",
+  "assets": [
+    {
+      "file": "AimDashboard-BRRIiT42.js",
+      "bytes": 119807,
+      "gzipBytes": 40414,
+      "brotliBytes": 34107
+    },
+    {
+      "file": "AimDashboard-C2M0MM7B.css",
+      "bytes": 18952,
+      "gzipBytes": 3721,
+      "brotliBytes": 3257
+    },
+    {
+      "file": "EpicSession-BVhUmiJb.js",
+      "bytes": 247892,
+      "gzipBytes": 57053,
+      "brotliBytes": 48348
+    },
+    {
+      "file": "GameStage-C1LnN9H_.css",
+      "bytes": 2317,
+      "gzipBytes": 757,
+      "brotliBytes": 600
+    },
+    {
+      "file": "GameStage-CwOsSwLK.js",
+      "bytes": 34997,
+      "gzipBytes": 12130,
+      "brotliBytes": 10618
+    },
+    {
+      "file": "Input-DTWabw2M.js",
+      "bytes": 49796,
+      "gzipBytes": 18598,
+      "brotliBytes": 16208
+    },
+    {
+      "file": "LiveRecoil-7Os_pY4Z.js",
+      "bytes": 2329,
+      "gzipBytes": 1212,
+      "brotliBytes": 1057
+    },
+    {
+      "file": "Runtime-Bs_TywMx.js",
+      "bytes": 194750,
+      "gzipBytes": 66722,
+      "brotliBytes": 56724
+    },
+    {
+      "file": "StreamingStage-BJ1GkyJw.js",
+      "bytes": 15203,
+      "gzipBytes": 5827,
+      "brotliBytes": 5010
+    },
+    {
+      "file": "TacticalAssessment-C7xF1fQo.js",
+      "bytes": 6450,
+      "gzipBytes": 3031,
+      "brotliBytes": 2570
+    },
+    {
+      "file": "TacticalAssessment-D2Lm2P-X.css",
+      "bytes": 1469,
+      "gzipBytes": 610,
+      "brotliBytes": 481
+    },
+    {
+      "file": "analysis.worker-aFOMcMeF.js",
+      "bytes": 9441,
+      "gzipBytes": 4218,
+      "brotliBytes": 3786
+    },
+    {
+      "file": "index-BjcgWlHr.css",
+      "bytes": 138886,
+      "gzipBytes": 27662,
+      "brotliBytes": 23491
+    },
+    {
+      "file": "index-xTaobvjq.js",
+      "bytes": 219514,
+      "gzipBytes": 70790,
+      "brotliBytes": 56854
+    },
+    {
+      "file": "react-C4x5mbfE.js",
+      "bytes": 223171,
+      "gzipBytes": 69219,
+      "brotliBytes": 59560
+    },
+    {
+      "file": "statistics-zktoDNT8.js",
+      "bytes": 2659,
+      "gzipBytes": 1062,
+      "brotliBytes": 989
+    },
+    {
+      "file": "three-BCW1kbAI.js",
+      "bytes": 572624,
+      "gzipBytes": 145249,
+      "brotliBytes": 118733
+    }
+  ],
+  "totals": {
+    "bytes": 1860257,
+    "gzipBytes": 528275,
+    "brotliBytes": 442393
+  }
+}

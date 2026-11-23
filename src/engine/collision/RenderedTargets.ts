@@ -8,19 +8,22 @@ export interface RenderedTargetPose {
 export interface RenderedTargetFrame {
   id:number;submittedAt:number;targets:(RenderedTargetPose|undefined)[];
 }
+export interface RenderedFrameProvenance {tick:number;alpha:number;}
 const EMPTY_FRAME:RenderedTargetFrame={id:0,submittedAt:0,targets:[]};
 
 /** Bounded history of the exact instance transforms submitted for drawing.
  * Time is the DOM monotonic clock, not simulation time or a physical scanout
  * timestamp. Copy a click's frame so later rendering cannot overwrite it. */
 export class RenderedTargets {
+  onCapture:((frame:RenderedTargetFrame,provenance?:RenderedFrameProvenance)=>void)|null=null;
   private frames:RenderedTargetFrame[]=[];private cursor=-1;private count=0;private sequence=0;private attached=false;
   constructor(readonly capacity=32){if(!Number.isInteger(capacity)||capacity<2)throw new Error('Render history capacity must be at least two');}
   attach(){this.attached=true;}
+  get isAttached(){return this.attached;}
   clear(){this.cursor=-1;this.count=0;}
   get size(){return this.count;}
   get latest():RenderedTargetFrame|undefined{return this.count?this.frames[this.cursor]:undefined;}
-  capture(targets:readonly Target[],matrices:readonly (readonly Matrix4[])[],submittedAt:number,positions?:readonly Vec3[]){
+  capture(targets:readonly Target[],matrices:readonly (readonly Matrix4[])[],submittedAt:number,positions?:readonly Vec3[],provenance?:RenderedFrameProvenance){
     if(!Number.isFinite(submittedAt))return;
     const previous=this.latest;if(previous&&submittedAt<previous.submittedAt)throw new Error('Render timestamps must be monotonic');
     this.attached=true;this.cursor=(this.cursor+1)%this.capacity;
@@ -36,7 +39,7 @@ export class RenderedTargets {
       for(let j=0;j<source.length;j++)(pose.matrices[j]??(pose.matrices[j]=new Matrix4())).copy(source[j]);
       pose.matrices.length=source.length;
     }
-    this.count=Math.min(this.capacity,this.count+1);return frame;
+    this.count=Math.min(this.capacity,this.count+1);this.onCapture?.(frame,provenance);return frame;
   }
   at(stamp:number):RenderedTargetFrame|undefined{
     if(!Number.isFinite(stamp))return undefined;

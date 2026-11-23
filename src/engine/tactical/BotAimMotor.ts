@@ -6,6 +6,15 @@ const RAD=Math.PI/180;
 const clamp=(value:number,min:number,max:number)=>Math.max(min,Math.min(max,value));
 export const wrapAngle=(angle:number)=>Math.atan2(Math.sin(angle),Math.cos(angle));
 export type DefenderSkill='beginner'|'normal'|'advanced'|'expert';
+/** F4 report targets, deliberately separate from official game or human data.
+ * Only an expert whose current physical crosshair already covers the newly
+ * observed angle uses this shorter response; large corrections keep the normal
+ * expert reaction and acceleration-limited acquisition. */
+export const HELD_ANGLE_TIMING_CALIBRATION={
+ id:'f4-expert-held-angle-v1',classification:'provisional-calibration',
+ source:'VALOPRAC improvement report, 2026-10-29, F4',
+ maximumAngleDegrees:3,reactionMultiplier:.49,minimumReactionSeconds:.125
+} as const;
 export const BOT_SKILL_PROFILES={
  beginner:{label:'입문',reaction:1.25,speed:.65,acceleration:.65,error:1.65,trackingDelay:.22,acquisition:.24,compensation:.66,tactics:.65},
  normal:{label:'보통',reaction:.72,speed:1,acceleration:1,error:1,trackingDelay:.14,acquisition:.18,compensation:1,tactics:1},
@@ -14,6 +23,7 @@ export const BOT_SKILL_PROFILES={
 } as const;
 export interface BotControlProfile {
  skill:DefenderSkill;reaction:number;recognition:number;acquisition:number;trackingDelay:number;
+ heldReaction:number|null;heldAngle:number;
  maxSpeed:number;maxAcceleration:number;initialError:number;motorNoise:number;
  compensationDelay:number;compensationGain:number;compensationSpeed:number;tactics:number;
 }
@@ -24,6 +34,8 @@ export function resolveBotProfile(settings:Settings,weapon:WeaponId):BotControlP
  const s=settings as ControlSettings,skill=s.defenderSkill??(s.botDifficulty==='easy'?'beginner':s.botDifficulty==='hard'?'advanced':'normal'),p=BOT_SKILL_PROFILES[skill]??BOT_SKILL_PROFILES.normal;
  const familiarity=weapon==='operator'?.9:weapon==='sheriff'?.94:1;
  return {skill,reaction:Math.max(.15,clamp(s.defenderReaction??.42,.15,1.5)*p.reaction),recognition:.035,acquisition:p.acquisition,trackingDelay:p.trackingDelay,
+  heldReaction:skill==='expert'?Math.max(HELD_ANGLE_TIMING_CALIBRATION.minimumReactionSeconds,clamp(s.defenderReaction??.42,.15,1.5)*HELD_ANGLE_TIMING_CALIBRATION.reactionMultiplier):null,
+  heldAngle:HELD_ANGLE_TIMING_CALIBRATION.maximumAngleDegrees*RAD,
   maxSpeed:clamp(s.defenderAimSpeed??180,30,480)*p.speed*RAD,maxAcceleration:clamp(s.defenderAimAcceleration??1200,120,5000)*p.acceleration*RAD,
   initialError:clamp(s.defenderFirstShotError??.8,.12,4)*p.error*(1.1-.4*clamp(s.defenderAccuracy,.1,.98))*RAD,
   motorNoise:(.025+.14*(1-clamp(s.defenderStability??.7,.05,.98)))*p.error*RAD,

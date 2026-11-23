@@ -22,6 +22,7 @@ export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch
 export interface DefenderSector {facingYaw?:number;navigation?:Vec3[];alternatives?:Vec3[];weapon?:WeaponId;}
 export type PerceptionPhase='unaware'|'detected'|'recognized'|'reacting'|'aiming'|'tracking'|'lost';
 export interface DefenderFootstep extends FootstepEvent {bot:number;encounterGeneration:number;kind:'bot-step';}
+export interface FirstShotTiming {preaimed:boolean;contactAngleDegrees:number;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firedAt:number;}
 export interface DefenderShot {
  id?:number;time:number;bot:number;weapon:WeaponId;origin:Vec3;aim:Vec3;impact:Vec3;
  hit:'head'|'body'|'leg'|'miss';hitRegion?:'head'|'torso'|'arm'|'leg';observed:boolean;recoveryUntil:number;
@@ -29,6 +30,7 @@ export interface DefenderShot {
  recoilBefore?:{pitch:number;yaw:number};recoilAfter?:{pitch:number;yaw:number};compensation?:{pitch:number;yaw:number};
  spread?:{base:number;movement:number;bloom:number;air:number;landing:number;total:number;x:number;y:number};
  damage?:number;penetratedLayers?:number;penetration?:PenetrationSegment[];reactionTime?:number;aimAcquisitionTime?:number;detectedAt?:number;
+ timing?:FirstShotTiming;
 }
 export interface DefenderDeath {bot:number;weapon:WeaponId;region:string;cause:'shot'|'exposure';time:number;duration:number;player:Vec3;defender:Vec3;line:Vec3[];path:Vec3[];reactionTime?:number;aimAcquisitionTime?:number;shotsFired?:number;hits?:number;penetratedLayers?:number;playerVisible?:boolean;playerShotVelocity?:number|null;}
 export interface PeekEpisode {started:number;ended:number;duration:number;distance:number;peakSpeed:number;peakVisibleFraction:number;verticalDisplacement:number;shots:number;hits:number;shotVelocity:number|null;acquisitionTime:number|null;returnToCover:number|null;timeToCover?:number|null;}
@@ -41,6 +43,7 @@ export interface DefenderMemory {
  state:DefenderState;weapon:WeaponId;visible:number;exposure:number;acquired:number;nextShot:number;lastSeen:number;known:Vec3|null;alertUntil:number;destination:Vec3|null;repeats:number;lastExposed:number;face:Vec3;decision:number;aim:Vec3|null;path:Vec3[];pathIndex:number;burst:number;lastShot:DefenderShot|null;holdingFace:Vec3;pose:number;
  gun:Weapon;motor:BotAimMotor;movement:Movement;footsteps:Footsteps;profile:BotControlProfile;rng:SeededRandom;generation:number;initialized:boolean;
  perceptionPhase:PerceptionPhase;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firstShotAt:number;
+ preaimed:boolean;contactAngleDegrees:number;
  observations:Observation[];recoilHistory:RecoilObservation[];nextRecoilObservation:number;lastHeard:number;lastHeardPoint:Vec3|null;
  preferHead:boolean;burstGoal:number;burstRemaining:number;pauseUntil:number;engagementShots:number;engagementHits:number;speculativeShots:number;pressureUntil:number;consecutiveMisses:number;uncertainty:Vec3;uncertaintyAt:number;
 }
@@ -48,6 +51,7 @@ type Memory=DefenderMemory;
 export interface BotDiagnostic {
  bot:number;state:DefenderState;phase:PerceptionPhase;weapon:WeaponId;visible:number;known:Vec3|null;lastSeen:number;lastHeard:number;uncertaintyMetres:number;
  detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;
+ preaimed:boolean;contactAngleDegrees:number;
  ammo:number;reserve:number;reloadingUntil:number|null;nextShot:number;burstRemaining:number;recoil:{pitch:number;yaw:number};motor:ReturnType<BotAimMotor['snapshot']>;
 }
 const CONTROL_KEYS=['defenderSkill','botDifficulty','defenderReaction','defenderAimSpeed','defenderAimAcceleration','defenderStability','defenderFirstShotError','defenderRecoilControl','defenderTactics','defenderAccuracy'] as const;
@@ -94,7 +98,7 @@ export class DefenderAI {
   const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});};
   return{state:'holding',weapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0,
    gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement:new Movement(undefined,this.obstacles),footsteps,profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
-   perceptionPhase:'unaware',detectedAt:-100,recognizedAt:Infinity,reactionUntil:Infinity,aimStartedAt:-100,acquisitionUntil:Infinity,triggerAt:Infinity,firstShotAt:-100,
+   perceptionPhase:'unaware',detectedAt:-100,recognizedAt:Infinity,reactionUntil:Infinity,aimStartedAt:-100,acquisitionUntil:Infinity,triggerAt:Infinity,firstShotAt:-100,preaimed:false,contactAngleDegrees:0,
    observations:[],recoilHistory:[],nextRecoilObservation:0,lastHeard:-100,lastHeardPoint:null,preferHead:false,burstGoal:0,burstRemaining:0,pauseUntil:0,engagementShots:0,engagementHits:0,speculativeShots:0,pressureUntil:0,consecutiveMisses:0,uncertainty:{x:0,y:0,z:0},uncertaintyAt:-100};
  }
  hear(e:FootstepEvent){
@@ -117,7 +121,18 @@ export class DefenderAI {
   const previous=m.visible;m.visible=this.visible(t,p,m);
   if(m.visible>0){
    const fresh=time-m.lastSeen>1.5||m.detectedAt<0;
-   if(fresh){m.detectedAt=time;m.recognizedAt=time+m.profile.recognition;m.reactionUntil=m.recognizedAt+m.profile.reaction*m.rng.range(.88,1.14);m.aimStartedAt=-100;m.acquisitionUntil=Infinity;m.triggerAt=Infinity;m.engagementShots=0;m.engagementHits=0;m.firstShotAt=-100;m.observations=[];m.preferHead=m.rng.next()<.12+m.profile.tactics*.35;this.visible(t,p,m);m.perceptionPhase='detected';}
+   if(fresh){
+    m.detectedAt=time;m.recognizedAt=time+m.profile.recognition;
+    // Keep RNG order identical for every unchanged difficulty. The expert-only
+    // shorter response is selected from the *current* observed angular error,
+    // never from a hidden player position, rank label or assumed perfect aim.
+    const responseJitter=m.rng.range(.88,1.14);
+    m.aimStartedAt=-100;m.acquisitionUntil=Infinity;m.triggerAt=Infinity;m.engagementShots=0;m.engagementHits=0;m.firstShotAt=-100;m.observations=[];m.preferHead=m.rng.next()<.12+m.profile.tactics*.35;this.visible(t,p,m);
+    t.headPosition(this.head);const aim=m.aim,dx=(aim?.x??this.head.x)-this.head.x,dy=(aim?.y??this.head.y)-this.head.y,dz=(aim?.z??this.head.z)-this.head.z;
+    const angle=m.motor.error(Math.atan2(-dx,-dz),Math.atan2(dy,Math.hypot(dx,dz)));m.contactAngleDegrees=angle*180/Math.PI;
+    m.preaimed=aim!==null&&m.profile.heldReaction!==null&&angle<=m.profile.heldAngle;
+    m.reactionUntil=m.recognizedAt+(m.preaimed?m.profile.heldReaction!:m.profile.reaction)*responseJitter;m.perceptionPhase='detected';
+   }
    else if(previous<=0&&time-m.lastSeen>.18){m.repeats++;m.triggerAt=Math.max(m.triggerAt,time+.12);m.burstRemaining=0;}
    if(time-m.lastExposed>.18)m.repeats++;m.lastExposed=time;m.lastSeen=time;m.known=vec(p.position);m.speculativeShots=0;
    if(m.aim){m.observations.push({time,point:vec(m.aim),position:vec(p.position),velocity:vec(p.velocity)});if(m.observations.length>40)m.observations.shift();}
@@ -300,7 +315,8 @@ export class DefenderAI {
   const damage=detail?damageAt(profile,detail,trace.distance)*trace.damageScale:0;
   const visualContact=m.detectedAt>=0&&m.aimStartedAt>=0;
   const shot:DefenderShot={encounterGeneration:this.epoch,targetGeneration:t.generation,id:++this.sequence,time,bot:t.id,weapon:m.weapon,origin:vec(origin),aim:vec(origin.clone().addScaledVector(direction,Math.max(1,distance))),impact:vec(trace.point),direction:vec(direction),hit:region,hitRegion:detail,observed,recoveryUntil:m.nextShot,
-   information,angularError:m.motor.error(desiredYaw,desiredPitch)*180/Math.PI,trajectoryAngularError:direction.angleTo(spreadDirection(desiredYaw,desiredPitch,0,0,new Vector3()))*180/Math.PI,shotIndex:gun.shotIndex,burstIndex:m.burst,ammoBefore:gun.ammo,recoilBefore,recoilAfter:{pitch:gun.recoil.pitch,yaw:gun.recoil.yaw},compensation:{pitch:m.motor.compensationPitch*180/Math.PI,yaw:m.motor.compensationYaw*180/Math.PI},spread,damage,penetratedLayers:trace.penetratedLayers,penetration:trace.segments,reactionTime:visualContact?m.aimStartedAt-m.detectedAt:undefined,aimAcquisitionTime:visualContact?time-m.aimStartedAt:undefined,detectedAt:visualContact?m.detectedAt:undefined};
+   information,angularError:m.motor.error(desiredYaw,desiredPitch)*180/Math.PI,trajectoryAngularError:direction.angleTo(spreadDirection(desiredYaw,desiredPitch,0,0,new Vector3()))*180/Math.PI,shotIndex:gun.shotIndex,burstIndex:m.burst,ammoBefore:gun.ammo,recoilBefore,recoilAfter:{pitch:gun.recoil.pitch,yaw:gun.recoil.yaw},compensation:{pitch:m.motor.compensationPitch*180/Math.PI,yaw:m.motor.compensationYaw*180/Math.PI},spread,damage,penetratedLayers:trace.penetratedLayers,penetration:trace.segments,reactionTime:visualContact?m.aimStartedAt-m.detectedAt:undefined,aimAcquisitionTime:visualContact?time-m.aimStartedAt:undefined,detectedAt:visualContact?m.detectedAt:undefined,
+   timing:visualContact?{preaimed:m.preaimed,contactAngleDegrees:m.contactAngleDegrees,detectedAt:m.detectedAt,recognizedAt:m.recognizedAt,reactionUntil:m.reactionUntil,aimStartedAt:m.aimStartedAt,acquisitionUntil:m.acquisitionUntil,triggerAt:m.triggerAt,firedAt:time}:undefined};
   const totals=this.combatTotals;totals.shots++;totals.hits+=Number(region!=='miss');totals.damage+=damage;totals.recoilSquared+=recoilBefore.pitch**2+recoilBefore.yaw**2;totals.residualSquared+=(recoilBefore.pitch+shot.compensation!.pitch)**2+(recoilBefore.yaw+shot.compensation!.yaw)**2;
   if(m.engagementShots===1){totals.firstShots++;totals.firstHits+=Number(region!=='miss');if(visualContact){totals.timingContacts++;totals.reaction+=shot.reactionTime!;totals.acquisition+=shot.aimAcquisitionTime!;totals.firstShotDelay+=time-m.detectedAt;}}
   this.report.combatSummary=this.combatSummary();
@@ -311,7 +327,7 @@ export class DefenderAI {
  private combatSummary():CombatSummary{const t=this.combatTotals,followupShots=t.shots-t.firstShots,followupHits=t.hits-t.firstHits;return{shots:t.shots,hits:t.hits,firstShots:t.firstShots,firstHits:t.firstHits,followupShots,followupHits,damage:t.damage,firstHitRate:t.firstShots?t.firstHits/t.firstShots:0,followupHitRate:followupShots?followupHits/followupShots:0,meanReaction:t.timingContacts?t.reaction/t.timingContacts:0,meanAcquisition:t.timingContacts?t.acquisition/t.timingContacts:0,meanFirstShotDelay:t.timingContacts?t.firstShotDelay/t.timingContacts:0,recoilRms:t.shots?Math.sqrt(t.recoilSquared/t.shots):0,residualRecoilRms:t.shots?Math.sqrt(t.residualSquared/t.shots):0};}
  /** Debug data is returned only on explicit request; gameplay HUD must gate it
   * behind botDiagnostics so concealed opponent knowledge is not disclosed. */
- diagnostics():BotDiagnostic[]{return this.targets.filter(t=>t.active&&t.enabled).flatMap(t=>{const m=this.memories[t.id];if(!m)return[];return[{bot:t.id,state:m.state,phase:m.perceptionPhase,weapon:m.weapon,visible:m.visible,known:m.known?vec(m.known):null,lastSeen:m.lastSeen,lastHeard:m.lastHeard,uncertaintyMetres:m.visible>0?0:Math.max(0,this.clock-Math.max(m.lastSeen,m.lastHeard))*.8,detectedAt:m.detectedAt,recognizedAt:m.recognizedAt,reactionUntil:m.reactionUntil,aimStartedAt:m.aimStartedAt,acquisitionUntil:m.acquisitionUntil,triggerAt:m.triggerAt,ammo:m.gun.ammo,reserve:m.gun.reserve,reloadingUntil:m.gun.reloadingUntil,nextShot:m.nextShot,burstRemaining:m.burstRemaining,recoil:{pitch:m.gun.recoil.pitch,yaw:m.gun.recoil.yaw},motor:m.motor.snapshot()}];});}
+ diagnostics():BotDiagnostic[]{return this.targets.filter(t=>t.active&&t.enabled).flatMap(t=>{const m=this.memories[t.id];if(!m)return[];return[{bot:t.id,state:m.state,phase:m.perceptionPhase,weapon:m.weapon,visible:m.visible,known:m.known?vec(m.known):null,lastSeen:m.lastSeen,lastHeard:m.lastHeard,uncertaintyMetres:m.visible>0?0:Math.max(0,this.clock-Math.max(m.lastSeen,m.lastHeard))*.8,detectedAt:m.detectedAt,recognizedAt:m.recognizedAt,reactionUntil:m.reactionUntil,aimStartedAt:m.aimStartedAt,acquisitionUntil:m.acquisitionUntil,triggerAt:m.triggerAt,preaimed:m.preaimed,contactAngleDegrees:m.contactAngleDegrees,ammo:m.gun.ammo,reserve:m.gun.reserve,reloadingUntil:m.gun.reloadingUntil,nextShot:m.nextShot,burstRemaining:m.burstRemaining,recoil:{pitch:m.gun.recoil.pitch,yaw:m.gun.recoil.yaw},motor:m.motor.snapshot()}];});}
  private kill(t:Target,m:Memory,p:PlayerBody,time:number,cause:'shot'|'exposure',region:string,shot?:DefenderShot){
   if(this.death)return;const path=[...this.report.path.slice(-59).map(vec),vec(p.position)];this.death={bot:t.id,weapon:m.weapon,region,cause,time,playerVisible:m.visible>0,playerShotVelocity:time-this.lastPlayerShotAt<3?this.lastPlayerShotVelocity:null,duration:m.exposure,player:vec(p.position),defender:vec(t.position),reactionTime:shot?.reactionTime,aimAcquisitionTime:shot?.aimAcquisitionTime,shotsFired:m.engagementShots,hits:m.engagementHits,penetratedLayers:shot?.penetratedLayers,line:shot?[vec(shot.origin),vec(shot.impact)]:[{x:t.position.x,y:t.position.y+1.68,z:t.position.z},{x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z}],path};this.report.lastDeath=this.death;this.report.deaths++;
  }

@@ -1,0 +1,34 @@
+import{describe,it,expect,vi,afterEach}from'vitest';
+import{Color,DataTexture,DoubleSide,Matrix4,MeshBasicMaterial,MeshStandardMaterial,PerspectiveCamera,Plane,Scene,Vector3,type Material}from'three';
+import{colorBatchSignature}from'../engine/rendering/StaticGeometry';
+import{GroundContacts}from'../engine/rendering/GroundContacts';
+import{RangeRenderer,type ShaderPreparationStatus}from'../engine/rendering/RangeRenderer';
+
+describe('I6 exact compatible palette grouping',()=>{
+ it('groups only the constant color difference, preserving linear tint separately',()=>{
+  const a=new MeshStandardMaterial({color:0xef5261,roughness:.9,metalness:.12}),b=a.clone();b.color=new Color(0xa8b8b5);b.name='other architectural theme';
+  expect(a.color.toArray()).not.toEqual(b.color.toArray());expect(colorBatchSignature(a)).toBe(colorBatchSignature(b));
+  for(const edit of[(m:MeshStandardMaterial)=>m.roughness=.8,(m:MeshStandardMaterial)=>m.metalness=.2,(m:MeshStandardMaterial)=>m.side=DoubleSide,(m:MeshStandardMaterial)=>m.depthWrite=false,(m:MeshStandardMaterial)=>m.polygonOffset=true,(m:MeshStandardMaterial)=>m.polygonOffsetFactor=-1,(m:MeshStandardMaterial)=>m.opacity=.7,(m:MeshStandardMaterial)=>m.transparent=true,(m:MeshStandardMaterial)=>m.toneMapped=false,(m:MeshStandardMaterial)=>m.flatShading=true]){const changed=b.clone();edit(changed);expect(colorBatchSignature(a)).not.toBe(colorBatchSignature(changed));changed.dispose();}
+  a.dispose();b.dispose();
+ });
+ it('keeps texture/custom shader/clipping identities outside the immutable palette path',()=>{
+  const mat=new MeshStandardMaterial({map:new DataTexture(new Uint8Array(4),1,1)});expect(colorBatchSignature(mat)).toBeNull();mat.map=null;mat.onBeforeCompile=()=>{};expect(colorBatchSignature(mat)).toBeNull();mat.dispose();
+  const basic=new MeshBasicMaterial();expect(colorBatchSignature(basic)).not.toBeNull();basic.clippingPlanes=[new Plane(new Vector3(0,1,0),0)];expect(colorBatchSignature(basic)).toBeNull();basic.dispose();
+ });
+});
+
+describe('I6 shared target ground helpers preserve actual interpolation and visibility',()=>{
+ function fixture(){const resources:{dispose():void}[]=[],c=new GroundContacts(4,g=>resources.push(g),(m:Material)=>resources.push(m),t=>resources.push(t)),camera=new PerspectiveCamera(70,16/9,.05,180);camera.position.set(0,2,3);camera.lookAt(0,0,-10);return{c,camera,dispose(){c.dispose();for(const r of resources)r.dispose();}};}
+ function target(x=0,z=-10){return{position:{x,y:0,z},previous:{x:x-1,y:.2,z:z+2},scale:1.4,active:true,enabled:true};}
+ it('retains world-space ring/shadow dimensions and distinct target scaling',()=>{const{c,camera,dispose}=fixture(),t=target(),before=JSON.stringify(t),matrix=new Matrix4(),p=new Vector3(),scale=new Vector3();try{c.update([t],.25,camera);expect(c.rings.count).toBe(1);expect(c.shadows.count).toBe(1);c.rings.getMatrixAt(0,matrix);p.setFromMatrixPosition(matrix);scale.setFromMatrixScale(matrix);expect(p.toArray()).toEqual([expect.closeTo(-.75,6),expect.closeTo(.166,6),expect.closeTo(-8.5,6)]);expect(scale.toArray()).toEqual([1,1,1]);c.shadows.getMatrixAt(0,matrix);scale.setFromMatrixScale(matrix);expect(scale.toArray()).toEqual([expect.closeTo(1.4,6),expect.closeTo(1.4,6),expect.closeTo(1.4,6)]);expect(JSON.stringify(t)).toBe(before);expect(c.rings.castShadow).toBe(false);expect((c.rings.material as MeshBasicMaterial).forceSinglePass).toBe(true);}finally{dispose();}});
+ it('does not submit inactive, disabled or out-of-frustum ground helpers',()=>{const{c,camera,dispose}=fixture();try{const inactive={...target(),active:false},disabled={...target(),enabled:false},behind=target(0,20);behind.previous={...behind.position};c.update([inactive,disabled,behind],1,camera);expect(c.rings.count).toBe(0);expect(c.shadows.count).toBe(0);expect(c.rings.visible).toBe(false);expect(c.shadows.visible).toBe(false);c.update([target()],1,camera);expect(c.rings.count).toBe(1);expect(c.rings.visible).toBe(true);}finally{dispose();}});
+});
+
+interface ProgressRange {mounted:boolean;materialRevision:number;waitForWarmDraw:ReturnType<typeof vi.fn>;renderer:{compile:ReturnType<typeof vi.fn>};readonly preparationStatus:ShaderPreparationStatus;readonly preparationReady:boolean;prepare:RangeRenderer['prepare'];}
+function progressFake(parallel=false){const r=Object.create(RangeRenderer.prototype) as ProgressRange;Object.assign(r,{mounted:true,materialRevision:2,preparedRevision:-1,preparationPhase:'idle',preparationRevision:-1,preparationStarted:0,preparationPromise:null,preparationReport:{revision:-1,milliseconds:0,programs:0,method:'synchronous',disposed:false},scene:new Scene(),camera:new PerspectiveCamera(),weaponScene:new Scene(),weaponCamera:new PerspectiveCamera(),renderer:{extensions:{has:()=>parallel},compile:vi.fn(),info:{programs:[]}},warmRenderPaths:vi.fn(),waitForWarmDraw:vi.fn().mockResolvedValue(undefined)});return r;}
+describe('I3 actual shader preparation progress',()=>{
+ afterEach(()=>vi.useRealTimers());
+ it('reports initialization, GPU wait and actual readiness; a changed revision becomes idle',async()=>{const r=progressFake(),states:ShaderPreparationStatus[]=[];expect(r.preparationStatus).toMatchObject({stage:'idle',revision:-1,requestedRevision:2,completedPrograms:null});let release!:()=>void;(r.waitForWarmDraw as ReturnType<typeof vi.fn>).mockImplementation(()=>new Promise<void>(resolve=>{states.push(r.preparationStatus);release=resolve;}));const work=r.prepare();expect(states[0]).toMatchObject({stage:'gpu',revision:2,requestedRevision:2,completedPrograms:null});expect(r.preparationReady).toBe(false);release();await work;expect(r.preparationStatus).toMatchObject({stage:'ready',completedPrograms:0,totalPrograms:0});r.materialRevision=3;expect(r.preparationStatus).toMatchObject({stage:'idle',revision:2,requestedRevision:3});});
+ it('reports failure and a disposed renderer without inventing successful completion',async()=>{const r=progressFake();(r.renderer.compile as ReturnType<typeof vi.fn>).mockImplementationOnce(()=>{throw Error('compile failed');});await expect(r.prepare()).rejects.toThrow('compile failed');expect(r.preparationStatus.stage).toBe('failed');r.mounted=false;expect(r.preparationStatus.stage).toBe('disposed');});
+ it('counts actual parallel-driver completion while compilation is pending',async()=>{vi.useFakeTimers();const r=progressFake(true),first={},second={};let done=false;Object.assign(r.renderer,{info:{programs:[{program:first},{program:second}]},getContext:()=>({getExtension:()=>({COMPLETION_STATUS_KHR:123}),isContextLost:()=>false,getProgramParameter:(program:object)=>program===first||done})});const work=r.prepare();expect(r.preparationStatus).toMatchObject({stage:'compiling',completedPrograms:1,totalPrograms:2});done=true;await vi.advanceTimersByTimeAsync(8);await work;expect(r.preparationStatus).toMatchObject({stage:'ready',completedPrograms:2,totalPrograms:2});});
+});

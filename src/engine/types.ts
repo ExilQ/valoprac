@@ -13,6 +13,7 @@ export type Bindings = Record<typeof BINDING_ACTIONS[number],string>;
 export interface WeaponTotals { shots:number; hits:number; heads:number; recoilSquared:number; spreadSum:number }
 export type PeekScenario='free'|'wide'|'shoulder'|'jiggle'|'crouch'|'jump'|'vertical'|'slicing'|'operator'|'mixed';
 export interface Settings {
+  movementTools:import('../training/movementTools/types').MovementToolsSettings;
   movementPhysics:'valorant'|'counterStrike';csMovementPreset:'cs2'|'sourceClassic';physicsDiagnostics:boolean;wheelJump:'off'|'up'|'down';
   combatMode:'learning'|'gunfight'|'exposure';defenderSkill:'beginner'|'normal'|'advanced'|'expert';defenderAimSpeed:number;defenderAimAcceleration:number;defenderStability:number;defenderFirstShotError:number;defenderRecoilControl:number;defenderTactics:number;botDiagnostics:boolean;jumpBufferMs:number;penetrationDiagnostics:boolean;
   peekingTimed:boolean;operatorScopeMode:'hold'|'toggle';operatorAutoRescope:boolean;operatorZoomBinding:string;peekScenario:PeekScenario;defenderWeapon:WeaponId|'mixed';defenderReaction:number;defenderAccuracy:number;defenderReposition:number;randomDefenders:boolean;
@@ -29,6 +30,7 @@ export interface Settings {
 
   sensitivity: number; degreesPerCount: number; dpi: number; fov: number; duration: number; seed: number;
   crosshairColor: string; crosshairThickness: number; crosshairGap: number; crosshairLength: number;
+  crosshairAdvanced:import('../config/crosshair').CrosshairAdvanced;
   dynamicCrosshair: boolean; brakingHud: boolean; idealCompensation: boolean; volume: number;
   renderScale: number; antialias: boolean; showPerformance: boolean; behavior: Behavior;
 }
@@ -47,6 +49,11 @@ export interface ShotEvent {
 export interface KillEvent {timestamp:number;targetId:number;generation:number;elapsed:number;firstShot:boolean}
 export interface DirectionResponse {targetId:number;changeTime:number;latency:number}
 export interface SessionData {
+  sessionOptions?:import('../training/platform/SessionOptions').SimulationOptions;
+  exercise?:import('../training/exercises/types').ExerciseReport;
+  movementPractice?:import('../training/movementTools/types').MovementPracticeSnapshot;
+  replay?:import('./replay/types').ReplayRecording;
+  replayIssue?:string;
   landings?:{events:number;recent:import('./footsteps/Landings').LandingSoundEvent[]};
   physics?:{version:string;current:ReturnType<import('./movement/Movement').Movement['physicsSnapshot']>;transitions:{time:number;profile:string;preset:string|null}[]};
   movement?:ReturnType<import('./movement/Movement').Movement['hopSnapshot']>;

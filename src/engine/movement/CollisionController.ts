@@ -53,6 +53,11 @@ export class CollisionController {
   }
   return true;
  }
+ /** Practice restores use the same ramp-aware occupied volume as normal
+  * traversal, rather than accepting an arbitrary saved coordinate. */
+ canOccupy(position:Vector3,bodyHeight:number,radius:number):boolean{
+  return[position.x,position.y,position.z,bodyHeight,radius].every(Number.isFinite)&&bodyHeight>0&&radius>0&&this.clearAtHeight(position,position.y,bodyHeight,radius);
+ }
  private stepClear(position:Vector3,top:number,o:HorizontalCollisionOptions):boolean{
   // Adjacent ramp/platform volumes can overlap the footprint. Test headroom
   // above their combined reachable step, rather than treating the higher

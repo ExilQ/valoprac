@@ -20,22 +20,31 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { WEAPON_ORDER } from '../../config/weapons';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import {mergeStaticArchitecture} from './StaticGeometry';
+import {colorBatchSignature,mergeStaticArchitecture} from './StaticGeometry';
+import {GroundContacts} from './GroundContacts';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
 import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
 import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
 import {cameraVerticalFov} from './projection';
+import {subscribeLocale,translateText} from '../../i18n/locale';
 const DEG=Math.PI/180;
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
 export interface ShaderPreparationReport {revision:number;milliseconds:number;programs:number;method:'parallel'|'synchronous';disposed:boolean;}
+export interface ShaderPreparationStatus {stage:'idle'|'compiling'|'warming'|'gpu'|'ready'|'failed'|'disposed';revision:number;requestedRevision:number;elapsedMs:number;completedPrograms:number|null;totalPrograms:number;}
 export class RangeRenderer {
+  private localizedSigns:(()=>void)[]=[];
+  private unsubscribeLocale=subscribeLocale(()=>{for(const paint of this.localizedSigns)paint();});
+  recordFrames=true;
+  /** Viewer-only camera. It never writes back into the authoritative movement,
+   * aim, hit registration or submitted target-frame history. */
+  inspectionCamera:{position:Vec3;target:Vec3;fov?:number}|null=null;
   readonly capabilities:GraphicsCapabilities;
   renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.05,180);
   private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
   private size=new THREE.Vector3();private color=new THREE.Color();private position=new THREE.Vector3();
   private geometries=new Set<THREE.BufferGeometry>();private materials=new Set<THREE.Material>();private textures=new Set<THREE.Texture>();
   private architecture:THREE.Group|null=null;private defenderWeapons=new Map<WeaponId,THREE.InstancedMesh>();private heldMatrix=new THREE.Matrix4();private heldPose=new THREE.Object3D();
-  private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetMatrices:THREE.Matrix4[][]=[];private renderedTargetPositions:THREE.Vector3[]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
+  private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetMatrices:THREE.Matrix4[][]=[];private renderedTargetPositions:THREE.Vector3[]=[];private groundContacts!:GroundContacts;private impacts:Impact[]=[];private impactIndex=0;
   private surfaceImpacts:THREE.Mesh[]=[];private surfaceImpactIndex=0;
   private tracers:THREE.Line[]=[];private tracerIndex=0;private weapon=new THREE.Group();private muzzle!:THREE.Mesh;
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
@@ -46,13 +55,15 @@ export class RangeRenderer {
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
   private materialRevision=0;private preparedRevision=-1;private shaderKey='';private preparationPromise:Promise<ShaderPreparationReport>|null=null;
   private canvasWarmHidden=false;private canvasVisibility='';
+  private preparationPhase:ShaderPreparationStatus['stage']='idle';private preparationStarted=0;private preparationRevision=-1;private completedPrograms:number|null=null;
   private preparationReport:ShaderPreparationReport={revision:-1,milliseconds:0,programs:0,method:'synchronous',disposed:false};
-  constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings){
+  constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings,options:{recordFrames?:boolean}={}){
+    this.recordFrames=options.recordFrames??true;
     this.renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:false});
     this.capabilities=detectGraphicsCapabilities(this.renderer.getContext());
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow)};this.settings=settings;
     this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x9aafb3);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
-    simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
+    if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
     const probe=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(this.renderer);this.environmentTarget=pmrem.fromScene(probe,0.04);this.scene.environment=this.environmentTarget.texture;this.scene.environmentIntensity=0.38;probe.dispose();pmrem.dispose();
     this.scene.fog=new THREE.Fog(0x9aafb3,38,110);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
     this.scene.add(new THREE.HemisphereLight(0xe2edf0,0x9a9184,1.85));
@@ -63,6 +74,10 @@ export class RangeRenderer {
   }
   get canvas(){return this.renderer.domElement;}
   get preparationReady(){return this.mounted&&this.preparedRevision===this.materialRevision;}
+  get preparationStatus():ShaderPreparationStatus {
+    const ready=this.preparationReady,phase=this.preparationPhase??'idle';
+    return {stage:!this.mounted?'disposed':ready?'ready':phase==='ready'?'idle':phase,revision:this.preparationRevision??-1,requestedRevision:this.materialRevision,elapsedMs:ready?this.preparationReport.milliseconds:this.preparationStarted?Math.max(0,performance.now()-this.preparationStarted):0,completedPrograms:this.completedPrograms??null,totalPrograms:this.renderer.info.programs?.length??0};
+  }
   /** Eagerly await before offering PointerLock. Calling this repeatedly shares
    * work; quality changes during compilation are prepared at their latest revision. */
   prepare():Promise<ShaderPreparationReport>{
@@ -74,6 +89,7 @@ export class RangeRenderer {
   private async prepareLatest():Promise<ShaderPreparationReport>{
     while(this.mounted&&this.preparedRevision!==this.materialRevision){
       const revision=this.materialRevision,start=performance.now(),parallel=this.renderer.extensions.has('KHR_parallel_shader_compile');
+      this.preparationRevision=revision;this.preparationStarted=start;this.preparationPhase='compiling';this.completedPrograms=null;
       try{
         this.renderer.compile(this.scene,this.camera);this.renderer.compile(this.weaponScene,this.weaponCamera);
         // Three's compileAsync owns an uncancellable material polling timer.
@@ -85,10 +101,10 @@ export class RangeRenderer {
         // Material compilation alone does not allocate shadow/postprocessing
         // buffers or upload all hidden viewmodels. Warm those real paths into an
         // offscreen target without submitting a frame to shooting registration.
-        this.warmRenderPaths();
+        this.preparationPhase='warming';this.warmRenderPaths();this.preparationPhase='gpu';
         await this.waitForWarmDraw(revision,start);
-      }catch(error){if(this.mounted)throw error;break;}
-      if(this.mounted&&revision===this.materialRevision){this.preparedRevision=revision;this.preparationReport={revision,milliseconds:performance.now()-start,programs:this.renderer.info.programs?.length??0,method:parallel?'parallel':'synchronous',disposed:false};}
+      }catch(error){if(this.mounted){this.preparationPhase='failed';throw error;}break;}
+      if(this.mounted&&revision===this.materialRevision){this.preparedRevision=revision;this.preparationPhase='ready';this.completedPrograms=this.renderer.info.programs?.length??0;this.preparationReport={revision,milliseconds:performance.now()-start,programs:this.renderer.info.programs?.length??0,method:parallel?'parallel':'synchronous',disposed:false};}
     }
     return {...this.preparationReport,disposed:!this.mounted};
   }
@@ -96,7 +112,7 @@ export class RangeRenderer {
     const gl=this.renderer.getContext(),extension=gl.getExtension('KHR_parallel_shader_compile');if(!extension)return;
     while(this.mounted&&revision===this.materialRevision){
       if(gl.isContextLost())throw new Error('Graphics context lost during shader preparation');
-      const pending=this.renderer.info.programs?.some(program=>program.program&&!gl.getProgramParameter(program.program,extension.COMPLETION_STATUS_KHR));
+      const programs=this.renderer.info.programs??[];this.completedPrograms=programs.reduce((count,program)=>count+Number(!program.program||!!gl.getProgramParameter(program.program,extension.COMPLETION_STATUS_KHR)),0);const pending=this.completedPrograms<programs.length;
       if(!pending)return;if(performance.now()-start>45000)throw new Error('Shader preparation did not complete within45seconds');
       await new Promise<void>(resolve=>setTimeout(resolve,8));
     }
@@ -162,8 +178,9 @@ export class RangeRenderer {
     for(let z=3;z>-29;z-=6){this.box(3,0.04,0.25,-6,4.85,z,light);this.box(3,0.04,0.25,6,4.85,z,light);}
   }
   private addSign(text:string,x:number,y:number,z:number,width:number,floor=false,reverse=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
-    ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(text,256,64);
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.textures.add(texture);
+    const paint=()=>{ctx.clearRect(0,0,512,128);ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(translateText(text),256,64,490);texture.needsUpdate=true;};
+    paint();this.localizedSigns.push(paint);
     const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});this.materials.add(material);const g=new THREE.PlaneGeometry(width,width/4);this.geometries.add(g);const mesh=new THREE.Mesh(g,material);mesh.position.set(x,y,z);if(floor)mesh.rotation.x=-Math.PI/2;else if(reverse)mesh.rotation.y=Math.PI;this.scene.add(mesh);
   }
   private buildTargets(){
@@ -174,8 +191,8 @@ export class RangeRenderer {
     const count=this.simulation.targets.length;
     for(let j=0;j<11;j++){const g=characterPartGeometry(j);this.geometries.add(g);const material=materials[j===0?0:j<3?1:j<7?2:3];const batch=new THREE.InstancedMesh(g,material,count);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;this.targetBatches.push(batch);this.scene.add(batch);}
     for(let i=0;i<count;i++){const target=this.simulation.targets[i],meshes:THREE.Mesh[]=[];for(let j=0;j<target.parts.length;j++){const batch=this.targetBatches[j],m=new THREE.Mesh(batch.geometry,batch.material);m.matrixAutoUpdate=false;m.userData.batch=batch;m.userData.slot=i;meshes.push(m);}this.targetMeshes.push(meshes);this.targetMatrices.push(meshes.map(mesh=>mesh.matrix));this.renderedTargetPositions.push(new THREE.Vector3());
-      const g=new THREE.RingGeometry(.45,.46,32);this.geometries.add(g);const mat=new THREE.MeshBasicMaterial({color:0x9aa8a5,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false});this.materials.add(mat);const ring=new THREE.Mesh(g,mat);ring.rotation.x=-Math.PI/2;this.scene.add(ring);this.targetRings.push(ring);
     }
+    this.groundContacts=new GroundContacts(count,g=>this.geometries.add(g),m=>this.materials.add(m),t=>this.textures.add(t));this.scene.add(this.groundContacts.rings,this.groundContacts.shadows);
   }
   private buildDefenderWeapons(){
     if(!this.simulation.defenders)return;
@@ -235,7 +252,6 @@ export class RangeRenderer {
   private buildPolish(){
     if(this.simulation.practiceMap==='range')this.buildRangePolish();this.buildArchitecturalLayers();
     if(this.simulation.practiceMap!=='range'){this.architecture=tacticalArchitecture(this.simulation.practiceMap,this.simulation.obstacles,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},t=>{this.textures.add(t);return t;});this.scene.add(this.architecture);}
-    this.buildContactShadows();
   }
   private buildRangePolish(){
     const concrete=this.material(0xa8b1a5,.92),paint=this.material(0x52686c,.7),rubber=this.material(0x596c69,.97),edge=this.material(0x93a6a3,.65);
@@ -302,16 +318,10 @@ export class RangeRenderer {
       this.addSign('VALOPRAC  /  TACTICAL CAMPUS',x,5,bounds[1]+1.05,8);
     }
   }
-  private buildContactShadows(){
-    // Shared radial contact-shadow texture. No additional dynamic light per target.
-    const n=32,data=new Uint8Array(n*n*4);for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4,r=Math.hypot(x/(n-1)*2-1,y/(n-1)*2-1);data[i]=data[i+1]=data[i+2]=0;data[i+3]=Math.round(Math.max(0,1-r)**2*125);}
-    const tex=new THREE.DataTexture(data,n,n);tex.needsUpdate=true;this.textures.add(tex);const mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false});this.materials.add(mat);const geo=new THREE.PlaneGeometry(1.5,1.1);this.geometries.add(geo);
-    for(let i=0;i<this.targetRings.length;i++){const shadow=new THREE.Mesh(geo,mat);shadow.rotation.x=-Math.PI/2;this.targetRings[i].userData.contactShadow=shadow;this.scene.add(shadow);}
-  }
   private batchStaticArchitecture(){
-    this.scene.updateMatrixWorld(true);const groups=new Map<THREE.Material,THREE.Mesh[]>();
-    for(const child of this.scene.children){if(!(child instanceof THREE.Mesh)||!child.userData.staticRange||Array.isArray(child.material))continue;const list=groups.get(child.material)??[];list.push(child);groups.set(child.material,list);}
-    for(const [material,list] of groups){if(list.length<2)continue;const merged=mergeStaticArchitecture(list);if(!merged)continue;this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,material);mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
+    this.scene.updateMatrixWorld(true);const groups=new Map<string,{material:THREE.Material;list:THREE.Mesh[];palette:boolean}>();
+    for(const child of this.scene.children){if(!(child instanceof THREE.Mesh)||!child.userData.staticRange||Array.isArray(child.material))continue;const signature=this.surfaceMaterials.includes(child.material as THREE.MeshStandardMaterial)?null:colorBatchSignature(child.material),key=signature??child.material.uuid;const group=groups.get(key)??{material:child.material,list:[] as THREE.Mesh[],palette:signature!==null};group.list.push(child);groups.set(key,group);}
+    for(const {material,list,palette} of groups.values()){if(list.length<2)continue;const merged=mergeStaticArchitecture(list,'world',palette);if(!merged)continue;let surface=material;if(palette){const tinted=material.clone() as THREE.MeshStandardMaterial;tinted.color.setHex(0xffffff);tinted.vertexColors=true;surface=tinted;this.materials.add(surface);}this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,surface);mesh.name='batched structural palette';mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
   }
   applySettings(settings:Settings){
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow)};
@@ -395,8 +405,10 @@ export class RangeRenderer {
       for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=id==='operator'||this.adsBlend>.1;v.animateBolt?.(s.weapon.boltProgress);v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
       this.weapon.visible=!(s.weaponId==='operator'&&s.weapon.scopeAmount>.75);this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
+    const inspection=this.inspectionCamera;
+    if(inspection){this.camera.position.set(inspection.position.x,inspection.position.y,inspection.position.z);this.camera.lookAt(inspection.target.x,inspection.target.y,inspection.target.z);this.weapon.visible=false;}
     if(this.architecture)updateTacticalArchitecture(this.architecture,this.camera.position,this.settings.graphicsPreset);
-    const zoom=preview?1:s.weaponId==='operator'?s.scopeZoom:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=cameraVerticalFov(this.settings.fov,zoom,this.camera.aspect);if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
+    const zoom=preview?1:s.weaponId==='operator'?s.scopeZoom:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=cameraVerticalFov(inspection?.fov??this.settings.fov,inspection?1:zoom,this.camera.aspect);if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
     for(let i=0;i<s.targets.length;i++){
       const t=s.targets[i],death=THREE.MathUtils.clamp((s.time-t.deadAt)/0.4,0,1),dx=(t.previous.x+(t.position.x-t.previous.x)*alpha)-t.position.x,dz=(t.previous.z+(t.position.z-t.previous.z)*alpha)-t.position.z;
       for(let j=0;j<t.parts.length;j++){
@@ -407,18 +419,18 @@ export class RangeRenderer {
         if(!mesh.visible)mesh.matrix.scale(this.size.setScalar(0));const batch=mesh.userData.batch as THREE.InstancedMesh;batch.setMatrixAt(mesh.userData.slot,mesh.matrix);
       }
       this.renderedTargetPositions[i].set(t.position.x+dx,t.position.y,t.position.z+dz);
-      this.targetRings[i].position.set(t.position.x+dx,t.previous.y+(t.position.y-t.previous.y)*alpha+.016,t.position.z+dz);this.targetRings[i].visible=t.active&&t.enabled;const contact=this.targetRings[i].userData.contactShadow as THREE.Mesh;contact.position.copy(this.targetRings[i].position);contact.visible=t.active&&t.enabled;contact.scale.setScalar(t.scale);
     }
+    this.groundContacts.update(s.targets,alpha,this.camera);
     this.updateDefenderWeapons(alpha);
     for(const batch of this.targetBatches){batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';}
     for(const tracer of this.tracers)if(tracer.visible&&s.time>tracer.userData.expire)tracer.visible=false;
     for(const shell of this.shells){if(!shell.mesh.visible)continue;if(s.time>=shell.until){shell.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;shell.velocity.y-=9.8*dt;shell.mesh.position.addScaledVector(shell.velocity,dt);shell.mesh.rotation.x+=dt*12;shell.mesh.rotation.z+=dt*8;}
     for(const p of this.sparks){if(!p.mesh.visible)continue;if(s.time>=p.until){p.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;p.velocity.y-=5*dt;p.mesh.position.addScaledVector(p.velocity,dt);}
     if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
-    if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
-    if(!preview)s.renderedTargets.capture(s.targets,this.targetMatrices,performance.now(),this.renderedTargetPositions);
+    if(!preview&&!this.composer&&!inspection){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
+    if(!preview&&this.recordFrames)s.renderedTargets.capture(s.targets,this.targetMatrices,performance.now(),this.renderedTargetPositions,{tick:s.ticks,alpha});
     if(this.canvasWarmHidden){this.canvas.style.visibility=this.canvasVisibility;this.canvasWarmHidden=false;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
+  dispose(){this.mounted=false;this.unsubscribeLocale?.();this.localizedSigns.length=0;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();this.groundContacts.dispose();for(const batch of this.targetBatches)batch.dispose();for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
 }

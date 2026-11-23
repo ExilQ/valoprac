@@ -26,6 +26,9 @@ export function createAssetHandler(assets,rules=[],aliases={}){
   // Detections. Apply after header rules so aliases, HEAD and 304 responses keep
   // the same strict script policy without untrusted inline CDN scripts.
   const html=headers.get('Content-Type')?.toLowerCase().startsWith('text/html');
+  // Keep only the actual homepage searchable, including on HEAD and 304 replies.
+  // Crawling stays allowed so engines can discover noindex on existing results.
+  if(html||/^(?:text\/plain|application\/(?:json|xml|pdf|zip))/.test(headers.get('Content-Type')??''))headers.set('X-Robots-Tag',html&&entry&&original==='/'?'index, follow, max-image-preview:large':'noindex, follow');
   if(html&&!/(?:^|,)\s*no-transform\s*(?:,|$)/i.test(headers.get('Cache-Control')??''))headers.set('Cache-Control',`${headers.get('Cache-Control')??'no-cache'}, no-transform`);
   if(entry?.scripts?.length)headers.set('Content-Security-Policy',headers.get('Content-Security-Policy').replace("script-src 'self'",`script-src 'self' ${entry.scripts.map(hash=>`'sha256-${hash}'`).join(' ')}`));
   if(!['GET','HEAD'].includes(request.method)){headers.set('Allow','GET, HEAD');return new Response('허용하지 않는 요청입니다.',{status:405,headers});}

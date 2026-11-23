@@ -1,5 +1,17 @@
-import {BufferGeometry,Float32BufferAttribute,type Mesh,type Color} from 'three';
+import {BufferGeometry,Float32BufferAttribute,Material,type Mesh,type Color} from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+
+/** Conservative palette batching for immutable, untextured architecture only.
+ * Serialized material state retains every supported depth/blend/PBR flag. The
+ * sole shading change is moving its constant linear color into vertex colors. */
+export function colorBatchSignature(material:Material):string|null {
+  if(!['MeshStandardMaterial','MeshBasicMaterial'].includes(material.type)||material.clippingPlanes?.length||material.onBeforeCompile!==Material.prototype.onBeforeCompile||material.customProgramCacheKey!==Material.prototype.customProgramCacheKey)return null;
+  // Texture authoring/quality changes and custom shaders retain their identity.
+  if(Object.keys(material).some(key=>/map$/i.test(key)&&!!(material as unknown as Record<string,unknown>)[key]))return null;
+  const state=material.toJSON() as unknown as Record<string,unknown>;
+  for(const key of ['metadata','uuid','name','color','userData'])delete state[key];
+  return JSON.stringify(Object.fromEntries(Object.keys(state).sort().map(key=>[key,state[key]])));
+}
 
 /** Batch authored architecture after normalizing the primitive formats. Rounded
  * boxes are non-indexed; box trim is indexed; ramp faces have no UV channel.

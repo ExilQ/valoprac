@@ -1,0 +1,785 @@
+{
+  "schema": 1,
+  "item": "A3",
+  "status": "local-source-validation-not-deployed",
+  "documentationGeneratedAt": "2026-11-04T10:15:40.427913+00:00",
+  "capture": {
+    "origin": "http://127.0.0.1:4221",
+    "environment": "Chromium154 Linux headless SwiftShader; real App/GameStage/Runtime/BrowserInput/MovementPractice/ReplayPlayer. Functional software-browser verification, not physical input or GPU timing.",
+    "checks": [
+      {
+        "name": "actual movement training uses trusted Pointer Lock and enabled explicit tools"
+      },
+      {
+        "name": "K saves the actual player pose",
+        "details": {
+          "x": 0,
+          "y": 0,
+          "z": 5
+        }
+      },
+      {
+        "name": "manual movement and jump produce actual takeoff/apex/landing trajectory",
+        "details": {
+          "id": 1,
+          "startTick": 42,
+          "endTick": 120,
+          "startTime": 0.35,
+          "duration": 0.65,
+          "takeoff": {
+            "x": 0,
+            "y": 0,
+            "z": 3.4739248888888934
+          },
+          "landing": {
+            "x": 0,
+            "y": 0,
+            "z": 0.17256622222227774
+          },
+          "peakHeight": 1.1499695016912355,
+          "peakSpeed": 5.079013333333249,
+          "distance": 3.3013586666666175,
+          "takeoffSpeed": 5.079013333333249,
+          "landingSpeed": 5.079013333333249,
+          "speedPreservation": 1,
+          "truncated": false,
+          "samples": [
+            [
+              0,
+              0,
+              0,
+              3.4739248888888934,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.00833333333333336,
+              0,
+              0.05851417525704024,
+              3.431599777777783,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.041666666666666685,
+              0,
+              0.2772930985074234,
+              3.262299333333341,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.07500000000000001,
+              0,
+              0.47162757731336213,
+              3.092998888888899,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.10833333333333334,
+              0,
+              0.6415176116748563,
+              2.923698444444457,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.14166666666666666,
+              0,
+              0.7869632015919061,
+              2.7543980000000152,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.17500000000000004,
+              0,
+              0.9079643470645113,
+              2.5850975555555733,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.20833333333333337,
+              0,
+              1.0045210480926723,
+              2.4157971111111314,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.2416666666666667,
+              0,
+              1.0766333046763885,
+              2.2464966666666895,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.275,
+              0,
+              1.1243011168156607,
+              2.0771962222222475,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.30833333333333335,
+              0,
+              1.1475244845104884,
+              1.9078957777778056,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.3416666666666667,
+              0,
+              1.1463034077608714,
+              1.7385953333333637,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.375,
+              0,
+              1.12063788656681,
+              1.5692948888889218,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.4083333333333333,
+              0,
+              1.0705279209283045,
+              1.3999944444444798,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.44166666666666665,
+              0,
+              0.9959735108453542,
+              1.230694000000038,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.475,
+              0,
+              0.8969746563179597,
+              1.061393555555596,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.5083333333333333,
+              0,
+              0.7735313573461207,
+              0.8920931111111544,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.5416666666666666,
+              0,
+              0.6256436139298371,
+              0.7227926666667129,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.575,
+              0,
+              0.45331142606910924,
+              0.5534922222222715,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.6083333333333334,
+              0,
+              0.2565347937639368,
+              0.3841917777778298,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.6416666666666667,
+              0,
+              0.035313717014319894,
+              0.21489133333338814,
+              5.079013333333249,
+              false,
+              0,
+              0
+            ],
+            [
+              0.65,
+              0,
+              0,
+              0.17256622222227774,
+              5.079013333333249,
+              true,
+              0,
+              0
+            ]
+          ]
+        }
+      },
+      {
+        "name": "L restores independently saved position through BrowserInput"
+      },
+      {
+        "name": "Y resets the new attempt origin rather than the older saved bookmark",
+        "details": {
+          "x": 0,
+          "y": 0,
+          "z": 4.13960508333283
+        }
+      },
+      {
+        "name": "saved-position restore and last-takeoff return remain independent"
+      },
+      {
+        "name": "paused action builds a bounded noninteractive ghost through common ReplayPlayer",
+        "details": {
+          "samples": 20,
+          "duration": 0.65,
+          "peakHeight": 1.1499695016912355,
+          "peakSpeed": 5.082523333333294,
+          "source": {
+            "gameVersion": "9.0.1",
+            "simulationVersion": "valoprac-replay-simulation-2",
+            "map": "range",
+            "physics": "valorant",
+            "seed": 1947
+          },
+          "sourceFinalVerified": true
+        }
+      },
+      {
+        "name": "a fresh physical jump restarts display-only ghost timing",
+        "details": {
+          "enabled": true,
+          "position": [
+            0,
+            0.05622250859037637,
+            4.097250722221718
+          ],
+          "ghostStart": 2.1916666666666664,
+          "time": 2.2,
+          "attempt": 2.183333333333333,
+          "authoritativeTargets": 12
+        }
+      },
+      {
+        "name": "A3 review opens third-person with stance marker and unchanged authority",
+        "details": {
+          "inspection": {
+            "position": {
+              "x": 0,
+              "y": 2.4,
+              "z": 8.13960508333283
+            },
+            "target": {
+              "x": 0,
+              "y": 1.3,
+              "z": 4.13960508333283
+            },
+            "fov": 65
+          },
+          "position": [
+            0,
+            2.4,
+            8.13960508333283
+          ],
+          "marker": true,
+          "recordFrames": false,
+          "observations": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+          ]
+        }
+      },
+      {
+        "name": "third-person controls remain reachable without horizontal overflow at four viewport sizes"
+      }
+    ],
+    "layouts": [
+      {
+        "width": 1280,
+        "height": 720,
+        "overflow": false,
+        "review": true,
+        "controls": [
+          {
+            "label": "재생",
+            "left": 329,
+            "right": 373.09375,
+            "width": 44.09375,
+            "height": 34
+          },
+          {
+            "label": "처음으로",
+            "left": 383.09375,
+            "right": 449.265625,
+            "width": 66.171875,
+            "height": 34
+          },
+          {
+            "label": "0.25배0.5배1배2배",
+            "left": 509.609375,
+            "right": 586.609375,
+            "width": 77,
+            "height": 35
+          },
+          {
+            "label": "1인칭",
+            "left": 596.609375,
+            "right": 647.5625,
+            "width": 50.953125,
+            "height": 34
+          },
+          {
+            "label": "위에서 보기",
+            "left": 657.5625,
+            "right": 737.890625,
+            "width": 80.328125,
+            "height": 34
+          },
+          {
+            "label": "3인칭 검토",
+            "left": 747.890625,
+            "right": 824.046875,
+            "width": 76.15625,
+            "height": 34
+          },
+          {
+            "label": "리플레이 시간 탐색",
+            "left": 335,
+            "right": 945,
+            "width": 610,
+            "height": 24
+          },
+          {
+            "label": "무결성 다시 검사",
+            "left": 329,
+            "right": 434.53125,
+            "width": 105.53125,
+            "height": 34
+          },
+          {
+            "label": "리플레이 파일 저장",
+            "left": 444.53125,
+            "right": 561.09375,
+            "width": 116.5625,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "width": 1366,
+        "height": 768,
+        "overflow": false,
+        "review": true,
+        "controls": [
+          {
+            "label": "재생",
+            "left": 372,
+            "right": 416.09375,
+            "width": 44.09375,
+            "height": 34
+          },
+          {
+            "label": "처음으로",
+            "left": 426.09375,
+            "right": 492.265625,
+            "width": 66.171875,
+            "height": 34
+          },
+          {
+            "label": "0.25배0.5배1배2배",
+            "left": 552.609375,
+            "right": 629.609375,
+            "width": 77,
+            "height": 35
+          },
+          {
+            "label": "1인칭",
+            "left": 639.609375,
+            "right": 690.5625,
+            "width": 50.953125,
+            "height": 34
+          },
+          {
+            "label": "위에서 보기",
+            "left": 700.5625,
+            "right": 780.890625,
+            "width": 80.328125,
+            "height": 34
+          },
+          {
+            "label": "3인칭 검토",
+            "left": 790.890625,
+            "right": 867.046875,
+            "width": 76.15625,
+            "height": 34
+          },
+          {
+            "label": "리플레이 시간 탐색",
+            "left": 378,
+            "right": 988,
+            "width": 610,
+            "height": 24
+          },
+          {
+            "label": "무결성 다시 검사",
+            "left": 372,
+            "right": 477.53125,
+            "width": 105.53125,
+            "height": 34
+          },
+          {
+            "label": "리플레이 파일 저장",
+            "left": 487.53125,
+            "right": 604.09375,
+            "width": 116.5625,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "overflow": false,
+        "review": true,
+        "controls": [
+          {
+            "label": "재생",
+            "left": 649,
+            "right": 693.09375,
+            "width": 44.09375,
+            "height": 34
+          },
+          {
+            "label": "처음으로",
+            "left": 703.09375,
+            "right": 769.265625,
+            "width": 66.171875,
+            "height": 34
+          },
+          {
+            "label": "0.25배0.5배1배2배",
+            "left": 829.609375,
+            "right": 906.609375,
+            "width": 77,
+            "height": 35
+          },
+          {
+            "label": "1인칭",
+            "left": 916.609375,
+            "right": 967.5625,
+            "width": 50.953125,
+            "height": 34
+          },
+          {
+            "label": "위에서 보기",
+            "left": 977.5625,
+            "right": 1057.890625,
+            "width": 80.328125,
+            "height": 34
+          },
+          {
+            "label": "3인칭 검토",
+            "left": 1067.890625,
+            "right": 1144.046875,
+            "width": 76.15625,
+            "height": 34
+          },
+          {
+            "label": "리플레이 시간 탐색",
+            "left": 655,
+            "right": 1265,
+            "width": 610,
+            "height": 24
+          },
+          {
+            "label": "무결성 다시 검사",
+            "left": 649,
+            "right": 754.53125,
+            "width": 105.53125,
+            "height": 34
+          },
+          {
+            "label": "리플레이 파일 저장",
+            "left": 764.53125,
+            "right": 881.09375,
+            "width": 116.5625,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "overflow": false,
+        "review": true,
+        "controls": [
+          {
+            "label": "재생",
+            "left": 34,
+            "right": 78.09375,
+            "width": 44.09375,
+            "height": 34
+          },
+          {
+            "label": "처음으로",
+            "left": 86.09375,
+            "right": 152.265625,
+            "width": 66.171875,
+            "height": 34
+          },
+          {
+            "label": "0.25배0.5배1배2배",
+            "left": 210.609375,
+            "right": 287.609375,
+            "width": 77,
+            "height": 35
+          },
+          {
+            "label": "1인칭",
+            "left": 295.609375,
+            "right": 346.5625,
+            "width": 50.953125,
+            "height": 34
+          },
+          {
+            "label": "위에서 보기",
+            "left": 34,
+            "right": 114.328125,
+            "width": 80.328125,
+            "height": 34
+          },
+          {
+            "label": "3인칭 검토",
+            "left": 122.328125,
+            "right": 198.484375,
+            "width": 76.15625,
+            "height": 34
+          },
+          {
+            "label": "리플레이 시간 탐색",
+            "left": 40,
+            "right": 350,
+            "width": 310,
+            "height": 24
+          },
+          {
+            "label": "무결성 다시 검사",
+            "left": 34,
+            "right": 139.53125,
+            "width": 105.53125,
+            "height": 34
+          },
+          {
+            "label": "리플레이 파일 저장",
+            "left": 147.53125,
+            "right": 264.09375,
+            "width": 116.5625,
+            "height": 34
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "movementDrawSuspension": "After the real prepared WebGL frame and trusted Pointer Lock, live GPU draws are suspended during the movement-key sequence to isolate software-driver frame stalls. Actual input, fixed physics, recording and later WebGL third-person review remain active. This is not a gameplay FPS or end-to-end latency test.",
+    "passed": true,
+    "completedAt": "2026-11-04T10:07:57.727Z"
+  },
+  "captureProvenance": {
+    "inputReportSha256": "86d1c5978e63e6fc924ec8be8c262e591a6893b3028f18c8358ec7e599f7d13b",
+    "sourceRoot": "/workspace/roadmap-stage3-snapshot",
+    "unreleasedGameVersion": "9.0.1",
+    "baseCheckpoint": "892fe4c",
+    "sourceFiles": {
+      "src/training/movementTools/types.ts": {
+        "currentSha256": "465b0a3901ec243f33459aaef441891d1116b012fc4bd26a47afe6c971c82b7c",
+        "browserSnapshotSha256": "465b0a3901ec243f33459aaef441891d1116b012fc4bd26a47afe6c971c82b7c",
+        "equalAtDocumentation": true
+      },
+      "src/training/movementTools/MovementPractice.ts": {
+        "currentSha256": "73fa69bca465deb680517dc35d94134e37ec0886b2bdcd135e4237e1771293f1",
+        "browserSnapshotSha256": "73fa69bca465deb680517dc35d94134e37ec0886b2bdcd135e4237e1771293f1",
+        "equalAtDocumentation": true
+      },
+      "src/training/movementTools/GhostFromReplay.ts": {
+        "currentSha256": "12bee77aa8f4a0a7710ab32c494ca39fcc94351960cae30b1711f2f2d282cfa1",
+        "browserSnapshotSha256": "12bee77aa8f4a0a7710ab32c494ca39fcc94351960cae30b1711f2f2d282cfa1",
+        "equalAtDocumentation": true
+      },
+      "src/engine/movement/Movement.ts": {
+        "currentSha256": "2beec6558f684f4a62c3b91f85957e161e18a750a7682ee2d4d626df9632d894",
+        "browserSnapshotSha256": "2beec6558f684f4a62c3b91f85957e161e18a750a7682ee2d4d626df9632d894",
+        "equalAtDocumentation": true
+      },
+      "src/engine/movement/CollisionController.ts": {
+        "currentSha256": "4f9d7023cbf176bcf25b2c35304fc53238d5c4608c170697bf707c678304c5f8",
+        "browserSnapshotSha256": "4f9d7023cbf176bcf25b2c35304fc53238d5c4608c170697bf707c678304c5f8",
+        "equalAtDocumentation": true
+      },
+      "src/engine/Runtime.ts": {
+        "currentSha256": "42a2a16e77c997db42f7e4f1b83aa91f8009b9e9f5c279bf636b34c319e3a0a6",
+        "browserSnapshotSha256": "42a2a16e77c997db42f7e4f1b83aa91f8009b9e9f5c279bf636b34c319e3a0a6",
+        "equalAtDocumentation": true
+      },
+      "src/engine/input/Input.ts": {
+        "currentSha256": "f249961dfa80ad36e66b3c3f7b94640c76bd49cdd68d229d40933c524e557c72",
+        "browserSnapshotSha256": "f249961dfa80ad36e66b3c3f7b94640c76bd49cdd68d229d40933c524e557c72",
+        "equalAtDocumentation": true
+      },
+      "src/engine/rendering/MovementReview.ts": {
+        "currentSha256": "0bef7ab55cf1c335f2aa6a7cbcd6e97f4932f667110a6e750a67e65849cc43f2",
+        "browserSnapshotSha256": "0bef7ab55cf1c335f2aa6a7cbcd6e97f4932f667110a6e750a67e65849cc43f2",
+        "equalAtDocumentation": true
+      },
+      "src/ui/MovementPracticePanel.tsx": {
+        "currentSha256": "4ca800c4a5aa4d064518b28653d6d58031d1a9dc01024b0dc1d180bd04865392",
+        "browserSnapshotSha256": "4ca800c4a5aa4d064518b28653d6d58031d1a9dc01024b0dc1d180bd04865392",
+        "equalAtDocumentation": true
+      },
+      "src/ui/ReplayViewer.tsx": {
+        "currentSha256": "f9ee69a3f63c7f5b94916d14f31509b8cb32753edc0c079858d31809dd7eff2e",
+        "browserSnapshotSha256": "f9ee69a3f63c7f5b94916d14f31509b8cb32753edc0c079858d31809dd7eff2e",
+        "equalAtDocumentation": true
+      },
+      "src/ui/replayTransport.ts": {
+        "currentSha256": "4a4096e6a610a3d9090588079e93ab708a03afaa09c8fc2170079124e93a2c0a",
+        "browserSnapshotSha256": "4a4096e6a610a3d9090588079e93ab708a03afaa09c8fc2170079124e93a2c0a",
+        "equalAtDocumentation": true
+      }
+    }
+  },
+  "focusedTests": {
+    "passed": true,
+    "passedCount": 35,
+    "failedCount": 0,
+    "filesCount": 6,
+    "files": [
+      "src/tests/movement-practice.test.tsx",
+      "src/tests/movement-practice-replay.test.ts",
+      "src/tests/movement-ghost.test.ts",
+      "src/tests/movement-inspection-camera.test.tsx",
+      "src/tests/input-movement-tools.test.ts",
+      "src/tests/replay-viewer.test.tsx"
+    ],
+    "command": "./node_modules/.bin/vitest run src/tests/movement-practice.test.tsx src/tests/movement-practice-replay.test.ts src/tests/movement-ghost.test.ts src/tests/movement-inspection-camera.test.tsx src/tests/input-movement-tools.test.ts src/tests/replay-viewer.test.tsx --reporter=verbose",
+    "logSha256": "76003cea7f416f3e310971f7956138590ad8bf8860764982c44a1347c6ae411a",
+    "log": "/workspace/roadmap-qa/a3-doc-focused-tests.log",
+    "durationSeconds": 17.94,
+    "environment": "Node JavaScript; fixed120Hz real simulation, not hardware input latency"
+  },
+  "sharedReplayGhostBenchmark": {
+    "benchmark": "movement-ghost-shared-replay",
+    "simulationHz": 120,
+    "displaySamples": 91,
+    "duration": 3,
+    "distance": 15.96837497453607,
+    "peakHeight": 1.1499695016912355,
+    "peakSpeed": 5.670000000000002,
+    "landings": 2,
+    "repeatEqual": true,
+    "liveStateUnchanged": true,
+    "sourceFinalVerified": true,
+    "independentGhostRecorder": false
+  },
+  "limits": {
+    "physicalInputLatencyVerified": false,
+    "hardwareFPSVerified": false,
+    "nativeValorantParityVerified": false,
+    "nativeCounterStrikeParityVerified": false,
+    "softwareBrowserOnly": true,
+    "liveMovementGpuDrawsSuspended": true,
+    "thirdPersonReviewWebGLActive": true,
+    "captureStillUsesUnreleasedVersion": true,
+    "wholeReleaseBuildAndTransferMeasurement": "parent release gate",
+    "numericGhostComparisonUIConnected": true,
+    "numericGhostComparisonHelperTested": true,
+    "numericGhostComparisonBrowserCaptured": false
+  },
+  "numericGhostComparisonIntegration": {
+    "documentedAt": "2026-11-04T10:21:19.577302+00:00",
+    "implemented": true,
+    "browserCapturePredatesIntegration": true,
+    "newTests": 3,
+    "focusedTests": {
+      "passed": 16,
+      "failed": 0,
+      "files": 3,
+      "durationSeconds": 9.16,
+      "logSha256": "8a05f27d6a5f414b68768739311f8d55a6b4d93700b8072a51c95c28a1315758",
+      "log": "/workspace/roadmap-qa/a3-ghost-panel-tests.log"
+    },
+    "typecheckPassed": true,
+    "runtimeLifecycleChanged": false,
+    "sourceHashes": {
+      "src/ui/MovementPracticePanel.tsx": "fdb6ee6dbb18d8262984c18789b345f1446a0b025703d3e4c8caa1366e98a3c7",
+      "src/components/GameStage.tsx": "826a42bde300c9275a164544b7768358c3b0e9ffd4b039e8c6fcad73204284b1",
+      "src/tests/movement-ghost-panel.test.tsx": "becf8cee4c5ef9a059e613c8c6a07ef41ce16685ba53ad0e4bfd909e7a2f6b4e"
+    },
+    "measurements": [
+      "signed elapsed time",
+      "signed horizontal distance",
+      "signed peak speed",
+      "signed peak height",
+      "unsigned landing separation",
+      "signed speed preservation percentage points"
+    ],
+    "missingLandingDisplayedAs": "—",
+    "inProgressExplicitlyLabeled": true
+  }
+}

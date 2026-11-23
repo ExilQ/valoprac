@@ -1,0 +1,414 @@
+{
+  "schema": 1,
+  "issues": [
+    "F3",
+    "F5",
+    "F6",
+    "F7"
+  ],
+  "environment": {
+    "engine": "Three.js PerspectiveCamera and actual fixed-step Simulation",
+    "stepSeconds": 0.008333333333333333,
+    "physicalDeviceTest": false
+  },
+  "projectionModel": {
+    "issue": "F3",
+    "version": "horizontal-angular-division-1",
+    "classification": "provisional-calibration",
+    "source": "VALOPRAC improvement report, 2026-10-29; third-party/community targets",
+    "baselineHorizontalDegrees": 103,
+    "targets": [
+      {
+        "zoom": 1.25,
+        "horizontalDegrees": 82.4
+      },
+      {
+        "zoom": 2.5,
+        "horizontalDegrees": 41.2
+      },
+      {
+        "zoom": 5,
+        "horizontalDegrees": 20.6
+      }
+    ],
+    "nativeReferenceMeasured": false
+  },
+  "projection": [
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 1.25,
+      "measuredHorizontalDegrees": 82.40000000000002,
+      "targetHorizontalDegrees": 82.4,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 11.70276922337243,
+      "projectedHeightPixels": 11.70276922337243,
+      "expectedPixels": 11.70276922337243,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 2.5,
+      "measuredHorizontalDegrees": 41.199999999999996,
+      "targetHorizontalDegrees": 41.2,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 27.256380781319766,
+      "projectedHeightPixels": 27.256380781319763,
+      "expectedPixels": 27.256380781319766,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "zoom": 5,
+      "measuredHorizontalDegrees": 20.600000000000005,
+      "targetHorizontalDegrees": 20.6,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 56.37459360931279,
+      "projectedHeightPixels": 56.3745936093128,
+      "expectedPixels": 56.37459360931279,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 1.25,
+      "measuredHorizontalDegrees": 82.40000000000002,
+      "targetHorizontalDegrees": 82.4,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 16.448987488195506,
+      "projectedHeightPixels": 16.448987488195506,
+      "expectedPixels": 16.44898748819551,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 2.5,
+      "measuredHorizontalDegrees": 41.199999999999996,
+      "targetHorizontalDegrees": 41.2,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 38.31057913626204,
+      "projectedHeightPixels": 38.31057913626205,
+      "expectedPixels": 38.31057913626204,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "zoom": 5,
+      "measuredHorizontalDegrees": 20.599999999999998,
+      "targetHorizontalDegrees": 20.6,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 79.23808179347043,
+      "projectedHeightPixels": 79.2380817934704,
+      "expectedPixels": 79.2380817934704,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "zoom": 1.25,
+      "measuredHorizontalDegrees": 82.40000000000002,
+      "targetHorizontalDegrees": 82.4,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 29.47110258301695,
+      "projectedHeightPixels": 29.47110258301695,
+      "expectedPixels": 29.471102583016954,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "zoom": 2.5,
+      "measuredHorizontalDegrees": 41.199999999999996,
+      "targetHorizontalDegrees": 41.2,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 68.63978761913616,
+      "projectedHeightPixels": 68.63978761913617,
+      "expectedPixels": 68.63978761913616,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "zoom": 5,
+      "measuredHorizontalDegrees": 20.599999999999998,
+      "targetHorizontalDegrees": 20.6,
+      "toleranceDegrees": 0.1,
+      "targetWidthMeters": 0.3,
+      "targetDistanceMeters": 20,
+      "projectedWidthPixels": 141.9682298799678,
+      "projectedHeightPixels": 141.9682298799678,
+      "expectedPixels": 141.9682298799678,
+      "centerNdc": [
+        0,
+        0
+      ],
+      "passed": true
+    }
+  ],
+  "spread": [
+    {
+      "weapon": "rifleA",
+      "classification": "provisional-calibration",
+      "source": "2026-10-29 improvement report; 09.01 adopted ADS multipliers",
+      "standingHalfConeDegrees": 0.1575,
+      "expectedUniformDiscRmsDegrees": 0.11136931803688123,
+      "rmsToleranceDegrees": 0.00315,
+      "count": 4096,
+      "seed": 76123,
+      "maxComponentDifference": 0,
+      "maximumDegrees": 0.15748326101568122,
+      "rmsDegrees": 0.11111826850700648,
+      "p95Degrees": 0.15307312257710098,
+      "firstDirections": [
+        {
+          "x": 0.0006094455147325215,
+          "y": 0.0011231380864406674,
+          "z": -0.9999991835681683
+        },
+        {
+          "x": -0.0016968645301329555,
+          "y": 0.0011259356312403684,
+          "z": -0.9999979264577105
+        },
+        {
+          "x": 0.0021466611805956593,
+          "y": -0.001480158524636917,
+          "z": -0.9999966004824805
+        },
+        {
+          "x": -0.0007838701303952559,
+          "y": 0.0014650874843669388,
+          "z": -0.999998619532188
+        },
+        {
+          "x": 0.00045654760154633755,
+          "y": -0.0020998492151366893,
+          "z": -0.999997691096115
+        },
+        {
+          "x": 0.0022160807713572195,
+          "y": 0.0009449054895091904,
+          "z": -0.9999970980656048
+        },
+        {
+          "x": -0.001733914154341469,
+          "y": 0.0010581120197041066,
+          "z": -0.9999979369682015
+        },
+        {
+          "x": 0.002212271232190214,
+          "y": 0.00023960074614646102,
+          "z": -0.999997524220674
+        }
+      ],
+      "passed": true
+    },
+    {
+      "weapon": "rifleB",
+      "classification": "provisional-calibration",
+      "source": "2026-10-29 improvement report; 09.01 adopted ADS multipliers",
+      "standingHalfConeDegrees": 0.11,
+      "expectedUniformDiscRmsDegrees": 0.07778174593052023,
+      "rmsToleranceDegrees": 0.0022,
+      "count": 4096,
+      "seed": 76123,
+      "maxComponentDifference": 0,
+      "maximumDegrees": 0.10999328579075723,
+      "rmsDegrees": 0.07820000685403614,
+      "p95Degrees": 0.10703519058426615,
+      "firstDirections": [
+        {
+          "x": 0.0003772406326783798,
+          "y": -0.000032851492045892333,
+          "z": -0.9999999283051397
+        },
+        {
+          "x": 0.0015456967375851707,
+          "y": 0.00007790406853797726,
+          "z": -0.9999988023755585
+        },
+        {
+          "x": 0.00002641298913597785,
+          "y": -0.0008157801538395456,
+          "z": -0.9999996669024919
+        },
+        {
+          "x": -0.0005020550639187722,
+          "y": 0.0012658603946303043,
+          "z": -0.9999990727686572
+        },
+        {
+          "x": 0.0008650887368160626,
+          "y": 0.0016442075015366392,
+          "z": -0.9999982741000952
+        },
+        {
+          "x": 0.0004872865145294886,
+          "y": 0.00014159073968267793,
+          "z": -0.9999998712519492
+        },
+        {
+          "x": 0.0007013829807375992,
+          "y": -0.00022565293579947043,
+          "z": -0.9999997285712967
+        },
+        {
+          "x": 0.0004381753592574023,
+          "y": 0.001595355136710355,
+          "z": -0.9999986314212347
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "labels": [
+    {
+      "task": "free",
+      "title": "자유 훈련장",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "timed",
+      "title": "헤드샷 정밀도",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "braking",
+      "title": "톡브레이킹 훈련",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "spray",
+      "title": "반동 연습",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "tactical",
+      "title": "각체크·피킹",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "vertical",
+      "title": "수직 각체크 훈련",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "bunny",
+      "title": "버니합 훈련",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    },
+    {
+      "task": "wallbang",
+      "title": "월샷 훈련",
+      "screens": [
+        "main-menu-launch",
+        "preparation",
+        "HUD",
+        "results",
+        "history"
+      ],
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "release": "9.0.1",
+  "sourceCommit": "8abf7b173698be249882ab34562016e640df4b3e",
+  "measuredAt": "2026-10-31T10:27:43.100Z",
+  "method": "built static assets compressed individually with Node gzip/brotli defaults; not observed network transfer or historical380kB",
+  "indexBytes": 1622,
+  "indexSHA256": "23071cf436b989c6e395962e7b4f31345dcb9bb06559403045452af765c86b07",
+  "assets": [
+    {
+      "file": "AimDashboard-C2M0MM7B.css",
+      "bytes": 18952,
+      "gzipBytes": 3721,
+      "brotliBytes": 3257
+    },
+    {
+      "file": "AimDashboard-CLBwH74F.js",
+      "bytes": 119807,
+      "gzipBytes": 40416,
+      "brotliBytes": 34086
+    },
+    {
+      "file": "EpicSession-CFiFByJ5.js",
+      "bytes": 247892,
+      "gzipBytes": 57051,
+      "brotliBytes": 48360
+    },
+    {
+      "file": "GameStage-BRWz_0WL.js",
+      "bytes": 23311,
+      "gzipBytes": 8298,
+      "brotliBytes": 7157
+    },
+    {
+      "file": "Input-DIgpTOOh.js",
+      "bytes": 49796,
+      "gzipBytes": 18598,
+      "brotliBytes": 16211
+    },
+    {
+      "file": "LiveRecoil-DpX0G3EV.js",
+      "bytes": 2329,
+      "gzipBytes": 1213,
+      "brotliBytes": 1055
+    },
+    {
+      "file": "Runtime-mKd7Jmfg.js",
+      "bytes": 189189,
+      "gzipBytes": 64927,
+      "brotliBytes": 55254
+    },
+    {
+      "file": "StreamingStage-CL8Si6dg.js",
+      "bytes": 15203,
+      "gzipBytes": 5827,
+      "brotliBytes": 5001
+    },
+    {
+      "file": "TacticalAssessment-CquKnG3K.js",
+      "bytes": 6450,
+      "gzipBytes": 3035,
+      "brotliBytes": 2566
+    },
+    {
+      "file": "TacticalAssessment-D2Lm2P-X.css",
+      "bytes": 1469,
+      "gzipBytes": 610,
+      "brotliBytes": 481
+    },
+    {
+      "file": "analysis.worker-aFOMcMeF.js",
+      "bytes": 9441,
+      "gzipBytes": 4218,
+      "brotliBytes": 3786
+    },
+    {
+      "file": "index-Ce9F4pGV.js",
+      "bytes": 192241,
+      "gzipBytes": 62041,
+      "brotliBytes": 49596
+    },
+    {
+      "file": "index-pA0QxRni.css",
+      "bytes": 135073,
+      "gzipBytes": 26954,
+      "brotliBytes": 22934
+    },
+    {
+      "file": "react-C4x5mbfE.js",
+      "bytes": 223171,
+      "gzipBytes": 69219,
+      "brotliBytes": 59560
+    },
+    {
+      "file": "statistics-zktoDNT8.js",
+      "bytes": 2659,
+      "gzipBytes": 1062,
+      "brotliBytes": 989
+    },
+    {
+      "file": "three-D9HCG2cD.js",
+      "bytes": 572606,
+      "gzipBytes": 145239,
+      "brotliBytes": 118856
+    }
+  ],
+  "allJSAndCSS": {
+    "bytes": 1809589,
+    "gzipBytes": 512429,
+    "brotliBytes": 429149
+  },
+  "manifest": {
+    "_AimDashboard-C2M0MM7B.css": {
+      "file": "assets/AimDashboard-C2M0MM7B.css",
+      "src": "_AimDashboard-C2M0MM7B.css"
+    },
+    "_AimDashboard-CLBwH74F.js": {
+      "file": "assets/AimDashboard-CLBwH74F.js",
+      "name": "AimDashboard",
+      "isDynamicEntry": true,
+      "imports": [
+        "index.html",
+        "_react-C4x5mbfE.js",
+        "_Input-DIgpTOOh.js"
+      ],
+      "dynamicImports": [
+        "src/aim/precision/TacticalAssessment.tsx"
+      ],
+      "css": [
+        "assets/AimDashboard-C2M0MM7B.css"
+      ]
+    },
+    "_Input-DIgpTOOh.js": {
+      "file": "assets/Input-DIgpTOOh.js",
+      "name": "Input",
+      "imports": [
+        "index.html"
+      ]
+    },
+    "_LiveRecoil-DpX0G3EV.js": {
+      "file": "assets/LiveRecoil-DpX0G3EV.js",
+      "name": "LiveRecoil",
+      "imports": [
+        "_react-C4x5mbfE.js",
+        "index.html"
+      ]
+    },
+    "_Runtime-mKd7Jmfg.js": {
+      "file": "assets/Runtime-mKd7Jmfg.js",
+      "name": "Runtime",
+      "imports": [
+        "_react-C4x5mbfE.js",
+        "index.html",
+        "_three-D9HCG2cD.js",
+        "_Input-DIgpTOOh.js",
+        "_statistics-zktoDNT8.js"
+      ]
+    },
+    "_StreamingStage-CL8Si6dg.js": {
+      "file": "assets/StreamingStage-CL8Si6dg.js",
+      "name": "StreamingStage",
+      "isDynamicEntry": true,
+      "imports": [
+        "index.html",
+        "_react-C4x5mbfE.js",
+        "_LiveRecoil-DpX0G3EV.js"
+      ],
+      "dynamicImports": [
+        "src/streaming/EpicSession.ts"
+      ]
+    },
+    "_react-C4x5mbfE.js": {
+      "file": "assets/react-C4x5mbfE.js",
+      "name": "react"
+    },
+    "_statistics-zktoDNT8.js": {
+      "file": "assets/statistics-zktoDNT8.js",
+      "name": "statistics"
+    },
+    "_three-D9HCG2cD.js": {
+      "file": "assets/three-D9HCG2cD.js",
+      "name": "three"
+    },
+    "index.html": {
+      "file": "assets/index-Ce9F4pGV.js",
+      "name": "index",
+      "src": "index.html",
+      "isEntry": true,
+      "imports": [
+        "_react-C4x5mbfE.js",
+        "_three-D9HCG2cD.js"
+      ],
+      "dynamicImports": [
+        "src/components/GameStage.tsx",
+        "_AimDashboard-CLBwH74F.js",
+        "_StreamingStage-CL8Si6dg.js"
+      ],
+      "css": [
+        "assets/index-pA0QxRni.css"
+      ]
+    },
+    "src/aim/precision/TacticalAssessment.tsx": {
+      "file": "assets/TacticalAssessment-CquKnG3K.js",
+      "name": "TacticalAssessment",
+      "src": "src/aim/precision/TacticalAssessment.tsx",
+      "isDynamicEntry": true,
+      "imports": [
+        "_react-C4x5mbfE.js",
+        "_Runtime-mKd7Jmfg.js",
+        "index.html",
+        "_AimDashboard-CLBwH74F.js",
+        "_three-D9HCG2cD.js",
+        "_Input-DIgpTOOh.js",
+        "_statistics-zktoDNT8.js"
+      ],
+      "css": [
+        "assets/TacticalAssessment-D2Lm2P-X.css"
+      ]
+    },
+    "src/components/GameStage.tsx": {
+      "file": "assets/GameStage-BRWz_0WL.js",
+      "name": "GameStage",
+      "src": "src/components/GameStage.tsx",
+      "isDynamicEntry": true,
+      "imports": [
+        "_react-C4x5mbfE.js",
+        "index.html",
+        "_Runtime-mKd7Jmfg.js",
+        "_three-D9HCG2cD.js",
+        "_LiveRecoil-DpX0G3EV.js",
+        "_Input-DIgpTOOh.js",
+        "_statistics-zktoDNT8.js"
+      ]
+    },
+    "src/streaming/EpicSession.ts": {
+      "file": "assets/EpicSession-CFiFByJ5.js",
+      "name": "EpicSession",
+      "src": "src/streaming/EpicSession.ts",
+      "isDynamicEntry": true,
+      "imports": [
+        "_statistics-zktoDNT8.js",
+        "_StreamingStage-CL8Si6dg.js",
+        "index.html",
+        "_react-C4x5mbfE.js",
+        "_three-D9HCG2cD.js",
+        "_LiveRecoil-DpX0G3EV.js"
+      ]
+    }
+  }
+}

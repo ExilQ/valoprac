@@ -1,0 +1,21 @@
+{
+  "page": "/valorant-aim-trainer.html",
+  "preview": "http://terminal.local:4173/",
+  "desktopScreenshot": "docs/search/intro-desktop.jpg",
+  "imageSize": [
+    1348,
+    926
+  ],
+  "checks": {
+    "introductionRendered": true,
+    "routineAnchorNavigates": true,
+    "homepageIntroductionAndLinksRendered": true,
+    "canonicalHTMLPages": 7,
+    "generatedAssetResponsesVerified": 69
+  },
+  "limits": {
+    "mobileBrowserLayoutTested": false,
+    "searchRankingVerified": false,
+    "googleSearchConsoleSubmitted": false
+  }
+}

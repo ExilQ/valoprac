@@ -1,0 +1,99 @@
+{
+  "url": "https://valoprac.trade",
+  "measuredAt": "2026-10-31T10:31:48.865Z",
+  "environment": "Fresh Chromium154, Linux headless SwiftShader,1366x768, anonymous production HTTPS, normal TLS verification",
+  "method": "Navigation/resource timing encodedBodySize, cold browser context; four-second settling after networkidle. Network/CDN timing is observational, not controlled download-speed benchmark.",
+  "elapsedWallMs": 11627,
+  "navigation": [
+    {
+      "duration": 1560.3999999999069,
+      "encodedBodySize": 1622,
+      "decodedBodySize": 1622,
+      "transferSize": 1922
+    }
+  ],
+  "resources": [
+    {
+      "name": "https://valoprac.trade/assets/index-Ce9F4pGV.js",
+      "initiatorType": "script",
+      "encodedBodySize": 61142,
+      "decodedBodySize": 192241,
+      "transferSize": 61442,
+      "duration": 147.5
+    },
+    {
+      "name": "https://valoprac.trade/assets/react-C4x5mbfE.js",
+      "initiatorType": "other",
+      "encodedBodySize": 69066,
+      "decodedBodySize": 223171,
+      "transferSize": 69366,
+      "duration": 548.8000000000466
+    },
+    {
+      "name": "https://valoprac.trade/assets/three-D9HCG2cD.js",
+      "initiatorType": "other",
+      "encodedBodySize": 143766,
+      "decodedBodySize": 572606,
+      "transferSize": 144066,
+      "duration": 638
+    },
+    {
+      "name": "https://valoprac.trade/assets/index-pA0QxRni.css",
+      "initiatorType": "link",
+      "encodedBodySize": 26778,
+      "decodedBodySize": 135073,
+      "transferSize": 27078,
+      "duration": 548.4000000001397
+    },
+    {
+      "name": "https://valoprac.trade/assets/GameStage-BRWz_0WL.js",
+      "initiatorType": "script",
+      "encodedBodySize": 8167,
+      "decodedBodySize": 23311,
+      "transferSize": 8467,
+      "duration": 100.29999999981374
+    },
+    {
+      "name": "https://valoprac.trade/assets/Runtime-mKd7Jmfg.js",
+      "initiatorType": "script",
+      "encodedBodySize": 64523,
+      "decodedBodySize": 189189,
+      "transferSize": 64823,
+      "duration": 131.69999999995343
+    },
+    {
+      "name": "https://valoprac.trade/assets/Input-DIgpTOOh.js",
+      "initiatorType": "script",
+      "encodedBodySize": 18374,
+      "decodedBodySize": 49796,
+      "transferSize": 18674,
+      "duration": 107
+    },
+    {
+      "name": "https://valoprac.trade/assets/statistics-zktoDNT8.js",
+      "initiatorType": "script",
+      "encodedBodySize": 1067,
+      "decodedBodySize": 2659,
+      "transferSize": 1367,
+      "duration": 224.19999999995343
+    },
+    {
+      "name": "https://valoprac.trade/assets/LiveRecoil-DpX0G3EV.js",
+      "initiatorType": "script",
+      "encodedBodySize": 1198,
+      "decodedBodySize": 2329,
+      "transferSize": 1498,
+      "duration": 99.5999999998603
+    },
+    {
+      "name": "https://valoprac.trade/favicon.svg",
+      "initiatorType": "other",
+      "encodedBodySize": 182,
+      "decodedBodySize": 221,
+      "transferSize": 482,
+      "duration": 93.69999999995343
+    }
+  ],
+  "totalEncodedBytes": 395885,
+  "errors": []
+}

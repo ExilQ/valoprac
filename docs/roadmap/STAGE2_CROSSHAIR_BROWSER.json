@@ -1,0 +1,144 @@
+{
+  "issues": [
+    "I7",
+    "I8"
+  ],
+  "browser": "154.0.8037.57",
+  "origin": "http://127.0.0.1:4179",
+  "completedAt": "2026-11-01T02:34:38.747Z",
+  "checks": [
+    {
+      "name": "actual UI supported code roundtrip 1",
+      "passed": true,
+      "bytes": 217,
+      "primaryEquivalent": true,
+      "adsEquivalent": true,
+      "dynamicCrosshair": false
+    },
+    {
+      "name": "actual UI supported code roundtrip 2",
+      "passed": true,
+      "bytes": 217,
+      "primaryEquivalent": true,
+      "adsEquivalent": true,
+      "dynamicCrosshair": false
+    },
+    {
+      "name": "actual UI supported code roundtrip 3",
+      "passed": true,
+      "bytes": 245,
+      "primaryEquivalent": true,
+      "adsEquivalent": true,
+      "dynamicCrosshair": false
+    },
+    {
+      "name": "actual UI supported code roundtrip 4",
+      "passed": true,
+      "bytes": 217,
+      "primaryEquivalent": true,
+      "adsEquivalent": true,
+      "dynamicCrosshair": false
+    },
+    {
+      "name": "actual UI supported code roundtrip 5",
+      "passed": true,
+      "bytes": 217,
+      "primaryEquivalent": true,
+      "adsEquivalent": true,
+      "dynamicCrosshair": false
+    },
+    {
+      "name": "actual clipboard copy",
+      "passed": true
+    },
+    {
+      "name": "malformed import preserves settings and reports validation error",
+      "passed": true,
+      "message": "__proto__: 지원하지 않는 조준선 항목입니다."
+    },
+    {
+      "name": "local profile restored after reload and applied",
+      "passed": true
+    },
+    {
+      "name": "actual layout and reticle centers 390x844",
+      "passed": true,
+      "width": 390,
+      "scrollWidth": 390,
+      "reticles": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ]
+    },
+    {
+      "name": "actual layout and reticle centers 1366x768",
+      "passed": true,
+      "width": 1366,
+      "scrollWidth": 1366,
+      "reticles": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ]
+    },
+    {
+      "name": "actual layout and reticle centers 2560x1440",
+      "passed": true,
+      "width": 2560,
+      "scrollWidth": 2560,
+      "reticles": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ]
+    },
+    {
+      "name": "actual layout and reticle centers 3440x1440",
+      "passed": true,
+      "width": 3440,
+      "scrollWidth": 3440,
+      "reticles": [
+        {
+          "dx": 0,
+          "dy": 0
+        },
+        {
+          "dx": 0,
+          "dy": 0
+        }
+      ]
+    },
+    {
+      "name": "local profile deletion",
+      "passed": true
+    },
+    {
+      "name": "actual 0.5/800 displayed units",
+      "passed": true,
+      "sensitivity": 0.5,
+      "dpi": 800,
+      "edpi": 400,
+      "cm360": 32.65714285714285,
+      "counts": 10285.714285714284
+    }
+  ],
+  "errors": [],
+  "nativeVALORANTClientVerified": false,
+  "passed": true
+}

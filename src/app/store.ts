@@ -1,3 +1,4 @@
+import type {SimulationOptions} from '../training/platform/SessionOptions';
 import { navigate,TAB_PATHS } from './navigation';
 import {automaticGraphicsPatch} from '../config/graphicsPolicy';
 import { create } from 'zustand';
@@ -8,18 +9,19 @@ export type Screen='menu'|'training'|'results';
 export interface GraphicsObservation {kind:string;renderer:string;reason:string;recommendLow:boolean;}
 interface AppState {
   graphics:GraphicsObservation|null;graphicsDismissed:boolean;reportGraphics:(observation:GraphicsObservation)=>void;
-  screen:Screen;mode:Mode;weapon:WeaponId;settings:Settings;locked:boolean;paused:boolean;
-  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream'|'aim';
+  screen:Screen;mode:Mode;weapon:WeaponId;settings:Settings;sessionOptions:SimulationOptions;locked:boolean;paused:boolean;
+  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream'|'aim'|'tools';
   updateSettings:(patch:Partial<Settings>)=>void;setMode:(mode:Mode)=>void;setWeapon:(weapon:WeaponId)=>void;
-  setTab:(tab:AppState['activeTab'])=>void;start:()=>void;finish:(session:SessionData)=>Promise<void>;menu:()=>void;refreshHistory:()=>Promise<void>;
+  setTab:(tab:AppState['activeTab'])=>void;start:()=>void;startSession:(options:SimulationOptions,weapon?:WeaponId)=>void;finish:(session:SessionData,keepTraining?:boolean)=>Promise<void>;menu:()=>void;refreshHistory:()=>Promise<void>;
 }
 export const useApp=create<AppState>((set,get)=>({
   graphics:null,graphicsDismissed:false,reportGraphics:graphics=>{set({graphics});const settings={...get().settings,...automaticGraphicsPatch(get().settings,graphics.recommendLow)};persistSettings(settings);set({settings});},
-  screen:'menu',mode:'free',weapon:'rifleA',settings:loadSettings(),locked:false,paused:true,history:[],result:null,notice:'',activeTab:'training',
+  screen:'menu',mode:'free',weapon:'rifleA',settings:loadSettings(),sessionOptions:{},locked:false,paused:true,history:[],result:null,notice:'',activeTab:'training',
   updateSettings:patch=>{const settings=sanitizeSettings({...get().settings,...patch});Object.assign(settings,automaticGraphicsPatch(settings,get().graphics?.recommendLow??false));const saved=persistSettings(settings);set({settings,...(!saved?{notice:'설정을 저장할 수 없습니다. 브라우저 저장 공간을 확인하세요.'}:{})});},
   setMode:mode=>set({mode}),setWeapon:weapon=>set({weapon}),setTab:activeTab=>{navigate(TAB_PATHS[activeTab]);set({activeTab,screen:'menu',locked:false,paused:true});},
-  start:()=>{navigate('/training.html');set({screen:'training',paused:true,result:null,notice:''});},
-  finish:async session=>{navigate('/results.html');set({screen:'results',result:session,locked:false,paused:true});try{await saveSession(session);await get().refreshHistory();}catch{set({notice:'이번 결과를 저장하지 못했습니다. 현재 결과는 화면에서 확인할 수 있습니다.'});}},
-  menu:()=>{navigate('/');set({screen:'menu',activeTab:'training',locked:false,paused:true});},
+  start:()=>{navigate('/training.html');set({screen:'training',paused:true,result:null,notice:'',sessionOptions:{}});},
+  startSession:(options,weapon)=>{const scenario=options.scenario;const patch:Partial<Settings>=scenario?{practiceMap:scenario.template,seed:scenario.seed,targetCount:scenario.bots.length,defenderSkill:scenario.rules.difficulty,combatMode:scenario.rules.combatMode,defenderWeapon:'mixed',exposureLimit:scenario.rules.exposureLimit,infiniteReserve:scenario.rules.infiniteReserve,autoReload:scenario.rules.autoReload,analysisWall:false,drill:'none'}:options.exercise?{practiceMap:'range',duration:60,targetCount:1,analysisWall:false,drill:'none'}:{};get().updateSettings(patch);navigate('/training.html');set({screen:'training',mode:'free',weapon:scenario?.player.weapon??weapon??get().weapon,sessionOptions:structuredClone(options),paused:true,locked:false,result:null,notice:''});},
+  finish:async(session,keepTraining=false)=>{if(!keepTraining)navigate('/results.html');set({screen:keepTraining?'training':'results',result:session,locked:false,paused:true});try{await saveSession(session);await get().refreshHistory();}catch{set({notice:'이번 결과를 저장하지 못했습니다. 현재 결과는 화면에서 확인할 수 있습니다.'});}},
+  menu:()=>{navigate('/');set({screen:'menu',activeTab:'training',locked:false,paused:true,sessionOptions:{}});},
   refreshHistory:async()=>{try{set({history:await loadHistory()});}catch{set({notice:'훈련 기록을 불러오지 못했습니다. 브라우저의 로컬 저장 허용을 확인하세요.'});}}
 }));

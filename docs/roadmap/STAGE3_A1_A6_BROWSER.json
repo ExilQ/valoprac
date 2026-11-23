@@ -1,0 +1,4651 @@
+{
+  "issueIds": [
+    "A1",
+    "A6",
+    "A2"
+  ],
+  "passed": true,
+  "functionalAcceptancePassed": true,
+  "coldStartupTargetPassed": false,
+  "sourcePatchAtBrowserCapture": "09.01 /9.0.1 frozen Stage3 snapshot; not production release",
+  "completedAt": "2026-11-04T10:26:20.408Z",
+  "checks": [
+    {
+      "name": "warmup uses actual prepared WebGL resources with active draws suspended for input isolation"
+    },
+    {
+      "name": "trusted browser firing after equip readiness produces real weapon shots",
+      "value": {
+        "shots": 2,
+        "enabledTargets": 1,
+        "kind": "warmup",
+        "time": 2.175,
+        "events": [
+          {
+            "trusted": true,
+            "button": 0,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "button": 0,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "button": 0,
+            "locked": true,
+            "time": 2.058333333333333
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual browser shots and full60s warmup reproduce through shared replay",
+      "value": {
+        "verified": {
+          "passed": true,
+          "mismatches": [],
+          "checksum": "8e2785f63b5493ce",
+          "score": 0,
+          "shots": 2,
+          "hits": 0,
+          "deaths": 0
+        },
+        "bytes": 4129,
+        "header": {
+          "gameVersion": "9.0.1",
+          "simulationVersion": "valoprac-replay-simulation-2",
+          "movementVersion": "dual-movement-1.1.0",
+          "projectionVersion": "horizontal-angular-division-1",
+          "calibrationFingerprint": "b9c4ab53c0512d05",
+          "createdAt": 1793787944218,
+          "fixedHz": 120,
+          "map": "range",
+          "physics": "valorant",
+          "seed": 1947,
+          "initial": {
+            "mode": "free",
+            "weapon": "rifleA",
+            "settings": {
+              "movementTools": {
+                "enabled": false,
+                "showTrajectory": true,
+                "showGhost": true,
+                "bindings": {
+                  "save": "KeyK",
+                  "restore": "KeyL",
+                  "takeoff": "KeyT",
+                  "reset": "KeyY"
+                }
+              },
+              "movementPhysics": "valorant",
+              "csMovementPreset": "cs2",
+              "physicsDiagnostics": false,
+              "wheelJump": "off",
+              "combatMode": "gunfight",
+              "defenderSkill": "normal",
+              "defenderAimSpeed": 180,
+              "defenderAimAcceleration": 1200,
+              "defenderStability": 0.7,
+              "defenderFirstShotError": 0.8,
+              "defenderRecoilControl": 0.6,
+              "defenderTactics": 0.55,
+              "botDiagnostics": false,
+              "jumpBufferMs": 80,
+              "penetrationDiagnostics": false,
+              "gameplayRevision": 2,
+              "aimTelemetry": true,
+              "peekingTimed": false,
+              "operatorScopeMode": "toggle",
+              "operatorAutoRescope": false,
+              "operatorZoomBinding": "KeyV",
+              "peekScenario": "free",
+              "defenderWeapon": "mixed",
+              "defenderReaction": 0.42,
+              "defenderAccuracy": 0.75,
+              "defenderReposition": 0.45,
+              "randomDefenders": true,
+              "practiceMap": "range",
+              "drill": "none",
+              "crouchMode": "hold",
+              "inputDiagnostics": false,
+              "adsDotSize": 2,
+              "botDifficulty": "normal",
+              "exposureEnabled": true,
+              "exposureLimit": 3,
+              "exposureMode": "continuous",
+              "footstepHud": true,
+              "soundMinimap": true,
+              "footstepVolume": 0.7,
+              "stepPerMeter": 0.625,
+              "stepWalkingGain": 0,
+              "stepWalkingDecay": 0.02,
+              "stepStationaryDecay": 3.5,
+              "stepStationaryVelocity": 0.035,
+              "stepStationaryDelay": 0.12,
+              "stepAudibleVelocity": 2.7,
+              "stepThreshold": 1,
+              "stepGraceDistance": 0.2,
+              "stepHearingRadius": 20,
+              "frameLimit": 0,
+              "hudScale": 1,
+              "showHeadshotConfirmation": true,
+              "showControlHints": true,
+              "interfaceVolume": 0.2,
+              "adsSensitivity": 1,
+              "scopeSensitivity25": 1,
+              "scopeSensitivity5": 1,
+              "autoGraphics": false,
+              "adsMode": "toggle",
+              "bindings": {
+                "forward": "KeyW",
+                "backward": "KeyS",
+                "left": "KeyA",
+                "right": "KeyD",
+                "walk": "ShiftLeft",
+                "crouch": "KeyC",
+                "jump": "Space",
+                "reload": "KeyR",
+                "weapons": "KeyB"
+              },
+              "graphicsPreset": "low",
+              "shadowQuality": "off",
+              "textureQuality": "medium",
+              "postProcessing": false,
+              "ambientOcclusion": false,
+              "effectsQuality": "low",
+              "premiumTheme": true,
+              "firingVolume": 0.85,
+              "handlingVolume": 0.65,
+              "feedbackVolume": 0.7,
+              "targetCount": 1,
+              "targetSize": 1,
+              "targetSpeed": 1,
+              "targetDistance": 20,
+              "spawnInterval": 0.6,
+              "eliminationRule": "head",
+              "infiniteReserve": true,
+              "autoReload": true,
+              "practiceHud": true,
+              "recoilAnalysis": false,
+              "analysisWall": false,
+              "sensitivity": 1.5,
+              "degreesPerCount": 0.07,
+              "dpi": 800,
+              "fov": 103,
+              "duration": 60,
+              "seed": 1947,
+              "crosshairColor": "#e8fcf3",
+              "crosshairThickness": 2,
+              "crosshairGap": 5,
+              "crosshairLength": 7,
+              "crosshairAdvanced": {
+                "version": 1,
+                "primary": {
+                  "outline": true,
+                  "outlineThickness": 1,
+                  "outlineOpacity": 0.75,
+                  "centerDot": true,
+                  "centerSize": 1,
+                  "centerOpacity": 1,
+                  "innerEnabled": true,
+                  "innerOpacity": 1,
+                  "outer": {
+                    "enabled": false,
+                    "opacity": 0.5,
+                    "length": 3,
+                    "thickness": 2,
+                    "gap": 12
+                  }
+                },
+                "adsMode": "dot",
+                "ads": {
+                  "color": "#e8fcf3",
+                  "outline": true,
+                  "outlineThickness": 1,
+                  "outlineOpacity": 0.75,
+                  "centerDot": true,
+                  "centerSize": 2,
+                  "centerOpacity": 1,
+                  "inner": {
+                    "enabled": false,
+                    "opacity": 1,
+                    "length": 7,
+                    "thickness": 2,
+                    "gap": 5
+                  },
+                  "outer": {
+                    "enabled": false,
+                    "opacity": 1,
+                    "length": 7,
+                    "thickness": 2,
+                    "gap": 5
+                  }
+                },
+                "weaponVisibility": {
+                  "rifleA": true,
+                  "rifleB": true,
+                  "sheriff": true,
+                  "operator": true
+                }
+              },
+              "dynamicCrosshair": true,
+              "brakingHud": true,
+              "idealCompensation": false,
+              "volume": 0.35,
+              "renderScale": 0.5,
+              "antialias": false,
+              "showPerformance": true,
+              "behavior": "random"
+            },
+            "attached": true,
+            "options": {
+              "exercise": {
+                "schema": 1,
+                "kind": "warmup",
+                "durationSeconds": 60
+              }
+            }
+          }
+        },
+        "final": {
+          "checksum": "8e2785f63b5493ce",
+          "score": 0,
+          "shots": 2,
+          "hits": 0,
+          "deaths": 0,
+          "tick": 7200,
+          "time": 60
+        },
+        "report": {
+          "schema": 1,
+          "version": "exercises-1.0.0",
+          "kind": "warmup",
+          "durationSeconds": 60,
+          "elapsedSeconds": 60,
+          "completed": true,
+          "score": 0,
+          "warmup": {
+            "appearances": 29,
+            "escaped": 28,
+            "eliminations": 0,
+            "shots": 2,
+            "hits": 0,
+            "headshots": 0,
+            "hitAccuracy": 0,
+            "firstTargetAt": 0,
+            "targetActive": false,
+            "nextTargetAt": null
+          }
+        },
+        "markers": [
+          {
+            "kind": "settings",
+            "time": 0
+          },
+          {
+            "kind": "weapon",
+            "time": 0
+          },
+          {
+            "kind": "settings",
+            "time": 0
+          },
+          {
+            "kind": "shot",
+            "time": 2.0666666666666664
+          },
+          {
+            "kind": "shot",
+            "time": 2.175
+          }
+        ]
+      }
+    },
+    {
+      "name": "flash uses an actual authoritative incoming cue",
+      "value": {
+        "time": 1.1583333333333332,
+        "cue": {
+          "id": 1,
+          "cueTime": 1.15,
+          "deadline": 1.95,
+          "source": {
+            "x": 0,
+            "y": 1.64,
+            "z": -1
+          },
+          "initialDirection": {
+            "x": 0,
+            "y": 0,
+            "z": -1
+          },
+          "movementOnset": null,
+          "maximumTurnDegrees": 0,
+          "completionTime": null,
+          "success": null
+        },
+        "yaw": 0
+      }
+    },
+    {
+      "name": "trusted CDP pointer movement observation before any fallback",
+      "value": {
+        "report": {
+          "schema": 1,
+          "version": "exercises-1.0.0",
+          "kind": "flash",
+          "durationSeconds": 60,
+          "elapsedSeconds": 1.225,
+          "completed": false,
+          "score": 1,
+          "flash": {
+            "cues": 1,
+            "successes": 1,
+            "failures": 0,
+            "successRate": 100,
+            "meanOnsetSeconds": 0.01666666666666683,
+            "meanCompletionSeconds": 0.01666666666666683,
+            "events": [
+              {
+                "id": 1,
+                "cueTime": 1.15,
+                "deadline": 1.95,
+                "source": {
+                  "x": 0,
+                  "y": 1.64,
+                  "z": -1
+                },
+                "initialDirection": {
+                  "x": 0,
+                  "y": 0,
+                  "z": -1
+                },
+                "movementOnset": 1.1666666666666667,
+                "maximumTurnDegrees": 137.24071104242782,
+                "completionTime": 1.1666666666666667,
+                "success": true
+              }
+            ],
+            "active": null
+          }
+        },
+        "yaw": -2.413528556120359,
+        "events": [
+          {
+            "trusted": true,
+            "x": 0,
+            "y": 0,
+            "at": 4327.399999999907,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "x": 194,
+            "y": -31,
+            "at": 14824.299999999814,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "x": 140,
+            "y": -173,
+            "at": 24531.399999999907,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": -722,
+            "y": 266,
+            "at": 29556.700000000186,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 565,
+            "y": -209,
+            "at": 29715.799999999814,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": -177,
+            "y": 357,
+            "at": 29810.700000000186,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 194,
+            "y": -241,
+            "at": 36911.60000000009,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 1317,
+            "y": -99,
+            "at": 39417.299999999814,
+            "locked": true,
+            "running": true,
+            "kind": "flash"
+          }
+        ]
+      }
+    },
+    {
+      "name": "manual relative input changes actual camera direction and records flash success",
+      "value": {
+        "report": {
+          "schema": 1,
+          "version": "exercises-1.0.0",
+          "kind": "flash",
+          "durationSeconds": 60,
+          "elapsedSeconds": 1.225,
+          "completed": false,
+          "score": 1,
+          "flash": {
+            "cues": 1,
+            "successes": 1,
+            "failures": 0,
+            "successRate": 100,
+            "meanOnsetSeconds": 0.01666666666666683,
+            "meanCompletionSeconds": 0.01666666666666683,
+            "events": [
+              {
+                "id": 1,
+                "cueTime": 1.15,
+                "deadline": 1.95,
+                "source": {
+                  "x": 0,
+                  "y": 1.64,
+                  "z": -1
+                },
+                "initialDirection": {
+                  "x": 0,
+                  "y": 0,
+                  "z": -1
+                },
+                "movementOnset": 1.1666666666666667,
+                "maximumTurnDegrees": 137.24071104242782,
+                "completionTime": 1.1666666666666667,
+                "success": true
+              }
+            ],
+            "active": null
+          }
+        },
+        "yaw": -2.413528556120359,
+        "events": [
+          {
+            "trusted": true,
+            "x": 0,
+            "y": 0,
+            "at": 4327.399999999907,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "x": 194,
+            "y": -31,
+            "at": 14824.299999999814,
+            "locked": false
+          },
+          {
+            "trusted": true,
+            "x": 140,
+            "y": -173,
+            "at": 24531.399999999907,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": -722,
+            "y": 266,
+            "at": 29556.700000000186,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 565,
+            "y": -209,
+            "at": 29715.799999999814,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": -177,
+            "y": 357,
+            "at": 29810.700000000186,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 194,
+            "y": -241,
+            "at": 36911.60000000009,
+            "locked": false,
+            "running": false,
+            "kind": "warmup"
+          },
+          {
+            "trusted": true,
+            "x": 1317,
+            "y": -99,
+            "at": 39417.299999999814,
+            "locked": true,
+            "running": true,
+            "kind": "flash"
+          }
+        ],
+        "activeDraws": 35
+      }
+    },
+    {
+      "name": "completed flash task score andcue/turnmarkers reproduce twice identically",
+      "value": {
+        "first": {
+          "passed": true,
+          "mismatches": [],
+          "checksum": "e3383a3151e7dfc3",
+          "score": 1,
+          "shots": 0,
+          "hits": 0,
+          "deaths": 0
+        },
+        "second": {
+          "passed": true,
+          "mismatches": [],
+          "checksum": "e3383a3151e7dfc3",
+          "score": 1,
+          "shots": 0,
+          "hits": 0,
+          "deaths": 0
+        },
+        "header": {
+          "gameVersion": "9.0.1",
+          "simulationVersion": "valoprac-replay-simulation-2",
+          "movementVersion": "dual-movement-1.1.0",
+          "projectionVersion": "horizontal-angular-division-1",
+          "calibrationFingerprint": "b9c4ab53c0512d05",
+          "createdAt": 1793787968183,
+          "fixedHz": 120,
+          "map": "range",
+          "physics": "valorant",
+          "seed": 1947,
+          "initial": {
+            "mode": "free",
+            "weapon": "rifleA",
+            "settings": {
+              "movementTools": {
+                "enabled": false,
+                "showTrajectory": true,
+                "showGhost": true,
+                "bindings": {
+                  "save": "KeyK",
+                  "restore": "KeyL",
+                  "takeoff": "KeyT",
+                  "reset": "KeyY"
+                }
+              },
+              "movementPhysics": "valorant",
+              "csMovementPreset": "cs2",
+              "physicsDiagnostics": false,
+              "wheelJump": "off",
+              "combatMode": "gunfight",
+              "defenderSkill": "normal",
+              "defenderAimSpeed": 180,
+              "defenderAimAcceleration": 1200,
+              "defenderStability": 0.7,
+              "defenderFirstShotError": 0.8,
+              "defenderRecoilControl": 0.6,
+              "defenderTactics": 0.55,
+              "botDiagnostics": false,
+              "jumpBufferMs": 80,
+              "penetrationDiagnostics": false,
+              "gameplayRevision": 2,
+              "aimTelemetry": true,
+              "peekingTimed": false,
+              "operatorScopeMode": "toggle",
+              "operatorAutoRescope": false,
+              "operatorZoomBinding": "KeyV",
+              "peekScenario": "free",
+              "defenderWeapon": "mixed",
+              "defenderReaction": 0.42,
+              "defenderAccuracy": 0.75,
+              "defenderReposition": 0.45,
+              "randomDefenders": true,
+              "practiceMap": "range",
+              "drill": "none",
+              "crouchMode": "hold",
+              "inputDiagnostics": false,
+              "adsDotSize": 2,
+              "botDifficulty": "normal",
+              "exposureEnabled": true,
+              "exposureLimit": 3,
+              "exposureMode": "continuous",
+              "footstepHud": true,
+              "soundMinimap": true,
+              "footstepVolume": 0.7,
+              "stepPerMeter": 0.625,
+              "stepWalkingGain": 0,
+              "stepWalkingDecay": 0.02,
+              "stepStationaryDecay": 3.5,
+              "stepStationaryVelocity": 0.035,
+              "stepStationaryDelay": 0.12,
+              "stepAudibleVelocity": 2.7,
+              "stepThreshold": 1,
+              "stepGraceDistance": 0.2,
+              "stepHearingRadius": 20,
+              "frameLimit": 0,
+              "hudScale": 1,
+              "showHeadshotConfirmation": true,
+              "showControlHints": true,
+              "interfaceVolume": 0.2,
+              "adsSensitivity": 1,
+              "scopeSensitivity25": 1,
+              "scopeSensitivity5": 1,
+              "autoGraphics": false,
+              "adsMode": "toggle",
+              "bindings": {
+                "forward": "KeyW",
+                "backward": "KeyS",
+                "left": "KeyA",
+                "right": "KeyD",
+                "walk": "ShiftLeft",
+                "crouch": "KeyC",
+                "jump": "Space",
+                "reload": "KeyR",
+                "weapons": "KeyB"
+              },
+              "graphicsPreset": "low",
+              "shadowQuality": "off",
+              "textureQuality": "medium",
+              "postProcessing": false,
+              "ambientOcclusion": false,
+              "effectsQuality": "low",
+              "premiumTheme": true,
+              "firingVolume": 0.85,
+              "handlingVolume": 0.65,
+              "feedbackVolume": 0.7,
+              "targetCount": 1,
+              "targetSize": 1,
+              "targetSpeed": 1,
+              "targetDistance": 20,
+              "spawnInterval": 0.6,
+              "eliminationRule": "head",
+              "infiniteReserve": true,
+              "autoReload": true,
+              "practiceHud": true,
+              "recoilAnalysis": false,
+              "analysisWall": false,
+              "sensitivity": 1.5,
+              "degreesPerCount": 0.07,
+              "dpi": 800,
+              "fov": 103,
+              "duration": 60,
+              "seed": 1947,
+              "crosshairColor": "#e8fcf3",
+              "crosshairThickness": 2,
+              "crosshairGap": 5,
+              "crosshairLength": 7,
+              "crosshairAdvanced": {
+                "version": 1,
+                "primary": {
+                  "outline": true,
+                  "outlineThickness": 1,
+                  "outlineOpacity": 0.75,
+                  "centerDot": true,
+                  "centerSize": 1,
+                  "centerOpacity": 1,
+                  "innerEnabled": true,
+                  "innerOpacity": 1,
+                  "outer": {
+                    "enabled": false,
+                    "opacity": 0.5,
+                    "length": 3,
+                    "thickness": 2,
+                    "gap": 12
+                  }
+                },
+                "adsMode": "dot",
+                "ads": {
+                  "color": "#e8fcf3",
+                  "outline": true,
+                  "outlineThickness": 1,
+                  "outlineOpacity": 0.75,
+                  "centerDot": true,
+                  "centerSize": 2,
+                  "centerOpacity": 1,
+                  "inner": {
+                    "enabled": false,
+                    "opacity": 1,
+                    "length": 7,
+                    "thickness": 2,
+                    "gap": 5
+                  },
+                  "outer": {
+                    "enabled": false,
+                    "opacity": 1,
+                    "length": 7,
+                    "thickness": 2,
+                    "gap": 5
+                  }
+                },
+                "weaponVisibility": {
+                  "rifleA": true,
+                  "rifleB": true,
+                  "sheriff": true,
+                  "operator": true
+                }
+              },
+              "dynamicCrosshair": true,
+              "brakingHud": true,
+              "idealCompensation": false,
+              "volume": 0.35,
+              "renderScale": 0.5,
+              "antialias": false,
+              "showPerformance": true,
+              "behavior": "random"
+            },
+            "attached": true,
+            "options": {
+              "exercise": {
+                "schema": 1,
+                "kind": "flash",
+                "durationSeconds": 60,
+                "responseWindowSeconds": 0.8,
+                "turnThresholdDegrees": 100
+              }
+            }
+          }
+        },
+        "final": {
+          "checksum": "e3383a3151e7dfc3",
+          "score": 1,
+          "shots": 0,
+          "hits": 0,
+          "deaths": 0,
+          "tick": 7200,
+          "time": 60
+        },
+        "bytes": 4497,
+        "markers": [
+          {
+            "time": 0,
+            "kind": "settings",
+            "label": "설정 변경"
+          },
+          {
+            "time": 0,
+            "kind": "weapon",
+            "label": "무기 변경"
+          },
+          {
+            "time": 0,
+            "kind": "settings",
+            "label": "설정 변경"
+          },
+          {
+            "time": 1.15,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 1.1666666666666667,
+            "kind": "turn",
+            "label": "회피 성공"
+          },
+          {
+            "time": 2.6416666666666666,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 3.4416666666666664,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 4.733333333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 5.533333333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 6.333333333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 7.133333333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 8.341666666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 9.141666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 9.141666666666667,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 10.308333333333334,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 11.108333333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 11.108333333333334,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 12.075,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 12.875,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 13.725,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 14.525,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 15.358333333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 16.15833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 17.116666666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 17.916666666666668,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 18.808333333333334,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 19.608333333333334,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 20.433333333333334,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 21.233333333333334,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 22.45,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 23.25,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 24.208333333333332,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 25.008333333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 26.125,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 26.925,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 27.866666666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 28.666666666666668,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 30.141666666666666,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 30.941666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 31.766666666666666,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 32.56666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 33.50833333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 34.30833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 35.09166666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 35.891666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 37.275,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 38.074999999999996,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 38.96666666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 39.766666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 40.90833333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 41.70833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 42.93333333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 43.73333333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 45.06666666666666,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 45.86666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 47.21666666666667,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 48.016666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 49.358333333333334,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 50.15833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 51.15833333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 51.95833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 52.75833333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 53.55833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 54.975,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 55.775,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 57.00833333333333,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 57.80833333333333,
+            "kind": "turn",
+            "label": "회피 미완료"
+          },
+          {
+            "time": 58.81666666666666,
+            "kind": "cue",
+            "label": "회피 신호"
+          },
+          {
+            "time": 59.61666666666666,
+            "kind": "turn",
+            "label": "회피 미완료"
+          }
+        ],
+        "report": {
+          "schema": 1,
+          "version": "exercises-1.0.0",
+          "kind": "flash",
+          "durationSeconds": 60,
+          "elapsedSeconds": 60,
+          "completed": true,
+          "score": 1,
+          "flash": {
+            "cues": 32,
+            "successes": 1,
+            "failures": 31,
+            "successRate": 3.125,
+            "meanOnsetSeconds": 0.01666666666666683,
+            "meanCompletionSeconds": 0.01666666666666683,
+            "events": [
+              {
+                "id": 1,
+                "cueTime": 1.15,
+                "deadline": 1.95,
+                "source": {
+                  "x": 0,
+                  "y": 1.64,
+                  "z": -1
+                },
+                "initialDirection": {
+                  "x": 0,
+                  "y": 0,
+                  "z": -1
+                },
+                "movementOnset": 1.1666666666666667,
+                "maximumTurnDegrees": 137.24071104242782,
+                "completionTime": 1.1666666666666667,
+                "success": true
+              },
+              {
+                "id": 2,
+                "cueTime": 2.6416666666666666,
+                "deadline": 3.4416666666666664,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 3,
+                "cueTime": 4.733333333333333,
+                "deadline": 5.533333333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 4,
+                "cueTime": 6.333333333333333,
+                "deadline": 7.133333333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 5,
+                "cueTime": 8.341666666666667,
+                "deadline": 9.141666666666667,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 6,
+                "cueTime": 10.308333333333334,
+                "deadline": 11.108333333333334,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 7,
+                "cueTime": 12.075,
+                "deadline": 12.875,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 8,
+                "cueTime": 13.725,
+                "deadline": 14.525,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 9,
+                "cueTime": 15.358333333333333,
+                "deadline": 16.15833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 10,
+                "cueTime": 17.116666666666667,
+                "deadline": 17.916666666666668,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 11,
+                "cueTime": 18.808333333333334,
+                "deadline": 19.608333333333334,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 12,
+                "cueTime": 20.433333333333334,
+                "deadline": 21.233333333333334,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 13,
+                "cueTime": 22.45,
+                "deadline": 23.25,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 14,
+                "cueTime": 24.208333333333332,
+                "deadline": 25.008333333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 15,
+                "cueTime": 26.125,
+                "deadline": 26.925,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 16,
+                "cueTime": 27.866666666666667,
+                "deadline": 28.666666666666668,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 17,
+                "cueTime": 30.141666666666666,
+                "deadline": 30.941666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 18,
+                "cueTime": 31.766666666666666,
+                "deadline": 32.56666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 19,
+                "cueTime": 33.50833333333333,
+                "deadline": 34.30833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 20,
+                "cueTime": 35.09166666666667,
+                "deadline": 35.891666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 21,
+                "cueTime": 37.275,
+                "deadline": 38.074999999999996,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 22,
+                "cueTime": 38.96666666666667,
+                "deadline": 39.766666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 23,
+                "cueTime": 40.90833333333333,
+                "deadline": 41.70833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 24,
+                "cueTime": 42.93333333333333,
+                "deadline": 43.73333333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 25,
+                "cueTime": 45.06666666666666,
+                "deadline": 45.86666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 26,
+                "cueTime": 47.21666666666667,
+                "deadline": 48.016666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 27,
+                "cueTime": 49.358333333333334,
+                "deadline": 50.15833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 28,
+                "cueTime": 51.15833333333333,
+                "deadline": 51.95833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 29,
+                "cueTime": 52.75833333333333,
+                "deadline": 53.55833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 30,
+                "cueTime": 54.975,
+                "deadline": 55.775,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 31,
+                "cueTime": 57.00833333333333,
+                "deadline": 57.80833333333333,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              },
+              {
+                "id": 32,
+                "cueTime": 58.81666666666666,
+                "deadline": 59.61666666666666,
+                "source": {
+                  "x": 3.9270258852878923,
+                  "y": 2.7225998705619867,
+                  "z": 9.405274703867855
+                },
+                "initialDirection": {
+                  "x": 0.6545043142146487,
+                  "y": 0.18043331176033112,
+                  "z": 0.7342124506446425
+                },
+                "movementOnset": null,
+                "maximumTurnDegrees": 0,
+                "completionTime": null,
+                "success": false
+              }
+            ],
+            "active": null
+          }
+        }
+      }
+    }
+  ],
+  "timing": {
+    "coldModeActionToFirstTargetDrawMs": 13210.5,
+    "warmRetryActionToFirstTargetDrawMs": 441.1999999997206
+  },
+  "limits": [
+    "Headless Chromium SwiftShader; not physical mouse, GPU or display latency.",
+    "The range is prepared with actual paused WebGL frames; all active draws are suspended to isolate BrowserInput and fixed-step mechanics from >500ms SwiftShader stalls. Preparation and paused/results frames remain real WebGL.",
+    "Remaining session time after the browser input checks is advanced through the same authoritative Simulation.step, not a one-minute human trial.",
+    "Cold mode-action-to-first-target-render measurement13210.5ms exceeds the proposed3000ms target on this software renderer; one sample is not a physical integrated-GPU benchmark.",
+    "Warm retry441.2ms is a renderer-submission timing from a separate initial attempt, not input-to-photon latency or an averaged benchmark.",
+    "Captured browser replay headers remain9.0.1, while focused unit tests ran against the current unreleased10.0.0 source. The seven relevant mechanics/UI modules have identical hashes between capture snapshot and current source.",
+    "A17ms automated turn in the browser screenshot is a functional test event, not a human reaction-time result."
+  ],
+  "initialFullBrowserAttempt": {
+    "origin": "http://127.0.0.1:4223",
+    "checks": [
+      {
+        "name": "warmup enters real prepared 3D trainer with first target"
+      },
+      {
+        "name": "trusted firing uses the existing weapon and exactly one owned target",
+        "value": {
+          "shots": 0,
+          "options": {
+            "exercise": {
+              "schema": 1,
+              "kind": "warmup",
+              "durationSeconds": 60
+            }
+          },
+          "targets": 1
+        }
+      },
+      {
+        "name": "60-second task completes in inline results without destroying renderer",
+        "value": {
+          "time": 60,
+          "complete": true,
+          "seed": 1947
+        }
+      },
+      {
+        "name": "one-action warm retry recreates deterministic authority and retains prepared renderer",
+        "value": {
+          "drawMs": 441.1999999997206,
+          "ok": true,
+          "sameCanvas": true,
+          "time": 0,
+          "seed": 1947,
+          "initialPosition": [
+            2.9,
+            0,
+            -15
+          ],
+          "programs": 27,
+          "sameRenderer": true,
+          "clock": 0
+        }
+      },
+      {
+        "name": "paused English switch preserves canvas, simulation and time",
+        "value": {
+          "sameCanvas": true,
+          "sameState": true,
+          "sameTime": true
+        }
+      }
+    ],
+    "errors": [
+      "page.waitForFunction: Timeout 10000ms exceeded.\n    at /workspace/roadmap-qa/exercise-app-browser.mjs:15:620"
+    ],
+    "timing": {
+      "coldModeActionToFirstTargetDrawMs": 13210.5,
+      "warmRetryActionToFirstTargetDrawMs": 441.1999999997206
+    },
+    "limitations": [
+      "Headless Chromium SwiftShader, not physical GPU/input latency.",
+      "After trusted real mouse input, remaining session time is advanced using the same fixed-step Simulation for a fast completion/retry test; this is not a one-minute human trial."
+    ],
+    "body": "ⓘ\n회피 신호 · 시야를 돌리세요\n0° 회전 · 남은 0.22초\n훈련장 지도\n발생한 소리의 청취 반경 · 20미터\n아직 들리는 발소리 없음\n발소리 누적 게이지\n0%\n정지 · 회복\n다음 발소리 기준 100% · 소리 0회\n빠른 이동 약 1.80미터 여유\n훈련용 누적 모델 · 공식 게임 수치 아님\n이동과 정확도\n0.00\n미터/초\n정확도 준비\n키 해제 후\n—\n준비까지 예상\n0 밀리초\n최근 제동 발사 시점\n—\n물리 · 발로란트\n플래시 회피 훈련\n남은 시간\n00:49\n0\n회피 성공\n사격 통계\n발사 0 · 명중 0 · 빗나감 0\n명중률 0.0% · 헤드샷 0.0%\n밴달\n25 / 25\n예비 ∞\n\n우클릭 · 정조준\n\nW A S D\n이동\nShift\n걷기\nC / Ctrl\n앉기\nR\n재장전\nEsc\n설정\nB\n무기 선택\n4 프레임/초 · 지연 상위 5% 533.4 밀리초 · 120회/초 연산",
+    "passed": false,
+    "completedAt": "2026-11-04T10:16:47.278Z"
+  },
+  "initialAttemptInterpretation": {
+    "passed": false,
+    "genuinePassedAreas": [
+      "Prepared first target submission",
+      "Full60s inline results",
+      "Same renderer/canvas deterministic retry",
+      "Paused locale switch preserves simulation state"
+    ],
+    "incorrectlyNamedRow": "The row labeled trusted firing recordedshots0; it did not establish a successful shot. The isolated follow-up establishes two real shots.",
+    "failure": "Flash turn was not completed in the first software-rendered attempt; no successful browser flash claim is inferred from that run."
+  },
+  "isolatedBrowserFollowUp": {
+    "origin": "http://127.0.0.1:4223",
+    "checks": [
+      {
+        "name": "warmup uses actual prepared WebGL resources with active draws suspended for input isolation"
+      },
+      {
+        "name": "trusted browser firing after equip readiness produces real weapon shots",
+        "value": {
+          "shots": 2,
+          "enabledTargets": 1,
+          "kind": "warmup",
+          "time": 2.175,
+          "events": [
+            {
+              "trusted": true,
+              "button": 0,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "button": 0,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "button": 0,
+              "locked": true,
+              "time": 2.058333333333333
+            }
+          ]
+        }
+      },
+      {
+        "name": "actual browser shots and full60s warmup reproduce through shared replay",
+        "value": {
+          "verified": {
+            "passed": true,
+            "mismatches": [],
+            "checksum": "8e2785f63b5493ce",
+            "score": 0,
+            "shots": 2,
+            "hits": 0,
+            "deaths": 0
+          },
+          "bytes": 4129,
+          "header": {
+            "gameVersion": "9.0.1",
+            "simulationVersion": "valoprac-replay-simulation-2",
+            "movementVersion": "dual-movement-1.1.0",
+            "projectionVersion": "horizontal-angular-division-1",
+            "calibrationFingerprint": "b9c4ab53c0512d05",
+            "createdAt": 1793787944218,
+            "fixedHz": 120,
+            "map": "range",
+            "physics": "valorant",
+            "seed": 1947,
+            "initial": {
+              "mode": "free",
+              "weapon": "rifleA",
+              "settings": {
+                "movementTools": {
+                  "enabled": false,
+                  "showTrajectory": true,
+                  "showGhost": true,
+                  "bindings": {
+                    "save": "KeyK",
+                    "restore": "KeyL",
+                    "takeoff": "KeyT",
+                    "reset": "KeyY"
+                  }
+                },
+                "movementPhysics": "valorant",
+                "csMovementPreset": "cs2",
+                "physicsDiagnostics": false,
+                "wheelJump": "off",
+                "combatMode": "gunfight",
+                "defenderSkill": "normal",
+                "defenderAimSpeed": 180,
+                "defenderAimAcceleration": 1200,
+                "defenderStability": 0.7,
+                "defenderFirstShotError": 0.8,
+                "defenderRecoilControl": 0.6,
+                "defenderTactics": 0.55,
+                "botDiagnostics": false,
+                "jumpBufferMs": 80,
+                "penetrationDiagnostics": false,
+                "gameplayRevision": 2,
+                "aimTelemetry": true,
+                "peekingTimed": false,
+                "operatorScopeMode": "toggle",
+                "operatorAutoRescope": false,
+                "operatorZoomBinding": "KeyV",
+                "peekScenario": "free",
+                "defenderWeapon": "mixed",
+                "defenderReaction": 0.42,
+                "defenderAccuracy": 0.75,
+                "defenderReposition": 0.45,
+                "randomDefenders": true,
+                "practiceMap": "range",
+                "drill": "none",
+                "crouchMode": "hold",
+                "inputDiagnostics": false,
+                "adsDotSize": 2,
+                "botDifficulty": "normal",
+                "exposureEnabled": true,
+                "exposureLimit": 3,
+                "exposureMode": "continuous",
+                "footstepHud": true,
+                "soundMinimap": true,
+                "footstepVolume": 0.7,
+                "stepPerMeter": 0.625,
+                "stepWalkingGain": 0,
+                "stepWalkingDecay": 0.02,
+                "stepStationaryDecay": 3.5,
+                "stepStationaryVelocity": 0.035,
+                "stepStationaryDelay": 0.12,
+                "stepAudibleVelocity": 2.7,
+                "stepThreshold": 1,
+                "stepGraceDistance": 0.2,
+                "stepHearingRadius": 20,
+                "frameLimit": 0,
+                "hudScale": 1,
+                "showHeadshotConfirmation": true,
+                "showControlHints": true,
+                "interfaceVolume": 0.2,
+                "adsSensitivity": 1,
+                "scopeSensitivity25": 1,
+                "scopeSensitivity5": 1,
+                "autoGraphics": false,
+                "adsMode": "toggle",
+                "bindings": {
+                  "forward": "KeyW",
+                  "backward": "KeyS",
+                  "left": "KeyA",
+                  "right": "KeyD",
+                  "walk": "ShiftLeft",
+                  "crouch": "KeyC",
+                  "jump": "Space",
+                  "reload": "KeyR",
+                  "weapons": "KeyB"
+                },
+                "graphicsPreset": "low",
+                "shadowQuality": "off",
+                "textureQuality": "medium",
+                "postProcessing": false,
+                "ambientOcclusion": false,
+                "effectsQuality": "low",
+                "premiumTheme": true,
+                "firingVolume": 0.85,
+                "handlingVolume": 0.65,
+                "feedbackVolume": 0.7,
+                "targetCount": 1,
+                "targetSize": 1,
+                "targetSpeed": 1,
+                "targetDistance": 20,
+                "spawnInterval": 0.6,
+                "eliminationRule": "head",
+                "infiniteReserve": true,
+                "autoReload": true,
+                "practiceHud": true,
+                "recoilAnalysis": false,
+                "analysisWall": false,
+                "sensitivity": 1.5,
+                "degreesPerCount": 0.07,
+                "dpi": 800,
+                "fov": 103,
+                "duration": 60,
+                "seed": 1947,
+                "crosshairColor": "#e8fcf3",
+                "crosshairThickness": 2,
+                "crosshairGap": 5,
+                "crosshairLength": 7,
+                "crosshairAdvanced": {
+                  "version": 1,
+                  "primary": {
+                    "outline": true,
+                    "outlineThickness": 1,
+                    "outlineOpacity": 0.75,
+                    "centerDot": true,
+                    "centerSize": 1,
+                    "centerOpacity": 1,
+                    "innerEnabled": true,
+                    "innerOpacity": 1,
+                    "outer": {
+                      "enabled": false,
+                      "opacity": 0.5,
+                      "length": 3,
+                      "thickness": 2,
+                      "gap": 12
+                    }
+                  },
+                  "adsMode": "dot",
+                  "ads": {
+                    "color": "#e8fcf3",
+                    "outline": true,
+                    "outlineThickness": 1,
+                    "outlineOpacity": 0.75,
+                    "centerDot": true,
+                    "centerSize": 2,
+                    "centerOpacity": 1,
+                    "inner": {
+                      "enabled": false,
+                      "opacity": 1,
+                      "length": 7,
+                      "thickness": 2,
+                      "gap": 5
+                    },
+                    "outer": {
+                      "enabled": false,
+                      "opacity": 1,
+                      "length": 7,
+                      "thickness": 2,
+                      "gap": 5
+                    }
+                  },
+                  "weaponVisibility": {
+                    "rifleA": true,
+                    "rifleB": true,
+                    "sheriff": true,
+                    "operator": true
+                  }
+                },
+                "dynamicCrosshair": true,
+                "brakingHud": true,
+                "idealCompensation": false,
+                "volume": 0.35,
+                "renderScale": 0.5,
+                "antialias": false,
+                "showPerformance": true,
+                "behavior": "random"
+              },
+              "attached": true,
+              "options": {
+                "exercise": {
+                  "schema": 1,
+                  "kind": "warmup",
+                  "durationSeconds": 60
+                }
+              }
+            }
+          },
+          "final": {
+            "checksum": "8e2785f63b5493ce",
+            "score": 0,
+            "shots": 2,
+            "hits": 0,
+            "deaths": 0,
+            "tick": 7200,
+            "time": 60
+          },
+          "report": {
+            "schema": 1,
+            "version": "exercises-1.0.0",
+            "kind": "warmup",
+            "durationSeconds": 60,
+            "elapsedSeconds": 60,
+            "completed": true,
+            "score": 0,
+            "warmup": {
+              "appearances": 29,
+              "escaped": 28,
+              "eliminations": 0,
+              "shots": 2,
+              "hits": 0,
+              "headshots": 0,
+              "hitAccuracy": 0,
+              "firstTargetAt": 0,
+              "targetActive": false,
+              "nextTargetAt": null
+            }
+          },
+          "markers": [
+            {
+              "kind": "settings",
+              "time": 0
+            },
+            {
+              "kind": "weapon",
+              "time": 0
+            },
+            {
+              "kind": "settings",
+              "time": 0
+            },
+            {
+              "kind": "shot",
+              "time": 2.0666666666666664
+            },
+            {
+              "kind": "shot",
+              "time": 2.175
+            }
+          ]
+        }
+      },
+      {
+        "name": "flash uses an actual authoritative incoming cue",
+        "value": {
+          "time": 1.1583333333333332,
+          "cue": {
+            "id": 1,
+            "cueTime": 1.15,
+            "deadline": 1.95,
+            "source": {
+              "x": 0,
+              "y": 1.64,
+              "z": -1
+            },
+            "initialDirection": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            },
+            "movementOnset": null,
+            "maximumTurnDegrees": 0,
+            "completionTime": null,
+            "success": null
+          },
+          "yaw": 0
+        }
+      },
+      {
+        "name": "trusted CDP pointer movement observation before any fallback",
+        "value": {
+          "report": {
+            "schema": 1,
+            "version": "exercises-1.0.0",
+            "kind": "flash",
+            "durationSeconds": 60,
+            "elapsedSeconds": 1.225,
+            "completed": false,
+            "score": 1,
+            "flash": {
+              "cues": 1,
+              "successes": 1,
+              "failures": 0,
+              "successRate": 100,
+              "meanOnsetSeconds": 0.01666666666666683,
+              "meanCompletionSeconds": 0.01666666666666683,
+              "events": [
+                {
+                  "id": 1,
+                  "cueTime": 1.15,
+                  "deadline": 1.95,
+                  "source": {
+                    "x": 0,
+                    "y": 1.64,
+                    "z": -1
+                  },
+                  "initialDirection": {
+                    "x": 0,
+                    "y": 0,
+                    "z": -1
+                  },
+                  "movementOnset": 1.1666666666666667,
+                  "maximumTurnDegrees": 137.24071104242782,
+                  "completionTime": 1.1666666666666667,
+                  "success": true
+                }
+              ],
+              "active": null
+            }
+          },
+          "yaw": -2.413528556120359,
+          "events": [
+            {
+              "trusted": true,
+              "x": 0,
+              "y": 0,
+              "at": 4327.399999999907,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "x": 194,
+              "y": -31,
+              "at": 14824.299999999814,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "x": 140,
+              "y": -173,
+              "at": 24531.399999999907,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": -722,
+              "y": 266,
+              "at": 29556.700000000186,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 565,
+              "y": -209,
+              "at": 29715.799999999814,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": -177,
+              "y": 357,
+              "at": 29810.700000000186,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 194,
+              "y": -241,
+              "at": 36911.60000000009,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 1317,
+              "y": -99,
+              "at": 39417.299999999814,
+              "locked": true,
+              "running": true,
+              "kind": "flash"
+            }
+          ]
+        }
+      },
+      {
+        "name": "manual relative input changes actual camera direction and records flash success",
+        "value": {
+          "report": {
+            "schema": 1,
+            "version": "exercises-1.0.0",
+            "kind": "flash",
+            "durationSeconds": 60,
+            "elapsedSeconds": 1.225,
+            "completed": false,
+            "score": 1,
+            "flash": {
+              "cues": 1,
+              "successes": 1,
+              "failures": 0,
+              "successRate": 100,
+              "meanOnsetSeconds": 0.01666666666666683,
+              "meanCompletionSeconds": 0.01666666666666683,
+              "events": [
+                {
+                  "id": 1,
+                  "cueTime": 1.15,
+                  "deadline": 1.95,
+                  "source": {
+                    "x": 0,
+                    "y": 1.64,
+                    "z": -1
+                  },
+                  "initialDirection": {
+                    "x": 0,
+                    "y": 0,
+                    "z": -1
+                  },
+                  "movementOnset": 1.1666666666666667,
+                  "maximumTurnDegrees": 137.24071104242782,
+                  "completionTime": 1.1666666666666667,
+                  "success": true
+                }
+              ],
+              "active": null
+            }
+          },
+          "yaw": -2.413528556120359,
+          "events": [
+            {
+              "trusted": true,
+              "x": 0,
+              "y": 0,
+              "at": 4327.399999999907,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "x": 194,
+              "y": -31,
+              "at": 14824.299999999814,
+              "locked": false
+            },
+            {
+              "trusted": true,
+              "x": 140,
+              "y": -173,
+              "at": 24531.399999999907,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": -722,
+              "y": 266,
+              "at": 29556.700000000186,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 565,
+              "y": -209,
+              "at": 29715.799999999814,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": -177,
+              "y": 357,
+              "at": 29810.700000000186,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 194,
+              "y": -241,
+              "at": 36911.60000000009,
+              "locked": false,
+              "running": false,
+              "kind": "warmup"
+            },
+            {
+              "trusted": true,
+              "x": 1317,
+              "y": -99,
+              "at": 39417.299999999814,
+              "locked": true,
+              "running": true,
+              "kind": "flash"
+            }
+          ],
+          "activeDraws": 35
+        }
+      },
+      {
+        "name": "completed flash task score andcue/turnmarkers reproduce twice identically",
+        "value": {
+          "first": {
+            "passed": true,
+            "mismatches": [],
+            "checksum": "e3383a3151e7dfc3",
+            "score": 1,
+            "shots": 0,
+            "hits": 0,
+            "deaths": 0
+          },
+          "second": {
+            "passed": true,
+            "mismatches": [],
+            "checksum": "e3383a3151e7dfc3",
+            "score": 1,
+            "shots": 0,
+            "hits": 0,
+            "deaths": 0
+          },
+          "header": {
+            "gameVersion": "9.0.1",
+            "simulationVersion": "valoprac-replay-simulation-2",
+            "movementVersion": "dual-movement-1.1.0",
+            "projectionVersion": "horizontal-angular-division-1",
+            "calibrationFingerprint": "b9c4ab53c0512d05",
+            "createdAt": 1793787968183,
+            "fixedHz": 120,
+            "map": "range",
+            "physics": "valorant",
+            "seed": 1947,
+            "initial": {
+              "mode": "free",
+              "weapon": "rifleA",
+              "settings": {
+                "movementTools": {
+                  "enabled": false,
+                  "showTrajectory": true,
+                  "showGhost": true,
+                  "bindings": {
+                    "save": "KeyK",
+                    "restore": "KeyL",
+                    "takeoff": "KeyT",
+                    "reset": "KeyY"
+                  }
+                },
+                "movementPhysics": "valorant",
+                "csMovementPreset": "cs2",
+                "physicsDiagnostics": false,
+                "wheelJump": "off",
+                "combatMode": "gunfight",
+                "defenderSkill": "normal",
+                "defenderAimSpeed": 180,
+                "defenderAimAcceleration": 1200,
+                "defenderStability": 0.7,
+                "defenderFirstShotError": 0.8,
+                "defenderRecoilControl": 0.6,
+                "defenderTactics": 0.55,
+                "botDiagnostics": false,
+                "jumpBufferMs": 80,
+                "penetrationDiagnostics": false,
+                "gameplayRevision": 2,
+                "aimTelemetry": true,
+                "peekingTimed": false,
+                "operatorScopeMode": "toggle",
+                "operatorAutoRescope": false,
+                "operatorZoomBinding": "KeyV",
+                "peekScenario": "free",
+                "defenderWeapon": "mixed",
+                "defenderReaction": 0.42,
+                "defenderAccuracy": 0.75,
+                "defenderReposition": 0.45,
+                "randomDefenders": true,
+                "practiceMap": "range",
+                "drill": "none",
+                "crouchMode": "hold",
+                "inputDiagnostics": false,
+                "adsDotSize": 2,
+                "botDifficulty": "normal",
+                "exposureEnabled": true,
+                "exposureLimit": 3,
+                "exposureMode": "continuous",
+                "footstepHud": true,
+                "soundMinimap": true,
+                "footstepVolume": 0.7,
+                "stepPerMeter": 0.625,
+                "stepWalkingGain": 0,
+                "stepWalkingDecay": 0.02,
+                "stepStationaryDecay": 3.5,
+                "stepStationaryVelocity": 0.035,
+                "stepStationaryDelay": 0.12,
+                "stepAudibleVelocity": 2.7,
+                "stepThreshold": 1,
+                "stepGraceDistance": 0.2,
+                "stepHearingRadius": 20,
+                "frameLimit": 0,
+                "hudScale": 1,
+                "showHeadshotConfirmation": true,
+                "showControlHints": true,
+                "interfaceVolume": 0.2,
+                "adsSensitivity": 1,
+                "scopeSensitivity25": 1,
+                "scopeSensitivity5": 1,
+                "autoGraphics": false,
+                "adsMode": "toggle",
+                "bindings": {
+                  "forward": "KeyW",
+                  "backward": "KeyS",
+                  "left": "KeyA",
+                  "right": "KeyD",
+                  "walk": "ShiftLeft",
+                  "crouch": "KeyC",
+                  "jump": "Space",
+                  "reload": "KeyR",
+                  "weapons": "KeyB"
+                },
+                "graphicsPreset": "low",
+                "shadowQuality": "off",
+                "textureQuality": "medium",
+                "postProcessing": false,
+                "ambientOcclusion": false,
+                "effectsQuality": "low",
+                "premiumTheme": true,
+                "firingVolume": 0.85,
+                "handlingVolume": 0.65,
+                "feedbackVolume": 0.7,
+                "targetCount": 1,
+                "targetSize": 1,
+                "targetSpeed": 1,
+                "targetDistance": 20,
+                "spawnInterval": 0.6,
+                "eliminationRule": "head",
+                "infiniteReserve": true,
+                "autoReload": true,
+                "practiceHud": true,
+                "recoilAnalysis": false,
+                "analysisWall": false,
+                "sensitivity": 1.5,
+                "degreesPerCount": 0.07,
+                "dpi": 800,
+                "fov": 103,
+                "duration": 60,
+                "seed": 1947,
+                "crosshairColor": "#e8fcf3",
+                "crosshairThickness": 2,
+                "crosshairGap": 5,
+                "crosshairLength": 7,
+                "crosshairAdvanced": {
+                  "version": 1,
+                  "primary": {
+                    "outline": true,
+                    "outlineThickness": 1,
+                    "outlineOpacity": 0.75,
+                    "centerDot": true,
+                    "centerSize": 1,
+                    "centerOpacity": 1,
+                    "innerEnabled": true,
+                    "innerOpacity": 1,
+                    "outer": {
+                      "enabled": false,
+                      "opacity": 0.5,
+                      "length": 3,
+                      "thickness": 2,
+                      "gap": 12
+                    }
+                  },
+                  "adsMode": "dot",
+                  "ads": {
+                    "color": "#e8fcf3",
+                    "outline": true,
+                    "outlineThickness": 1,
+                    "outlineOpacity": 0.75,
+                    "centerDot": true,
+                    "centerSize": 2,
+                    "centerOpacity": 1,
+                    "inner": {
+                      "enabled": false,
+                      "opacity": 1,
+                      "length": 7,
+                      "thickness": 2,
+                      "gap": 5
+                    },
+                    "outer": {
+                      "enabled": false,
+                      "opacity": 1,
+                      "length": 7,
+                      "thickness": 2,
+                      "gap": 5
+                    }
+                  },
+                  "weaponVisibility": {
+                    "rifleA": true,
+                    "rifleB": true,
+                    "sheriff": true,
+                    "operator": true
+                  }
+                },
+                "dynamicCrosshair": true,
+                "brakingHud": true,
+                "idealCompensation": false,
+                "volume": 0.35,
+                "renderScale": 0.5,
+                "antialias": false,
+                "showPerformance": true,
+                "behavior": "random"
+              },
+              "attached": true,
+              "options": {
+                "exercise": {
+                  "schema": 1,
+                  "kind": "flash",
+                  "durationSeconds": 60,
+                  "responseWindowSeconds": 0.8,
+                  "turnThresholdDegrees": 100
+                }
+              }
+            }
+          },
+          "final": {
+            "checksum": "e3383a3151e7dfc3",
+            "score": 1,
+            "shots": 0,
+            "hits": 0,
+            "deaths": 0,
+            "tick": 7200,
+            "time": 60
+          },
+          "bytes": 4497,
+          "markers": [
+            {
+              "time": 0,
+              "kind": "settings",
+              "label": "설정 변경"
+            },
+            {
+              "time": 0,
+              "kind": "weapon",
+              "label": "무기 변경"
+            },
+            {
+              "time": 0,
+              "kind": "settings",
+              "label": "설정 변경"
+            },
+            {
+              "time": 1.15,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 1.1666666666666667,
+              "kind": "turn",
+              "label": "회피 성공"
+            },
+            {
+              "time": 2.6416666666666666,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 3.4416666666666664,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 4.733333333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 5.533333333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 6.333333333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 7.133333333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 8.341666666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 9.141666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 9.141666666666667,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 10.308333333333334,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 11.108333333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 11.108333333333334,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 12.075,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 12.875,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 13.725,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 14.525,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 15.358333333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 16.15833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 17.116666666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 17.916666666666668,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 18.808333333333334,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 19.608333333333334,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 20.433333333333334,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 21.233333333333334,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 22.45,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 23.25,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 24.208333333333332,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 25.008333333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 26.125,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 26.925,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 27.866666666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 28.666666666666668,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 30.141666666666666,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 30.941666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 31.766666666666666,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 32.56666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 33.50833333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 34.30833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 35.09166666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 35.891666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 37.275,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 38.074999999999996,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 38.96666666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 39.766666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 40.90833333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 41.70833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 42.93333333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 43.73333333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 45.06666666666666,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 45.86666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 47.21666666666667,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 48.016666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 49.358333333333334,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 50.15833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 51.15833333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 51.95833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 52.75833333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 53.55833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 54.975,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 55.775,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 57.00833333333333,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 57.80833333333333,
+              "kind": "turn",
+              "label": "회피 미완료"
+            },
+            {
+              "time": 58.81666666666666,
+              "kind": "cue",
+              "label": "회피 신호"
+            },
+            {
+              "time": 59.61666666666666,
+              "kind": "turn",
+              "label": "회피 미완료"
+            }
+          ],
+          "report": {
+            "schema": 1,
+            "version": "exercises-1.0.0",
+            "kind": "flash",
+            "durationSeconds": 60,
+            "elapsedSeconds": 60,
+            "completed": true,
+            "score": 1,
+            "flash": {
+              "cues": 32,
+              "successes": 1,
+              "failures": 31,
+              "successRate": 3.125,
+              "meanOnsetSeconds": 0.01666666666666683,
+              "meanCompletionSeconds": 0.01666666666666683,
+              "events": [
+                {
+                  "id": 1,
+                  "cueTime": 1.15,
+                  "deadline": 1.95,
+                  "source": {
+                    "x": 0,
+                    "y": 1.64,
+                    "z": -1
+                  },
+                  "initialDirection": {
+                    "x": 0,
+                    "y": 0,
+                    "z": -1
+                  },
+                  "movementOnset": 1.1666666666666667,
+                  "maximumTurnDegrees": 137.24071104242782,
+                  "completionTime": 1.1666666666666667,
+                  "success": true
+                },
+                {
+                  "id": 2,
+                  "cueTime": 2.6416666666666666,
+                  "deadline": 3.4416666666666664,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 3,
+                  "cueTime": 4.733333333333333,
+                  "deadline": 5.533333333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 4,
+                  "cueTime": 6.333333333333333,
+                  "deadline": 7.133333333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 5,
+                  "cueTime": 8.341666666666667,
+                  "deadline": 9.141666666666667,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 6,
+                  "cueTime": 10.308333333333334,
+                  "deadline": 11.108333333333334,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 7,
+                  "cueTime": 12.075,
+                  "deadline": 12.875,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 8,
+                  "cueTime": 13.725,
+                  "deadline": 14.525,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 9,
+                  "cueTime": 15.358333333333333,
+                  "deadline": 16.15833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 10,
+                  "cueTime": 17.116666666666667,
+                  "deadline": 17.916666666666668,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 11,
+                  "cueTime": 18.808333333333334,
+                  "deadline": 19.608333333333334,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 12,
+                  "cueTime": 20.433333333333334,
+                  "deadline": 21.233333333333334,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 13,
+                  "cueTime": 22.45,
+                  "deadline": 23.25,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 14,
+                  "cueTime": 24.208333333333332,
+                  "deadline": 25.008333333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 15,
+                  "cueTime": 26.125,
+                  "deadline": 26.925,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 16,
+                  "cueTime": 27.866666666666667,
+                  "deadline": 28.666666666666668,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 17,
+                  "cueTime": 30.141666666666666,
+                  "deadline": 30.941666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 18,
+                  "cueTime": 31.766666666666666,
+                  "deadline": 32.56666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 19,
+                  "cueTime": 33.50833333333333,
+                  "deadline": 34.30833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 20,
+                  "cueTime": 35.09166666666667,
+                  "deadline": 35.891666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 21,
+                  "cueTime": 37.275,
+                  "deadline": 38.074999999999996,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 22,
+                  "cueTime": 38.96666666666667,
+                  "deadline": 39.766666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 23,
+                  "cueTime": 40.90833333333333,
+                  "deadline": 41.70833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 24,
+                  "cueTime": 42.93333333333333,
+                  "deadline": 43.73333333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 25,
+                  "cueTime": 45.06666666666666,
+                  "deadline": 45.86666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 26,
+                  "cueTime": 47.21666666666667,
+                  "deadline": 48.016666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 27,
+                  "cueTime": 49.358333333333334,
+                  "deadline": 50.15833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 28,
+                  "cueTime": 51.15833333333333,
+                  "deadline": 51.95833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 29,
+                  "cueTime": 52.75833333333333,
+                  "deadline": 53.55833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 30,
+                  "cueTime": 54.975,
+                  "deadline": 55.775,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 31,
+                  "cueTime": 57.00833333333333,
+                  "deadline": 57.80833333333333,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                },
+                {
+                  "id": 32,
+                  "cueTime": 58.81666666666666,
+                  "deadline": 59.61666666666666,
+                  "source": {
+                    "x": 3.9270258852878923,
+                    "y": 2.7225998705619867,
+                    "z": 9.405274703867855
+                  },
+                  "initialDirection": {
+                    "x": 0.6545043142146487,
+                    "y": 0.18043331176033112,
+                    "z": 0.7342124506446425
+                  },
+                  "movementOnset": null,
+                  "maximumTurnDegrees": 0,
+                  "completionTime": null,
+                  "success": false
+                }
+              ],
+              "active": null
+            }
+          }
+        }
+      }
+    ],
+    "errors": [],
+    "events": [
+      {
+        "trusted": true,
+        "x": 0,
+        "y": 0,
+        "at": 4327.399999999907,
+        "locked": false
+      },
+      {
+        "trusted": true,
+        "x": 194,
+        "y": -31,
+        "at": 14824.299999999814,
+        "locked": false
+      },
+      {
+        "trusted": true,
+        "x": 140,
+        "y": -173,
+        "at": 24531.399999999907,
+        "locked": false,
+        "running": false,
+        "kind": "warmup"
+      },
+      {
+        "trusted": true,
+        "x": -722,
+        "y": 266,
+        "at": 29556.700000000186,
+        "locked": false,
+        "running": false,
+        "kind": "warmup"
+      },
+      {
+        "trusted": true,
+        "x": 565,
+        "y": -209,
+        "at": 29715.799999999814,
+        "locked": false,
+        "running": false,
+        "kind": "warmup"
+      },
+      {
+        "trusted": true,
+        "x": -177,
+        "y": 357,
+        "at": 29810.700000000186,
+        "locked": false,
+        "running": false,
+        "kind": "warmup"
+      },
+      {
+        "trusted": true,
+        "x": 194,
+        "y": -241,
+        "at": 36911.60000000009,
+        "locked": false,
+        "running": false,
+        "kind": "warmup"
+      },
+      {
+        "trusted": true,
+        "x": 1317,
+        "y": -99,
+        "at": 39417.299999999814,
+        "locked": true,
+        "running": true,
+        "kind": "flash"
+      }
+    ],
+    "limitations": [
+      "Headless Chromium SwiftShader; not physical mouse, GPU or display latency.",
+      "The range is prepared with actual paused WebGL frames; all active draws are suspended to isolate BrowserInput and fixed-step mechanics from >500ms SwiftShader stalls. Preparation and paused/results frames remain real WebGL.",
+      "Remaining session time after the browser input checks is advanced through the same authoritative Simulation.step, not a one-minute human trial."
+    ],
+    "turnInput": "trusted CDP mousemove through BrowserInput",
+    "passed": true,
+    "completedAt": "2026-11-04T10:26:20.408Z"
+  },
+  "focusedTests": {
+    "passed": 15,
+    "failed": 0,
+    "files": 2,
+    "command": "node_modules/.bin/vitest run src/tests/exercise-mechanics.test.ts src/tests/exercise-records-ui.test.tsx --reporter=verbose",
+    "logSha256": "c0e8a804fbef28fd8b58a4014e81cae05d22cbaffddd6e3b13bf831ce5ae8c94",
+    "currentSourceVersion": "10.0.0"
+  },
+  "unitMeasurements": [
+    {
+      "benchmark": "warmup-passive-crossings",
+      "fixedHz": 120,
+      "report": {
+        "schema": 1,
+        "version": "exercises-1.0.0",
+        "kind": "warmup",
+        "durationSeconds": 60,
+        "elapsedSeconds": 60,
+        "completed": true,
+        "score": 0,
+        "warmup": {
+          "appearances": 29,
+          "escaped": 28,
+          "eliminations": 0,
+          "shots": 0,
+          "hits": 0,
+          "headshots": 0,
+          "hitAccuracy": 0,
+          "firstTargetAt": 0,
+          "targetActive": false,
+          "nextTargetAt": null
+        }
+      },
+      "firstTargetSimulationTime": 0,
+      "graphicsLoadMeasured": false,
+      "playerMovementAutomatic": false
+    },
+    {
+      "benchmark": "warmup-real3d-replay",
+      "report": {
+        "schema": 1,
+        "version": "exercises-1.0.0",
+        "kind": "warmup",
+        "durationSeconds": 60,
+        "elapsedSeconds": 60,
+        "completed": true,
+        "score": 103,
+        "warmup": {
+          "appearances": 107,
+          "escaped": 4,
+          "eliminations": 103,
+          "shots": 103,
+          "hits": 103,
+          "headshots": 103,
+          "hitAccuracy": 100,
+          "firstTargetAt": 0,
+          "targetActive": false,
+          "nextTargetAt": null
+        }
+      },
+      "replay": {
+        "passed": true,
+        "mismatches": [],
+        "checksum": "52a87629f270cb23",
+        "score": 103,
+        "shots": 103,
+        "hits": 103,
+        "deaths": 0
+      },
+      "gzipBytes": 7700,
+      "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
+    },
+    {
+      "benchmark": "flash-camera-reaction-replay",
+      "report": {
+        "schema": 1,
+        "version": "exercises-1.0.0",
+        "kind": "flash",
+        "durationSeconds": 60,
+        "elapsedSeconds": 60,
+        "completed": true,
+        "score": 43,
+        "flash": {
+          "cues": 43,
+          "successes": 43,
+          "failures": 0,
+          "successRate": 100,
+          "meanOnsetSeconds": 0.25833333333333336,
+          "meanCompletionSeconds": 0.25833333333333336,
+          "events": [
+            {
+              "id": 1,
+              "cueTime": 1.15,
+              "deadline": 1.95,
+              "source": {
+                "x": 0,
+                "y": 1.64,
+                "z": -1
+              },
+              "initialDirection": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+              },
+              "movementOnset": 1.4083333333333332,
+              "maximumTurnDegrees": 110,
+              "completionTime": 1.4083333333333332,
+              "success": true
+            },
+            {
+              "id": 2,
+              "cueTime": 2.8833333333333333,
+              "deadline": 3.6833333333333336,
+              "source": {
+                "x": -5.638155724715451,
+                "y": 1.64,
+                "z": 7.052120859954012
+              },
+              "initialDirection": {
+                "x": -0.9396926207859084,
+                "y": 0,
+                "z": 0.3420201433256687
+              },
+              "movementOnset": 3.1416666666666666,
+              "maximumTurnDegrees": 110,
+              "completionTime": 3.1416666666666666,
+              "success": true
+            },
+            {
+              "id": 3,
+              "cueTime": 4.433333333333334,
+              "deadline": 5.233333333333333,
+              "source": {
+                "x": 3.8567256581192355,
+                "y": 1.64,
+                "z": 9.59626665871387
+              },
+              "initialDirection": {
+                "x": 0.6427876096865393,
+                "y": 0,
+                "z": 0.7660444431189781
+              },
+              "movementOnset": 4.691666666666666,
+              "maximumTurnDegrees": 110.00000000000003,
+              "completionTime": 4.691666666666666,
+              "success": true
+            },
+            {
+              "id": 4,
+              "cueTime": 5.491666666666666,
+              "deadline": 6.291666666666666,
+              "source": {
+                "x": 2.9999999999999982,
+                "y": 1.64,
+                "z": -0.1961524227066329
+              },
+              "initialDirection": {
+                "x": 0.49999999999999967,
+                "y": 0,
+                "z": -0.8660254037844388
+              },
+              "movementOnset": 5.75,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 5.75,
+              "success": true
+            },
+            {
+              "id": 5,
+              "cueTime": 6.958333333333333,
+              "deadline": 7.758333333333333,
+              "source": {
+                "x": -5.908846518073248,
+                "y": 1.64,
+                "z": 3.9581109339984173
+              },
+              "initialDirection": {
+                "x": -0.984807753012208,
+                "y": 0,
+                "z": -0.17364817766693044
+              },
+              "movementOnset": 7.216666666666667,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 7.216666666666667,
+              "success": true
+            },
+            {
+              "id": 6,
+              "cueTime": 8.383333333333333,
+              "deadline": 9.183333333333334,
+              "source": {
+                "x": 1.0418890660015787,
+                "y": 1.64,
+                "z": 10.908846518073249
+              },
+              "initialDirection": {
+                "x": 0.17364817766692978,
+                "y": 0,
+                "z": 0.9848077530122081
+              },
+              "movementOnset": 8.641666666666666,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 8.641666666666666,
+              "success": true
+            },
+            {
+              "id": 7,
+              "cueTime": 9.608333333333333,
+              "deadline": 10.408333333333333,
+              "source": {
+                "x": 5.196152422706635,
+                "y": 1.64,
+                "z": 2.0000000000000053
+              },
+              "initialDirection": {
+                "x": 0.8660254037844392,
+                "y": 0,
+                "z": -0.4999999999999991
+              },
+              "movementOnset": 9.866666666666667,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 9.866666666666667,
+              "success": true
+            },
+            {
+              "id": 8,
+              "cueTime": 10.716666666666667,
+              "deadline": 11.516666666666667,
+              "source": {
+                "x": -4.596266658713862,
+                "y": 1.64,
+                "z": 1.1432743418807574
+              },
+              "initialDirection": {
+                "x": -0.766044443118977,
+                "y": 0,
+                "z": -0.6427876096865405
+              },
+              "movementOnset": 10.975,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 10.975,
+              "success": true
+            },
+            {
+              "id": 9,
+              "cueTime": 11.808333333333334,
+              "deadline": 12.608333333333334,
+              "source": {
+                "x": -2.0521208599540235,
+                "y": 1.64,
+                "z": 10.638155724715446
+              },
+              "initialDirection": {
+                "x": -0.3420201433256706,
+                "y": 0,
+                "z": 0.9396926207859078
+              },
+              "movementOnset": 12.066666666666666,
+              "maximumTurnDegrees": 109.99999999999997,
+              "completionTime": 12.066666666666666,
+              "success": true
+            },
+            {
+              "id": 10,
+              "cueTime": 13.025,
+              "deadline": 13.825000000000001,
+              "source": {
+                "x": 6,
+                "y": 1.64,
+                "z": 5.000000000000015
+              },
+              "initialDirection": {
+                "x": 1,
+                "y": 0,
+                "z": 2.4499125789312946e-15
+              },
+              "movementOnset": 13.283333333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 13.283333333333333,
+              "success": true
+            },
+            {
+              "id": 11,
+              "cueTime": 14.174999999999999,
+              "deadline": 14.975,
+              "source": {
+                "x": -2.052120859954006,
+                "y": 1.64,
+                "z": -0.6381557247154523
+              },
+              "initialDirection": {
+                "x": -0.34202014332566766,
+                "y": 0,
+                "z": -0.9396926207859088
+              },
+              "movementOnset": 14.433333333333334,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 14.433333333333334,
+              "success": true
+            },
+            {
+              "id": 12,
+              "cueTime": 15.258333333333333,
+              "deadline": 16.058333333333334,
+              "source": {
+                "x": -4.596266658713867,
+                "y": 1.64,
+                "z": 8.856725658119236
+              },
+              "initialDirection": {
+                "x": -0.7660444431189779,
+                "y": 0,
+                "z": 0.6427876096865395
+              },
+              "movementOnset": 15.516666666666666,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 15.516666666666666,
+              "success": true
+            },
+            {
+              "id": 13,
+              "cueTime": 16.733333333333334,
+              "deadline": 17.533333333333335,
+              "source": {
+                "x": 5.1961524227066365,
+                "y": 1.64,
+                "z": 7.999999999999993
+              },
+              "initialDirection": {
+                "x": 0.8660254037844394,
+                "y": 0,
+                "z": 0.4999999999999987
+              },
+              "movementOnset": 16.991666666666667,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 16.991666666666667,
+              "success": true
+            },
+            {
+              "id": 14,
+              "cueTime": 17.95,
+              "deadline": 18.75,
+              "source": {
+                "x": 1.0418890660015656,
+                "y": 1.64,
+                "z": -0.9088465180732515
+              },
+              "initialDirection": {
+                "x": 0.1736481776669276,
+                "y": 0,
+                "z": -0.9848077530122086
+              },
+              "movementOnset": 18.208333333333332,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 18.208333333333332,
+              "success": true
+            },
+            {
+              "id": 15,
+              "cueTime": 19.325,
+              "deadline": 20.125,
+              "source": {
+                "x": -5.908846518073244,
+                "y": 1.64,
+                "z": 6.041889066001606
+              },
+              "initialDirection": {
+                "x": -0.9848077530122074,
+                "y": 0,
+                "z": 0.17364817766693438
+              },
+              "movementOnset": 19.583333333333332,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 19.583333333333332,
+              "success": true
+            },
+            {
+              "id": 16,
+              "cueTime": 20.525,
+              "deadline": 21.325,
+              "source": {
+                "x": 3.000000000000028,
+                "y": 1.64,
+                "z": 10.196152422706616
+              },
+              "initialDirection": {
+                "x": 0.5000000000000047,
+                "y": 0,
+                "z": 0.8660254037844359
+              },
+              "movementOnset": 20.78333333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 20.78333333333333,
+              "success": true
+            },
+            {
+              "id": 17,
+              "cueTime": 22.258333333333333,
+              "deadline": 23.058333333333334,
+              "source": {
+                "x": 3.856725658119205,
+                "y": 1.64,
+                "z": 0.40373334128610594
+              },
+              "initialDirection": {
+                "x": 0.6427876096865341,
+                "y": 0,
+                "z": -0.7660444431189823
+              },
+              "movementOnset": 22.516666666666666,
+              "maximumTurnDegrees": 110.00000000000007,
+              "completionTime": 22.516666666666666,
+              "success": true
+            },
+            {
+              "id": 18,
+              "cueTime": 23.341666666666665,
+              "deadline": 24.141666666666666,
+              "source": {
+                "x": -5.6381557247154666,
+                "y": 1.64,
+                "z": 2.947879140046033
+              },
+              "initialDirection": {
+                "x": -0.9396926207859111,
+                "y": 0,
+                "z": -0.3420201433256612
+              },
+              "movementOnset": 23.6,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 23.6,
+              "success": true
+            },
+            {
+              "id": 19,
+              "cueTime": 24.541666666666668,
+              "deadline": 25.34166666666667,
+              "source": {
+                "x": 5.5866177344036484e-14,
+                "y": 1.64,
+                "z": 11
+              },
+              "initialDirection": {
+                "x": 9.311029557339415e-15,
+                "y": 0,
+                "z": 1
+              },
+              "movementOnset": 24.8,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 24.8,
+              "success": true
+            },
+            {
+              "id": 20,
+              "cueTime": 25.583333333333332,
+              "deadline": 26.383333333333333,
+              "source": {
+                "x": 5.638155724715428,
+                "y": 1.64,
+                "z": 2.9478791400459277
+              },
+              "initialDirection": {
+                "x": 0.9396926207859048,
+                "y": 0,
+                "z": -0.3420201433256787
+              },
+              "movementOnset": 25.841666666666665,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 25.841666666666665,
+              "success": true
+            },
+            {
+              "id": 21,
+              "cueTime": 27.224999999999998,
+              "deadline": 28.025,
+              "source": {
+                "x": -3.8567256581192906,
+                "y": 1.64,
+                "z": 0.4037333412861779
+              },
+              "initialDirection": {
+                "x": -0.6427876096865485,
+                "y": 0,
+                "z": -0.7660444431189704
+              },
+              "movementOnset": 27.483333333333334,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 27.483333333333334,
+              "success": true
+            },
+            {
+              "id": 22,
+              "cueTime": 28.375,
+              "deadline": 29.175,
+              "source": {
+                "x": -2.9999999999999316,
+                "y": 1.64,
+                "z": 10.196152422706671
+              },
+              "initialDirection": {
+                "x": -0.49999999999998856,
+                "y": 0,
+                "z": 0.8660254037844453
+              },
+              "movementOnset": 28.633333333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 28.633333333333333,
+              "success": true
+            },
+            {
+              "id": 23,
+              "cueTime": 29.775,
+              "deadline": 30.575,
+              "source": {
+                "x": 5.908846518073263,
+                "y": 1.64,
+                "z": 6.041889066001496
+              },
+              "initialDirection": {
+                "x": 0.9848077530122106,
+                "y": 0,
+                "z": 0.17364817766691604
+              },
+              "movementOnset": 30.03333333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 30.03333333333333,
+              "success": true
+            },
+            {
+              "id": 24,
+              "cueTime": 31.258333333333333,
+              "deadline": 32.05833333333333,
+              "source": {
+                "x": -1.0418890660016757,
+                "y": 1.64,
+                "z": -0.9088465180732319
+              },
+              "initialDirection": {
+                "x": -0.17364817766694596,
+                "y": 0,
+                "z": -0.9848077530122054
+              },
+              "movementOnset": 31.516666666666666,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 31.516666666666666,
+              "success": true
+            },
+            {
+              "id": 25,
+              "cueTime": 32.85,
+              "deadline": 33.65,
+              "source": {
+                "x": -5.1961524227065805,
+                "y": 1.64,
+                "z": 8.000000000000089
+              },
+              "initialDirection": {
+                "x": -0.86602540378443,
+                "y": 0,
+                "z": 0.5000000000000149
+              },
+              "movementOnset": 33.108333333333334,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 33.108333333333334,
+              "success": true
+            },
+            {
+              "id": 26,
+              "cueTime": 34.458333333333336,
+              "deadline": 35.25833333333333,
+              "source": {
+                "x": 4.596266658713939,
+                "y": 1.64,
+                "z": 8.856725658119151
+              },
+              "initialDirection": {
+                "x": 0.7660444431189899,
+                "y": 0,
+                "z": 0.6427876096865252
+              },
+              "movementOnset": 34.71666666666667,
+              "maximumTurnDegrees": 110.00000000000007,
+              "completionTime": 34.71666666666667,
+              "success": true
+            },
+            {
+              "id": 27,
+              "cueTime": 36.05833333333333,
+              "deadline": 36.85833333333333,
+              "source": {
+                "x": 2.052120859953901,
+                "y": 1.64,
+                "z": -0.6381557247154905
+              },
+              "initialDirection": {
+                "x": 0.34202014332565017,
+                "y": 0,
+                "z": -0.9396926207859151
+              },
+              "movementOnset": 36.31666666666666,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 36.31666666666666,
+              "success": true
+            },
+            {
+              "id": 28,
+              "cueTime": 37.31666666666666,
+              "deadline": 38.11666666666666,
+              "source": {
+                "x": -6,
+                "y": 1.64,
+                "z": 5.000000000000126
+              },
+              "initialDirection": {
+                "x": -1,
+                "y": 0,
+                "z": 2.1071971693610123e-14
+              },
+              "movementOnset": 37.575,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 37.575,
+              "success": true
+            },
+            {
+              "id": 29,
+              "cueTime": 38.375,
+              "deadline": 39.175,
+              "source": {
+                "x": 2.0521208599541385,
+                "y": 1.64,
+                "z": 10.638155724715403
+              },
+              "initialDirection": {
+                "x": 0.34202014332568975,
+                "y": 0,
+                "z": 0.9396926207859008
+              },
+              "movementOnset": 38.63333333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 38.63333333333333,
+              "success": true
+            },
+            {
+              "id": 30,
+              "cueTime": 40.05,
+              "deadline": 40.849999999999994,
+              "source": {
+                "x": 4.596266658713777,
+                "y": 1.64,
+                "z": 1.1432743418806552
+              },
+              "initialDirection": {
+                "x": 0.7660444431189628,
+                "y": 0,
+                "z": -0.6427876096865575
+              },
+              "movementOnset": 40.30833333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 40.30833333333333,
+              "success": true
+            },
+            {
+              "id": 31,
+              "cueTime": 41.541666666666664,
+              "deadline": 42.34166666666666,
+              "source": {
+                "x": -5.196152422706707,
+                "y": 1.64,
+                "z": 2.0000000000001297
+              },
+              "initialDirection": {
+                "x": -0.8660254037844511,
+                "y": 0,
+                "z": -0.49999999999997835
+              },
+              "movementOnset": 41.8,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 41.8,
+              "success": true
+            },
+            {
+              "id": 32,
+              "cueTime": 42.80833333333333,
+              "deadline": 43.60833333333333,
+              "source": {
+                "x": -1.0418890660014268,
+                "y": 1.64,
+                "z": 10.908846518073275
+              },
+              "initialDirection": {
+                "x": -0.17364817766690446,
+                "y": 0,
+                "z": 0.9848077530122126
+              },
+              "movementOnset": 43.06666666666666,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 43.06666666666666,
+              "success": true
+            },
+            {
+              "id": 33,
+              "cueTime": 44.2,
+              "deadline": 45,
+              "source": {
+                "x": 5.9088465180732195,
+                "y": 1.64,
+                "z": 3.9581109339982548
+              },
+              "initialDirection": {
+                "x": 0.9848077530122032,
+                "y": 0,
+                "z": -0.17364817766695753
+              },
+              "movementOnset": 44.458333333333336,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 44.458333333333336,
+              "success": true
+            },
+            {
+              "id": 34,
+              "cueTime": 45.266666666666666,
+              "deadline": 46.06666666666666,
+              "source": {
+                "x": -3.0000000000001505,
+                "y": 1.64,
+                "z": -0.19615242270654498
+              },
+              "initialDirection": {
+                "x": -0.5000000000000251,
+                "y": 0,
+                "z": -0.8660254037844242
+              },
+              "movementOnset": 45.525,
+              "maximumTurnDegrees": 110.00000000000007,
+              "completionTime": 45.525,
+              "success": true
+            },
+            {
+              "id": 35,
+              "cueTime": 46.96666666666667,
+              "deadline": 47.766666666666666,
+              "source": {
+                "x": -3.856725658119097,
+                "y": 1.64,
+                "z": 9.596266658713985
+              },
+              "initialDirection": {
+                "x": -0.6427876096865162,
+                "y": 0,
+                "z": 0.7660444431189974
+              },
+              "movementOnset": 47.225,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 47.225,
+              "success": true
+            },
+            {
+              "id": 36,
+              "cueTime": 48.1,
+              "deadline": 48.9,
+              "source": {
+                "x": 5.638155724715515,
+                "y": 1.64,
+                "z": 7.052120859953835
+              },
+              "initialDirection": {
+                "x": 0.9396926207859192,
+                "y": 0,
+                "z": 0.3420201433256391
+              },
+              "movementOnset": 48.358333333333334,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 48.358333333333334,
+              "success": true
+            },
+            {
+              "id": 37,
+              "cueTime": 49.65,
+              "deadline": 50.449999999999996,
+              "source": {
+                "x": -1.9699748297928497e-13,
+                "y": 1.64,
+                "z": -1
+              },
+              "initialDirection": {
+                "x": -3.283291382988083e-14,
+                "y": 0,
+                "z": -1
+              },
+              "movementOnset": 49.90833333333333,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 49.90833333333333,
+              "success": true
+            },
+            {
+              "id": 38,
+              "cueTime": 51.34166666666667,
+              "deadline": 52.141666666666666,
+              "source": {
+                "x": -5.63815572471538,
+                "y": 1.64,
+                "z": 7.052120859954204
+              },
+              "initialDirection": {
+                "x": -0.9396926207858967,
+                "y": 0,
+                "z": 0.3420201433257008
+              },
+              "movementOnset": 51.6,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 51.6,
+              "success": true
+            },
+            {
+              "id": 39,
+              "cueTime": 52.483333333333334,
+              "deadline": 53.28333333333333,
+              "source": {
+                "x": 3.856725658119399,
+                "y": 1.64,
+                "z": 9.59626665871373
+              },
+              "initialDirection": {
+                "x": 0.6427876096865665,
+                "y": 0,
+                "z": 0.7660444431189553
+              },
+              "movementOnset": 52.74166666666667,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 52.74166666666667,
+              "success": true
+            },
+            {
+              "id": 40,
+              "cueTime": 53.641666666666666,
+              "deadline": 54.44166666666666,
+              "source": {
+                "x": 2.999999999999809,
+                "y": 1.64,
+                "z": -0.19615242270674216
+              },
+              "initialDirection": {
+                "x": 0.4999999999999682,
+                "y": 0,
+                "z": -0.866025403784457
+              },
+              "movementOnset": 53.9,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 53.9,
+              "success": true
+            },
+            {
+              "id": 41,
+              "cueTime": 55.05833333333333,
+              "deadline": 55.85833333333333,
+              "source": {
+                "x": -5.908846518073288,
+                "y": 1.64,
+                "z": 3.958110933998643
+              },
+              "initialDirection": {
+                "x": -0.9848077530122147,
+                "y": 0,
+                "z": -0.17364817766689286
+              },
+              "movementOnset": 55.31666666666666,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 55.31666666666666,
+              "success": true
+            },
+            {
+              "id": 42,
+              "cueTime": 56.583333333333336,
+              "deadline": 57.38333333333333,
+              "source": {
+                "x": 1.0418890660018145,
+                "y": 1.64,
+                "z": 10.908846518073208
+              },
+              "initialDirection": {
+                "x": 0.1736481776669691,
+                "y": 0,
+                "z": 0.9848077530122012
+              },
+              "movementOnset": 56.84166666666667,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 56.84166666666667,
+              "success": true
+            },
+            {
+              "id": 43,
+              "cueTime": 58.016666666666666,
+              "deadline": 58.81666666666666,
+              "source": {
+                "x": 5.1961524227065095,
+                "y": 1.64,
+                "z": 1.9999999999997886
+              },
+              "initialDirection": {
+                "x": 0.8660254037844183,
+                "y": 0,
+                "z": -0.5000000000000352
+              },
+              "movementOnset": 58.275,
+              "maximumTurnDegrees": 110.00000000000009,
+              "completionTime": 58.275,
+              "success": true
+            }
+          ],
+          "active": null
+        }
+      },
+      "replay": {
+        "passed": true,
+        "mismatches": [],
+        "checksum": "e0daa03a6bbd0f18",
+        "score": 43,
+        "shots": 0,
+        "hits": 0,
+        "deaths": 0
+      },
+      "clock": "120Hz simulation; no physical input-to-photon or native ability parity claim"
+    }
+  ],
+  "capturedSourceHashes": {
+    "src/training/exercises/Exercises.ts": "066e189f2db7a7a17a26a38ca5cc7177920b06e6d2b9ee9d4325dc66c15583c9",
+    "src/training/exercises/types.ts": "165f298d3d6dba577d973b24e54d3cbb430981c8bd77775a89549eaabb9e70d8",
+    "src/engine/Runtime.ts": "42a2a16e77c997db42f7e4f1b83aa91f8009b9e9f5c279bf636b34c319e3a0a6",
+    "src/engine/input/Input.ts": "f249961dfa80ad36e66b3c3f7b94640c76bd49cdd68d229d40933c524e557c72",
+    "src/engine/replay/recording.ts": "f08d6112378d5f438883761c6c43435830bb34ad28b57f10c8501c259baf91eb",
+    "src/engine/replay/playback.ts": "9baf7b59acc6e3836bee5e4cd2878368c807ff7a77f1e81ad3f6a6579c0f7188",
+    "src/ui/ExerciseTraining.tsx": "465c1e02c0cca42dd9505a3974eb93a052c2e20d1f56959f8a566bd2ceab6426"
+  },
+  "sameCurrentMechanicsSourceAtDocumentation": true,
+  "harnesses": [
+    "measure-exercise-input-browser.mjs",
+    "/workspace/roadmap-qa/exercise-app-browser.mjs"
+  ],
+  "screenshots": [
+    {
+      "path": "exercises/flash-results.png",
+      "sha256": "6a330c1b869d0751060c7d45f668c54c80b4aeffd44f6df94bdff4aa59779326"
+    },
+    {
+      "path": "exercises/paused-english.png",
+      "sha256": "c6aaedfc335e543d7f054426055078d74b553e831b6d15b5274605e9042b1b88"
+    }
+  ]
+}

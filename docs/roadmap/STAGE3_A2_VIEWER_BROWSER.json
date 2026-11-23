@@ -1,0 +1,958 @@
+{
+  "origin": "http://127.0.0.1:4207",
+  "environment": "Chromium154/Linux headless/SwiftShader; actual WebGL viewer and seeded4-second480-tick training recording, not native-game or physical input timing",
+  "checks": [
+    {
+      "name": "actual seeded recording re-executes and verifies; display Low leaves authority Medium; no PointerLock",
+      "initial": {
+        "time": 0,
+        "score": 4,
+        "shots": 10,
+        "preset": "low",
+        "authoritativePreset": "medium",
+        "frameFlag": false,
+        "locked": false
+      }
+    },
+    {
+      "name": "play and pause advance actual fixed-tick simulation only while playing",
+      "paused": 0.575
+    },
+    {
+      "name": "trusted keyboard seek reconstructs exact final score/shots",
+      "end": {
+        "time": 4,
+        "score": 4,
+        "shots": 10,
+        "expected": {
+          "checksum": "0724c249acfe8df1",
+          "score": 4,
+          "shots": 10,
+          "hits": 6,
+          "deaths": 0,
+          "tick": 480,
+          "time": 4
+        }
+      }
+    },
+    {
+      "name": "real kill event marker seeks to actual eliminated target state",
+      "moment": {
+        "time": 0.008333333333333333,
+        "score": 1
+      }
+    },
+    {
+      "name": "top-down cutaway frames player and enabled defender silhouettes",
+      "framing": [
+        {
+          "x": 0.000021686482672637558,
+          "y": -0.7411646842611836,
+          "z": 0.9980607868177213
+        },
+        {
+          "x": -0.000021686290367929786,
+          "y": 0.7411632908347892,
+          "z": 0.9980608057873539
+        }
+      ]
+    },
+    {
+      "name": "top-down/first-person camera toggles leave complete simulation checksum unchanged",
+      "checksum": "112723c65d68e7b8"
+    },
+    {
+      "name": "four responsive viewport layouts keep controls and timeline usable"
+    },
+    {
+      "name": "real compressed download imports locally and verifies again",
+      "bytes": 6571
+    },
+    {
+      "name": "malformed local replay rejected without replacing compatible viewer"
+    },
+    {
+      "name": "incompatible versions are rejected at import while prior valid viewer remains available"
+    },
+    {
+      "name": "mismatched submitted score is visibly unverified and play blocked"
+    },
+    {
+      "name": "close unmounts viewer canvas and resources"
+    },
+    {
+      "name": "display-only renderer does not attach or populate headless replay history",
+      "unattached": {
+        "attached": false,
+        "size": 0
+      }
+    },
+    {
+      "name": "Operator replay retains its genuine scope mask and magnified presentation"
+    },
+    {
+      "name": "actual WebGL rendering/cameras never change simulation checksum",
+      "samples": 85
+    }
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "canvas": true,
+      "controls": [
+        {
+          "label": "재생",
+          "width": 44.09375,
+          "height": 34,
+          "left": 23,
+          "right": 67.09375
+        },
+        {
+          "label": "처음으로",
+          "width": 66.171875,
+          "height": 34,
+          "left": 75.09375,
+          "right": 141.265625
+        },
+        {
+          "label": "0.25배0.5배1배2배",
+          "width": 77,
+          "height": 35,
+          "left": 199.609375,
+          "right": 276.609375
+        },
+        {
+          "label": "1인칭",
+          "width": 50.953125,
+          "height": 34,
+          "left": 284.609375,
+          "right": 335.5625
+        },
+        {
+          "label": "위에서 보기",
+          "width": 80.328125,
+          "height": 34,
+          "left": 23,
+          "right": 103.328125
+        },
+        {
+          "label": "리플레이 시간 탐색",
+          "width": 332,
+          "height": 24,
+          "left": 29,
+          "right": 361
+        },
+        {
+          "label": "무결성 다시 검사",
+          "width": 105.53125,
+          "height": 34,
+          "left": 23,
+          "right": 128.53125
+        },
+        {
+          "label": "리플레이 파일 저장",
+          "width": 116.5625,
+          "height": 34,
+          "left": 136.53125,
+          "right": 253.09375
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "canvas": true,
+      "controls": [
+        {
+          "label": "재생",
+          "width": 44.09375,
+          "height": 34,
+          "left": 93,
+          "right": 137.09375
+        },
+        {
+          "label": "처음으로",
+          "width": 66.171875,
+          "height": 34,
+          "left": 147.09375,
+          "right": 213.265625
+        },
+        {
+          "label": "0.25배0.5배1배2배",
+          "width": 77,
+          "height": 35,
+          "left": 273.609375,
+          "right": 350.609375
+        },
+        {
+          "label": "1인칭",
+          "width": 50.953125,
+          "height": 34,
+          "left": 360.609375,
+          "right": 411.5625
+        },
+        {
+          "label": "위에서 보기",
+          "width": 80.328125,
+          "height": 34,
+          "left": 421.5625,
+          "right": 501.890625
+        },
+        {
+          "label": "리플레이 시간 탐색",
+          "width": 1082,
+          "height": 24,
+          "left": 99,
+          "right": 1181
+        },
+        {
+          "label": "무결성 다시 검사",
+          "width": 105.53125,
+          "height": 34,
+          "left": 93,
+          "right": 198.53125
+        },
+        {
+          "label": "리플레이 파일 저장",
+          "width": 116.5625,
+          "height": 34,
+          "left": 208.53125,
+          "right": 325.09375
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "canvas": true,
+      "controls": [
+        {
+          "label": "재생",
+          "width": 44.09375,
+          "height": 34,
+          "left": 136,
+          "right": 180.09375
+        },
+        {
+          "label": "처음으로",
+          "width": 66.171875,
+          "height": 34,
+          "left": 190.09375,
+          "right": 256.265625
+        },
+        {
+          "label": "0.25배0.5배1배2배",
+          "width": 77,
+          "height": 35,
+          "left": 316.609375,
+          "right": 393.609375
+        },
+        {
+          "label": "1인칭",
+          "width": 50.953125,
+          "height": 34,
+          "left": 403.609375,
+          "right": 454.5625
+        },
+        {
+          "label": "위에서 보기",
+          "width": 80.328125,
+          "height": 34,
+          "left": 464.5625,
+          "right": 544.890625
+        },
+        {
+          "label": "리플레이 시간 탐색",
+          "width": 1082,
+          "height": 24,
+          "left": 142,
+          "right": 1224
+        },
+        {
+          "label": "무결성 다시 검사",
+          "width": 105.53125,
+          "height": 34,
+          "left": 136,
+          "right": 241.53125
+        },
+        {
+          "label": "리플레이 파일 저장",
+          "width": 116.5625,
+          "height": 34,
+          "left": 251.53125,
+          "right": 368.09375
+        }
+      ]
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "overflow": false,
+      "canvas": true,
+      "controls": [
+        {
+          "label": "재생",
+          "width": 44.09375,
+          "height": 34,
+          "left": 1173,
+          "right": 1217.09375
+        },
+        {
+          "label": "처음으로",
+          "width": 66.171875,
+          "height": 34,
+          "left": 1227.09375,
+          "right": 1293.265625
+        },
+        {
+          "label": "0.25배0.5배1배2배",
+          "width": 77,
+          "height": 35,
+          "left": 1353.609375,
+          "right": 1430.609375
+        },
+        {
+          "label": "1인칭",
+          "width": 50.953125,
+          "height": 34,
+          "left": 1440.609375,
+          "right": 1491.5625
+        },
+        {
+          "label": "위에서 보기",
+          "width": 80.328125,
+          "height": 34,
+          "left": 1501.5625,
+          "right": 1581.890625
+        },
+        {
+          "label": "리플레이 시간 탐색",
+          "width": 1082,
+          "height": 24,
+          "left": 1179,
+          "right": 2261
+        },
+        {
+          "label": "무결성 다시 검사",
+          "width": 105.53125,
+          "height": 34,
+          "left": 1173,
+          "right": 1278.53125
+        },
+        {
+          "label": "리플레이 파일 저장",
+          "width": 116.5625,
+          "height": 34,
+          "left": 1288.53125,
+          "right": 1405.09375
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "exportedBytes": 6571,
+  "authoritativeRenderObservations": [
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 6,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 12,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 13,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 22,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 28,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "top-down"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 2,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": false,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": false,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": false,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": false,
+      "frames": 0,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    },
+    {
+      "unchanged": true,
+      "attached": true,
+      "frames": 32,
+      "preset": "low",
+      "camera": "first-person"
+    }
+  ],
+  "pointerLockEverEntered": false,
+  "passed": true,
+  "completedAt": "2026-11-02T09:10:22.520Z"
+}

@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "items": [
+    "A4",
+    "A5"
+  ],
+  "recordedAt": "2026-11-04T09:50:30.985Z",
+  "baseCheckpoint": "892fe4c",
+  "deployment": "not-published",
+  "tests": {
+    "passed": 46,
+    "failed": 0,
+    "files": 4,
+    "additionalIntegrationCases": 13,
+    "finalUIRepeatPassed": 8,
+    "typeScriptPassed": true
+  },
+  "measurements": [
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "long-lane",
+      "random": false,
+      "seed": 1947,
+      "ticks": 480,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "fb408d28a3149412",
+      "passed": true,
+      "routeSamples": 141,
+      "maxThreats": 1,
+      "codeBytes": 753,
+      "replayGzipBytes": 3024
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "long-lane",
+      "random": true,
+      "seed": 7319,
+      "ticks": 480,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "0c95a55daf43400d",
+      "passed": true,
+      "routeSamples": 141,
+      "maxThreats": 1,
+      "codeBytes": 752,
+      "replayGzipBytes": 3021
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "close-corner",
+      "random": false,
+      "seed": 1947,
+      "ticks": 390,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "9a2a5032811dc806",
+      "passed": true,
+      "routeSamples": 101,
+      "maxThreats": 1,
+      "codeBytes": 792,
+      "replayGzipBytes": 2869
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "close-corner",
+      "random": true,
+      "seed": 7319,
+      "ticks": 390,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "26ee9ea6a564e4bc",
+      "passed": true,
+      "routeSamples": 101,
+      "maxThreats": 1,
+      "codeBytes": 790,
+      "replayGzipBytes": 2872
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "off-angle",
+      "random": false,
+      "seed": 1947,
+      "ticks": 424,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "cfc772079e10085f",
+      "passed": true,
+      "routeSamples": 116,
+      "maxThreats": 1,
+      "codeBytes": 742,
+      "replayGzipBytes": 2917
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "off-angle",
+      "random": true,
+      "seed": 7319,
+      "ticks": 424,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "b2dced4db9a9a44f",
+      "passed": true,
+      "routeSamples": 116,
+      "maxThreats": 1,
+      "codeBytes": 741,
+      "replayGzipBytes": 2918
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "vertical",
+      "random": false,
+      "seed": 1947,
+      "ticks": 547,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "fe7b87939138ffbf",
+      "passed": true,
+      "routeSamples": 171,
+      "maxThreats": 1,
+      "codeBytes": 769,
+      "replayGzipBytes": 3290
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "vertical",
+      "random": true,
+      "seed": 7319,
+      "ticks": 547,
+      "bots": 1,
+      "score": 1,
+      "hits": 1,
+      "checksum": "21be5682cc5df97e",
+      "passed": true,
+      "routeSamples": 171,
+      "maxThreats": 1,
+      "codeBytes": 768,
+      "replayGzipBytes": 3285
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "sequential",
+      "random": false,
+      "seed": 1947,
+      "ticks": 803,
+      "bots": 3,
+      "score": 1,
+      "hits": 1,
+      "checksum": "dac69ffbe4c00c1d",
+      "passed": true,
+      "routeSamples": 282,
+      "maxThreats": 1,
+      "codeBytes": 1436,
+      "replayGzipBytes": 4423
+    },
+    {
+      "benchmark": "scenario-common-replay",
+      "route": "sequential",
+      "random": true,
+      "seed": 7319,
+      "ticks": 803,
+      "bots": 3,
+      "score": 1,
+      "hits": 1,
+      "checksum": "cb32eaa1b2b1571d",
+      "passed": true,
+      "routeSamples": 282,
+      "maxThreats": 1,
+      "codeBytes": 1434,
+      "replayGzipBytes": 4420
+    }
+  ],
+  "browser": {
+    "passed": true,
+    "checks": 12,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844,
+        "overflow": false,
+        "invalidButtons": 0
+      },
+      {
+        "width": 768,
+        "height": 1024,
+        "overflow": false,
+        "invalidButtons": 0
+      },
+      {
+        "width": 1366,
+        "height": 900,
+        "overflow": false,
+        "invalidButtons": 0
+      },
+      {
+        "width": 3440,
+        "height": 1440,
+        "overflow": false,
+        "invalidButtons": 0
+      }
+    ],
+    "errors": []
+  },
+  "sources": [
+    {
+      "path": "src/training/scenarios/types.ts",
+      "bytes": 1957,
+      "sha256": "a44b25db0a2b69ddadcad6c2ac4bf941359157338f36aa6bd1ae69435c553ebb"
+    },
+    {
+      "path": "src/training/scenarios/templates.ts",
+      "bytes": 3861,
+      "sha256": "8152dd8bfdac8641ebfcde612dfbbea8cce03fcce61a48287f3bc292331f725d"
+    },
+    {
+      "path": "src/training/scenarios/validation.ts",
+      "bytes": 10475,
+      "sha256": "9e196e3584611c221e0e65625101790a1d66b351ed2e45c1565debee0a24b996"
+    },
+    {
+      "path": "src/training/scenarios/compile.ts",
+      "bytes": 2645,
+      "sha256": "4beae6051dd409b429bd65046791413e2fc718f02098162361cbd209e4d9ccab"
+    },
+    {
+      "path": "src/training/scenarios/codec.ts",
+      "bytes": 3687,
+      "sha256": "d2f9df3be724d3cbc789a67c939cbaa3c4a771a8f462636dff5ab1c33bdb9c46"
+    },
+    {
+      "path": "src/ui/ScenarioEditor.tsx",
+      "bytes": 15258,
+      "sha256": "45786d2771df969855ee0d3159e9d6af64a0c9185781618745bddef576b1c61a"
+    },
+    {
+      "path": "src/ui/ScenarioRoutes.tsx",
+      "bytes": 3437,
+      "sha256": "130b356ca963b048360b1cda841dada3a89added4ceb7048cf132869ae7aeed2"
+    },
+    {
+      "path": "src/ui/ScenarioPlan.tsx",
+      "bytes": 1994,
+      "sha256": "c56f0e147fce995172a195bd08e88fe6b55846ce1fafafcdd9cb32211c2f9caf"
+    },
+    {
+      "path": "src/ui/scenarios.css",
+      "bytes": 4499,
+      "sha256": "556939848b7473e7074fc4eb700f2fce1ee7292a65eff3197eedec87a36b191c"
+    }
+  ],
+  "limits": {
+    "new3DGeometry": false,
+    "nativeValorantMeasured": false,
+    "physicalInputLatencyVerified": false,
+    "hardwareFPSVerified": false,
+    "crossBrowserEnginesVerified": false,
+    "originalRenderingGeometryPreserved": true
+  }
+}

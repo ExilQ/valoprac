@@ -1,0 +1,274 @@
+{
+  "issues": [
+    "I1",
+    "I2"
+  ],
+  "environment": "Native Chromium OfflineAudioContext,HRTFPannerNode,48kHz,0.5s windows; original concretebotfootsteps except labeled500/4000Hzocclusionprobes",
+  "rows": [
+    {
+      "name": "left",
+      "position": {
+        "x": -12,
+        "y": 1.64,
+        "z": 0
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.0066796074982117615,
+      "rmsRight": 0.003123075921856661,
+      "rmsCombined": 0.0073736530664147495,
+      "power500": 8.315228911352186,
+      "power4000": 0.5559629504317418,
+      "backend": "hrtf"
+    },
+    {
+      "name": "right",
+      "position": {
+        "x": 12,
+        "y": 1.64,
+        "z": 0
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.003123075914630514,
+      "rmsRight": 0.0066796074982101335,
+      "rmsCombined": 0.007373653063352674,
+      "power500": 8.315411610435412,
+      "power4000": 0.5559579125337313,
+      "backend": "hrtf"
+    },
+    {
+      "name": "left-turned",
+      "position": {
+        "x": -12,
+        "y": 1.64,
+        "z": 0
+      },
+      "yaw": 3.141592653589793,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.003123075914630514,
+      "rmsRight": 0.0066796074982101335,
+      "rmsCombined": 0.007373653063352674,
+      "power500": 8.315411610435412,
+      "power4000": 0.5559579125337313,
+      "backend": "hrtf"
+    },
+    {
+      "name": "front",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": -12
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.005023298705320189,
+      "rmsRight": 0.005023298705320189,
+      "rmsCombined": 0.007104017156915022,
+      "power500": 3.3388423753319247,
+      "power4000": 1.477470332215922,
+      "backend": "hrtf"
+    },
+    {
+      "name": "rear",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": 12
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.003862305606940403,
+      "rmsRight": 0.003862305606940403,
+      "rmsCombined": 0.005462124971364766,
+      "power500": 5.378446244913124,
+      "power4000": 0.33034145683658733,
+      "backend": "hrtf"
+    },
+    {
+      "name": "near",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": -9
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.006697731603062725,
+      "rmsRight": 0.006697731603062725,
+      "rmsCombined": 0.009472022870186197,
+      "power500": 5.935710396368143,
+      "power4000": 2.626725877769232,
+      "backend": "hrtf"
+    },
+    {
+      "name": "far",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": -36
+      },
+      "yaw": 0,
+      "originalFootstep": true,
+      "occluded": false,
+      "rmsLeft": 0.0016744329007656812,
+      "rmsRight": 0.0016744329007656812,
+      "rmsCombined": 0.0023680057175465494,
+      "power500": 0.37098189977300894,
+      "power4000": 0.164170367360577,
+      "backend": "hrtf"
+    },
+    {
+      "name": "open-probe",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": -12
+      },
+      "yaw": 0,
+      "originalFootstep": false,
+      "occluded": false,
+      "rmsLeft": 0.022062631999963226,
+      "rmsRight": 0.022062631999963226,
+      "rmsCombined": 0.031201273395994638,
+      "power500": 32584.69771645313,
+      "power4000": 45793.8566385212,
+      "backend": "hrtf"
+    },
+    {
+      "name": "covered-probe",
+      "position": {
+        "x": 0,
+        "y": 1.64,
+        "z": -12
+      },
+      "yaw": 0,
+      "originalFootstep": false,
+      "occluded": true,
+      "rmsLeft": 0.007058023767951697,
+      "rmsRight": 0.007058023767951697,
+      "rmsCombined": 0.009981552936188945,
+      "power500": 6968.754846979063,
+      "power4000": 1039.6911148878864,
+      "backend": "hrtf"
+    }
+  ],
+  "checks": {
+    "leftDominates": true,
+    "rightDominates": true,
+    "listenerTurnReverses": true,
+    "distanceRatio": 0.25,
+    "toleranceDistance": 0.015,
+    "distancePass": true,
+    "coveredQuieter": true,
+    "coveredHighRatio": 0.1061587074322373,
+    "coveredHighPass": true,
+    "allNativeHrtf": true
+  },
+  "passed": true,
+  "geometryResolverMeasured": false,
+  "headphoneLocalizationTested": false,
+  "laptopListeningTested": false,
+  "physicalDeviceLatencyMeasured": false,
+  "completedAt": "2026-10-31T10:37:13.866Z",
+  "spectrum": {
+    "benchmark": "original-footstep-spectrum",
+    "sampleRate": 48000,
+    "rows": [
+      {
+        "material": "concrete",
+        "side": 0,
+        "below250": 0.1361329029056125,
+        "from250To4000": 0.4430455521422634,
+        "above4000": 0.4208215449521232,
+        "rms": 0.05125461665529684,
+        "peak": 0.3589576184749603,
+        "fftSize": 8192
+      },
+      {
+        "material": "concrete",
+        "side": 1,
+        "below250": 0.11703399875047543,
+        "from250To4000": 0.451592895122259,
+        "above4000": 0.4313731061272651,
+        "rms": 0.051983509253280345,
+        "peak": 0.3827758729457855,
+        "fftSize": 8192
+      },
+      {
+        "material": "steel",
+        "side": 0,
+        "below250": 0.11032585210796553,
+        "from250To4000": 0.541882683219627,
+        "above4000": 0.3477914646724083,
+        "rms": 0.05611120337029389,
+        "peak": 0.38472363352775574,
+        "fftSize": 8192
+      },
+      {
+        "material": "steel",
+        "side": 1,
+        "below250": 0.1011659669926137,
+        "from250To4000": 0.5239236414828476,
+        "above4000": 0.37491039152454086,
+        "rms": 0.055596367940862194,
+        "peak": 0.37629541754722595,
+        "fftSize": 8192
+      },
+      {
+        "material": "tile",
+        "side": 0,
+        "below250": 0.11643102549883773,
+        "from250To4000": 0.40366098669054745,
+        "above4000": 0.47990798781061556,
+        "rms": 0.05494698956438306,
+        "peak": 0.3979688286781311,
+        "fftSize": 8192
+      },
+      {
+        "material": "tile",
+        "side": 1,
+        "below250": 0.0997212767887289,
+        "from250To4000": 0.42563192572781045,
+        "above4000": 0.4746467974834665,
+        "rms": 0.05589003123413097,
+        "peak": 0.42097175121307373,
+        "fftSize": 8192
+      },
+      {
+        "material": "wood",
+        "side": 0,
+        "below250": 0.1596224131566334,
+        "from250To4000": 0.46222959634895094,
+        "above4000": 0.37814799049441705,
+        "rms": 0.05388543246075117,
+        "peak": 0.3828771710395813,
+        "fftSize": 8192
+      },
+      {
+        "material": "wood",
+        "side": 1,
+        "below250": 0.1282638691169667,
+        "from250To4000": 0.4892347167131509,
+        "above4000": 0.38250141416987665,
+        "rms": 0.054987403504930775,
+        "peak": 0.40500473976135254,
+        "fftSize": 8192
+      }
+    ],
+    "physicalListeningTested": false,
+    "nativeAudioMatched": false
+  },
+  "tests": {
+    "files": 7,
+    "passed": 40,
+    "failed": 0,
+    "command": "npx vitest run src/tests/audio-occlusion.test.ts src/tests/audio-stall-cadence.test.ts src/tests/spatial-audio.test.ts src/tests/audio-spectrum.test.ts src/tests/surface-audio.test.ts src/tests/audio-lifecycle.test.ts src/tests/landing-sounds.test.ts --reporter=verbose"
+  }
+}

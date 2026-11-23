@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "stage": "A2-foundation",
+  "productionDeployed": false,
+  "applicationTests": 1131,
+  "applicationFiles": 83,
+  "brokerTests": 20,
+  "hostingTests": 12,
+  "oneMinute": {
+    "benchmark": "deterministic-replay-one-minute",
+    "schema": 1,
+    "ticks": 7200,
+    "lookEvents": 60000,
+    "renderedFrames": 3600,
+    "commands": 70801,
+    "rawBytes": 906159,
+    "gzipBytes": 134241,
+    "verification": {
+      "passed": true,
+      "mismatches": [],
+      "checksum": "bcda6c5f2479dabb",
+      "score": 0,
+      "shots": 172,
+      "hits": 0,
+      "deaths": 0
+    },
+    "environment": "Node JavaScript120Hz; shared realSimulation, no GPU or physicalmouse"
+  },
+  "cpuLook": {
+    "benchmark": "replay-look-cpu",
+    "eventsPerRun": 12000,
+    "runs": 10,
+    "unrecordedMedianMicroseconds": 0.041177916666669034,
+    "recordedMedianMicroseconds": 0.17586750000000012,
+    "samples": [
+      {
+        "recording": false,
+        "events": 12000,
+        "totalMs": 5.847251000000028,
+        "microsecondsPerEvent": 0.48727091666666905
+      },
+      {
+        "recording": true,
+        "events": 12000,
+        "totalMs": 3.0731309999999894,
+        "microsecondsPerEvent": 0.25609424999999914
+      },
+      {
+        "recording": false,
+        "events": 12000,
+        "totalMs": 0.5062730000000784,
+        "microsecondsPerEvent": 0.042189416666673196
+      },
+      {
+        "recording": true,
+        "events": 12000,
+        "totalMs": 5.724796999999967,
+        "microsecondsPerEvent": 0.4770664166666639
+      },
+      {
+        "recording": false,
+        "events": 12000,
+        "totalMs": 0.4941350000000284,
+        "microsecondsPerEvent": 0.041177916666669034
+      },
+      {
+        "recording": true,
+        "events": 12000,
+        "totalMs": 2.1104100000000017,
+        "microsecondsPerEvent": 0.17586750000000012
+      },
+      {
+        "recording": false,
+        "events": 12000,
+        "totalMs": 0.2990899999999783,
+        "microsecondsPerEvent": 0.02492416666666486
+      },
+      {
+        "recording": true,
+        "events": 12000,
+        "totalMs": 1.5119889999999714,
+        "microsecondsPerEvent": 0.12599908333333093
+      },
+      {
+        "recording": false,
+        "events": 12000,
+        "totalMs": 0.2687950000000683,
+        "microsecondsPerEvent": 0.022399583333339024
+      },
+      {
+        "recording": true,
+        "events": 12000,
+        "totalMs": 1.2165129999999635,
+        "microsecondsPerEvent": 0.1013760833333303
+      }
+    ],
+    "physicalInputLatencyVerified": false,
+    "description": "Alternating real Simulation.look loops; CPU event append only, excludes browser delivery/GPU/scanout/peripheral delay."
+  },
+  "actualApp": {
+    "checks": [
+      "actual training Pointer Lock",
+      "actual Runtime finish recording and verified result replay",
+      "result viewer usable",
+      "actual browser gzip file export",
+      "IndexedDB saved replay in history library",
+      "saved file re-import and outcome verification",
+      "viewer leaves Pointer Lock released"
+    ],
+    "errors": [],
+    "environment": "Chromium154 Linux headless SwiftShader; actual App/Runtime/BrowserInput/IndexedDB; local-only development origin",
+    "summary": "현재 제거0\n현재 발사0\n무기밴달\n기록 점수1",
+    "passed": true,
+    "completedAt": "2026-11-02T09:20:54.463Z"
+  },
+  "actualFileBytes": 15330,
+  "limits": {
+    "physicalInputLatencyVerified": false,
+    "crossBrowserFloatDeterminismVerified": false,
+    "silentViewer": true
+  }
+}

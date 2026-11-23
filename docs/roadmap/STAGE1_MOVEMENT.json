@@ -1,0 +1,436 @@
+{
+  "schema": 1,
+  "issueIds": [
+    "F1",
+    "F2",
+    "F9",
+    "F10"
+  ],
+  "environment": {
+    "runtime": "Node24.22.1 / Vitest3.2.7 / Three0.180.0",
+    "fixedHz": 120,
+    "nativeGameMeasured": false,
+    "gpuMeasured": false,
+    "physicalInputLatencyMeasured": false
+  },
+  "baseline": {
+    "revision": "09.01",
+    "gameVersion": "9.0.1",
+    "commit": "8abf7b173698be249882ab34562016e640df4b3e",
+    "fixedHz": 120,
+    "nativeGameMeasured": false,
+    "rows": [
+      {
+        "label": "run",
+        "groundSpeed": 5.4,
+        "airMean": 5.399999999999996,
+        "airPeak": 5.4,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      },
+      {
+        "label": "walk",
+        "groundSpeed": 2.592,
+        "airMean": 2.5920000000000027,
+        "airPeak": 2.592,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      },
+      {
+        "label": "crouch",
+        "groundSpeed": 1.9440000000000006,
+        "airMean": 1.9440000000000013,
+        "airPeak": 1.9440000000000006,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      },
+      {
+        "label": "operator",
+        "groundSpeed": 5.13,
+        "airMean": 5.129999999999997,
+        "airPeak": 5.13,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      },
+      {
+        "label": "rifle-ads",
+        "groundSpeed": 4.104,
+        "airMean": 4.104000000000005,
+        "airPeak": 4.104,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      },
+      {
+        "label": "operator-scope",
+        "groundSpeed": 3.6936,
+        "airMean": 3.693600000000003,
+        "airPeak": 3.6936,
+        "height": 0.7295833333333329,
+        "duration": 0.5666666666666667,
+        "impact": 5.150000000000002,
+        "airTicks": 68
+      }
+    ],
+    "csTrajectories": [
+      {
+        "preset": "cs2",
+        "sha256": "63483b858c8d3b210c78ca576d62fd8d14e7b540bcdf7725b4223a937d38f058"
+      },
+      {
+        "preset": "sourceClassic",
+        "sha256": "d25ad9af42b2d0c7425c57026128797351eaf683a109052de5e27abc9f76ae7c"
+      }
+    ],
+    "sixSecondChaining": {
+      "mode": "chain",
+      "cap": 5.5,
+      "seconds": 6,
+      "pathMeters": 32.4,
+      "netMeters": 32.4,
+      "peakSpeed": 5.4,
+      "finalSpeed": 5.4,
+      "jumps": 11,
+      "chains": 10,
+      "landings": 10,
+      "meanLandingInterval": 0.575,
+      "lastInputTimingMs": -50,
+      "lastSpeedPreservation": 1,
+      "groundTicks": 0,
+      "airborneTicks": 720,
+      "largestTurnDegrees": 0
+    }
+  },
+  "updated": {
+    "benchmark": "roadmap-stage1-movement",
+    "schema": 1,
+    "physicsVersion": "dual-movement-1.1.0",
+    "fixedHz": 120,
+    "nativeGameMeasured": false,
+    "rows": [
+      {
+        "label": "running rifle",
+        "groundSpeed": 5.4,
+        "airMean": 5.399999999999993,
+        "airPeak": 5.4,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -5.038749999999994
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -5.4
+          },
+          "horizontalSpeed": 5.4,
+          "movementState": "running",
+          "weapon": "rifleA",
+          "weaponRunSpeed": 5.4,
+          "ads": false,
+          "speedCap": 5.670000000000001,
+          "calibration": "report-provisional"
+        }
+      },
+      {
+        "label": "walking rifle",
+        "groundSpeed": 2.592,
+        "airMean": 2.592000000000004,
+        "airPeak": 2.592,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -2.5141999999999984
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -2.592
+          },
+          "horizontalSpeed": 2.592,
+          "movementState": "walking",
+          "weapon": "rifleA",
+          "weaponRunSpeed": 5.4,
+          "ads": false,
+          "speedCap": 3.342,
+          "calibration": "report-provisional"
+        }
+      },
+      {
+        "label": "crouching rifle",
+        "groundSpeed": 1.9440000000000006,
+        "airMean": 1.944,
+        "airPeak": 1.9440000000000006,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -1.9457499999999992
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -1.9440000000000006
+          },
+          "horizontalSpeed": 1.9440000000000006,
+          "movementState": "crouching",
+          "weapon": "rifleA",
+          "weaponRunSpeed": 5.4,
+          "ads": false,
+          "speedCap": 2.694000000000001,
+          "calibration": "report-provisional"
+        }
+      },
+      {
+        "label": "Operator",
+        "groundSpeed": 5.13,
+        "airMean": 5.129999999999997,
+        "airPeak": 5.13,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -4.80488888888888
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -5.13
+          },
+          "horizontalSpeed": 5.13,
+          "movementState": "running",
+          "weapon": "operator",
+          "weaponRunSpeed": 5.13,
+          "ads": false,
+          "speedCap": 5.3865,
+          "calibration": "report-provisional"
+        }
+      },
+      {
+        "label": "rifle ADS",
+        "groundSpeed": 4.104,
+        "airMean": 4.104000000000003,
+        "airPeak": 4.104,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -3.8994333333333215
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -4.104
+          },
+          "horizontalSpeed": 4.104,
+          "movementState": "running",
+          "weapon": "rifleA",
+          "weaponRunSpeed": 5.4,
+          "ads": true,
+          "speedCap": 4.854,
+          "calibration": "report-provisional"
+        }
+      },
+      {
+        "label": "Operator scope",
+        "groundSpeed": 3.6936,
+        "airMean": 3.6936000000000027,
+        "airPeak": 3.6936,
+        "height": 1.1499695016912355,
+        "duration": 0.6416666666666644,
+        "impact": 7.1866323024885075,
+        "airTicks": 77,
+        "takeoff": {
+          "kind": "jump",
+          "time": 1.0083333333333333,
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -3.529186666666669
+          },
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": -3.6936
+          },
+          "horizontalSpeed": 3.6936,
+          "movementState": "running",
+          "weapon": "operator",
+          "weaponRunSpeed": 5.13,
+          "ads": true,
+          "speedCap": 4.4436,
+          "calibration": "report-provisional"
+        }
+      }
+    ],
+    "reverseSteering": [
+      {
+        "angleDegrees": 149,
+        "impulseMetersPerSecond": 0.0833333333333336,
+        "velocityBefore": [
+          0,
+          0,
+          -5.4
+        ],
+        "velocityAfter": [
+          -0.042919839575837865,
+          0,
+          -5.328569391608157
+        ]
+      },
+      {
+        "angleDegrees": 150,
+        "impulseMetersPerSecond": 0.04166666666666649,
+        "velocityBefore": [
+          0,
+          0,
+          -5.4
+        ],
+        "velocityAfter": [
+          -0.02083333333333333,
+          0,
+          -5.363915608175649
+        ]
+      },
+      {
+        "angleDegrees": 151,
+        "impulseMetersPerSecond": 0.04166666666666639,
+        "velocityBefore": [
+          0,
+          0,
+          -5.4
+        ],
+        "velocityAfter": [
+          -0.02020040084359738,
+          0,
+          -5.363557512202526
+        ]
+      },
+      {
+        "angleDegrees": 180,
+        "impulseMetersPerSecond": 0.04166666666666696,
+        "velocityBefore": [
+          0,
+          0,
+          -5.4
+        ],
+        "velocityAfter": [
+          -5.102694996447305e-18,
+          0,
+          -5.358333333333333
+        ]
+      }
+    ],
+    "csTrajectories": [
+      {
+        "preset": "cs2",
+        "sha256": "63483b858c8d3b210c78ca576d62fd8d14e7b540bcdf7725b4223a937d38f058",
+        "unchangedFrom0901": true
+      },
+      {
+        "preset": "sourceClassic",
+        "sha256": "d25ad9af42b2d0c7425c57026128797351eaf683a109052de5e27abc9f76ae7c",
+        "unchangedFrom0901": true
+      }
+    ],
+    "sixSecondChaining": {
+      "mode": "chain",
+      "cap": 5.5,
+      "seconds": 6,
+      "pathMeters": 32.4,
+      "netMeters": 32.4,
+      "peakSpeed": 5.4,
+      "finalSpeed": 5.4,
+      "jumps": 10,
+      "chains": 9,
+      "landings": 9,
+      "meanLandingInterval": 0.65,
+      "lastInputTimingMs": -25,
+      "lastSpeedPreservation": 1,
+      "groundTicks": 0,
+      "airborneTicks": 720,
+      "largestTurnDegrees": 0
+    }
+  },
+  "acceptance": {
+    "jumpHeight": {
+      "targetMeters": 1.15,
+      "toleranceMeters": 0.02,
+      "measuredMeters": 1.1499695016912355,
+      "passed": true
+    },
+    "flightDuration": {
+      "referenceSeconds": [
+        0.61,
+        0.68
+      ],
+      "measuredSeconds": 0.6416666666666644,
+      "timestampQuantizationSeconds": 0.008333333333333333,
+      "passed": true
+    },
+    "heldForwardSlowMovement": {
+      "passed": true
+    },
+    "counterStrikeIsolation": {
+      "passed": true
+    }
+  },
+  "tests": {
+    "newTests": 24,
+    "affectedTests": 180,
+    "files": 8,
+    "passed": 180,
+    "failed": 0,
+    "log": "/workspace/roadmap-qa/movement-final.log"
+  },
+  "limits": {
+    "F1": "Report-derived takeoff budget/reverse multiplier, not official native equations. Existing09.01 wish-speed limits retained.",
+    "F2": "Report-derived1.15m target with separately chosen22m/s\u00b2 gravity; native capture pending.",
+    "F9": "Walking ratio .48 retained without a native measurement.",
+    "F10": "Independent impact-based landing stream retained; silent-landing rules unverified.",
+    "inputLatency": "No physical mouse-to-photon measurement.",
+    "performance": "No GPU/frame-time claim from trajectory tests.",
+    "deployment": "Root release pipeline pending."
+  }
+}
