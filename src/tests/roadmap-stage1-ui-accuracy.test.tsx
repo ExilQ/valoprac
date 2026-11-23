@@ -78,7 +78,7 @@ describe('F7 all eight navigation tasks retain their name across menu, preparati
   const menu=renderToStaticMarkup(<MainMenu/>),preparation=renderToStaticMarkup(<GameStage/>),hud=renderToStaticMarkup(<GameHUD runtime={null} settings={settings} telemetry={INITIAL_TELEMETRY} mode={choice.mode} weapon="rifleA"/>),result=renderToStaticMarkup(<Results/>),history=renderToStaticMarkup(<History/>);
   expect(trainingTitle(choice.mode,settings)).toBe(title);
   const launch=menu.match(/<button class="start-button"[^>]*>(.*?)<\/button>/)?.[1];expect(launch).toContain(title);
-  expect(preparation).toContain(title+' · 훈련 준비 완료');expect(preparation).toContain(trainingDescription(choice.mode,settings));
+  expect(preparation).toContain('훈련 준비 완료');expect(preparation).toContain('>'+title+'</h2>');expect(preparation).toContain(trainingDescription(choice.mode,settings));
   expect(hud).toContain(title);expect(result).toContain(title);expect(history).toContain(title);
   if(!['free','timed'].includes(id)){expect(preparation).not.toContain('무기를 바꾸고 표적을 조정하며 자유롭게 연습하세요.');expect(hud).not.toContain('자유 훈련');}
   measurements.labels.push({task:id,title,screens:['main-menu-launch','preparation','HUD','results','history'],passed:true});

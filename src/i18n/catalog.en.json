@@ -12525,6 +12525,26 @@
       "id": "msg_0d61d8a6396e",
       "source": "감도 비교·측정 방법",
       "en": "Sensitivity comparison methodology"
+    },
+    {
+      "id": "msg_137e32bba00a",
+      "source": "훈련 실패",
+      "en": "Training failed"
+    },
+    {
+      "id": "msg_e9dbbe23f3d8",
+      "source": "훈련장",
+      "en": "Training area"
+    },
+    {
+      "id": "msg_d09b8055f6ba",
+      "source": "무제한",
+      "en": "Unlimited"
+    },
+    {
+      "id": "msg_ba3f8b4219a7",
+      "source": "현재 체력",
+      "en": "Current health"
     }
   ]
 }

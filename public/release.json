@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.10",
+  "version": "12.0.11",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -169,7 +169,11 @@
     "map-specific-original-arena-art-direction",
     "openvaim-inspired-floor-wall-surface-patterns",
     "coordinated-arena-lighting-and-painted-sky",
-    "original-route-markings-and-obstacle-color-bands"
+    "original-route-markings-and-obstacle-color-bands",
+    "tactical-training-briefing",
+    "segmented-live-magazine-hud",
+    "combat-health-and-timed-round-readouts",
+    "configured-control-key-hints"
   ],
   "unreal": {
     "engine": "5.7",
@@ -184,7 +188,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.10",
+  "patchLabel": "12.11",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,

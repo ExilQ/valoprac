@@ -1,9 +1,11 @@
 /* Gameplay has independent contrast tokens. Menu themes never recolor reticles,
  * target rendering, or the instrument backplates over bright/dark environments. */
 .game-stage .game-hud.precision-hud{
- --hud-ink:#f1f6f4;--hud-muted:#bdcbd0;--hud-line:#637b84;--hud-panel:rgba(20,36,45,.94);
- --hud-accent:#91d7cf;--hud-success:#9bd7bb;--hud-warning:#ebc878;--hud-danger:#ffaaa3;
+ --hud-ink:#f8f3e7;--hud-muted:#c3c9c8;--hud-line:#687476;--hud-panel:rgba(19,26,30,.96);
+ --hud-accent:#9bdbcc;--hud-success:#a0dcc3;--hud-warning:#f0bf79;--hud-danger:#ffaaa3;
  --hud-map:#16252c;--hud-map-wall:#6f858b;--hud-sound-fill:#e8bb5920;
+ --hud-display:"Arial Narrow",var(--font-body),system-ui,sans-serif;
+ --hud-chamfer:polygon(0 0,calc(100% - 11px) 0,100% 11px,100% 100%,11px 100%,0 calc(100% - 11px));
  --ink:var(--hud-ink);--muted:var(--hud-muted);--subtle:var(--hud-muted);--line:var(--hud-line);
  --accent:var(--hud-accent);--interactive:var(--hud-accent);--success:var(--hud-success);--warning:var(--hud-warning);--danger:var(--hud-danger);
  --dock-width:clamp(196px,16vw,232px);--hud-inset:max(18px,env(safe-area-inset-left),env(safe-area-inset-right));
@@ -20,7 +22,7 @@
 .game-stage .precision-hud .hud-top-center{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
 .game-stage .precision-hud .hud-bottom-center{grid-column:2;grid-row:3;align-self:end;min-width:0;display:grid;gap:5px}
 .game-stage .precision-hud .footstep-hud{position:static;display:contents;width:auto;font-size:12px}
-.game-stage .precision-hud :is(.hearing-map,.footstep-gauge,.braking-hud,.practice-stat-hud,.movement-physics-diagnostics,.ammo-hud,.hud-diagnostics-disclosure,.mechanics-hud,.peeking-hud){
+.game-stage .precision-hud :is(.hearing-map,.footstep-gauge,.braking-hud,.practice-stat-hud,.movement-physics-diagnostics,.ammo-hud,.health-hud,.hud-diagnostics-disclosure,.mechanics-hud,.peeking-hud){
  background:var(--hud-panel);color:var(--hud-ink);border:1px solid var(--hud-line);border-radius:2px;box-shadow:none;backdrop-filter:none;min-width:0;
 }
 .game-stage .precision-hud .hearing-map,.game-stage .precision-hud .footstep-gauge{padding:10px 12px;order:initial}
@@ -59,20 +61,22 @@
 .game-stage .precision-hud .braking-times>span{display:flex;justify-content:space-between;gap:8px;color:var(--hud-muted);font-size:12px}
 .game-stage .precision-hud .braking-times b{font-size:12px;font-weight:500;color:var(--hud-ink);white-space:nowrap}
 .game-stage .precision-hud .movement-profile-status{background:var(--hud-panel);border:1px solid var(--hud-line);padding:3px 8px;font-size:12px;color:var(--hud-muted)}
-.game-stage .precision-hud .game-top{position:static;inset:auto;transform:none;width:auto;max-width:100%;min-height:54px;margin:0;background:var(--hud-panel);border:1px solid var(--hud-line);display:flex;justify-content:center;align-items:stretch;overflow:hidden}
+.game-stage .precision-hud .game-top{position:static;inset:auto;transform:none;width:auto;min-width:0;max-width:100%;min-height:58px;margin:0;background:var(--hud-panel);border:1px solid var(--hud-line);display:flex;justify-content:center;align-items:stretch;overflow:hidden;clip-path:var(--hud-chamfer)}
 .game-stage .precision-hud .game-top .mode-pill{display:flex;align-items:center;gap:8px;max-width:174px;min-width:0;font-size:12px;line-height:1.5;padding:10px 13px;background:none;color:var(--hud-ink);border:0;clip-path:none}
-.game-stage .precision-hud .game-top .status-dot{width:5px;height:5px;background:var(--hud-accent);box-shadow:none;border-radius:0}
 .game-stage .precision-hud .hud-mode-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;max-width:100%}
-.game-stage .precision-hud .game-top .timer{position:static;inset:auto;transform:none;display:grid;align-content:center;grid-template-columns:auto auto auto;column-gap:0;font-family:inherit;font-weight:550;font-size:25px;line-height:1.15;padding:6px 14px;min-width:96px;border:0;border-inline:1px solid var(--hud-line);background:none;color:var(--hud-ink);white-space:nowrap}
+.game-stage .precision-hud .game-top .timer{position:relative;inset:auto;transform:none;display:grid;place-content:center;text-align:center;gap:1px;font-family:var(--hud-display);font-size:27px;line-height:1.05;padding:6px 14px 9px;min-width:104px;border:0;border-inline:1px solid var(--hud-line);background:#ffffff08;color:var(--hud-ink);white-space:nowrap}
 .game-stage .precision-hud .timer small{grid-column:1/-1;font-size:12px!important;font-weight:400;line-height:1.5;margin:0;color:var(--hud-muted);text-align:center}
-.game-stage .precision-hud .timer em{font-style:normal;opacity:1;padding-inline:1px}
+.game-stage .precision-hud .timer strong{font-weight:750;letter-spacing:-.02em}
+.game-stage .precision-hud .hud-round-progress{position:absolute;inset:auto 0 0;height:3px;background:#ffffff20}
+.game-stage .precision-hud .hud-round-progress>i{display:block;height:100%;background:var(--hud-accent)}
+.game-stage .precision-hud .timer.danger .hud-round-progress>i{background:var(--hud-danger)}
 .game-stage .precision-hud .timer.danger{color:var(--hud-danger)}
-.game-stage .precision-hud .kill-counter{display:flex;align-items:baseline;justify-content:center;gap:7px;background:none;border:0;padding:12px 13px;margin:0;min-width:66px}
-.game-stage .precision-hud .kill-counter strong{font-size:25px;line-height:1.15;font-weight:550}
+.game-stage .precision-hud .kill-counter{display:grid;place-content:center;text-align:center;gap:2px;background:none;border:0;padding:7px 14px;margin:0;min-width:66px}
+.game-stage .precision-hud .kill-counter strong{font-family:var(--hud-display);font-size:24px;line-height:1.05;font-weight:720;color:var(--hud-ink)}
 .game-stage .precision-hud .kill-counter small{font-size:12px!important;line-height:1.5;color:var(--hud-muted)}
 .game-stage .precision-hud .drill-hud{position:static;inset:auto;margin:0;max-width:420px;width:100%;padding:7px 10px;line-height:1.5;font-size:12px;background:var(--hud-panel);border:1px solid var(--hud-line);border-radius:2px;color:var(--hud-ink)}
 .game-stage .precision-hud .drill-hud>span,.game-stage .precision-hud .drill-hud>small{font-size:12px;line-height:1.5;color:var(--hud-muted)}
-.game-stage .precision-hud .hud-right-stack{display:flex;flex-direction:column;gap:8px;min-height:0;max-height:calc(100% - 124px);overflow:auto;scrollbar-width:thin;pointer-events:auto}
+.game-stage .precision-hud .hud-right-stack{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto;scrollbar-width:thin;pointer-events:auto}
 .game-stage .precision-hud .hud-right-stack>*{flex-shrink:0}
 .game-stage .precision-hud .movement-physics-diagnostics{padding:9px 12px;font-size:12px;line-height:1.5;gap:6px;flex-shrink:0;min-width:0;overflow:visible}
 .game-stage .precision-hud .movement-physics-diagnostics h3{font-size:12px;font-weight:550;line-height:1.5;color:var(--hud-ink);margin:0}
@@ -95,16 +99,28 @@
 .game-stage .precision-hud .hud-practice-details{display:grid;gap:5px;margin-top:8px;font-size:12px;color:var(--hud-muted)}
 .game-stage .precision-hud .peeking-hud{padding:9px 12px;font-size:12px;line-height:1.5;gap:5px}
 .game-stage .precision-hud .peeking-hud strong{font-size:15px;color:var(--hud-ink);font-weight:550}
-.game-stage .precision-hud .peeking-hud strong small,.game-stage .precision-hud .peeking-hud strong>span{font-size:12px;color:var(--hud-muted)}
+.game-stage .precision-hud .peeking-hud strong small{font-size:12px;color:var(--hud-muted)}
 .game-stage .precision-hud .peeking-hud .low-health{color:var(--hud-danger)}
 .game-stage .precision-hud .mechanics-hud{padding:9px 12px;font-size:12px;line-height:1.5;gap:5px}
 .game-stage .precision-hud .mechanics-hud h3{font-size:12px;font-weight:550;color:var(--hud-ink)}
-.game-stage .precision-hud .ammo-hud{position:static;inset:auto;transform:none;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:1px 8px;margin:auto 0 0;padding:10px 12px;text-align:right;border-top:2px solid var(--hud-accent);width:auto;max-width:100%}
+.game-stage .precision-hud .ammo-hud{--readout-color:var(--hud-accent);position:static;inset:auto;transform:none;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;flex:none;gap:1px 8px;margin:auto 0 0;padding:9px 12px 8px;text-align:right;text-shadow:none;border-top:2px solid var(--readout-color);width:auto;max-width:100%;clip-path:var(--hud-chamfer)}
+.game-stage .precision-hud .ammo-hud[data-ammo-state="low"]{--readout-color:var(--hud-danger)}
+.game-stage .precision-hud .ammo-hud[data-ammo-state="reloading"]{--readout-color:var(--hud-warning)}
 .game-stage .precision-hud .ammo-hud>span{grid-column:1;grid-row:1;font-size:12px;letter-spacing:0;color:var(--hud-ink);text-align:left}
 .game-stage .precision-hud .ammo-hud .reserve-count{grid-column:2;grid-row:1;font-size:12px!important;color:var(--hud-muted)}
-.game-stage .precision-hud .ammo-hud>strong{grid-column:1/-1;grid-row:2;font-family:inherit;font-size:35px;font-weight:550;line-height:1.2;letter-spacing:-.025em;color:var(--hud-ink)}
+.game-stage .precision-hud .ammo-hud>strong{grid-column:1/-1;grid-row:2;font-family:var(--hud-display);font-size:37px;font-weight:750;line-height:1.05;letter-spacing:-.035em;color:var(--hud-ink);margin:0}
 .game-stage .precision-hud .ammo-hud>strong small{font-size:17px;font-weight:400;color:var(--hud-muted);letter-spacing:0}
-.game-stage .precision-hud .ammo-hud>p{grid-column:1/-1;grid-row:3;font-size:12px!important;line-height:1.5;color:var(--hud-muted);margin:3px 0 0;white-space:normal}
+.game-stage .precision-hud .ammo-hud>p{grid-column:1/-1;grid-row:4;font-size:12px!important;line-height:1.5;color:var(--hud-muted);margin:3px 0 0;white-space:normal}
+.game-stage .precision-hud .ammo-hud[data-ammo-state]:not([data-ammo-state="ready"]) :is(strong,p){color:var(--readout-color)}
+.game-stage .precision-hud .ammo-segments{grid-column:1/-1;grid-row:3;display:flex;gap:3px;margin-top:5px;transform:skewX(-15deg)}
+.game-stage .precision-hud .ammo-segments>span{flex:1;min-width:0;height:4px;background:#ffffff32}
+.game-stage .precision-hud .ammo-segments i,.game-stage .precision-hud .health-hud-meter i{display:block;height:100%;background:var(--readout-color)}
+.game-stage .precision-hud .health-hud{--readout-color:var(--hud-success);flex:none;padding:6px 12px 8px;clip-path:var(--hud-chamfer)}
+.game-stage .precision-hud .health-hud[data-health-state="low"]{--readout-color:var(--hud-danger)}
+.game-stage .precision-hud .health-hud>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.game-stage .precision-hud .health-hud strong{font-family:var(--hud-display);font-size:20px;line-height:1.25;color:var(--readout-color)}
+.game-stage .precision-hud .health-hud small{font-size:12px;font-weight:450;color:var(--hud-muted)}
+.game-stage .precision-hud .health-hud-meter{height:4px;margin-top:4px;background:#ffffff32}
 .game-stage .precision-hud .game-bottom-center{position:static;inset:auto;transform:none;display:flex;justify-content:center;flex-wrap:wrap;gap:5px 12px;padding:5px 8px;font-size:12px;line-height:1.5;white-space:normal;background:var(--hud-panel);border:1px solid var(--hud-line);color:var(--hud-muted)}
 .game-stage .precision-hud .game-bottom-center span{display:inline-flex!important;gap:4px;align-items:center}
 .game-stage .precision-hud kbd{font-family:inherit;font-size:12px;padding:1px 3px;background:none;border:0;border-bottom:1px solid var(--hud-line);border-radius:0;box-shadow:none;color:var(--hud-ink)}
@@ -115,4 +131,25 @@
 @media(max-height:800px){.game-stage .precision-hud .hearing-map svg{height:78px;margin-block:6px}.game-stage .precision-hud .hearing-map,.game-stage .precision-hud .footstep-gauge{padding:8px 10px}.game-stage .precision-hud .hud-footstep-details{margin-top:5px}.game-stage .precision-hud .braking-hud{padding:8px 10px}.game-stage .precision-hud .hud-left-dock,.game-stage .precision-hud .hud-right-dock{gap:8px}}
 @media(max-width:1050px){.game-stage .game-hud.precision-hud{--dock-width:192px;--hud-inset:12px;column-gap:10px}.game-stage .precision-hud .game-top .mode-pill{max-width:128px;font-size:12px}.game-stage .precision-hud .game-top .timer{padding-inline:10px}.game-stage .precision-hud .game-top .kill-counter{padding-inline:9px}.game-stage .precision-hud .game-bottom-center span:nth-child(2),.game-stage .precision-hud .game-bottom-center span:nth-child(3){display:none!important}}
 @media(max-width:700px){.game-stage .game-hud.precision-hud{--dock-width:160px;column-gap:8px;font-size:12px}.game-stage .precision-hud .game-top .mode-pill{display:none}.game-stage .precision-hud .game-top .timer{min-width:76px;font-size:22px;padding-inline:8px}.game-stage .precision-hud .kill-counter strong{font-size:22px}.game-stage .precision-hud .kill-counter small{display:none}.game-stage .precision-hud .game-bottom-center{display:none}.game-stage .precision-hud .hearing-map svg{height:66px}.game-stage .precision-hud .ammo-hud>strong{font-size:29px}.game-stage .precision-hud .physics-essential-readouts>span{flex-wrap:wrap;gap:0 6px}}
+@media(max-width:560px){
+ .game-stage .game-hud.precision-hud{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:7px}
+ .game-stage .precision-hud .hud-top-center{grid-column:1/-1}
+ .game-stage .precision-hud .game-top .mode-pill{display:flex}
+ .game-stage .precision-hud .kill-counter small{display:block}
+ .game-stage .precision-hud .hud-left-dock,.game-stage .precision-hud .hud-right-dock{grid-row:2;padding-top:0;gap:6px}
+ .game-stage .precision-hud .hud-left-dock{grid-column:1;width:min(148px,100%)}
+ .game-stage .precision-hud .hud-right-dock{grid-column:2;width:min(148px,100%);justify-self:end}
+ .game-stage .precision-hud .hud-bottom-center{grid-column:1/-1;justify-self:center;grid-row:3}
+ .game-stage .precision-hud .braking-hud .speed{flex-wrap:wrap}
+ .game-stage .precision-hud .braking-hud .speed>b{margin-left:0}
+ .game-stage .precision-hud .hearing-map>header{flex-wrap:wrap;gap:3px}
+}
+@media(max-height:490px){
+ .game-stage .precision-hud .braking-hud .hud-braking-details:not([open]){margin-top:3px}
+ .game-stage .precision-hud .hud-right-dock{padding-top:0}
+}
+@media(forced-colors:active){
+ .game-stage .precision-hud :is(.hud-round-progress,.ammo-segments>span,.health-hud-meter){border:1px solid GrayText}
+ .game-stage .precision-hud :is(.hud-round-progress,.ammo-segments,.health-hud-meter) i{background:CanvasText;forced-color-adjust:none}
+}
 @media(prefers-reduced-motion:reduce){.game-stage .precision-hud *{animation:none!important;transition:none!important}}

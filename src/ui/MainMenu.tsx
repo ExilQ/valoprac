@@ -5,7 +5,7 @@ import {SearchIntroduction} from './SearchIntroduction';
 import {TacticalControls} from './TacticalControls';
 import {TacticalMapSelection} from './TacticalMapSelection';
 import {selectedTraining,trainingChoice,type TrainingNavigation} from '../app/trainingNavigation';
-import {ArrowRight,ArrowUpRight,ChevronDown,Infinity,Timer,MoveHorizontal,Activity,ScanLine,Layers3,Crosshair,Target,ChartNoAxesCombined,SlidersHorizontal,Wrench} from 'lucide-react';
+import {Play,ArrowUpRight,ChevronDown,Infinity,Timer,MoveHorizontal,Activity,ScanLine,Layers3,Crosshair,Target,ChartNoAxesCombined,SlidersHorizontal,Wrench} from 'lucide-react';
 import {useApp} from '../app/store';
 import {GameStage} from '../components/LazyGameStage';
 import {TrainingMapPlan} from './TrainingMapPlan';
@@ -15,6 +15,7 @@ import {trainingTitle,trainingDescription,trainingTimed,trainingMapTitle} from '
 import {PEEK_ZONES,activeAngles} from '../engine/tactical/complex';
 import type {PeekScenario} from '../engine/types';
 import './homeUtility.css';
+import './trainingBrief.css';
 export const trainingStartLabel=trainingTitle;
 const NAVIGATION_KEY='valoprac-training-navigation-open';
 const TRAINING_ROWS=[
@@ -56,12 +57,16 @@ export function MainMenu(){
     </details>
    </section>
    <div className="utility-session-container"><div className="utility-session-column">
-    <section className="utility-task-panel" aria-labelledby="selected-training-title"><h2 id="selected-training-title">{title}</h2><p className="utility-task-description">{trainingDescription(mode,s)}</p>
+    <section className="utility-task-panel" aria-labelledby="selected-training-title">
+     <header className="training-brief">
+      <h2 className="training-brief-title" id="selected-training-title">{title}</h2>
+      <p className="training-brief-description">{trainingDescription(mode,s)}</p>
+     </header>
      {['precision','tracking'].includes(mode)&&<div className="timed-submodes" aria-label="시간제 세부 훈련"><button aria-pressed={mode==='precision'} onClick={()=>setMode('precision')}>헤드샷 정밀도</button><button aria-pressed={mode==='tracking'} onClick={()=>setMode('tracking')}>이동 표적 추적</button></div>}
      <div className="session-config"><div><span className="control-label">훈련 시간</span><div className="duration-options">{!timed?<span className="unlimited-label"><Infinity size={15}/>직접 종료할 때까지</span>:[30,60,120].map(n=><button key={n} aria-pressed={s.duration===n} className={s.duration===n?'active':''} onClick={()=>update({duration:n})}>{n}초</button>)}</div></div><button className="weapon-quick-select" onClick={()=>setTab('weapons')}><span className="control-label">장착 무기</span><strong>{WEAPONS[weapon].name}<ArrowUpRight size={14}/></strong></button></div>
      {mode==='free'&&s.practiceMap==='range'&&<div className="utility-quick-targets"><label htmlFor="home-target-count">표적 수</label><input id="home-target-count" aria-label="빠른 표적 수" type="number" min="1" max="12" step="1" value={s.targetCount} onChange={event=>{const n=Number(event.target.value);if(Number.isFinite(n)&&n>=1&&n<=12)update({targetCount:Math.round(n)});}}/><span>개</span><span className="utility-target-rule">{s.eliminationRule==='head'?'헤드샷만':s.eliminationRule==='any'?'모든 부위 한 발':'체력 150 · 피해량 누적'}</span></div>}
      {s.practiceMap==='complex'&&mode==='free'&&<label className="practice-select utility-sector-select">훈련 구역<select aria-label="빠른 피킹 구역" value={s.peekScenario} onChange={e=>chooseSector(e.target.value as PeekScenario)}><option value="free">전체 전술 맵 · 자유 탐색</option>{PEEK_ZONES.map(zone=><option key={zone.id} value={zone.scenario}>{zone.name}</option>)}<option value="operator">오퍼레이터 대응</option></select></label>}
-     <button className="start-button" onClick={start}><span><strong>훈련 시작</strong><small>{trainingStartLabel(mode,s)} · {!timed?'시간 무제한':`${s.duration}초`}</small></span><ArrowRight size={18} aria-hidden="true"/></button><p className="start-note">훈련 중 <kbd>Esc</kbd>를 누르면 일시정지합니다.</p>
+     <button className="start-button" onClick={start}><span><strong>훈련 시작</strong><small>{trainingStartLabel(mode,s)} · {!timed?'시간 무제한':`${s.duration}초`}</small></span><Play size={18} fill="currentColor" aria-hidden="true"/></button><p className="start-note">훈련 중 <kbd>Esc</kbd>를 누르면 일시정지합니다.</p>
     </section>
     <aside className="home-aside utility-preview-panel"><div className="range-card"><div className="range-card-header"><h3>{trainingMapTitle(s)}</h3><a href={TAB_PATHS.maps} onClick={event=>{if(shouldNavigateLocally(event)){event.preventDefault();setTab('maps');}}}>맵 변경</a></div><div className="utility-space-preview" id="training-space-preview">{previewOpen?<GameStage preview key={`${mode}-${s.practiceMap}-${s.peekScenario}`}/>:<TrainingMapPlan map={s.practiceMap}/>}</div><button className="utility-preview-toggle" aria-expanded={previewOpen} aria-controls="training-space-preview" onClick={()=>setPreviewOpen(open=>!open)}>{previewOpen?'3D 미리보기 끄기':'3D 미리보기 켜기'}</button></div></aside>
     <section className="utility-recent-strip"><div>{recent?<><h3>최근 기록</h3><p>{new Date(recent.createdAt).toLocaleDateString(localeTag())} · 헤드샷 {recent.summary.headshotAccuracy.toFixed(1)}% · {recent.summary.eliminations}개 제거</p></>:<><h3>아직 훈련 기록이 없습니다</h3><p>훈련을 마치면 이 브라우저에 저장됩니다.</p></>}</div><a href={TAB_PATHS.history} onClick={event=>{if(shouldNavigateLocally(event)){event.preventDefault();setTab('history');}}}>기록 보기</a></section>

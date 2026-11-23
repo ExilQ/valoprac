@@ -23,6 +23,6 @@ describe('Combat UI information boundaries',()=>{
  });
  it('keeps ammunition after the closing optional stack and uses the Operator movement threshold',()=>{
   const html=renderToStaticMarkup(<GameHUD runtime={null} settings={DEFAULT_SETTINGS} telemetry={INITIAL_TELEMETRY} mode="free" weapon="operator"/>);
-  expect(html).toContain('</div><div class="ammo-hud">');expect(html).toContain(`left:${5.13*.72*.15/5.4*100}%`);
+  expect(html).toContain('</div><div class="ammo-hud" data-ammo-state="ready">');expect(html).toContain(`left:${5.13*.72*.15/5.4*100}%`);
  });
 });

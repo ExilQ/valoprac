@@ -46,3 +46,10 @@ export function trainingMapTitle(s:Pick<Settings,'practiceMap'>){
 export function trainingTimed(mode:Mode,s:Pick<Settings,'practiceMap'|'peekingTimed'>,options?:SimulationOptions){if(options?.exercise)return true;if(options?.scenario)return options.scenario.rules.duration!==null;return mode!=='free'||s.practiceMap==='complex'&&s.peekingTimed;}
 
 export function scenarioTitleIsLiteral(options?:SimulationOptions){const d=options?.scenario;return !!d&&d.title!==SCENARIO_ROUTE_TITLES[d.routeId];}
+
+export function trainingKeyLabel(code:string) {
+ if(code.startsWith('Key'))return code.slice(3);
+ if(code.startsWith('Digit'))return code.slice(5);
+ if(code.startsWith('Arrow'))return {ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'}[code]??code;
+ return code.replace(/(?:Left|Right)$/,'').replace('Control','Ctrl');
+}

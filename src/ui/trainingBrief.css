@@ -1,0 +1,79 @@
+.training-brief {
+ --brief-ink: #fff4e5;
+ --brief-muted: #d4d9d6;
+ --brief-accent: #f2bd7e;
+ --brief-panel: #182329;
+ --brief-cut: polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px));
+ position: relative;
+ padding: clamp(18px,3.5vw,28px);
+ overflow: hidden;
+ text-align: left;
+ color: var(--brief-ink);
+ background: repeating-linear-gradient(132deg,transparent 0 31px,#d2e9e30d 32px 33px,transparent 34px 66px) right center/38% 100% no-repeat,
+             linear-gradient(110deg,var(--brief-panel) 54%,#2c4246);
+ border-left: 3px solid var(--brief-accent);
+ clip-path: var(--brief-cut);
+}
+.training-brief .training-brief-title,
+:root[data-theme] .pause-intro .training-brief .training-brief-title {
+ margin: 0;
+ color: var(--brief-ink);
+ font-family: var(--font-body);
+ font-size: clamp(24px,3vw,36px);
+ font-weight: 760;
+ line-height: 1.24;
+ letter-spacing: -.035em;
+ overflow-wrap: anywhere;
+}
+.training-brief .training-brief-description {
+ max-width: 54ch;
+ margin: 10px 0 0;
+ color: var(--brief-muted);
+ font-size: 14px;
+ line-height: 1.7;
+}
+.training-brief .training-brief-state {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ margin: 0 0 10px;
+ color: var(--brief-accent);
+ font-size: 13px;
+ font-weight: 650;
+}
+.training-brief-facts {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 7px 16px;
+ margin: 13px 0 0;
+ font-size: 13px;
+}
+.training-brief-facts > div { display: flex; gap: 6px; align-items: baseline; }
+.training-brief-facts dt { color: var(--brief-muted); }
+.training-brief-facts dd { margin: 0; font-weight: 650; }
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button,
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch {
+ --launch-fill: #edb576;
+ --launch-ink: #1b201f;
+ min-height: 54px;
+ color: var(--launch-ink);
+ background: var(--launch-fill);
+ border: 0;
+ border-left: 4px solid #a95b35;
+ border-radius: 0;
+ clip-path: polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button:is(:hover,:focus-visible),
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch:enabled:is(:hover,:focus-visible) { background: #ffd39c; }
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button:focus-visible,
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch:focus-visible { outline: 2px solid currentColor; outline-offset: -6px; }
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button small { color: inherit; }
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button > svg { flex: none; }
+.game-stage .pause-intro > .training-brief { margin-bottom: 18px; }
+.game-stage .pause-intro > .training-launch:disabled { opacity: .65; }
+.game-stage .pause-intro .training-brief + .exposure-feedback { margin-block: 12px; }
+@media (forced-colors: active) {
+ .training-brief { border: 1px solid CanvasText; clip-path: none; }
+ :root[data-theme] .training-home.precision-home .utility-task-panel .start-button,
+ :root[data-theme] .game-stage .pause-card .pause-intro > .training-launch { border: 1px solid ButtonText; clip-path: none; }
+}
