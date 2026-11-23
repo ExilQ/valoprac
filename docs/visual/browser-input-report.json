@@ -1,0 +1,306 @@
+{
+  "schema": 1,
+  "origin": "http://localhost:4173",
+  "method": "Playwright browser-generated keyboard/mouse events through the existing DOM input adapter; actual browser Pointer Lock and fullscreen APIs; no synthetic simulation state or forced locked UI",
+  "physicalHardwareTested": false,
+  "inputToPhotonMeasured": false,
+  "startedAt": "2026-10-25T00:12:05.265Z",
+  "checks": [
+    {
+      "name": "browser-pointer-lock",
+      "locked": true,
+      "running": true,
+      "error": null,
+      "support": true
+    },
+    {
+      "name": "browser-fire",
+      "before": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0,
+        "time": 0,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0,
+        "pitch": 0,
+        "footsteps": 0,
+        "locked": true
+      },
+      "after": {
+        "weapon": "rifleA",
+        "ammo": 24,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0,
+        "time": 0.45,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0,
+        "pitch": 0,
+        "footsteps": 0,
+        "locked": true
+      },
+      "passed": true
+    },
+    {
+      "name": "browser-reload",
+      "start": {
+        "weapon": "rifleA",
+        "ammo": 24,
+        "reloading": true,
+        "ads": false,
+        "adsAmount": 0,
+        "time": 0.8583333333333333,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0,
+        "pitch": 0,
+        "footsteps": 0,
+        "locked": true
+      },
+      "end": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0,
+        "time": 3.1416666666666666,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0,
+        "pitch": 0,
+        "footsteps": 0,
+        "locked": true
+      },
+      "passed": true
+    },
+    {
+      "name": "browser-toggle-ads",
+      "firstClick": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": true,
+        "adsAmount": 0.8884116007492252,
+        "time": 3.275,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 0,
+        "locked": true
+      },
+      "secondClick": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0.13040098969266636,
+        "time": 3.3916666666666666,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 0,
+        "locked": true
+      },
+      "passed": true
+    },
+    {
+      "name": "browser-hold-ads",
+      "held": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": true,
+        "adsAmount": 0.9200265292786051,
+        "time": 3.591666666666667,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 0,
+        "locked": true
+      },
+      "released": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0.015069056625362183,
+        "time": 3.841666666666667,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 0,
+        "locked": true
+      },
+      "passed": true,
+      "savedPreference": "hold"
+    },
+    {
+      "name": "browser-movement-and-release",
+      "before": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 0.015069056625362183,
+        "time": 3.841666666666667,
+        "running": true,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 0,
+        "locked": true
+      },
+      "moving": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 1.1456143521366137e-7,
+        "time": 4.558333333333334,
+        "running": true,
+        "position": [
+          -0.004501082912974883,
+          0,
+          1.4912528870332382
+        ],
+        "speed": 5.4,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 2,
+        "locked": true
+      },
+      "stopped": {
+        "weapon": "rifleA",
+        "ammo": 25,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 1.776293130590552e-11,
+        "time": 5.091666666666667,
+        "running": true,
+        "position": [
+          -0.005049882840170083,
+          0,
+          1.063444691234009
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 2,
+        "locked": true
+      },
+      "passed": true
+    },
+    {
+      "name": "browser-sheriff-no-ads",
+      "state": {
+        "weapon": "sheriff",
+        "ammo": 6,
+        "reloading": false,
+        "ads": false,
+        "adsAmount": 1.5069056625362287e-37,
+        "time": 6.241666666666666,
+        "running": true,
+        "position": [
+          -0.005049882840170083,
+          0,
+          1.063444691234009
+        ],
+        "speed": 0,
+        "yaw": 0.001282816999639965,
+        "pitch": -0.032498030665377625,
+        "footsteps": 2,
+        "locked": true
+      },
+      "passed": true
+    },
+    {
+      "name": "native-pointer-unlock-after-headless-escape",
+      "usedNativeAPI": true,
+      "forcedAppState": false
+    },
+    {
+      "name": "actual-fullscreen-button",
+      "fullscreen": true,
+      "fullscreenTag": "DIV",
+      "fullscreenClass": "game-stage ",
+      "fullscreenSupported": true,
+      "keyboardLockSupported": true,
+      "pointerLocked": true,
+      "running": true,
+      "viewport": [
+        1366,
+        768
+      ],
+      "screen": [
+        1366,
+        768
+      ],
+      "canvas": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 768,
+        "top": 0,
+        "right": 1366,
+        "bottom": 768,
+        "left": 0
+      },
+      "error": null
+    }
+  ],
+  "errors": [],
+  "completedAt": "2026-10-25T00:12:35.855Z"
+}

@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -47,7 +47,12 @@
     "total-movement-cone-endpoints",
     "response-security-headers",
     "immutable-asset-responses",
-    "complete-source-export"
+    "complete-source-export",
+    "authored-profile-weapon-geometry",
+    "articulated-first-person-arms",
+    "tapered-tactical-character-visuals",
+    "architectural-map-detail",
+    "competitive-interface-tokens"
   ],
   "unreal": {
     "engine": "5.7",
@@ -62,7 +67,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "04.01",
+  "patchLabel": "05.00",
   "aimScience": {
     "algorithm": "aim-1.0.0",
     "browserImplemented": true,
@@ -83,5 +88,15 @@
     "runtime": "worker-esm",
     "responseHeadersVerifiedLocally": true,
     "publicResponseVerificationRequired": true
+  },
+  "visuals": {
+    "renderer": "three-webgl",
+    "assets": "original-procedural",
+    "hardwareFPSVerified": false,
+    "physicalInputLatencyVerified": false,
+    "softwareVisualQA": true,
+    "browserPointerLockVerified": true,
+    "browserFullscreenVerified": true,
+    "hudLayoutsVerified": 8
   }
 }

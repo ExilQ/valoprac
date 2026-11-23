@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "4.0.1",
-  "patchLabel": "04.01",
-  "generatedAt": "2026-10-24T11:08:17.005Z",
+  "release": "5.0.0",
+  "patchLabel": "05.00",
+  "generatedAt": "2026-10-25T07:25:03.542Z",
   "tests": {
-    "application": 360,
+    "application": 382,
     "broker": 20,
     "hosting": 8,
     "passed": true,
@@ -21,7 +21,7 @@
       "weapon": "rifleA",
       "headSamples": 243,
       "blocked": 0,
-      "maxCoverage": 0.05625,
+      "maxCoverage": 0.041666666666666664,
       "aspectRatios": [
         "16:9",
         "16:10",
@@ -39,7 +39,7 @@
       "weapon": "rifleB",
       "headSamples": 243,
       "blocked": 0,
-      "maxCoverage": 0.05625,
+      "maxCoverage": 0.041666666666666664,
       "aspectRatios": [
         "16:9",
         "16:10",
@@ -58,36 +58,36 @@
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 125,
       "events": 125,
-      "elapsedMs": 1.073190000000011,
+      "elapsedMs": 1.6325989999999706,
       "dropped": 0,
-      "callbackP95": 0.0051879999999755455,
+      "callbackP95": 0.008122000000014395,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 500,
       "events": 500,
-      "elapsedMs": 1.960739999999987,
+      "elapsedMs": 3.476904999999988,
       "dropped": 0,
-      "callbackP95": 0.001232000000015887,
+      "callbackP95": 0.0025039999999876272,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 1000,
       "events": 1000,
-      "elapsedMs": 3.054128999999989,
+      "elapsedMs": 4.381522999999959,
       "dropped": 0,
-      "callbackP95": 0.0015829999999823485,
+      "callbackP95": 0.0021530000000211658,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 4000,
       "events": 4000,
-      "elapsedMs": 11.668203000000005,
+      "elapsedMs": 23.584475999999995,
       "dropped": 0,
-      "callbackP95": 0.0003699999999753345,
+      "callbackP95": 0.0007620000000088112,
       "physicalDeviceTest": false
     }
   ],
@@ -161,7 +161,8 @@
   },
   "browserQA": {
     "menuAndPreferenceQA": true,
-    "webgl": "disabled-in-managed-chrome",
+    "webgl": "Three.js WebGL / Chromium SwiftShader",
+    "softwareScreenshots": true,
     "gpuScreenshots": false,
     "physicalRawInput": false,
     "physicalCtrlW": false,

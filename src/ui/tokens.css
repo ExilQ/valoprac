@@ -1,10 +1,12 @@
-/* Original tactical UI tokens. No proprietary fonts or artwork. */
+/* VALOPRAC / original tactical interface foundations. System font stack supports Korean. */
 :root {
- --accent:#ff626a; --accent-hover:#ff7d82; --accent-soft:rgba(255,98,106,.09);
- --bg:#10161c; --surface:#171f27; --surface-raised:#1c2630; --surface-deep:#0d1319;
- --ink:#eef1ed; --muted:#98a6af; --subtle:#71818e; --line:rgba(213,224,230,.12);
+ --accent:#EF5261; --accent-hover:#ff6977; --accent-soft:rgba(239,82,97,.09);
+ --bg:#111820; --surface:#1B252F; --surface-raised:#23313c; --surface-deep:#0d141c;
+ --ink:#ECEDEB; --muted:#A8B0B8; --subtle:#7f8c98; --line:#38424C;
  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px;
  --type-small:11px; --type-body:13px; --type-title:32px;
- --panel-cut:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%);
- --ease-fast:120ms ease-out; --ease-panel:160ms ease-out;
+ --font-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ --font-display:"Arial Narrow","Roboto Condensed",var(--font-body);
+ --panel-cut:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%);
+ --ease-fast:110ms ease-out; --ease-panel:150ms ease-out;
 }

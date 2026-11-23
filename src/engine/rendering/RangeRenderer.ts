@@ -1,3 +1,5 @@
+import {characterPartGeometry} from './CharacterGeometry';
+import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import {surfaceHeight} from '../collision/environment';
 import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
@@ -12,7 +14,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { WEAPON_ORDER } from '../../config/weapons';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import {mergeStaticArchitecture} from './StaticGeometry';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
 const DEG=Math.PI/180;
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
@@ -31,51 +33,54 @@ export class RangeRenderer {
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
   constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings){
     this.renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:false});
-    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x15212a);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
+    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x9aafb3);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
     this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
-    const probe=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(this.renderer);this.environmentTarget=pmrem.fromScene(probe,0.04);this.scene.environment=this.environmentTarget.texture;this.scene.environmentIntensity=0.55;probe.dispose();pmrem.dispose();
-    this.scene.fog=new THREE.Fog(0x15212a,26,90);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
-    this.scene.add(new THREE.HemisphereLight(0xddefff,0x596260,2.0));
-    const sun=this.sun=new THREE.DirectionalLight(0xffead4,2.8);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
-    const fill=new THREE.DirectionalLight(0xa4e2f2,1.3);fill.position.set(4,5,-18);this.scene.add(fill);
+    const probe=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(this.renderer);this.environmentTarget=pmrem.fromScene(probe,0.04);this.scene.environment=this.environmentTarget.texture;this.scene.environmentIntensity=0.38;probe.dispose();pmrem.dispose();
+    this.scene.fog=new THREE.Fog(0x9aafb3,38,110);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
+    this.scene.add(new THREE.HemisphereLight(0xe2edf0,0x9a9184,1.85));
+    const sun=this.sun=new THREE.DirectionalLight(0xffeedb,2.5);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
+    const fill=new THREE.DirectionalLight(0xb8d8e5,.8);fill.position.set(4,5,-18);this.scene.add(fill);
     this.buildEnvironment();this.buildTargets();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
   }
   get canvas(){return this.renderer.domElement;}
   private material(color:number,roughness=0.8){const m=new THREE.MeshStandardMaterial({color,roughness,metalness:0.12});this.materials.add(m);return m;}
-  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material){const g=new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
+  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material){const r=Math.min(.035,Math.min(w,h,d)*.12),g=Math.min(w,h,d)>.09?new RoundedBoxGeometry(w,h,d,1,r):new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
   private buildEnvironment(){
     if(this.simulation.practiceMap!=='range'){this.buildTactical();return;}
 
-    const floor=this.material(0x64716f),trim=this.material(0x2c3940),metal=this.material(0x707d7d),accent=this.material(0x6cf1bd);
+    const floor=this.material(0x89958f,.94),trim=this.material(0x3e535b,.7),metal=this.material(0x667b80,.55),accent=this.material(0xbcb18b,.85);
     this.box(24,0.15,40,0,-0.09,-10,floor);
-    const grid=new THREE.GridHelper(40,40,0x96b0aa,0x788981);grid.position.set(0,0.005,-10);this.scene.add(grid);this.geometries.add(grid.geometry);const gridM=grid.material as THREE.Material;this.materials.add(gridM);gridM.transparent=true;gridM.opacity=0.22;
-    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.material(o.color));}
+    // Broad expansion seams give depth without high-frequency combat clutter.
+    const seam=this.material(0x76857f,.95);for(let z=5;z>-30;z-=5)this.box(23.9,.006,.024,0,.004,z,seam);
+    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.archMaterial(o.kind==='cover'?'rangeCover':'rangePlaster',o.kind==='cover'?0x668183:0xc1beb0,.88));this.refineObstacle(o);}
     for(let z=6;z>-30;z-=6){this.box(0.12,5,0.3,-11.94,2.5,z,metal);this.box(0.12,5,0.3,11.94,2.5,z,metal);this.box(24,0.22,0.3,0,5,z,trim);}
     for(let x=-10;x<=10;x+=5){this.box(0.06,0.015,35,x,0.013,-10,metal);}
     this.box(21,0.08,0.06,0,0.014,0,accent);this.box(0.06,0.015,28,0,0.013,-14,accent);
-    this.box(18,3.9,0.08,0,2,-29.94,this.material(0x1b2b30));
+    this.box(18,3.9,0.08,0,2,-29.94,this.material(0x728780,.92));
     const points:THREE.Vector3[]=[];for(let x=-9;x<=9;x+=0.5){points.push(new THREE.Vector3(x,0.1,-29.885),new THREE.Vector3(x,3.9,-29.885));}for(let y=0.1;y<=3.9;y+=0.5){points.push(new THREE.Vector3(-9,y,-29.885),new THREE.Vector3(9,y,-29.885));}
     const geometry=new THREE.BufferGeometry().setFromPoints(points);this.geometries.add(geometry);const mat=new THREE.LineBasicMaterial({color:0x607c78,transparent:true,opacity:0.35});this.materials.add(mat);this.scene.add(new THREE.LineSegments(geometry,mat));
     for(const radius of [0.07,0.3,0.65,1.1]){const g=new THREE.RingGeometry(radius-0.009,radius,64);this.geometries.add(g);const m=new THREE.MeshBasicMaterial({color:0x9bcab6,side:THREE.DoubleSide});this.materials.add(m);const ring=new THREE.Mesh(g,m);ring.position.set(0,1.64,-29.87);this.scene.add(ring);}
-    this.addSign('정',-10,3.4,-29.82,1.2);this.addSign('머리만 유효',0,4.5,-29.82,2.6);
+    this.addSign('01',-10,3.4,-29.82,1.2);this.addSign('머리만 유효',0,4.5,-29.82,2.6);
     for(const [label,z] of [['10 미터',-5],['20 미터',-15],['30 미터',-25]] as const)this.addSign(label,-10.7,0.025,z,1.6,true);
     // Simple faux skylight strips use emissive materials with no dynamic shadow cost.
     const light=new THREE.MeshBasicMaterial({color:0xcde7df});this.materials.add(light);
     for(let z=3;z>-29;z-=6){this.box(3,0.04,0.25,-6,4.85,z,light);this.box(3,0.04,0.25,6,4.85,z,light);}
   }
   private addSign(text:string,x:number,y:number,z:number,width:number,floor=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
-    ctx.fillStyle='#b4c4bd';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(text,256,64);
+    ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(text,256,64);
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.textures.add(texture);
     const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});this.materials.add(material);const g=new THREE.PlaneGeometry(width,width/4);this.geometries.add(g);const mesh=new THREE.Mesh(g,material);mesh.position.set(x,y,z);if(floor)mesh.rotation.x=-Math.PI/2;this.scene.add(mesh);
   }
   private buildTargets(){
-    const head=this.material(0xed7f65),torso=this.material(0xd1dad3),arm=this.material(0x879c99),leg=this.material(0x728582);
-    const headGeo=new THREE.SphereGeometry(1,16,12),boxGeo=new THREE.BoxGeometry(1,1,1);this.geometries.add(headGeo);this.geometries.add(boxGeo);
-    const batchMaterials=[head,torso,arm,leg],batchCounts=[1,2,4,4],batchSlots=[0,0,0,0];
-    for(let i=0;i<4;i++){const batch=new THREE.InstancedMesh(i===0?headGeo:boxGeo,batchMaterials[i],this.simulation.targets.length*batchCounts[i]);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;this.targetBatches.push(batch);this.scene.add(batch);}
-    for(const target of this.simulation.targets){const meshes:THREE.Mesh[]=[];for(const part of target.parts){const m=new THREE.Mesh(part.shape==='sphere'?headGeo:boxGeo,part.zone==='head'?head:part.zone==='torso'?torso:part.zone==='arm'?arm:leg);m.matrixAutoUpdate=false;m.frustumCulled=false;const bi=part.zone==='head'?0:part.zone==='torso'?1:part.zone==='arm'?2:3;m.userData.batch=this.targetBatches[bi];m.userData.slot=batchSlots[bi]++;meshes.push(m);}this.targetMeshes.push(meshes);
-      const g=new THREE.RingGeometry(0.53,0.56,40);this.geometries.add(g);const mat=new THREE.MeshBasicMaterial({color:0x7ce9bc,transparent:true,opacity:0.6,side:THREE.DoubleSide,depthWrite:false});this.materials.add(mat);const ring=new THREE.Mesh(g,mat);ring.rotation.x=-Math.PI/2;this.scene.add(ring);this.targetRings.push(ring);
+    // The same authoritative articulated nodes animate both collision and visual
+    // parts. Independent authored geometry replaces hitbox-shaped mannequins.
+    const colors=[0xffffff,0xffffff,0xffffff,0xffffff];
+    const materials=colors.map(()=>{const m=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.77,metalness:.06});this.materials.add(m);return m;});
+    const count=this.simulation.targets.length;
+    for(let j=0;j<11;j++){const g=characterPartGeometry(j);this.geometries.add(g);const material=materials[j===0?0:j<3?1:j<7?2:3];const batch=new THREE.InstancedMesh(g,material,count);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;this.targetBatches.push(batch);this.scene.add(batch);}
+    for(let i=0;i<count;i++){const target=this.simulation.targets[i],meshes:THREE.Mesh[]=[];for(let j=0;j<target.parts.length;j++){const batch=this.targetBatches[j],m=new THREE.Mesh(batch.geometry,batch.material);m.matrixAutoUpdate=false;m.userData.batch=batch;m.userData.slot=i;meshes.push(m);}this.targetMeshes.push(meshes);
+      const g=new THREE.RingGeometry(.45,.46,32);this.geometries.add(g);const mat=new THREE.MeshBasicMaterial({color:0x9aa8a5,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false});this.materials.add(mat);const ring=new THREE.Mesh(g,mat);ring.rotation.x=-Math.PI/2;this.scene.add(ring);this.targetRings.push(ring);
     }
   }
   private buildWeapon(){
@@ -96,28 +101,80 @@ export class RangeRenderer {
     const t=new THREE.DataTexture(data,n,n);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(kind==='rubber'?12:5,kind==='rubber'?20:5);t.colorSpace=kind.endsWith('normal')?THREE.NoColorSpace:THREE.SRGBColorSpace;t.needsUpdate=true;t.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());this.textures.add(t);this.surfaceTextures.set(key,t);return t;
   }
   private buildTactical(){
-    const trim=this.material(0x293e48,.6),floor=this.material(0x384e55,.93),light=new THREE.MeshBasicMaterial({color:0x91c9c5});this.materials.add(light);
+    const trim=this.material(0x52666c,.68),floor=this.material(0x89968e,.96),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.09,b[1]+b[3]/2,floor);
-    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.material(o.color));if(o.ramp){const mesh=this.scene.children[this.scene.children.length-1] as THREE.Mesh,b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.box(this.size.x,.08,this.size.z,this.position.x,o.box.max.y-.08,this.position.z,trim);}
+    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.archMaterial(o.kind==='cover'?'tacticalCover':'tacticalPlaster',o.kind==='cover'?0x718e8b:(this.simulation.practiceMap==='garage'||this.simulation.practiceMap==='tower'?0xadb6b0:0xc6bfae),.9));if(o.ramp){const mesh=this.scene.children[this.scene.children.length-1] as THREE.Mesh,b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.box(this.size.x,.08,this.size.z,this.position.x,o.box.max.y-.08,this.position.z,trim);this.refineObstacle(o);}
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
     if(this.simulation.level){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
     this.sun.shadow.camera.left=-30;this.sun.shadow.camera.right=30;this.sun.shadow.camera.top=36;this.sun.shadow.camera.bottom=-30;this.sun.shadow.camera.updateProjectionMatrix();
   }
   private buildPolish(){
-    if(this.simulation.practiceMap==='range')this.buildRangePolish();
+    if(this.simulation.practiceMap==='range')this.buildRangePolish();this.buildArchitecturalLayers();
     this.buildContactShadows();
   }
   private buildRangePolish(){
-    const concrete=this.material(0x92a39e,0.88),paint=this.material(0x243d4b,0.44),rubber=this.material(0x192e36,0.94),edge=this.material(0x587782,0.55);
+    const concrete=this.material(0xa8b1a5,.92),paint=this.material(0x52686c,.7),rubber=this.material(0x596c69,.97),edge=this.material(0x93a6a3,.65);
     this.surfaceMaterials.push(concrete,rubber);concrete.userData.surface='concrete';rubber.userData.surface='rubber';
     this.box(23.8,0.012,9.4,0,0.012,5,rubber);this.box(24,0.26,0.4,0,0.13,9.7,paint);
     for(const x of [-11.85,11.85]){this.box(0.12,1.15,39,x,0.58,-10,concrete);this.box(0.13,0.045,39,x,1.2,-10,edge);for(let z=7;z>-30;z-=4){this.box(0.16,2.6,0.11,x,2.75,z,paint);this.box(0.05,0.08,1.8,x+(x<0?0.03:-0.03),2.3,z-1,edge);}}
-    const glow=new THREE.MeshStandardMaterial({color:0x82dacb,emissive:0x2b7a6c,emissiveIntensity:0.8,roughness:0.35});this.materials.add(glow);
+    const glow=new THREE.MeshStandardMaterial({color:0xc4d7cc,emissive:0x81958b,emissiveIntensity:0.12,roughness:0.8});this.materials.add(glow);
     for(const x of [-10.9,10.9])this.box(0.04,0.022,34,x,0.025,-12,glow);
     for(let z=3;z>-29;z-=6){this.box(24,0.15,0.17,0,5.3,z,paint);this.box(24,0.018,0.08,0,5.2,z,glow);}
     for(let x=-9;x<=9;x+=4.5){this.box(3.8,0.07,0.04,x,4.55,-29.83,glow);this.box(0.07,4.1,0.1,x-2.12,2.35,-29.84,paint);}
     for(let i=0;i<4;i++){const x=-8.1+i*5.4;this.box(0.045,0.009,6,x,0.027,5,edge);this.addSign(`사선 0${i+1}`,x+1.8,0.033,7,1.3,true);}
     this.addSign('발로프랙 · 전술 훈련 시설',0,5.4,-29.8,5.2);
+  }
+  /** Visual dressing follows existing solids; surface reveals stay within 2 cm. No colliders, spawn points,
+   * navigation surfaces or head-height sightlines are changed. */
+  private refineObstacle(o:import('../collision/environment').Obstacle){
+    if(o.ramp)return;const b=o.box,w=b.max.x-b.min.x,h=b.max.y-b.min.y,d=b.max.z-b.min.z,cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
+    const trim=this.archMaterial('trim',0x617577,.78),base=this.archMaterial('base',0x7a8982,.92),panel=this.archMaterial('panel',0xa6b4ab,.91),metal=this.archMaterial('metal',0x405861,.63);
+    if(o.kind==='cover'){
+      // Flush inset cladding follows the exact footprint of the old cover.
+      this.box(w*.95,.045,d*.95,cx,b.max.y+.001,cz,metal);
+      if(w>.8&&d>.6&&h>.5){for(const z of [b.min.z-.004,b.max.z+.004]){this.box(w*.8,h*.62,.018,cx,b.min.y+h*.47,z,panel);this.box(w*.83,.035,.024,cx,b.min.y+.13,z,trim);}}
+      return;
+    }
+    if(h<2.5)return;
+    // Lower plinth and upper cornice are kept inside the original wall volume.
+    this.box(w,.22,d,cx,b.min.y+.11,cz,base);this.box(w,.12,d,cx,b.max.y-.06,cz,trim);
+    if(w>d&&w>2){for(const z of [b.min.z-.003,b.max.z+.003]){
+      this.box(w,.11,.025,cx,b.min.y+2.7,z,trim);
+      const count=Math.max(1,Math.floor(w/3.8));for(let i=0;i<count;i++){const x=b.min.x+(i+.5)*w/count;
+        if(h>4){this.box(Math.min(2.6,w/count-.2),.78,.03,x,b.max.y-1.04,z,metal);for(let k=-1;k<=1;k++)this.box(.035,.78,.035,x+k*.52,b.max.y-1.04,z,trim);}
+        this.box(.11,Math.max(.1,h-2.9),.03,x,b.min.y+2.85+(h-2.9)/2,z,panel);
+      }
+    }}else if(d>w&&d>2){for(const x of [b.min.x-.003,b.max.x+.003]){
+      this.box(.025,.11,d,x,b.min.y+2.7,cz,trim);const count=Math.max(1,Math.floor(d/4));for(let i=0;i<count;i++){const z=b.min.z+(i+.5)*d/count;
+        if(h>4){this.box(.03,.78,Math.min(2.5,d/count-.2),x,b.max.y-1.04,z,metal);for(let k=-1;k<=1;k++)this.box(.035,.78,.035,x,b.max.y-1.04,z+k*.52,trim);}
+        this.box(.03,Math.max(.1,h-2.9),.11,x,b.min.y+2.85+(h-2.9)/2,z,panel);
+      }
+    }}
+  }
+  private archMaterials=new Map<string,THREE.MeshStandardMaterial>();
+  private archMaterial(key:string,color:number,roughness:number){let m=this.archMaterials.get(key);if(!m){m=this.material(color,roughness);m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1;this.archMaterials.set(key,m);}return m;}
+  private buildArchitecturalLayers(){
+    const frame=this.archMaterial('metal',0x405861,.63),inset=this.archMaterial('inset',0x809d9d,.8),warm=this.archMaterial('warm',0xc5b998,.88);
+    if(this.simulation.practiceMap==='range'){
+      // High clerestory openings and paired ribs compose an original training
+      // campus. All new forms are above combat height or outside the play area.
+      for(const x of [-11.98,11.98])for(let z=3;z>-29;z-=6){this.box(.025,1.08,3.6,x,3.4,z,inset);this.box(.04,.055,3.75,x,2.84,z,frame);this.box(.04,.055,3.75,x,3.96,z,frame);for(const k of [-1,0,1])this.box(.05,1.12,.045,x,3.4,z+k,frame);}
+      for(let z=3;z>-29;z-=6){this.box(23.9,.06,.42,0,5.43,z,warm);this.box(23.9,.08,.08,0,5.31,z-.24,frame);}
+      this.addSign('VALOPRAC  /  TRAINING FACILITY',0,4.6,-29.8,8);
+    }else{
+      const level=this.simulation.level;
+      if(level){for(let i=0;i<level.angles.length;i++){
+        const x=level.route[i*3+2].x;
+        // Threshold construction remains within the pre-existing doorway wall.
+        this.box(3.1,.17,.65,x,5.63,0,frame);this.box(2.55,.07,.72,x,5.5,0,warm);
+        this.addSign(`SECTOR  0${i+1}`,x,4.1,.365,2.2);
+        // Raised platforms retain their exact top surfaces; riser stripes sit on
+        // the solids, with no floating railings that would imply false collision.
+        const a=level.angles[i];if(a.position.y>0)this.addSign('상단 수비각',x,a.position.y+.02,a.position.z+2,1.8,true);
+      }}
+      const bounds=level?.bounds??[-24,-24,48,48];const x=bounds[0]+bounds[2]/2;
+      this.addSign('VALOPRAC  /  TACTICAL CAMPUS',x,5,bounds[1]+1.05,8);
+    }
   }
   private buildContactShadows(){
     // Shared radial contact-shadow texture. No additional dynamic light per target.
@@ -128,7 +185,7 @@ export class RangeRenderer {
   private batchStaticArchitecture(){
     this.scene.updateMatrixWorld(true);const groups=new Map<THREE.Material,THREE.Mesh[]>();
     for(const child of this.scene.children){if(!(child instanceof THREE.Mesh)||!child.userData.staticRange||Array.isArray(child.material))continue;const list=groups.get(child.material)??[];list.push(child);groups.set(child.material,list);}
-    for(const [material,list] of groups){if(list.length<2)continue;const copies=list.map(m=>m.geometry.clone().applyMatrix4(m.matrixWorld));const merged=mergeGeometries(copies);for(const g of copies)g.dispose();if(!merged)continue;this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,material);mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list)this.scene.remove(item);}
+    for(const [material,list] of groups){if(list.length<2)continue;const merged=mergeStaticArchitecture(list);if(!merged)continue;this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,material);mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
   }
   applySettings(settings:Settings){
     this.settings={...settings};this.scene.environment=settings.graphicsPreset==='low'?null:this.environmentTarget?.texture??null;this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
@@ -180,7 +237,7 @@ export class RangeRenderer {
       this.gunSlide*=Math.exp(-(s.weaponId==='sheriff'?13:22)*elapsed);
       const w=s.weapon,reload=w.reloadingUntil===null?0:THREE.MathUtils.clamp((s.time-w.reloadStarted)/w.profile.reloadTime,0,1),reloadPose=Math.sin(reload*Math.PI),equip=THREE.MathUtils.clamp((w.equipUntil-s.time)/w.profile.equipTime,0,1);
       poseViewmodel(s.weaponId,this.adsBlend,this.gunSlide,equip,reloadPose,s.time,m.speed,swayX,swayY,this.weapon);
-      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=this.adsBlend>.1;v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;}
+      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=this.adsBlend>.1;v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
       this.weapon.visible=true;this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
     const zoom=preview?1:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=2*Math.atan(Math.tan(this.settings.fov*DEG/2)/zoom/this.camera.aspect)/DEG;if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
@@ -189,7 +246,7 @@ export class RangeRenderer {
       for(let j=0;j<t.parts.length;j++){
         const p=t.parts[j],mesh=this.targetMeshes[i][j];mesh.visible=t.enabled&&(t.active||death<1);mesh.castShadow=this.settings.shadowQuality!=='off';mesh.matrix.copy(p.node.matrixWorld);
         mesh.matrix.elements[12]+=dx;mesh.matrix.elements[14]+=dz;
-        if(p.shape==='sphere')mesh.matrix.scale(this.size.setScalar(p.size.x/2));else mesh.matrix.scale(p.size);
+        mesh.matrix.scale(p.size);
         if(!t.active){mesh.matrix.elements[13]-=death*0.85;mesh.matrix.scale(this.size.setScalar(1-death*0.45));}
         if(!mesh.visible)mesh.matrix.scale(this.size.setScalar(0));const batch=mesh.userData.batch as THREE.InstancedMesh;batch.setMatrixAt(mesh.userData.slot,mesh.matrix);
       }
@@ -203,5 +260,5 @@ export class RangeRenderer {
     if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
+  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
 }

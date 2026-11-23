@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "release": "4.0.1",
-  "patchLabel": "04.01",
+  "release": "5.0.0",
+  "patchLabel": "05.00",
   "algorithm": "aim-1.0.0",
-  "generatedAt": "2026-10-24T11:08:17.005Z",
+  "generatedAt": "2026-10-25T07:25:03.542Z",
   "tests": {
-    "application": 360,
+    "application": 382,
     "broker": 20,
     "hosting": 8,
     "passed": true,
@@ -41,7 +41,7 @@
           0.03477439587310676
         ],
         "heldoutMean": 0.749978651885502,
-        "meanComputeMs": 0.04439986458332731,
+        "meanComputeMs": 0.05899068750000088,
         "observationsPerRun": [
           12
         ]
@@ -55,7 +55,7 @@
           0.027123381736567365
         ],
         "heldoutMean": 0.7438748482493082,
-        "meanComputeMs": 0.056125020833326524,
+        "meanComputeMs": 0.07804335416666912,
         "observationsPerRun": [
           12
         ]
@@ -69,7 +69,7 @@
           0.021165192123412137
         ],
         "heldoutMean": 0.7442843989026081,
-        "meanComputeMs": 0.14996922916666833,
+        "meanComputeMs": 0.1849372395833401,
         "observationsPerRun": [
           12
         ]
@@ -83,7 +83,7 @@
           0.060996461247085756
         ],
         "heldoutMean": 0.7267001638019696,
-        "meanComputeMs": 0.052288468749999595,
+        "meanComputeMs": 0.04450625000000367,
         "observationsPerRun": [
           12
         ]
@@ -97,7 +97,7 @@
           0.02610606660160872
         ],
         "heldoutMean": 0.7431010058005967,
-        "meanComputeMs": 1.9413740833333364,
+        "meanComputeMs": 2.8372501041666625,
         "observationsPerRun": [
           12
         ]
@@ -111,7 +111,7 @@
   "telemetry": {
     "benchmark": "aim-telemetry-cpu",
     "events": 200000,
-    "elapsedMs": 15.677925000000016,
+    "elapsedMs": 20.94939199999999,
     "bytes": 2883584,
     "columns": 22,
     "hardwareInputLatencyMeasured": false,
@@ -130,8 +130,9 @@
   },
   "browserQA": {
     "menusAndSetupVerifiedInChrome": true,
-    "managedPreviewPointerLock": "denied",
-    "managedWebGL": "disabled",
+    "browserPointerLock": true,
+    "browserFullscreen": true,
+    "webgl": "Three.js WebGL / Chromium SwiftShader",
     "physicalMouseCalibrationVerified": false,
     "publicOriginGameplayVerified": false,
     "highRefreshHardwareVerified": false

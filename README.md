@@ -1,3 +1,7 @@
+# VALOPRAC 5.0.0 — visual redesign
+
+Patch **05.00** refines original weapon geometry, skinned first-person gloves/arms, articulated tactical characters, architectural materials/lighting and the complete Korean interface within the existing Three.js engine. See [visual audit and implementation](docs/visual/REDESIGN.md). Existing mechanics, local records and production Site identity remain in place. Hardware FPS and physical input latency require real-device validation.
+
 # VALOPRAC 4.0.1 — tactical movement and visual upgrade
 
 Patch **04.01** fixes HUD docking, late Pointer Lock errors, explicit total movement cones, source-export completeness, player guidance, and actual security/cache/SPA responses through the existing Site. The response worker embeds the compiled client; `dist-client` is intermediate, `dist` is the complete Worker ESM deployment.

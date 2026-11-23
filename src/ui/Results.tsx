@@ -6,10 +6,11 @@ import { useApp } from '../app/store';
 import { WEAPONS } from '../config/weapons';
 import { MODES } from '../training/modes/modes';
 import { SprayPlot } from './SprayPlot';
+import './analytics.css';
 export function Trend({sessions}:{sessions:SessionData[]}){
   const data=sessions.slice(0,14).reverse();
   if(!data.length)return <div className="empty-chart">훈련을 마치면 기록이 여기에 쌓입니다.</div>;
-  return <div className="trend-chart"><svg viewBox="0 0 600 130" role="img" aria-label="최근 훈련의 헤드샷 명중률 추이"><path d="M 15 110 H 585 M 15 60 H 585 M 15 10 H 585" stroke="#26333b" strokeDasharray="3 5"/><polyline points={data.map((s,i)=>`${15+i/Math.max(1,data.length-1)*570},${110-s.summary.headshotAccuracy}`).join(' ')} fill="none" stroke="#7ee0b3" strokeWidth="2"/>{data.map((s,i)=><circle key={s.id} cx={15+i/Math.max(1,data.length-1)*570} cy={110-s.summary.headshotAccuracy} r="3.5" fill="#9bf0c5"><title>{new Date(s.createdAt).toLocaleDateString('ko-KR')} · {s.summary.headshotAccuracy.toFixed(1)}%</title></circle>)}</svg><div><span>이전 기록</span><span>최근 기록 · 헤드샷 명중률</span></div></div>;
+  return <div className="trend-chart"><svg viewBox="0 0 720 170" role="img" aria-label="최근 훈련의 헤드샷 명중률 추이, 세로축 0에서 100퍼센트"><path d="M 45 135 H 700 M 45 80 H 700 M 45 25 H 700" stroke="var(--line,#38424c)" strokeDasharray="3 5"/>{[0,50,100].map(n=><text x="8" y={139-n*1.1} key={n} className="trend-axis">{n}%</text>)}<polyline points={data.map((s,i)=>`${45+i/Math.max(1,data.length-1)*655},${135-s.summary.headshotAccuracy*1.1}`).join(' ')} fill="none" stroke="var(--accent,#ef5261)" strokeWidth="2"/>{data.map((s,i)=><circle key={s.id} cx={45+i/Math.max(1,data.length-1)*655} cy={135-s.summary.headshotAccuracy*1.1} r="3" fill="var(--ink,#ecedeb)" stroke="var(--accent,#ef5261)"><title>{new Date(s.createdAt).toLocaleDateString('ko-KR')} · {s.summary.headshotAccuracy.toFixed(1)}%</title></circle>)}</svg><div><span>이전 기록</span><span>최근 {data.length}회 · 헤드샷 명중률</span></div></div>;
 }
 function ReactionPlot({times}:{times:number[]}){
   const bins=[0,0,0,0,0];times.forEach(t=>bins[Math.min(4,Math.floor(t/0.15))]++);const max=Math.max(1,...bins);

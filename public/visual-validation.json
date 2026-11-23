@@ -1,0 +1,481 @@
+{
+  "schema": 1,
+  "release": "5.0.0",
+  "patchLabel": "05.00",
+  "generatedAt": "2026-10-25T00:13:16.004797+00:00",
+  "renderer": "Three.js WebGL / Chromium SwiftShader",
+  "baseline": {
+    "release": "4.0.1",
+    "sourceCommit": "8ca371a9744cace0d1479569fb6e20e8942574d3"
+  },
+  "visualQA": {
+    "beforeAfterPairs": 17,
+    "stagedPausedComparisons": true,
+    "hud": [
+      {
+        "viewport": [
+          1366,
+          768
+        ],
+        "scale": 1,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          1366,
+          768
+        ],
+        "scale": 1.25,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "scale": 1,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "scale": 1.25,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          2560,
+          1440
+        ],
+        "scale": 1,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          2560,
+          1440
+        ],
+        "scale": 1.25,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          3440,
+          1440
+        ],
+        "scale": 1,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      },
+      {
+        "viewport": [
+          3440,
+          1440
+        ],
+        "scale": 1.25,
+        "overlaps": [],
+        "outside": [],
+        "horizontalClipping": []
+      }
+    ],
+    "analytics": [
+      {
+        "id": "overview",
+        "title": "에임 종합 분석",
+        "viewport": [
+          1920,
+          1080
+        ],
+        "bodyHorizontalOverflow": false,
+        "bodyScrollWidth": 1920,
+        "panels": [
+          {
+            "selector": ".aim-dashboard",
+            "width": 1600,
+            "right": 1862,
+            "scrollWidth": 1600,
+            "clientWidth": 1600,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1504,
+            "clientWidth": 1504,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": ".aim-grid",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1504,
+            "clientWidth": 1504,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": ".aim-metrics",
+            "width": 654.765625,
+            "right": 1789,
+            "scrollWidth": 653,
+            "clientWidth": 653,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 775.234375,
+            "right": 1085.234375,
+            "scrollWidth": 772,
+            "clientWidth": 772,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 704.765625,
+            "right": 1814,
+            "scrollWidth": 703,
+            "clientWidth": 703,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1502,
+            "clientWidth": 1502,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          }
+        ]
+      },
+      {
+        "id": "explore",
+        "title": "감도 탐색",
+        "viewport": [
+          1920,
+          1080
+        ],
+        "bodyHorizontalOverflow": false,
+        "bodyScrollWidth": 1920,
+        "panels": [
+          {
+            "selector": ".aim-dashboard",
+            "width": 1600,
+            "right": 1862,
+            "scrollWidth": 1600,
+            "clientWidth": 1600,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1504,
+            "clientWidth": 1504,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": ".aim-grid",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1504,
+            "clientWidth": 1504,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 775.234375,
+            "right": 1085.234375,
+            "scrollWidth": 773,
+            "clientWidth": 773,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 704.765625,
+            "right": 1814,
+            "scrollWidth": 703,
+            "clientWidth": 703,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1502,
+            "clientWidth": 1502,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1502,
+            "clientWidth": 1502,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          }
+        ]
+      },
+      {
+        "id": "analysis",
+        "title": "플릭·트래킹 분석",
+        "viewport": [
+          1920,
+          1080
+        ],
+        "bodyHorizontalOverflow": false,
+        "bodyScrollWidth": 1920,
+        "panels": [
+          {
+            "selector": ".aim-dashboard",
+            "width": 1600,
+            "right": 1862,
+            "scrollWidth": 1600,
+            "clientWidth": 1600,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1504,
+            "clientWidth": 1504,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1502,
+            "clientWidth": 1502,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          },
+          {
+            "selector": "#aim-content .settings-card",
+            "width": 1504,
+            "right": 1814,
+            "scrollWidth": 1502,
+            "clientWidth": 1502,
+            "overflowX": "visible",
+            "horizontalClipping": false
+          }
+        ]
+      }
+    ],
+    "consoleErrors": [],
+    "pageErrors": []
+  },
+  "browserInput": {
+    "method": "Playwright browser-generated keyboard/mouse events through the existing DOM input adapter; actual browser Pointer Lock and fullscreen APIs; no synthetic simulation state or forced locked UI",
+    "pointerLockVerified": true,
+    "fullscreenVerified": true,
+    "fullscreenViewport": [
+      1366,
+      768
+    ],
+    "checks": [
+      {
+        "name": "browser-pointer-lock"
+      },
+      {
+        "name": "browser-fire",
+        "passed": true
+      },
+      {
+        "name": "browser-reload",
+        "passed": true
+      },
+      {
+        "name": "browser-toggle-ads",
+        "passed": true
+      },
+      {
+        "name": "browser-hold-ads",
+        "passed": true
+      },
+      {
+        "name": "browser-movement-and-release",
+        "passed": true
+      },
+      {
+        "name": "browser-sheriff-no-ads",
+        "passed": true
+      },
+      {
+        "name": "native-pointer-unlock-after-headless-escape"
+      },
+      {
+        "name": "actual-fullscreen-button"
+      }
+    ],
+    "nativeEscapeHeadlessVerified": false,
+    "nativeExitPointerLockVerified": true
+  },
+  "renderingCosts": {
+    "method": "Same paused Vandal range with 5 stationary bots, 1920x1080 Medium; counters include render passes and shadows",
+    "before": {
+      "drawCalls": 125,
+      "triangles": 16753,
+      "geometries": 79,
+      "textures": 26,
+      "jsHeapBytes": 29599385
+    },
+    "after": {
+      "calls": 116,
+      "triangles": 66639,
+      "geometries": 74,
+      "textures": 31
+    },
+    "baselineMediumFPSSamples": 2,
+    "mediumFPSComparisonValid": false,
+    "lowAfterOnly": {
+      "method": "AFTER ONLY: paused staged Vandal scene, Low preset with explicit 0.5 render-scale override and 60 frame limit; two-second warmup then at most ten-second browser rAF observation; software rendering is not representative hardware FPS or GPU execution time",
+      "sampleCount": 52,
+      "minimumSamplesForStatistics": 20,
+      "sufficientSamples": true,
+      "elapsedMs": 10000.799999999814,
+      "averageFPS": 5.252790544977019,
+      "frameMsP50": 183.3000000000029,
+      "frameMsP95": 333.3000000000029,
+      "frameMsP99": 366.6000000000058,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "gpuRenderingLoad": null,
+      "physicalInputLatency": null,
+      "calls": 70,
+      "triangles": 35184,
+      "geometries": 73,
+      "textures": 21,
+      "canvasPixels": [
+        960,
+        540
+      ],
+      "settings": {
+        "gameplayRevision": 1,
+        "aimTelemetry": true,
+        "practiceMap": "range",
+        "drill": "none",
+        "crouchMode": "hold",
+        "inputDiagnostics": false,
+        "adsDotSize": 2,
+        "botDifficulty": "normal",
+        "exposureEnabled": false,
+        "exposureLimit": 2,
+        "exposureMode": "continuous",
+        "footstepHud": true,
+        "soundMinimap": true,
+        "footstepVolume": 0.7,
+        "stepPerMeter": 0.625,
+        "stepWalkingGain": 0,
+        "stepWalkingDecay": 0.02,
+        "stepStationaryDecay": 3.5,
+        "stepStationaryVelocity": 0.035,
+        "stepStationaryDelay": 0.12,
+        "stepAudibleVelocity": 2.7,
+        "stepThreshold": 1,
+        "stepGraceDistance": 0.2,
+        "stepHearingRadius": 20,
+        "frameLimit": 60,
+        "hudScale": 1,
+        "showHeadshotConfirmation": true,
+        "showControlHints": true,
+        "interfaceVolume": 0.2,
+        "adsSensitivity": 1,
+        "adsMode": "toggle",
+        "bindings": {
+          "forward": "KeyW",
+          "backward": "KeyS",
+          "left": "KeyA",
+          "right": "KeyD",
+          "walk": "ShiftLeft",
+          "crouch": "KeyC",
+          "jump": "Space",
+          "reload": "KeyR",
+          "weapons": "KeyB"
+        },
+        "graphicsPreset": "low",
+        "shadowQuality": "off",
+        "textureQuality": "low",
+        "postProcessing": false,
+        "ambientOcclusion": false,
+        "effectsQuality": "low",
+        "premiumTheme": true,
+        "firingVolume": 0.85,
+        "handlingVolume": 0.65,
+        "feedbackVolume": 0.7,
+        "targetCount": 5,
+        "targetSize": 1,
+        "targetSpeed": 1,
+        "targetDistance": 20,
+        "spawnInterval": 0.6,
+        "eliminationRule": "head",
+        "infiniteReserve": true,
+        "autoReload": true,
+        "practiceHud": true,
+        "recoilAnalysis": false,
+        "analysisWall": false,
+        "sensitivity": 0.35,
+        "degreesPerCount": 0.07,
+        "dpi": 800,
+        "fov": 103,
+        "duration": 60,
+        "seed": 1947,
+        "crosshairColor": "#e8fcf3",
+        "crosshairThickness": 2,
+        "crosshairGap": 5,
+        "crosshairLength": 7,
+        "dynamicCrosshair": true,
+        "brakingHud": true,
+        "idealCompensation": false,
+        "volume": 0.35,
+        "renderScale": 0.5,
+        "antialias": false,
+        "showPerformance": true,
+        "behavior": "stationary"
+      },
+      "jsHeapBytes": 29631649,
+      "navigation": [
+        {
+          "responseEndMs": 242.70000000018626,
+          "domContentLoadedMs": 2758.7000000001863,
+          "loadMs": 2794.2000000001863,
+          "transferBytes": 1942
+        }
+      ]
+    }
+  },
+  "hardwareFPSVerified": false,
+  "physicalInputLatencyVerified": false,
+  "gpuRenderingLoad": null,
+  "unrealProductionEnabled": false
+}
