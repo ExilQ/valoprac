@@ -46,7 +46,7 @@ const roadmap=JSON.parse(read('roadmap-validation.json'));assert.equal(roadmap.r
 const ui=JSON.parse(read('interface-validation.json'));assert.equal(ui.release,release.version);assert.equal(ui.patchLabel,release.patchLabel);assert(ui.tests.passed&&ui.responsive.allPassed&&ui.workflows.passed);assert.equal(ui.themes.default,'light');assert.equal(ui.captureRelease,'11.0.0');assert.equal(ui.preservation.captureRelease,'11.0.0');assert.equal(ui.preservation.mechanicalCompatibilityVersion,'10.0.0');assert.equal(ui.currentSimulation.gameVersion,release.interface.gameplayCompatibilityVersion);assert.equal(ui.currentSimulation.simulationVersion,'valoprac-replay-simulation-3');assert.equal(ui.readability.failedText,0);assert(ui.readability.textMinimum>=4.5&&ui.readability.boundaryMinimum>=3);assert.equal(read('precision-tokens.css'),readFileSync('src/ui/tokens.css','utf8'));assert(read('interface-comparison.html').includes('1366'));assert(html.includes('data-theme-preference'));assert(html.includes('valoprac-interface-theme-v1'));assert(existsSync(join(root,'interface-theme.js')));assert.equal(release.interface.settingsCategories,8);
 assert(!Object.keys(manifest).some(k=>k.includes('catalog.en')),'The Korean-only presentation must not download an unused English catalog');
 
-const physics12=JSON.parse(read('physics-materials-validation.json'));assert.equal(physics12.release,release.version);assert.equal(physics12.patchLabel,release.patchLabel);assert.equal(physics12.simulation.version,'valoprac-replay-simulation-3');assert.equal(physics12.simulation.materialPhysicsVersion,'physical-surfaces-1.0.0');assert.equal(physics12.simulation.fixedHz,120);assert.equal(physics12.simulation.acceptedLegacy[0].simulationVersion,'valoprac-replay-simulation-2');assert(physics12.tests.passed&&physics12.measuredReleaseEvidence.gates.completed);assert.equal(physics12.queries.parity.mismatches,0);assert.equal(physics12.wasm.productionAdopted,false);assert.equal(physics12.limits.hardwareFPSVerified,false);assert.equal(release.physicsMaterials.visualFamilies,15);assert.equal(release.physicsMaterials.physicalSurfaces,22);assert(read('physics-materials.html').includes('12.00'));assert(read('physics-materials.html').includes('소프트웨어'));assert(!Object.keys(manifest).some(k=>k.includes('dev/materials')||k.includes('engine-audit')),'Development showcases must not become production entry chunks');
+const physics12=JSON.parse(read('physics-materials-validation.json'));assert.equal(physics12.release,release.version);assert.equal(physics12.patchLabel,release.patchLabel);assert.equal(physics12.simulation.version,'valoprac-replay-simulation-3');assert.equal(physics12.simulation.materialPhysicsVersion,'physical-surfaces-1.0.0');assert.equal(physics12.simulation.fixedHz,120);assert.equal(physics12.simulation.acceptedLegacy[0].simulationVersion,'valoprac-replay-simulation-2');assert(physics12.tests.passed&&physics12.measuredReleaseEvidence.gates.completed);assert.equal(physics12.queries.parity.mismatches,0);assert.equal(physics12.wasm.productionAdopted,false);assert.equal(physics12.limits.hardwareFPSVerified,false);assert.equal(release.physicsMaterials.visualFamilies,15);assert.equal(release.physicsMaterials.physicalSurfaces,22);assert(read('physics-materials.html').includes('12.00'));assert(read('physics-materials.html').includes('소프트웨어'));assert(!Object.keys(manifest).some(k=>k.includes('dev/materials')||k.includes('engine-audit')||k.includes('character-audit')),'Development showcases must not become production entry chunks');
 
 assert.equal(physics12.simulation.acceptedLegacy[0].gameVersion,'10.0.0');assert.equal(physics12.simulation.acceptedLegacy[0].rules,'legacy-v2');
 assert.equal(physics12.visualComparison.rows.length,6);assert(physics12.visualComparison.rows.every(row=>row.decodedPixelsIdentical));
@@ -68,7 +68,7 @@ assert(graphics.showcase.every(row=>row.families===15));
 console.log(JSON.stringify({graphicsValidation:true,maps:graphics.pairs.length,showcasePresets:graphics.showcase.length}));
 
 const obstacles=JSON.parse(read(release.obstacleReview.report.slice(1)));
-assert.equal(obstacles.release,release.version);
+assert.equal(obstacles.release,'12.0.5');
 assert.equal(obstacles.baseline,'12.0.4');
 assert.equal(release.obstacleReview.simulationRulesChanged,false);
 assert(obstacles.passed&&obstacles.firstShot.passed&&obstacles.cleanup.canvasCount===0);
@@ -84,3 +84,19 @@ for(const {before,after} of obstacles.pairs){
 const peeking=obstacles.pairs.find(pair=>pair.map==='complex');
 assert(peeking&&peeking.after.drawCalls.max<peeking.before.drawCalls.max);
 console.log(JSON.stringify({obstacleValidation:true,scenePresets:obstacles.pairs.length}));
+
+const characters=JSON.parse(read(release.characterReview.report.slice(1)));
+assert.equal(characters.release,release.version);
+assert.equal(characters.baseline,'12.0.5');
+assert.equal(release.characterReview.geometryVersion,'field-agent-1');
+assert(characters.passed&&characters.alignment.falsePositive===0&&characters.alignment.falseNegative===0);
+assert.equal(characters.pairs.length,7);
+for(const {before,after} of characters.pairs){
+ assert.deepEqual(after.camera,before.camera);
+ assert.deepEqual(after.viewport,before.viewport);
+ assert.equal(after.drawCalls,before.drawCalls);
+ assert.equal(after.programs,0);
+ assert(after.geometryBytes<before.geometryBytes*.4);
+}
+for(const pair of characters.pairs.filter(pair=>pair.pose==='lane'))assert(pair.after.triangles<=pair.before.triangles*1.13);
+console.log(JSON.stringify({characterValidation:true,scenePresets:characters.pairs.length}));

@@ -1,5 +1,6 @@
 import {approachVelocity,BOT_DIFFICULTY} from './locomotion';
 import {intersectCharacterPart} from './CharacterShape';
+import {FIELD_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from './characterProfile';
 import {MOVEMENT} from '../../config/movement';
 import { Box3, Matrix4, Object3D, Ray, Sphere, Vector3 } from 'three';
 import type { Behavior, HitZone } from '../types';
@@ -14,7 +15,7 @@ export class Target {
   private hitResult:{zone:HitZone;distance:number}={zone:'miss',distance:Infinity};
   difficulty:'easy'|'normal'|'hard'='normal';enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
   direction=1;directionZ=0;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
-  constructor(public id:number,public behavior:Behavior,public rng:SeededRandom){
+  constructor(public id:number,public behavior:Behavior,public rng:SeededRandom,readonly characterGeometry:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
     this.root.add(this.upper,this.leftHip,this.rightHip);
     this.head=this.part('head',this.upper,0,1.68,0,0.34,0.34,0.34,'sphere');
     this.part('torso',this.upper,0,1.13,0,0.48,0.58,0.28);
@@ -70,7 +71,7 @@ export class Target {
     for(let i=0;i<this.parts.length;i++){
       const p=this.parts[i];if(matrices){if(!matrices[i])continue;model.copy(matrices[i]);}else model.copy(p.node.matrixWorld).scale(p.size);
       modelInverse.copy(model).invert();localRay.copy(ray).applyMatrix4(modelInverse);
-      const hit=intersectCharacterPart(localRay,i,localHit);
+      const hit=intersectCharacterPart(localRay,i,localHit,this.characterGeometry);
       if(hit){worldHit.copy(localHit).applyMatrix4(model);const d=ray.origin.distanceTo(worldHit);if(d<distance-1e-6||(Math.abs(d-distance)<1e-6&&hit.zone==='head')){distance=d;zone=hit.zone;out.copy(worldHit);}}
     }this.hitResult.zone=zone;this.hitResult.distance=distance;return Number.isFinite(distance)?this.hitResult:null;
   }

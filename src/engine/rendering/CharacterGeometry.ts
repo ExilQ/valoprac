@@ -1,71 +1,159 @@
-import * as THREE from 'three';
-import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import {BufferGeometry,Color,Float32BufferAttribute,ShapeUtils,Uint8BufferAttribute,Vector2} from 'three';
 import type {HitZone} from '../types';
+import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
+import {legacyCharacterPartGeometry} from './LegacyCharacterGeometry';
 
-/** Original VALOPRAC uniform in normalized articulated-part space. Rendering and
- * shooting use this canonical surface; no separate generous sphere/box hit shape.
- * Vertex-colour layering lets all eleven articulated parts share four materials. */
+/** Each region is a span of triangle corners in draw order. For indexed
+ * geometry these offsets address the index buffer, not unique vertices. */
 export interface CharacterHitRegion {start:number;count:number;zone:HitZone;}
-const SOURCES:THREE.BufferGeometry[]=[];
-const COLORS={cloth:0x596979,vest:0x334653,trim:0x94a7ac,boot:0x293941,skin:0xeab69b,mask:0x566b76,visor:0x273d49,head:0xda8c72};
-function tint(g:THREE.BufferGeometry,color:number){const c=new THREE.Color(color),a=new Float32Array(g.getAttribute('position').count*3);for(let i=0;i<a.length;i+=3){a[i]=c.r;a[i+1]=c.g;a[i+2]=c.b;}g.setAttribute('color',new THREE.BufferAttribute(a,3));return g;}
-function torso(top:number,bottom:number,depth:number){
-  const outline=[[-.34,-.5],[-.5,-.3],[-.5,.3],[-.34,.5],[.34,.5],[.5,.3],[.5,-.3],[.34,-.5]];
-  const v:number[]=[],indices:number[]=[];
-  for(const [y,w] of [[-.5,bottom],[.5,top]])for(const [x,z] of outline)v.push(x*w,y,z*depth);
-  for(let i=0;i<8;i++){const j=(i+1)%8;indices.push(i,j,j+8,i,j+8,i+8);}
-  for(let i=1;i<7;i++)indices.push(0,i+1,i,8,8+i,8+i+1);
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(indices);g.computeVertexNormals();return g;
-}
-function buildCharacterPartGeometry(index:number){
-  const parts:THREE.BufferGeometry[]=[],regions:CharacterHitRegion[]=[];let offset=0;
-  const defaultZone:HitZone=index===0?'head':index<3?'torso':index<7?'arm':'leg';
-  const add=(g:THREE.BufferGeometry,c:number,x=0,y=0,z=0,zone:HitZone=defaultZone)=>{g.translate(x,y,z);const p=g.toNonIndexed();p.deleteAttribute('uv');const count=p.getAttribute('position').count;regions.push({start:offset,count,zone});offset+=count;parts.push(tint(p,c));g.dispose();};
-  const box=(w:number,h:number,d:number,c:number,x=0,y=0,z=0)=>add(new THREE.BoxGeometry(w,h,d),c,x,y,z);
-  if(index===0){
-    const g=new THREE.SphereGeometry(.5,16,12);g.scale(.83,1,.9);add(g,COLORS.head);
-    // Slim brow and face covering, rather than a spherical target ball.
-    const mask=torso(.73,.6,.47);mask.scale(1,.42,1);add(mask,COLORS.mask,0,-.18,.22);
-    box(.56,.14,.065,COLORS.visor,0,.08,.405);
-    const neck=new THREE.CylinderGeometry(.22,.25,.25,10);add(neck,COLORS.skin,0,-.51,0,'torso');
-  }else if(index===1){
-    add(torso(.98,.73,.9),COLORS.cloth);
-    const vest=torso(.78,.65,.16);vest.scale(1,.74,1);add(vest,COLORS.vest,0,-.015,.46);
-    // Narrow shoulder straps and central fastening are visible at training range.
-    for(const x of [-.28,.28])box(.09,.76,.045,COLORS.trim,x,.04,.55);
-    box(.54,.045,.03,COLORS.trim,0,-.21,.565);
-    box(.17,.13,.05,COLORS.vest,-.13,.04,.57);box(.17,.13,.05,COLORS.vest,.13,.04,.57);
-  }else if(index===2){
-    add(torso(.86,.84,.9),COLORS.cloth);box(.92,.17,.96,COLORS.boot,0,.35,0);box(.17,.2,.08,COLORS.trim,0,.33,.51);
-  }else if(index===3||index===5){
-    add(torso(.84,.72,.88),COLORS.cloth);
-    const patch=torso(.65,.56,.1);patch.scale(1,.3,1);add(patch,COLORS.vest,0,.2,.45);
-  }else if(index===4||index===6){
-    add(torso(.77,.85,.82),COLORS.cloth);
-    const hand=new THREE.SphereGeometry(.5,10,8);hand.scale(.83,.44,.86);add(hand,COLORS.boot,0,-.43,.015);
-    box(.7,.13,.84,COLORS.trim,0,-.27,0);
-  }else if(index===7||index===9){
-    add(torso(.95,.79,.92),COLORS.cloth);
-    box(.58,.48,.08,COLORS.vest,index===7?-.22:.22,.02,.43);
-  }else{
-    add(torso(.8,.7,.86),COLORS.cloth);
-    const knee=new THREE.SphereGeometry(.5,10,8);knee.scale(.74,.28,.21);add(knee,COLORS.vest,0,.33,.4);
-    // Shoes end at the same ground plane as the original rig, with a shaped toe.
-    const shoe=torso(.78,.91,1.43);shoe.scale(1,.29,1);add(shoe,COLORS.boot,0,-.35,.15);
-    box(.83,.06,1.3,COLORS.trim,0,-.485,.14);
+interface Finish {color:Color;roughness:number;metalness:number;}
+type Ring=readonly [y:number,radiusX:number,radiusZ:number,offsetZ?:number,finish?:Finish,offsetX?:number];
+type Point=readonly [x:number,y:number];
+
+function finish(color:number,roughness:number,metalness=0):Finish{return{color:new Color(color),roughness,metalness};}
+
+const TWILL=finish(0x647985,.89);
+const WEAVE_LIGHT=finish(0x7c939b,.86);
+const WEAVE_DARK=finish(0x364c5a,.94);
+const ARMOR=finish(0x354852,.52,.08);
+const ARMOR_EDGE=finish(0x50616a,.47,.12);
+const RUBBER=finish(0x243039,.93);
+const LEATHER=finish(0x3b4b53,.71);
+const NECK=finish(0xb57d64,.78);
+const FACE=finish(0xbd9178,.72);
+const AMBER=finish(0xd78a51,.61,.04);
+const LENS=finish(0x283e48,.24,.23);
+const LENS_RIM=finish(0x637a81,.29,.26);
+
+const CHASSIS:readonly Point[]=[[-.29,-.33],[.29,-.33],[.37,-.18],[.37,.23],[.26,.37],[-.26,.37],[-.37,.23],[-.37,-.18]];
+const CHEVRON:readonly Point[]=[[-.28,-.11],[0,-.155],[.28,-.11],[.28,-.061],[0,-.096],[-.28,-.061]];
+const VENT:readonly Point[]=[[-.39,.045],[.39,.045],[.36,.125],[.29,.165],[-.29,.165],[-.36,.125]];
+const VISOR:readonly Point[]=[[-.32,.064],[.32,.064],[.29,.118],[-.29,.118]];
+const LIGHT_STRIP:readonly Point[]=[[-.20,.108],[.20,.108],[.17,.128],[-.17,.128]];
+const MASK:readonly Point[]=[[-.145,-.394],[.145,-.394],[.245,-.314],[.29,-.172],[.22,-.117],[-.22,-.117],[-.29,-.172],[-.245,-.314]];
+const MASK_GRILLE:readonly Point[]=[[-.114,-.295],[.114,-.295],[.144,-.244],[-.144,-.244]];
+const BUCKLE:readonly Point[]=[[-.14,.22],[.14,.22],[.13,.48],[-.13,.48]];
+const HARNESS:readonly Point[]=[[-.32,.11],[-.239,.11],[-.176,.473],[-.253,.483]];
+
+const canonical:BufferGeometry[]=[];
+
+function buildFieldPart(index:number){
+  const positions:number[]=[],colors:number[]=[],response:number[]=[],indices:number[]=[],regions:CharacterHitRegion[]=[];
+  const zone:HitZone=index===0?'head':index<3?'torso':index<7?'arm':'leg';
+
+  function vertex(x:number,y:number,z:number,surface:Finish){
+    const {r,g,b}=surface.color;
+    positions.push(x,y,z);
+    colors.push(Math.round(r*255),Math.round(g*255),Math.round(b*255));
+    response.push(Math.round(surface.roughness*255),Math.round(surface.metalness*255));
   }
-  const merged=mergeGeometries(parts)!;for(const g of parts)g.dispose();
-  // The authored sleeve placement is part of the canonical geometry, so the
-  // same inward offset applies to rendered triangles and collision triangles.
-  if(index===3||index===5)merged.translate(index===3?.3:-.3,0,0);
-  if(index===4||index===6)merged.translate(index===4?.34:-.34,0,0);
-  merged.userData.hitRegions=regions;merged.computeBoundingBox();merged.computeBoundingSphere();return merged;
+  function region(start:number,hitZone:HitZone){
+    regions.push({start,count:indices.length-start,zone:hitZone});
+  }
+  function loft(rings:readonly Ring[],surface:Finish,facets=8,hitZone=zone){
+    const start=indices.length,base=positions.length/3;
+    function ringVertex(row:Ring,side:number){
+      const [y,radiusX,radiusZ,z=0,mat=surface,x=0]=row,angle=side*Math.PI*2/facets;
+      vertex(x+Math.sin(angle)*radiusX,y,z+Math.cos(angle)*radiusZ,mat);
+    }
+    for(const ring of rings)for(let side=0;side<facets;side++)ringVertex(ring,side);
+    for(let row=1;row<rings.length;row++)for(let side=0;side<facets;side++){
+      const a=base+(row-1)*facets+side,b=base+(row-1)*facets+(side+1)%facets;
+      indices.push(a,b,b+facets,a,b+facets,a+facets);
+    }
+    // Duplicate only the cap rims to keep the longitudinal shading smooth
+    // across the articulated surfaces and the shell ends crisp.
+    for(const top of [false,true]){
+      const cap=rings[top?rings.length-1:0],rim=positions.length/3;
+      for(let side=0;side<facets;side++)ringVertex(cap,side);
+      for(let side=1;side<facets-1;side++){
+        if(top)indices.push(rim,rim+side,rim+side+1);
+        else indices.push(rim,rim+side+1,rim+side);
+      }
+    }
+    region(start,hitZone);
+  }
+  function panel(outline:readonly Point[],baseZ:number,faceZ:number,surface:Finish,edge=surface,x=0,y=0,scale=1){
+    const start=indices.length,base=positions.length/3,count=outline.length;
+    const centerX=outline.reduce((sum,p)=>sum+p[0],0)/count,centerY=outline.reduce((sum,p)=>sum+p[1],0)/count;
+    for(const [depth,shrink,material] of [[baseZ,1,edge],[faceZ,.88,surface]] as const){
+      for(const [px,py] of outline)vertex(x+(centerX+(px-centerX)*shrink)*scale,y+(centerY+(py-centerY)*shrink)*scale,depth,material);
+    }
+    function triangle(a:number,b:number,c:number){if(faceZ>baseZ)indices.push(a,b,c);else indices.push(a,c,b);}
+    // The open back is embedded in the parent surface.
+    for(let i=0;i<count;i++){
+      const a=base+i,b=base+(i+1)%count;
+      triangle(a,b,b+count);triangle(a,b+count,a+count);
+    }
+    for(const [a,b,c] of ShapeUtils.triangulateShape(outline.map(([px,py])=>new Vector2(px,py)),[]))triangle(base+count+a,base+count+b,base+count+c);
+    region(start,zone);
+  }
+
+  if(index===0){
+    loft([[-.69,.176,.186],[-.43,.18,.19],[-.28,.175,.17]],NECK,8,'torso');
+    loft([[-.45,.14,.18,.025],[-.38,.23,.265,.03],[-.2,.31,.345,.015],[.04,.345,.38],[.28,.3,.32]],FACE,12);
+    // Shell wraps the temples and occiput with the brow open for the visor.
+    loft([[-.14,.31,.31,-.075,ARMOR],[-.005,.40,.365,-.047,ARMOR_EDGE],[.18,.421,.414,-.025,AMBER],
+      [.37,.381,.382,-.03,AMBER],[.48,.27,.28,-.034,ARMOR_EDGE],[.5,.12,.12,-.04,ARMOR]],ARMOR,12);
+    panel(VENT,.20,.411,ARMOR,ARMOR_EDGE);
+    panel(VISOR,.34,.422,LENS,LENS_RIM);
+    panel(LIGHT_STRIP,.395,.424,LENS_RIM,LENS);
+    panel(MASK,.12,.375,WEAVE_DARK,ARMOR);
+    panel(MASK_GRILLE,.365,.389,ARMOR_EDGE,ARMOR);
+  }else if(index===1){
+    loft([[-.53,.34,.36],[-.28,.37,.40,.008],[.12,.46,.465],[.36,.477,.42,-.028],
+      [.489,.283,.299,-.026],[.576,.213,.252,-.024,ARMOR_EDGE]],TWILL,10);
+    panel(HARNESS,.22,.466,WEAVE_DARK,ARMOR_EDGE);
+    panel(HARNESS.map(([x,y]):Point=>[-x,y]).reverse(),.22,.466,WEAVE_DARK,ARMOR_EDGE);
+    panel(CHASSIS,.31,.53,ARMOR,ARMOR_EDGE);
+    panel(CHEVRON,.505,.552,AMBER,ARMOR_EDGE);
+    panel(CHASSIS,-.32,-.51,WEAVE_DARK,ARMOR_EDGE,0,-.026,.86);
+    panel(CHEVRON,-.48,-.53,WEAVE_LIGHT,ARMOR_EDGE,0,.03,.82);
+  }else if(index===2){
+    loft([[-.51,.37,.35],[-.34,.44,.425],[.21,.445,.46],[.36,.44,.48,0,ARMOR_EDGE],[.53,.40,.445,0,RUBBER]],TWILL,10);
+    panel(BUCKLE,.40,.54,ARMOR_EDGE,ARMOR);
+  }else if(index===3||index===5){
+    const inward=index===3?1:-1;
+    loft([[-.56,.27,.315],[-.37,.324,.36,-.025],[.11,.417,.42],[.43,.44,.435,0,TWILL,.11*inward],
+      [.53,.327,.33,0,TWILL,.24*inward]],TWILL);
+    panel(CHASSIS,.22,.48,ARMOR,ARMOR_EDGE,0,.22,.82);
+    panel(CHEVRON,.433,.498,AMBER,ARMOR_EDGE,0,.24,.82);
+  }else if(index===4||index===6){
+    loft([[-.35,.295,.30,.027],[-.2,.328,.345],[.25,.385,.377,-.014],[.56,.30,.31]],TWILL);
+    loft([[-.61,.205,.28,.052,RUBBER],[-.52,.355,.384,.062,LEATHER],[-.31,.391,.40,.04,LEATHER],[-.17,.30,.305,.015,ARMOR]],LEATHER);
+    panel(CHASSIS,.25,.432,ARMOR_EDGE,ARMOR,0,-.36,.64);
+  }else if(index===7||index===9){
+    loft([[-.5,.342,.395],[-.31,.387,.42,.012],[.1,.442,.451],[.43,.452,.47,-.016],[.53,.39,.414]],TWILL,10);
+    panel(CHASSIS,.22,.492,WEAVE_DARK,ARMOR_EDGE,index===7?-.09:.09,.02,.83);
+  }else{
+    loft([[-.315,.29,.34,-.05],[-.12,.335,.405,-.055],[.29,.383,.424,-.036],[.56,.346,.402,.022]],WEAVE_DARK);
+    panel(CHASSIS,.16,.49,ARMOR,ARMOR_EDGE,0,.305,.77);
+    // A longer toe and separate sole reroute the boot silhouette into the
+    // character's planted stance. The lowest surface stays on the ground.
+    loft([[-.5,.393,.681,.153,RUBBER],[-.461,.404,.69,.158,RUBBER],[-.36,.393,.643,.135,LEATHER],[-.19,.29,.381,-.042,LEATHER]],LEATHER,10);
+  }
+
+  const geometry=new BufferGeometry();
+  geometry.setAttribute('position',new Float32BufferAttribute(positions,3));
+  geometry.setAttribute('color',new Uint8BufferAttribute(colors,3,true));
+  geometry.setAttribute('characterFinish',new Uint8BufferAttribute(response,2,true));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  if(index===3||index===5)geometry.translate(index===3?.3:-.3,0,0);
+  if(index===4||index===6)geometry.translate(index===4?.34:-.34,0,0);
+  geometry.userData.hitRegions=regions;
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
 }
 
-/** Immutable CPU source. Callers must not mutate or dispose this canonical mesh. */
-export function characterPartSourceGeometry(index:number){
- if(!Number.isInteger(index)||index<0||index>=11)throw new RangeError('Invalid character part');
- return SOURCES[index]??(SOURCES[index]=buildCharacterPartGeometry(index));
+/** Immutable CPU source. Both renderers and hit queries consume these triangles. */
+export function characterPartSourceGeometry(index:number,version:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
+  if(!Number.isInteger(index)||index<0||index>=11)throw new RangeError('Invalid character part');
+  if(version===LEGACY_CHARACTER_GEOMETRY)return legacyCharacterPartGeometry(index);
+  return canonical[index]??(canonical[index]=buildFieldPart(index));
 }
-/** A renderer-owned clone, exactly matching the shared shooting surface. */
-export function characterPartGeometry(index:number){return characterPartSourceGeometry(index).clone();}
+
+export function characterPartGeometry(index:number,version:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
+  return characterPartSourceGeometry(index,version).clone();
+}

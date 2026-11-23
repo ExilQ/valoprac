@@ -10,7 +10,7 @@ import {characterPartShape} from '../engine/targets/CharacterShape';
 function visualReference(target:Target){
  const material=new MeshBasicMaterial({side:FrontSide}),geometries:BufferGeometry[]=[],meshes:Mesh[]=[];
  for(const [i,p] of target.parts.entries()){
-  const geometry=characterPartGeometry(i),mesh=new Mesh(geometry,material);geometries.push(geometry);mesh.matrixAutoUpdate=false;mesh.matrixWorld.copy(p.node.matrixWorld).scale(p.size);meshes.push(mesh);
+  const geometry=characterPartGeometry(i,target.characterGeometry),mesh=new Mesh(geometry,material);geometries.push(geometry);mesh.matrixAutoUpdate=false;mesh.matrixWorld.copy(p.node.matrixWorld).scale(p.size);meshes.push(mesh);
  }
  const caster=new Raycaster(),hits:Intersection[]=[];
  return{meshes,cast(ray:Ray){caster.set(ray.origin,ray.direction);hits.length=0;caster.intersectObjects(meshes,false,hits);if(!hits.length)return null;const hit=hits[0],regions=hit.object instanceof Mesh?hit.object.geometry.userData.hitRegions as CharacterHitRegion[]:[];const vertex=hit.faceIndex!*3,region=regions.find(r=>vertex>=r.start&&vertex<r.start+r.count)!;return{distance:hit.distance,point:hit.point,zone:region.zone};},dispose(){for(const g of geometries)g.dispose();material.dispose();}};
@@ -25,9 +25,16 @@ describe('Rendered target surfaces are the authoritative shooting surfaces',()=>
  it('uses the exact same finite canonical vertices for rendering and cached collision, with explicit neck/body classification',()=>{
   for(let i=0;i<11;i++){
    const render=characterPartGeometry(i),source=characterPartSourceGeometry(i),shape=characterPartShape(i);
-   try{expect(render).not.toBe(source);expect(shape.geometry).toBe(source);expect(Array.from(render.getAttribute('position').array)).toEqual(Array.from(source.getAttribute('position').array));expect(shape.bounds.isEmpty()).toBe(false);for(const n of source.getAttribute('position').array)expect(Number.isFinite(n)).toBe(true);}finally{render.dispose();}
+   try{expect(render).not.toBe(source);expect(shape.geometry).toBe(source);expect(Array.from(render.getAttribute('position').array)).toEqual(Array.from(source.getAttribute('position').array));expect(render.index?.array).toEqual(source.index?.array);expect(shape.bounds.isEmpty()).toBe(false);for(const n of source.getAttribute('position').array)expect(Number.isFinite(n)).toBe(true);}finally{render.dispose();}
   }
-  expect((characterPartSourceGeometry(0).userData.hitRegions as CharacterHitRegion[]).map(r=>r.zone)).toContain('torso');
+  const helmets=characterPartSourceGeometry(0);
+  const finish=helmets.getAttribute('characterFinish');
+  let minRoughness=1,maxRoughness=0;
+  for(let i=0;i<finish.count;i++){minRoughness=Math.min(minRoughness,finish.getX(i));maxRoughness=Math.max(maxRoughness,finish.getX(i));}
+  expect(finish.normalized).toBe(true);
+  expect(minRoughness).toBeLessThan(.30);
+  expect(maxRoughness).toBeGreaterThan(.75);
+  expect((helmets.userData.hitRegions as CharacterHitRegion[]).map(r=>r.zone)).toContain('torso');
  });
 
  it('has no front/side/diagonal silhouette false positives or false negatives while standing, crouching, strafing, rotated or scaled',()=>{

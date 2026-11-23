@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.5",
+  "version": "12.0.6",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -165,7 +165,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.05",
+  "patchLabel": "12.06",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -476,5 +476,11 @@
     "baseline": "12.04",
     "scope": "Wall and cover rendering",
     "simulationRulesChanged": false
+  },
+  "characterReview": {
+    "report": "/character-validation.json",
+    "baseline": "12.05",
+    "geometryVersion": "field-agent-1",
+    "historicalGeometryVersion": "classic-1"
   }
 }

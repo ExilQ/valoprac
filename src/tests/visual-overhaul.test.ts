@@ -92,7 +92,22 @@ describe('Character visual geometry preserves the authoritative hit rig',()=>{
    const torso=partBounds[1];
    expect(partBounds[3].max.x).toBeGreaterThan(torso.min.x);
    expect(partBounds[5].min.x).toBeLessThan(torso.max.x);
-   for(const [upper,lower] of [[3,4],[5,6]])expect(Math.abs(partBounds[upper].getCenter(new Vector3()).x-partBounds[lower].getCenter(new Vector3()).x)).toBeLessThan(.005);
+   // The upper sleeve slopes toward its shoulder while the elbow stays in line
+   // with the forearm. Measure the mating rings, not the whole sleeve bounds.
+   const ringCenter=(partIndex:number,end:'min'|'max')=>{
+    const geometry=geometries[partIndex],part=target.parts[partIndex];
+    const y=geometry.boundingBox![end].y,vertices=geometry.getAttribute('position');
+    const bounds=new Box3(),point=new Vector3(),matrix=part.node.matrixWorld.clone().scale(part.size);
+    for(let i=0;i<vertices.count;i++)if(Math.abs(vertices.getY(i)-y)<1e-6)
+     bounds.expandByPoint(point.fromBufferAttribute(vertices,i).applyMatrix4(matrix));
+    expect(bounds.isEmpty()).toBe(false);
+    return bounds.getCenter(point);
+   };
+   for(const [upper,lower] of [[3,4],[5,6]]){
+    const upperElbow=ringCenter(upper,'min'),lowerElbow=ringCenter(lower,'max');
+    expect(Math.abs(upperElbow.x-lowerElbow.x)).toBeLessThan(.005);
+    expect(lowerElbow.y-upperElbow.y).toBeGreaterThan(0);
+   }
    const width=partBounds.reduce((box,part)=>box.union(part),new Box3()).getSize(new Vector3()).x;
    expect(width).toBeLessThan(.75);
   }finally{geometries.forEach(g=>g.dispose());}

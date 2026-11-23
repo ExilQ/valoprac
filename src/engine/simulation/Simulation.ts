@@ -17,7 +17,8 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,type SimulationRulesId} from './rules';
+import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
 import {TacticalHearing} from '../tactical/Hearing';
@@ -62,7 +63,8 @@ export class Simulation {
   private currentInput!:InputState;
   private pendingBrakeShot:ShotEvent|null=null;
   private physicsTransitions:{time:number;profile:string;preset:string|null}[]=[];
-  constructor(public mode:Mode,public weaponId:WeaponId,public settings:Settings,options:SimulationOptions={},readonly rules:SimulationRulesId=CURRENT_SIMULATION_RULES){
+  constructor(public mode:Mode,public weaponId:WeaponId,public settings:Settings,options:SimulationOptions={},readonly rules:SimulationRulesId=CURRENT_SIMULATION_RULES,
+    readonly characterGeometry:CharacterGeometryVersion=rules===LEGACY_SIMULATION_RULES?LEGACY_CHARACTER_GEOMETRY:FIELD_CHARACTER_GEOMETRY){
     this.movement.setSimulationRules(rules);
     this.options=validateSessionOptions(options);this.scenario=this.options.scenario?compileScenario(this.options.scenario):null;
     if(this.options.exercise||this.scenario)this.mode='free';
@@ -83,7 +85,7 @@ export class Simulation {
     this.tap=new TapDrill(settings.drill);
     this.weapons=Object.fromEntries(WEAPON_ORDER.map((id,i)=>[id,new Weapon(WEAPONS[id],settings.seed+i*907)])) as Record<WeaponId,Weapon>;this.weapon=this.weapons[weaponId];this.configureAmmo();this.rng=new SeededRandom(settings.seed^0xF91);
     for(let i=0;i<(mode==='free'?12:mode==='tracking'&&settings.behavior==='peek'?1:MODES[mode].count);i++){
-      const behavior=mode==='tracking'||mode==='free'||settings.drill==='stopMoving'?settings.behavior:'stationary';const t=new Target(i,behavior,new SeededRandom(settings.seed+i*139+1));this.targets.push(t);if(this.practiceMap!=='tactical')this.spawn(t);if(mode==='free'){t.enabled=i<Math.min(settings.targetCount,settings.behavior==='peek'?1:12)&&!settings.analysisWall;t.active=t.enabled;}
+      const behavior=mode==='tracking'||mode==='free'||settings.drill==='stopMoving'?settings.behavior:'stationary';const t=new Target(i,behavior,new SeededRandom(settings.seed+i*139+1),this.characterGeometry);this.targets.push(t);if(this.practiceMap!=='tactical')this.spawn(t);if(mode==='free'){t.enabled=i<Math.min(settings.targetCount,settings.behavior==='peek'?1:12)&&!settings.analysisWall;t.active=t.enabled;}
     }
     this.exposure=new Exposure(this.targets.length);
     if(this.level&&!this.scenario&&this.practiceMap!=='complex'){this.angles=new AngleTraining(this.level,this.targets,new SeededRandom(settings.seed^0xA661),this.settings);this.resetTargets();}

@@ -7,8 +7,8 @@ import {SeededRandom} from '../engine/simulation/random';
 
 function fixture(multiDraw:boolean,count=4){
   const geometries=Array.from({length:11},(_,i)=>characterPartGeometry(i));
-  const materials=Array.from({length:3},()=>new MeshStandardMaterial({vertexColors:true}));
-  const perPart=geometries.map((_,i)=>materials[i===0?0:i<7?1:2]);
+  const materials=Array.from({length:2},()=>new MeshStandardMaterial({vertexColors:true}));
+  const perPart=geometries.map((_,i)=>materials[i===0?0:1]);
   const batches=createCharacterBatches(geometries,perPart,count,multiDraw);
   return{batches,geometries,materials,perPart,dispose(){batches.dispose();for(const geometry of geometries)geometry.dispose();for(const material of materials)material.dispose();}};
 }
@@ -24,15 +24,16 @@ function expectFloat32Matrix(actual:Matrix4,expected:Matrix4){
 }
 
 describe('Articulated character material batches',()=>{
-  it('uses three material identities with exactly reserved geometry and instance capacity',()=>{
+  it('reserves indexed geometry and instance capacity for both character finishes',()=>{
     const f=fixture(true,72);
     try{
-      expect(f.batches.getStats()).toEqual({backend:'batched',targetCount:72,partCount:11,batchCount:3,instanceCount:792,instanceCapacity:792});
+      expect(f.batches.getStats()).toEqual({backend:'batched',targetCount:72,partCount:11,batchCount:2,instanceCount:792,instanceCapacity:792});
       for(const object of f.batches.objects){
         expect(object).toBeInstanceOf(BatchedMesh);const batch=object as BatchedMesh;
         const parts=f.perPart.flatMap((material,i)=>material===batch.material?[i]:[]);
         expect(batch.instanceCount).toBe(72*parts.length);expect(batch.maxInstanceCount).toBe(batch.instanceCount);
-        expect(batch.unusedVertexCount).toBe(0);expect(batch.geometry.index).toBeNull();
+        expect(batch.unusedVertexCount).toBe(0);
+        expect(batch.geometry.index!.count).toBe(parts.reduce((count,i)=>count+f.geometries[i].index!.count,0));
         expect(batch.geometry.getAttribute('position').count).toBe(parts.reduce((count,i)=>count+f.geometries[i].getAttribute('position').count,0));
         expect(batch.frustumCulled).toBe(false);expect(batch.perObjectFrustumCulled).toBe(false);expect(batch.sortObjects).toBe(false);
         expect(()=>batch.addInstance(0)).toThrow('Maximum item count');

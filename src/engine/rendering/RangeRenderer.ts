@@ -9,6 +9,8 @@ import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
+import {useCharacterFinishes} from './CharacterMaterial';
+import {FIELD_CHARACTER_GEOMETRY} from '../targets/characterProfile';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
 import {obstacleFinishes} from './ObstacleFinishes';
 import {surfaceHeight,type Obstacle} from '../collision/environment';
@@ -246,8 +248,26 @@ export class RangeRenderer {
   private buildTargets(){
     // The canonical animated surface matrices remain the hit-registration input.
     // GPU grouping and visibility compaction never alter those world poses.
-    const materials=(['composite','fabric','fabric','rubber'] as VisualMaterialId[]).map(family=>{const m=this.materialLibrary.material(family,{tint:0xffffff,vertexColors:true});this.materials.add(m);return m;});
-    const count=this.simulation.targets.length,geometries=Array.from({length:11},(_,j)=>{const geometry=characterPartGeometry(j),family:VisualMaterialId=j===0?'composite':j<7?'fabric':'rubber',part=this.simulation.targets[0]?.parts[j];writeWorldScaleUV(geometry,VISUAL_MATERIALS[family].metersPerTile,part?new THREE.Matrix4().makeScale(part.size.x,part.size.y,part.size.z):undefined);this.geometries.add(geometry);return geometry;}),perPart=geometries.map((_,j)=>materials[j===0?0:j<3?1:j<7?2:3]);
+    const version=this.simulation.characterGeometry,field=version===FIELD_CHARACTER_GEOMETRY;
+    const familyFor=(part:number):VisualMaterialId=>part===0?'composite':field||part<7?'fabric':'rubber';
+    const byFamily=new Map<VisualMaterialId,THREE.MeshStandardMaterial>(),geometries:THREE.BufferGeometry[]=[],perPart:THREE.MeshStandardMaterial[]=[];
+    const count=this.simulation.targets.length;
+    for(let j=0;j<11;j++){
+      const family=familyFor(j),geometry=characterPartGeometry(j,version),part=this.simulation.targets[0]?.parts[j];
+      let material=byFamily.get(family);
+      if(!material){
+        const options=field?{tint:0xffffff,vertexColors:true,roughness:1,normalStrength:.12}:{tint:0xffffff,vertexColors:true};
+        material=this.materialLibrary.material(family,options);
+        if(field)useCharacterFinishes(material);
+        byFamily.set(family,material);
+        this.materials.add(material);
+      }
+      const scale=part?new THREE.Matrix4().makeScale(part.size.x,part.size.y,part.size.z):undefined;
+      writeWorldScaleUV(geometry,VISUAL_MATERIALS[family].metersPerTile,scale);
+      this.geometries.add(geometry);
+      geometries.push(geometry);
+      perPart.push(material);
+    }
     this.characterBatches=createCharacterBatches(geometries,perPart,count,useMultiDrawCharacters(this.capabilities,!!this.renderer.getContext().getExtension('WEBGL_multi_draw')));
     this.targetBatches=[...this.characterBatches.objects];for(const batch of this.targetBatches)this.scene.add(batch);
     for(let i=0;i<count;i++){

@@ -1,6 +1,6 @@
 import {Matrix4,Vector3} from 'three';
 import {Simulation} from '../simulation/Simulation';
-import {replayRulesFor,replayOutcome,simulationChecksum} from './integrity';
+import {replayRulesFor,replayCharacterGeometry,replayOutcome,simulationChecksum} from './integrity';
 import type {SimulationRulesId} from '../simulation/rules';
 import {validateReplay} from './validation';
 import {REPLAY_FIXED_DT,ReplayError,unpackInput,type ReplayCommand,type ReplayProgress,type ReplayRecording,type ReplayVerification} from './types';
@@ -24,7 +24,7 @@ export class ReplayPlayer {
  readonly mismatches:ReplayVerification['mismatches']=[];
  readonly rules:SimulationRulesId;
  constructor(readonly recording:ReplayRecording){validateReplay(recording);this.rules=replayRulesFor(recording.header);this.simulation=this.create();}
- private create(){const i=this.recording.header.initial,s=new Simulation(i.mode,i.weapon,structuredClone(i.settings),structuredClone(i.options),this.rules);if(i.attached)s.renderedTargets.attach();return s;}
+ private create(){const i=this.recording.header.initial,s=new Simulation(i.mode,i.weapon,structuredClone(i.settings),structuredClone(i.options),this.rules,replayCharacterGeometry(this.recording.header));if(i.attached)s.renderedTargets.attach();return s;}
  get time(){return this.simulation.time;}
  get ended(){return this.cursor>=this.recording.commands.length;}
  get events(){return this.recording.events;}

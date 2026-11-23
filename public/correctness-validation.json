@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.5",
-  "patchLabel": "12.05",
-  "generatedAt": "2026-11-19T11:34:15.113Z",
+  "release": "12.0.6",
+  "patchLabel": "12.06",
+  "generatedAt": "2026-11-19T11:55:34.942Z",
   "tests": {
-    "application": 1467,
+    "application": 1469,
     "broker": 28,
     "hosting": 28,
     "passed": true,
@@ -19,7 +19,7 @@
     "benchmark": "target-visual-alignment",
     "method": "Independent Three.Mesh.raycast versus shared-surface shooting BVH",
     "sampledRays": 12480,
-    "visibleSurfaceHits": 4388,
+    "visibleSurfaceHits": 4060,
     "falsePositive": 0,
     "falseNegative": 0,
     "poses": [
@@ -34,10 +34,10 @@
   "surfaceCPU": {
     "benchmark": "target-surface-cpu",
     "casts": 20000,
-    "triangles": 1568,
+    "triangles": 1750,
     "bvhNodes": 469,
-    "elapsedMilliseconds": 884.2638719999995,
-    "meanMicroseconds": 44.213193599999975,
+    "elapsedMilliseconds": 1013.7730270000002,
+    "meanMicroseconds": 50.688651350000015,
     "gpuTested": false,
     "inputLatencyMeasured": false
   },

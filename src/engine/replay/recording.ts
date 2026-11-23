@@ -16,7 +16,7 @@ export class ReplayRecorder {
  private readonly header:ReplayHeader;private previousCapture:typeof this.simulation.renderedTargets.onCapture;
  constructor(readonly simulation:Simulation){
   if(simulation.ticks!==0||simulation.renderedTargets.size!==0)throw new ReplayError('리플레이는 새 훈련의 첫 입력 전에 기록을 시작해야 합니다.');
-  this.header={...replayCompatibility(simulation.rules),createdAt:Date.now(),fixedHz:120,map:simulation.practiceMap,physics:simulation.movement.profile.id+(simulation.movement.profile.preset?'/'+simulation.movement.profile.preset:''),seed:simulation.settings.seed,initial:{mode:simulation.mode,weapon:simulation.weaponId,settings:copy(simulation.settings),attached:simulation.renderedTargets.isAttached,options:copy(validateSessionOptions(simulation.options))}};
+  this.header={...replayCompatibility(simulation.rules,simulation.characterGeometry),createdAt:Date.now(),fixedHz:120,map:simulation.practiceMap,physics:simulation.movement.profile.id+(simulation.movement.profile.preset?'/'+simulation.movement.profile.preset:''),seed:simulation.settings.seed,initial:{mode:simulation.mode,weapon:simulation.weaponId,settings:copy(simulation.settings),attached:simulation.renderedTargets.isAttached,options:copy(validateSessionOptions(simulation.options))}};
   this.previousCapture=simulation.renderedTargets.onCapture;
   simulation.renderedTargets.onCapture=(frame,provenance)=>{
    this.previousCapture?.(frame,provenance);if(this.stopped||this.failure)return;
