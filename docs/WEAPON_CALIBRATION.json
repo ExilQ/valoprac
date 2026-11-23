@@ -1,5 +1,5 @@
 {
-  "version": "weapons-3.0-movement-provisional",
+  "version": "weapons-3.1-total-movement-cones",
   "reviewedAt": "2026-10-24",
   "angles": "degrees",
   "distance": "meters",
@@ -100,6 +100,21 @@
     "Actual shooting uses pre-kick aim and independent seeded disk spread. Current-shot camera recoil changes subsequent aim.",
     "Damage is recorded at ray distance. Default head-only training always eliminates on a head hit, including beyond Sheriff falloff.",
     "rifleA and rifleB identifiers remain for backward compatibility with saved history.",
-    "Rifle movement cone now6degrees at5.4m/s and3degrees at nominal walk speed; current native equivalence is unverified. Air penalties are8.5/8degrees. Independent tangent-disc projection preserves center at steep angles."
-  ]
+    "Rifle movement cone now6degrees at5.4m/s and3degrees at nominal walk speed; current native equivalence is unverified. Air penalties are8.5/8degrees. Independent tangent-disc projection preserves center at steep angles.",
+    "4.0.1 endpoints are TOTAL no-bloom standing hip-fire radii, including first-shot error. Sheriff1.2/3.0 is the requested calibration reference;9.10 primary patch confirms the rifle3/6 changes, not those exact Sheriff values. Intermediate velocity curves and distribution remain provisional."
+  ],
+  "totalMovementHipCone": {
+    "rifleA": {
+      "walking": 3,
+      "running": 6
+    },
+    "rifleB": {
+      "walking": 3,
+      "running": 6
+    },
+    "sheriff": {
+      "walking": 1.2,
+      "running": 3
+    }
+  }
 }

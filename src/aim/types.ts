@@ -1,5 +1,5 @@
 export const AIM_VERSION='aim-1.0.0';
-export const GAME_VERSION='4.0.0';
+export const GAME_VERSION='4.0.1';
 export const TASKS=['large','small','micro','smooth','reactive','switch'] as const;
 export type AimTask=typeof TASKS[number];
 export const TASK_LABELS:Record<AimTask,string>={large:'큰 표적 플릭',small:'작은 표적 플릭',micro:'미세 조정',smooth:'부드러운 트래킹',reactive:'반응형 트래킹',switch:'표적 전환'};

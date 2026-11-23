@@ -1,11 +1,12 @@
 {
   "schema": 1,
-  "release": "4.0.0",
-  "patchLabel": "04.00",
-  "generatedAt": "2026-10-24T06:32:07.981Z",
+  "release": "4.0.1",
+  "patchLabel": "04.01",
+  "generatedAt": "2026-10-24T11:08:17.005Z",
   "tests": {
-    "application": 346,
+    "application": 360,
     "broker": 20,
+    "hosting": 8,
     "passed": true,
     "renderSchedules": [
       60,
@@ -57,36 +58,36 @@
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 125,
       "events": 125,
-      "elapsedMs": 1.8237570000000005,
+      "elapsedMs": 1.073190000000011,
       "dropped": 0,
-      "callbackP95": 0.005359999999996035,
+      "callbackP95": 0.0051879999999755455,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 500,
       "events": 500,
-      "elapsedMs": 4.115948000000003,
+      "elapsedMs": 1.960739999999987,
       "dropped": 0,
-      "callbackP95": 0.0029649999999605825,
+      "callbackP95": 0.001232000000015887,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 1000,
       "events": 1000,
-      "elapsedMs": 7.7419230000000425,
+      "elapsedMs": 3.054128999999989,
       "dropped": 0,
-      "callbackP95": 0.0017090000000052896,
+      "callbackP95": 0.0015829999999823485,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 4000,
       "events": 4000,
-      "elapsedMs": 21.728230999999994,
+      "elapsedMs": 11.668203000000005,
       "dropped": 0,
-      "callbackP95": 0.0006309999999984939,
+      "callbackP95": 0.0003699999999753345,
       "physicalDeviceTest": false
     }
   ],
@@ -135,16 +136,16 @@
       {
         "condition": "walking",
         "shots": 25,
-        "wallHits": 20,
-        "averageMovementConeDegrees": 2.88,
+        "wallHits": 21,
+        "averageMovementConeDegrees": 2.64,
         "averageSpeed": 2.500986666666666,
         "physicalRecoil": true
       },
       {
         "condition": "running",
         "shots": 25,
-        "wallHits": 18,
-        "averageMovementConeDegrees": 5.718689458689458,
+        "wallHits": 19,
+        "averageMovementConeDegrees": 5.478689458689458,
         "averageSpeed": 5.158000000000002,
         "physicalRecoil": true
       },

@@ -28,8 +28,8 @@
     "Browser 4.0 ADS, velocity-cone spread, elevated maps, exposure and input capture are not ported or validated in UE"
   ],
   "rollback": {
-    "siteVersionNumber": 7,
-    "sourceCommit": "b79b2936a5d6f8e1651429c59460c474ae94f46b",
-    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_b238459cdfbc81918faa3691b78d25fa"
+    "siteVersionNumber": 8,
+    "sourceCommit": "096502ee057dccebc7578e569dc124bfc3889333",
+    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_3803d8333e1481919bdc8e34a0b48b2a"
   }
 }

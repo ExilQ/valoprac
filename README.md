@@ -1,4 +1,6 @@
-# VALOPRAC 4.0.0 — tactical movement and visual upgrade
+# VALOPRAC 4.0.1 — tactical movement and visual upgrade
+
+Patch **04.01** fixes HUD docking, late Pointer Lock errors, explicit total movement cones, source-export completeness, player guidance, and actual security/cache/SPA responses through the existing Site. The response worker embeds the compiled client; `dist-client` is intermediate, `dist` is the complete Worker ESM deployment.
 
 Major patch **04.00** extends 3.0 in place with real velocity-cone spread, tap-braking drills, compact toggle ADS, faster persistent-footstep recovery, optional fullscreen keyboard capture, bounded input diagnostics, faster bots, six original elevated tactical sections and exposure retry. See [implementation and calibration](docs/TACTICAL_OVERHAUL.md) and the actual release-generated tactical validation report. GPU visuals and physical input remain unverified.
 
@@ -46,7 +48,7 @@ Three layers remain distinct: bullet rays/spread, camera recoil and cosmetic gun
 
 ## Calibration and rights
 
-See `docs/WEAPON_CALIBRATION.json` for verified published values, requested reference values and provisional estimates. No native VALORANT parity or exact sensitivity matching is asserted. The required named skin profiles are present, but **no Riot audio/model/texture recording is included**. All shipped sounds and weapon artwork are independently produced alternatives. The Phantom reference slot remains Champions 2026, not another collection.
+See `docs/WEAPON_CALIBRATION.json` for verified published values, requested reference values and provisional estimates. No native VALORANT parity or exact sensitivity matching is asserted. The required named skin profiles are present, but **no Riot audio/model/texture recording is included**. All shipped sounds and weapon artwork are independently produced alternatives. Requested reference names remain internal calibration metadata; the public sound UI labels shipped original audio and authorized user imports.
 
 Three.js' MIT-licensed procedural `RoomEnvironment` is used to generate an original reflection probe. This is a browser WebGL renderer, not Unreal Engine or Lumen. Low quality removes expensive passes; High/Ultra are optional.
 

@@ -12,3 +12,5 @@ worker.env
 
 __pycache__/
 *.pyc
+
+dist-client/

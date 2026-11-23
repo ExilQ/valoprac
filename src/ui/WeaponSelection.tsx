@@ -16,7 +16,7 @@ export function WeaponSelection({compact=false}:{compact?:boolean}) {
       <div className="weapon-card-heading"><span>0{i+1} / {w.fireMode==='auto'?'자동 소총':'정밀 리볼버'}</span>{selected===id?<span className="selected-label"><Check size={14}/> 장착 선택</span>:<span>선택</span>}</div>
       <WeaponSilhouette id={id}/><div className="weapon-title"><h2>{w.name}</h2><span>{id==='rifleA'?'강한 초반 상승':id==='rifleB'?'부드러운 초기 연사':'단발 정밀 사격'}</span></div>
       <dl><div><dt>탄창</dt><dd>{w.magazine}발</dd></div><div><dt>발사 속도</dt><dd>{w.fireRate}발/초</dd></div><div><dt>초탄 산포</dt><dd>{w.firstSpread}도</dd></div><div><dt>정조준</dt><dd>{w.adsZoom>1?'1.25배':'미지원'}</dd></div></dl>
-      {!compact&&<><div className="weapon-damage"><span>거리별 피해 · 머리 / 몸통 / 다리</span>{w.damage.map((d,j)=><p key={j}><b>{j===0?'0':w.damage[j-1].maxDistance}–{Number.isFinite(d.maxDistance)?`${d.maxDistance}미터`:'최대 거리'}</b><span>{d.head} / {d.body} / {d.leg}</span></p>)}</div><p className="weapon-audio">{AUDIO_PROFILES[id].reference} 참고 프로필<br/><strong>현재 기본음: 자체 제작 대체음</strong></p></>}
+      {!compact&&<><div className="weapon-damage"><span>거리별 피해 · 머리 / 몸통 / 다리</span>{w.damage.map((d,j)=><p key={j}><b>{j===0?'0':w.damage[j-1].maxDistance}–{Number.isFinite(d.maxDistance)?`${d.maxDistance}미터`:'최대 거리'}</b><span>{d.head} / {d.body} / {d.leg}</span></p>)}</div><p className="weapon-audio">{AUDIO_PROFILES[id].alternative}<br/><strong>현재 기본음: 자체 제작 대체음</strong></p></>}
     </button>;})}</div>
     {!compact&&<footer className="weapon-foot"><p>반동 곡선과 회복은 추정 모델입니다. 실제 게임과 동일하다고 검증하지 않았습니다.</p><button className="primary-button" onClick={()=>setTab('training')}><Crosshair size={16}/> 훈련 준비 <ArrowRight size={16}/></button></footer>}
   </section>;

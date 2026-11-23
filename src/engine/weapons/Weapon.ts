@@ -35,8 +35,10 @@ export class Weapon {
     const p=this.profile,s=this.spread;const crouch=1+(p.crouchSpread-1)*m.crouch,aim=ads&&p.adsZoom>1?p.adsSpread:1;
     s.base=p.firstSpread*crouch*aim;
     const threshold=m.profile.accuracyVelocityThreshold,walk=m.profile.maxSpeed*m.profile.walkModifier;
-    const f=m.speed<=threshold?0:m.speed<=walk?.5*(m.speed-threshold)/(walk-threshold):.5+.5*(m.speed-walk)/(m.profile.maxSpeed-walk);
-    s.movement=p.movementSpread*Math.min(1.5,f)*crouch*aim;s.bloom=this.bloom*crouch*aim;s.air=m.grounded?0:p.airSpread;s.landing=m.grounded&&landingPenalty?0.35:0;
+    // Configured walking/running values are total no-bloom hip-fire half-cone radii.
+    const walkCone=p.walkingSpread??p.movementSpread*.5;
+    const total=m.speed<=threshold?p.firstSpread:m.speed<=walk?p.firstSpread+(walkCone-p.firstSpread)*(m.speed-threshold)/(walk-threshold):walkCone+(p.movementSpread-walkCone)*Math.min(1.5,(m.speed-walk)/(m.profile.maxSpeed-walk));
+    s.movement=Math.max(0,total-p.firstSpread)*crouch*aim;s.bloom=this.bloom*crouch*aim;s.air=m.grounded?0:p.airSpread;s.landing=m.grounded&&landingPenalty?0.35:0;
     s.total=s.base+s.movement+s.bloom+s.air+s.landing;
     const theta=this.rng.next()*Math.PI*2,r=Math.sqrt(this.rng.next())*s.total;
     s.x=Math.cos(theta)*r;s.y=Math.sin(theta)*r;return s;
