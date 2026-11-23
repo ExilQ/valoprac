@@ -14,6 +14,13 @@ This is the existing VALOPRAC tactical-FPS trainer. **Continue development rathe
 - Validation, where network and tools permit: `corepack pnpm install --frozen-lockfile`, `corepack pnpm test`, `corepack pnpm typecheck`, `corepack pnpm build`, `node --test infrastructure/pixel-streaming/*.test.mjs`, and `node scripts/verify-migration.mjs`.
 - Before merging to `main`, check the GitHub Actions PR results and manually exercise browser Pointer Lock, keyboard focus, weapon recoil, collision, and client-only persistence.
 
+## GitHub patch releases
+
+- For every completed VALOPRAC product patch, validate the changes, commit the source and push it to `ExilQ/valoprac`. Follow the repository's pull request and validation process.
+- Check the GitHub releases, tags, and the source version before choosing the next patch version. Use a `vMAJOR.MINOR.PATCH` tag on the exact commit that contains the verified patch. Keep the package version in sync when releasing the browser package.
+- Publish a GitHub Release for that tag. Write the patch notes in Korean with the user-visible changes, fixes, and any release-relevant validation limitations. Verify the published release and share its link when reporting completion.
+- If a patch was developed in the hosted Sites project, verify that the GitHub commit contains the corresponding source before tagging it. A GitHub release does not publish the live website.
+
 ## Shared memory (Memorix; optional until runtime installation is verified)
 
 - Read `docs/agent-memory/VALOPRAC_CONTEXT.md` and `docs/MEMORIX.md` when beginning a new Codex session or switching agents.
