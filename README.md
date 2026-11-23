@@ -1,51 +1,55 @@
-# VALOPRAC 2.3 — persistent footsteps and tactical corner practice
-
-The browser trainer remains the production default. The genuine Unreal Engine 5.7 source project is in `unreal/VALOPRAC`; it has not been built or run with Unreal in this environment. See [migration documentation](docs/migration/README.md), [validation](docs/migration/VALIDATION.md) and [deployment/rollback](docs/migration/DEPLOYMENT.md). No GPU service has been purchased or activated. Release 2.2 adds the portable authoritative analytics journal, browser history/results/recoil adapter, acknowledged input admission, cancellation handling and tested worker teardown. See [protocol and limits](docs/migration/PROTOCOL.md).
-
-Release 2.3 integrates the original separate corner-map layout and hearing/peeking concept with the existing Three.js movement, weapon and 3D hitbox engine. Persistent distance-based footsteps, stationary recovery, a distinct event-radius minimap, hearing-only bot investigation, local calibration controls/comparison and Korean patch notes are functional in the browser path. See [footstep calibration and evidence](docs/FOOTSTEP_CALIBRATION.md). These additions are not ported to the unbuilt UE staging runtime.
-
 # VALOPRAC
 
-A Korean browser-based tactical FPS trainer built with React, TypeScript, Vite, Three.js and Zustand. Production domain: https://valoprac.trade.
+VALOPRAC is an independent, Korean-language tactical FPS practice tool that runs in the browser. It helps players repeat the moments that are hard to isolate in a match, such as stopping before the first shot, managing recoil, peeking a corner, and moving quietly enough to avoid giving away their position.
 
-Version 2.0 extends the existing engine rather than replacing it: the 120 Hz movement simulation, braking measurements, rig-based head collision, original timed modes and IndexedDB history remain in place. Free Practice is unlimited and supports live weapon/target configuration while preserving normal magazine and reload mechanics.
+[Open the trainer](https://valoprac.trade/) · [Open the Review Lab](https://valoprac.trade/review/)
 
-## Development
+## What it helps you practice
 
-Node.js 24.22.1 LTS; dependencies are pinned by `pnpm-lock.yaml`.
+- **Movement and first-shot accuracy.** Use drills and timing measurements to see how braking, movement speed, and stance affect a shot.
+- **Weapon control.** Practice firing, aiming down sights, reloading, and recoil recovery with distinct weapon profiles. Use timed drills for repeatable attempts or Free Practice to work at your own pace.
+- **Tactical decisions.** Approach corners from different angles and use the footstep display to see where movement produces noise that defenders can hear.
+- **Review.** Check local training statistics after a session. The live Review Lab lets players connect training sessions to their own match-review notes and compare results over time.
+
+## What this repository is for
+
+This public repository provides a runnable browser trainer and a place to inspect, test, and improve its mechanics. It documents how simulation, rendering, input, and local storage work together. The live website can be ahead of this source snapshot. For the features served on the website, see the [production metadata](https://valoprac.trade/release.json) and [English patch history](docs/PATCH_HISTORY_EN.md).
+
+| Area | Role |
+| --- | --- |
+| [Simulation](src/engine/simulation) and [movement](src/engine/movement) | Advance the game at a fixed 120 Hz and apply acceleration, braking, jumping, and crouching. |
+| [Rendering](src/engine/rendering) and [interface](src/ui) | Draw 3D scenes with Three.js and present training controls, feedback, and results in React. |
+| [Training analytics](src/training/analytics) and [storage](src/storage) | Calculate practice statistics and save training history and settings in the browser. |
+| [Unreal project](unreal/VALOPRAC) and [streaming infrastructure](infrastructure/pixel-streaming) | Provide experimental native and streaming scaffolding. Browser practice uses the WebGL runtime. Native Unreal build and play verification are still outstanding. |
+
+## Run locally
+
+Use Node.js **24.22.1** and **pnpm 11.25.0**. The pnpm lockfile pins the dependencies.
 
 ```sh
-pnpm install --frozen-lockfile
-npm test
-npm run typecheck
-npm run build
+corepack enable
+corepack pnpm install --frozen-lockfile
+corepack pnpm dev
 ```
 
-`npm run build` runs tests, TypeScript and Vite. Output is `dist`. Known client routes (`/training.html`, `/settings.html`, `/statistics.html`, `/results.html`) are exported as static HTML entry documents so direct URLs and refresh work without relying on Pages-only rewrite handling. No server, account, API key or client-side secret is needed. All data and optional imported audio remain in the user's browser. Existing settings/history keys and the `rifleA`/`rifleB` IDs are retained for compatibility.
+Open [localhost:4173](http://localhost:4173). The browser trainer can run locally without an account or an API key. Use `corepack pnpm build` to generate the static browser output in `dist/`.
 
-## Systems
+## Contributing
 
-- `src/engine/simulation`: authoritative fixed ticks and mode lifecycle.
-- `src/engine/movement`: acceleration, friction, inertia, jumping, crouch and braking episodes.
-- `src/config/weapons.ts`: distinct Vandal, Phantom and semi-automatic Sheriff profiles, damage bands and ADS.
-- `src/engine/recoil`: stateful horizontal direction, protected bullets, smooth recovery and player compensation.
-- `src/engine/collision`, `targets`: hitscan against animated sphere/OBB hit zones and original cover geometry.
-- `src/engine/rendering`: original weapon models, instanced humanoid parts, merged range geometry, stylized PBR, reflection probe and optional post-processing.
-- `src/engine/audio`: preloaded original sound buffers, channel gains, overlapping tails and bounded active voices.
-- `src/storage/audioAssets.ts`: rights-attested local audio import. For authorized public assets, configure same-origin paths and explicit redistribution authorization in `src/config/audio.ts`.
-- `src/training/analytics`: lifetime scalar totals and capped detailed snapshots. Old history summaries remain readable.
-- `src/ui`: Korean settings, practice controls, analysis and results. React updates at HUD cadence, not on every simulation tick.
+Open an issue with the drill, weapon, browser, and steps to reproduce a problem. Include what you expected and what happened. For changes to movement, hit detection, or audio, include the measurement or test that demonstrates the difference.
 
-Three layers remain distinct: bullet rays/spread, camera recoil and cosmetic gun/effect animation. Audio or graphical quality changes do not consume gameplay RNG. Sheriff input uses press counts so a click shorter than a simulation frame is retained.
+Before opening a pull request, run the checks relevant to your change.
+
+```sh
+corepack pnpm test
+corepack pnpm typecheck
+corepack pnpm build
+```
+
+[Mechanics](docs/MECHANICS.md) · [Footstep calibration](docs/FOOTSTEP_CALIBRATION.md) · [Manual testing](docs/MANUAL_TESTING.md) · [Unreal migration notes](docs/migration/README.md)
 
 ## Calibration and rights
 
-See `docs/WEAPON_CALIBRATION.json` for verified published values, requested reference values and provisional estimates. No native VALORANT parity or exact sensitivity matching is asserted. The required named skin profiles are present, but **no Riot audio/model/texture recording is included**. All shipped sounds and weapon artwork are independently produced alternatives. The Phantom reference slot remains Champions 2026, not another collection.
+VALOPRAC is an unofficial training tool. Its movement, weapon, and sensitivity values are independently calibrated for practice. The trainer uses original models and sounds, and [Third-party notices](THIRD_PARTY_NOTICES.md) describe included dependencies and their terms.
 
-Three.js' MIT-licensed procedural `RoomEnvironment` is used to generate an original reflection probe. This is a browser WebGL renderer, not Unreal Engine or Lumen. Low quality removes expensive passes; High/Ultra are optional.
-
-## Validation and production
-
-Read `docs/UPGRADE_VALIDATION.md` for per-feature status and manual desktop QA. Tests cover mechanics, 30/60/144/240 Hz replay, storage, input contracts, audio lifecycle and one hour of simulated unlimited firing. They do not prove real GPU FPS, actual Pointer Lock, acoustic fidelity or browser soak stability.
-
-The authoritative production repository is the existing Sites source identified by `.openai/hosting.json`; keep its project ID and public audience. Use the existing source helper to open the latest source, validate/build, push the exact source state, package `dist`, save a version and deploy it. Do not replace the Site or move its custom-domain DNS. Previous saved versions remain rollback candidates. `public/release.json` identifies the release for public HTTP verification.
+Project-wide licensing terms are currently unspecified. Confirm permissions with the maintainer before redistributing the project's code or assets.
