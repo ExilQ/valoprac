@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.sites-runtime/
+.openai/deploy.tar.gz
+*.tsbuildinfo
+unreal/**/Binaries/
+unreal/**/Intermediate/
+unreal/**/Saved/
+unreal/**/DerivedDataCache/
+unreal/builds/
+worker.env
+
+__pycache__/
+*.pyc

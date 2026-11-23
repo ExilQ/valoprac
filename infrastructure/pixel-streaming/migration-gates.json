@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "defaultRuntime": "browser",
+  "engine": "Unreal Engine 5.7",
+  "gates": {
+    "unrealBuildPassed": false,
+    "gpuRuntimeVerified": false,
+    "webrtcInputVerified": false,
+    "weaponAndHitboxRegressionPassed": false,
+    "audioRoutingVerifiedInUnreal": false,
+    "unlimitedPracticeAndHistoryVerified": false,
+    "latencyComparedOnActualHardware": false,
+    "isolatedConcurrentSessionsVerified": false,
+    "longSessionMemorySoakPassed": false,
+    "visualComparisonReviewed": false,
+    "rollbackExercised": false
+  },
+  "blockers": [
+    "No licensed UE 5.7 installation or UnrealBuildTool in this execution environment",
+    "No GPU or authorized GPU host available",
+    "No measured WebRTC or input-to-photon session",
+    "UE-dependent gameplay/history/recoil integration requires actual UBT, GPU and WebRTC validation"
+  ],
+  "rollback": {
+    "siteVersionNumber": 4,
+    "sourceCommit": "683be0cd1bbf4f867cb7f27d78ab548a1351fd9e",
+    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_5c2123512aac8191980e6be96a7f10c4"
+  }
+}

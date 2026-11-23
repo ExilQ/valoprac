@@ -1,0 +1,22 @@
+[Unit]
+Description=VALOPRAC isolated UE Pixel Streaming session broker
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+User=valoprac
+Group=valoprac
+WorkingDirectory=/opt/valoprac
+EnvironmentFile=/etc/valoprac/worker.env
+ExecStart=/usr/bin/node /opt/valoprac/infrastructure/pixel-streaming/server.mjs
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+KillMode=control-group
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+UMask=0077
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target

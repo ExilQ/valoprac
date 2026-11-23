@@ -1,0 +1,31 @@
+{
+  "application": "VALOPRAC",
+  "version": "2.2.0",
+  "calibration": "weapons-2.0-11.08-PC",
+  "features": [
+    "free-practice",
+    "vandal",
+    "phantom",
+    "sheriff",
+    "ads",
+    "original-audio-profiles",
+    "graphics-presets",
+    "tactical-ui",
+    "weapon-selection",
+    "settings-tabs",
+    "browser-fallback",
+    "ue57-source-project",
+    "pixel-streaming-staging-protocol",
+    "authoritative-stream-analytics",
+    "stream-history-and-recoil",
+    "acknowledged-input-admission",
+    "isolated-worker-teardown"
+  ],
+  "unreal": {
+    "engine": "5.7",
+    "sourceIncluded": true,
+    "built": false,
+    "gpuVerified": false,
+    "productionEnabled": false
+  }
+}

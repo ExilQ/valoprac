@@ -1,0 +1,48 @@
+diff --git a/dist/cjs/VideoPlayer/VideoPlayer.js b/dist/cjs/VideoPlayer/VideoPlayer.js
+index 30ad10a5e2820ff7f66b55ceaecccec846e2555b..1a7ca3023e003b126213fb8b3ca4f15acef39201 100644
+--- a/dist/cjs/VideoPlayer/VideoPlayer.js
++++ b/dist/cjs/VideoPlayer/VideoPlayer.js
+@@ -43,10 +43,17 @@ class VideoPlayer {
+             this.onVideoInitialized();
+         };
+         // set resize events to the windows if it is resized or its orientation is changed
+-        window.addEventListener('resize', () => this.resizePlayerStyle(), true);
+-        window.addEventListener('orientationchange', () => this.onOrientationChange());
++        this.boundResize = () => this.resizePlayerStyle();
++        this.boundOrientation = () => this.onOrientationChange();
++        window.addEventListener('resize', this.boundResize, true);
++        window.addEventListener('orientationchange', this.boundOrientation);
+     }
+     destroy() {
++        window.removeEventListener('resize', this.boundResize, true);
++        window.removeEventListener('orientationchange', this.boundOrientation);
++        window.clearTimeout(this.resizeTimeoutHandle);
++        this.videoElement.onclick = null;
++        this.videoElement.onloadedmetadata = null;
+         this.videoElement.src = '';
+         this.videoElement.srcObject = null;
+         this.videoElement.remove();
+diff --git a/dist/esm/VideoPlayer/VideoPlayer.js b/dist/esm/VideoPlayer/VideoPlayer.js
+index 077ba8d4252124a1cbb14f8fbfd4e4ee96a3a9a4..9c2472a07d1b6634975cd6a34caa15a6ab599817 100644
+--- a/dist/esm/VideoPlayer/VideoPlayer.js
++++ b/dist/esm/VideoPlayer/VideoPlayer.js
+@@ -40,10 +40,17 @@ export class VideoPlayer {
+             this.onVideoInitialized();
+         };
+         // set resize events to the windows if it is resized or its orientation is changed
+-        window.addEventListener('resize', () => this.resizePlayerStyle(), true);
+-        window.addEventListener('orientationchange', () => this.onOrientationChange());
++        this.boundResize = () => this.resizePlayerStyle();
++        this.boundOrientation = () => this.onOrientationChange();
++        window.addEventListener('resize', this.boundResize, true);
++        window.addEventListener('orientationchange', this.boundOrientation);
+     }
+     destroy() {
++        window.removeEventListener('resize', this.boundResize, true);
++        window.removeEventListener('orientationchange', this.boundOrientation);
++        window.clearTimeout(this.resizeTimeoutHandle);
++        this.videoElement.onclick = null;
++        this.videoElement.onloadedmetadata = null;
+         this.videoElement.src = '';
+         this.videoElement.srcObject = null;
+         this.videoElement.remove();

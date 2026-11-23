@@ -1,0 +1,25 @@
+import {readFileSync,existsSync,readdirSync,statSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import assert from 'node:assert/strict';
+const root=resolve('dist');
+const read=p=>readFileSync(join(root,p),'utf8');
+const release=JSON.parse(read('release.json'));
+assert.equal(release.version,JSON.parse(readFileSync('package.json','utf8')).version);
+assert(release.features.includes('free-practice'));
+const html=read('index.html');
+assert(html.includes('lang="ko"'));
+assert(html.includes('VALOPRAC'));
+assert(html.includes('https://valoprac.trade/'));
+for(const match of html.matchAll(/(?:src|href)="(\/assets\/[^"?#]+)"/g))assert(existsSync(join(root,match[1])),match[1]);
+const manifest=JSON.parse(read('.vite/manifest.json'));
+for(const value of Object.values(manifest)){assert(existsSync(join(root,value.file)),value.file);for(const css of value.css??[])assert(existsSync(join(root,css)),css);}
+assert(Object.keys(manifest).some(k=>k.includes('GameStage')),'3D gameplay must be emitted as a real dynamic chunk');
+for(const file of readdirSync(join(root,'assets'))){const path=join(root,'assets',file);assert(!file.endsWith('.map'),'Public sourcemaps must not be emitted');assert(statSync(path).size<2_000_000,`Unexpected large asset: ${file}`);if(file.endsWith('.js'))assert(!/sk-(?:proj-)?[A-Za-z0-9_-]{30,}/.test(readFileSync(path,'utf8')),'Potential API key in browser output');}
+assert(read('guide.html').includes('자체 제작 대체음'));
+assert(read('_headers').includes('immutable'));
+assert(read('_redirects').includes('/index.html 200'));
+for(const route of ['training','settings','statistics','results','weapons','unreal'])assert.equal(read(`${route}/index.html`),html);
+assert(existsSync(join(root,'downloads/valoprac-unreal-source.zip')));
+assert(Object.keys(manifest).some(k=>k.includes('EpicSession')),'Official streaming client must remain lazy loaded');
+assert.equal(JSON.parse(read('streaming-config.json')).enabled,release.unreal.productionEnabled,'Release metadata must match the actual streaming configuration');
+console.log(JSON.stringify({release:release.version,manifestEntries:Object.keys(manifest).length,assetCount:readdirSync(join(root,'assets')).length,passed:true}));

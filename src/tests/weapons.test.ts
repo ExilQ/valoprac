@@ -1,0 +1,24 @@
+import { describe,it,expect } from 'vitest';
+import { WEAPONS } from '../config/weapons';
+import { Weapon } from '../engine/weapons/Weapon';
+import { Recoil } from '../engine/recoil/Recoil';
+import { SeededRandom } from '../engine/simulation/random';
+import { Movement } from '../engine/movement/Movement';
+import { emptyInput } from '../engine/types';
+import { FIXED_DT } from '../engine/simulation/FixedClock';
+describe('Spread and recoil',()=>{
+  it('increases spread as movement speed exceeds the accuracy threshold',()=>{const a=new Weapon(WEAPONS.rifleA,7),b=new Weapon(WEAPONS.rifleA,7),m=new Movement();const stationary=a.calculateSpread(m,false,false).total;m.speed=5.4;const moving=b.calculateSpread(m,false,false).total;expect(moving).toBeGreaterThan(stationary*10);});
+  it('applies crouch, airborne, landing, ADS and consecutive-shot contributions separately',()=>{const w=new Weapon(WEAPONS.rifleA,7),m=new Movement();const standing=w.calculateSpread(m,false,false).total;m.crouch=1;expect(w.calculateSpread(m,false,false).total).toBeLessThan(standing);m.grounded=false;expect(w.calculateSpread(m,false,false).air).toBe(WEAPONS.rifleA.airSpread);m.grounded=true;expect(w.calculateSpread(m,false,true).air).toBeGreaterThan(0);w.bloom=0.5;expect(w.calculateSpread(m,false,false).bloom).toBeGreaterThan(0);const base=w.calculateSpread(m,false,false).base;expect(w.calculateSpread(m,true,false).base).toBeLessThan(base);});
+  it('reproduces identical spread samples from a fixed seed',()=>{const a=new Weapon(WEAPONS.rifleA,190),b=new Weapon(WEAPONS.rifleA,190),m=new Movement();for(let i=0;i<50;i++)expect({...a.calculateSpread(m,false,false)}).toEqual({...b.calculateSpread(m,false,false)});});
+  it('produces distinct sequences for different seeds',()=>{expect(new SeededRandom(1).next()).not.toBe(new SeededRandom(2).next());});
+  it('accumulates pattern-based vertical and horizontal recoil',()=>{const r=new Recoil(),rng=new SeededRandom(1);for(let i=0;i<12;i++)r.kick(i,WEAPONS.rifleA,rng,0);expect(r.pitch).toBeGreaterThan(4);expect(Math.abs(r.yaw)).toBeGreaterThan(0.4);});
+  it('recovers continuously only after the configured delay',()=>{const r=new Recoil(),p=WEAPONS.rifleA;r.pitch=5;r.recover(FIXED_DT,p,0.05);expect(r.pitch).toBe(5);r.recover(FIXED_DT,p,0.3);expect(r.pitch).toBeLessThan(5);expect(r.pitch).toBeGreaterThan(4);for(let i=0;i<240;i++)r.recover(FIXED_DT,p,1);expect(r.pitch).toBeLessThan(0.001);});
+  it('consumes player compensation without reintroducing compensated recoil',()=>{const r=new Recoil();r.pitch=2;r.yaw=0.5;const [pitch,yaw]=r.compensate(-1.6,-0.4,0.8);expect(pitch).toBeCloseTo(0);expect(yaw).toBeCloseTo(0);expect(r.pitch).toBeCloseTo(0);r.recover(0.5,WEAPONS.rifleA,1);expect(r.pitch).toBeCloseTo(0);expect(r.compensationPitch).toBe(-1.6);});
+});
+describe('Fire-rate lattice, ammunition, reload and burst reset',()=>{
+  for(const profile of Object.values(WEAPONS).filter(p=>p.fireMode==='auto'))it(`enforces the ${profile.id} fire rate`,()=>{const w=new Weapon({...profile,magazine:1000},1),times:number[]=[];for(let i=1;i<=360;i++)w.step(i*FIXED_DT,FIXED_DT,{...emptyInput(),fire:true},()=>times.push(i*FIXED_DT));expect(times.length).toBeLessThanOrEqual(Math.ceil(3*profile.fireRate));expect(times.length).toBeGreaterThanOrEqual(Math.floor(3*profile.fireRate));for(let i=1;i<times.length;i++)expect(times[i]-times[i-1]).toBeGreaterThanOrEqual(1/profile.fireRate-FIXED_DT-1e-8);});
+  it('stops on an empty magazine, blocks fire during reload, then refills',()=>{const w=new Weapon({...WEAPONS.rifleA,magazine:3},2);let fired=0;const input={...emptyInput(),fire:true};for(let i=1;i<=70;i++)w.step(i*FIXED_DT,FIXED_DT,input,()=>fired++);expect(fired).toBe(3);expect(w.ammo).toBe(0);expect(w.reloadingUntil).not.toBeNull();const reloadEnd=w.reloadingUntil!;w.step(reloadEnd-0.001,FIXED_DT,input,()=>fired++);expect(fired).toBe(3);w.step(reloadEnd,FIXED_DT,emptyInput(),()=>fired++);expect(w.ammo).toBe(3);expect(w.reloadingUntil).toBeNull();});
+  it('prevents reloading a full magazine and double-starting reload',()=>{const w=new Weapon(WEAPONS.rifleB,1);w.requestReload(0);expect(w.reloadingUntil).toBeNull();w.ammo=2;w.requestReload(1);const end=w.reloadingUntil;w.requestReload(2);expect(w.reloadingUntil).toBe(end);});
+  it('resets the shot index and bloom after a pause',()=>{const w=new Weapon(WEAPONS.rifleA,1);w.step(0,FIXED_DT,{...emptyInput(),fire:true},()=>{});expect(w.shotIndex).toBe(1);for(let i=1;i<=120;i++)w.step(i*FIXED_DT,FIXED_DT,emptyInput(),()=>{});expect(w.shotIndex).toBe(0);expect(w.bloom).toBe(0);});
+  it('does not issue a catch-up burst after the trigger was released',()=>{const w=new Weapon(WEAPONS.rifleA,1);let shots=0;w.step(0,FIXED_DT,{...emptyInput(),fire:true},()=>shots++);w.step(5,FIXED_DT,{...emptyInput(),fire:true},()=>shots++);expect(shots).toBe(2);expect(w.nextShot).toBeCloseTo(5+1/w.profile.fireRate);});
+});

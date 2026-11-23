@@ -1,0 +1,28 @@
+{
+  "retrievedOn": "2026-10-18",
+  "sourceURL": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-northeast-2/index.csv",
+  "records": [
+    {
+      "sku": "NPWTV4PDSKJ9WCNH",
+      "description": "$0.647 per On Demand Linux g4dn.xlarge Instance Hour",
+      "effectiveDate": "2026-10-01",
+      "priceUSDPerHour": 0.647,
+      "term": "OnDemand",
+      "unit": "Hrs",
+      "region": "ap-northeast-2",
+      "instance": "g4dn.xlarge",
+      "os": "Linux",
+      "tenancy": "Shared"
+    }
+  ],
+  "notIncluded": [
+    "data transfer",
+    "TURN relay",
+    "storage",
+    "public IPv4",
+    "tax",
+    "idle/warm-up time"
+  ],
+  "assumedVideoMbps": 15,
+  "nominalVideoGBPerPlayerHour": 6.75
+}
