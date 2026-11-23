@@ -115,7 +115,7 @@ h1,h2,h3{color:var(--ink);font-weight:650;letter-spacing:-.035em}h1{font-size:32
 :root[data-theme] .scenario-status{background:var(--surface-raised);color:var(--success);border-color:var(--success);font-size:14px}
 :root[data-theme] .scenario-status.invalid{color:var(--danger);border-color:var(--danger);background:var(--danger-soft)}
 :root[data-theme] .scenario-plan{background:var(--plot-bg);border-color:var(--control-border)}
-@media(max-width:700px){:root[data-theme] .training-platform .platform-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 8px;overflow:visible}:root[data-theme] .training-platform .platform-tabs button{min-width:0;max-width:100%;white-space:normal;font-size:13px;padding:10px 4px}}
+@media(max-width:700px){:root[data-theme] .training-platform .platform-tabs{display:flex;flex-wrap:nowrap;gap:0;overflow-x:auto}:root[data-theme] .training-platform .platform-tabs button{flex:none;min-height:44px;white-space:nowrap;font-size:13px;padding:10px 14px}}
 /* Measurement tables keep the same readable ink in every module. */
 :root[data-theme] .aim-table td{color:var(--ink);font-size:13px;border-color:var(--line)}
 :root[data-theme] .aim-table th{color:var(--muted);font-size:12px;border-color:var(--line)}

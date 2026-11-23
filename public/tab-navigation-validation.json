@@ -1,0 +1,248 @@
+{
+  "checks": [
+    "Desktop settings use up/down with automatic selection, End, and a single tab stop",
+    "Resize preserves the selected settings tab, updates the axis, and reveals the tab in its strip",
+    "Tools support manual activation; focusing Replay neither fetches it nor moves the outer page",
+    "Editing a tactical route preserves the chosen route and focuses the editor tab",
+    "Forced colors distinguish the selected tool tab by its border",
+    "Aim lab retains manual activation, focus and URL restoration through the shared control",
+    "18 settings, tools and aim layouts match their keyboard axis with no horizontal page overflow"
+  ],
+  "layouts": [
+    {
+      "width": 320,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 700,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 700,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 700,
+      "view": "aim",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 844,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 844,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 844,
+      "view": "aim",
+      "passed": true
+    },
+    {
+      "width": 680,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 680,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 680,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "aim",
+      "passed": true
+    },
+    {
+      "width": 681,
+      "orientation": "vertical",
+      "flex": "column",
+      "rows": 8,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 681,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 681,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 900,
+      "view": "aim",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "orientation": "vertical",
+      "flex": "column",
+      "rows": 8,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 1024,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "aim",
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "orientation": "vertical",
+      "flex": "column",
+      "rows": 8,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "settings",
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "tools",
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "orientation": "horizontal",
+      "flex": "row",
+      "rows": 1,
+      "overflow": false,
+      "active": 1,
+      "height": 768,
+      "view": "aim",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "passed": true,
+  "finishedAt": "2026-11-19T08:38:33.572Z",
+  "schema": 1,
+  "release": "12.0.3",
+  "patchLabel": "12.03",
+  "browser": "Chromium",
+  "baseline": {
+    "release": "12.0.2",
+    "viewport": [
+      390,
+      844
+    ],
+    "settings": {
+      "rows": 2,
+      "announcedOrientation": "vertical"
+    },
+    "tools": {
+      "rows": 2,
+      "replayActivatedByEnd": true
+    }
+  },
+  "touchTargets": {
+    "settings": [
+      44,
+      47
+    ],
+    "viewport": [
+      320,
+      700
+    ],
+    "count": 8
+  },
+  "guidance": {
+    "id": "tabs",
+    "installerLock": "64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65"
+  }
+}

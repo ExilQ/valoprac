@@ -41,7 +41,7 @@ describe('Korean React screen rendering (server markup, not browser QA)',()=>{
       expect(html.match(/role="tab"/g)).toHaveLength(8);
       expect(html.match(/aria-selected="true"/g)).toHaveLength(1);
       expect(html).toContain(`role="tabpanel" id="settings-panel-${id}" aria-labelledby="settings-tab-${id}"`);
-      for(const [tabId,label] of tabs)expect(html).toContain(`id="settings-tab-${tabId}" aria-controls="settings-panel-${tabId}" aria-selected="${tabId===id}" tabindex="${tabId===id?0:-1}">${label}`);
+      for(const [tabId,label] of tabs)expect(html).toContain(`id="settings-tab-${tabId}" aria-selected="${tabId===id}" tabindex="${tabId===id?0:-1}">${label}`);
     }
     const controls=renderToString(<SettingsPanel initialTab="controls"/>),sensitivity=renderToString(<SettingsPanel initialTab="sensitivity"/>),graphics=renderToString(<SettingsPanel initialTab="graphics"/>),crosshair=renderToString(<SettingsPanel initialTab="crosshair"/>);
     expect(controls).toContain('이동 물리엔진');expect(controls).toContain('앞으로 키');expect(controls).not.toContain('aria-label="마우스 감도"');

@@ -1,5 +1,5 @@
 import {Tabs,Panel} from '../components/utility/Controls';
-import {lazy,Suspense,useState} from 'react';
+import {lazy,Suspense,useRef,useState} from 'react';
 import {useApp} from '../app/store';
 import {ExerciseSetup} from './ExerciseTraining';
 import {ScenarioRoutes} from './ScenarioRoutes';
@@ -10,16 +10,24 @@ import {trainingMapTitle} from './trainingPresentation';
 import './trainingPlatform.css';
 const ReplayLibrary=lazy(()=>import('./ReplayViewer').then(m=>({default:m.ReplayLibrary})));
 const TABS={warmup:'1분 워밍업',movement:'이동 도구',routes:'전술 경로',editor:'시나리오 편집',flash:'플래시 회피',replays:'리플레이'} as const;
+const TOOL_TABS=Object.entries(TABS).map(([id,label])=>({id:id as keyof typeof TABS,label}));
 export function TrainingPlatform(){
  const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
  const start=useApp(s=>s.startSession),settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),history=useApp(s=>s.history);
  const tools=settings.movementTools;
- return <section className="training-platform"><header className="view-title"><p className="eyebrow">훈련 · 검토 · 직접 구성</p><h1>훈련 도구와 시나리오</h1><p>실제 이동·조준·판정을 사용하고, 호환되는 입력 기록으로 결과를 다시 확인합니다.</p></header>
-  <Tabs items={Object.entries(TABS).map(([id,label])=>({id:id as keyof typeof TABS,label}))} value={tab} onChange={setTab} label="훈련 플랫폼 도구" prefix="platform-tab" panelId="platform-active-panel" className="platform-tabs"/>
-  <section id="platform-active-panel" role="tabpanel" aria-labelledby={`platform-tab-${tab}`}>
+ const platform=useRef<HTMLElement>(null);
+
+ function editRoute(scenario:ScenarioDefinition) {
+  platform.current?.querySelector<HTMLButtonElement>('#platform-tab-editor')?.focus();
+  setDraft(scenario);
+  setTab('editor');
+ }
+ return <section className="training-platform" ref={platform}><header className="view-title"><p className="eyebrow">훈련 · 검토 · 직접 구성</p><h1>훈련 도구와 시나리오</h1><p>실제 이동·조준·판정을 사용하고, 호환되는 입력 기록으로 결과를 다시 확인합니다.</p></header>
+  <Tabs items={TOOL_TABS} value={tab} onChange={setTab} label="훈련 플랫폼 도구" prefix="platform-tab" activation="manual" className="platform-tabs"/>
+  <section id="platform-active-panel" role="tabpanel" tabIndex={0} aria-labelledby={`platform-tab-${tab}`}>
    {tab==='warmup'&&<ExerciseSetup kind="warmup" onStart={(exercise,weapon)=>start({exercise},weapon)}/>}
    {tab==='flash'&&<ExerciseSetup kind="flash" onStart={(exercise,weapon)=>start({exercise},weapon)}/>}
-   {tab==='routes'&&<ScenarioRoutes history={history} onStart={scenario=>start({scenario})} onEdit={scenario=>{setDraft(scenario);setTab('editor');}}/>}
+   {tab==='routes'&&<ScenarioRoutes history={history} onStart={scenario=>start({scenario})} onEdit={editRoute}/>}
    {tab==='editor'&&<ScenarioEditor initialScenario={draft} onStart={scenario=>start({scenario})}/>}
    {tab==='replays'&&<Suspense fallback={<p role="status">리플레이 보관함을 준비합니다…</p>}><ReplayLibrary sessions={history}/></Suspense>}
    {tab==='movement'&&<Panel className="movement-tool-setup"><h2>기존 맵에서 이동 연습</h2><p>점프와 공중 조향은 직접 조작합니다. 저장 위치·이륙점으로 돌아와 같은 구간을 다시 시도하고, 이전 시도를 고스트로 비교하세요.</p>

@@ -1,4 +1,4 @@
-import {useId,useState} from 'react';
+import {useId,useState,useSyncExternalStore} from 'react';
 import {MousePointer2,Monitor,RotateCcw,Maximize,Volume2,SlidersHorizontal,Gauge,Keyboard} from 'lucide-react';
 import {rotationCounts} from '../engine/input/zoomSensitivity';
 import {sensitivityUnits} from '../engine/input/sensitivity';
@@ -12,11 +12,25 @@ import {CrosshairDesigner} from './CrosshairDesigner';
 import {MovementPhysicsSettings,movementPhysicsLabel} from './MovementPhysicsSettings';
 import {AdvancedSettings} from './AdvancedSettings';
 import {PracticeControls} from './PracticeControls';
+import {Tabs} from '../components/utility/Controls';
 import {ThemeSelector} from './theme/ThemeSelector';
 import './settingsUtility.css';
 
 export type SettingsTab='general'|'controls'|'sensitivity'|'crosshair'|'graphics'|'audio'|'training'|'advanced';
 const TABS:Record<SettingsTab,string>={general:'일반',controls:'조작',sensitivity:'감도',crosshair:'조준점',graphics:'그래픽',audio:'사운드',training:'훈련',advanced:'고급'};
+const SETTINGS_TABS=Object.entries(TABS).map(([id,label])=>({id:id as SettingsTab,label}));
+const compactSettingsQuery='(max-width: 680px)';
+function subscribeToCompactSettings(onChange:()=>void) {
+ const media=window.matchMedia(compactSettingsQuery);
+ media.addEventListener('change',onChange);
+ return ()=>media.removeEventListener('change',onChange);
+}
+function isCompactSettings() {
+ return window.matchMedia(compactSettingsQuery).matches;
+}
+function desktopSettings() {
+ return false;
+}
 const DESCRIPTIONS:Record<SettingsTab,string>={
  general:'화면 테마와 훈련 중 표시할 정보를 정합니다.',
  controls:'이동 규칙과 키를 정합니다. 감도는 별도 탭에서 조절할 수 있습니다.',
@@ -41,11 +55,12 @@ export function SettingsPanel({initialTab='general'}:{initialTab?:SettingsTab}){
   <div className="settings-control-pair"><input id={`${id}-${key}`} aria-label={label} type="range" min={min} max={max} step={step} value={s[key]} onChange={e=>changeNumber(key,+e.target.value)}/><input className="settings-value-input" aria-label={`${label} 값`} type="number" min={min} max={max} step={step} value={s[key]} onChange={e=>{if(e.target.value!=='')changeNumber(key,e.target.valueAsNumber);}}/></div>
  </div>;
  const toggle=(key:BooleanKeys,label:string)=><label className="toggle-field"><span>{label}</span><input type="checkbox" checked={s[key]} onChange={e=>update({[key]:e.target.checked})}/><i aria-hidden="true"/></label>;
- const selectTab=(next:SettingsTab,focus=false)=>{select(next);if(focus)requestAnimationFrame(()=>document.getElementById(`settings-tab-${next}`)?.focus());};
+ const compact=useSyncExternalStore(subscribeToCompactSettings,isCompactSettings,desktopSettings);
  return <div className="settings-view precision-settings">
   <header className="view-title settings-page-heading"><div><p className="eyebrow">훈련 환경</p><h1>설정</h1><p>변경한 설정은 자동 저장되며 훈련에 바로 적용됩니다.</p></div><span className="settings-save-status"><span aria-hidden="true"/>자동 저장</span></header>
   <div className="settings-layout">
-   <div className="settings-tabs" role="tablist" aria-label="설정 분류" aria-orientation="vertical">{Object.entries(TABS).map(([key,label])=><button key={key} role="tab" id={`settings-tab-${key}`} aria-controls={`settings-panel-${key}`} aria-selected={tab===key} tabIndex={tab===key?0:-1} onClick={()=>selectTab(key as SettingsTab)} onKeyDown={e=>{const keys=Object.keys(TABS) as SettingsTab[],index=keys.indexOf(tab);if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?keys[0]:e.key==='End'?keys.at(-1)!:keys[(index+(['ArrowRight','ArrowDown'].includes(e.key)?1:keys.length-1))%keys.length];selectTab(next,true);}}}>{label}</button>)}</div>
+   <Tabs items={SETTINGS_TABS} value={tab} onChange={select} label="설정 분류"
+    prefix="settings-tab" className="settings-tabs" orientation={compact?'horizontal':'vertical'}/>
    <div role="tabpanel" id={`settings-panel-${tab}`} aria-labelledby={`settings-tab-${tab}`} className="settings-tab-content" tabIndex={0}>
     <header className="settings-section-heading"><h2>{TABS[tab]}</h2><p>{DESCRIPTIONS[tab]}</p></header>
     {tab==='general'&&<div className="settings-grid"><section className="settings-card settings-theme-card"><h3>화면 테마</h3><ThemeSelector/></section><section className="settings-card"><h3><SlidersHorizontal size={18}/> 훈련 화면</h3>{number('hudScale','훈련 정보 크기',.75,1.25,.05,'배')}{toggle('showHeadshotConfirmation','명중·헤드샷 확인 표시')}{toggle('showControlHints','하단 조작 도움말 표시')}{toggle('practiceHud','자유 훈련 사격 통계 표시')}{toggle('brakingHud','속도와 제동 피드백 표시')}{toggle('showPerformance','프레임 성능 표시')}<p className="field-note">상세 진단은 필요할 때만 켜세요. 기본 조준선과 표적 판정은 표시 설정의 영향을 받지 않습니다.</p></section><section className="settings-card"><h3>데이터 보관</h3><p className="field-note">설정과 훈련 기록은 이 브라우저에 저장됩니다. 계정이나 서버 업로드 없이 사용할 수 있습니다.</p><div className="setting-readout"><span>현재 훈련 엔진</span><strong>브라우저 입체 렌더링</strong></div><p className="field-note">자유 훈련은 시간 제한이 없습니다. 경과 시간은 훈련을 종료하지 않습니다.</p></section></div>}
