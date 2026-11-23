@@ -7,6 +7,9 @@ import { Simulation } from '../engine/simulation/Simulation';
 import { createScenario } from '../training/scenarios/templates';
 import { scenarioWithDifferentPlacement, selectScenarioPlacements } from '../training/scenarios/compile';
 import { loadDrills, saveDrill, scenarioComparisonKey, updateDrill } from '../training/scenarios/library';
+import { crossesEntryGate, scenarioEntryGate } from '../training/scenarios/entryGate';
+import { convertSensitivity, SOURCE_GAMES } from '../config/sensitivityConversion';
+import { sensitivityUnits } from '../engine/input/sensitivity';
 import { ShotTimeline } from '../ui/ShotTimeline';
 
 afterEach(() => vi.unstubAllGlobals());
@@ -52,6 +55,22 @@ describe('drill review and local presentation settings', () => {
     expect(preview.patch).not.toHaveProperty('adsSensitivity');
     expect(preview.patch).not.toHaveProperty('dpi');
     expect(preview.warnings).toHaveLength(1);
+  });
+
+  it('matches physical rotation distance across different game DPIs', () => {
+    const {yaw}=SOURCE_GAMES[0];
+    const converted=convertSensitivity(1.25,yaw,400,.07,800)!;
+    expect(sensitivityUnits(converted,800,.07).cm360).toBeCloseTo(sensitivityUnits(1.25,400,yaw).cm360!,8);
+    expect(convertSensitivity(1,yaw,0,.07,800)).toBeNull();
+  });
+
+  it('requires an inside, forward crossing at the entry gate height', () => {
+    const scenario=createScenario('sequential'),gate=scenarioEntryGate(scenario)!;
+    const before=scenario.player.position,after={x:gate.center.x+gate.forwardX,y:gate.center.y,z:gate.center.z+gate.forwardZ};
+    expect(crossesEntryGate(gate,before,after)).toBe(true);
+    expect(crossesEntryGate(gate,after,before)).toBe(false);
+    expect(crossesEntryGate(gate,{...before,y:4},{...after,y:4})).toBe(false);
+    expect(crossesEntryGate(gate,{...before,x:before.x-gate.forwardZ*3,z:before.z+gate.forwardX*3},{...after,x:after.x-gate.forwardZ*3,z:after.z+gate.forwardX*3})).toBe(false);
   });
 
   it('renders retained shot components and signed braking timing for legacy records', () => {

@@ -3,6 +3,7 @@ import {CollisionController} from '../../engine/movement/CollisionController';
 import {levelFor,visibleBetween,type TacticalLevel} from '../../engine/tactical/levels';
 import {routeSpace,sampleRoute} from '../../engine/tactical/complexValidation';
 import {playerVisibilitySamples} from '../../engine/tactical/DefenderAI';
+import {scenarioEntryGate} from './entryGate';
 import {scenarioRoute} from './templates';
 import {MAX_SCENARIO_BOTS,MAX_SCENARIO_BYTES,SCENARIO_ROUTE_IDS,ScenarioError,type ScenarioDefinition,type ScenarioGeometryReport,type ScenarioRouteId} from './types';
 import type {Vec3} from '../../engine/types';
@@ -53,12 +54,19 @@ export function validateScenarioWithGeometry(raw:unknown){
  if(typeof o.title!=='string'||!o.title.trim()||o.title.length>64||/[\u0000-\u001f\u007f]/.test(o.title))fail('이름은 제어 문자가 없는 1–64자여야 합니다.');
  const seed=number(o.seed,1,2147483647,'시드');if(!Number.isSafeInteger(seed))fail('시드는 정수여야 합니다.');
  const ruleKeys=['difficulty','combatMode','duration','exposureLimit','randomSpawns','infiniteReserve','autoReload','exposurePolicy'];
- if(plain(o.rules)&&Object.hasOwn(o.rules,'arrival'))ruleKeys.push('arrival');
+ if(plain(o.rules)){
+  if(Object.hasOwn(o.rules,'arrival'))ruleKeys.push('arrival');
+  if(Object.hasOwn(o.rules,'startOnEntry')){
+   if(o.rules.startOnEntry!==true)fail('진입선 설정이 올바르지 않습니다.');
+   ruleKeys.push('startOnEntry');
+  }
+ }
  const p=object(o.player,['position','yaw','pitch','weapon'],'시작 위치'),rules=object(o.rules,ruleKeys,'훈련 규칙');
  if(!Array.isArray(o.bots)||o.bots.length<1||o.bots.length>MAX_SCENARIO_BOTS)fail('수비수는 1–12명이어야 합니다.');const ids=new Set<string>();
  const bots=o.bots.map((value,index)=>{const b=object(value,['id','position','weapon','movement','alternatives'],`${index+1}번 수비수`),key=id(b.id,'수비수 ID');if(ids.has(key))fail('수비수 ID가 중복되었습니다.');ids.add(key);if(!Array.isArray(b.alternatives)||b.alternatives.length>4)fail('대체 수비 위치는 최대 4개입니다.');const alternatives=b.alternatives.map((q,i)=>position(q,`${key} 대체 위치 ${i+1}`)),movement=choice(b.movement,['hold','reposition'] as const,'이동 방식');if(movement==='reposition'&&!alternatives.length)fail('재배치 수비수에게 대체 위치가 필요합니다.');return{id:key,position:position(b.position,`${key} 위치`),weapon:choice(b.weapon,WEAPONS,'무기') as ScenarioDefinition['player']['weapon'],movement,alternatives};});
  for(let i=0;i<bots.length;i++)for(let j=i+1;j<bots.length;j++)if([bots[i].position,...bots[i].alternatives].some(a=>[bots[j].position,...bots[j].alternatives].some(b=>distance(a,b)<.85)))fail('수비수의 가능한 배치가 서로 겹칩니다.');
- const def:ScenarioDefinition={schema:1,id:id(o.id,'시나리오 ID'),title:o.title,routeId,template:route.template,seed,player:{position:position(p.position,'플레이어 위치'),yaw:number(p.yaw,-Math.PI*2,Math.PI*2,'시작 방향'),pitch:number(p.pitch,-1.48,1.48,'상하 조준'),weapon:choice(p.weapon,WEAPONS,'플레이어 무기') as ScenarioDefinition['player']['weapon']},bots,rules:{difficulty:choice(rules.difficulty,['beginner','normal','advanced','expert'] as const,'난이도'),combatMode:choice(rules.combatMode,['learning','gunfight','exposure'] as const,'교전 규칙'),duration:rules.duration===null?null:number(rules.duration,15,600,'훈련 시간'),exposureLimit:number(rules.exposureLimit,.5,5,'노출 시간'),randomSpawns:flag(rules.randomSpawns,'무작위 배치'),infiniteReserve:flag(rules.infiniteReserve,'무제한 예비 탄약'),autoReload:flag(rules.autoReload,'자동 재장전'),exposurePolicy:choice(rules.exposurePolicy,['sequential','crossfire'] as const,'노출 규칙'),...(Object.hasOwn(rules,'arrival')?{arrival:choice(rules.arrival,['after-clear'] as const,'수비수 등장')}: {})}};
+ const def:ScenarioDefinition={schema:1,id:id(o.id,'시나리오 ID'),title:o.title,routeId,template:route.template,seed,player:{position:position(p.position,'플레이어 위치'),yaw:number(p.yaw,-Math.PI*2,Math.PI*2,'시작 방향'),pitch:number(p.pitch,-1.48,1.48,'상하 조준'),weapon:choice(p.weapon,WEAPONS,'플레이어 무기') as ScenarioDefinition['player']['weapon']},bots,rules:{difficulty:choice(rules.difficulty,['beginner','normal','advanced','expert'] as const,'난이도'),combatMode:choice(rules.combatMode,['learning','gunfight','exposure'] as const,'교전 규칙'),duration:rules.duration===null?null:number(rules.duration,15,600,'훈련 시간'),exposureLimit:number(rules.exposureLimit,.5,5,'노출 시간'),randomSpawns:flag(rules.randomSpawns,'무작위 배치'),infiniteReserve:flag(rules.infiniteReserve,'무제한 예비 탄약'),autoReload:flag(rules.autoReload,'자동 재장전'),exposurePolicy:choice(rules.exposurePolicy,['sequential','crossfire'] as const,'노출 규칙'),...(Object.hasOwn(rules,'arrival')?{arrival:choice(rules.arrival,['after-clear'] as const,'수비수 등장')}: {}),...(rules.startOnEntry===true?{startOnEntry:true as const}: {})}};
+ if(def.rules.startOnEntry&&!scenarioEntryGate(def))fail('진입선을 만들 공간이 부족합니다. 시작 위치를 경로 시작점 쪽으로 옮기세요.');
  const level=scenarioLevel(def);
  supported(level,new CollisionController(level.obstacles),def.player.position,.28,'플레이어 시작 위치');
  return { definition:def, geometry:analyzeScenarioGeometry(def) };

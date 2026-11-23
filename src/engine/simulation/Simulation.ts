@@ -1,6 +1,7 @@
 import {validateSessionOptions,type SimulationOptions} from '../../training/platform/SessionOptions';
 import {Exercises} from '../../training/exercises/Exercises';
 import {compileScenario,selectScenarioPlacements} from '../../training/scenarios/compile';
+import {crossesEntryGate} from '../../training/scenarios/entryGate';
 import type {CompiledScenario} from '../../training/scenarios/types';
 import {MovementPractice} from '../../training/movementTools/MovementPractice';
 import {isMovementAction,type MovementAction,type MovementActionResult} from '../../training/movementTools/types';
@@ -120,7 +121,7 @@ export class Simulation {
     for(const target of this.targets){
       target.enabled=false;
       target.active=false;
-      if(!chained||target.id===0)this.activateScenarioTarget(target.id);
+      if(!this.scenario.entryGate&&(!chained||target.id===0))this.activateScenarioTarget(target.id);
     }
     if(this.defenders){this.defenders.setSectors(sectors);this.defenders.retry();}
     else this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.scenario.spawn,this.settings.seed,sectors);
@@ -176,6 +177,11 @@ export class Simulation {
     this.braking.update(input,movementYaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
     if(this.settings.movementTools?.enabled)this.movementPractice.beforeStep(this.movementContext());
     this.movement.step(input,movementYaw,dt,this.time);
+    const gate=this.scenario?.entryGate;
+    if(gate&&!this.targets[0].enabled&&crossesEntryGate(gate,this.movement.previous,this.movement.position)){
+      const count=this.options.scenario?.rules.arrival==='after-clear'?1:this.scenarioSectors.length;
+      for(let index=0;index<count;index++)this.activateScenarioTarget(index);
+    }
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
     this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius);
     this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;

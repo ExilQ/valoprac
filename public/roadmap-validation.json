@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.8",
-  "patchLabel": "12.08",
-  "generatedAt": "2026-11-22T02:46:26.158Z",
+  "release": "12.0.9",
+  "patchLabel": "12.09",
+  "generatedAt": "2026-11-22T03:00:29.031Z",
   "tests": {
-    "application": 1485,
+    "application": 1487,
     "broker": 28,
     "hosting": 28,
     "passed": true,
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3106
+        "replayGzipBytes": 3107
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18229,7 +18229,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3103
+        "replayGzipBytes": 3104
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18277,7 +18277,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 2999
+        "replayGzipBytes": 3000
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 2998
+        "replayGzipBytes": 2999
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18309,7 +18309,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 769,
-        "replayGzipBytes": 3377
+        "replayGzipBytes": 3378
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4507
+        "replayGzipBytes": 4509
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18373,7 +18373,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 836,
-        "replayGzipBytes": 5466
+        "replayGzipBytes": 5467
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18421,7 +18421,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 866,
-        "replayGzipBytes": 5319
+        "replayGzipBytes": 5320
       }
     ],
     "browser": {

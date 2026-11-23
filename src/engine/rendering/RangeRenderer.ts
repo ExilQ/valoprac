@@ -1,6 +1,5 @@
 import {floorImpactSurface,floorImpactSurfaceAt} from '../collision/floorImpact';
-import {PENETRATION_MATERIALS} from '../../config/penetration';
-import {SURFACES,SURFACE_PARTICLE_PROFILES,surfaceForObstacle,type SurfaceId} from '../../config/surfaces';
+import {SURFACES,SURFACE_PARTICLE_PROFILES,type SurfaceId} from '../../config/surfaces';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
 import type {PenetrationSegment} from '../collision/Ballistics';
@@ -13,7 +12,8 @@ import {useCharacterFinishes} from './CharacterMaterial';
 import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
 import {obstacleFinishes} from './ObstacleFinishes';
-import {surfaceHeight,type Obstacle} from '../collision/environment';
+import type {Obstacle} from '../collision/environment';
+import {tacticalRampGeometry,tacticalSurfaceStyle} from './TacticalSurface';
 import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
 import type { Simulation } from '../simulation/Simulation';
@@ -64,6 +64,7 @@ export class RangeRenderer {
   private debrisGeometries={} as Record<keyof typeof SURFACE_PARTICLE_PROFILES,THREE.BufferGeometry>;
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
+  private entryMarker:THREE.Mesh|null=null;
   private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private fxaa:ShaderPass|null=null;private adsBlend=0;private settingsKey='';
   private materialLibrary!:SurfaceMaterialLibrary;private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
@@ -87,7 +88,7 @@ export class RangeRenderer {
     this.scene.add(new THREE.HemisphereLight(0xe7eff6,0xa39884,1.68));
     const sun=this.sun=new THREE.DirectionalLight(0xffeedb,2.5);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
     const fill=new THREE.DirectionalLight(0xc2d9eb,.68);fill.position.set(4,5,-18);this.scene.add(fill);
-    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.batchStaticArchitecture();this.applySettings(settings);
+    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildEntryMarker();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
     // initialization succeeds so failed attempts do not retain the renderer.
@@ -241,6 +242,18 @@ export class RangeRenderer {
     const light=new THREE.MeshBasicMaterial({color:0xcde7df});this.materials.add(light);
     for(let z=3;z>-29;z-=6){this.box(3,0.04,0.25,-6,4.85,z,light);this.box(3,0.04,0.25,6,4.85,z,light);}
   }
+  private buildEntryMarker(){
+    const gate=this.simulation.scenario?.entryGate;
+    if(!gate)return;
+    const geometry=new THREE.BoxGeometry(gate.halfWidth*2,.016,.075);
+    const material=new THREE.MeshBasicMaterial({color:0xc782f4});
+    const marker=new THREE.Mesh(geometry,material);
+    marker.position.set(gate.center.x,gate.center.y+.022,gate.center.z);
+    marker.rotation.y=Math.atan2(-gate.forwardX,-gate.forwardZ);
+    this.geometries.add(geometry);this.materials.add(material);
+    this.entryMarker=marker;
+    this.scene.add(marker);
+  }
   private addSign(text:string,x:number,y:number,z:number,width:number,floor=false,reverse=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.textures.add(texture);
     const paint=()=>{ctx.clearRect(0,0,512,128);ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(translateText(text),256,64,490);texture.needsUpdate=true;};
@@ -314,18 +327,25 @@ export class RangeRenderer {
     for(let i=0;i<32;i++){const pm=particleMaterial.clone();this.materials.add(pm);const mesh=new THREE.Mesh(particleGeometry,pm);mesh.visible=false;this.scene.add(mesh);this.sparks.push({mesh,velocity:new THREE.Vector3(),until:0});}
   }
   clearImpacts(){this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
-  private tacticalSurface(o:import('../collision/environment').Obstacle){
-    const id=surfaceForObstacle(o),definition=SURFACES[id],family=definition.visualMaterialId;
-    const b=o.box,x=(b.min.x+b.max.x)/2,z=(b.min.z+b.max.z)/2;
-    const theme=this.simulation.practiceMap==='complex'?PEEK_ZONES.find(q=>Math.abs(q.center.x-x)<12.1&&Math.sign(q.center.z)===Math.sign(z))?.theme:undefined;
-    const palette={facility:[0xa8b8b5,0x607c7c],research:[0xb8c7cc,0x607b8a],urban:[0xb5a38e,0x837b6e],courtyard:[0xc5b28e,0x8e967b]} as const;
-    const tint=o.material?PENETRATION_MATERIALS[o.material].color:theme?palette[theme][o.kind==='cover'?1:0]:o.kind==='cover'?0x718e8b:0xc6bfae;
-    const m=this.materialLibrary.material(family,{tint,...(id==='glass'?{transparent:true,opacity:.32,depthWrite:false}:{})});this.materials.add(m);return m;
+  private tacticalSurface(obstacle:Obstacle){
+    const {family,tint,glass}=tacticalSurfaceStyle(obstacle,this.simulation.practiceMap);
+    const material=this.materialLibrary.material(family,{tint,...(glass?{transparent:true,opacity:.32,depthWrite:false}:{})});
+    this.materials.add(material);
+    return material;
   }
   private buildTactical(){
     const trim=this.material(0x52666c,.68,'painted-metal'),floor=this.material(0x858d87,.96,'raw-concrete'),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.075,b[1]+b[3]/2,floor);
-    for(const o of this.simulation.obstacles){const mesh=this.obstacleBox(o,this.tacticalSurface(o),true);if(o.ramp){const b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);const family=(mesh.material as THREE.Material).userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);mesh.geometry=g;mesh.position.set(0,0,0);}}
+    for(const obstacle of this.simulation.obstacles){
+      if(!obstacle.ramp){this.obstacleBox(obstacle,this.tacticalSurface(obstacle),true);continue;}
+      const material=this.tacticalSurface(obstacle),geometry=tacticalRampGeometry(obstacle);
+      writeWorldScaleUV(geometry,VISUAL_MATERIALS[material.userData.visualMaterialId as VisualMaterialId].metersPerTile);
+      const mesh=new THREE.Mesh(geometry,material);
+      mesh.castShadow=mesh.receiveShadow=true;
+      mesh.userData.staticRange=true;
+      this.geometries.add(geometry);
+      this.scene.add(mesh);
+    }
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
     if(this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
     if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(0xa9bdc0,65,160);}
@@ -511,6 +531,7 @@ export class RangeRenderer {
     this.characterBatches?.commit();this.characterBatches?.setShadow(this.settings.shadowQuality!=='off');
   }
   render(alpha:number,elapsed:number,preview:boolean,_ads:boolean){
+    if(this.entryMarker)this.entryMarker.visible=!this.simulation.targets[0].enabled;
     this.renderer.info.reset();const s=this.simulation,m=s.movement;
     if(preview){if(s.practiceMap==='complex'){
       const zone=zoneForScenario(this.settings.peekScenario)??PEEK_ZONES[0],sign=Math.sign(zone.center.z);

@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.8",
+  "version": "12.0.9",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -158,7 +158,14 @@
     "two-additional-original-tactical-routes",
     "original-per-weapon-finishes",
     "local-valorant-settings-preview",
-    "indexed-ground-support-queries"
+    "indexed-ground-support-queries",
+    "orbitable-scenario-blockout-and-material-preview",
+    "collision-aligned-surface-placement",
+    "orbitable-weapon-inspection",
+    "two-additional-original-pbr-weapon-finishes",
+    "procedural-coated-metal-refinement",
+    "deterministic-scenario-entry-gates",
+    "dpi-aware-cross-game-sensitivity-conversion"
   ],
   "unreal": {
     "engine": "5.7",
@@ -173,7 +180,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.08",
+  "patchLabel": "12.09",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,

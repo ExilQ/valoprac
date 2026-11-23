@@ -1,0 +1,8 @@
+.orbit-preview { margin-block: .6rem 1rem; }
+.orbit-preview-viewport { min-block-size: 15rem; block-size: clamp(15rem,42vw,29rem); border-radius: .5rem; overflow: hidden; background: #15262b; }
+.orbit-preview-viewport canvas { display: block; inline-size: 100%; block-size: 100%; touch-action: none; cursor: grab; }
+.orbit-preview-viewport canvas:active { cursor: grabbing; }
+.orbit-preview-actions, .scenario-map-views { display: flex; gap: .45rem; flex-wrap: wrap; margin-block: .55rem; }
+.orbit-preview-actions button, .scenario-map-views button { padding: .5rem .65rem; min-block-size: 2.75rem; color: var(--ink); background: var(--surface); border: 1px solid var(--control-border); border-radius: .35rem; font-size: .875rem; }
+.scenario-map-views button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.weapon-inspect .orbit-preview-viewport { block-size: clamp(15rem,30vw,22rem); }

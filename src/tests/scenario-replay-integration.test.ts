@@ -39,13 +39,15 @@ describe('A4/A5 scenario options execute and replay through the common authority
   expect(a.passed).toBe(true);expect(a).toEqual(b);expect(a.checksum).toBe(simulationChecksum(sim));expect(a.score).toBe(1);expect(a.hits).toBe(1);
   console.log(JSON.stringify({benchmark:'scenario-common-replay',route:route.id,random,seed:def.seed,ticks:sim.ticks,bots:def.bots.length,score:a.score,hits:a.hits,checksum:a.checksum,passed:a.passed,routeSamples:plan.geometry.routeSamples,maxThreats:plan.geometry.maxSimultaneousThreats,codeBytes:encodeScenario(def).length,replayGzipBytes:encoded.length}));
  },15000);
- it('activates the next defender only after a clear and reconstructs the transition and retry',async()=>{
+ it('opens the entry gate, activates the next defender after a clear, and replays both transitions',async()=>{
   const def=createScenario('sequential');
-  def.rules.arrival='after-clear';def.rules.combatMode='learning';
+  def.rules.arrival='after-clear';def.rules.startOnEntry=true;def.rules.combatMode='learning';
   const sim=new Simulation('free','rifleA',structuredClone(DEFAULT_SETTINGS),{scenario:def});
   const recorder=new ReplayRecorder(sim);
   sim.running=true;
-  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([0]);
+  expect(sim.targets.filter(t=>t.enabled&&t.active)).toHaveLength(0);
+  for(let i=0;i<15;i++)step(sim);
+  expect(sim.targets.filter(t=>t.enabled&&t.active)).toHaveLength(0);
   for(const destination of compileScenario(def).route.slice(1,4)){
    let attempts=0;
    while(Math.hypot(destination.x-sim.movement.position.x,destination.z-sim.movement.position.z)>.08&&attempts++<2000){
@@ -55,11 +57,12 @@ describe('A4/A5 scenario options execute and replay through the common authority
    expect(attempts).toBeLessThan(2000);
   }
   for(let i=0;i<90;i++)step(sim);
+  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([0]);
   aim(sim,sim.targets[0].headPosition(new Vector3()));step(sim,{fire:true,firePresses:1});
   expect(sim.kills.at(-1)?.targetId).toBe(0);
   expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([1]);
   sim.retryTactical();sim.running=true;step(sim);
-  expect(sim.targets.filter(t=>t.enabled&&t.active).map(t=>t.id)).toEqual([0]);
+  expect(sim.targets.filter(t=>t.enabled&&t.active)).toHaveLength(0);
   expect((await new ReplayPlayer(recorder.finish()!).verify()).passed).toBe(true);
  });
  it('keeps a real custom Operator death separate from reset and reconstructs it',async()=>{

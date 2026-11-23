@@ -57,7 +57,7 @@ function scenarioLayoutKey(scenario: ScenarioDefinition) {
     point(player.position), player.yaw, player.pitch, player.weapon,
     scenario.bots.map(bot => [bot.id, point(bot.position), bot.weapon, bot.movement, bot.alternatives.map(point)]),
     rules.difficulty, rules.combatMode, rules.duration, rules.exposureLimit, rules.randomSpawns,
-    rules.infiniteReserve, rules.autoReload, rules.exposurePolicy, rules.arrival ?? null,
+    rules.infiniteReserve, rules.autoReload, rules.exposurePolicy, rules.arrival ?? null, rules.startOnEntry ?? false,
   ];
 }
 

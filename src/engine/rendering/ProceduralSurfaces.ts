@@ -60,11 +60,13 @@ function sample(id:VisualMaterialId,u:number,v:number){
       break;
     }
     case 'metal': height=fine*.045;shade=middle*.004;rough=fine*.022;break;
-    case 'paint':
-      height=middle*.12+fine*.08;
-      shade=broad*.014+middle*.008+fine*.006;
-      rough=middle*.035+fine*.028;
+    case 'paint': {
+      const coat=id==='painted-metal'?smooth(clamp((fine+.24)*.85)):0;
+      height=middle*.12+fine*.08+coat*.14;
+      shade=broad*.014+middle*.008+fine*.006-coat*.032;
+      rough=middle*.035+fine*.028-coat*.085;
       break;
+    }
     case 'wood': {
       const rings=TAU*(u*9+.26*Math.sin(TAU*v)+.08*Math.sin(TAU*(v*2+u)));
       const band=Math.sin(rings+broad*.85);

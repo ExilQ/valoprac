@@ -80,3 +80,7 @@
 .valorant-import input { max-inline-size: 100%; }
 .valorant-import ul { padding-inline-start: 1.25rem; }
 .valorant-import > button { margin-top: .6rem; }
+
+.sens-conversion { margin-top: 1rem; }
+.sens-conversion label { display: grid; align-content: start; gap: .4rem; }
+.sens-conversion input, .sens-conversion select { inline-size: 100%; }

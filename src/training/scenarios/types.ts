@@ -15,7 +15,7 @@ export interface ScenarioBot {
 export interface ScenarioDefinition {
  schema:1;id:string;title:string;template:ScenarioTemplate;routeId:ScenarioRouteId;seed:number;
  player:{position:Vec3;yaw:number;pitch:number;weapon:WeaponId};bots:ScenarioBot[];
- rules:{difficulty:Settings['defenderSkill'];combatMode:Settings['combatMode'];duration:number|null;exposureLimit:number;randomSpawns:boolean;infiniteReserve:boolean;autoReload:boolean;arrival?:'after-clear';exposurePolicy:'sequential'|'crossfire'};
+ rules:{difficulty:Settings['defenderSkill'];combatMode:Settings['combatMode'];duration:number|null;exposureLimit:number;randomSpawns:boolean;infiniteReserve:boolean;autoReload:boolean;arrival?:'after-clear';startOnEntry?:true;exposurePolicy:'sequential'|'crossfire'};
 }
 export interface ScenarioRoute {
  id:ScenarioRouteId;title:string;description:string;objective:string;template:ScenarioTemplate;route:Vec3[];spawn:Vec3;yaw:number;
@@ -25,6 +25,6 @@ export interface ScenarioGeometryReport {
  routeId:ScenarioRouteId;routeSamples:number;maxSimultaneousThreats:number;newlyExposed:{index:number;bots:string[]}[];revealed:string[];spawnThreats:string[];navigationSamples:number;
 }
 export interface CompiledScenario {
- definition:ScenarioDefinition;settingsPatch:Partial<Settings>;sectors:AngleSector[];spawn:Vec3;yaw:number;pitch:number;weapon:WeaponId;route:Vec3[];geometry:ScenarioGeometryReport;
+ definition:ScenarioDefinition;settingsPatch:Partial<Settings>;sectors:AngleSector[];spawn:Vec3;yaw:number;pitch:number;weapon:WeaponId;entryGate:import('./entryGate').ScenarioEntryGate|null;route:Vec3[];geometry:ScenarioGeometryReport;
 }
 export class ScenarioError extends Error {constructor(message:string){super(message);this.name='ScenarioError';}}

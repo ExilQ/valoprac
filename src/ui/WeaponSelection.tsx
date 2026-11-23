@@ -1,4 +1,4 @@
-import { useId, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useId, useState, type CSSProperties } from 'react';
 import { equipWeaponFinish, loadWeaponFinishes, WEAPON_FINISHES } from '../config/weaponFinishes';
 import { Check, ArrowRight } from 'lucide-react';
 import { WEAPONS, WEAPON_ORDER } from '../config/weapons';
@@ -6,6 +6,8 @@ import { AUDIO_PROFILES } from '../config/audio';
 import { useApp } from '../app/store';
 import type { WeaponId } from '../engine/types';
 import './weaponUtility.css';
+
+const WeaponInspect=lazy(()=>import('./WeaponInspect'));
 
 // Original vector silhouettes. These are interface illustrations, not game assets.
 export function WeaponSilhouette({id}:{id:WeaponId}) {
@@ -22,6 +24,7 @@ const distanceLabel=(id:WeaponId,index:number)=>{const values=WEAPONS[id].damage
 export function WeaponSelection({compact=false}:{compact?:boolean}) {
  const selected=useApp(s=>s.weapon),choose=useApp(s=>s.setWeapon),setTab=useApp(s=>s.setTab),weapon=WEAPONS[selected],closeDamage=weapon.damage[0];
  const finishGroup=useId();
+ const [inspect,setInspect]=useState(false);
  const [finishes,setFinishes]=useState(loadWeaponFinishes);
  const [finishMessage,setFinishMessage]=useState('');
  const finishId=finishes[selected]??'original',finish=WEAPON_FINISHES[finishId];
@@ -39,6 +42,8 @@ export function WeaponSelection({compact=false}:{compact?:boolean}) {
    </div><p className="weapon-inventory-note">무기를 바꿔도 감도와 훈련 설정은 유지됩니다.</p></div>
    {!compact&&<article className="weapon-equipment-sheet" aria-label="선택한 무기 정보"><header className="weapon-sheet-header"><div><p>{CATEGORY[selected]}</p><h2>{weapon.name}</h2></div><span className="weapon-equipped"><Check size={14} aria-hidden="true"/> 현재 장착</span></header>
     <div className="weapon-sheet-art" style={swatches}><WeaponSilhouette id={selected}/><span>{finish.title}</span></div>
+    <button type="button" className="secondary-button" aria-expanded={inspect} onClick={()=>setInspect(value=>!value)}>{inspect?'3D 무기 보기 닫기':'무기 3D로 보기'}</button>
+    {inspect&&<Suspense fallback={<p role="status">3D 무기를 불러오는 중입니다.</p>}><WeaponInspect weapon={selected} finish={finishId}/></Suspense>}
     <fieldset className="weapon-finishes"><legend>무기 스킨</legend>{(Object.keys(WEAPON_FINISHES) as (keyof typeof WEAPON_FINISHES)[]).map(id=><label key={id}><input type="radio" name={finishGroup} checked={id===finishId} onChange={()=>{try{setFinishes(equipWeaponFinish(selected,id));setFinishMessage('');}catch{setFinishMessage('무기 스킨을 저장하지 못했습니다.');}}}/><i aria-hidden="true" style={{background:color(WEAPON_FINISHES[id].steel),borderColor:color(WEAPON_FINISHES[id].edge)}}/>{WEAPON_FINISHES[id].title}</label>)}</fieldset>
     {finishMessage&&<p className="inline-notice" role="status">{finishMessage}</p>}
     <p className="weapon-sheet-purpose">{PURPOSE[selected]}</p>
