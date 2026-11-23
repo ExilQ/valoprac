@@ -37,19 +37,19 @@ describe('continuous bot motor',()=>{
  it('orders four provisional skills without granting an instant expert reaction',()=>{
   const profiles=(['beginner','normal','advanced','expert'] as const).map(defenderSkill=>resolveBotProfile({...DEFAULT_SETTINGS,defenderSkill},'rifleA'));
   expect(profiles.map(p=>p.reaction)).toEqual([...profiles.map(p=>p.reaction)].sort((a,b)=>b-a));
-  expect(profiles[3].reaction).toBeGreaterThan(.25);expect(profiles[3].compensationGain).toBeLessThan(1);expect(profiles[0].initialError).toBeGreaterThan(profiles[3].initialError);
+  expect(profiles[3].reaction).toBeGreaterThan(.2);expect(profiles[3].compensationGain).toBeLessThan(1);expect(profiles[0].initialError).toBeGreaterThan(profiles[3].initialError);
  });
 });
 
 describe('combat controller and shared physical weapon simulation',()=>{
  it('processes detection, recognition, reaction, motor acquisition and trigger separately',()=>{
   const {ai}=fixture();ai.health=1e6;const phases=new Set<string>();
-  for(let i=0;i<180;i++){ai.step(dt,i*dt,body());phases.add(ai.memories[0].perceptionPhase);if(i<45)expect(ai.shots).toHaveLength(0);}
+  for(let i=0;i<180;i++){ai.step(dt,i*dt,body());phases.add(ai.memories[0].perceptionPhase);if(i<30)expect(ai.shots).toHaveLength(0);}
   expect([...phases]).toEqual(expect.arrayContaining(['detected','recognized','reacting','aiming','tracking']));
-  const s=ai.shots[0];expect(s).toBeDefined();expect(s.time).toBeGreaterThan(.55);expect(s.reactionTime).toBeGreaterThan(.3);expect(s.aimAcquisitionTime).toBeGreaterThanOrEqual(.15);expect(s.time).toBeGreaterThan(ai.memories[0].acquisitionUntil);
+  const s=ai.shots[0];expect(s).toBeDefined();expect(s.time).toBeGreaterThan(.3);expect(s.time).toBeLessThan(.55);expect(s.reactionTime).toBeGreaterThan(.25);expect(s.aimAcquisitionTime).toBeGreaterThan(0);expect(s.time).toBeGreaterThan(ai.memories[0].acquisitionUntil);
  });
- it('retains a fresh-contact firing floor even with manually minimized expert reaction',()=>{
-  const {ai}=fixture('rifleA',{defenderSkill:'expert',defenderReaction:.15,defenderFirstShotError:.05});ai.health=1e6;advance(ai,1);expect(ai.shots.length).toBeGreaterThan(0);expect(ai.shots[0].time).toBeGreaterThanOrEqual(.45);
+ it('retains a finite fresh-contact response without a fixed450ms floor',()=>{
+  const {ai}=fixture('rifleA',{defenderSkill:'expert',defenderReaction:.15,defenderFirstShotError:.05});ai.health=1e6;advance(ai,1);expect(ai.shots.length).toBeGreaterThan(0);expect(ai.shots[0].time).toBeGreaterThanOrEqual(.15);expect(ai.shots[0].time).toBeLessThan(.35);
  });
  it.each(['rifleA','rifleB','sheriff','operator'] as const)('%s rays contain real spread, recoil, magazine and mechanical cadence',weapon=>{
   const {ai}=fixture(weapon);ai.health=1e6;advance(ai,8);
@@ -84,7 +84,7 @@ describe('combat controller and shared physical weapon simulation',()=>{
   expect(speculative).toBeGreaterThan(0);
  });
  it('separates gunfight damage from optional learning and mandatory exposure timers',()=>{
-  for(const mode of ['learning','exposure','gunfight'] as const){const {ai}=fixture('operator',{combatMode:mode,exposureEnabled:mode!=='exposure',exposureLimit:.5});advance(ai,.55);if(mode==='gunfight'){expect(ai.death).toBeNull();expect(ai.health).toBe(150);}else{expect(ai.death?.cause).toBe('exposure');expect(ai.shots).toHaveLength(0);}}
+  for(const mode of ['learning','exposure','gunfight'] as const){const {ai}=fixture('operator',{combatMode:mode,exposureEnabled:mode!=='exposure',exposureLimit:.5});if(mode==='gunfight')ai.health=1e6;advance(ai,.55);if(mode==='gunfight'){expect(ai.death).toBeNull();expect(ai.health).toBeLessThan(1e6);}else{expect(ai.death?.cause).toBe('exposure');expect(ai.shots).toHaveLength(0);}}
   const {ai}=fixture('rifleA',{combatMode:'learning',exposureEnabled:false});advance(ai,6);expect(ai.health).toBe(150);expect(ai.shots).toHaveLength(0);expect(ai.death).toBeNull();
  });
  it('resets weapons, motor, perception and stale callback effects on retry',()=>{
@@ -104,7 +104,7 @@ describe('combat controller and shared physical weapon simulation',()=>{
   const sixty=run(60);expect(sixty.ticks).toBe(600);expect(run(144)).toEqual(sixty);expect(run(240)).toEqual(sixty);
  });
  it('persists actual session combat totals and clones them across retries',()=>{
-  const {ai}=fixture();ai.health=1e6;advance(ai,3);const report=ai.snapshot(),c=report.combatSummary!;expect(c.shots).toBe(ai.report.enemyShots);expect(c.firstShots+c.followupShots).toBe(c.shots);expect(c.firstHits+c.followupHits).toBe(c.hits);expect(c.meanFirstShotDelay).toBeGreaterThan(.55);expect(c.residualRecoilRms).toBeGreaterThan(0);
+  const {ai}=fixture();ai.health=1e6;advance(ai,3);const report=ai.snapshot(),c=report.combatSummary!;expect(c.shots).toBe(ai.report.enemyShots);expect(c.firstShots+c.followupShots).toBe(c.shots);expect(c.firstHits+c.followupHits).toBe(c.hits);expect(c.meanFirstShotDelay).toBeGreaterThan(.3);expect(c.meanFirstShotDelay).toBeLessThan(.55);expect(c.residualRecoilRms).toBeGreaterThan(0);
   c.shots=999;const total=ai.report.enemyShots;ai.retry();expect(ai.snapshot().combatSummary!.shots).toBe(total);expect(ai.memories[0].gun.ammo).toBe(25);
  });
  it('diagnostics clone concealed memory and report actual ballistic hit regions',()=>{

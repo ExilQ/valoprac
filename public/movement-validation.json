@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "release": "9.0.0",
-  "patchLabel": "09.00",
-  "generatedAt": "2026-10-28T08:28:28.046Z",
-  "calibration": "dual-movement-1.0.0-provisional",
+  "release": "9.0.1",
+  "patchLabel": "09.01",
+  "generatedAt": "2026-10-30T10:59:25.976Z",
+  "calibration": "dual-movement-1.0.1-provisional",
   "tests": {
-    "application": 861,
+    "application": 940,
     "broker": 20,
     "hosting": 12,
     "passed": true,

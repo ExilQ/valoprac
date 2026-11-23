@@ -90,7 +90,7 @@ export class Simulation {
     t.spawn(x,z,this.time);
   }
   look(deltaX:number,deltaY:number){
-    const degrees=angularGain(this.settings,this.ads,this.weaponId==='operator'?this.scopeZoom:this.weapon.profile.adsZoom);
+    const degrees=angularGain(this.settings,this.ads,this.weaponId==='operator'?this.scopeZoom:this.weapon.profile.adsZoom,this.weaponId==='operator'&&this.scopeLevel>0?this.scopeLevel as 1|2:undefined);
     const [pitch,yaw]=this.weapon.recoil.compensate(-deltaY*degrees,-deltaX*degrees,this.weapon.profile.cameraScale);
     this.yaw+=yaw*DEG;this.pitch=MathUtils.clamp(this.pitch+pitch*DEG,-1.48,1.48);
   }

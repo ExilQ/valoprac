@@ -12,16 +12,17 @@ export function movementModelIdentity(settings:Pick<Settings,'movementPhysics'|'
  const p=resolveMovementPhysics(settings);return `${MOVEMENT_PHYSICS_VERSION}|${p.id}|${p.preset??'tactical'}|buffer:${Math.round((p.jumpBufferSeconds??0)*1000)}`;
 }
 export function movementModelKey(meta:Partial<AimMeta>){return meta.renderer==='browser-webgl'?meta.movementModel??'legacy-movement':undefined;}
+export function projectionModelKey(meta:Partial<AimMeta>){return meta.ads?meta.projectionModel??meta.calibration?.projectionModel??'legacy-tangent-zoom':undefined;}
 
 /** Sensitivity deliberately is not part of this key: it is the tested factor.
  * Input mode, projection, ADS/zoom and algorithm changes cannot be pooled. */
 export function aimCompatibilityKey(meta:Pick<AimMeta,'fov'|'dpi'|'coefficient'|'algorithm'>&Partial<AimMeta>){
- const m=extra(meta as AimMeta);return JSON.stringify({algorithm:m.algorithm,dpi:m.dpi,coefficient:m.coefficient,fov:m.fov,renderer:m.renderer??'angular-canvas',ads:m.ads??false,adsMultiplier:m.adsMultiplier??1,scopeZoom:m.scopeZoom??1,inputFingerprint:m.inputFingerprint??'legacy-unfingerprinted',rawMode:m.rawMode??'unknown',evaluationMode:m.evaluationMode??'hip',protocol:m.protocol??'legacy',expectedTasks:m.expectedTasks?.slice().sort()??null,...(m.renderer==='browser-webgl'?{movementModel:movementModelKey(m)}:{})});
+ const m=extra(meta as AimMeta);return JSON.stringify({algorithm:m.algorithm,dpi:m.dpi,coefficient:m.coefficient,fov:m.fov,renderer:m.renderer??'angular-canvas',ads:m.ads??false,adsMultiplier:m.adsMultiplier??1,scopeZoom:m.scopeZoom??1,inputFingerprint:m.inputFingerprint??'legacy-unfingerprinted',rawMode:m.rawMode??'unknown',evaluationMode:m.evaluationMode??'hip',protocol:m.protocol??'legacy',expectedTasks:m.expectedTasks?.slice().sort()??null,...(m.renderer==='browser-webgl'?{movementModel:movementModelKey(m)}:{}),...(m.ads?{projectionModel:projectionModelKey(m)}:{})});
 }
 export function compatibleAimRecords(records:AimRecord[],reference:Pick<AimMeta,'fov'|'dpi'|'coefficient'|'algorithm'>&Partial<AimMeta>){
  const full=reference.renderer!==undefined&&reference.rawMode!==undefined;
  if(full){const key=aimCompatibilityKey(reference);return records.filter(r=>aimCompatibilityKey(r.meta)===key);}
- return records.filter(r=>r.meta.algorithm===reference.algorithm&&r.meta.renderer===(reference.renderer??'angular-canvas')&&r.meta.ads===(reference.ads??false)&&r.meta.dpi===reference.dpi&&r.meta.coefficient===reference.coefficient&&Math.abs(r.meta.fov-reference.fov)<1e-6&&movementModelKey(r.meta)===movementModelKey(reference));
+ return records.filter(r=>r.meta.algorithm===reference.algorithm&&r.meta.renderer===(reference.renderer??'angular-canvas')&&r.meta.ads===(reference.ads??false)&&r.meta.dpi===reference.dpi&&r.meta.coefficient===reference.coefficient&&Math.abs(r.meta.fov-reference.fov)<1e-6&&movementModelKey(r.meta)===movementModelKey(reference)&&projectionModelKey(r.meta)===projectionModelKey(reference));
 }
 export interface BlockResult {key:string;session:string;experiment:string;round:number;task:AimTask;sensitivity:number;score:number;hitRate:number|null;condition:string;phase:string;count:number;createdAt:number;order:number;compatibility:string;expectedTasks:AimTask[];stage:string;}
 function neutral(r:AimRecord){return r.meta.phase!=='combat'&&String(r.meta.task)!=='tactical'&&r.meta.renderer==='angular-canvas';}

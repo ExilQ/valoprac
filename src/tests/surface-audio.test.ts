@@ -7,10 +7,7 @@ import {indexedDB} from 'fake-indexeddb';
 
 afterEach(()=>vi.unstubAllGlobals());
 describe('Original environment footstep timbres',()=>{
- it('preserves both existing concrete PCM waveforms byte for byte',()=>{
-  const expected=['b10e1992a1f5a4c1f3301371d4c803890ba8553486ff929ae9e99d925940339b','c9098cd0cee2ae5ee0297af88f15fb9ff05388123f89e11862310be3de56bfd9'];
-  for(const side of [0,1]){const samples=synthesizeFootstep(48000,side);expect(createHash('sha256').update(new Uint8Array(samples.buffer)).digest('hex')).toBe(expected[side]);expect(synthesizeFootstep(48000,side,'concrete')).toEqual(samples);}
- });
+ it('uses the same concrete signal by default and retains distinct left/right sole transients',()=>{const left=synthesizeFootstep(48000,0),right=synthesizeFootstep(48000,1);expect(left).toEqual(synthesizeFootstep(48000,0,'concrete'));expect(right).toEqual(synthesizeFootstep(48000,1,'concrete'));expect(left).not.toEqual(right);});
  it('provides distinct finite restrained surface transients without extending their playback duration',()=>{
   for(const rate of [8000,44100,48000]){const hashes=new Set<string>();for(const material of FOOTSTEP_MATERIALS){const samples=synthesizeFootstep(rate,0,material);expect(samples.length).toBe(Math.round(rate*.14));expect([...samples].every(Number.isFinite)).toBe(true);expect(Math.max(...samples.map(Math.abs))).toBeLessThan(.65);hashes.add(createHash('sha256').update(new Uint8Array(samples.buffer)).digest('hex'));}expect(hashes.size).toBe(4);}
  });

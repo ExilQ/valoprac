@@ -21,7 +21,7 @@ export interface Settings {
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
 
   frameLimit:number; hudScale:number; showHeadshotConfirmation:boolean; showControlHints:boolean; interfaceVolume:number;
-  adsSensitivity:number; adsMode:'hold'|'toggle'; bindings:Bindings;
+  adsSensitivity:number;scopeSensitivity25:number;scopeSensitivity5:number;autoGraphics:boolean; adsMode:'hold'|'toggle'; bindings:Bindings;
   graphicsPreset:Quality; shadowQuality:Quality|'off'; textureQuality:Quality; postProcessing:boolean; ambientOcclusion:boolean; effectsQuality:Quality; premiumTheme:boolean;
   firingVolume:number; handlingVolume:number; feedbackVolume:number;
   targetCount:number; targetSize:number; targetSpeed:number; targetDistance:number; spawnInterval:number;

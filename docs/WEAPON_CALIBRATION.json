@@ -1,6 +1,6 @@
 {
-  "version": "weapons-3.1-total-movement-cones",
-  "reviewedAt": "2026-10-24",
+  "version": "weapons-3.2-ads-cones-horizontal-zoom",
+  "reviewedAt": "2026-10-29",
   "angles": "degrees",
   "distance": "meters",
   "sources": {
@@ -34,7 +34,9 @@
         160,
         40,
         34
-      ]
+      ],
+      "adsFirstShotConeDegrees": 0.1575,
+      "adsSpreadMultiplier": 0.63
     },
     "phantom": {
       "fireRate": 11,
@@ -54,7 +56,9 @@
           35,
           29.75
         ]
-      ]
+      ],
+      "adsFirstShotConeDegrees": 0.11,
+      "adsSpreadMultiplier": 0.55
     },
     "sheriff": {
       "fireRate": 4,
@@ -101,7 +105,8 @@
     "Damage is recorded at ray distance. Default head-only training always eliminates on a head hit, including beyond Sheriff falloff.",
     "rifleA and rifleB identifiers remain for backward compatibility with saved history.",
     "Rifle movement cone now6degrees at5.4m/s and3degrees at nominal walk speed; current native equivalence is unverified. Air penalties are8.5/8degrees. Independent tangent-disc projection preserves center at steep angles.",
-    "4.0.1 endpoints are TOTAL no-bloom standing hip-fire radii, including first-shot error. Sheriff1.2/3.0 is the requested calibration reference;9.10 primary patch confirms the rifle3/6 changes, not those exact Sheriff values. Intermediate velocity curves and distribution remain provisional."
+    "4.0.1 endpoints are TOTAL no-bloom standing hip-fire radii, including first-shot error. Sheriff1.2/3.0 is the requested calibration reference;9.10 primary patch confirms the rifle3/6 changes, not those exact Sheriff values. Intermediate velocity curves and distribution remain provisional.",
+    "09.01 calibrates standing first-shot ADS cones to0.1575/0.11degrees. Moving/crouch/bloom modifiers remain separately modeled; no current native-game parity measurement is asserted."
   ],
   "totalMovementHipCone": {
     "rifleA": {
@@ -116,5 +121,20 @@
       "walking": 1.2,
       "running": 3
     }
+  },
+  "scopedCamera": {
+    "version": "horizontal-division-1.0.0",
+    "horizontalDegrees": "baseHorizontalFov / magnification",
+    "referenceBaseHorizontalDegrees": 103,
+    "values": {
+      "1.25": 82.4,
+      "2.5": 41.2,
+      "5": 20.6
+    },
+    "sources": [
+      "https://aim.sheepu.dev/"
+    ],
+    "evidence": "Community/reference convention requested by user; native-game camera and spread were not independently measured",
+    "sensitivity": "existing coefficient * sensitivity * selected ADS multiplier / magnification; camera degrees are separate"
   }
 }

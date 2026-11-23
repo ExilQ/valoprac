@@ -19,13 +19,13 @@ export interface WeaponProfile {
 export const WEAPONS:Record<WeaponId,WeaponProfile> = {
   rifleA:{penetration:'medium',id:'rifleA',name:'밴달',kind:'vandal',fireMode:'auto',fireRate:9.75,adsFireRate:8.775,adsZoom:1.25,equipTime:1,reserve:75,adsTransition:.14,
     magazine:25,reloadTime:2.5,firstSpread:0.25,movementSpread:6,walkingSpread:3,crouchMovingSpread:.8,airSpread:8.5,bloomPerShot:0.13,maxBloom:1.25,bloomRecovery:2.3,resetTime:0.38,
-    recoilRecovery:6.8,recoveryDelay:0.18,cameraScale:1,randomness:0.065,crouchSpread:0.72,crouchRecoil:0.8,adsSpread:0.8,adsMoveModifier:0.76,
+    recoilRecovery:6.8,recoveryDelay:0.18,cameraScale:1,randomness:0.065,crouchSpread:0.72,crouchRecoil:0.8,adsSpread:0.63,adsMoveModifier:0.76,
     yawSwitchTime:0.6,yawSwitchChance:0.1,protectedBullets:6,
     damage:[{maxDistance:Infinity,head:160,body:40,leg:34}],
     recoil:[[0.2,0],[0.4,0.025],[0.57,-0.035],[0.69,0.045],[0.78,0.065],[0.78,0.04],[0.69,0.18],[0.59,0.27],[0.47,0.37],[0.37,0.43],[0.28,0.48],[0.2,0.45],[0.14,0.4],[0.08,0.43],[0.04,0.48],[0.03,0.5],[0.02,0.5],[0.01,0.48],[0.01,0.46]]},
   rifleB:{penetration:'medium',id:'rifleB',name:'팬텀',kind:'phantom',fireMode:'auto',fireRate:11,adsFireRate:9.9,adsZoom:1.25,equipTime:1,reserve:90,adsTransition:.12,
     magazine:30,reloadTime:2.5,firstSpread:0.2,movementSpread:6,walkingSpread:3,crouchMovingSpread:.8,airSpread:8,bloomPerShot:0.105,maxBloom:1.1,bloomRecovery:2.5,resetTime:0.35,
-    recoilRecovery:7.2,recoveryDelay:0.16,cameraScale:1,randomness:0.055,crouchSpread:0.68,crouchRecoil:0.78,adsSpread:0.78,adsMoveModifier:0.76,
+    recoilRecovery:7.2,recoveryDelay:0.16,cameraScale:1,randomness:0.055,crouchSpread:0.68,crouchRecoil:0.78,adsSpread:0.55,adsMoveModifier:0.76,
     yawSwitchTime:0.6,yawSwitchChance:0.1,protectedBullets:8,
     damage:[{maxDistance:20,head:156,body:39,leg:33.15},{maxDistance:Infinity,head:140,body:35,leg:29.75}],
     recoil:[[0.14,0],[0.3,-0.025],[0.41,0.025],[0.49,0.03],[0.57,-0.03],[0.59,0.04],[0.56,0.08],[0.5,0.1],[0.42,0.21],[0.34,0.3],[0.26,0.34],[0.19,0.36],[0.12,0.34],[0.07,0.36],[0.03,0.38],[0.02,0.4],[0.01,0.39],[0.01,0.38]]},
@@ -39,4 +39,4 @@ export const WEAPONS:Record<WeaponId,WeaponProfile> = {
 };
 export const WEAPON_ORDER:WeaponId[]=['rifleA','rifleB','sheriff','operator'];
 export function damageAt(profile:WeaponProfile,zone:HitZone,distance:number){const d=profile.damage.find(d=>distance<=d.maxDistance)??profile.damage[profile.damage.length-1];return zone==='head'?d.head:zone==='leg'?d.leg:zone==='torso'||zone==='arm'?d.body:0;}
-export function adsFov(horizontalDegrees:number,zoom:number){return 2*Math.atan(Math.tan(horizontalDegrees*Math.PI/360)/zoom)*180/Math.PI;}
+export {horizontalFov as adsFov} from '../engine/rendering/projection';

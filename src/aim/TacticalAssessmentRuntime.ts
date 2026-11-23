@@ -4,8 +4,8 @@ import {mean} from './math';
 import {clusteredSummary} from './precision/statistics';
 import {random,shuffled,clamp} from './math';
 import type {CombatAssessmentContext} from './CombatCapture';
-import {movementModelKey} from './statistics';
-import {calibrationFingerprint} from './precision/calibration';
+import {movementModelKey,projectionModelKey} from './statistics';
+import {calibrationFingerprint,SCOPED_PROJECTION_MODEL} from './precision/calibration';
 
 export interface TacticalAssessmentBlock {
  id:string;experiment:string;session:string;condition:string;label:string;round:number;pair:string;order:number;
@@ -41,25 +41,28 @@ export function createTacticalAssessmentPlan(setup:TacticalAssessmentSetup):Tact
 /** The live Runtime receives a private sanitized-shape copy. It may mutate its
  * own copy normally without ever writing the player's global settings store. */
 export function tacticalAssessmentSettings(settings:Settings,block:TacticalAssessmentBlock):Settings {
- return{...settings,bindings:{...settings.bindings},sensitivity:block.sensitivity,adsSensitivity:block.adsMultiplier,seed:block.seed,aimTelemetry:true,practiceMap:block.zoom===1?'complex':'range',peekScenario:'slicing',peekingTimed:false,targetCount:3,targetSize:1,targetDistance:block.distance,targetSpeed:1,behavior:block.weapon==='operator'?'stationary':'reactive',randomDefenders:false,drill:'none',analysisWall:false,eliminationRule:'head',exposureEnabled:true,infiniteReserve:true,autoReload:true};
+ return{...settings,bindings:{...settings.bindings},sensitivity:block.sensitivity,adsSensitivity:block.adsMultiplier,...(block.zoom>=1.75?block.zoom>=3.75?{scopeSensitivity5:block.adsMultiplier}:{scopeSensitivity25:block.adsMultiplier}:{}),seed:block.seed,aimTelemetry:true,practiceMap:block.zoom===1?'complex':'range',peekScenario:'slicing',peekingTimed:false,targetCount:3,targetSize:1,targetDistance:block.distance,targetSpeed:1,behavior:block.weapon==='operator'?'stationary':'reactive',randomDefenders:false,drill:'none',analysisWall:false,eliminationRule:'head',exposureEnabled:true,infiniteReserve:true,autoReload:true};
 }
 export function tacticalAssessmentContext(block:TacticalAssessmentBlock,onRecord:(record:AimRecord)=>void,onError?:(message:string)=>void):CombatAssessmentContext {
  return{experiment:block.experiment,session:block.session,blockId:block.id,condition:`tactical-v2|${block.condition}|seed:${block.seed}|distance:${block.distance}|factor:${block.factor}`,round:block.round,pair:block.pair,order:block.order,weapon:block.weapon,expectedZoom:block.zoom,expectedTrials:block.trials,warmupSeconds:block.warmupSeconds,assessmentFactor:block.factor,assessmentValue:block.value,onRecord,onError};
 }
-function pairedFingerprint(record:AimRecord){const config=record.meta.calibration;return JSON.stringify([config?calibrationFingerprint({...config,adsMultiplier:record.meta.assessmentFactor==='adsMultiplier'?1:config.adsMultiplier}):record.meta.inputFingerprint,movementModelKey(record.meta)]);}
+function pairedFingerprint(record:AimRecord){const config=record.meta.calibration;return JSON.stringify([config?calibrationFingerprint({...config,adsMultiplier:record.meta.assessmentFactor==='adsMultiplier'?1:config.adsMultiplier}):record.meta.inputFingerprint,movementModelKey(record.meta),projectionModelKey(record.meta)]);}
 function movementModelLabel(model:string){if(model==='legacy-movement')return '이전 이동 모델';const [version,,,buffer]=model.split('|'),label=model.includes('|valorant|')?'발로란트 물리엔진':model.includes('|sourceClassic|')?'카운터 스트라이크 · 클래식 Source':'카운터 스트라이크 · CS2';return `${label} · ${version.replace('dual-movement-','')} · 점프 입력 ${buffer?.replace('buffer:','')??'?'}ms`;}
 export function tacticalAssessmentResults(records:AimRecord[]){
  const relevant=records.filter(r=>r.meta.task==='tactical'&&r.meta.renderer==='browser-webgl'&&r.meta.blockId&&r.meta.assessmentFactor),groups=new Map<string,AimRecord[]>();
- for(const record of relevant){const key=JSON.stringify([record.meta.blockId,movementModelKey(record.meta)]),a=groups.get(key)??[];if(!a.some(r=>r.meta.id===record.meta.id))a.push(record);groups.set(key,a);}
+ for(const record of relevant){const key=JSON.stringify([record.meta.blockId,movementModelKey(record.meta),projectionModelKey(record.meta)]),a=groups.get(key)??[];if(!a.some(r=>r.meta.id===record.meta.id))a.push(record);groups.set(key,a);}
  const blocks=[...groups.values()].map(rows=>{const meta=rows[0].meta,expected=meta.expectedTrials??8,valid=rows.filter(r=>r.meta.valid&&r.metrics.valid),confounded=valid.filter(r=>r.meta.moving||Math.abs(r.meta.recoil??0)>.1||(r.meta.spread??0)>.3),clean=valid.filter(r=>!confounded.includes(r));return{meta,record:rows[0],rows:rows.length,valid:valid.length,complete:rows.length===expected,headRate:mean(valid.map(r=>Number(r.meta.headshot??r.metrics.hit))),cleanHeadRate:mean(clean.map(r=>Number(r.meta.headshot??r.metrics.hit))),clean:clean.length,confounded:confounded.length,aimError:mean(valid.flatMap(r=>r.metrics.clickError===null?[]:[r.metrics.clickError])),correction:mean(valid.flatMap(r=>r.metrics.correctionTime===null?[]:[r.metrics.correctionTime]))};});
- const movementModels=[...new Set(relevant.map(r=>movementModelKey(r.meta)!))];
- if(!movementModels.length)movementModels.push('legacy-movement');
- return movementModels.flatMap(movementModel=>CONDITIONS.map(condition=>{
-  const a=blocks.filter(b=>movementModelKey(b.meta)===movementModel&&b.meta.condition.includes(`|${condition.condition}|`)),values=[...new Set(a.map(b=>b.meta.assessmentValue!))].sort((x,y)=>x-y),comparisons=values.map(value=>{const selected=a.filter(b=>b.meta.assessmentValue===value),complete=selected.filter(b=>b.complete&&b.valid===(b.meta.expectedTrials??8));return{value,blocks:complete.length,attemptedBlocks:selected.length,shots:selected.reduce((n,b)=>n+b.rows,0),validShots:selected.reduce((n,b)=>n+b.valid,0),headRate:mean(complete.flatMap(b=>b.headRate===null?[]:[b.headRate])),cleanHeadRate:mean(complete.flatMap(b=>b.cleanHeadRate===null?[]:[b.cleanHeadRate])),confounded:selected.reduce((n,b)=>n+b.confounded,0),aimError:mean(complete.flatMap(b=>b.aimError===null?[]:[b.aimError])),correction:mean(complete.flatMap(b=>b.correction===null?[]:[b.correction]))};});
+ return CONDITIONS.flatMap(condition=>{
+  const matching=blocks.filter(b=>b.meta.condition.includes(`|${condition.condition}|`));
+  const identities=[...new Set(matching.map(b=>JSON.stringify([movementModelKey(b.meta)!,projectionModelKey(b.meta)??null])))].map(key=>JSON.parse(key) as [string,string|null]);
+  if(!identities.length)identities.push(['legacy-movement',condition.zoom>1?SCOPED_PROJECTION_MODEL:null]);
+  return identities.map(([movementModel,projectionModel])=>{
+  const a=matching.filter(b=>movementModelKey(b.meta)===movementModel&&(projectionModelKey(b.meta)??null)===projectionModel),values=[...new Set(a.map(b=>b.meta.assessmentValue!))].sort((x,y)=>x-y),comparisons=values.map(value=>{const selected=a.filter(b=>b.meta.assessmentValue===value),complete=selected.filter(b=>b.complete&&b.valid===(b.meta.expectedTrials??8));return{value,blocks:complete.length,attemptedBlocks:selected.length,shots:selected.reduce((n,b)=>n+b.rows,0),validShots:selected.reduce((n,b)=>n+b.valid,0),headRate:mean(complete.flatMap(b=>b.headRate===null?[]:[b.headRate])),cleanHeadRate:mean(complete.flatMap(b=>b.cleanHeadRate===null?[]:[b.cleanHeadRate])),confounded:selected.reduce((n,b)=>n+b.confounded,0),aimError:mean(complete.flatMap(b=>b.aimError===null?[]:[b.aimError])),correction:mean(complete.flatMap(b=>b.correction===null?[]:[b.correction]))};});
   const deltas:number[]=[],pairSessions:string[]=[];if(values.length===2)for(const first of a.filter(b=>b.complete&&b.valid===(b.meta.expectedTrials??8)&&b.meta.assessmentValue===values[0])){const second=a.find(b=>b.complete&&b.valid===(b.meta.expectedTrials??8)&&b.meta.assessmentValue===values[1]&&b.meta.session===first.meta.session&&b.meta.pair===first.meta.pair&&b.meta.condition===first.meta.condition&&pairedFingerprint(b.record)===pairedFingerprint(first.record));if(second&&first.headRate!==null&&second.headRate!==null){deltas.push(second.headRate-first.headRate);pairSessions.push(first.meta.session);}}
   // Independent repetition units, not individual shots. One short assessment
   // cannot establish transfer or an ADS optimum.
   const sessions=new Set(pairSessions).size,clustered=clusteredSummary([...new Set(pairSessions)].map(session=>deltas.filter((_,i)=>pairSessions[i]===session))),interval=deltas.length>=6&&sessions>=2?clustered.interval:null;
-  return{...condition,movementModel,label:`${condition.label} · ${movementModelLabel(movementModel)}`,factor:condition.zoom===1?'sensitivity' as const:'adsMultiplier' as const,comparisons,pairedRounds:deltas.length,sessions,difference:clustered.mean,interval,conclusion:interval?(interval[0]>.03?'improved':interval[1]<-.03?'worse':interval[0]>=-.03&&interval[1]<=.03?'equivalent':'inconclusive'):'inconclusive'};
- }));
+  return{...condition,movementModel,projectionModel,label:`${condition.label} · ${movementModelLabel(movementModel)}${projectionModel?' · '+(projectionModel==='legacy-tangent-zoom'?'이전 줌 시야각':'가로 시야각 ÷ 배율'):''}`,factor:condition.zoom===1?'sensitivity' as const:'adsMultiplier' as const,comparisons,pairedRounds:deltas.length,sessions,difference:clustered.mean,interval,conclusion:interval?(interval[0]>.03?'improved':interval[1]<-.03?'worse':interval[0]>=-.03&&interval[1]<=.03?'equivalent':'inconclusive'):'inconclusive'};
+ });
+ });
 }

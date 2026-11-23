@@ -2,15 +2,18 @@ import { readFileSync,writeFileSync,mkdirSync,rmSync } from 'node:fs';
 import ts from 'typescript';
 import * as THREE from 'three';
 const cache='.sites-runtime/unreal-export';mkdirSync(cache,{recursive:true});
-async function module(path){let output=ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;output=output.replace("'../simulation/random'","'./random.mjs'");const file=`${cache}/${path.split('/').at(-1).replace('.ts','.mjs')}`;writeFileSync(file,output);return import(new URL(`../${file}`,import.meta.url));}
-const {WEAPONS}=await module('src/config/weapons.ts'),{MOVEMENT}=await module('src/config/movement.ts'),{createWeaponView}=await module('src/engine/rendering/WeaponView.ts');
+async function module(path){let output=ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;output=output.replace("'../simulation/random'","'./random.mjs'").replace("'../engine/rendering/projection'","'./projection.mjs'");const file=`${cache}/${path.split('/').at(-1).replace('.ts','.mjs')}`;writeFileSync(file,output);return import(new URL(`../${file}`,import.meta.url));}
+await module('src/engine/rendering/projection.ts');
+const {WEAPONS,WEAPON_ORDER}=await module('src/config/weapons.ts'),{MOVEMENT}=await module('src/config/movement.ts');
 const dir='unreal/VALOPRAC/Content/Data';mkdirSync(dir,{recursive:true});
 const data={schema:1,calibration:'2.0.0',units:'meters-degrees-seconds',movement:MOVEMENT,weapons:WEAPONS};
 writeFileSync(`${dir}/calibration.json`,JSON.stringify(data,null,2)+'\n');
 const fields=['fireRate','adsFireRate','adsZoom','equipTime','reserve','magazine','reloadTime','firstSpread','movementSpread','airSpread','bloomPerShot','maxBloom','bloomRecovery','resetTime','recoilRecovery','recoveryDelay','cameraScale','randomness','crouchSpread','crouchRecoil','adsSpread','adsMoveModifier','yawSwitchTime','yawSwitchChance','protectedBullets'];
 let header='// Generated from src/config; run npm run export:unreal. Do not edit.\n#pragma once\n#include "SimulationCore.h"\nnamespace valoprac {\ninline Profile profile(int id){Profile p;switch(id){\n';
-for(const [i,w] of Object.values(WEAPONS).entries()){header+=`case ${i}:\np.semi=${w.fireMode==='semi'};\n`;for(const f of fields)header+=`p.${f}=${w[f]};\n`;header+=`p.damage={${w.damage.map(d=>`{${Number.isFinite(d.maxDistance)?d.maxDistance:-1},${d.head},${d.body},${d.leg}}`).join(',')}};\n`;header+=`p.pattern={${w.recoil.map(([x,y])=>`{${x},${y}}`).join(',')}};\nbreak;\n`;}
-header+='default:break;}return p;}\ninline MovementTuning movementProfile(){MovementTuning p;\n';for(const [key,value] of Object.entries(MOVEMENT))header+=`p.${key}=${value};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
+for(const [i,w] of WEAPON_ORDER.map(id=>WEAPONS[id]).entries()){header+=`case ${i}:\np.semi=${w.fireMode==='semi'};\n`;for(const f of fields)header+=`p.${f}=${w[f]};\n`;header+=`p.damage={${w.damage.map(d=>`{${Number.isFinite(d.maxDistance)?d.maxDistance:-1},${d.head},${d.body},${d.leg}}`).join(',')}};\n`;header+=`p.pattern.clear();\np.pattern.reserve(${w.recoil.length});\n${w.recoil.map(([x,y])=>`p.pattern.push_back({${x},${y}});`).join('\n')}\nbreak;\n`;}
+header+='default:break;}return p;}\ninline MovementTuning movementProfile(){MovementTuning p;\n';for(const [key,value] of Object.entries(MOVEMENT).filter(([key])=>!['jumpBufferSeconds','jumpCooldown','hopSpeedCap'].includes(key)))header+=`p.${key}=${value};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
+if(process.argv.includes('--profiles-only')){rmSync(cache,{recursive:true});console.log('Exported portable calibration profiles; Unreal runtime remains disabled');process.exit(0);}
+const {createWeaponView}=await module('src/engine/rendering/WeaponView.ts');
 const models={schema:1,license:'Original VALOPRAC geometry; no Riot assets',weapons:{}};
 for(const id of Object.keys(WEAPONS)){
  const geometries=[],materials=[];const view=createWeaponView(id,g=>(geometries.push(g),g),m=>(materials.push(m),m));view.root.updateMatrixWorld(true);

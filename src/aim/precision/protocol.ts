@@ -1,8 +1,9 @@
+import {zoomSensitivityMultiplier} from '../../engine/input/zoomSensitivity';
 import type {Settings,WeaponId} from '../../engine/types';
 import {AIM_VERSION,TASKS,trackingTask,type AimPlan,type AimRecord,type AimSetup,type AimTask,type PrecisionMode,type PrecisionStage,type EvaluationMode} from '../types';
 import {candidates,makePlan} from '../experiments';
 import {summarizeBlocks,precisionReport} from '../statistics';
-import {calibrationFromSettings,constrainSensitivityCandidates} from './calibration';
+import {calibrationFromSettings,constrainSensitivityCandidates,SCOPED_PROJECTION_MODEL} from './calibration';
 
 export interface PrecisionPlanOptions {mode:PrecisionMode;stage:PrecisionStage;records:AimRecord[];seed?:number;protocolId?:string;evaluationMode?:EvaluationMode;adsMultiplier?:number;weapon?:WeaponId;}
 export const PRECISION_TASKS:Record<PrecisionMode,readonly AimTask[]>={quick:['small','micro','reactive'],precision:TASKS,longitudinal:TASKS};
@@ -64,15 +65,19 @@ export function createPrecisionPlan(setup:AimSetup,settings:Settings,options:Pre
    radius:b.radius*(options.stage==='heldout'?.85:1),amplitude:b.amplitude*(options.stage==='heldout'?1.12:1)}));
  }
  if(options.mode==='quick')for(const block of next.blocks)if(!trackingTask(block.task))block.trials=4;
- next.protocol=options.mode;next.protocolId=options.protocolId??globalThis.crypto.randomUUID();next.stage=options.stage;next.evaluationMode=options.evaluationMode??'hip';next.adsMultiplier=options.adsMultiplier??settings.adsSensitivity;next.weapon=options.weapon;next.scopeZoom=next.evaluationMode==='operator-5'?5:next.evaluationMode==='operator-2.5'?2.5:next.evaluationMode==='rifle-ads'?1.25:1;
+ next.protocol=options.mode;next.protocolId=options.protocolId??globalThis.crypto.randomUUID();next.stage=options.stage;next.evaluationMode=options.evaluationMode??'hip';next.weapon=options.weapon;next.scopeZoom=next.evaluationMode==='operator-5'?5:next.evaluationMode==='operator-2.5'?2.5:next.evaluationMode==='rifle-ads'?1.25:1;next.adsMultiplier=options.adsMultiplier??zoomSensitivityMultiplier(settings,next.scopeZoom);
  if(options.stage==='heldout'||options.stage==='retention')next.alternative=values.find(v=>Math.abs(v-base)>1e-7)??base;
  return next;
 }
 
 export function protocolProgress(plan:AimPlan,records:AimRecord[]){
  let completedBlocks=0,nextBlock=0;
+ const zoom=plan.scopeZoom??(plan.evaluationMode==='operator-5'?5:plan.evaluationMode==='operator-2.5'?2.5:plan.evaluationMode==='rifle-ads'?1.25:1);
+ // A saved scoped plan can be repeated under the corrected camera, but old
+ // trials must not complete a partly collected current-camera block.
+ const currentCondition=(r:AimRecord)=>zoom<=1||r.meta.ads&&(r.meta.projectionModel??r.meta.calibration?.projectionModel)===SCOPED_PROJECTION_MODEL&&Math.abs((r.meta.scopeZoom??r.meta.calibration?.scopeZoom??1)-zoom)<.04&&(plan.adsMultiplier===undefined||Math.abs(r.meta.adsMultiplier-plan.adsMultiplier)<1e-8);
  const done=plan.blocks.map(block=>{
-  const trials=new Set(records.filter(r=>r.metrics.valid&&r.meta.blockId===block.id&&r.meta.algorithm===AIM_VERSION).map(r=>r.meta.trialIndex??r.meta.id));
+  const trials=new Set(records.filter(r=>r.metrics.valid&&r.meta.blockId===block.id&&r.meta.algorithm===AIM_VERSION&&currentCondition(r)).map(r=>r.meta.trialIndex??r.meta.id));
   return trials.size>=block.trials;
  });
  for(const complete of done)if(complete)completedBlocks++;

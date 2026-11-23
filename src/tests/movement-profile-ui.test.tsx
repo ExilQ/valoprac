@@ -4,7 +4,7 @@ import {useApp} from '../app/store';
 import {DEFAULT_SETTINGS} from '../config/settings';
 import {SettingsPanel} from '../ui/SettingsPanel';
 import {MovementPhysicsSettings} from '../ui/MovementPhysicsSettings';
-import {MovementProfileStatus,MovementPhysicsDiagnostics} from '../ui/MovementPhysicsFeedback';
+import {MovementProfileStatus,MovementPhysicsDiagnostics,MovementPhysicsDetails} from '../ui/MovementPhysicsFeedback';
 import {Simulation} from '../engine/simulation/Simulation';
 import {emptyInput} from '../engine/types';
 const original={...useApp.getInitialState()};
@@ -30,6 +30,6 @@ describe('Selectable movement controls and honest live diagnostics',()=>{
  it('keeps physics internals absent by default, then renders actual airborne velocity and applied input on opt-in',()=>{
   const s=new Simulation('free','rifleA',{...DEFAULT_SETTINGS,physicsDiagnostics:false});expect(renderToStaticMarkup(<MovementPhysicsDiagnostics simulation={s}/>)).toBe('');
   s.settings.physicsDiagnostics=true;s.movement.velocity.set(0,0,-5);s.movement.speed=5;s.movement.step({...emptyInput(),jump:true,jumpPresses:1,strafe:-1},0,1/120,1/120);s.time=1/120;
-  const html=renderToStaticMarkup(<MovementPhysicsDiagnostics simulation={s}/>);expect(html).toContain('aria-label="이동 물리 진단" tabindex="0"');expect(html).toContain('공중');expect(html).toContain('공중 가속 기여');expect(html).toContain('실제 속도 벡터');expect(html).toContain('수평 벡터 · 월드 좌표');expect(html).toContain(s.movement.velocity.y.toFixed(2));expect(html).not.toMatch(/NaN|Infinity|undefined/);
+  const html=renderToStaticMarkup(<MovementPhysicsDiagnostics simulation={s}/>);expect(html).toContain('aria-label="이동 물리 진단"');expect(html).toContain('physics-jump-times');expect(html).toContain('physics-chain-timing');const details=renderToStaticMarkup(<MovementPhysicsDetails simulation={s}/>);expect(html).toContain('공중');expect(details).toContain('공중 가속 기여');expect(details).toContain('실제 속도 벡터');expect(details).toContain('이동 벡터 · 세부 정보');expect(html).toContain(s.movement.velocity.y.toFixed(2));expect(html).not.toMatch(/NaN|Infinity|undefined/);
  });
 });

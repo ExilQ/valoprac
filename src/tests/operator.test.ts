@@ -56,9 +56,9 @@ describe('Dedicated sniper scope and recovery state',()=>{
  it('cycles 2.5× → 5× → exit with persistent toggle, smooth optics and the exact FOV ratio',()=>{
   const s=sim({adsMode:'hold',operatorScopeMode:'toggle'});advance(s,1,{scopePresses:1});expect(s.scopeLevel).toBe(1);expect(s.scopeZoom).toBeGreaterThan(1);expect(s.scopeZoom).toBeLessThan(2.5);
   advance(s,180);expect(s.ads).toBe(true);expect(s.scopeZoom).toBeCloseTo(2.5,8);
-  expect(Math.tan(103*Math.PI/360)/Math.tan(adsFov(103,s.scopeZoom)*Math.PI/360)).toBeCloseTo(2.5,8);
+  expect(adsFov(103,s.scopeZoom)).toBeCloseTo(41.2,8);
   advance(s,1,{scopePresses:1});expect(s.scopeLevel).toBe(2);expect(s.scopeZoom).toBeGreaterThan(2.5);expect(s.scopeZoom).toBeLessThan(5);advance(s,180);
-  expect(s.scopeZoom).toBeCloseTo(5,8);expect(Math.tan(103*Math.PI/360)/Math.tan(adsFov(103,s.scopeZoom)*Math.PI/360)).toBeCloseTo(5,8);
+  expect(s.scopeZoom).toBeCloseTo(5,8);expect(adsFov(103,s.scopeZoom)).toBeCloseTo(20.6,8);
   const yaw=s.yaw;s.look(10,0);expect(Math.abs(s.yaw-yaw)).toBeCloseTo(10*s.settings.degreesPerCount*s.settings.sensitivity/5*Math.PI/180,10);
   advance(s,1,{scopePresses:1});expect(s.scopeLevel).toBe(0);expect(s.ads).toBe(false);expect(s.scopeZoom).toBeGreaterThan(1);advance(s,180);expect(s.scopeZoom).toBeCloseTo(1,8);
  });

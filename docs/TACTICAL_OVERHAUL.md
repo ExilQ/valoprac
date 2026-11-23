@@ -1,5 +1,6 @@
 # VALOPRAC 4.0.0 / patch 04.00
 
+> 09.01 camera update: scoped horizontal FOV now equals the configured horizontal degrees divided by zoom (103° →82.4°/41.2°/20.6°). Earlier tangent-zoom descriptions below document the historical implementation and are superseded by this calibration. Sensitivity keeps its independent gain/zoom formula. Native-game parity remains unmeasured.
 This extends the 3.0 browser implementation in place. It does not ship a built Unreal game, exact Riot map assets, native Raw Input Buffer, proprietary directional gains or verified Riot audio. The previous weapons, sound profiles, timed modes, local aim science and history remain.
 
 ## Movement, accuracy and braking

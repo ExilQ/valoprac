@@ -1,5 +1,6 @@
 # VALOPRAC 06.00 implementation review
 
+> 09.01 camera update: scoped horizontal FOV now equals the configured horizontal degrees divided by zoom (103° →82.4°/41.2°/20.6°). Earlier tangent-zoom descriptions below document the historical implementation and are superseded by this calibration. Sensitivity keeps its independent gain/zoom formula. Native-game parity remains unmeasured.
 The existing React/TypeScript/Three.js application is extended in place. Its 120 Hz simulation, input adapter, original three weapons, recoil, movement, footstep accumulation, aim tasks and local history remain in use. This release does not run Unreal Engine or replace the browser engine.
 
 ## Tactical level pipeline

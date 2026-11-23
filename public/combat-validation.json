@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatedAt": "2026-10-28T08:28:28.046Z",
+  "generatedAt": "2026-10-30T10:59:25.976Z",
   "baseline": {
     "capturedAt": "2026-10-27T11:18:10.647214+00:00",
     "sourceCommit": "59295203ddd2d54ffb1495b7b456508b81d0f7c9",
@@ -830,10 +830,10 @@
       "textureCountChange": 0
     }
   },
-  "release": "9.0.0",
-  "patchLabel": "09.00",
+  "release": "9.0.1",
+  "patchLabel": "09.01",
   "tests": {
-    "application": 861,
+    "application": 940,
     "broker": 20,
     "hosting": 12,
     "passed": true,

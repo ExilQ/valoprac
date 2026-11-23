@@ -1,18 +1,22 @@
 import { navigate,TAB_PATHS } from './navigation';
+import {automaticGraphicsPatch} from '../config/graphicsPolicy';
 import { create } from 'zustand';
 import { loadSettings, persistSettings, sanitizeSettings } from '../config/settings';
 import type { Settings, Mode, WeaponId, SessionData } from '../engine/types';
 import { loadHistory, saveSession } from '../storage/history';
 export type Screen='menu'|'training'|'results';
+export interface GraphicsObservation {kind:string;renderer:string;reason:string;recommendLow:boolean;}
 interface AppState {
+  graphics:GraphicsObservation|null;graphicsDismissed:boolean;reportGraphics:(observation:GraphicsObservation)=>void;
   screen:Screen;mode:Mode;weapon:WeaponId;settings:Settings;locked:boolean;paused:boolean;
   history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream'|'aim';
   updateSettings:(patch:Partial<Settings>)=>void;setMode:(mode:Mode)=>void;setWeapon:(weapon:WeaponId)=>void;
   setTab:(tab:AppState['activeTab'])=>void;start:()=>void;finish:(session:SessionData)=>Promise<void>;menu:()=>void;refreshHistory:()=>Promise<void>;
 }
 export const useApp=create<AppState>((set,get)=>({
+  graphics:null,graphicsDismissed:false,reportGraphics:graphics=>{set({graphics});const settings={...get().settings,...automaticGraphicsPatch(get().settings,graphics.recommendLow)};persistSettings(settings);set({settings});},
   screen:'menu',mode:'free',weapon:'rifleA',settings:loadSettings(),locked:false,paused:true,history:[],result:null,notice:'',activeTab:'training',
-  updateSettings:patch=>{const settings=sanitizeSettings({...get().settings,...patch});const saved=persistSettings(settings);set({settings,...(!saved?{notice:'설정을 저장할 수 없습니다. 브라우저 저장 공간을 확인하세요.'}:{})});},
+  updateSettings:patch=>{const settings=sanitizeSettings({...get().settings,...patch});Object.assign(settings,automaticGraphicsPatch(settings,get().graphics?.recommendLow??false));const saved=persistSettings(settings);set({settings,...(!saved?{notice:'설정을 저장할 수 없습니다. 브라우저 저장 공간을 확인하세요.'}:{})});},
   setMode:mode=>set({mode}),setWeapon:weapon=>set({weapon}),setTab:activeTab=>{navigate(TAB_PATHS[activeTab]);set({activeTab,screen:'menu',locked:false,paused:true});},
   start:()=>{navigate('/training.html');set({screen:'training',paused:true,result:null,notice:''});},
   finish:async session=>{navigate('/results.html');set({screen:'results',result:session,locked:false,paused:true});try{await saveSession(session);await get().refreshHistory();}catch{set({notice:'이번 결과를 저장하지 못했습니다. 현재 결과는 화면에서 확인할 수 있습니다.'});}},

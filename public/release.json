@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -102,7 +102,18 @@
     "swept-shared-contact-controller",
     "separate-impact-based-landing-sounds",
     "movement-compatible-tactical-analytics",
-    "optional-physics-vector-diagnostics"
+    "optional-physics-vector-diagnostics",
+    "calibrated-tactical-air-request-cap",
+    "horizontal-degree-zoom-projection",
+    "independent-operator-zoom-sensitivity",
+    "delivered-mouse-counts-360",
+    "finite-held-angle-first-shot-response",
+    "pinned-jump-and-landing-diagnostics",
+    "hrtf-enemy-shot-and-footstep-audio",
+    "bounded-stale-fire-audio",
+    "automatic-software-integrated-gpu-guidance",
+    "cancellable-shader-and-gpu-preparation",
+    "bevelled-architectural-topology-and-pbr-palette-batching"
   ],
   "unreal": {
     "engine": "5.7",
@@ -117,7 +128,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "09.00",
+  "patchLabel": "09.01",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -184,7 +195,7 @@
     "validation": "/correctness-validation.json"
   },
   "combat": {
-    "calibration": "combat-1.0.0-provisional",
+    "calibration": "combat-1.0.1-provisional",
     "validation": "/combat-validation.json",
     "defaultMode": "gunfight",
     "skills": [
@@ -199,7 +210,7 @@
     "softwareGPUPerformanceImprovementVerified": false
   },
   "movement": {
-    "calibration": "dual-movement-1.0.0-provisional",
+    "calibration": "dual-movement-1.0.1-provisional",
     "simulationHz": 120,
     "defaultProfile": "valorant",
     "profiles": [
@@ -234,5 +245,21 @@
     "sharedWithBots": true,
     "nativeFormulaVerified": false,
     "materials": 10
+  },
+  "corrections": {
+    "validation": "/corrections-validation.json",
+    "projection": "horizontal-degrees-divided-by-zoom-v1",
+    "independentScopeGains": [
+      1.25,
+      2.5,
+      5
+    ],
+    "deliveredMouseCountReadout": true,
+    "spatialEnemyAudio": true,
+    "resolvedDistanceBotFootsteps": true,
+    "boundedLateAudioScheduling": true,
+    "automaticGraphicsDetection": true,
+    "shaderPreparationBeforeStart": true,
+    "nativeSilentJumpVerified": false
   }
 }

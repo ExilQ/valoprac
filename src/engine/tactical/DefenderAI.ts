@@ -10,6 +10,8 @@ import {spreadDirection} from '../weapons/trajectory';
 import {BotAimMotor,resolveBotProfile,wrapAngle,type BotControlProfile} from './BotAimMotor';
 import {visibleBetween,standingSpace} from './levels';
 import type {FootstepEvent} from '../footsteps/Footsteps';
+import {Footsteps} from '../footsteps/Footsteps';
+import {zoneAt} from './complex';
 import {SeededRandom} from '../simulation/random';
 import {WEAPONS,damageAt} from '../../config/weapons';
 
@@ -19,6 +21,7 @@ export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch
  * perception and bullets. Sample fraction is not projected screen-space body area. */
 export interface DefenderSector {facingYaw?:number;navigation?:Vec3[];alternatives?:Vec3[];weapon?:WeaponId;}
 export type PerceptionPhase='unaware'|'detected'|'recognized'|'reacting'|'aiming'|'tracking'|'lost';
+export interface DefenderFootstep extends FootstepEvent {bot:number;encounterGeneration:number;kind:'bot-step';}
 export interface DefenderShot {
  id?:number;time:number;bot:number;weapon:WeaponId;origin:Vec3;aim:Vec3;impact:Vec3;
  hit:'head'|'body'|'leg'|'miss';hitRegion?:'head'|'torso'|'arm'|'leg';observed:boolean;recoveryUntil:number;
@@ -36,7 +39,7 @@ interface RecoilObservation {time:number;pitch:number;yaw:number;}
 /** Renderer compatibility fields (face/state/pose/lastShot) remain authoritative. */
 export interface DefenderMemory {
  state:DefenderState;weapon:WeaponId;visible:number;exposure:number;acquired:number;nextShot:number;lastSeen:number;known:Vec3|null;alertUntil:number;destination:Vec3|null;repeats:number;lastExposed:number;face:Vec3;decision:number;aim:Vec3|null;path:Vec3[];pathIndex:number;burst:number;lastShot:DefenderShot|null;holdingFace:Vec3;pose:number;
- gun:Weapon;motor:BotAimMotor;movement:Movement;profile:BotControlProfile;rng:SeededRandom;generation:number;initialized:boolean;
+ gun:Weapon;motor:BotAimMotor;movement:Movement;footsteps:Footsteps;profile:BotControlProfile;rng:SeededRandom;generation:number;initialized:boolean;
  perceptionPhase:PerceptionPhase;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firstShotAt:number;
  observations:Observation[];recoilHistory:RecoilObservation[];nextRecoilObservation:number;lastHeard:number;lastHeardPoint:Vec3|null;
  preferHead:boolean;burstGoal:number;burstRemaining:number;pauseUntil:number;engagementShots:number;engagementHits:number;speculativeShots:number;pressureUntil:number;consecutiveMisses:number;uncertainty:Vec3;uncertaintyAt:number;
@@ -75,6 +78,7 @@ export function intersectPlayerBody(ray:Ray,p:PlayerBody,out:Vector3){
 
 export class DefenderAI {
  memories:Memory[]=[];shots:DefenderShot[]=[];health=150;death:DefenderDeath|null=null;onShot:((s:DefenderShot)=>void)|null=null;perceptionUpdates=0;
+ onFootstep:((event:DefenderFootstep)=>void)|null=null;private footstepSequence=0;
  report:PeekReport={health:150,deaths:0,clears:0,baits:0,recoveryExploits:0,heardEvents:0,enemyShots:0,exposure:0,maxVisibleFraction:0,distance:0,peakSpeed:0,episodes:[],lastDeath:null,path:[],currentTime:0,observedRecoveryUntil:0,visibilityMethod:'Nine yawed human-body samples; approximate coverage, not projected body area',operator:{scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,scopeTransitionSum:0,holdingSeconds:0,firstShots:0,firstHits:0}};
  private controlValues:unknown[]=[];private lastPlayerShotVelocity:number|null=null;private lastPlayerShotAt=-100;private combatTotals={timingContacts:0,shots:0,hits:0,firstShots:0,firstHits:0,damage:0,reaction:0,acquisition:0,firstShotDelay:0,recoilSquared:0,residualSquared:0};private epoch=0;private clock=0;private seed:number;private rng:SeededRandom;private current:PeekEpisode|null=null;private episodeOrigin:Vec3|null=null;private episodeLow=0;private episodeHigh=0;private returningAt:number|null=null;private last:Vec3|null=null;private pathAt=0;private perceptionAt=0;private head=new Vector3();private ray=new Ray();private hit=new Vector3();private sequence=0;private usedBaits=new Set<number>();private usedRecoveries=new Set<number>();
  constructor(public targets:Target[],public obstacles:Obstacle[],public settings:Settings,private holdingPoint:Vec3,seed=1947,private sectors:readonly DefenderSector[]=[]){this.seed=seed;this.rng=new SeededRandom(seed^0xd3f3);this.retry();}
@@ -87,8 +91,9 @@ export class DefenderAI {
   const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)},weapon=this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon;
   const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(WEAPONS[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
   gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;
+  const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});};
   return{state:'holding',weapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0,
-   gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement:new Movement(undefined,this.obstacles),profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
+   gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement:new Movement(undefined,this.obstacles),footsteps,profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
    perceptionPhase:'unaware',detectedAt:-100,recognizedAt:Infinity,reactionUntil:Infinity,aimStartedAt:-100,acquisitionUntil:Infinity,triggerAt:Infinity,firstShotAt:-100,
    observations:[],recoilHistory:[],nextRecoilObservation:0,lastHeard:-100,lastHeardPoint:null,preferHead:false,burstGoal:0,burstRemaining:0,pauseUntil:0,engagementShots:0,engagementHits:0,speculativeShots:0,pressureUntil:0,consecutiveMisses:0,uncertainty:{x:0,y:0,z:0},uncertaintyAt:-100};
  }
@@ -145,7 +150,12 @@ export class DefenderAI {
    const seen=m.visible>0;any=Math.max(any,m.visible);
    if(seen){m.exposure+=dt;m.acquired+=dt;}else{m.acquired=Math.max(0,m.acquired-dt*2);m.exposure=this.settings.exposureMode==='continuous'?0:Math.max(0,m.exposure-dt*.65);}
    if(seen&&time>=m.recognizedAt&&time<m.reactionUntil)m.perceptionPhase=time<m.recognizedAt+dt?'recognized':'reacting';
-   if(seen&&time>=m.reactionUntil&&m.aimStartedAt<0){m.aimStartedAt=time;m.motor.begin(time,m.profile);const point=this.rememberedAim(m,time);t.headPosition(this.head);const dx=(point?.x??0)-this.head.x,dy=(point?.y??0)-this.head.y,dz=(point?.z??0)-this.head.z,angle=m.motor.error(Math.atan2(-dx,-dz),Math.atan2(dy,Math.hypot(dx,dz)));m.acquisitionUntil=time+clamp(m.profile.acquisition+angle/m.profile.maxSpeed*.3,.15,.4);m.triggerAt=Math.max(m.detectedAt+.45,m.acquisitionUntil+m.rng.range(.045,.085));}
+   if(seen&&time>=m.reactionUntil&&m.aimStartedAt<0){m.aimStartedAt=time;m.motor.begin(time,m.profile);const point=this.rememberedAim(m,time);t.headPosition(this.head);const dx=(point?.x??0)-this.head.x,dy=(point?.y??0)-this.head.y,dz=(point?.z??0)-this.head.z,angle=m.motor.error(Math.atan2(-dx,-dz),Math.atan2(dy,Math.hypot(dx,dz)));
+    // A held angle does not need another full fixed acquisition delay after
+    // recognition and response. The small confirmation window scales with the
+    // observed angular correction; the finite motor and fresh LOS still gate
+    // the real shot, including surprises far from the held crosshair.
+    m.acquisitionUntil=time+clamp(m.profile.acquisition*angle/(Math.PI/4),.008,m.profile.acquisition);m.triggerAt=m.acquisitionUntil+m.rng.range(.008,.02);}
    if(seen&&m.aimStartedAt>=0)m.perceptionPhase=time<m.acquisitionUntil?'aiming':'tracking';
    const look=this.rememberedAim(m,time);t.headPosition(this.head);const canAim=m.aimStartedAt>=0||!seen&&m.lastHeardPoint!==null;
    let yaw=wrapAngle(-Math.atan2(m.holdingFace.x,m.holdingFace.z)-Math.PI),pitch=0;
@@ -255,6 +265,8 @@ export class DefenderAI {
     const nx=t.position.x+dx*n,nz=t.position.z+dz*n,ny=this.ground(nx,nz,t.position.y);if(ny!==null){t.velocity.set((nx-t.position.x)/dt,(ny-t.position.y)/dt,(nz-t.position.z)/dt);t.position.set(nx,ny,nz);}else{m.destination=null;m.path=[];t.velocity.set(0,0,0);}
    }
   }else t.velocity.set(0,0,0);
+  const ground=this.ground(t.position.x,t.position.z,t.position.y),grounded=ground!==null&&Math.abs(ground-t.position.y)<.02;
+  m.footsteps.step({previous:t.previous,position:t.position,velocity:t.velocity,grounded,crouch:t.crouch},false,dt,time);
   t.updatePose(time);const aim=['tracking','firing'].includes(m.state)?1:m.state==='recovering'?.8:m.destination?.25:m.state==='alert'||m.state==='listening'?.6:.35;m.pose+=(aim-m.pose)*(1-Math.exp(-dt*9));t.leftArm.rotation.set(-m.pose,.0,.4*m.pose);t.rightArm.rotation.set(-1.18*m.pose,0,-.4*m.pose);t.root.rotation.y=Math.atan2(m.face.x,m.face.z);t.root.updateMatrixWorld(true);for(const part of t.parts)part.inverse.copy(part.node.matrixWorld).invert();
  }
  /** Short utility policy: these inputs are all observed or owned state. No

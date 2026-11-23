@@ -159,16 +159,26 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
    }
   }else for(const o of obstacles){const b=o.box,w=b.max.x-b.min.x,d=b.max.z-b.min.z;if(o.kind==='wall'&&w>2){chunk=`legacy-${Math.floor(b.min.z/16)}`;block(w,.14,d,(b.min.x+b.max.x)/2,b.max.y-.15,(b.min.z+b.max.z)/2,metal);}}
  }
- root.updateMatrixWorld(true);const batches=new Map<string,{material:T.Material;meshes:T.Mesh[];detail:number;chunk:string}>();
+ root.updateMatrixWorld(true);const sourceMeshes=root.children.length;
+ const batches=new Map<string,{material:T.Material;meshes:T.Mesh[];detail:number;chunk:string}>(),batchMaterials=new Map<string,T.Material>();
+ const materialKey=(mat:T.Material)=>{const standard=mat as T.MeshStandardMaterial;return JSON.stringify([mat.type,standard.roughness,standard.metalness,standard.map?.uuid,standard.normalMap?.uuid,standard.normalScale?.toArray(),standard.emissive?.getHex(),standard.emissiveIntensity,mat.transparent,mat.opacity,mat.side,mat.depthWrite,mat.depthTest,mat.polygonOffset,mat.polygonOffsetFactor,mat.polygonOffsetUnits]);};
  for(const child of root.children)if(child instanceof T.Mesh&&!Array.isArray(child.material)){
-  const key=`${child.userData.artChunk}:${child.userData.artDetail}:${child.material.uuid}`;const batch=batches.get(key)??{material:child.material,meshes:[] as T.Mesh[],detail:child.userData.artDetail,chunk:child.userData.artChunk};batch.meshes.push(child);batches.set(key,batch);
+  // Palette tints become constant linear vertex colors. Materials with identical
+  // PBR/texture state can then share a draw while retaining every authored color.
+  // Essential surfaces share a campus batch; optional upper finishes keep32m
+  // spatial cells and their existing distance/preset visibility rules.
+  const signature=materialKey(child.material),cell=child.userData.artDetail===0?'campus':`cell-${Math.floor(child.position.x/32)}-${Math.floor(child.position.z/32)}`;
+  let material=batchMaterials.get(signature);
+  if(!material){const cloned=child.material.clone() as T.MeshStandardMaterial;cloned.color.setHex(0xffffff);cloned.vertexColors=true;material=m(cloned);batchMaterials.set(signature,material);}
+  const key=`${cell}:${child.userData.artDetail}:${signature}`;const batch=batches.get(key)??{material,meshes:[] as T.Mesh[],detail:child.userData.artDetail,chunk:cell};batch.meshes.push(child);batches.set(key,batch);
  }
  for(const batch of batches.values()){
-  const merged=mergeStaticArchitecture(batch.meshes);if(!merged)continue;
+  const merged=mergeStaticArchitecture(batch.meshes,'world',true);if(!merged)continue;
   const o=new T.Mesh(g(merged),batch.material);o.castShadow=batch.detail===0;o.receiveShadow=true;o.name=`${batch.chunk} architecture`;o.userData.artDetail=batch.detail;merged.computeBoundingSphere();
   for(const old of batch.meshes){root.remove(old);old.geometry.dispose();}root.add(o);
  }
  root.userData.themeCount=map==='complex'?4:1;root.userData.meterScaledUVs=true;root.userData.collisionUnchanged=true;
+ root.userData.batching={sourceMeshes,batches:root.children.length,palettePreserved:true,optionalCellMeters:32};
  return root;
 }
 

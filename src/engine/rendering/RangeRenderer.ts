@@ -5,7 +5,7 @@ import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
-import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import {architecturalBox} from './ArchitecturalBox';
 import {surfaceHeight} from '../collision/environment';
 import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
@@ -22,9 +22,14 @@ import { WEAPON_ORDER } from '../../config/weapons';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {mergeStaticArchitecture} from './StaticGeometry';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
+import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
+import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
+import {cameraVerticalFov} from './projection';
 const DEG=Math.PI/180;
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
+export interface ShaderPreparationReport {revision:number;milliseconds:number;programs:number;method:'parallel'|'synchronous';disposed:boolean;}
 export class RangeRenderer {
+  readonly capabilities:GraphicsCapabilities;
   renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.05,180);
   private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
   private size=new THREE.Vector3();private color=new THREE.Color();private position=new THREE.Vector3();
@@ -39,8 +44,13 @@ export class RangeRenderer {
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];private surfaceTextures=new Map<string,THREE.DataTexture>();
   private shells:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private shellIndex=0;
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
+  private materialRevision=0;private preparedRevision=-1;private shaderKey='';private preparationPromise:Promise<ShaderPreparationReport>|null=null;
+  private canvasWarmHidden=false;private canvasVisibility='';
+  private preparationReport:ShaderPreparationReport={revision:-1,milliseconds:0,programs:0,method:'synchronous',disposed:false};
   constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings){
     this.renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:false});
+    this.capabilities=detectGraphicsCapabilities(this.renderer.getContext());
+    settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow)};this.settings=settings;
     this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x9aafb3);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
     simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
     const probe=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(this.renderer);this.environmentTarget=pmrem.fromScene(probe,0.04);this.scene.environment=this.environmentTarget.texture;this.scene.environmentIntensity=0.38;probe.dispose();pmrem.dispose();
@@ -52,8 +62,84 @@ export class RangeRenderer {
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
   }
   get canvas(){return this.renderer.domElement;}
+  get preparationReady(){return this.mounted&&this.preparedRevision===this.materialRevision;}
+  /** Eagerly await before offering PointerLock. Calling this repeatedly shares
+   * work; quality changes during compilation are prepared at their latest revision. */
+  prepare():Promise<ShaderPreparationReport>{
+    if(!this.mounted)return Promise.resolve({...this.preparationReport,disposed:true});
+    if(this.preparationReady)return Promise.resolve(this.preparationReport);
+    if(this.preparationPromise)return this.preparationPromise;
+    this.preparationPromise=this.prepareLatest().finally(()=>{this.preparationPromise=null;});return this.preparationPromise;
+  }
+  private async prepareLatest():Promise<ShaderPreparationReport>{
+    while(this.mounted&&this.preparedRevision!==this.materialRevision){
+      const revision=this.materialRevision,start=performance.now(),parallel=this.renderer.extensions.has('KHR_parallel_shader_compile');
+      try{
+        this.renderer.compile(this.scene,this.camera);this.renderer.compile(this.weaponScene,this.weaponCamera);
+        // Three's compileAsync owns an uncancellable material polling timer.
+        // Poll the same KHR completion flag here so disposal or a changed
+        // material revision cannot dereference destroyed programs later.
+        if(parallel)await this.waitForPrograms(revision,start);
+        if(!this.mounted)break;
+        if(revision!==this.materialRevision)continue;
+        // Material compilation alone does not allocate shadow/postprocessing
+        // buffers or upload all hidden viewmodels. Warm those real paths into an
+        // offscreen target without submitting a frame to shooting registration.
+        this.warmRenderPaths();
+        await this.waitForWarmDraw(revision,start);
+      }catch(error){if(this.mounted)throw error;break;}
+      if(this.mounted&&revision===this.materialRevision){this.preparedRevision=revision;this.preparationReport={revision,milliseconds:performance.now()-start,programs:this.renderer.info.programs?.length??0,method:parallel?'parallel':'synchronous',disposed:false};}
+    }
+    return {...this.preparationReport,disposed:!this.mounted};
+  }
+  private async waitForPrograms(revision:number,start:number){
+    const gl=this.renderer.getContext(),extension=gl.getExtension('KHR_parallel_shader_compile');if(!extension)return;
+    while(this.mounted&&revision===this.materialRevision){
+      if(gl.isContextLost())throw new Error('Graphics context lost during shader preparation');
+      const pending=this.renderer.info.programs?.some(program=>program.program&&!gl.getProgramParameter(program.program,extension.COMPLETION_STATUS_KHR));
+      if(!pending)return;if(performance.now()-start>45000)throw new Error('Shader preparation did not complete within45seconds');
+      await new Promise<void>(resolve=>setTimeout(resolve,8));
+    }
+  }
+  private async waitForWarmDraw(revision:number,start:number){
+    const gl=this.renderer.getContext() as WebGL2RenderingContext;
+    if(typeof gl.fenceSync!=='function'){gl.finish();return;}
+    const fence=gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE,0);if(!fence){gl.finish();return;}
+    gl.flush();
+    try{
+      while(this.mounted&&revision===this.materialRevision){
+        if(gl.isContextLost())throw new Error('Graphics context lost during warm rendering');
+        const status=gl.clientWaitSync(fence,0,0);
+        if(status===gl.ALREADY_SIGNALED||status===gl.CONDITION_SATISFIED)return;
+        if(status===gl.WAIT_FAILED)throw new Error('Shader warm render fence failed');
+        if(performance.now()-start>45000)throw new Error('Graphics preparation did not complete within45seconds');
+        await new Promise<void>(resolve=>setTimeout(resolve,8));
+      }
+    }finally{if(!gl.isContextLost())gl.deleteSync(fence);}
+  }
+  private warmRenderPaths(){
+    const previousTarget=this.renderer.getRenderTarget(),previousClear=this.renderer.autoClear,weaponVisible=this.weapon.visible;
+    const weaponVisibility=WEAPON_ORDER.map(id=>this.visuals[id].root.visible),probe=new THREE.WebGLRenderTarget(16,16);
+    const composerScreen=this.composer?.renderToScreen;
+    try{
+      if(!this.canvasWarmHidden){this.canvasVisibility=this.canvas.style.visibility;this.canvas.style.visibility='hidden';this.canvasWarmHidden=true;}
+      this.weapon.visible=true;for(const id of WEAPON_ORDER)this.visuals[id].root.visible=true;
+      this.scene.updateMatrixWorld(true);this.weaponScene.updateMatrixWorld(true);this.renderer.setRenderTarget(probe);
+      this.renderer.render(this.scene,this.camera);this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);
+      // Regular offscreen targets use linear output in Three. Also warm the
+      // actual default framebuffer's sRGB variant while the canvas is hidden;
+      // otherwise the first visible frame can compile a second shader set.
+      this.renderer.setRenderTarget(null);for(const id of WEAPON_ORDER)this.visuals[id].root.visible=id===this.simulation.weaponId;
+      this.renderer.render(this.scene,this.camera);this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);
+      if(this.composer){this.composer.renderToScreen=true;this.composer.render(0);}
+    }finally{
+      if(this.composer&&composerScreen!==undefined)this.composer.renderToScreen=composerScreen;
+      this.weapon.visible=weaponVisible;WEAPON_ORDER.forEach((id,i)=>{this.visuals[id].root.visible=weaponVisibility[i];});
+      this.renderer.autoClear=previousClear;this.renderer.setRenderTarget(previousTarget);probe.dispose();
+    }
+  }
   private material(color:number,roughness=0.8){const m=new THREE.MeshStandardMaterial({color,roughness,metalness:0.12});this.materials.add(m);return m;}
-  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material){const r=Math.min(.035,Math.min(w,h,d)*.12),g=Math.min(w,h,d)>.09?new RoundedBoxGeometry(w,h,d,1,r):new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
+  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material){const r=Math.min(.035,Math.min(w,h,d)*.12),g=Math.min(w,h,d)>.09?architecturalBox(w,h,d,r):new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
   private buildEnvironment(){
     if(this.simulation.practiceMap!=='range'){this.buildTactical();return;}
 
@@ -228,8 +314,12 @@ export class RangeRenderer {
     for(const [material,list] of groups){if(list.length<2)continue;const merged=mergeStaticArchitecture(list);if(!merged)continue;this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,material);mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
   }
   applySettings(settings:Settings){
+    settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow)};
+    const shaderKey=[settings.graphicsPreset,settings.shadowQuality,settings.textureQuality,settings.postProcessing,settings.ambientOcclusion,settings.antialias,settings.effectsQuality,settings.renderScale].join(':');
+    if(shaderKey!==this.shaderKey){this.shaderKey=shaderKey;this.materialRevision++;}
     this.settings={...settings};this.scene.environment=settings.graphicsPreset==='low'?null:this.environmentTarget?.texture??null;this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
     const shadows=settings.shadowQuality!=='off';this.renderer.shadowMap.enabled=shadows;this.sun.castShadow=shadows;
+    for(const batch of [...this.targetBatches,...this.defenderWeapons.values()])batch.castShadow=shadows;
     const resolution={off:256,low:512,medium:1024,high:2048,ultra:2048}[settings.shadowQuality];
     if(this.sun.shadow.mapSize.x!==resolution){this.sun.shadow.map?.dispose();this.sun.shadow.map=null;this.sun.shadow.mapSize.set(resolution,resolution);}
     for(const m of this.surfaceMaterials){const texture=this.surfaceTexture(m.userData.surface);if(m.map!==texture){m.map=texture;m.roughnessMap=texture;m.normalMap=this.surfaceTexture(m.userData.surface+'normal');m.normalScale.set(0.12,0.12);m.needsUpdate=true;}}
@@ -284,7 +374,7 @@ export class RangeRenderer {
     a.setXYZ(0,shot.position.x+0.2,shot.position.y+this.simulation.movement.eyeHeight-0.16,shot.position.z-0.35);a.setXYZ(1,shot.impact.x,shot.impact.y,shot.impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+0.045;
   }
   resize(){if(!this.mounted)return;const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.weaponCamera.aspect=w/h;this.weaponCamera.fov=2*Math.atan(Math.tan(VIEWMODEL_HFOV*DEG/2)/this.weaponCamera.aspect)/DEG;this.weaponCamera.updateProjectionMatrix();this.updateFov();this.composer?.setPixelRatio(this.renderer.getPixelRatio());this.composer?.setSize(w,h);if(this.ao)this.ao.setSize(Math.ceil(w*this.renderer.getPixelRatio()*0.5),Math.ceil(h*this.renderer.getPixelRatio()*0.5));if(this.fxaa)this.fxaa.uniforms.resolution.value.set(1/(w*this.renderer.getPixelRatio()),1/(h*this.renderer.getPixelRatio()));}
-  private updateFov(){const horizontal=this.settings.fov*DEG;this.camera.fov=2*Math.atan(Math.tan(horizontal/2)/this.camera.aspect)/DEG;this.camera.updateProjectionMatrix();}
+  private updateFov(){this.camera.fov=cameraVerticalFov(this.settings.fov,1,this.camera.aspect);this.camera.updateProjectionMatrix();}
   render(alpha:number,elapsed:number,preview:boolean,_ads:boolean){
     this.renderer.info.reset();const s=this.simulation,m=s.movement;
     if(preview){if(s.practiceMap==='complex'){
@@ -306,7 +396,7 @@ export class RangeRenderer {
       this.weapon.visible=!(s.weaponId==='operator'&&s.weapon.scopeAmount>.75);this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
     if(this.architecture)updateTacticalArchitecture(this.architecture,this.camera.position,this.settings.graphicsPreset);
-    const zoom=preview?1:s.weaponId==='operator'?s.scopeZoom:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=2*Math.atan(Math.tan(this.settings.fov*DEG/2)/zoom/this.camera.aspect)/DEG;if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
+    const zoom=preview?1:s.weaponId==='operator'?s.scopeZoom:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=cameraVerticalFov(this.settings.fov,zoom,this.camera.aspect);if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
     for(let i=0;i<s.targets.length;i++){
       const t=s.targets[i],death=THREE.MathUtils.clamp((s.time-t.deadAt)/0.4,0,1),dx=(t.previous.x+(t.position.x-t.previous.x)*alpha)-t.position.x,dz=(t.previous.z+(t.position.z-t.previous.z)*alpha)-t.position.z;
       for(let j=0;j<t.parts.length;j++){
@@ -327,6 +417,7 @@ export class RangeRenderer {
     if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
     if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
     if(!preview)s.renderedTargets.capture(s.targets,this.targetMatrices,performance.now(),this.renderedTargetPositions);
+    if(this.canvasWarmHidden){this.canvas.style.visibility=this.canvasVisibility;this.canvasWarmHidden=false;}
   }
   get calls(){return this.renderer.info.render.calls;}
   dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}

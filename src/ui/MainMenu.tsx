@@ -8,6 +8,19 @@ import { GameStage } from '../components/LazyGameStage';
 import { MODES } from '../training/modes/modes';
 import { PracticeControls } from './PracticeControls';
 import { WEAPONS } from '../config/weapons';
+import {DRILL_LABELS} from '../training/modes/TapDrill';
+import type {Mode,Settings} from '../engine/types';
+export function trainingStartLabel(mode:Mode,s:Pick<Settings,'practiceMap'|'drill'>){
+ const selection=selectedTraining(mode,s);
+ if(selection==='tactical')return s.drill==='mixed'?'복합 전술 훈련':'각체크·피킹';
+ if(selection==='vertical')return '수직 각체크 훈련';
+ if(selection==='braking')return '톡브레이킹 훈련';
+ if(selection==='spray')return '반동 연습';
+ if(selection==='bunny')return '버니합 훈련';
+ if(selection==='wallbang')return '월샷 훈련';
+ if(selection==='free'&&s.drill!=='none')return DRILL_LABELS[s.drill];
+ return MODES[mode].title;
+}
 export function MainMenu(){
  const mode=useApp(s=>s.mode),weapon=useApp(s=>s.weapon),setMode=useApp(s=>s.setMode),start=useApp(s=>s.start),s=useApp(x=>x.settings),update=useApp(x=>x.updateSettings),setTab=useApp(x=>x.setTab),history=useApp(s=>s.history);
  const recent=history.find(h=>h.mode===mode);
@@ -31,7 +44,7 @@ export function MainMenu(){
  <div className="home-workspace"><section className="mode-section"><div className="section-heading"><h2>훈련 선택</h2><span>01 — 09 / TRAINING</span></div><div className="mode-grid">{rows.map((r,i)=><button key={r.id} aria-pressed={r.active} className={`mode-card ${r.active?'selected':''}`} onClick={r.action}><span className="mode-index">{String(i+1).padStart(2,'0')}</span><r.Icon size={18} strokeWidth={1.5} className="mode-icon"/><span className="mode-copy"><h3>{r.name}</h3><p>{r.desc}</p></span><span className="mode-skill">{r.tag}</span><ArrowUpRight size={14} className="mode-arrow"/></button>)}</div>
  {['precision','tracking'].includes(mode)&&<div className="timed-submodes" aria-label="시간제 세부 훈련"><button aria-pressed={mode==='precision'} onClick={()=>setMode('precision')}>헤드샷 정밀도</button><button aria-pressed={mode==='tracking'} onClick={()=>setMode('tracking')}>이동 표적 추적</button></div>}
  <div className="session-config"><div><span className="control-label">훈련 시간</span><div className="duration-options">{!timed?<span className="unlimited-label"><Infinity size={16}/> 직접 종료할 때까지</span>:[30,60,120].map(n=><button key={n} className={s.duration===n?'active':''} onClick={()=>update({duration:n})}>{n}초</button>)}</div></div><button className="weapon-quick-select" onClick={()=>setTab('weapons')}><span className="control-label">장착 무기</span><strong>{WEAPONS[weapon].name}<ArrowRight size={14}/></strong></button></div>
- <button className="start-button" onClick={start}><span><span className="start-icon"><Crosshair size={20}/></span><span><strong>훈련 시작</strong><small>{selection==='bunny'?'버니합 훈련':selection==='wallbang'?'월샷 훈련':MODES[mode].title} · {!timed?'시간 무제한':`${s.duration}초`}</small></span></span><ArrowRight size={20}/></button><p className="start-note"><MousePointer2 size={13}/> 데스크톱 · 키보드와 마우스 권장</p></section>
+ <button className="start-button" onClick={start}><span><span className="start-icon"><Crosshair size={20}/></span><span><strong>훈련 시작</strong><small>{trainingStartLabel(mode,s)} · {!timed?'시간 무제한':`${s.duration}초`}</small></span></span><ArrowRight size={20}/></button><p className="start-note"><MousePointer2 size={13}/> 데스크톱 · 키보드와 마우스 권장</p></section>
  <aside className="home-aside"><div className="range-card"><div className="range-card-header"><span><span className="status-dot"/> TRAINING GROUND</span><b>{s.practiceMap==='bunny'?'관성 이동 코스':s.practiceMap==='wallbang'?'재질 관통 사격장':tactical?'전술 공간':'기본 사격장'}</b></div><GameStage preview key={`${mode}-${s.practiceMap}-${s.peekScenario}`}/><div className="preview-caption"><span>01 / PREPARE TO PRACTICE</span><strong>{s.practiceMap==='bunny'?'착지에서 다음 움직임으로.':s.practiceMap==='wallbang'?'보이는 벽, 실제 통과하는 탄도.':tactical?'하나의 각, 하나의 판단.':'모든 정확함은 기본기에서.'}</strong></div><div className="range-card-footer"><span>입체 부위별 판정</span><span>초당 120회 연산</span></div></div><div className="training-tip"><span className="tip-index">FOCUS / 오늘의 기본기</span><div><h3>{s.practiceMap==='bunny'?'새 입력으로 다음 점프를.':s.practiceMap==='wallbang'?'재질과 두께를 읽으세요.':mode==='braking'?'멈춘 뒤, 정확하게.':mode==='spray'?'반동의 흐름을 익히세요.':mode==='tracking'?'머리 높이를 놓치지 마세요.':'조준선은 늘 머리 높이에.'}</h3><p>{s.practiceMap==='bunny'?'착지 직전에 점프를 다시 입력하세요. 지상 접촉 시간과 입력 편차, 속도 보존을 확인합니다.':s.practiceMap==='wallbang'?'무기와 사격 각도를 바꾸며 재질 저항과 실제 통과 두께가 피해에 주는 영향을 비교하세요.':MODES[mode].description}</p></div></div></aside></div>
  <details className="training-configuration"><summary><span><SlidersHorizontal size={16}/> 훈련 환경 세부 설정</span><span>맵 · 과제 · 봇 · 탄약</span></summary><TacticalControls menu/>{mode==='free'&&<section className="practice-menu-settings"><h3>표적 및 탄약 설정</h3><PracticeControls free includeTactical={false}/></section>}</details>
  <section className="recent-section"><div className="section-heading"><h2>최근 훈련</h2><button onClick={()=>setTab('history')}>전체 기록 <ArrowRight size={14}/></button></div>{recent?<div className="recent-card"><div><Clock3 size={18}/><span>{MODES[recent.mode].title}<small>{new Date(recent.createdAt).toLocaleDateString('ko-KR')}</small></span></div><div><strong>{recent.summary.headshotAccuracy.toFixed(1)}%</strong><small>헤드샷 명중률</small></div><div><strong>{recent.summary.eliminations}개</strong><small>표적 제거</small></div><div><strong>{recent.summary.averageEliminationTime.toFixed(2)}초</strong><small>평균 제거 시간</small></div></div>:<div className="recent-placeholder"><Clock3 size={18}/><p>첫 훈련을 마치면 기록이 표시됩니다.</p><span>이 브라우저에 자동 저장</span></div>}</section>

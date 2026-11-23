@@ -9,19 +9,26 @@ import { AUDIO_PROFILES, AUDIO_ACTIONS, type AudioAction } from '../../config/au
 import { readAudioAssets } from '../../storage/audioAssets';
 import { WEAPON_ORDER } from '../../config/weapons';
 import { synthesize } from './synthesis';
-import type { Settings, ShotEvent, WeaponId } from '../types';
+import {listenerForward,spatialCue,type ListenerPose} from './spatial';
+import type { Settings, ShotEvent, WeaponId, Vec3 } from '../types';
 type Channel='firing'|'handling'|'feedback'|'footsteps';
-interface Voice {source:AudioBufferSourceNode;gain:GainNode;channel:Channel}
+interface Voice {source:AudioBufferSourceNode;gain:GainNode;channel:Channel;spatial:AudioNode|null;startsAt:number;timestamp?:number;emitter?:string;position?:Vec3;baseGain:number}
 export class TrainingAudio {
   private context:AudioContext|null=null;private channels:Record<Channel,GainNode>|null=null;private master:GainNode|null=null;private compressor:DynamicsCompressorNode|null=null;
   private buffers=new Map<string,AudioBuffer>();private voices=new Set<Voice>();private loading:Promise<void>|null=null;private disposed=false;private lastShot='';private anchor=0;private weapon:WeaponId='rifleA';
   private stepBuffers=new Map<FootstepMaterial,AudioBuffer[]>();private lastFootstep=0;footstepEvents=0;
   private landingBuffers=new Map<FootstepMaterial,AudioBuffer>();private lastLanding=0;landingEvents=0;
+  private botSteps=new Map<number,number>();botFootstepEvents=0;
+  private pose:ListenerPose={position:{x:0,y:0,z:0},yaw:0,pitch:0};
+  private pendingFire=new Map<string,Voice>();readonly scheduling={staleDropped:0,futureDropped:0,lateCoalesced:0};
+  private latestFire=new Map<string,number>();
+  spatialBackend:'unavailable'|'hrtf'|'stereo'|'mono'='unavailable';
   custom=new Set<string>();events=0;
   async unlock(){
     if(this.disposed)return;
     if(!this.context){const c=this.context=new AudioContext({latencyHint:'interactive'});this.master=c.createGain();this.compressor=c.createDynamicsCompressor();this.compressor.threshold.value=-6;this.compressor.ratio.value=5;this.master.connect(this.compressor).connect(c.destination);
       this.channels={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.channels))g.connect(this.master);
+      this.spatialBackend=typeof c.createPanner==='function'?'hrtf':typeof c.createStereoPanner==='function'?'stereo':'mono';this.listener(this.pose.position,this.pose.yaw,this.pose.pitch);
       for(const id of WEAPON_ORDER)for(const action of AUDIO_ACTIONS){const values=synthesize(id,action,c.sampleRate),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.buffers.set(`${id}:${action}`,b);}
       for(const material of FOOTSTEP_MATERIALS){const pair:AudioBuffer[]=[];for(let side=0;side<2;side++){const values=synthesizeFootstep(c.sampleRate,side,material),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);pair.push(b);}this.stepBuffers.set(material,pair);}
       for(const material of FOOTSTEP_MATERIALS){const values=synthesizeLanding(c.sampleRate,material),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.landingBuffers.set(material,b);}
@@ -38,24 +45,63 @@ export class TrainingAudio {
     await Promise.allSettled(jobs);
   }
   sync(time:number){if(this.context)this.anchor=this.context.currentTime-time;}
+  /** Called from the actual player/camera transform, independent of screen size. */
+  listener(position:Vec3,yaw:number,pitch=0){
+    if(![position.x,position.y,position.z,yaw,pitch].every(Number.isFinite))return;
+    this.pose={position:{...position},yaw,pitch};
+    for(const v of this.voices)if(v.position&&v.spatial&&'pan' in v.spatial){const p=v.spatial as StereoPannerNode,cue=spatialCue(v.position,this.pose);p.pan.value=cue.pan;v.gain.gain.value=v.baseGain*cue.gain;}
+    const l=this.context?.listener;if(!l)return;const f=listenerForward(yaw,pitch);
+    if(l.positionX){l.positionX.value=position.x;l.positionY.value=position.y;l.positionZ.value=position.z;l.forwardX.value=f.x;l.forwardY.value=f.y;l.forwardZ.value=f.z;l.upX.value=0;l.upY.value=1;l.upZ.value=0;}
+    else{l.setPosition(position.x,position.y,position.z);l.setOrientation(f.x,f.y,f.z,0,1,0);}
+  }
   levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;this.channels.firing.gain.value=s.firingVolume;this.channels.handling.gain.value=s.handlingVolume;this.channels.feedback.gain.value=s.feedbackVolume;this.channels.footsteps.gain.value=s.footstepVolume;}
   selectWeapon(id:WeaponId){if(this.weapon!==id){this.stop();this.weapon=id;}}
-  shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp);this.impacts(s.penetrationSegments??[],s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
+  shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp,1,undefined,'player');this.impacts(s.penetrationSegments??[],s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
   footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;const b=this.stepBuffers.get(e.material??'concrete')?.[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65);}
   landing(e:LandingSoundEvent){if(e.id<=this.lastLanding)return;this.lastLanding=e.id;this.landingEvents++;const b=this.landingBuffers.get(e.material??'concrete');if(b)this.playBuffer(b,'footsteps',e.timestamp,Math.max(.15,Math.min(.85,e.impactSpeed/9)));}
-  enemyShot(id:WeaponId,distance:number){this.play(id,'fire','firing',undefined,Math.max(.08,Math.min(.65,9/Math.max(9,distance))));}
+  enemyShot(id:WeaponId,origin:number|Vec3,time?:number,sourceId?:number|string){
+    if(typeof origin==='number'){this.play(id,'fire','firing',time,Math.max(.08,Math.min(.65,9/Math.max(9,origin))),undefined,`enemy:${sourceId??id}`);return;}
+    this.play(id,'fire','firing',time,.65,origin,`enemy:${sourceId??`${id}:${origin.x}:${origin.z}`}`);
+  }
+  botFootstep(bot:number,e:FootstepEvent){if(e.id<=(this.botSteps.get(bot)??0))return;this.botSteps.set(bot,e.id);this.botFootstepEvents++;const b=this.stepBuffers.get(e.material??'concrete')?.[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65,e.position);}
+  resetBotSteps(){this.botSteps.clear();}
   impacts(segments:PenetrationSegment[],time?:number,scale=1){for(const segment of segments.slice(0,4)){const entry=this.buffers.get(`impact:${segment.material}:false`);if(entry)this.playBuffer(entry,'feedback',time,.38*scale);if(segment.penetrated){const exit=this.buffers.get(`impact:${segment.material}:true`);if(exit)this.playBuffer(exit,'feedback',time,.22*scale);}}}
   action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){this.play(id,action,'handling');}
-  private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1){
-    const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale);
+  private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1,position?:Vec3,emitter?:string){
+    const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale,position,emitter);
   }
-  private playBuffer(b:AudioBuffer,channel:Channel,time?:number,scale=1){
+  private release(v:Voice,stop=false){
+    v.source.onended=null;if(stop){try{v.source.stop();}catch{/* Voice may already have finished. */}}
+    v.source.disconnect();v.gain.disconnect();v.spatial?.disconnect();this.voices.delete(v);if(v.emitter&&this.pendingFire.get(v.emitter)===v)this.pendingFire.delete(v.emitter);
+  }
+  private playBuffer(b:AudioBuffer,channel:Channel,time?:number,scale=1,position?:Vec3,emitter?:string){
     const c=this.context;if(!c||c.state!=='running'||!this.channels||this.disposed)return;
-    if(this.voices.size>=48){const v=this.voices.values().next().value as Voice|undefined;if(v){v.source.onended=null;v.source.stop();v.source.disconnect();v.gain.disconnect();this.voices.delete(v);}}
-    const source=c.createBufferSource(),gain=c.createGain();source.buffer=b;gain.gain.value=scale;source.connect(gain).connect(this.channels[channel]);
-    const v={source,gain,channel};this.voices.add(v);source.onended=()=>{source.disconnect();gain.disconnect();this.voices.delete(v);};source.start(time===undefined?c.currentTime:Math.max(c.currentTime,Math.min(c.currentTime+0.025,this.anchor+time)));
+    const now=c.currentTime,target=time===undefined?now:this.anchor+time;
+    // A stalled render may deliver many historic simulation events together.
+    // Discard old tails and preserve actual future spacing, never clamp every
+    // event onto one currentTime/currentTime+25ms boundary.
+    if(!Number.isFinite(target)||target<now-.12){this.scheduling.staleDropped++;return;}
+    if(target>now+2){this.scheduling.futureDropped++;return;}
+    if(channel==='firing'&&emitter&&time!==undefined){if(time<=(this.latestFire.get(emitter)??-Infinity)){this.scheduling.staleDropped++;return;}this.latestFire.set(emitter,time);}
+    const late=channel==='firing'&&emitter!==undefined&&target<now-.008;
+    const previous=emitter?this.pendingFire.get(emitter):undefined;
+    if(late&&previous&&previous.startsAt>now&&previous.timestamp!==undefined&&time!==undefined&&time>=previous.timestamp){this.release(previous,true);this.scheduling.lateCoalesced++;}
+    if(this.voices.size>=48){const old=this.voices.values().next().value as Voice|undefined;if(old)this.release(old,true);}
+    const source=c.createBufferSource(),gain=c.createGain();source.buffer=b;gain.gain.value=scale;source.connect(gain);
+    let spatial:AudioNode|null=null;
+    if(position&&[position.x,position.y,position.z].every(Number.isFinite)){
+      if(typeof c.createPanner==='function'){
+        const p=c.createPanner();p.panningModel='HRTF';p.distanceModel='inverse';p.refDistance=9;p.maxDistance=120;p.rolloffFactor=1;
+        if(p.positionX){p.positionX.value=position.x;p.positionY.value=position.y;p.positionZ.value=position.z;}else p.setPosition(position.x,position.y,position.z);
+        gain.connect(p).connect(this.channels[channel]);spatial=p;
+      }else if(typeof c.createStereoPanner==='function'){
+        const p=c.createStereoPanner(),cue=spatialCue(position,this.pose);p.pan.value=cue.pan;gain.gain.value*=cue.gain;gain.connect(p).connect(this.channels[channel]);spatial=p;
+      }else{gain.gain.value*=spatialCue(position,this.pose).gain;gain.connect(this.channels[channel]);}
+    }else gain.connect(this.channels[channel]);
+    const startsAt=late?now+.012:Math.max(now,target),v:Voice={source,gain,channel,spatial,startsAt,timestamp:time,emitter,position:position?{...position}:undefined,baseGain:scale};
+    this.voices.add(v);if(late&&emitter)this.pendingFire.set(emitter,v);source.onended=()=>this.release(v);source.start(startsAt);
   }
   get activeVoiceCount(){return this.voices.size;}
-  stop(){for(const v of this.voices){v.source.onended=null;try{v.source.stop();}catch{/* Already ended. */}v.source.disconnect();v.gain.disconnect();}this.voices.clear();}
-  dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.clear();this.landingBuffers.clear();this.custom.clear();}
+  stop(){for(const v of [...this.voices])this.release(v,true);this.voices.clear();this.pendingFire.clear();}
+  dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.clear();this.landingBuffers.clear();this.botSteps.clear();this.latestFire.clear();this.custom.clear();this.spatialBackend='unavailable';}
 }

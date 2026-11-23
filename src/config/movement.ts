@@ -16,7 +16,7 @@ export const MOVEMENT: MovementProfile = {
 };
 
 export type MovementPhysicsId='valorant'|'counterStrike';
-export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.0.0';
+export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.0.1';
 export type CounterStrikePreset='cs2'|'sourceClassic';
 export interface MovementPhysicsSettings {movementPhysics:MovementPhysicsId;csMovementPreset:CounterStrikePreset;jumpBufferMs:number;}
 /** Independent SI calibration. Source projection/ground-friction principles

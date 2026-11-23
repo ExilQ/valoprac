@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "9.0.0",
-  "patchLabel": "09.00",
-  "generatedAt": "2026-10-28T08:28:28.046Z",
+  "release": "9.0.1",
+  "patchLabel": "09.01",
+  "generatedAt": "2026-10-30T10:59:25.976Z",
   "tests": {
-    "application": 861,
+    "application": 940,
     "broker": 20,
     "hosting": 12,
     "passed": true,
@@ -169,7 +169,21 @@
       "Primary historical evidence is distinguished from current in-game verification.",
       "Weapon specifications are versioned calibration, not an assertion of current game parity.",
       "No proprietary artwork, map coordinates, recordings or extracted game assets are used."
-    ]
+    ],
+    "cameraCalibration": {
+      "version": "horizontal-division-1.0.0",
+      "updated": "2026-10-29",
+      "horizontalDegrees": "baseHorizontalFov / zoom",
+      "base103Degrees": {
+        "2.5x": 41.2,
+        "5x": 20.6
+      },
+      "nativeParityVerified": false,
+      "separateSensitivitySettings": [
+        "scopeSensitivity25",
+        "scopeSensitivity5"
+      ]
+    }
   },
   "nativeParityVerified": false,
   "hardwareFPSVerified": false,

@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "benchmark": "air-zoom-before-after",
+  "baselineCommit": "bbdfa88ebd4a434e11aecefede0b21f1a17a24cb",
+  "measuredAt": "2026-10-29T19:40:48.283Z",
+  "fixedHz": 120,
+  "scene": "Empty collision scene; one second settle then manual held-forward jump",
+  "nativeGameMeasured": false,
+  "rows": [
+    {
+      "name": "walking rifle",
+      "before": {
+        "groundedSpeed": 2.592,
+        "meanAirSpeed": 4.724794117647058,
+        "peakAirSpeed": 5.4,
+        "airTicks": 68
+      },
+      "after": {
+        "groundedSpeed": 2.592,
+        "meanAirSpeed": 2.5920000000000027,
+        "peakAirSpeed": 2.592,
+        "airTicks": 68
+      }
+    },
+    {
+      "name": "crouching rifle",
+      "before": {
+        "groundedSpeed": 1.9440000000000006,
+        "meanAirSpeed": 4.371382352941176,
+        "peakAirSpeed": 5.4,
+        "airTicks": 68
+      },
+      "after": {
+        "groundedSpeed": 1.9440000000000006,
+        "meanAirSpeed": 1.9440000000000013,
+        "peakAirSpeed": 1.9440000000000006,
+        "airTicks": 68
+      }
+    },
+    {
+      "name": "Operator",
+      "before": {
+        "groundedSpeed": 5.13,
+        "meanAirSpeed": 5.395441176470584,
+        "peakAirSpeed": 5.4,
+        "airTicks": 68
+      },
+      "after": {
+        "groundedSpeed": 5.13,
+        "meanAirSpeed": 5.129999999999997,
+        "peakAirSpeed": 5.13,
+        "airTicks": 68
+      }
+    },
+    {
+      "name": "rifle ADS",
+      "before": {
+        "groundedSpeed": 4.104,
+        "meanAirSpeed": 5.261176470588232,
+        "peakAirSpeed": 5.4,
+        "airTicks": 68
+      },
+      "after": {
+        "groundedSpeed": 4.104,
+        "meanAirSpeed": 4.104000000000005,
+        "peakAirSpeed": 4.104,
+        "airTicks": 68
+      }
+    },
+    {
+      "name": "Operator scoped",
+      "before": {
+        "groundedSpeed": 3.6936,
+        "meanAirSpeed": 5.15547058823529,
+        "peakAirSpeed": 5.4,
+        "airTicks": 68
+      },
+      "after": {
+        "groundedSpeed": 3.6936,
+        "meanAirSpeed": 3.693600000000003,
+        "peakAirSpeed": 3.6936,
+        "airTicks": 68
+      }
+    }
+  ],
+  "zoom": [
+    {
+      "zoom": 1.25,
+      "beforeHorizontalDegrees": 90.32781260118297,
+      "afterHorizontalDegrees": 82.4
+    },
+    {
+      "zoom": 2.5,
+      "beforeHorizontalDegrees": 53.39280359869237,
+      "afterHorizontalDegrees": 41.2
+    },
+    {
+      "zoom": 5,
+      "beforeHorizontalDegrees": 28.227142391310654,
+      "afterHorizontalDegrees": 20.6
+    }
+  ],
+  "stationaryAdsSpread": [
+    {
+      "weapon": "rifleA",
+      "before": 0.2,
+      "after": 0.1575
+    },
+    {
+      "weapon": "rifleB",
+      "before": 0.15600000000000003,
+      "after": 0.11000000000000001
+    }
+  ]
+}

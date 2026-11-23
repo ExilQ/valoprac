@@ -1,4 +1,4 @@
-# VALOPRAC 9.0.0 — dual movement physics and real air control
+# VALOPRAC 9.0.1 — calibrated movement, zoom, sound and graphics
 
 Patch **09.00** applies selectable VALORANT and CS2-inspired movement physics across every existing browser mode/map. It adds real camera-relative air steering, timestamped input, distinct ground and landing rules, optional Source Classic, separate landing sounds and physics-compatible analytics. Existing combat, weapons, maps, sensitivity tools and Korean preferences remain available.
 
@@ -76,3 +76,14 @@ existing modes/maps keep their weapons, AI, sound and analytics. See
 [implementation and independent calibration](docs/movement/IMPLEMENTATION.md),
 [official references](docs/movement/REFERENCES.md) and
 [release/rollback](docs/movement/RELEASE.md).
+
+## 09.01 corrections
+
+Walking/crouching/weapon air requests, degree-based scoped FOV, ADS cones,
+held-angle response, pinned physics diagnostics and current training labels are
+corrected. Scoped gains and delivered360° counts are independent. Original enemy
+audio is spatial, late fire scheduling is bounded, graphics recommendations respect
+manual choices, and shader/GPU preparation finishes before training starts.
+See [measured corrections](docs/0910/AIR_ZOOM_CORRECTIONS.md),
+[rendering evidence](docs/0910/PERFORMANCE.md), [audio](docs/0910/AUDIO.md)
+and [native verification still open](docs/0910/NATIVE_VERIFICATION.md).

@@ -33,7 +33,9 @@ export function solveAirMovement(v:Vector3,w:WishMovement,p:MovementPhysicsProfi
  const beforeX=v.x,beforeZ=v.z;
  if(w.amount>0){
   const current=v.x*w.x+v.z*w.z;
-  const limit=p.airModel==='projection'?Math.min(w.speed,p.airWishSpeedCap):p.airMaxSpeed*w.amount;
+  // Wish speed already includes the fraction of a short input pulse. Respect
+  // walk/crouch/weapon/ADS modifiers without multiplying that fraction twice.
+  const limit=p.airModel==='projection'?Math.min(w.speed,p.airWishSpeedCap):Math.min(p.airMaxSpeed*w.amount,w.speed);
   const requested=p.airModel==='projection'?p.airAcceleration*w.speed*dt:p.airAcceleration*w.amount*dt;
   const add=Math.min(requested,Math.max(0,limit-current));v.x+=w.x*add;v.z+=w.z*add;
  }

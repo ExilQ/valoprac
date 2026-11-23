@@ -40,10 +40,10 @@
       "exactGameParityVerified": false
     }
   ],
-  "release": "9.0.0",
+  "release": "9.0.1",
   "date": "2026-10-24",
   "fixedTimestep": 0.008333333333333333,
-  "applicationTests": 861,
+  "applicationTests": 940,
   "brokerTests": 20,
   "requiredScenarios": [
     "A",

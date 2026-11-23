@@ -97,5 +97,19 @@
     "Primary historical evidence is distinguished from current in-game verification.",
     "Weapon specifications are versioned calibration, not an assertion of current game parity.",
     "No proprietary artwork, map coordinates, recordings or extracted game assets are used."
-  ]
+  ],
+  "cameraCalibration": {
+    "version": "horizontal-division-1.0.0",
+    "updated": "2026-10-29",
+    "horizontalDegrees": "baseHorizontalFov / zoom",
+    "base103Degrees": {
+      "2.5x": 41.2,
+      "5x": 20.6
+    },
+    "nativeParityVerified": false,
+    "separateSensitivitySettings": [
+      "scopeSensitivity25",
+      "scopeSensitivity5"
+    ]
+  }
 }
