@@ -1,14 +1,17 @@
+import {createOperatorVisual} from './OperatorVisual';
 import * as T from 'three';
 import type { WeaponId } from '../types';
 import {mergeStaticArchitecture} from './StaticGeometry';
 export interface WeaponVisual {
   root:T.Group;sights:T.Group;magazine:T.Group;cylinder:T.Group;hammer:T.Group;muzzle:T.Mesh;accent:T.MeshStandardMaterial;
   animate?:(time:number,speed:number,reload:number,kick:number,ads:number)=>void;
+  animateBolt?:(phase:number)=>void;
   dispose?:()=>void;
 }
 // Independently authored, meter-scale weapon artwork. No downloaded game assets.
 // Receivers, stocks, magazines and grips use their own side-profile topology, not scaled cubes.
 export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material):WeaponVisual {
+  if(id==='operator')return createOperatorVisual(geometry,material,createArms);
   const root=new T.Group(),sights=new T.Group(),magazine=new T.Group(),cylinder=new T.Group(),hammer=new T.Group();
   root.name=`VALOPRAC ${id} original viewmodel`;sights.name="open sight posts";magazine.name="magazine";cylinder.name="revolver cylinder";hammer.name="hammer";root.add(sights,magazine,cylinder,hammer);
   const sheriff=id==='sheriff',phantom=id==='rifleB';
@@ -111,7 +114,8 @@ export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.Bu
 /** Lightweight original glove/forearm rigs. Ring-lofted anatomy is skinned to wrist,
  * palm and two joints per digit. No disconnected cylinders; bones share a bind pose. */
 function createArms(parent:T.Group,sheriff:boolean,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material){
-  const rigs:{root:T.Bone;wrist:T.Bone;finger:T.Bone[];rest:T.Vector3}[]=[],skeletons:T.Skeleton[]=[];
+  const rigs:{root:T.Bone;wrist:T.Bone;finger:T.Bone[];rest:T.Vector3;wristRest:T.Vector3}[]=[],skeletons:T.Skeleton[]=[];
+  let boltPhase=0;
   const sleeve=material(new T.MeshStandardMaterial({color:0x43565d,roughness:.94,metalness:0})),glove=material(new T.MeshStandardMaterial({color:0x253238,roughness:.87,metalness:.03}));
   for(const support of [false,true]){
     const elbow=new T.Vector3(support?-.19:.15,-.32,.32),wristAt=new T.Vector3(support?-.048:.029,support?-.092:-.075,support?(sheriff?.075:-.235):.115),palmAt=wristAt.clone().add(new T.Vector3(support?.012:-.003,.018,-.029));
@@ -143,7 +147,14 @@ function createArms(parent:T.Group,sheriff:boolean,geometry:(g:T.BufferGeometry)
       const bi=bones.indexOf(finger),ji=bones.indexOf(joint);loft([base,middle,tip],[[.0058,.0064],[.0055,.006],[.0038,.0044]],[bi,ji,ji],1);
     }
     const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('normal',new T.Float32BufferAttribute(normals,3));g.setAttribute('skinIndex',new T.Uint16BufferAttribute(skinIndices,4));g.setAttribute('skinWeight',new T.Float32BufferAttribute(skinWeights,4));g.setIndex(indices);for(const a of groups)g.addGroup(a.start,a.count,a.materialIndex);g.computeVertexNormals();
-    const body=new T.SkinnedMesh(geometry(g),[sleeve,glove]);body.name=support?'support arm · articulated glove':'dominant arm · articulated glove';body.frustumCulled=false;parent.add(body);parent.updateMatrixWorld(true);const skeleton=new T.Skeleton(bones);skeletons.push(skeleton);body.bind(skeleton);rigs.push({root,wrist,finger:fingers,rest:root.position.clone()});
+    const body=new T.SkinnedMesh(geometry(g),[sleeve,glove]);body.name=support?'support arm · articulated glove':'dominant arm · articulated glove';body.frustumCulled=false;parent.add(body);parent.updateMatrixWorld(true);const skeleton=new T.Skeleton(bones);skeletons.push(skeleton);body.bind(skeleton);rigs.push({root,wrist,finger:fingers,rest:root.position.clone(),wristRest:wrist.position.clone()});
   }
-  return {dispose(){for(const skeleton of skeletons)skeleton.dispose();},animate(time:number,speed:number,reload:number,kick:number,ads:number){for(let i=0;i<rigs.length;i++){const r=rigs[i];r.root.position.copy(r.rest);if(i===1){r.root.position.y+=reload*(sheriff?.055:-.065);r.root.position.z+=reload*(sheriff?-.045:.12);r.root.position.x-=reload*(sheriff?.04:0);r.wrist.rotation.x=reload*(sheriff?-.15:.32);}else r.wrist.rotation.x=-kick*.035;for(let j=0;j<r.finger.length;j++)r.finger[j].rotation.z=Math.sin(time*1.9+j*.3)*.006*(1-ads)*Math.min(1,speed+.2);}}};
+  const smooth=(a:number,b:number,p:number)=>{const t=T.MathUtils.clamp((p-a)/(b-a),0,1);return t*t*(3-2*t);};
+  return {dispose(){for(const skeleton of skeletons)skeleton.dispose();},animateBolt(phase:number){boltPhase=T.MathUtils.clamp(phase,0,1);},animate(time:number,speed:number,reload:number,kick:number,ads:number){for(let i=0;i<rigs.length;i++){const r=rigs[i];r.root.position.copy(r.rest);r.wrist.position.copy(r.wristRest);r.wrist.rotation.set(0,0,0);if(i===1){r.root.position.y+=reload*(sheriff?.055:-.065);r.root.position.z+=reload*(sheriff?-.045:.12);r.root.position.x-=reload*(sheriff?.04:0);r.wrist.rotation.x=reload*(sheriff?-.15:.32);}else{
+   // The dominant hand leaves the pistol grip, follows the mechanical handle
+   // rearward, then returns before the next round is available. Shoulder/elbow
+   // roots stay fixed; the modest wrist excursion remains within arm reach.
+   const grip=smooth(.015,.17,boltPhase)*(1-smooth(.85,1,boltPhase))*(1-reload),pull=smooth(.17,.42,boltPhase)*(1-smooth(.58,.85,boltPhase));
+   r.wrist.position.x+=.046*grip;r.wrist.position.y+=.055*grip;r.wrist.position.z+=(-.01+.075*pull)*grip;r.wrist.rotation.x=-kick*.035-.17*grip;r.wrist.rotation.z=-.24*grip;
+  }for(let j=0;j<r.finger.length;j++)r.finger[j].rotation.z=Math.sin(time*1.9+j*.3)*.006*(1-ads)*Math.min(1,speed+.2);}}};
 }

@@ -65,7 +65,7 @@ describe('Compact ADS geometry occlusion (CPU rays, not GPU screenshot approval)
    for(const distance of [5,20,35])for(const dx of [-.12,0,.12])for(const dy of [-.12,0,.12]){const direction=new Vector3(dx,dy,-distance).normalize();cast.set(new Vector3(),direction);const hit=cast.intersectObject(v.root,true);samples++;blocked+=Number(hit.length>0);}let cover=0;for(let x=0;x<40;x++)for(let y=0;y<24;y++){cast.setFromCamera(new Vector2((x+.5)/40*2-1,(y+.5)/24*2-1),camera);if(cast.intersectObject(v.root,true).length)cover++;}maxCoverage=Math.max(maxCoverage,cover/(40*24));
   }expect(blocked).toBe(0);expect(maxCoverage).toBeLessThan(.2);expect(Math.tan(103*Math.PI/360)/Math.tan(adsFov(103,1.25)*Math.PI/360)).toBeCloseTo(1.25,10);console.info(JSON.stringify({benchmark:'ads-geometry-occlusion',weapon:id,headSamples:samples,blocked,maxCoverage,aspectRatios:['16:9','16:10','21:9'],distances:[5,20,35],gpuScreenshots:false}));
   }finally{geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}
- });
+ },15000); // Exhaustive CPU ray grid; wall-clock budget allows shared CI hosts.
  it('Sheriff remains unzoomed during right-click, reload and weapon transitions',()=>{const s=new Simulation('free','sheriff',DEFAULT_SETTINGS);s.running=true;for(let i=0;i<120;i++)s.step(dt,{...emptyInput(),ads:true});expect(s.ads).toBe(false);expect(s.weapon.ads).toBe(false);expect(s.weapon.profile.adsZoom).toBe(1);s.switchWeapon('rifleA');for(let i=0;i<130;i++)s.step(dt,{...emptyInput(),ads:true});expect(s.ads).toBe(true);s.weapon.ammo=10;s.step(dt,{...emptyInput(),ads:true,reload:true});s.step(dt,{...emptyInput(),ads:true});expect(s.ads).toBe(false);});
 });
 describe('Regression refinements for elevation, recovery and sound',()=>{

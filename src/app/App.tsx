@@ -25,7 +25,7 @@ export function App(){
     <button className={tab==='training'&&mode==='free'&&practiceMap==='range'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'none'});selectTraining('free');}}><Infinity size={19}/> 자유 훈련장<span>01</span></button>
     <button className={tab==='training'&&['precision','braking','tracking'].includes(mode)&&screen==='menu'?'active':''} onClick={()=>selectTraining('precision')}><Timer size={19}/> 시간제 훈련</button>
     <button className={tab==='training'&&mode==='spray'&&screen==='menu'?'active':''} onClick={()=>selectTraining('spray')}><Activity size={19}/> 반동 연습</button>
-    <button className={tab==='training'&&mode==='free'&&practiceMap==='tactical'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'tactical'});selectTraining('free');}}><ScanLine size={18}/> 각체크·피킹</button>
+    <button className={tab==='training'&&mode==='free'&&(practiceMap==='tactical'||practiceMap==='complex')&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'complex',peekScenario:'free',targetCount:11,eliminationRule:'damage'});selectTraining('free');}}><ScanLine size={18}/> 각체크·피킹</button>
     <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'tapAD',analysisWall:false});selectTraining('braking');}}><MoveHorizontal size={18}/> 톡브레이킹 훈련</button>
     <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'mid',drill:'vertical',analysisWall:false});selectTraining('free');}}><Layers3 size={18}/> 수직 각체크 훈련</button>
     <button className={tab==='aim'?'active':''} onClick={()=>setTab('aim')}><Target size={18}/> 에임 분석 · 감도 탐색</button>

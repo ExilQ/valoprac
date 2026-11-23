@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "release": "6.0.0",
+  "patchLabel": "06.00",
+  "generatedAt": "2026-10-25T23:09:29.644Z",
+  "tests": {
+    "application": 473,
+    "broker": 20,
+    "hosting": 8,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "geometry": {
+    "benchmark": "peeking-geometry",
+    "sectors": 11,
+    "zones": [
+      {
+        "id": "A",
+        "samples": 147,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "B",
+        "samples": 148,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "C",
+        "samples": 148,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "D",
+        "samples": 147,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "E",
+        "samples": 147,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "F",
+        "samples": 212,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "G",
+        "samples": 143,
+        "maxThreats": 1,
+        "invalidRoutes": 0
+      },
+      {
+        "id": "H",
+        "samples": 147,
+        "maxThreats": 2,
+        "invalidRoutes": 0
+      }
+    ],
+    "passed": true
+  },
+  "operatorCalibration": {
+    "schema": 1,
+    "version": "operator-1.0.0",
+    "retrieved": "2026-10-25",
+    "platform": "VALORANT PC reference; existing browser simulation",
+    "nativeParityVerified": false,
+    "sources": [
+      {
+        "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-1-09/",
+        "published": "2020-09-29",
+        "kind": "official historical patch",
+        "verified": {
+          "scopedMovementModifier": 0.72,
+          "fireRate": 0.6,
+          "legDamage": 120,
+          "accuracyDeadzoneFraction": 0.15,
+          "landingInaccuracyDuration": 0.225
+        }
+      },
+      {
+        "url": "https://liquipedia.net/valorant/Operator",
+        "kind": "secondary reference",
+        "verified": {
+          "magazine": 5,
+          "reserve": 10,
+          "reloadSeconds": 3.7,
+          "movementMetersPerSecond": 5.13,
+          "damage": [
+            255,
+            150,
+            120
+          ],
+          "dualZoom": [
+            2.5,
+            5
+          ],
+          "penetration": "High"
+        },
+        "conflicts": [
+          "Alternate-fire rate listed .75 conflicts with official1.09 .6; .6 is used for both scopes."
+        ]
+      },
+      {
+        "url": "https://valohub.co/weapons/operator",
+        "kind": "secondary reference",
+        "verified": {
+          "equipSeconds": 1.5,
+          "hipSpreadDegrees": 5,
+          "reloadSeconds": 3.7,
+          "fireRate": 0.6,
+          "damage": [
+            255,
+            150,
+            120
+          ]
+        },
+        "notUsed": [
+          "ADS accuracy -1 is a data sentinel, not a physical negative spread."
+        ]
+      }
+    ],
+    "implementedReference": {
+      "fireRate": 0.6,
+      "magazine": 5,
+      "reserve": 10,
+      "reload": 3.7,
+      "equip": 1.5,
+      "unscopedSpeed": 5.13,
+      "scopeSpeedModifier": 0.72,
+      "zoom": [
+        2.5,
+        5
+      ],
+      "damage": [
+        255,
+        150,
+        120
+      ]
+    },
+    "provisional": {
+      "scopeTransitionSeconds": 0.3,
+      "scopedSpreadDegrees": 0.02,
+      "precisionVelocityMetersPerSecond": 0.55404,
+      "airSpreadDegrees": 12,
+      "movementSpreadDegrees": 9,
+      "penetration": {
+        "maxCoverMeters": 0.8,
+        "maxWallMeters": 0.35,
+        "totalMeters": 1.1,
+        "maxLayers": 2,
+        "damageMultiplierPerLayer": 0.65
+      },
+      "audio": "independently synthesized; not native Riot audio",
+      "scopeControls": "toggle2.5->5->off; hold+separatezoom binding; optionalautorescope after realbolt recovery"
+    },
+    "notes": [
+      "Primary historical evidence is distinguished from current in-game verification.",
+      "Weapon specifications are versioned calibration, not an assertion of current game parity.",
+      "No proprietary artwork, map coordinates, recordings or extracted game assets are used."
+    ]
+  },
+  "nativeParityVerified": false,
+  "hardwareFPSVerified": false,
+  "physicalInputLatencyVerified": false
+}

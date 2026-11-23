@@ -62,14 +62,14 @@ export class Movement {
       }
     }
   }
-  estimateReadyTime(input:InputState,yaw:number,dt=1/120){
+  estimateReadyTime(input:InputState,yaw:number,dt=1/120,threshold=this.profile.accuracyVelocityThreshold){
     if(!this.grounded)return null;
     let x=this.velocity.x,z=this.velocity.z;
     const l=Math.hypot(input.forward,input.strafe);let dx=0,dz=0;
     if(l){const f=input.forward/Math.max(1,l),s=input.strafe/Math.max(1,l);dx=s*Math.cos(yaw)-f*Math.sin(yaw);dz=-f*Math.cos(yaw)-s*Math.sin(yaw);}
-    if(l&&dx*x+dz*z>=0&&this.speed>this.profile.accuracyVelocityThreshold)return null;
+    if(l&&dx*x+dz*z>=0&&this.speed>threshold)return null;
     for(let n=0;n<240;n++){
-      const speed=Math.hypot(x,z);if(speed<=this.profile.accuracyVelocityThreshold)return n*dt;
+      const speed=Math.hypot(x,z);if(speed<=threshold)return n*dt;
       if(!l){const next=Math.max(0,speed-(this.profile.groundDeceleration+this.profile.friction*speed)*dt);x*=next/speed;z*=next/speed;}
       else{x+=dx*this.profile.reverseAcceleration*dt;z+=dz*this.profile.reverseAcceleration*dt;}
     }return null;

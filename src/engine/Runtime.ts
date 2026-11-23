@@ -1,4 +1,3 @@
-import {footstepProfile} from '../config/footsteps';
 import {CombatCapture} from '../aim/CombatCapture';
 import { InputLatencyProbe } from '../benchmarks/InputLatencyProbe';
 import { RenderCadence } from './rendering/RenderCadence';
@@ -8,7 +7,7 @@ import { RangeRenderer } from './rendering/RangeRenderer';
 import { BrowserInput } from './input/Input';
 import { TrainingAudio } from './audio/Audio';
 import type { Mode, Settings, WeaponId, SessionData, SessionSummary } from './types';
-export interface Telemetry {weapon:WeaponId;reserve:number;ads:boolean;summary:SessionSummary|null;time:number;ammo:number;reloading:number|null;score:number;shots:number;speed:number;accurate:boolean;release:number|null;ready:number|null;thresholdDelta:number|null;early:boolean;hit:string;hitAge:number;fps:number;p95:number;calls:number;debt:number;spread:number;recoil:number;grounded:boolean}
+export interface Telemetry {scopeZoom?:number;scopeLevel?:number;scopeAmount?:number;operatorState?:string;peeking?:import('./tactical/DefenderAI').PeekReport;health?:number;weapon:WeaponId;reserve:number;ads:boolean;summary:SessionSummary|null;time:number;ammo:number;reloading:number|null;score:number;shots:number;speed:number;accurate:boolean;release:number|null;ready:number|null;thresholdDelta:number|null;early:boolean;hit:string;hitAge:number;fps:number;p95:number;calls:number;debt:number;spread:number;recoil:number;grounded:boolean}
 export const INITIAL_TELEMETRY:Telemetry={weapon:'rifleA',reserve:75,ads:false,summary:null,time:0,ammo:25,reloading:null,score:0,shots:0,speed:0,accurate:true,release:null,ready:0,thresholdDelta:null,early:false,hit:'miss',hitAge:100,fps:0,p95:0,calls:0,debt:0,spread:0,recoil:0,grounded:true};
 export class Runtime {
   private aimCapture:CombatCapture|null=null;
@@ -20,6 +19,7 @@ export class Runtime {
     this.preview=preview;this.simulation=new Simulation(mode,weapon,settings);this.renderer=new RangeRenderer(host,this.simulation,settings);
     this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,onError,()=>this.publishTelemetry(),id=>{this.switchWeapon(id);this.onWeapon(id);});
     if(!preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode);this.input.observer=this.aimCapture;}
+    if(this.simulation.defenders)this.simulation.defenders.onShot=e=>{if(e.observed)this.audio.enemyShot(e.weapon,Math.hypot(e.origin.x-this.simulation.movement.position.x,e.origin.z-this.simulation.movement.position.z));};
     this.simulation.onFootstep=e=>this.audio.footstep(e);
     this.simulation.onShot=s=>{this.renderer.addShot(s);this.audio.shot(s);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
@@ -57,11 +57,11 @@ export class Runtime {
   private step=(dt:number)=>this.simulation.step(dt,this.input.state);
   private publishTelemetry(){
     const s=this.simulation,w=s.weapon,b=s.braking;const times=Array.from(this.frameTimes.subarray(0,this.sampleCount)).filter(t=>t>0).sort((a,b)=>a-b);const average=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
-    const last=s.shots[s.shots.length-1];this.onTelemetry({weapon:s.weaponId,reserve:w.reserve,ads:s.ads,summary:s.hudSummary(),time:s.time,ammo:w.ammo,reloading:w.reloadingUntil===null?null:Math.max(0,w.reloadingUntil-s.time),score:s.stats.eliminations,shots:s.stats.shots,speed:s.movement.speed,accurate:s.movement.accurate,release:b.releaseTime===null?null:s.time-b.releaseTime,ready:s.movement.estimateReadyTime(this.input.state,s.yaw),thresholdDelta:last?.thresholdDelta??null,early:s.time-s.lastEarlyAt<0.3,hit:s.lastHit,hitAge:s.time-s.lastHitAt,fps:average?1000/average:0,p95:times[Math.floor(times.length*0.95)]??0,calls:this.renderer.calls,debt:this.clock.deferredTicks,spread:w.spread.total,recoil:w.recoil.pitch,grounded:s.movement.grounded});
+    const movementReady=s.movement.estimateReadyTime(this.input.state,s.yaw,1/120,s.weaponId==='operator'?5.13*.72*.15:s.movement.profile.accuracyVelocityThreshold);const ready=s.weaponId==='operator'?(!s.ads||movementReady===null?null:Math.max(movementReady,w.scopeReadyAt-s.time,.225-(s.time-s.movement.landedAt),0)):movementReady;
+    const last=s.shots[s.shots.length-1];this.onTelemetry({scopeZoom:s.scopeZoom,scopeLevel:s.scopeLevel,scopeAmount:s.weaponId==='operator'?w.scopeAmount:0,operatorState:s.weaponId==='operator'?w.operatorState:undefined,peeking:s.defenders?.snapshot(),health:s.defenders?.health,weapon:s.weaponId,reserve:w.reserve,ads:s.ads,summary:s.hudSummary(),time:s.time,ammo:w.ammo,reloading:w.reloadingUntil===null?null:Math.max(0,w.reloadingUntil-s.time),score:s.stats.eliminations,shots:s.stats.shots,speed:s.movement.speed,accurate:s.weaponId==='operator'?s.ads&&w.scopeAmount>.98&&s.time>=w.scopeReadyAt&&s.movement.grounded&&s.movement.speed<=5.13*.72*.15&&s.time-s.movement.landedAt>=.225:s.movement.accurate,release:b.releaseTime===null?null:s.time-b.releaseTime,ready,thresholdDelta:last?.thresholdDelta??null,early:s.time-s.lastEarlyAt<0.3,hit:s.lastHit,hitAge:s.time-s.lastHitAt,fps:average?1000/average:0,p95:times[Math.floor(times.length*0.95)]??0,calls:this.renderer.calls,debt:this.clock.deferredTicks,spread:w.spread.total,recoil:w.recoil.pitch,grounded:s.movement.grounded});
   }
   switchWeapon(id:WeaponId){this.input.reset();this.audio.selectWeapon(id);this.simulation.switchWeapon(id);this.publishTelemetry();}
-  configure(settings:Settings){const s=this.simulation;const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall'].some(k=>(settings as unknown as Record<string,unknown>)[k]!== (s.settings as unknown as Record<string,unknown>)[k]);
-    Object.assign(s.settings,settings);s.tap.drill=s.settings.drill;s.settings.practiceMap=s.practiceMap;s.footsteps.configure(footstepProfile(settings));s.configureAmmo();if(targetChange&&s.mode==='free')s.resetTargets();this.renderer.applySettings(settings);this.audio.levels(settings);this.publishTelemetry();}
+  configure(settings:Settings){this.simulation.configure(settings);this.renderer.applySettings(settings);this.audio.levels(settings);this.publishTelemetry();}
   retryTactical(){this.input.reset();this.audio.stop();this.simulation.retryTactical();this.clock=new FixedClock();this.publishTelemetry();}
   resetTargets(){this.simulation.resetTargets();this.publishTelemetry();}
   resetStatistics(){this.simulation.resetStatistics();this.renderer.clearImpacts();this.publishTelemetry();}

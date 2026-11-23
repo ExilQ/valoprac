@@ -6,7 +6,7 @@ export class LifetimeStats {
   shots=0;heads=0;bodies=0;limbs=0;first=0;firstHits=0;firstHeads=0;eliminations=0;early=0;brakes=0;
   elimination=new Moments();brake=new Moments();deceleration=new Moments();speed=new Moments();timing=new Moments();angular=new Moments();
   comparison={neutral:{duration:new Moments(),timing:new Moments(),heads:0},opposite:{duration:new Moments(),timing:new Moments(),heads:0}};
-  weapons:Record<WeaponId,WeaponTotals>={rifleA:totals(),rifleB:totals(),sheriff:totals()};
+  weapons:Record<WeaponId,WeaponTotals>={rifleA:totals(),rifleB:totals(),sheriff:totals(),operator:totals()};
   shot(s:ShotEvent){this.shots++;const hit=s.hit==='head'||s.hit==='torso'||s.hit==='arm'||s.hit==='leg';if(s.hit==='head')this.heads++;if(s.hit==='torso')this.bodies++;if(s.hit==='arm'||s.hit==='leg')this.limbs++;
     if(s.firstShot){this.first++;if(hit)this.firstHits++;if(s.hit==='head')this.firstHeads++;}
     if(s.releaseTime!==null){this.brakes++;if(!s.accurate)this.early++;this.speed.add(Math.hypot(s.velocity.x,s.velocity.z));}

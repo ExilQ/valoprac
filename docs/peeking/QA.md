@@ -1,0 +1,9 @@
+# VALOPRAC 06.00 visual and browser-input evidence
+
+The final staged renderer inspection recorded no page errors. All eight HUD layout cases passed: 1366 × 768, 1920 × 1080, 2560 × 1440 and 3440 × 1440, each at HUD scales 1 and 1.25. The audit checked visible panel intersections, viewport containment and horizontal text clipping. It does not establish every UI state or every font/browser combination.
+
+Eleven browser-input checks passed through the real DOM input adapter: actual Pointer Lock, toggle levels 2.5× / 5× / off, the dedicated zoom binding, held-fire single-shot behavior, real bolt admission, reload gating and magazine restoration, Hold scope, Sheriff without ADS, and the actual fullscreen button. The fullscreen input check used a 960 × 540 browser viewport. It does not establish physical mouse latency, OS shortcut capture, or fullscreen behavior at all four HUD resolutions.
+
+Before/after screenshots compare the existing corridor and elevated maps at the same 1920 × 1080 output size, Medium graphics and render scale 1. The Operator and new-zone images use render scale 0.5 for software-renderer inspection, while their UI remains full-resolution. They are staged paused frames, not evidence of physical input or continuous gameplay performance. The Operator captures precede the final compact ammunition-row layout; the later HUD captures record that final layout. New-map captures were repeated after aligning decorative front doors to the actual collision openings and lifting the elevated rear header.
+
+Evidence files remain in `/workspace/operator-qa/`: `final-visual-report.json`, `operator-input.json`, `performance.json`, `screenshots/` and the standalone embedded `review.html`. The report makes no AAA quality, native VALORANT parity, production deployment or hardware performance claim. Production verification belongs to the release workflow.

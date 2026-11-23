@@ -1,6 +1,6 @@
 import type { Settings, Quality } from '../engine/types';
 export const DEFAULT_SETTINGS: Settings = {
-  gameplayRevision:1,aimTelemetry:true,
+  gameplayRevision:1,aimTelemetry:true,peekingTimed:false,operatorScopeMode:'toggle',operatorAutoRescope:false,operatorZoomBinding:'KeyV',peekScenario:'free',defenderWeapon:'mixed',defenderReaction:.35,defenderAccuracy:.75,defenderReposition:.45,randomDefenders:true,
   practiceMap:'range',drill:'none',crouchMode:'hold',inputDiagnostics:false,adsDotSize:2,botDifficulty:'normal',exposureEnabled:true,exposureLimit:2,exposureMode:'continuous',footstepHud:true,soundMinimap:true,footstepVolume:.7,
   stepPerMeter:.625,stepWalkingGain:0,stepWalkingDecay:.02,stepStationaryDecay:3.5,stepStationaryVelocity:.035,stepStationaryDelay:.12,stepAudibleVelocity:2.7,stepThreshold:1,stepGraceDistance:.2,stepHearingRadius:20,
 
@@ -21,10 +21,10 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(typeof o.hudScale==='number'&&Number.isFinite(o.hudScale))s.hudScale=Math.max(0.75,Math.min(1.25,o.hudScale));
   if(typeof o.interfaceVolume==='number'&&Number.isFinite(o.interfaceVolume))s.interfaceVolume=Math.max(0,Math.min(1,o.interfaceVolume));
   for(const k of ['showHeadshotConfirmation','showControlHints'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
-  const ranges:Partial<Record<keyof Settings,[number,number]>>={adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[1,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10]};
+  const ranges:Partial<Record<keyof Settings,[number,number]>>={defenderReaction:[.15,1.5],defenderAccuracy:[.1,.98],defenderReposition:[0,1],adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[1,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10]};
   for(const [k,range] of Object.entries(ranges)){const v=o[k];if(typeof v==='number'&&Number.isFinite(v))(s as unknown as Record<string,unknown>)[k]=Math.min(range[1],Math.max(range[0],v));}
-  if(['range','tactical','long','garage','site','mid','tower','multi'].includes(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
-  for(const k of ['inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
+  if(['range','tactical','long','garage','site','mid','tower','multi','complex'].includes(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
+  for(const k of ['peekingTimed','operatorAutoRescope','randomDefenders','inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
   if(typeof o.crosshairColor==='string'&&/^#[0-9a-f]{6}$/i.test(o.crosshairColor))s.crosshairColor=o.crosshairColor;
   if(['stationary','strafe','random','stopGo','crouch','peek','appearing','short','long','reactive','wide','mixed'].includes(String(o.behavior)))s.behavior=o.behavior as Settings['behavior'];
   for(const key of ['graphicsPreset','textureQuality','effectsQuality'] as const)if(['low','medium','high','ultra'].includes(String(o[key])))s[key]=o[key] as Quality;
@@ -33,14 +33,22 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(['easy','normal','hard'].includes(String(o.botDifficulty)))s.botDifficulty=o.botDifficulty as Settings['botDifficulty'];
   if(o.exposureMode==='continuous'||o.exposureMode==='persistent')s.exposureMode=o.exposureMode;
   if(o.crouchMode==='hold'||o.crouchMode==='toggle')s.crouchMode=o.crouchMode;
+  if(o.operatorScopeMode==='hold'||o.operatorScopeMode==='toggle')s.operatorScopeMode=o.operatorScopeMode;
+  if(['free','wide','shoulder','jiggle','crouch','jump','vertical','slicing','operator','mixed'].includes(String(o.peekScenario)))s.peekScenario=o.peekScenario as Settings['peekScenario'];
+  if(['mixed','operator','rifleA','rifleB','sheriff'].includes(String(o.defenderWeapon)))s.defenderWeapon=o.defenderWeapon as Settings['defenderWeapon'];
   if(o.adsMode==='hold'||o.adsMode==='toggle')s.adsMode=o.adsMode;
   if(['head','any','damage'].includes(String(o.eliminationRule)))s.eliminationRule=o.eliminationRule as Settings['eliminationRule'];
   s.bindings={...DEFAULT_SETTINGS.bindings};
   if(o.bindings&&typeof o.bindings==='object'){
     const b=o.bindings as Record<string,unknown>;const proposed={...s.bindings};
-    for(const k of Object.keys(proposed) as (keyof Settings['bindings'])[]){const v=b[k];if(typeof v==='string'&&/^(Key[A-Z]|Digit[04-9]|Space|ShiftLeft|ShiftRight|ControlLeft|ControlRight|AltLeft|AltRight|ArrowUp|ArrowDown|ArrowLeft|ArrowRight)$/.test(v))proposed[k]=v;}
+    for(const k of Object.keys(proposed) as (keyof Settings['bindings'])[]){const v=b[k];if(typeof v==='string'&&/^(Key[A-Z]|Digit[05-9]|Space|ShiftLeft|ShiftRight|ControlLeft|ControlRight|AltLeft|AltRight|ArrowUp|ArrowDown|ArrowLeft|ArrowRight)$/.test(v))proposed[k]=v;}
     if(new Set(Object.values(proposed)).size===Object.keys(proposed).length)s.bindings=proposed;
   }
+  // Resolve the optional sniper key after user movement/reload bindings. The
+  // fallback must also remain available when an older profile already uses V.
+  const used=new Set(Object.values(s.bindings));
+  const desired=typeof o.operatorZoomBinding==='string'&&/^Key[A-Z]$/.test(o.operatorZoomBinding)?o.operatorZoomBinding:'KeyV';
+  s.operatorZoomBinding=!used.has(desired)?desired:['KeyV','KeyN','KeyM',...Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ',c=>`Key${c}`)].find(key=>!used.has(key))!;
   if(o.gameplayRevision!==1&&o.stepStationaryDecay===1.4)s.stepStationaryDecay=3.5;
   s.targetCount=Math.round(s.targetCount);s.seed=Math.round(s.seed);s.duration=Math.round(s.duration);return s;
 }

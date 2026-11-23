@@ -1,3 +1,6 @@
+import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
+import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
+import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import {surfaceHeight} from '../collision/environment';
@@ -23,6 +26,7 @@ export class RangeRenderer {
   private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
   private size=new THREE.Vector3();private color=new THREE.Color();private position=new THREE.Vector3();
   private geometries=new Set<THREE.BufferGeometry>();private materials=new Set<THREE.Material>();private textures=new Set<THREE.Texture>();
+  private architecture:THREE.Group|null=null;private defenderWeapons=new Map<WeaponId,THREE.InstancedMesh>();private heldMatrix=new THREE.Matrix4();private heldPose=new THREE.Object3D();
   private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
   private tracers:THREE.Line[]=[];private tracerIndex=0;private weapon=new THREE.Group();private muzzle!:THREE.Mesh;
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
@@ -40,7 +44,7 @@ export class RangeRenderer {
     this.scene.add(new THREE.HemisphereLight(0xe2edf0,0x9a9184,1.85));
     const sun=this.sun=new THREE.DirectionalLight(0xffeedb,2.5);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
     const fill=new THREE.DirectionalLight(0xb8d8e5,.8);fill.position.set(4,5,-18);this.scene.add(fill);
-    this.buildEnvironment();this.buildTargets();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.batchStaticArchitecture();this.applySettings(settings);
+    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
   }
   get canvas(){return this.renderer.domElement;}
@@ -67,10 +71,10 @@ export class RangeRenderer {
     const light=new THREE.MeshBasicMaterial({color:0xcde7df});this.materials.add(light);
     for(let z=3;z>-29;z-=6){this.box(3,0.04,0.25,-6,4.85,z,light);this.box(3,0.04,0.25,6,4.85,z,light);}
   }
-  private addSign(text:string,x:number,y:number,z:number,width:number,floor=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
+  private addSign(text:string,x:number,y:number,z:number,width:number,floor=false,reverse=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
     ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(text,256,64);
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.textures.add(texture);
-    const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});this.materials.add(material);const g=new THREE.PlaneGeometry(width,width/4);this.geometries.add(g);const mesh=new THREE.Mesh(g,material);mesh.position.set(x,y,z);if(floor)mesh.rotation.x=-Math.PI/2;this.scene.add(mesh);
+    const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});this.materials.add(material);const g=new THREE.PlaneGeometry(width,width/4);this.geometries.add(g);const mesh=new THREE.Mesh(g,material);mesh.position.set(x,y,z);if(floor)mesh.rotation.x=-Math.PI/2;else if(reverse)mesh.rotation.y=Math.PI;this.scene.add(mesh);
   }
   private buildTargets(){
     // The same authoritative articulated nodes animate both collision and visual
@@ -81,6 +85,24 @@ export class RangeRenderer {
     for(let j=0;j<11;j++){const g=characterPartGeometry(j);this.geometries.add(g);const material=materials[j===0?0:j<3?1:j<7?2:3];const batch=new THREE.InstancedMesh(g,material,count);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;this.targetBatches.push(batch);this.scene.add(batch);}
     for(let i=0;i<count;i++){const target=this.simulation.targets[i],meshes:THREE.Mesh[]=[];for(let j=0;j<target.parts.length;j++){const batch=this.targetBatches[j],m=new THREE.Mesh(batch.geometry,batch.material);m.matrixAutoUpdate=false;m.userData.batch=batch;m.userData.slot=i;meshes.push(m);}this.targetMeshes.push(meshes);
       const g=new THREE.RingGeometry(.45,.46,32);this.geometries.add(g);const mat=new THREE.MeshBasicMaterial({color:0x9aa8a5,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false});this.materials.add(mat);const ring=new THREE.Mesh(g,mat);ring.rotation.x=-Math.PI/2;this.scene.add(ring);this.targetRings.push(ring);
+    }
+  }
+  private buildDefenderWeapons(){
+    if(!this.simulation.defenders)return;
+    const material=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.65,metalness:.42});this.materials.add(material);
+    for(const id of WEAPON_ORDER){const geometry=defenderWeaponGeometry(id);this.geometries.add(geometry);const batch=new THREE.InstancedMesh(geometry,material,this.simulation.targets.length);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;batch.name=`${id} defender equipment`;this.scene.add(batch);this.defenderWeapons.set(id,batch);}
+  }
+  private updateDefenderWeapons(alpha:number){
+    const ai=this.simulation.defenders;if(!ai)return;
+    for(const [id,batch] of this.defenderWeapons){
+      let equipped=0;
+      for(const t of this.simulation.targets){const memory=ai.memories[t.id];
+        if(!memory||memory.weapon!==id||!t.enabled||!t.active){this.heldMatrix.makeScale(0,0,0);batch.setMatrixAt(t.id,this.heldMatrix);continue;}
+        equipped++;
+        const pose=(memory as {pose?:number}).pose??.35;this.heldPose.position.set(.13,.9+.37*pose,.1+.35*pose);this.heldPose.rotation.set((1-pose)*.75,0,0);this.heldPose.scale.setScalar(1);this.heldPose.updateMatrix();
+        this.heldMatrix.multiplyMatrices(t.root.matrixWorld,this.heldPose.matrix);this.heldMatrix.elements[12]+=(t.previous.x-t.position.x)*(1-alpha);this.heldMatrix.elements[14]+=(t.previous.z-t.position.z)*(1-alpha);batch.setMatrixAt(t.id,this.heldMatrix);
+      }
+      batch.visible=equipped>0;batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';
     }
   }
   private buildWeapon(){
@@ -100,16 +122,28 @@ export class RangeRenderer {
     for(let y=0;y<n;y++)for(let x=0;x<n;x++){const i=(y*n+x)*4;const grain=((x*17+y*43+x*y*3)%13)-6;const line=kind==='rubber'&&(x%16===0||y%16===0)?-25:0;const c=220+grain+line;if(kind.endsWith('normal')){data[i]=128+grain;data[i+1]=128-grain;data[i+2]=255;}else data[i]=data[i+1]=data[i+2]=c;data[i+3]=255;}
     const t=new THREE.DataTexture(data,n,n);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(kind==='rubber'?12:5,kind==='rubber'?20:5);t.colorSpace=kind.endsWith('normal')?THREE.NoColorSpace:THREE.SRGBColorSpace;t.needsUpdate=true;t.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());this.textures.add(t);this.surfaceTextures.set(key,t);return t;
   }
+  private tacticalSurface(o:import('../collision/environment').Obstacle){
+    const b=o.box,x=(b.min.x+b.max.x)/2,z=(b.min.z+b.max.z)/2;
+    const theme=this.simulation.practiceMap==='complex'?PEEK_ZONES.find(q=>Math.abs(q.center.x-x)<12.1&&Math.sign(q.center.z)===Math.sign(z))?.theme:undefined;
+    const palette={facility:[0xa8b8b5,0x607c7c],research:[0xb8c7cc,0x607b8a],urban:[0xb5a38e,0x837b6e],courtyard:[0xc5b28e,0x8e967b]} as const;
+    if(theme)return this.archMaterial(`${theme}-${o.kind}`,palette[theme][o.kind==='cover'?1:0],.9);
+    return this.archMaterial(o.kind==='cover'?'tacticalCover':'tacticalPlaster',o.kind==='cover'?0x718e8b:(this.simulation.practiceMap==='garage'||this.simulation.practiceMap==='tower'?0xadb6b0:0xc6bfae),.9);
+  }
   private buildTactical(){
     const trim=this.material(0x52666c,.68),floor=this.material(0x89968e,.96),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.09,b[1]+b[3]/2,floor);
-    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.archMaterial(o.kind==='cover'?'tacticalCover':'tacticalPlaster',o.kind==='cover'?0x718e8b:(this.simulation.practiceMap==='garage'||this.simulation.practiceMap==='tower'?0xadb6b0:0xc6bfae),.9));if(o.ramp){const mesh=this.scene.children[this.scene.children.length-1] as THREE.Mesh,b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.box(this.size.x,.08,this.size.z,this.position.x,o.box.max.y-.08,this.position.z,trim);this.refineObstacle(o);}
+    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.tacticalSurface(o));if(o.ramp){const mesh=this.scene.children[this.scene.children.length-1] as THREE.Mesh,b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.box(this.size.x,.08,this.size.z,this.position.x,o.box.max.y-.08,this.position.z,trim);this.refineObstacle(o);}
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
-    if(this.simulation.level){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
+    if(this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
+    if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(0xa9bdc0,65,160);}
     this.sun.shadow.camera.left=-30;this.sun.shadow.camera.right=30;this.sun.shadow.camera.top=36;this.sun.shadow.camera.bottom=-30;this.sun.shadow.camera.updateProjectionMatrix();
+    const centerX=b[0]+b[2]/2,centerZ=b[1]+b[3]/2,span=Math.max(b[2],b[3])*.64;
+    this.sun.position.set(centerX-35,65,centerZ+38);this.sun.target.position.set(centerX,0,centerZ);
+    this.sun.shadow.camera.left=-span;this.sun.shadow.camera.right=span;this.sun.shadow.camera.top=span;this.sun.shadow.camera.bottom=-span;this.sun.shadow.camera.far=220;this.sun.shadow.camera.updateProjectionMatrix();
   }
   private buildPolish(){
     if(this.simulation.practiceMap==='range')this.buildRangePolish();this.buildArchitecturalLayers();
+    if(this.simulation.practiceMap!=='range'){this.architecture=tacticalArchitecture(this.simulation.practiceMap,this.simulation.obstacles,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},t=>{this.textures.add(t);return t;});this.scene.add(this.architecture);}
     this.buildContactShadows();
   }
   private buildRangePolish(){
@@ -163,7 +197,7 @@ export class RangeRenderer {
       this.addSign('VALOPRAC  /  TRAINING FACILITY',0,4.6,-29.8,8);
     }else{
       const level=this.simulation.level;
-      if(level){for(let i=0;i<level.angles.length;i++){
+      if(level&&this.simulation.practiceMap!=='complex'){for(let i=0;i<level.angles.length;i++){
         const x=level.route[i*3+2].x;
         // Threshold construction remains within the pre-existing doorway wall.
         this.box(3.1,.17,.65,x,5.63,0,frame);this.box(2.55,.07,.72,x,5.5,0,warm);
@@ -227,7 +261,12 @@ export class RangeRenderer {
   private updateFov(){const horizontal=this.settings.fov*DEG;this.camera.fov=2*Math.atan(Math.tan(horizontal/2)/this.camera.aspect)/DEG;this.camera.updateProjectionMatrix();}
   render(alpha:number,elapsed:number,preview:boolean,_ads:boolean){
     this.renderer.info.reset();const s=this.simulation,m=s.movement;
-    if(preview){if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);this.camera.lookAt(s.level.angles[1].position.x,1.5,-8);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
+    if(preview){if(s.practiceMap==='complex'){
+      const zone=zoneForScenario(this.settings.peekScenario)??PEEK_ZONES[0],sign=Math.sign(zone.center.z);
+      // Preview the selected real bay, including rear-facing zones. The old
+      // fixed camera pointed into a gallery wall for half of the complex.
+      this.camera.position.set(zone.entry.x+2,3.1,sign*10.4);this.camera.lookAt(zone.center.x+2,1.5+zone.vertical*.45,zone.center.z);
+    }else if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);this.camera.lookAt(s.level.angles[1].position.x,1.5,-8);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
     else{
       this.camera.position.lerpVectors(m.previous,m.position,alpha);this.camera.position.y+=m.previousEyeHeight+(m.eyeHeight-m.previousEyeHeight)*alpha;
       // Mouse rotation is applied directly at render cadence; no extra look smoothing.
@@ -237,10 +276,11 @@ export class RangeRenderer {
       this.gunSlide*=Math.exp(-(s.weaponId==='sheriff'?13:22)*elapsed);
       const w=s.weapon,reload=w.reloadingUntil===null?0:THREE.MathUtils.clamp((s.time-w.reloadStarted)/w.profile.reloadTime,0,1),reloadPose=Math.sin(reload*Math.PI),equip=THREE.MathUtils.clamp((w.equipUntil-s.time)/w.profile.equipTime,0,1);
       poseViewmodel(s.weaponId,this.adsBlend,this.gunSlide,equip,reloadPose,s.time,m.speed,swayX,swayY,this.weapon);
-      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=this.adsBlend>.1;v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
-      this.weapon.visible=true;this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
+      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=id==='operator'||this.adsBlend>.1;v.animateBolt?.(s.weapon.boltProgress);v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
+      this.weapon.visible=!(s.weaponId==='operator'&&s.weapon.scopeAmount>.75);this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
-    const zoom=preview?1:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=2*Math.atan(Math.tan(this.settings.fov*DEG/2)/zoom/this.camera.aspect)/DEG;if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
+    if(this.architecture)updateTacticalArchitecture(this.architecture,this.camera.position,this.settings.graphicsPreset);
+    const zoom=preview?1:s.weaponId==='operator'?s.scopeZoom:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=2*Math.atan(Math.tan(this.settings.fov*DEG/2)/zoom/this.camera.aspect)/DEG;if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
     for(let i=0;i<s.targets.length;i++){
       const t=s.targets[i],death=THREE.MathUtils.clamp((s.time-t.deadAt)/0.4,0,1),dx=(t.previous.x+(t.position.x-t.previous.x)*alpha)-t.position.x,dz=(t.previous.z+(t.position.z-t.previous.z)*alpha)-t.position.z;
       for(let j=0;j<t.parts.length;j++){
@@ -252,6 +292,7 @@ export class RangeRenderer {
       }
       this.targetRings[i].position.set(t.position.x+dx,t.previous.y+(t.position.y-t.previous.y)*alpha+.016,t.position.z+dz);this.targetRings[i].visible=t.active&&t.enabled;const contact=this.targetRings[i].userData.contactShadow as THREE.Mesh;contact.position.copy(this.targetRings[i].position);contact.visible=t.active&&t.enabled;contact.scale.setScalar(t.scale);
     }
+    this.updateDefenderWeapons(alpha);
     for(const batch of this.targetBatches){batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';}
     for(const tracer of this.tracers)if(tracer.visible&&s.time>tracer.userData.expire)tracer.visible=false;
     for(const shell of this.shells){if(!shell.mesh.visible)continue;if(s.time>=shell.until){shell.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;shell.velocity.y-=9.8*dt;shell.mesh.position.addScaledVector(shell.velocity,dt);shell.mesh.rotation.x+=dt*12;shell.mesh.rotation.z+=dt*8;}
@@ -260,5 +301,5 @@ export class RangeRenderer {
     if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
+  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
 }

@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -52,7 +52,17 @@
     "articulated-first-person-arms",
     "tapered-tactical-character-visuals",
     "architectural-map-detail",
-    "competitive-interface-tokens"
+    "competitive-interface-tokens",
+    "operator-bolt-action",
+    "dual-magnification-scope",
+    "connected-peeking-complex",
+    "eight-peeking-zones",
+    "weapon-aware-defenders",
+    "physical-body-exposure",
+    "observed-sniper-recovery",
+    "instant-encounter-retry",
+    "peeking-session-analysis",
+    "surface-footstep-audio"
   ],
   "unreal": {
     "engine": "5.7",
@@ -67,7 +77,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "05.00",
+  "patchLabel": "06.00",
   "aimScience": {
     "algorithm": "aim-1.0.0",
     "browserImplemented": true,
@@ -82,7 +92,15 @@
     "exposureDefaultSeconds": 2,
     "exactValorantParity": false,
     "gpuVisualQA": false,
-    "keyboardShortcutCaptureHardwareVerified": false
+    "keyboardShortcutCaptureHardwareVerified": false,
+    "complex": {
+      "zones": 8,
+      "sectors": 11,
+      "connected": true,
+      "manualPeeking": true,
+      "bodyVisibilitySampling": 9,
+      "randomSpawnEnvelopeMeters": 0.36
+    }
   },
   "hosting": {
     "runtime": "worker-esm",
@@ -98,5 +116,16 @@
     "browserPointerLockVerified": true,
     "browserFullscreenVerified": true,
     "hudLayoutsVerified": 8
+  },
+  "operator": {
+    "calibration": "operator-1.0.0",
+    "nativeParityVerified": false,
+    "browserImplemented": true,
+    "unrealPortImplemented": false,
+    "zoom": [
+      2.5,
+      5
+    ],
+    "boltMechanicsVerified": true
   }
 }

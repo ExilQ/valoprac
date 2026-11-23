@@ -7,4 +7,4 @@ it('executes a ten-minute engine-only workload without invalid state (not a WebG
   const start=performance.now();for(let i=0;i<72000;i++){input.strafe=Math.floor(i/90)%2?1:-1;s.step(1/120,input);}const elapsed=performance.now()-start;
   expect(s.time).toBe(600);expect(s.completed).toBe(true);expect(Number.isFinite(s.movement.position.x)).toBe(true);expect(s.stats.shots).toBeGreaterThan(3000);expect(s.shots.length).toBeLessThanOrEqual(2048);expect(s.shots.length).toBeLessThan(6600);
   console.info(JSON.stringify({benchmark:'engine-only',simulationSeconds:600,fixedTicks:72000,targets:s.targets.length,shots:s.shots.length,elapsedMilliseconds:Math.round(elapsed),ticksPerSecond:Math.round(72000/elapsed*1000),webglTested:false}));
-});
+},15000); // Reports CPU cost; this finite workload is not a 5-second performance gate.

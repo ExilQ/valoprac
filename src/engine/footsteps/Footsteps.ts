@@ -1,5 +1,7 @@
 import {FOOTSTEP_BASELINE,type FootstepProfile} from '../../config/footsteps';
-export interface FootstepEvent {id:number;timestamp:number;position:{x:number;y:number;z:number};radius:number;speed:number;}
+export type FootstepMaterial='concrete'|'steel'|'tile'|'wood';
+export const FOOTSTEP_MATERIALS:readonly FootstepMaterial[]=['concrete','steel','tile','wood'];
+export interface FootstepEvent {id:number;timestamp:number;position:{x:number;y:number;z:number};radius:number;speed:number;material?:FootstepMaterial;}
 export type FootstepState='stationary'|'walking'|'crouching'|'running'|'transition'|'slow'|'airborne';
 export interface FootstepMovement {previous:{x:number;y:number;z:number};position:{x:number;y:number;z:number};grounded:boolean;crouch:number;}
 const EPS=1e-9;

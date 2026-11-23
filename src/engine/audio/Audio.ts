@@ -1,5 +1,5 @@
 import {synthesizeFootstep} from './footstepSynthesis';
-import type {FootstepEvent} from '../footsteps/Footsteps';
+import {FOOTSTEP_MATERIALS,type FootstepEvent,type FootstepMaterial} from '../footsteps/Footsteps';
 import { AUDIO_PROFILES, AUDIO_ACTIONS, type AudioAction } from '../../config/audio';
 import { readAudioAssets } from '../../storage/audioAssets';
 import { WEAPON_ORDER } from '../../config/weapons';
@@ -10,14 +10,14 @@ interface Voice {source:AudioBufferSourceNode;gain:GainNode;channel:Channel}
 export class TrainingAudio {
   private context:AudioContext|null=null;private channels:Record<Channel,GainNode>|null=null;private master:GainNode|null=null;private compressor:DynamicsCompressorNode|null=null;
   private buffers=new Map<string,AudioBuffer>();private voices=new Set<Voice>();private loading:Promise<void>|null=null;private disposed=false;private lastShot='';private anchor=0;private weapon:WeaponId='rifleA';
-  private stepBuffers:AudioBuffer[]=[];private lastFootstep=0;footstepEvents=0;
+  private stepBuffers=new Map<FootstepMaterial,AudioBuffer[]>();private lastFootstep=0;footstepEvents=0;
   custom=new Set<string>();events=0;
   async unlock(){
     if(this.disposed)return;
     if(!this.context){const c=this.context=new AudioContext({latencyHint:'interactive'});this.master=c.createGain();this.compressor=c.createDynamicsCompressor();this.compressor.threshold.value=-6;this.compressor.ratio.value=5;this.master.connect(this.compressor).connect(c.destination);
       this.channels={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.channels))g.connect(this.master);
       for(const id of WEAPON_ORDER)for(const action of AUDIO_ACTIONS){const values=synthesize(id,action,c.sampleRate),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.buffers.set(`${id}:${action}`,b);}
-      for(let side=0;side<2;side++){const values=synthesizeFootstep(c.sampleRate,side),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.stepBuffers.push(b);}
+      for(const material of FOOTSTEP_MATERIALS){const pair:AudioBuffer[]=[];for(let side=0;side<2;side++){const values=synthesizeFootstep(c.sampleRate,side,material),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);pair.push(b);}this.stepBuffers.set(material,pair);}
       this.loading=this.preload(c);
     }
     await this.context.resume();await this.loading;
@@ -33,8 +33,9 @@ export class TrainingAudio {
   levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;this.channels.firing.gain.value=s.firingVolume;this.channels.handling.gain.value=s.handlingVolume;this.channels.feedback.gain.value=s.feedbackVolume;this.channels.footsteps.gain.value=s.footstepVolume;}
   selectWeapon(id:WeaponId){if(this.weapon!==id){this.stop();this.weapon=id;}}
   shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
-  footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;const b=this.stepBuffers[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65);}
-  action(id:WeaponId,action:'reload'|'equip'){this.play(id,action,'handling');}
+  footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;const b=this.stepBuffers.get(e.material??'concrete')?.[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65);}
+  enemyShot(id:WeaponId,distance:number){this.play(id,'fire','firing',undefined,Math.max(.08,Math.min(.65,9/Math.max(9,distance))));}
+  action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){this.play(id,action,'handling');}
   private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1){
     const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale);
   }
@@ -46,5 +47,5 @@ export class TrainingAudio {
   }
   get activeVoiceCount(){return this.voices.size;}
   stop(){for(const v of this.voices){v.source.onended=null;try{v.source.stop();}catch{/* Already ended. */}v.source.disconnect();v.gain.disconnect();}this.voices.clear();}
-  dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.length=0;this.custom.clear();}
+  dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.clear();this.custom.clear();}
 }

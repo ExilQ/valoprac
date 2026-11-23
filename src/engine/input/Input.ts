@@ -2,7 +2,7 @@ import { emptyInput, type WeaponId } from '../types';
 import type { Settings } from '../types';
 import {InputDiagnostics} from './InputDiagnostics';
 import {monotonicEventTime} from './sensitivity';
-export interface InputTarget {settings:Settings;running:boolean;look:(dx:number,dy:number)=>void;readonly viewYaw:number;readonly viewPitch:number;}
+export interface InputTarget {readonly weaponId?:WeaponId;settings:Settings;running:boolean;look:(dx:number,dy:number)=>void;readonly viewYaw:number;readonly viewPitch:number;}
 export interface InputObserver {sample:(kind:0|1,dx:number,dy:number,stamp:number,received:number,beforeYaw:number,beforePitch:number)=>void;}
 export class BrowserInput {
   state=emptyInput();private keys=new Set<string>();private destroyed=false;private fallbackAttempted=false;private lockAttempt=0;private lockPending=false;private legacyLock=false;private deferredLockError:ReturnType<typeof setTimeout>|null=null;
@@ -31,9 +31,10 @@ export class BrowserInput {
   reset(){this.rightDown=false;this.crouchToggle=false;this.keys.clear();Object.assign(this.state,emptyInput());}
   private keyDown=(event:KeyboardEvent)=>{
     if(!this.locked)return;const b=this.simulation.settings.bindings;
-    if(Object.values(b).includes(event.code)||['KeyC','ControlLeft','ControlRight','ShiftRight'].includes(event.code)||['Digit1','Digit2','Digit3'].includes(event.code))event.preventDefault();
+    if(Object.values(b).includes(event.code)||['KeyC','ControlLeft','ControlRight','ShiftRight'].includes(event.code)||['Digit1','Digit2','Digit3','Digit4'].includes(event.code))event.preventDefault();
     if(event.code===b.weapons&&!event.repeat){this.reset();document.exitPointerLock();this.onWeapons();return;}
-    if(!event.repeat&&['Digit1','Digit2','Digit3'].includes(event.code)){this.reset();this.onWeapon((['rifleA','rifleB','sheriff'] as const)[Number(event.code.slice(-1))-1]);return;}
+    if(!event.repeat&&['Digit1','Digit2','Digit3','Digit4'].includes(event.code)){this.reset();this.onWeapon((['rifleA','rifleB','sheriff','operator'] as const)[Number(event.code.slice(-1))-1]);return;}
+    if(this.simulation.weaponId==='operator'&&event.code===this.simulation.settings.operatorZoomBinding&&!event.repeat){event.preventDefault();this.state.zoomPresses=(this.state.zoomPresses??0)+1;}
     if(this.isCrouch(event.code)&&!event.repeat&&!this.keys.has(event.code)&&this.simulation.settings.crouchMode==='toggle')this.crouchToggle=!this.crouchToggle;this.keys.add(event.code);if(event.code===b.jump&&!event.repeat)this.state.jump=true;if(event.code===b.reload&&!event.repeat)this.state.reload=true;this.updateAxes();
   };
   private keyUp=(event:KeyboardEvent)=>{this.keys.delete(event.code);this.updateAxes();};
@@ -41,8 +42,8 @@ export class BrowserInput {
   private held(code:string){return this.keys.has(code)||code.endsWith('Left')&&this.keys.has(code.replace('Left','Right'))||code.endsWith('Right')&&this.keys.has(code.replace('Right','Left'));}
   private updateAxes(){const b=this.simulation.settings.bindings;this.state.forward=Number(this.keys.has(b.forward))-Number(this.keys.has(b.backward));this.state.strafe=Number(this.keys.has(b.right))-Number(this.keys.has(b.left));this.state.walk=this.held(b.walk);this.state.crouch=this.simulation.settings.crouchMode==='toggle'?this.crouchToggle:[...this.keys].some(k=>this.isCrouch(k));}
   private move=(event:MouseEvent)=>{if(this.locked&&this.simulation.running){const now=performance.now(),stamp=monotonicEventTime(event.timeStamp,now),y=this.simulation.viewYaw,p=this.simulation.viewPitch;this.simulation.look(event.movementX,event.movementY);this.observer?.sample(0,event.movementX,event.movementY,stamp,now,y,p);this.diagnostics.record(stamp,now,performance.now()-now,event.movementX,event.movementY);}};
-  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0){if(this.observer&&this.simulation.running){const now=performance.now();this.observer.sample(1,0,0,monotonicEventTime(event.timeStamp,now),now,this.simulation.viewYaw,this.simulation.viewPitch);}this.state.fire=true;this.state.firePresses=(this.state.firePresses??0)+1;}if(event.button===2&&!this.rightDown){this.rightDown=true;event.preventDefault();this.state.ads=this.simulation.settings.adsMode==='toggle'?!this.state.ads:true;}};
-  private mouseUp=(event:MouseEvent)=>{if(event.button===0)this.state.fire=false;if(event.button===2){this.rightDown=false;if(this.simulation.settings.adsMode==='hold')this.state.ads=false;}};
+  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0){if(this.observer&&this.simulation.running){const now=performance.now();this.observer.sample(1,0,0,monotonicEventTime(event.timeStamp,now),now,this.simulation.viewYaw,this.simulation.viewPitch);}this.state.fire=true;this.state.firePresses=(this.state.firePresses??0)+1;}if(event.button===2&&!this.rightDown){this.rightDown=true;event.preventDefault();if(this.simulation.weaponId==='operator'){this.state.scopeHeld=true;this.state.scopePresses=(this.state.scopePresses??0)+1;}else this.state.ads=this.simulation.settings.adsMode==='toggle'?!this.state.ads:true;}};
+  private mouseUp=(event:MouseEvent)=>{if(event.button===0)this.state.fire=false;if(event.button===2){this.rightDown=false;this.state.scopeHeld=false;if(this.simulation.settings.adsMode==='hold')this.state.ads=false;}};
   private lockChange=()=>{if(this.deferredLockError!==null){clearTimeout(this.deferredLockError);this.deferredLockError=null;}this.lockPending=false;this.reset();if(!this.locked)this.releaseKeyboard();else this.onError('');this.onLock(this.locked);};
   private lockError=()=>{if(this.destroyed||this.locked)return;const attempt=this.lockAttempt;
     // Promise-based attempts own their failures. A late error event has no request identity.

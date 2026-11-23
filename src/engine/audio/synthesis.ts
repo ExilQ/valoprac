@@ -3,6 +3,7 @@ import type { AudioAction } from '../../config/audio';
 import { SeededRandom } from '../simulation/random';
 // Independently synthesized signals. They are not sampled, copied, or matched Riot recordings.
 export function synthesize(weapon:WeaponId,action:AudioAction,sampleRate:number){
+  if(weapon==='operator'||action==='bolt'||action==='scope')return sniperSignal(weapon,action,sampleRate);
   const duration=action==='fire'?(weapon==='sheriff'?0.65:weapon==='rifleA'?0.42:0.3):action==='reload'?(weapon==='sheriff'?2.25:2.5):action==='equip'?0.3:0.5;
   const data=new Float32Array(Math.ceil(sampleRate*duration)),rng=new SeededRandom(weapon==='rifleA'?2303:weapon==='rifleB'?2606:101);
   const cues=weapon==='sheriff'?[0.12,0.55,1.25,1.9]:[0.15,0.65,1.5,2.1];
@@ -18,3 +19,5 @@ export function synthesize(weapon:WeaponId,action:AudioAction,sampleRate:number)
     data[i]=Math.tanh(v)*Math.min(1,t*2500)*Math.min(1,(duration-t)*100);
   }return data;
 }
+
+function sniperSignal(weapon:WeaponId,action:AudioAction,sampleRate:number){const duration=action==='fire'?1.35:action==='reload'?3.7:action==='bolt'?1.5:action==='scope'?.18:.65;const data=new Float32Array(Math.ceil(duration*sampleRate)),rng=new SeededRandom(9017+action.length);let low=0;for(let i=0;i<data.length;i++){const t=i/sampleRate,n=rng.range(-1,1);low+=.09*(n-low);let v=0;if(action==='fire'){v=(n-low)*Math.exp(-t*55)*.45+Math.sin(2*Math.PI*(65*t+6*(1-Math.exp(-t*18))))*Math.exp(-t*9)*.45+low*Math.exp(-t*5)*.5;for(const cue of [.095,.22,.37])if(t>cue)v+=low*Math.exp(-(t-cue)*11)*.12;}else{const cues=action==='reload'?[.12,.6,1.6,2.5,3.35]:action==='bolt'?[.22,.45,1.1,1.35]:[.025,.08];for(const cue of cues)if(t>=cue)v+=(n*.26+Math.sin(t*3700)*.12)*Math.exp(-(t-cue)*65);}data[i]=Math.tanh(v)*Math.min(1,t*2500)*Math.min(1,(duration-t)*100);}return data;}

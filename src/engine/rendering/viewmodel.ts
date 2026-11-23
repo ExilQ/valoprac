@@ -6,6 +6,13 @@ export function poseViewmodel(id:WeaponId,ads:number,kick:number,equip:number,re
  const b=id==='sheriff'?0:ads,lower=equip*equip*(3-2*equip);
  // Small pace-coupled motion, damped toward zero at the sight plane. Cosmetic only.
  const pace=time*(5+Math.min(speed,5)*1.25),bob=Math.sin(pace)*Math.min(.0035,speed*.0008)*(1-b);
+ if(id==='operator'){
+  // The long precision rifle is shouldered farther from the projection plane.
+  // Its stock stays outside the camera near field without scaling the mesh or
+  // changing the gameplay camera, zoom, trajectory or authored hand anatomy.
+  out.position.set(.215*(1-b)-swayX*.45*(1-b),-.23+.055*b-swayY*.45*(1-b)+bob-lower*.3,-.86-.08*b+kick*.028);
+  out.rotation.set(kick*.044-reload*.15+lower*.65,0,-reload*.35);return;
+ }
  out.position.set(.225*(1-b)-swayX*.55*(1-b),-.22+.06*b-swayY*.55*(1-b)+bob-lower*.3,-.65-.15*b+kick*(id==='sheriff'?.068:.023));
  out.rotation.set(kick*(id==='sheriff'?.29:.03)*(1-b*.7)-reload*.17+lower*.65,0,-reload*.44);
 }

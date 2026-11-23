@@ -4,7 +4,7 @@ export interface EngineTotals {
  shots:number;heads:number;bodies:number;limbs:number;eliminations:number;first:number;firstHits:number;firstHeads:number;early:number;brakes:number;
  elimination:MomentSnapshot;brake:MomentSnapshot;deceleration:MomentSnapshot;speed:MomentSnapshot;timing:MomentSnapshot;angular:MomentSnapshot;
  comparison:Record<'neutral'|'opposite',{duration:MomentSnapshot;timing:MomentSnapshot;heads:number}>;
- weapons:Record<WeaponId,WeaponTotals>;tracking:{samples:number;onHead:number;errorSquared:number};
+ weapons:Record<'rifleA'|'rifleB'|'sheriff',WeaponTotals>&{operator?:WeaponTotals};tracking:{samples:number;onHead:number;errorSquared:number};
 }
 export type EngineEvent={seq:number;type:'shot';data:ShotEvent}|{seq:number;type:'kill';data:KillEvent}|{seq:number;type:'reaction';data:DirectionResponse}|{seq:number;type:'brake';data:{shotSeq:number;brakingKind:ShotEvent['brakingKind'];brakingDuration:number|null;thresholdDelta:number|null;decelerationDuration:number|null}};
 export interface AnalyticsSnapshot {schema:1;epoch:number;startSequence:number;firstSequence:number;lastSequence:number;acknowledged:number;totals:EngineTotals;events:EngineEvent[];}
@@ -19,7 +19,7 @@ const pair=(o:unknown)=>object(o)&&numberKeys(o,['pitch','yaw']);
 const moment=(m:unknown)=>object(m)&&count(m.n)&&finite(m.sum)&&finite(m.squares)&&m.squares>=0&&(m.n!==0||m.sum===0&&m.squares===0);
 const kind=(v:unknown)=>v===null||v==='neutral'||v==='opposite';
 export function validShot(o:unknown):o is ShotEvent {
- if(!object(o)||!numberKeys(o,['timestamp','shotIndex','magazineShot'])||!['rifleA','rifleB','sheriff'].includes(String(o.weapon))||!['head','torso','arm','leg','wall','miss'].includes(String(o.hit)))return false;
+ if(!object(o)||!numberKeys(o,['timestamp','shotIndex','magazineShot'])||!['rifleA','rifleB','sheriff','operator'].includes(String(o.weapon))||!['head','torso','arm','leg','wall','miss'].includes(String(o.hit)))return false;
  if(o.damage!==undefined&&(!finite(o.damage)||o.damage<0)||o.ads!==undefined&&typeof o.ads!=='boolean'||o.horizontalDirection!==undefined&&o.horizontalDirection!==-1&&o.horizontalDirection!==1)return false;
  if(!count(o.shotIndex)||!count(o.magazineShot)||(o.timestamp as number)<0||typeof o.firstShot!=='boolean'||typeof o.accurate!=='boolean')return false;
  if(!vec(o.position)||!vec(o.velocity)||!vec(o.direction)||!vec(o.impact)||!pair(o.aim)||!pair(o.recoil)||!pair(o.playerCompensation)||!object(o.movementDirection)||!numberKeys(o.movementDirection,['x','z']))return false;
@@ -34,7 +34,7 @@ function validTotals(t:unknown):t is EngineTotals {
  if(!['elimination','brake','deceleration','speed','timing','angular'].every(k=>moment(t[k]))||!object(t.comparison)||!object(t.weapons)||!object(t.tracking))return false;
  for(const key of ['neutral','opposite']){const c=t.comparison[key];if(!object(c)||!moment(c.duration)||!moment(c.timing)||!count(c.heads))return false;}
  let totalShots=0,totalHits=0,totalHeads=0;
- for(const key of ['rifleA','rifleB','sheriff']){const w=t.weapons[key];if(!object(w)||!['shots','hits','heads'].every(k=>count(w[k]))||!numberKeys(w,['recoilSquared','spreadSum'])||(w.recoilSquared as number)<0||(w.spreadSum as number)<0||(w.heads as number)>(w.hits as number)||(w.hits as number)>(w.shots as number))return false;totalShots+=w.shots as number;totalHits+=w.hits as number;totalHeads+=w.heads as number;}
+ for(const key of ['rifleA','rifleB','sheriff',...(t.weapons.operator!==undefined?['operator']:[])]){const w=t.weapons[key];if(!object(w)||!['shots','hits','heads'].every(k=>count(w[k]))||!numberKeys(w,['recoilSquared','spreadSum'])||(w.recoilSquared as number)<0||(w.spreadSum as number)<0||(w.heads as number)>(w.hits as number)||(w.hits as number)>(w.shots as number))return false;totalShots+=w.shots as number;totalHits+=w.hits as number;totalHeads+=w.heads as number;}
  return totalShots===t.shots&&totalHeads===t.heads&&totalHits===(t.heads as number)+(t.bodies as number)+(t.limbs as number)&&count(t.tracking.samples)&&count(t.tracking.onHead)&&t.tracking.onHead<=t.tracking.samples&&finite(t.tracking.errorSquared)&&t.tracking.errorSquared>=0;
 }
 export function parseAnalytics(raw:unknown):AnalyticsSnapshot|null {
