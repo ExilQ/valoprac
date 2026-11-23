@@ -14,3 +14,5 @@ import './ui/premium.css';
 import './ui/operator.css';
 
 import './ui/precisionUtility.css';
+import './ui/patchNotes.css';
+import './ui/interfaceRefinement.css';

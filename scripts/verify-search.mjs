@@ -38,7 +38,7 @@ function verifyExcluded(directory){for(const entry of readdirSync(directory,{wit
 }}
 verifyExcluded(root);
 const home=readFileSync(root+'/index.html','utf8');
-for(const term of ['발로란트 에임 연습 사이트','Valorant aim trainer','바로 훈련 시작'])assert(home.includes(term),'Homepage HTML must contain '+term);
+for(const term of ['발로란트 에임 연습 사이트','Valorant aim trainer','바로 훈련 시작','발로란트 대기샷 연습'])assert(home.includes(term),'Homepage HTML must contain '+term);
 const landing=readFileSync(root+'/valorant-aim-trainer.html','utf8');
 for(const term of ['Valorant aim training','10분 에임 연습 루틴','톡브레이킹','무료','Riot Games'])assert(landing.includes(term),'Training introduction must explain '+term);
 for(const match of landing.matchAll(/href="(\/[^"?#]*)/g))assert(match[1]==='/'||match[1]==='/training'||match[1]==='/aim.html'||existsSync(root+match[1]),'Broken introduction link '+match[1]);

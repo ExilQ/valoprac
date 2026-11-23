@@ -27,7 +27,10 @@ export function GameStage({preview=false}:{preview?:boolean}){
   useEffect(()=>{
     if(!host.current)return;
     let r:Runtime;
-    try{r=new Runtime(host.current,mode,weapon,settings,preview,setTelemetry,locked=>useApp.setState({locked,paused:!locked}),setError,data=>{void finish(data,!preview&&!!options.exercise);},id=>useApp.getState().setWeapon(id),undefined,preview?{}:options);runtime.current=r;useApp.getState().reportGraphics(r.renderer.capabilities);}
+    try{r=new Runtime(host.current,mode,weapon,settings,preview,setTelemetry,locked=>{
+      useApp.setState({locked,paused:!locked});
+      if(locked&&!preview)window.dispatchEvent(new Event('valoprac:training-started'));
+    },setError,data=>{void finish(data,!preview&&!!options.exercise);},id=>useApp.getState().setWeapon(id),undefined,preview?{}:options);runtime.current=r;useApp.getState().reportGraphics(r.renderer.capabilities);}
     catch(error){console.error(error);setError('입체 그래픽을 시작하지 못했습니다. 하드웨어 가속과 그래픽 지원을 확인하세요.');return;}
     return ()=>{runtime.current=null;r.dispose();};
   },[mode,preview,finish,preview?settings.practiceMap:null,preview?null:options]);
@@ -41,7 +44,7 @@ export function GameStage({preview=false}:{preview?:boolean}){
   const resume=(capture=false)=>{setInspectHud(false);if(!runtime.current){setError('입체 그래픽이 준비되지 않았습니다. 하드웨어 가속을 확인한 뒤 새로고침하세요.');return;}setError('');void runtime.current.resume(capture);};
   return <div className={`game-stage ${preview?'range-preview':''} ${inspectHud?'hud-inspection':''}`} style={{'--hud-scale':settings.hudScale} as CSSProperties}>
     <div ref={host} className="webgl-host"/>
-    {preview?<><div className="range-shade"/><div className="range-caption"><span className="status-dot"/> 실시간 입체 훈련장 <span>머리만 유효</span></div><div className="range-target-label"><CrosshairIcon size={14}/> 정밀 판정 · 고정 시간 간격</div>{error&&<p className="preview-error">{error}</p>}</>:<>
+    {preview?<><div className="range-shade"/><div className="range-caption"><span className="status-dot"/> 3D 훈련장 미리보기</div><div className="range-target-label"><CrosshairIcon size={14}/> 정밀 판정 · 고정 시간 간격</div>{error&&<p className="preview-error">{error}</p>}</>:<>
 
       <PatchNotes/><ExerciseHUD report={telemetry.exercise}/>
       <GameHUD runtime={runtime.current} settings={settings} telemetry={telemetry} mode={mode} weapon={weapon}/>

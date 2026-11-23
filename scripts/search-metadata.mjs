@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 
 export const origin='https://valoprac.trade';
-export const home={path:'/',title:'발로란트 에임 연습 사이트 | VALOPRAC · Valorant Aim Trainer',description:'설치 없이 시작하는 무료 발로란트 에임 연습 사이트 VALOPRAC. 헤드샷·플릭·추적·톡브레이킹·피킹과 감도 비교를 브라우저에서 연습하세요.'};
+export const home={path:'/',title:'발로란트 에임 연습 사이트 | VALOPRAC · Valorant Aim Trainer',description:'설치 없이 시작하는 무료 발로란트 에임 연습 사이트 VALOPRAC. 헤드샷·대기샷·각체크·피킹과 톡브레이킹을 브라우저에서 연습하세요.'};
 export const aim={path:'/aim.html',title:'발로란트 감도 찾기·에임 분석 | VALOPRAC',description:'VALOPRAC 감도 연구실에서 DPI, eDPI, cm/360을 확인하고 플릭·추적·클릭 타이밍 과제로 후보 감도를 같은 조건에서 비교하세요.'};
 export const guides=[
  {path:'/valorant-aim-trainer.html',title:'발로란트 에임 연습 사이트 | 무료 Valorant Aim Trainer — VALOPRAC',description:'설치 없이 시작하는 발로란트 에임 연습 사이트 VALOPRAC. 무료 Valorant aim trainer에서 헤드샷, 플릭, 추적, 톡브레이킹·피킹과 감도 비교를 연습하세요.'},
@@ -21,7 +21,7 @@ export function withIndexingPolicy(html,indexable=false){
 export const escapeHTML=value=>value.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 export function introduction(){
  const content=JSON.parse(readFileSync('src/content/search.json','utf8'));
- return `<main data-search-intro class="site-intro"><h1>${escapeHTML(content.heading)}</h1><p>${escapeHTML(content.description)}</p><p>${escapeHTML(content.detail)}</p><nav aria-label="훈련 안내"><a href="/training">바로 훈련 시작</a>${content.links.map(link=>`<a href="${link.href}">${escapeHTML(link.label)}</a>`).join('')}</nav><noscript><p>실제 사격 훈련에는 자바스크립트가 필요합니다. 훈련 안내는 위 링크에서 계속 읽을 수 있습니다.</p></noscript></main>`;
+ return `<main data-search-intro class="site-intro"><h1>${escapeHTML(content.heading)}</h1><p>${escapeHTML(content.description)}</p><p>${escapeHTML(content.detail)}</p><h2>${escapeHTML(content.holdAngle.heading)}</h2><p>${escapeHTML(content.holdAngle.description)}</p><nav aria-label="훈련 안내"><a href="/training">바로 훈련 시작</a>${content.links.map(link=>`<a href="${link.href}">${escapeHTML(link.label)}</a>`).join('')}</nav><noscript><p>실제 사격 훈련에는 자바스크립트가 필요합니다. 훈련 안내는 위 링크에서 계속 읽을 수 있습니다.</p></noscript></main>`;
 }
 export function decorate(html,page){
  const canonical=origin+page.path;

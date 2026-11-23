@@ -1,6 +1,7 @@
 import {localeTag} from '../../i18n/locale';
-import {lazy,Suspense,useEffect,useMemo,useState} from 'react';
+import {lazy,Suspense,useEffect,useMemo,useRef,useState,type KeyboardEvent} from 'react';
 import {useApp} from '../../app/store';
+import {LOCATION_CHANGED,navigate} from '../../app/navigation';
 import {AIM_VERSION,TASKS,type AimPlan,type AimRecord,type AimSetup,type AimPhase,type AimTask} from '../types';
 import {loadAimRecords,loadAimPlans,saveAimPlan,clearAimData,exportAimData,AIM_RECORD_LIMIT,AIM_TRACE_LIMIT,AIM_PLAN_LIMIT} from '../storage';
 import {makePlan} from '../experiments';
@@ -16,9 +17,58 @@ const TacticalAssessment=lazy(()=>import('../precision/TacticalAssessment').then
 import './aim.css';
 const TABS={overview:'측정 개요',explore:'감도 탐색',analysis:'플릭·트래킹 분석',coach:'개인 맞춤 훈련',verify:'감도 비교 실험',history:'장기 성장 기록'};
 type Tab=keyof typeof TABS;
+const TAB_KEYS=Object.keys(TABS) as Tab[];
+
+function tabFromLocation():Tab {
+ const section=typeof window==='undefined'?'':window.location.hash.slice(1);
+ return Object.hasOwn(TABS,section)?section as Tab:'overview';
+}
+
+function revealTab(button:HTMLButtonElement|null) {
+ const strip=button?.parentElement;
+ if(!button||!strip)return;
+ const tab=button.getBoundingClientRect(),viewport=strip.getBoundingClientRect();
+ if(tab.left<viewport.left)strip.scrollLeft+=tab.left-viewport.left;
+ if(tab.right>viewport.right)strip.scrollLeft+=tab.right-viewport.right;
+}
 function difficultyPreference(){try{const p=JSON.parse(localStorage.getItem('valoprac-aim-difficulty-v1')??'{}');return {level:Number.isFinite(p.level)?Math.max(.6,Math.min(1.8,p.level)):1,at:Number.isFinite(p.at)?p.at:0};}catch{return {level:1,at:0};}}
 export function loadAimSetup(base:number,dpi:number):AimSetup{const fallback:AimSetup={base,alternative:Math.min(5,base*1.1),dpi,range:.2,rounds:2,goal:'tactical',schedule:'mixed',mousepad:0,comfortAngle:180};try{const raw=JSON.parse(localStorage.getItem('valoprac-aim-preferences-v1')??'{}');for(const [k,min,max] of [['base',.01,5],['alternative',.01,5],['dpi',100,32000],['range',.05,.5],['rounds',2,6],['mousepad',0,150],['comfortAngle',1,360]] as const)if(typeof raw[k]==='number'&&Number.isFinite(raw[k]))fallback[k]=Math.min(max,Math.max(min,raw[k]));if(['balanced','precision','tracking','tactical'].includes(raw.goal))fallback.goal=raw.goal;if(['blocked','mixed'].includes(raw.schedule))fallback.schedule=raw.schedule;}catch{}fallback.rounds=Math.round(fallback.rounds);return fallback;}
-export function AimDashboard(){const settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),[tab,setTab]=useState<Tab>(()=>{const section=typeof window==='undefined'?'':window.location.hash.slice(1);return section in TABS?section as Tab:'overview';}),[setup,setSetup]=useState(()=>loadAimSetup(settings.sensitivity,settings.dpi)),[records,setRecords]=useState<AimRecord[]>([]),[plans,setPlans]=useState<AimPlan[]>([]),[plan,setPlan]=useState<AimPlan|null>(null),[tactical,setTactical]=useState(false),[notice,setNotice]=useState(''),[deleting,setDeleting]=useState(false),[loading,setLoading]=useState(true),[level,setLevel]=useState(()=>difficultyPreference().level),[adaptAt,setAdaptAt]=useState(()=>difficultyPreference().at);
+export function AimDashboard(){const settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),[tab,setTab]=useState<Tab>(tabFromLocation),[setup,setSetup]=useState(()=>loadAimSetup(settings.sensitivity,settings.dpi)),[records,setRecords]=useState<AimRecord[]>([]),[plans,setPlans]=useState<AimPlan[]>([]),[plan,setPlan]=useState<AimPlan|null>(null),[tactical,setTactical]=useState(false),[notice,setNotice]=useState(''),[deleting,setDeleting]=useState(false),[loading,setLoading]=useState(true),[level,setLevel]=useState(()=>difficultyPreference().level),[adaptAt,setAdaptAt]=useState(()=>difficultyPreference().at);
+ const tabStrip=useRef<HTMLDivElement>(null);
+ const [focusedTab,setFocusedTab]=useState<Tab|null>(null);
+ useEffect(()=>{
+  const syncTab=()=>setTab(tabFromLocation());
+  window.addEventListener('popstate',syncTab);
+  window.addEventListener('hashchange',syncTab);
+  window.addEventListener(LOCATION_CHANGED,syncTab);
+  return ()=>{
+   window.removeEventListener('popstate',syncTab);
+   window.removeEventListener('hashchange',syncTab);
+   window.removeEventListener(LOCATION_CHANGED,syncTab);
+  };
+ },[]);
+ useEffect(()=>revealTab(tabStrip.current?.querySelector('[aria-selected="true"]')??null),[tab]);
+
+ const selectTab=(next:Tab)=>{
+  setTab(next);
+  const {pathname,search}=window.location;
+  navigate(pathname+search+(next==='overview'?'':'#'+next),true);
+ };
+ const moveTabFocus=(event:KeyboardEvent<HTMLButtonElement>,current:Tab)=>{
+  const {key}=event;
+  const index=TAB_KEYS.indexOf(current);
+  let next:Tab;
+  if(key==='Home')next=TAB_KEYS[0];
+  else if(key==='End')next=TAB_KEYS[TAB_KEYS.length-1];
+  else if(key==='ArrowLeft'||key==='ArrowRight'){
+   const step=key==='ArrowRight'?1:-1;
+   next=TAB_KEYS[(index+step+TAB_KEYS.length)%TAB_KEYS.length];
+  }else return;
+  event.preventDefault();
+  const button=tabStrip.current?.querySelector<HTMLButtonElement>('#aim-tab-'+next)??null;
+  button?.focus({preventScroll:true});
+  revealTab(button);
+ };
  useEffect(()=>{let alive=true;void Promise.all([loadAimRecords(),loadAimPlans()]).then(([r,p])=>{if(alive){setRecords(r);setPlans(p);}}).catch(()=>{if(alive)setNotice('로컬 분석 기록을 읽지 못했습니다. 저장소 권한과 공간을 확인하세요.');}).finally(()=>{if(alive)setLoading(false);});return()=>{alive=false;};},[]);
  useEffect(()=>{try{localStorage.setItem('valoprac-aim-preferences-v1',JSON.stringify(setup));}catch{setNotice('실험 환경 설정을 저장하지 못했습니다.');}},[setup]);
  useEffect(()=>{try{localStorage.setItem('valoprac-aim-difficulty-v1',JSON.stringify({level,at:adaptAt}));}catch{}},[level,adaptAt]);
@@ -30,8 +80,13 @@ export function AimDashboard(){const settings=useApp(s=>s.settings),update=useAp
  const exportData=async()=>{try{const data=await exportAimData(),url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`VALOPRAC-aim-${new Date(Date.now()+9*3600000).toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch{setNotice('기록을 내보내지 못했습니다.');}};
  if(tactical)return <Suspense fallback={<p role="status">실전 평가 화면을 준비합니다…</p>}><TacticalAssessment settings={settings} base={setup.base} alternative={setup.alternative} onRecord={record} onClose={()=>{setTactical(false);void loadAimRecords().then(setRecords).catch(()=>{});}} seed={settings.seed}/></Suspense>;
  if(plan)return <AimSession plan={plan} onRecord={record} onClose={()=>{setPlan(null);void loadAimRecords().then(setRecords).catch(()=>{});}}/>;
- return <div className="aim-dashboard"><header className="view-title"><p className="eyebrow">측정 · 탐색 · 연습 · 검증</p><h1>정밀 감도 연구실</h1><p>현재 입력을 측정하고, 후보를 비교하고, 새 표적으로 검증합니다. 추천을 승인할 때까지 일반 훈련 감도는 유지됩니다.</p></header><div className="aim-nav" role="tablist" aria-label="에임 분석 분류">{Object.entries(TABS).map(([id,label])=><button key={id} role="tab" id={`aim-tab-${id}`} aria-controls="aim-content" tabIndex={tab===id?0:-1} aria-selected={tab===id} onClick={()=>setTab(id as Tab)} onKeyDown={e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();const keys=Object.keys(TABS) as Tab[],next=keys[(keys.indexOf(tab)+(e.key==='ArrowRight'?1:keys.length-1))%keys.length];setTab(next);requestAnimationFrame(()=>document.getElementById(`aim-tab-${next}`)?.focus());}}}>{label}</button>)}</div>{notice&&<p role="status" className="inline-notice">{notice}</p>}<div role="tabpanel" id="aim-content" aria-labelledby={`aim-tab-${tab}`}>{loading?<p role="status">이 브라우저의 측정 기록을 불러옵니다…</p>:<>
- {tab==='overview'&&<><div className="aim-grid aim-overview-grid"><section className="settings-card aim-intro"><small>기준 측정</small><h2>현재 감도를 먼저 측정하세요</h2><dl className="aim-current-settings" aria-label="현재 입력 설정"><div><dt>일반 훈련 감도</dt><dd>{settings.sensitivity.toFixed(3)}</dd></div><div><dt>사용자 입력 DPI</dt><dd>{settings.dpi.toLocaleString(localeTag())}</dd></div></dl><p>시작 반응, 초기 착지, 미세 보정, 클릭 대기, 트래킹 복귀를 따로 측정합니다. 반복 없이 최적 감도나 향상률을 만들어내지 않습니다.</p><div className="practice-buttons"><button className="primary-button" onClick={()=>start('baseline')}>첫 기준 평가 시작</button><button className="secondary-button" onClick={()=>setTab('explore')}>감도 탐색 설정</button></div><p className="field-note">데스크톱 마우스와 포인터 잠금이 필요합니다. 중립 화면은 각도 기반 평면 투영이며 기존 3D 훈련장을 교체하지 않습니다.</p></section><section className="settings-card"><h3>이 브라우저의 실제 기록</h3><div className="aim-metrics"><div><small>저장 시도</small><b>{records.length}회</b></div><div><small>유효 중립 시도</small><b>{compatible.filter(r=>r.metrics.valid).length}회</b></div><div><small>무기 참고 표본</small><b>{records.filter(r=>r.meta.phase==='combat').length}회</b></div><div><small>실험·훈련 계획</small><b>{plans.length}개</b></div></div><p className="field-note">보관: 요약 최대 {AIM_RECORD_LIMIT.toLocaleString(localeTag())}회, 최근 {AIM_TRACE_LIMIT}회 궤적, 계획 {AIM_PLAN_LIMIT}개. 표본이 없으면 실제 플레이어 효과를 판단할 수 없습니다.</p><label className="practice-toggle"><span>기존 무기 훈련의 조준 표본 기록</span><input type="checkbox" checked={settings.aimTelemetry} onChange={e=>update({aimTelemetry:e.target.checked})}/></label><p className="field-note">최대 초당 2회·세션 50개 궤적을 로컬에서만 분석합니다. 의도 표적을 추정한 게임 기록은 감도 최적화에 사용하지 않습니다.</p><a href="/aim-methodology.html" target="_blank" rel="noreferrer">측정 방법·연구 출처·검증 한계</a></section></div><section className="settings-card"><h3>확인된 것과 아직 모르는 것</h3><p>연구는 조준 동작의 분해와 통제된 실험 설계를 참고하는 근거입니다. 새 시스템의 실제 플레이어 진단 정확도, 최적 감도, 훈련 효과는 사용자 반복 실험으로 추가 검증해야 합니다.</p><p>방향별 감도·자동 조준·입력 유도·마우스 펌웨어 변경은 없습니다. 원시 입력 요청은 플랫폼 지원에 따르며 브라우저 델타를 물리 센서 카운트로 간주하지 않습니다.</p></section></>}
+ return <div className="aim-dashboard"><header className="view-title"><p className="eyebrow">측정 · 탐색 · 연습 · 검증</p><h1>정밀 감도 연구실</h1><p>현재 입력을 측정하고, 후보를 비교하고, 새 표적으로 검증합니다. 추천을 승인할 때까지 일반 훈련 감도는 유지됩니다.</p></header><div ref={tabStrip} className="aim-nav" role="tablist" aria-label="에임 분석 분류"
+  onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget))setFocusedTab(null);}}>
+ {TAB_KEYS.map(id=><button key={id} type="button" role="tab" id={`aim-tab-${id}`}
+  tabIndex={(focusedTab??tab)===id?0:-1} aria-selected={tab===id} onFocus={()=>setFocusedTab(id)}
+  onClick={()=>selectTab(id)} onKeyDown={event=>moveTabFocus(event,id)}>{TABS[id]}</button>)}
+ </div>{notice&&<p role="status" className="inline-notice">{notice}</p>}<div role="tabpanel" id="aim-content" tabIndex={0} aria-labelledby={`aim-tab-${tab}`}>{loading?<p role="status">이 브라우저의 측정 기록을 불러옵니다…</p>:<>
+ {tab==='overview'&&<><div className="aim-grid aim-overview-grid"><section className="settings-card aim-intro"><small>기준 측정</small><h2>현재 감도를 먼저 측정하세요</h2><dl className="aim-current-settings" aria-label="현재 입력 설정"><div><dt>일반 훈련 감도</dt><dd>{settings.sensitivity.toFixed(3)}</dd></div><div><dt>사용자 입력 DPI</dt><dd>{settings.dpi.toLocaleString(localeTag())}</dd></div></dl><p>시작 반응, 초기 착지, 미세 보정, 클릭 대기, 트래킹 복귀를 따로 측정합니다. 반복 없이 최적 감도나 향상률을 만들어내지 않습니다.</p><div className="practice-buttons"><button className="primary-button" onClick={()=>start('baseline')}>첫 기준 평가 시작</button><button className="secondary-button" onClick={()=>{selectTab('explore');tabStrip.current?.querySelector<HTMLButtonElement>('#aim-tab-explore')?.focus();}}>감도 탐색 설정</button></div><p className="field-note">데스크톱 마우스와 포인터 잠금이 필요합니다. 중립 화면은 각도 기반 평면 투영이며 기존 3D 훈련장을 교체하지 않습니다.</p></section><section className="settings-card"><h3>이 브라우저의 실제 기록</h3><div className="aim-metrics"><div><small>저장 시도</small><b>{records.length}회</b></div><div><small>유효 중립 시도</small><b>{compatible.filter(r=>r.metrics.valid).length}회</b></div><div><small>무기 참고 표본</small><b>{records.filter(r=>r.meta.phase==='combat').length}회</b></div><div><small>실험·훈련 계획</small><b>{plans.length}개</b></div></div><p className="field-note">보관: 요약 최대 {AIM_RECORD_LIMIT.toLocaleString(localeTag())}회, 최근 {AIM_TRACE_LIMIT}회 궤적, 계획 {AIM_PLAN_LIMIT}개. 표본이 없으면 실제 플레이어 효과를 판단할 수 없습니다.</p><label className="practice-toggle"><span>기존 무기 훈련의 조준 표본 기록</span><input type="checkbox" checked={settings.aimTelemetry} onChange={e=>update({aimTelemetry:e.target.checked})}/></label><p className="field-note">최대 초당 2회·세션 50개 궤적을 로컬에서만 분석합니다. 의도 표적을 추정한 게임 기록은 감도 최적화에 사용하지 않습니다.</p><a href="/aim-methodology.html" target="_blank" rel="noreferrer">측정 방법·연구 출처·검증 한계</a></section></div><section className="settings-card"><h3>확인된 것과 아직 모르는 것</h3><p>연구는 조준 동작의 분해와 통제된 실험 설계를 참고하는 근거입니다. 새 시스템의 실제 플레이어 진단 정확도, 최적 감도, 훈련 효과는 사용자 반복 실험으로 추가 검증해야 합니다.</p><p>방향별 감도·자동 조준·입력 유도·마우스 펌웨어 변경은 없습니다. 원시 입력 요청은 플랫폼 지원에 따르며 브라우저 델타를 물리 센서 카운트로 간주하지 않습니다.</p></section></>}
  {tab==='explore'&&<AimExplorer setup={setup} setSetup={setSetup} records={records} start={start} plans={plans} onPlan={launchPlan} onTactical={()=>setTactical(true)}/>}
  {tab==='analysis'&&<AimDiagnostics records={records}/>}
  {tab==='coach'&&<AimCoach records={[...compatible.filter(r=>Math.abs(r.meta.sensitivity-settings.sensitivity)<1e-6),...records.filter(r=>r.meta.phase==='combat')]} setup={setup} setSetup={setSetup} start={start} level={level}/>}

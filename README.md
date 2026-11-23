@@ -121,3 +121,7 @@ manual choices, and shader/GPU preparation finishes before training starts.
 See [measured corrections](docs/0910/AIR_ZOOM_CORRECTIONS.md),
 [rendering evidence](docs/0910/PERFORMANCE.md), [audio](docs/0910/AUDIO.md)
 and [native verification still open](docs/0910/NATIVE_VERIFICATION.md).
+
+## Security admission patch
+
+Normal browser training, settings, history and imported audio remain accountless and local to the browser. Optional anonymous site usage metrics now require a short-lived server-issued grant and enforce durable per-network/session and global write budgets. No runtime secret is shipped to the browser. The optional GPU runtime requires native Sites sign-in, explicit tester approval and periodic reauthorization; it remains disabled by default. See [admission configuration, limits and validation](docs/SECURITY_ADMISSION.md) and [GPU bring-up](docs/migration/DEPLOYMENT.md).

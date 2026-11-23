@@ -40,6 +40,14 @@ describe('Independent Precision Utility presentation themes',()=>{
   let changes=0;const unsubscribe=subscribeTheme(()=>changes++);initializeTheme();expect(getThemeState()).toBe(before);e.media.change(true);expect(changes).toBe(0);
   setThemePreference('light');expect(changes).toBe(1);expect(e.storage.values.get(THEME_STORAGE_KEY)).toBe('light');unsubscribe();setThemePreference('dark');expect(changes).toBe(1);
  });
+ it('matches the browser toolbar to the chosen theme without changing gameplay preferences',()=>{
+  const e=environment(),values=new Map<string,string>();
+  Object.assign(document,{querySelector:()=>({setAttribute:(key:string,value:string)=>values.set(key,value)})});
+  initializeTheme();expect(values.get('content')).toBe('#ffffff');
+  setThemePreference('dark');expect(values.get('content')).toBe('#202a2d');
+  setThemePreference('light');expect(values.get('content')).toBe('#ffffff');
+  expect(e.storage.writes.every(write=>write.key===THEME_STORAGE_KEY)).toBe(true);
+ });
  it('follows live system changes only in system mode and keeps explicit dark independent',()=>{
   const e=environment({preference:'system'});initializeTheme();let changes=0;const unsubscribe=subscribeTheme(()=>changes++);
   e.media.change(true);expect(getThemeState().resolved).toBe('dark');expect(e.attrs.get('data-theme-preference')).toBe('system');expect(changes).toBe(1);

@@ -1,4 +1,4 @@
-import { mkdirSync,readFileSync,writeFileSync,readdirSync } from 'node:fs';
+import { existsSync,mkdirSync,readFileSync,writeFileSync,readdirSync } from 'node:fs';
 import {join} from 'node:path';
 import {decorate,home,aim,guides,introduction,withIndexingPolicy} from './search-metadata.mjs';
 let html=readFileSync('dist-client/index.html','utf8');
@@ -32,3 +32,21 @@ function excludeDocuments(directory){for(const entry of readdirSync(directory,{w
  else if(entry.name.endsWith('.html')&&file!=='dist-client/index.html')writeFileSync(file,withIndexingPolicy(readFileSync(file,'utf8'),false));
 }}
 excludeDocuments('dist-client');
+
+const telemetryPaths = ['index.html','training.html','maps.html','weapons.html','aim.html','statistics.html',
+ 'settings.html','tools.html','results.html','unreal.html','guide.html','valorant-aim-trainer.html',
+ 'aim-methodology.html','footsteps.html','tactical-guide.html'];
+const beaconToken = process.env.VALOPRAC_CF_WEB_ANALYTICS_TOKEN?.trim();
+if (beaconToken && !/^[a-f0-9]{32}$/.test(beaconToken)) throw new Error('Invalid public Cloudflare Web Analytics site token');
+const beacon = beaconToken
+ ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${beaconToken}"}'></script>`
+ : '';
+for (const route of telemetryPaths) {
+ const variants = route==='index.html' ? [route] : [route,route.replace('.html','/index.html')];
+ for (const variant of variants) {
+  const file = 'dist-client/'+variant;
+  if (!existsSync(file)) continue;
+  const document = readFileSync(file,'utf8');
+  writeFileSync(file,document.replace('</body>',`<script defer src="/usage.js?v=admission-1"></script>${beacon}</body>`));
+ }
+}

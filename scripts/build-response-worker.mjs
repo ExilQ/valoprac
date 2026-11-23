@@ -2,18 +2,35 @@ import {readFileSync,writeFileSync,mkdirSync,readdirSync,rmSync} from 'node:fs';
 import {resolve,relative,join,extname} from 'node:path';
 import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
+import {build as bundleWorker} from 'vite';
+import {cpSync} from 'node:fs';
 const source=resolve('dist-client'),output=resolve('dist'),assets={};
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.zip':'application/zip','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 function collect(dir){for(const d of readdirSync(dir,{withFileTypes:true})){if(d.name.startsWith('.')||['_headers','_redirects'].includes(d.name))continue;const path=join(dir,d.name);if(d.isDirectory()){collect(path);continue;}const key='/'+relative(source,path).replaceAll('\\','/'),bytes=readFileSync(path),type=mime[extname(path)]??'application/octet-stream',text=/^(text\/|application\/(javascript|json|xml))/.test(type)||type==='image/svg+xml',entry={type,etag:'"'+createHash('sha256').update(bytes).digest('hex')+'"',immutable:key.startsWith('/assets/')};if(text){entry.text=bytes.toString('utf8');if(type.startsWith('text/html'))entry.scripts=[...entry.text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(m=>!(/\bsrc\s*=/.test(m[1]))&&m[2].trim()).map(m=>createHash('sha256').update(m[2]).digest('base64'));}else entry.base64=bytes.toString('base64');assets[key]=entry;}}
 collect(source);
 const rules=[];for(const line of readFileSync('public/_headers','utf8').split(/\r?\n/)){if(!line.trim()||line.trim().startsWith('#'))continue;if(line.startsWith('/'))rules.push({path:line.trim(),headers:{}});else{const m=line.trim().match(/^([^:]+):\s*(.*)$/);if(!m||!rules.length)throw Error('Invalid response header rule');rules.at(-1).headers[m[1]]=m[2];}}
+if (process.env.VALOPRAC_CF_WEB_ANALYTICS_TOKEN?.trim()) {
+ for (const rule of rules) {
+  const name='Content-Security-Policy';
+  if(rule.headers[name])rule.headers[name]=rule.headers[name]
+   .replace(/script-src ([^;]+)/,"script-src $1 https://static.cloudflareinsights.com")
+   .replace(/connect-src ([^;]+)/,"connect-src $1 https://cloudflareinsights.com");
+ }
+}
 const aliases={};for(const raw of readFileSync('public/_redirects','utf8').split(/\r?\n/)){const line=raw.trim();if(!line||line.startsWith('#'))continue;const parts=line.split(/\s+/);if(parts.length!==3||parts[2]!=='200'||!parts[0].startsWith('/')||!parts[1].startsWith('/')||parts.some(p=>p.includes('*'))||!assets[parts[1]]?.type.startsWith('text/html'))throw Error(`Only concrete existing HTML aliases are supported: ${line}`);if(aliases[parts[0]])throw Error(`Duplicate route alias: ${parts[0]}`);aliases[parts[0]]=parts[1];}
 const manifest=JSON.parse(readFileSync('.openai/hosting.json','utf8'));if(manifest.static)throw Error('The response worker must not be published as a static Site');
 rmSync(output,{recursive:true,force:true});mkdirSync(join(output,'server'),{recursive:true});mkdirSync(join(output,'.openai'),{recursive:true});
 const template=readFileSync('worker/index.js','utf8');if(!template.includes('/*__ASSETS__*/{}'))throw Error('Missing worker asset insertion marker');
-const workerSource=template.replace('/*__ASSETS__*/{}',()=>JSON.stringify({assets,rules,aliases}));
+const staged=resolve('.sites-runtime/response-entry.mjs');mkdirSync(resolve('.sites-runtime'),{recursive:true});
+const entrySource=template.replaceAll("from './usage.js'",()=>`from ${JSON.stringify(resolve('worker/usage.js'))}`).replaceAll("from './admission.js'",()=>`from ${JSON.stringify(resolve('worker/admission.js'))}`).replace('/*__ASSETS__*/{}',()=>JSON.stringify({assets,rules,aliases}));
+writeFileSync(staged,entrySource);
+const bundled=await bundleWorker({configFile:false,publicDir:false,logLevel:'warn',build:{write:false,minify:false,target:'es2022',lib:{entry:staged,formats:['es']},rollupOptions:{treeshake:false}}});
+const outputs=Array.isArray(bundled)?bundled:[bundled];
+const workerSource=outputs.flatMap(result=>result.output).find(item=>item.type==='chunk'&&item.isEntry)?.code;
+if(!workerSource)throw Error('Response worker bundling produced no entry module');
 const compressedBytes=gzipSync(workerSource).byteLength;
 if(compressedBytes>10*1024*1024)throw Error(`Response Worker exceeds the 10MiB compressed release budget: ${compressedBytes}`);
 writeFileSync(join(output,'server/index.js'),workerSource);
 writeFileSync(join(output,'.openai/hosting.json'),JSON.stringify(manifest,null,2)+'\n');
+cpSync('drizzle',join(output,'drizzle'),{recursive:true});
 console.log(JSON.stringify({responseWorker:true,assets:Object.keys(assets).length,bytes:readFileSync(join(output,'server/index.js')).byteLength,compressedBytes,compressedBudgetBytes:10*1024*1024}));

@@ -1,0 +1,364 @@
+{
+  "checks": [
+    "Mobile keeps the start button visible and native training selection works; sampled touch targets are at least 44×44",
+    "A mobile deep link reveals its selected tab by scrolling only the tab strip",
+    "Real shortcuts and selected aim tabs survive reload and Back/Forward; arrow/Home/End navigation commits only on activation",
+    "Selected tab keeps a visible border in forced colors",
+    "Six primary destinations fit seven viewport sizes (42 page layouts)"
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "height": 700,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "route": "/statistics.html",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/aim.html#history",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/settings.html",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/weapons.html",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/maps.html",
+      "overflow": false
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "route": "/statistics.html",
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "home": {
+    "defaultOpen": true,
+    "startBottom": 699,
+    "previewCanvases": 0
+  },
+  "touchSizes": [
+    {
+      "label": "",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "label": "자유 훈련장시간제 훈련반동 연습톡브레이킹 훈련각체크·피킹수직 각체크 훈련버니합 훈련월샷 훈련",
+      "width": 288.765625,
+      "height": 46
+    },
+    {
+      "label": "헤드샷 정밀도",
+      "width": 91.375,
+      "height": 44
+    },
+    {
+      "label": "이동 표적 추적",
+      "width": 94.484375,
+      "height": 44
+    },
+    {
+      "label": "30초",
+      "width": 93.328125,
+      "height": 44
+    },
+    {
+      "label": "60초",
+      "width": 93.34375,
+      "height": 44
+    },
+    {
+      "label": "120초",
+      "width": 93.328125,
+      "height": 44
+    },
+    {
+      "label": "장착 무기밴달",
+      "width": 354,
+      "height": 44
+    },
+    {
+      "label": "맵 변경",
+      "width": 44,
+      "height": 44
+    }
+  ],
+  "mobileTabs": {
+    "display": "flex",
+    "width": 354,
+    "total": 561,
+    "scroll": 207
+  },
+  "invalidHash": [
+    "측정 개요"
+  ],
+  "passed": true,
+  "date": "2026-11-18T11:42:25.167Z",
+  "schema": 1,
+  "release": "12.0.2",
+  "patchLabel": "12.02",
+  "baselineCommit": "4e6cf297b6453c085acbdd19d7c5d46d8f9c0c57",
+  "baseline": {
+    "origin": "https://valoprac.trade",
+    "checks": [],
+    "viewports": [],
+    "errors": [],
+    "home": {
+      "defaultOpen": true,
+      "startBottom": 693,
+      "previewCanvases": 0
+    },
+    "mobileTabs": {
+      "display": "grid",
+      "width": 354,
+      "total": 354,
+      "scroll": 0
+    },
+    "invalidHash": [],
+    "passed": true,
+    "date": "2026-11-18T11:36:46.934Z"
+  },
+  "guidance": {
+    "cliVersion": "1.0.1",
+    "sourceCommit": "64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65",
+    "applied": [
+      "tabs",
+      "form-factor-adaptation"
+    ],
+    "scanGuideCount": 38,
+    "scanMatches": 7,
+    "legacyChanges": 0,
+    "why": "Copying array methods require a newer compatibility baseline than the project’s ES2022 target."
+  },
+  "browser": "Chromium 154, emulated touch and forced colors"
+}

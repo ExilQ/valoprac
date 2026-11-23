@@ -1,4 +1,6 @@
 // Generated builds replace this marker with same-origin asset data; no runtime network dependencies.
+import {handleUsage} from './usage.js';
+import {handleGPUGrant} from './admission.js';
 const EMBEDDED = /*__ASSETS__*/{};
 const SECURITY_HEADERS={
    'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin',
@@ -10,7 +12,10 @@ function decode(entry){if(entry.text!==undefined)return entry.text;const raw=ato
 export function createAssetHandler(assets,rules=[],aliases={}){
  const decoded=new Map();
  const match=(pattern,path)=>pattern.endsWith('*')?path.startsWith(pattern.slice(0,-1)):path===pattern;
- const handler={async fetch(request){
+ const handler={async fetch(request, env){
+  const apiPath=new URL(request.url).pathname;
+  if(apiPath==='/api/usage'||apiPath==='/api/usage/session')return handleUsage(request,env);
+  if(apiPath==='/api/gpu/grant')return handleGPUGrant(request,env);
   const url=new URL(request.url);let path;try{path=decodeURIComponent(url.pathname);}catch{return new Response(request.method==='HEAD'?null:'잘못된 주소입니다.',{status:400,headers:{...SECURITY_HEADERS,'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','X-Robots-Tag':'noindex, follow'}});}
   const original=path,documentRequest=(request.headers.get('accept')??'').includes('text/html')||request.headers.get('sec-fetch-dest')==='document';
   const hidden=path.split('/').some(p=>p.startsWith('.')||p==='_headers'||p==='_redirects');

@@ -12,10 +12,19 @@ export function parseRoute(pathname: string): { screen: Screen; activeTab: keyof
   if (path === '/unreal') return { screen: 'menu', activeTab: 'stream' };
   return { screen: 'menu', activeTab: 'training' };
 }
-export function navigate(path: string) {
+export const LOCATION_CHANGED = 'valoprac:location-change';
+
+export function navigate(path: string, replace = false) {
   if (typeof window === 'undefined') return;
-  try { if (window.location.pathname !== path) window.history.pushState(null, '', path); }
-  catch { /* Navigation remains usable when browser history access is denied. */ }
+  const {pathname, search, hash} = window.location;
+  if (pathname + search + hash === path) return;
+  try {
+    if (replace) window.history.replaceState(window.history.state, '', path);
+    else window.history.pushState(null, '', path);
+  } catch {
+    return;
+  }
+  window.dispatchEvent(new Event(LOCATION_CHANGED));
 }
 
 /** Preserve browser link behaviors for modified, auxiliary and external clicks. */

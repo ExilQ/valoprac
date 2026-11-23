@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -165,7 +165,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.01",
+  "patchLabel": "12.02",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -416,7 +416,7 @@
     "gameplayParametersChanged": false,
     "gameplayCompatibilityVersion": "12.0.0",
     "captureRelease": "12.0.1",
-    "note": "Presentation-only modern web update; gameplay and replay compatibility remain 12.0.0 / simulation 3. Historical interface11 and physics12 captures keep their original release metadata.",
+    "note": "Presentation update with shareable aim tabs and keyboard navigation. The 12.0.1 interface comparison is historical.",
     "modernWebGuidance": {
       "repository": "https://github.com/GoogleChrome/modern-web-guidance-src",
       "guides": [
@@ -429,7 +429,8 @@
       "optInWebGLPreview": true,
       "nativeRouteLinks": true,
       "nativeHistoryConfirmation": true
-    }
+    },
+    "webReview": "/modern-web-review.json"
   },
   "physicsMaterials": {
     "validation": "/physics-materials-validation.json",
@@ -461,5 +462,5 @@
       "formalProofOfAllCode": false
     }
   },
-  "releaseDate": "2026-11-15"
+  "releaseDate": "2026-11-18"
 }

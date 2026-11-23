@@ -40,11 +40,11 @@
       "exactGameParityVerified": false
     }
   ],
-  "release": "12.0.1",
+  "release": "12.0.2",
   "date": "2026-10-24",
   "fixedTimestep": 0.008333333333333333,
-  "applicationTests": 1455,
-  "brokerTests": 20,
+  "applicationTests": 1463,
+  "brokerTests": 28,
   "requiredScenarios": [
     "A",
     "B",

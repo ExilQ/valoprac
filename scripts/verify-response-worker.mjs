@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,readdirSync} from 'node:fs';
+import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {join,relative} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const source=readFileSync('dist/server/index.js','utf8'),moduleURL='data:text/javascript;base64,'+Buffer.from(source).toString('base64');
@@ -12,3 +12,13 @@ for(const route of ['training','settings','statistics','results','weapons','unre
 const first=await req('/');assert.doesNotMatch(first.headers.get('x-robots-tag'),/noindex/);assert.doesNotMatch((await req('/?utm_source=chatgpt.com')).headers.get('x-robots-tag'),/noindex/);const cached=await req('/',{'If-None-Match':first.headers.get('etag')});assert.equal(cached.status,304);assert.match(cached.headers.get('cache-control'),/no-transform/);
 assert.equal((await req('/',{}, 'HEAD')).status,200);assert(!JSON.parse(readFileSync('dist/.openai/hosting.json','utf8')).static);
 console.log(JSON.stringify({responseWorkerVerified:true,assetResponses:checks.length,headers:true,htmlNoTransform:true,immutableAssets:true,knownRoutes:true,unknownDocument404:true,asset404:true}));
+
+// Verify admission at the packaged Worker boundary, not only imported source helpers.
+let dbCalls=0;
+const env={VALOPRAC_USAGE_SECRET:'build-check-non-production-usage-key-0001',DB:{prepare(){dbCalls++;throw Error('Unsigned requests must not access D1');}}};
+const unsigned=new Request('https://valoprac.trade/api/usage',{method:'POST',headers:{origin:'https://valoprac.trade','sec-fetch-site':'same-origin','cf-connecting-ip':'203.0.113.1','content-type':'application/json'},body:JSON.stringify({id:crypto.randomUUID(),test:true,type:'view',path:'/',source:'unknown',seq:1})});
+assert.equal((await worker.fetch(unsigned,env)).status,401);assert.equal(dbCalls,0);
+assert.equal((await worker.fetch(new Request('https://valoprac.trade/api/gpu/grant',{method:'POST',headers:{origin:'https://valoprac.trade','sec-fetch-site':'same-origin'}}),{})).status,401);
+assert(existsSync('dist/drizzle/0001_usage_admission.sql'));assert(existsSync('dist/drizzle/meta/_journal.json'));
+assert(readFileSync('dist-client/index.html','utf8').includes('/usage.js?v=admission-1'));
+console.log(JSON.stringify({packagedAdmissionVerified:true,unsignedMetricsRejected:true,anonymousGPURejected:true,migrationsIncluded:true,usageScriptCacheBusted:true}));

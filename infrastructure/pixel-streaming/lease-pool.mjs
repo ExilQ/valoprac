@@ -34,9 +34,9 @@ export class LeasePool {
   }catch(error){await this.release(lease.id);throw error;}
   finally{signal?.removeEventListener('abort',release);}
  }
- authenticate(id,token){const l=this.leases.get(id);return l?.state==='ready'&&l.expires>this.now()&&equal(l.token,token)?l:null;}
- signal(id,token){const l=this.leases.get(id);return l?.state==='ready'&&l.expires>this.now()&&!l.socket&&equal(l.signalToken,token)?l:null;}
- heartbeat(lease){if(lease.state!=='ready'||this.leases.get(lease.id)!==lease)return false;lease.expires=this.now()+this.ttl;return true;}
+ authenticate(id,token){const l=this.leases.get(id);return l?.state==='ready'&&l.expires>this.now()&&(l.authorizationExpires===undefined||l.authorizationExpires>this.now())&&equal(l.token,token)?l:null;}
+ signal(id,token){const l=this.leases.get(id);return l?.state==='ready'&&l.expires>this.now()&&(l.authorizationExpires===undefined||l.authorizationExpires>this.now())&&!l.socket&&equal(l.signalToken,token)?l:null;}
+ heartbeat(lease){if(lease.state!=='ready'||this.leases.get(lease.id)!==lease||lease.authorizationExpires!==undefined&&lease.authorizationExpires<=this.now())return false;lease.expires=this.now()+this.ttl;return true;}
  release(id){
   const l=this.leases.get(id);if(!l)return Promise.resolve();if(l.releasePromise)return l.releasePromise;
   l.state='stopping';l.abort.abort();l.socket?.destroy();
@@ -47,6 +47,6 @@ export class LeasePool {
   });
   return l.releasePromise;
  }
- async reap(){await Promise.all([...this.leases.values()].filter(l=>l.expires<=this.now()).map(l=>this.release(l.id)));}
+ async reap(){await Promise.all([...this.leases.values()].filter(l=>l.expires<=this.now()||l.authorizationExpires!==undefined&&l.authorizationExpires<=this.now()).map(l=>this.release(l.id)));}
  close(){this.closing=true;return Promise.all([...this.leases.keys()].map(id=>this.release(id)));}
 }

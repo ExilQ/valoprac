@@ -9,6 +9,7 @@ import {Simulation} from '../engine/simulation/Simulation';
 import {emptyInput} from '../engine/types';
 import {DEFAULT_SETTINGS} from '../config/settings';
 import '../ui/styles.css';import '../ui/tokens.css';import '../ui/tactical.css';import '../ui/premium.css';import '../ui/operator.css';import '../ui/precisionUtility.css';
+import '../ui/patchNotes.css';import '../ui/interfaceRefinement.css';
 initializeTheme();
 const originalRangeRender=RangeRenderer.prototype.render;
 RangeRenderer.prototype.render=function(...args){const result=originalRangeRender.apply(this,args);if(this.preparationReady&&this.renderer.info.render.calls>0){(window as any).precisionRangeDrawReady=true;(window as any).precisionRangeRenderer=this;}return result;};

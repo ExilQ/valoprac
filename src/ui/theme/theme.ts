@@ -34,6 +34,7 @@ function applyDocument(next:ThemeState){
  }
  root.setAttribute('data-theme',next.resolved);
  document.documentElement.setAttribute('data-theme-preference',next.preference);
+ document.querySelector?.('meta[name="theme-color"]')?.setAttribute('content',next.resolved==='light'?'#ffffff':'#202a2d');
 }
 function update(preference:ThemePreference){
  const resolved:ResolvedTheme=preference==='dark'||preference==='system'&&systemDark?'dark':'light';
