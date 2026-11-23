@@ -10,6 +10,7 @@ import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchite
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
+import {obstacleFinishes} from './ObstacleFinishes';
 import {surfaceHeight,type Obstacle} from '../collision/environment';
 import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
@@ -196,7 +197,15 @@ export class RangeRenderer {
     const {x:width,y:height,z:depth}=this.size;
     const {x,y,z}=this.position;
     const plinth=obstacle.kind==='wall'&&!obstacle.material&&height>=2.5;
-    if(obstacle.ramp||(!plinth&&!tactical))return this.box(width,height,depth,x,y,z,material);
+    if(obstacle.ramp||material.transparent||(obstacle.kind==='cover'&&obstacle.material)||(!plinth&&!tactical)){
+      const mesh=this.box(width,height,depth,x,y,z,material);
+      if(material.transparent){
+        // Glass panes sort individually and do not cast a solid box shadow.
+        mesh.userData.staticRange=false;
+        mesh.castShadow=false;
+      }
+      return mesh;
+    }
 
     const finishes:BoxFinish[]=[];
     if(plinth)finishes.push({below:-height/2+.22,color:WALL_PLINTH});
@@ -214,7 +223,7 @@ export class RangeRenderer {
     this.box(24,0.15,40,0,-0.075,-10,floor);
     // Broad expansion seams give depth without high-frequency combat clutter.
     const seam=this.material(0x76857f,.95);for(let z=5;z>-30;z-=5)this.box(23.9,.006,.024,0,.004,z,seam);
-    for(const o of this.simulation.obstacles){this.obstacleBox(o,this.tacticalSurface(o));this.refineObstacle(o);}
+    for(const o of this.simulation.obstacles)this.obstacleBox(o,this.tacticalSurface(o));
     for(let z=6;z>-30;z-=6){this.box(0.12,5,0.3,-11.94,2.5,z,metal);this.box(0.12,5,0.3,11.94,2.5,z,metal);this.box(24,0.22,0.3,0,5,z,trim);}
     for(let x=-10;x<=10;x+=5){this.box(0.06,0.015,35,x,0.013,-10,metal);}
     this.box(21,0.08,0.06,0,0.014,0,accent);this.box(0.06,0.015,28,0,0.013,-14,accent);
@@ -288,7 +297,7 @@ export class RangeRenderer {
   private buildTactical(){
     const trim=this.material(0x52666c,.68,'painted-metal'),floor=this.material(0x858d87,.96,'raw-concrete'),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.075,b[1]+b[3]/2,floor);
-    for(const o of this.simulation.obstacles){const mesh=this.obstacleBox(o,this.tacticalSurface(o),true);if(o.ramp){const b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);const family=(mesh.material as THREE.Material).userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.refineObstacle(o);}
+    for(const o of this.simulation.obstacles){const mesh=this.obstacleBox(o,this.tacticalSurface(o),true);if(o.ramp){const b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);const family=(mesh.material as THREE.Material).userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);mesh.geometry=g;mesh.position.set(0,0,0);}}
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
     if(this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
     if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(0xa9bdc0,65,160);}
@@ -298,7 +307,9 @@ export class RangeRenderer {
     this.sun.shadow.camera.left=-span;this.sun.shadow.camera.right=span;this.sun.shadow.camera.top=span;this.sun.shadow.camera.bottom=-span;this.sun.shadow.camera.far=220;this.sun.shadow.camera.updateProjectionMatrix();
   }
   private buildPolish(){
-    if(this.simulation.practiceMap==='range')this.buildRangePolish();this.buildArchitecturalLayers();
+    if(this.simulation.practiceMap==='range')this.buildRangePolish();
+    this.buildObstacleFinishes();
+    this.buildArchitecturalLayers();
     if(this.simulation.practiceMap!=='range'){this.architecture=tacticalArchitecture(this.simulation.practiceMap,this.simulation.obstacles,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},t=>{this.textures.add(t);return t;},this.materialLibrary);this.scene.add(this.architecture);}
   }
   private buildRangePolish(){
@@ -313,31 +324,18 @@ export class RangeRenderer {
     for(let i=0;i<4;i++){const x=-8.1+i*5.4;this.box(0.045,0.009,6,x,0.027,5,edge);this.addSign(`사선 0${i+1}`,x+1.8,0.033,7,1.3,true);}
     this.addSign('발로프랙 · 전술 훈련 시설',0,5.4,-29.8,5.2);
   }
-  /** Visual dressing follows existing solids; surface reveals stay within 2 cm. No colliders, spawn points,
-   * navigation surfaces or head-height sightlines are changed. */
-  private refineObstacle(o:import('../collision/environment').Obstacle){
-    if(o.material)return;
-    if(o.ramp)return;const b=o.box,w=b.max.x-b.min.x,h=b.max.y-b.min.y,d=b.max.z-b.min.z,cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
-    const trim=this.archMaterial('trim',0x617577,.78),panel=this.archMaterial('panel',0xa6b4ab,.91),metal=this.archMaterial('metal',0x405861,.63);
-    if(o.kind==='cover'){
-      // Flush inset cladding follows the exact footprint of the old cover.
-      this.box(w*.95,.045,d*.95,cx,b.max.y+.001,cz,metal);
-      if(w>.8&&d>.6&&h>.5){for(const z of [b.min.z-.004,b.max.z+.004]){this.box(w*.8,h*.62,.018,cx,b.min.y+h*.47,z,panel);this.box(w*.83,.035,.024,cx,b.min.y+.13,z,trim);}}
-      return;
-    }
-    if(h<2.5)return;
-    if(w>d&&w>2){for(const z of [b.min.z-.003,b.max.z+.003]){
-      this.box(w,.11,.025,cx,b.min.y+2.7,z,trim);
-      const count=Math.max(1,Math.floor(w/3.8));for(let i=0;i<count;i++){const x=b.min.x+(i+.5)*w/count;
-        if(h>4){this.box(Math.min(2.6,w/count-.2),.78,.03,x,b.max.y-1.04,z,metal);for(let k=-1;k<=1;k++)this.box(.035,.78,.035,x+k*.52,b.max.y-1.04,z,trim);}
-        this.box(.11,Math.max(.1,h-2.9),.03,x,b.min.y+2.85+(h-2.9)/2,z,panel);
-      }
-    }}else if(d>w&&d>2){for(const x of [b.min.x-.003,b.max.x+.003]){
-      this.box(.025,.11,d,x,b.min.y+2.7,cz,trim);const count=Math.max(1,Math.floor(d/4));for(let i=0;i<count;i++){const z=b.min.z+(i+.5)*d/count;
-        if(h>4){this.box(.03,.78,Math.min(2.5,d/count-.2),x,b.max.y-1.04,z,metal);for(let k=-1;k<=1;k++)this.box(.035,.78,.035,x,b.max.y-1.04,z+k*.52,trim);}
-        this.box(.03,Math.max(.1,h-2.9),.11,x,b.min.y+2.85+(h-2.9)/2,z,panel);
-      }
-    }}
+  private buildObstacleFinishes(){
+    const geometry=obstacleFinishes(this.simulation.obstacles);
+    if(!geometry)return;
+    const family='painted-metal';
+    writeWorldScaleUV(geometry,VISUAL_MATERIALS[family].metersPerTile);
+    const material=this.materialLibrary.material(family,{tint:0xffffff,vertexColors:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    const mesh=new THREE.Mesh(geometry,material);
+    mesh.name='flush obstacle cladding';
+    mesh.receiveShadow=true;
+    this.geometries.add(geometry);
+    this.materials.add(material);
+    this.scene.add(mesh);
   }
   private archMaterials=new Map<string,THREE.MeshStandardMaterial>();
   private archMaterial(key:string,color:number,roughness:number){let m=this.archMaterials.get(key);if(!m){const family:VisualMaterialId=/metal|trim|frame/.test(key)?'painted-metal':/base|concrete/.test(key)?'raw-concrete':/warm/.test(key)?'wood':'painted-concrete';m=this.materialLibrary.material(family,{tint:color,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});this.materials.add(m);m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1;this.archMaterials.set(key,m);}return m;}

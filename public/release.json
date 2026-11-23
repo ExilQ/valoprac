@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.4",
+  "version": "12.0.5",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -165,7 +165,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.04",
+  "patchLabel": "12.05",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -470,5 +470,11 @@
     "settings": "Fixed paired scenes",
     "visualMaterialChannels": "RGBA8 base and normal, linear RG8 roughness",
     "triangleOrderPreserved": true
+  },
+  "obstacleReview": {
+    "report": "/obstacle-validation.json",
+    "baseline": "12.04",
+    "scope": "Wall and cover rendering",
+    "simulationRulesChanged": false
   }
 }

@@ -54,7 +54,7 @@ for(const row of physics12.visualComparison.rows){const bytes=readFileSync(join(
 
 
 const graphics=JSON.parse(read(release.graphicsReview.report.slice(1)));
-assert.equal(graphics.release,release.version);
+assert.equal(graphics.release,'12.0.4');
 assert(graphics.passed&&graphics.firstShot.passed&&graphics.cleanup.canvasCount===0);
 assert.equal(graphics.pairs.length,5);
 for(const pair of graphics.pairs){
@@ -66,3 +66,21 @@ for(const pair of graphics.pairs){
 assert.equal(graphics.showcase.length,4);
 assert(graphics.showcase.every(row=>row.families===15));
 console.log(JSON.stringify({graphicsValidation:true,maps:graphics.pairs.length,showcasePresets:graphics.showcase.length}));
+
+const obstacles=JSON.parse(read(release.obstacleReview.report.slice(1)));
+assert.equal(obstacles.release,release.version);
+assert.equal(obstacles.baseline,'12.0.4');
+assert.equal(release.obstacleReview.simulationRulesChanged,false);
+assert(obstacles.passed&&obstacles.firstShot.passed&&obstacles.cleanup.canvasCount===0);
+assert.equal(obstacles.pairs.length,4);
+for(const {before,after} of obstacles.pairs){
+ assert.deepEqual(after.settings,before.settings);
+ assert.deepEqual(after.camera,before.camera);
+ assert.deepEqual(after.authority,before.authority);
+ assert(after.preparationAuthorityUnchanged&&after.shaderProgramsAddedDuringFrames===0);
+ assert(after.geometryBytes<before.geometryBytes&&after.triangles.max<before.triangles.max);
+ assert(after.drawCalls.max<=before.drawCalls.max+1);
+}
+const peeking=obstacles.pairs.find(pair=>pair.map==='complex');
+assert(peeking&&peeking.after.drawCalls.max<peeking.before.drawCalls.max);
+console.log(JSON.stringify({obstacleValidation:true,scenePresets:obstacles.pairs.length}));
