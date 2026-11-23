@@ -2,6 +2,8 @@ import {createOperatorVisual} from './OperatorVisual';
 import * as T from 'three';
 import type { WeaponId } from '../types';
 import {mergeStaticArchitecture} from './StaticGeometry';
+import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
+import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 export interface WeaponVisual {
   root:T.Group;sights:T.Group;magazine:T.Group;cylinder:T.Group;hammer:T.Group;muzzle:T.Mesh;accent:T.MeshStandardMaterial;
   animate?:(time:number,speed:number,reload:number,kick:number,ads:number)=>void;
@@ -10,16 +12,17 @@ export interface WeaponVisual {
 }
 // Independently authored, meter-scale weapon artwork. No downloaded game assets.
 // Receivers, stocks, magazines and grips use their own side-profile topology, not scaled cubes.
-export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material):WeaponVisual {
-  if(id==='operator')return createOperatorVisual(geometry,material,createArms);
+export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,surfaceLibrary?:SurfaceMaterialLibrary):WeaponVisual {
+  if(id==='operator')return createOperatorVisual(geometry,material,createArms,surfaceLibrary);
+  const surfaces=surfaceLibrary??new SurfaceMaterialLibrary();
   const root=new T.Group(),sights=new T.Group(),magazine=new T.Group(),cylinder=new T.Group(),hammer=new T.Group();
   root.name=`VALOPRAC ${id} original viewmodel`;sights.name="open sight posts";magazine.name="magazine";cylinder.name="revolver cylinder";hammer.name="hammer";root.add(sights,magazine,cylinder,hammer);
   const sheriff=id==='sheriff',phantom=id==='rifleB';
-  const mat=(color:number,roughness:number,metalness:number)=>material(new T.MeshStandardMaterial({color,roughness,metalness})) as T.MeshStandardMaterial;
-  const steel=mat(sheriff?0x77858a:phantom?0x344549:0x3e484d,.34,.78),edge=mat(0x8d999b,.31,.82),dark=mat(0x111a20,.51,.52),polymer=mat(phantom?0x243238:0x273034,.83,.08),rubber=mat(0x11191c,.95,.02),brass=mat(0x9c8863,.46,.68);
+  const mat=(family:VisualMaterialId,color:number,roughness?:number,metalness?:number)=>material(surfaces.material(family,{tint:color,roughness,metalness})) as T.MeshStandardMaterial;
+  const steel=mat('steel',sheriff?0x77858a:phantom?0x344549:0x3e484d,.34),edge=mat('brushed-metal',0x8d999b,.31),dark=mat('painted-metal',0x1c282f,.51),polymer=mat('plastic',phantom?0x2e4148:0x303e44,.83),rubber=mat('rubber',0x19252a,.95),brass=mat('steel',0x9c8863,.46,.82);
   // Kept for existing theme API; no decorative emissive stripes are used.
-  const accent=mat(phantom?0x6e8c90:0xa79570,.49,.6);accent.emissive.set(0x000000);
-  const mesh=(g:T.BufferGeometry,m:T.Material,parent:T.Group=root)=>{const o=new T.Mesh(geometry(g),m);o.castShadow=false;o.receiveShadow=false;parent.add(o);return o;};
+  const accent=mat('painted-metal',phantom?0x6e8c90:0xa79570,.49,.6);accent.emissive.set(0x000000);
+  const mesh=(g:T.BufferGeometry,m:T.Material,parent:T.Group=root)=>{const family=m.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);const o=new T.Mesh(geometry(g),m);o.castShadow=false;o.receiveShadow=false;parent.add(o);return o;};
   const profile=(points:[number,number][],width:number,m:T.Material,parent:T.Group=root,offset=0,bevel=.002,holes:[number,number][][]=[])=>{
     const s=new T.Shape();points.forEach(([z,y],i)=>i?s.lineTo(-z,y):s.moveTo(-z,y));s.closePath();
     for(const loop of holes){const hole=new T.Path();loop.forEach(([z,y],i)=>i?hole.lineTo(-z,y):hole.moveTo(-z,y));hole.closePath();s.holes.push(hole);}
@@ -46,7 +49,7 @@ export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.Bu
     // Radially scalloped longitudinal cylinder wall; chambers and extractor appear on rear face.
     const vertices:number[]=[],indices:number[]=[],n=60,half=.043;
     for(const z of [-half,half])for(let i=0;i<n;i++){const a=i/n*Math.PI*2,r=.043-.0035*Math.pow(Math.max(0,Math.cos(a*6)),4);vertices.push(Math.sin(a)*r,Math.cos(a)*r,z);}
-    for(let i=0;i<n;i++){const j=(i+1)%n;indices.push(i,j,n+i,j,n+j,n+i);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(vertices,3));g.setIndex(indices);g.computeVertexNormals();mesh(g,mat(0x53646c,.32,.8),cylinder);tube(.04,.003,0,0,.044,edge,cylinder,24);tube(.013,.006,0,0,.047,dark,cylinder,12);
+    for(let i=0;i<n;i++){const j=(i+1)%n;indices.push(i,j,n+i,j,n+j,n+i);}const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(vertices,3));g.setIndex(indices);g.computeVertexNormals();mesh(g,mat('steel',0x53646c,.32),cylinder);tube(.04,.003,0,0,.044,edge,cylinder,24);tube(.013,.006,0,0,.047,dark,cylinder,12);
     for(let i=0;i<6;i++){const a=i*Math.PI/3,x=Math.sin(a)*.027,y=Math.cos(a)*.027;tube(.008,.004,x,y,.047,dark,cylinder,12);tube(.006,.004,x,y,.049,brass,cylinder,12);}
     profile([[.049,-.033],[.083,-.027],[.108,-.084],[.128,-.16],[.111,-.176],[.061,-.166],[.045,-.133],[.032,-.072]],.048,polymer);
     for(const x of [-.025,.025])profile([[.057,-.065],[.079,-.056],[.113,-.15],[.101,-.162],[.068,-.155],[.047,-.096]],.003,rubber,root,x,.0006);
@@ -89,7 +92,7 @@ export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.Bu
     for(const x of [-.035,.035])plate(.004,.003,.009,x,.157,-.33,edge,sights);
     plate(.066,.003,.009,0,.112,-.33,dark,sights);plate(.066,.003,.009,0,.112,.092,dark,sights);
   }
-  const arms=createArms(root,sheriff,geometry,material);
+  const arms=createArms(root,sheriff,geometry,material,surfaces);
   const flash=material(new T.MeshBasicMaterial({color:0xffddb1,transparent:true,opacity:.68,depthWrite:false}));
   const muzzle=mesh(new T.ConeGeometry(.019,sheriff?.065:.085,6),flash);muzzle.rotation.x=-Math.PI/2;muzzle.position.set(0,sheriff?.031:phantom?.014:.005,sheriff?-.326:phantom?-.637:-.624);muzzle.visible=false;
   // Batch static details within their existing articulated parent. Local-space
@@ -108,15 +111,15 @@ export function createWeaponView(id:WeaponId,geometry:(g:T.BufferGeometry)=>T.Bu
       for(const part of list){parent.remove(part);part.geometry.dispose();}
     }
   }
-  return {root,sights,magazine,cylinder,hammer,muzzle,accent,animate(time,speed,reload,kick,ads){arms.animate(time,speed,reload,kick,ads);},dispose(){arms.dispose();}};
+  return {root,sights,magazine,cylinder,hammer,muzzle,accent,animate(time,speed,reload,kick,ads){arms.animate(time,speed,reload,kick,ads);},dispose(){arms.dispose();if(!surfaceLibrary)surfaces.dispose();}};
 }
 
 /** Lightweight original glove/forearm rigs. Ring-lofted anatomy is skinned to wrist,
  * palm and two joints per digit. No disconnected cylinders; bones share a bind pose. */
-function createArms(parent:T.Group,sheriff:boolean,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material){
+function createArms(parent:T.Group,sheriff:boolean,geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,surfaces:SurfaceMaterialLibrary){
   const rigs:{root:T.Bone;wrist:T.Bone;finger:T.Bone[];rest:T.Vector3;wristRest:T.Vector3}[]=[],skeletons:T.Skeleton[]=[];
   let boltPhase=0;
-  const sleeve=material(new T.MeshStandardMaterial({color:0x43565d,roughness:.94,metalness:0})),glove=material(new T.MeshStandardMaterial({color:0x253238,roughness:.87,metalness:.03}));
+  const sleeve=material(surfaces.material('fabric',{tint:0x53656d})),glove=material(surfaces.material('rubber',{tint:0x2a3b42,roughness:.9}));
   for(const support of [false,true]){
     const elbow=new T.Vector3(support?-.19:.15,-.32,.32),wristAt=new T.Vector3(support?-.048:.029,support?-.092:-.075,support?(sheriff?.075:-.235):.115),palmAt=wristAt.clone().add(new T.Vector3(support?.012:-.003,.018,-.029));
     const bones:T.Bone[]=[],addBone=(at:T.Vector3,p:T.Bone|null)=>{const b=new T.Bone();b.position.copy(at);if(p){const absolute=new T.Vector3();p.getWorldPosition(absolute);b.position.sub(absolute);p.add(b);}bones.push(b);if(!p)parent.add(b);parent.updateMatrixWorld(true);return b;};
@@ -147,6 +150,7 @@ function createArms(parent:T.Group,sheriff:boolean,geometry:(g:T.BufferGeometry)
       const bi=bones.indexOf(finger),ji=bones.indexOf(joint);loft([base,middle,tip],[[.0058,.0064],[.0055,.006],[.0038,.0044]],[bi,ji,ji],1);
     }
     const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('normal',new T.Float32BufferAttribute(normals,3));g.setAttribute('skinIndex',new T.Uint16BufferAttribute(skinIndices,4));g.setAttribute('skinWeight',new T.Float32BufferAttribute(skinWeights,4));g.setIndex(indices);for(const a of groups)g.addGroup(a.start,a.count,a.materialIndex);g.computeVertexNormals();
+    writeWorldScaleUV(g,VISUAL_MATERIALS.fabric.metersPerTile);
     const body=new T.SkinnedMesh(geometry(g),[sleeve,glove]);body.name=support?'support arm · articulated glove':'dominant arm · articulated glove';body.frustumCulled=false;parent.add(body);parent.updateMatrixWorld(true);const skeleton=new T.Skeleton(bones);skeletons.push(skeleton);body.bind(skeleton);rigs.push({root,wrist,finger:fingers,rest:root.position.clone(),wristRest:wrist.position.clone()});
   }
   const smooth=(a:number,b:number,p:number)=>{const t=T.MathUtils.clamp((p-a)/(b-a),0,1);return t*t*(3-2*t);};

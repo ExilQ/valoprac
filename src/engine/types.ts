@@ -55,7 +55,7 @@ export interface SessionData {
   replay?:import('./replay/types').ReplayRecording;
   replayIssue?:string;
   landings?:{events:number;recent:import('./footsteps/Landings').LandingSoundEvent[]};
-  physics?:{version:string;current:ReturnType<import('./movement/Movement').Movement['physicsSnapshot']>;transitions:{time:number;profile:string;preset:string|null}[]};
+  physics?:{version:string;rules?:import('./simulation/rules').SimulationRulesId;materialPhysicsVersion?:string;current:ReturnType<import('./movement/Movement').Movement['physicsSnapshot']>;transitions:{time:number;profile:string;preset:string|null}[]};
   movement?:ReturnType<import('./movement/Movement').Movement['hopSnapshot']>;
   footsteps?:{events:number;botHeardEvents:number;finalAccumulation:number;recent:import('./footsteps/Footsteps').FootstepEvent[]};
 

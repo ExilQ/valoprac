@@ -11,8 +11,12 @@ import {BotAimMotor,resolveBotProfile,wrapAngle,type BotControlProfile} from './
 import {visibleBetween,standingSpace} from './levels';
 import type {FootstepEvent} from '../footsteps/Footsteps';
 import {Footsteps} from '../footsteps/Footsteps';
+import {resolveGroundSurface} from '../footsteps/surfaceSelection';
+import {SURFACES} from '../../config/surfaces';
 import {zoneAt} from './complex';
 import {SeededRandom} from '../simulation/random';
+import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
+import {staticBroadphaseFor} from '../collision/StaticBroadphase';
 import {WEAPONS,damageAt} from '../../config/weapons';
 
 export type DefenderState='holding'|'listening'|'alert'|'tracking'|'firing'|'recovering'|'repositioning'|'re-peeking'|'returning'|'eliminated';
@@ -68,8 +72,9 @@ function localBody(p:PlayerBody){
   ...[-1,1].map(sign=>({region:'leg' as const,box:new Box3(new Vector3(sign<0?-.22:.04,.03,-.1),new Vector3(sign<0?-.04:.22,.65-c*.18,.17))}))
  ];
 }
-function toWorld(p:PlayerBody,x:number,y:number,z=0):Vec3{const c=Math.cos(p.yaw),s=Math.sin(p.yaw);return{x:p.position.x+x*c+z*s,y:p.position.y+y,z:p.position.z-x*s+z*c};}
-export function playerVisibilitySamples(p:PlayerBody):Vec3[]{const torso=p.eyeHeight-.51+clamp(p.crouch,0,1)*.09;return[[0,p.eyeHeight+.04],[-.12,p.eyeHeight+.04],[.12,p.eyeHeight+.04],[0,torso],[-.34,torso+.12],[.34,torso+.12],[-.13,.3],[.13,.3],[0,.72-clamp(p.crouch,0,1)*.2]].map(([x,y])=>toWorld(p,x,y));}
+function toWorld(p:PlayerBody,x:number,y:number,z=0,out:Vec3={x:0,y:0,z:0}):Vec3{const c=Math.cos(p.yaw),s=Math.sin(p.yaw);out.x=p.position.x+x*c+z*s;out.y=p.position.y+y;out.z=p.position.z-x*s+z*c;return out;}
+export function playerVisibilitySamples(p:PlayerBody,out:Vec3[]=Array.from({length:9},()=>({x:0,y:0,z:0}))):Vec3[]{const torso=p.eyeHeight-.51+clamp(p.crouch,0,1)*.09;toWorld(p,0,p.eyeHeight+.04,0,out[0]);toWorld(p,-.12,p.eyeHeight+.04,0,out[1]);toWorld(p,.12,p.eyeHeight+.04,0,out[2]);toWorld(p,0,torso,0,out[3]);toWorld(p,-.34,torso+.12,0,out[4]);toWorld(p,.34,torso+.12,0,out[5]);toWorld(p,-.13,.3,0,out[6]);toWorld(p,.13,.3,0,out[7]);toWorld(p,0,.72-clamp(p.crouch,0,1)*.2,0,out[8]);return out;}
+const visibilitySamples=Array.from({length:9},()=>({x:0,y:0,z:0})),groundCandidates:number[]=[],routeCandidates:number[]=[],navigationPoint=new Vector3();
 /** First physical intersection with the current translated/yawed/crouched body. */
 export function intersectPlayerBody(ray:Ray,p:PlayerBody,out:Vector3){
  inverse.makeRotationY(p.yaw);inverse.setPosition(p.position.x,p.position.y,p.position.z);inverse.invert();localRay.copy(ray).applyMatrix4(inverse);
@@ -84,9 +89,11 @@ export class DefenderAI {
  memories:Memory[]=[];shots:DefenderShot[]=[];health=150;death:DefenderDeath|null=null;onShot:((s:DefenderShot)=>void)|null=null;perceptionUpdates=0;
  onFootstep:((event:DefenderFootstep)=>void)|null=null;private footstepSequence=0;
  report:PeekReport={health:150,deaths:0,clears:0,baits:0,recoveryExploits:0,heardEvents:0,enemyShots:0,exposure:0,maxVisibleFraction:0,distance:0,peakSpeed:0,episodes:[],lastDeath:null,path:[],currentTime:0,observedRecoveryUntil:0,visibilityMethod:'Nine yawed human-body samples; approximate coverage, not projected body area',operator:{scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,scopeTransitionSum:0,holdingSeconds:0,firstShots:0,firstHits:0}};
+ private rules:SimulationRulesId=CURRENT_SIMULATION_RULES;
  private controlValues:unknown[]=[];private lastPlayerShotVelocity:number|null=null;private lastPlayerShotAt=-100;private combatTotals={timingContacts:0,shots:0,hits:0,firstShots:0,firstHits:0,damage:0,reaction:0,acquisition:0,firstShotDelay:0,recoilSquared:0,residualSquared:0};private epoch=0;private clock=0;private seed:number;private rng:SeededRandom;private current:PeekEpisode|null=null;private episodeOrigin:Vec3|null=null;private episodeLow=0;private episodeHigh=0;private returningAt:number|null=null;private last:Vec3|null=null;private pathAt=0;private perceptionAt=0;private head=new Vector3();private ray=new Ray();private hit=new Vector3();private sequence=0;private usedBaits=new Set<number>();private usedRecoveries=new Set<number>();
  constructor(public targets:Target[],public obstacles:Obstacle[],public settings:Settings,private holdingPoint:Vec3,seed=1947,private sectors:readonly DefenderSector[]=[]){this.seed=seed;this.rng=new SeededRandom(seed^0xd3f3);this.retry();}
  setSectors(sectors:readonly DefenderSector[]){this.sectors=sectors;}
+ setSimulationRules(rules:SimulationRulesId){this.rules=rules;for(const m of this.memories)m.movement.setSimulationRules(rules);}
  retry(){
   this.epoch++;this.lastPlayerShotVelocity=null;this.lastPlayerShotAt=-100;this.health=150;this.death=null;this.current=null;this.last=null;this.episodeOrigin=null;this.returningAt=null;this.pathAt=0;this.perceptionAt=0;this.shots.length=0;this.report.health=150;this.report.path=[];this.report.observedRecoveryUntil=0;this.usedBaits.clear();this.usedRecoveries.clear();
   this.memories=this.targets.map((t,i)=>this.newMemory(t,i));
@@ -95,15 +102,17 @@ export class DefenderAI {
   const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)},weapon=this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon;
   const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(WEAPONS[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
   gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;
-  const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});};
+  const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;if(this.rules==='legacy-v2')this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});else{const surfaceId=resolveGroundSurface(this.settings.practiceMap,this.obstacles,e.position,this.rules);this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:SURFACES[surfaceId].footstepSoundProfile,surfaceId,bot:i,encounterGeneration:this.epoch,kind:'bot-step'});}};
+  const movement=new Movement(undefined,this.obstacles);movement.setSimulationRules(this.rules);
   return{state:'holding',weapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0,
-   gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement:new Movement(undefined,this.obstacles),footsteps,profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
+   gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement,footsteps,profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
    perceptionPhase:'unaware',detectedAt:-100,recognizedAt:Infinity,reactionUntil:Infinity,aimStartedAt:-100,acquisitionUntil:Infinity,triggerAt:Infinity,firstShotAt:-100,preaimed:false,contactAngleDegrees:0,
    observations:[],recoilHistory:[],nextRecoilObservation:0,lastHeard:-100,lastHeardPoint:null,preferHead:false,burstGoal:0,burstRemaining:0,pauseUntil:0,engagementShots:0,engagementHits:0,speculativeShots:0,pressureUntil:0,consecutiveMisses:0,uncertainty:{x:0,y:0,z:0},uncertaintyAt:-100};
  }
  hear(e:FootstepEvent){
   // No key state or current hidden player position reaches this memory. A sound is
   // a dated observation at its emitted location, attenuated by intervening cover.
+  // Sound retains geometric occlusion, including transparent glass barriers.
   let heard=false;
   for(const t of this.targets){if(!t.enabled||!t.active)continue;const m=this.memories[t.id];if(!m)continue;t.headPosition(this.head);const source={...e.position,y:e.position.y+1};const clear=visibleBetween(this.obstacles,vec(this.head),source);if(Math.hypot(t.position.x-e.position.x,t.position.y-e.position.y,t.position.z-e.position.z)>e.radius*(clear?1:.7))continue;
    if(m.visible<=0){m.known=vec(e.position);m.lastHeard=e.timestamp;m.lastHeardPoint=vec(e.position);m.alertUntil=e.timestamp+2.2;m.uncertainty={x:m.rng.range(-1,1),y:m.rng.range(-.2,.2),z:m.rng.range(-1,1)};m.uncertaintyAt=e.timestamp;if(m.state==='holding')m.state='listening';}heard=true;
@@ -112,9 +121,9 @@ export class DefenderAI {
  }
  eliminated(id:number){const m=this.memories[id];if(m&&m.state!=='eliminated'){m.state='eliminated';m.visible=0;m.destination=null;m.path=[];this.report.clears++;}}
  private visible(t:Target,p:PlayerBody,m:Memory,recordAim=true){
-  t.headPosition(this.head);const from=vec(this.head),dx=p.position.x-from.x,dz=p.position.z-from.z,d=Math.hypot(dx,dz);if(d>65)return 0;if((dx*m.face.x+dz*m.face.z)/Math.max(.001,d)<Math.cos(80*Math.PI/180))return 0;
-  const points=playerVisibilitySamples(p);let n=0,selected:Vec3|null=null,best=Infinity;
-  for(let i=0;i<points.length;i++){const point=points[i];if(!visibleBetween(this.obstacles,from,point))continue;n++;const score=m.preferHead?Math.abs(point.y-(p.position.y+p.eyeHeight+.04))+Math.abs(i===0?0:point.x-p.position.x)*.1:Math.abs(point.y-(p.position.y+p.eyeHeight*.7));if(score<best){best=score;selected=point;}}
+  t.headPosition(this.head);const from=this.head,dx=p.position.x-from.x,dz=p.position.z-from.z,d=Math.hypot(dx,dz);if(d>65)return 0;if((dx*m.face.x+dz*m.face.z)/Math.max(.001,d)<Math.cos(80*Math.PI/180))return 0;
+  const points=playerVisibilitySamples(p,visibilitySamples);let n=0,selected:Vec3|null=null,best=Infinity;
+  for(let i=0;i<points.length;i++){const point=points[i];if(!visibleBetween(this.obstacles,from,point,this.rules))continue;n++;const score=m.preferHead?Math.abs(point.y-(p.position.y+p.eyeHeight+.04))+Math.abs(i===0?0:point.x-p.position.x)*.1:Math.abs(point.y-(p.position.y+p.eyeHeight*.7));if(score<best){best=score;selected=point;}}
   if(recordAim&&selected)m.aim=vec(selected);return n/points.length;
  }
  private detect(t:Target,m:Memory,p:PlayerBody,time:number){
@@ -161,7 +170,7 @@ export class DefenderAI {
    if(perception)this.detect(t,m,p,time);
    // A cheap current obstruction check invalidates a cached visible observation;
    // it never acquires a new concealed location between perception updates.
-   else if(m.visible>0&&m.aim){t.headPosition(this.head);if(!visibleBetween(this.obstacles,vec(this.head),m.aim)){this.loseContact(m,time);}}
+   else if(m.visible>0&&m.aim){t.headPosition(this.head);if(!visibleBetween(this.obstacles,vec(this.head),m.aim,this.rules)){this.loseContact(m,time);}}
    const seen=m.visible>0;any=Math.max(any,m.visible);
    if(seen){m.exposure+=dt;m.acquired+=dt;}else{m.acquired=Math.max(0,m.acquired-dt*2);m.exposure=this.settings.exposureMode==='continuous'?0:Math.max(0,m.exposure-dt*.65);}
    if(seen&&time>=m.recognizedAt&&time<m.reactionUntil)m.perceptionPhase=time<m.recognizedAt+dt?'recognized':'reacting';
@@ -219,7 +228,7 @@ export class DefenderAI {
     const memory=time-m.lastSeen<.6&&time>=m.triggerAt,sound=time-m.lastHeard<1.1&&heardReady;
     if((memory||sound)&&angularError<tolerance*1.8&&time>=m.decision){m.decision=time+.25;
      t.headPosition(this.head);const direction=new Vector3(look.x-this.head.x,look.y-this.head.y,look.z-this.head.z),length=direction.length();this.ray.set(this.head.clone(),direction.normalize());
-     const preview=traceBallisticRay(this.ray,gun.profile,{distance:length,zone:'torso',point:look},this.obstacles);
+     const preview=traceBallisticRay(this.ray,gun.profile,{distance:length,zone:'torso',point:look},this.obstacles,150,this.rules);
      if(preview.stopReason==='target'&&preview.penetratedLayers>0&&m.rng.next()<m.profile.tactics*.32){admit=true;information=memory?'memory':'sound';}
     }
    }
@@ -241,8 +250,10 @@ export class DefenderAI {
  }
  /** A supported floor height close enough to traverse without flying or climbing walls. */
  private ground(x:number,z:number,fromY:number):number|null{
-  const heights=[0];for(const o of this.obstacles){const b=o.box;if((o.kind!=='cover'&&!o.ramp)||x<b.min.x-.001||x>b.max.x+.001||z<b.min.z-.001||z>b.max.z+.001)continue;heights.push(surfaceHeight(o,x,z));}
-  const choices=heights.filter(y=>y<=fromY+.31&&y>=fromY-.31&&standingSpace(this.obstacles,{x,y,z},.3));return choices.length?Math.max(...choices):null;
+  const index=staticBroadphaseFor(this.obstacles);if(index)index.queryAabb(x-.001,-Infinity,z-.001,x+.001,Infinity,z+.001,groundCandidates);
+  let best:number|null=0<=fromY+.31&&0>=fromY-.31&&standingSpace(this.obstacles,{x,y:0,z},.3)?0:null;
+  for(let i=0,n=index?groundCandidates.length:this.obstacles.length;i<n;i++){const o=this.obstacles[index?groundCandidates[i]:i],b=o.box;if((o.kind!=='cover'&&!o.ramp)||x<b.min.x-.001||x>b.max.x+.001||z<b.min.z-.001||z>b.max.z+.001)continue;const y=surfaceHeight(o,x,z);if(y<=fromY+.31&&y>=fromY-.31&&standingSpace(this.obstacles,{x,y,z},.3))best=best===null?y:Math.max(best,y);}
+  return best;
  }
  private segment(a:Vec3,b:Vec3):Vec3[]|null{
   const d=distance2(a,b),n=Math.max(1,Math.ceil(d/.12));let y=a.y;const path:Vec3[]=[];
@@ -252,7 +263,7 @@ export class DefenderAI {
  /** Short visibility graph only when deciding to reposition, never per simulation tick. */
  private route(a:Vec3,b:Vec3):Vec3[]|null{
   const direct=this.segment(a,b);if(direct)return[b];
-  const nodes:Vec3[]=[vec(a),vec(b)];const nearby=this.obstacles.filter(o=>o.box.distanceToPoint(new Vector3(a.x,a.y,a.z))<5&&o.box.max.y>a.y+.35).slice(0,10);
+  const nodes:Vec3[]=[vec(a),vec(b)],nearby:Obstacle[]=[];navigationPoint.set(a.x,a.y,a.z);const index=staticBroadphaseFor(this.obstacles);if(index)index.queryAabb(a.x-5,a.y-5,a.z-5,a.x+5,a.y+5,a.z+5,routeCandidates);for(let i=0,n=index?routeCandidates.length:this.obstacles.length;i<n&&nearby.length<10;i++){const o=this.obstacles[index?routeCandidates[i]:i];if(o.box.distanceToPoint(navigationPoint)<5&&o.box.max.y>a.y+.35)nearby.push(o);}
   for(const o of nearby){for(const x of [o.box.min.x-.36,o.box.max.x+.36])for(const z of [o.box.min.z-.36,o.box.max.z+.36]){if(Math.hypot(x-a.x,z-a.z)>8)continue;const y=this.ground(x,z,a.y);if(y!==null)nodes.push({x,y,z});}}
   // L waypoints cover corridor turns without assuming endpoints can be connected.
   for(const point of [{x:a.x,y:a.y,z:b.z},{x:b.x,y:a.y,z:a.z}]){const y=this.ground(point.x,point.z,a.y);if(y!==null)nodes.push({...point,y});}
@@ -267,7 +278,7 @@ export class DefenderAI {
   // Repeated visible peeks change the chosen side; hidden movement never does.
   if(m.repeats>1)candidates.sort((a,b)=>Math.sign(m.repeats%2?1:-1)*(a.x-b.x));
   const routes=candidates.flatMap(p=>{if(distance2(t.position,p)<.25||!standingSpace(this.obstacles,p,.3))return[];const path=this.route(t.position,p);return path?[{p,path}]:[];});if(!routes.length)return;
-  const hidden=routes.filter(({p})=>!visibleBetween(this.obstacles,{x:p.x,y:p.y+1.5,z:p.z},{x:m.known!.x,y:m.known!.y+1.4,z:m.known!.z}));const list=hidden.length?hidden:routes,selected=list[Math.floor(this.rng.next()*list.length)];m.path=selected.path;m.pathIndex=0;m.destination=vec(selected.p);
+  const hidden=routes.filter(({p})=>!visibleBetween(this.obstacles,{x:p.x,y:p.y+1.5,z:p.z},{x:m.known!.x,y:m.known!.y+1.4,z:m.known!.z},this.rules));const list=hidden.length?hidden:routes,selected=list[Math.floor(this.rng.next()*list.length)];m.path=selected.path;m.pathIndex=0;m.destination=vec(selected.p);
  }
  private move(t:Target,m:Memory,dt:number,time:number){
   if(m.destination){let goal=m.path[m.pathIndex]??m.destination,d=distance2(t.position,goal);if(d<.008){m.pathIndex++;goal=m.path[m.pathIndex]??m.destination;d=distance2(t.position,goal);}
@@ -300,7 +311,7 @@ export class DefenderAI {
   const gun=m.gun,profile=gun.profile,recoilBefore={pitch:gun.recoil.pitch,yaw:gun.recoil.yaw};
   const spread={...gun.calculateSpread(m.movement,gun.ads,time-m.movement.landedAt<.16)};
   const direction=spreadDirection(m.motor.yaw+m.motor.compensationYaw+recoilBefore.yaw*Math.PI/180,m.motor.pitch+m.motor.compensationPitch+recoilBefore.pitch*Math.PI/180,spread.x,spread.y,new Vector3());
-  t.headPosition(this.head);const origin=this.head.clone();this.ray.set(origin,direction);const playerHit=intersectPlayerBody(this.ray,p,this.hit),trace=traceBallisticRay(this.ray,profile,playerHit?{distance:playerHit.distance,zone:playerHit.region,point:vec(this.hit)}:null,this.obstacles);
+  t.headPosition(this.head);const origin=this.head.clone();this.ray.set(origin,direction);const playerHit=intersectPlayerBody(this.ray,p,this.hit),trace=traceBallisticRay(this.ray,profile,playerHit?{distance:playerHit.distance,zone:playerHit.region,point:vec(this.hit)}:null,this.obstacles,150,this.rules);
   const detail=trace.zone==='head'||trace.zone==='torso'||trace.zone==='arm'||trace.zone==='leg'?trace.zone:undefined,region:DefenderShot['hit']=detail==='head'?'head':detail==='leg'?'leg':detail?'body':'miss';
   // Exactly the player recoil profile and RNG streams affect the next ray.
   // Compensation lives in the motor and cannot erase the weapon's true recoil.
@@ -311,7 +322,7 @@ export class DefenderAI {
   if(m.burstRemaining<=0){const pause=m.weapon==='operator'?interval+profile.adsTransition:m.weapon==='sheriff'?Math.max(.650001,profile.resetTime+.1):profile.resetTime+m.rng.range(.05,.18);m.pauseUntil=time+pause;m.nextShot=Math.max(m.nextShot,m.pauseUntil);}
   if(information!=='visual')m.speculativeShots++;
   m.decision=time+.25;
-  const distance=origin.distanceTo(new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z)),playerEye={x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z},observed=distance<=(m.weapon==='operator'?80:35)||visibleBetween(this.obstacles,playerEye,vec(origin));
+  const distance=origin.distanceTo(new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z)),playerEye={x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z},observed=distance<=(m.weapon==='operator'?80:35)||visibleBetween(this.obstacles,playerEye,vec(origin),this.rules);
   const damage=detail?damageAt(profile,detail,trace.distance)*trace.damageScale:0;
   const visualContact=m.detectedAt>=0&&m.aimStartedAt>=0;
   const shot:DefenderShot={encounterGeneration:this.epoch,targetGeneration:t.generation,id:++this.sequence,time,bot:t.id,weapon:m.weapon,origin:vec(origin),aim:vec(origin.clone().addScaledVector(direction,Math.max(1,distance))),impact:vec(trace.point),direction:vec(direction),hit:region,hitRegion:detail,observed,recoveryUntil:m.nextShot,
@@ -339,7 +350,7 @@ export class DefenderAI {
   if(visible>0){this.report.exposure+=dt;if(!this.current){this.current={started:time,ended:time,duration:0,distance:0,peakSpeed:0,peakVisibleFraction:0,verticalDisplacement:0,shots:0,hits:0,shotVelocity:null,acquisitionTime:null,returnToCover:null,timeToCover:null};this.episodeOrigin=vec(p.position);this.episodeLow=this.episodeHigh=p.position.y;this.returningAt=null;}
    const e=this.current;e.ended=time;e.duration=time-e.started;e.distance+=distance;e.peakSpeed=Math.max(e.peakSpeed,speed);e.peakVisibleFraction=Math.max(e.peakVisibleFraction,visible);this.episodeLow=Math.min(this.episodeLow,p.position.y);this.episodeHigh=Math.max(this.episodeHigh,p.position.y);e.verticalDisplacement=this.episodeHigh-this.episodeLow;
    const start=this.episodeOrigin!,dx=p.position.x-start.x,dz=p.position.z-start.z;if(this.returningAt===null&&Math.hypot(dx,dz)>.04&&p.velocity.x*dx+p.velocity.z*dz<-.05)this.returningAt=time;
-   if(e.acquisitionTime===null){const view=new Vector3(-Math.sin(p.yaw)*Math.cos(p.pitch),Math.sin(p.pitch),-Math.cos(p.yaw)*Math.cos(p.pitch)),origin=new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z);for(const t of this.targets){if(!t.active||!t.enabled)continue;t.headPosition(this.head);const delta=this.head.clone().sub(origin);if(delta.lengthSq()<1e-8)continue;if(view.dot(delta.normalize())>Math.cos(.025)&&visibleBetween(this.obstacles,vec(origin),vec(this.head))){e.acquisitionTime=time-e.started;break;}}}
+   if(e.acquisitionTime===null){const view=new Vector3(-Math.sin(p.yaw)*Math.cos(p.pitch),Math.sin(p.pitch),-Math.cos(p.yaw)*Math.cos(p.pitch)),origin=new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z);for(const t of this.targets){if(!t.active||!t.enabled)continue;t.headPosition(this.head);const delta=this.head.clone().sub(origin);if(delta.lengthSq()<1e-8)continue;if(view.dot(delta.normalize())>Math.cos(.025)&&visibleBetween(this.obstacles,vec(origin),vec(this.head),this.rules)){e.acquisitionTime=time-e.started;break;}}}
   }else this.closeEpisode(time,!this.death);
   if(this.death)this.closeEpisode(time,false);
  }

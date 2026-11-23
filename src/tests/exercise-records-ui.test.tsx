@@ -19,6 +19,12 @@ describe('Completed comparable exercise records stay local and bounded',()=>{
  it('does not award a best for early exits, incomplete or mismatched protocol data',()=>{
   vi.stubGlobal('localStorage',new MemoryStorage());for(const mutate of [(s:SessionData)=>s.exercise!.completed=false,(s:SessionData)=>s.exercise!.elapsedSeconds=30,(s:SessionData)=>s.exercise!.version='future',(s:SessionData)=>s.sessionOptions={exercise:DEFAULT_FLASH_OPTIONS},(s:SessionData)=>s.exercise!.score=Infinity,(s:SessionData)=>s.exercise!.score=100001]){const s=policySession();mutate(s);expect(recordExerciseBest(s).improved).toBe(false);}expect(loadExerciseBests()).toEqual([]);
  });
+ it('keeps historical10 records in their original comparison group after12 upgrades',()=>{
+  const current=policySession(),legacy=structuredClone(current);legacy.physics!.version='dual-movement-1.1.0';
+  expect(JSON.parse(exerciseBestKey(legacy))[0]).toBe('10.0.0');expect(JSON.parse(exerciseBestKey(current))[0]).toBe('12.0.0');
+  vi.stubGlobal('localStorage',new MemoryStorage());recordExerciseBest(legacy);recordExerciseBest(current);
+  expect(loadExerciseBests()).toHaveLength(2);expect(new Set(loadExerciseBests().map(r=>JSON.parse(r.key)[0]))).toEqual(new Set(['10.0.0','12.0.0']));
+ });
  it('separates weapon, seed, movement physics, timing, elimination and ammunition rules',()=>{
   const initial=policySession(),key=exerciseBestKey(initial);
   for(const mutate of [(s:SessionData)=>s.weapon='operator',(s:SessionData)=>s.settings.seed++,(s:SessionData)=>s.settings.movementPhysics='counterStrike',(s:SessionData)=>s.settings.jumpBufferMs=0,(s:SessionData)=>s.settings.eliminationRule='any',(s:SessionData)=>s.settings.autoReload=false,(s:SessionData)=>s.settings.infiniteReserve=false]){const s=structuredClone(initial);mutate(s);expect(exerciseBestKey(s)).not.toBe(key);}

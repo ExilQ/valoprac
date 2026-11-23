@@ -1,13 +1,14 @@
 {
   "schema": 1,
-  "release": "11.0.0",
-  "patchLabel": "11.00",
-  "generatedAt": "2026-11-06T23:47:02.323Z",
-  "calibration": "dual-movement-1.1.0-provisional",
+  "release": "12.0.0",
+  "patchLabel": "12.00",
+  "generatedAt": "2026-11-15T07:53:04.106Z",
+  "calibration": "dual-movement-1.2.0-provisional",
+  "historicalBrowserCaptureRelease": "9.0.0",
   "tests": {
-    "application": 1268,
+    "application": 1444,
     "broker": 20,
-    "hosting": 13,
+    "hosting": 14,
     "passed": true,
     "renderSchedules": [
       60,
@@ -234,7 +235,7 @@
         "position": [
           0,
           0,
-          -6.79069061769315
+          -6.7906906176931505
         ]
       },
       {
@@ -253,7 +254,7 @@
         "position": [
           -1.1602782740604172,
           0,
-          -7.353641439345614
+          -7.353641439345613
         ],
         "landingHeadingRadians": -0.32731161396403,
         "airTime": 0.6416666666666668,
@@ -267,7 +268,7 @@
         "position": [
           -0.6742929354285441,
           0,
-          -7.486792931835822
+          -7.486792931835823
         ],
         "landingHeadingRadians": -0.1470783553884025,
         "airTime": 0.7166666666666666,

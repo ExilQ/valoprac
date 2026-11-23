@@ -1,3 +1,4 @@
+import {floorImpactSurface,floorImpactSurfaceAt} from './collision/floorImpact';
 import {CombatCapture,type CombatAssessmentContext} from '../aim/CombatCapture';
 import { InputLatencyProbe } from '../benchmarks/InputLatencyProbe';
 import { RenderCadence } from './rendering/RenderCadence';
@@ -45,10 +46,10 @@ export class Runtime {
     if(!this.preview){try{this.replayRecorder=new ReplayRecorder(this.simulation);this.replayState='recording';}catch(error){this.recordingUnavailable(error);}}
     this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,this.onError,()=>this.publishTelemetry(),id=>{this.switchWeapon(id);this.onWeapon(id);},action=>{this.performMovementAction(action);});
     if(!this.preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode,this.assessment,()=>this.input.rawConfirmation);this.input.observer=this.aimCapture;}
-    if(this.simulation.defenders){this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,e.origin,e.time,e.bot);this.audio.impacts(e.penetration??[],e.time,.55);}this.renderer.addDefenderShot({...e,segments:e.penetration});};this.simulation.defenders.onFootstep=event=>this.audio.botFootstep(event.bot,event);}
+    if(this.simulation.defenders){this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,e.origin,e.time,e.bot);this.audio.impacts(e.penetration??[],e.time,.55);const floor=floorImpactSurfaceAt(this.simulation.practiceMap,e.impact,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,e.impact,e.time,.55,`enemy-floor:${e.bot}`);}this.renderer.addDefenderShot({...e,segments:e.penetration});};this.simulation.defenders.onFootstep=event=>this.audio.botFootstep(event.bot,event);}
     this.simulation.onFootstep=e=>this.audio.footstep(e);
     this.simulation.onLanding=e=>this.audio.landing(e);
-    this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);this.aimCapture?.shot(s);};
+    this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);const floor=floorImpactSurface(this.simulation.practiceMap,s,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,s.impact,s.timestamp);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>this.deliverSession();
   }
@@ -87,7 +88,7 @@ export class Runtime {
     let next:Simulation;
     try{next=new Simulation(old.mode,old.weaponId,old.settings,old.options);}catch(error){this.onError(error instanceof Error?error.message:'훈련을 다시 준비하지 못했습니다.');return false;}
     if(next.practiceMap!==old.practiceMap||next.targets.length!==old.targets.length||next.targets.some((target,i)=>target.parts.length!==old.targets[i].parts.length))return false;
-    this.audio.stop();this.unbindSimulation();this.simulation=next;this.renderer.simulation=next;next.renderedTargets.attach();
+    this.audio.resetSession(next.time);this.unbindSimulation();this.simulation=next;this.renderer.simulation=next;next.renderedTargets.attach();
     this.finishNotified=false;this.replayState='preview';this.replayIssue=undefined;this.completedReplay=null;this.lastExerciseCue=0;this.clearMovementReview();
     this.clock=new FixedClock();this.cadence.reset();this.previousTime=0;this.lastDraw=0;this.hudAt=0;this.sampleIndex=0;this.sampleCount=0;this.frameTimes.fill(0);this.latency.clearPending();
     this.bindSimulation();this.renderer.clearImpacts();this.renderer.applySettings(next.settings);this.graphicsReady=this.renderer.preparationReady;
@@ -120,7 +121,7 @@ export class Runtime {
     if(this.simulation.exposure.death&&this.input.locked){this.input.reset();document.exitPointerLock();this.audio.stop();this.onLock(false);}
     if(this.simulation.running&&elapsed>0.5){this.audio.stop();this.simulation.running=false;this.input.reset();if(this.input.locked)document.exitPointerLock();this.onLock(false);this.onError('긴 화면 정지를 감지해 일시정지했습니다. 클릭하면 이어서 훈련합니다.');}
     let alpha=1;if(this.simulation.running)alpha=this.clock.advance(elapsed,this.step);
-    if(this.renderer.preparationReady&&this.cadence.shouldDraw(now,this.preview?30:this.simulation.settings.frameLimit)){
+    if(this.renderer.preparationReady&&this.cadence.shouldDraw(now,this.preview?30:this.renderer.effectiveFrameLimit??this.simulation.settings.frameLimit)){
       const drawElapsed=this.lastDraw?(now-this.lastDraw)/1000:elapsed;this.lastDraw=now;
       this.frameTimes[this.sampleIndex++%this.frameTimes.length]=drawElapsed*1000;this.sampleCount=Math.min(this.sampleCount+1,this.frameTimes.length);
       const tools=this.simulation.settings.movementTools;if(this.movementReview&&tools){const start=this.movementVisual?.current?.startTime??this.ghostStartTime;this.movementReview.update(tools,this.movementVisual,this.movementGhost,this.movementGhost?sampleMovementGhost(this.movementGhost,this.simulation.time-start):null);}

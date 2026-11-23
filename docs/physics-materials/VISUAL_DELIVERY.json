@@ -1,0 +1,92 @@
+{
+  "captureAt": "2026-11-08T01:38:28.675Z",
+  "baselineSource": "0029c162de2756aa11092748514efe726e1ee217",
+  "candidate": "Unreleased12 material implementation captured November8; subsequent November15 fixes are separately verified, not re-labelled as these original captures.",
+  "method": "Same camera, seeded scene, High with AO/post/AA equallydisabled; original WebGL screenshots, losslesspixel-identical delivery",
+  "rows": [
+    {
+      "phase": "before",
+      "scene": "range",
+      "url": "/physics-comparison/before/range.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "d7d84df49f17684c7ad30fdea66ba7733212d36e44f715ea2e55ac0d347d12fa",
+      "deliverySHA256": "b364ad5b28cbf2d7960a3593a373a711e63bf59fbd02d8a613d5122a67ab793f",
+      "decodedPixelSHA256": "0f23876b3c2af434d5f12fdd02d76d898ce8e3d83419f07be993363f4f3ce41f",
+      "decodedPixelsIdentical": true,
+      "bytes": 217536
+    },
+    {
+      "phase": "before",
+      "scene": "complex-bay",
+      "url": "/physics-comparison/before/complex-bay.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "50d27a573d2627490256daa435f68120be3699e5c3aa36ac985799cf8eab37f0",
+      "deliverySHA256": "c4fa8fe8c6a3ea5cdef61dced72f378857bb846954e5dc6605581e85f30ddd33",
+      "decodedPixelSHA256": "d1aaa823b7f5540fc309c3f8ab9c90b2c688242316ea75370e9fbcddb569e368",
+      "decodedPixelsIdentical": true,
+      "bytes": 105758
+    },
+    {
+      "phase": "before",
+      "scene": "rifleA-hip",
+      "url": "/physics-comparison/before/rifleA-hip.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "9700d18f96a44bfb6a119e8e92e3c9db3e5d6423a81ade2a5d589b0a8e9dea31",
+      "deliverySHA256": "70e75091ed4ec3ab85e9b02885be5ae661119e0f116c326e274045b8739cee8c",
+      "decodedPixelSHA256": "81a419b652898bad1df271a4ee4befe65cc64ca0c0122bf08f9bfcdd48746ae5",
+      "decodedPixelsIdentical": true,
+      "bytes": 166208
+    },
+    {
+      "phase": "after",
+      "scene": "range",
+      "url": "/physics-comparison/after/range.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "9914ad15a8f58a4f7dcda015fc5dd9c05b8cc89f8d91ee95d77ae0d346045ed0",
+      "deliverySHA256": "de47285e90622ccffba3564892feb3752c7641e73f8a2d72d29f9f8c61a18a24",
+      "decodedPixelSHA256": "d8585d8c4ea11256a7b6a28383d06ddc70e8b642417ac9d6d71c9f47e378343a",
+      "decodedPixelsIdentical": true,
+      "bytes": 289056
+    },
+    {
+      "phase": "after",
+      "scene": "complex-bay",
+      "url": "/physics-comparison/after/complex-bay.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "443a593048c8a0bb0e12cea1ce03e9e2a04353550814719732262624aeeceb68",
+      "deliverySHA256": "faa37f0ce7717fdd0aedc70e1e4ef7550e87bf82957afe933cfc9229e2bc1089",
+      "decodedPixelSHA256": "f78f5169927d71666383ab5f689329eaf6257eb997b126c7446be9f64012c120",
+      "decodedPixelsIdentical": true,
+      "bytes": 192460
+    },
+    {
+      "phase": "after",
+      "scene": "rifleA-hip",
+      "url": "/physics-comparison/after/rifleA-hip.webp",
+      "dimensions": [
+        1100,
+        680
+      ],
+      "originalPngSHA256": "fc86543d7c810a567d08185dffb506ad404c007137c94f5063fa2a58257e92f3",
+      "deliverySHA256": "16fc30d0e4153c1d3c8611350f9113fea3e7e477d368babd1f38552f6020ffb4",
+      "decodedPixelSHA256": "366681d1fce52d646156821ad61dd824ecc94e946b802dd7076141afb504fde9",
+      "decodedPixelsIdentical": true,
+      "bytes": 271336
+    }
+  ]
+}

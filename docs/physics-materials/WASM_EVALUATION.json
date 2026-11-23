@@ -1,0 +1,332 @@
+{
+  "schema": 1,
+  "date": "2026-11-08T00:35:34.977Z",
+  "decision": "Retain TypeScript; no demonstrated whole-engine benefit",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCpus": 3
+  },
+  "provenance": {
+    "script": "scripts/benchmark-wasm-evaluation.mjs",
+    "scriptSha256": "6c50aafe19bf2cbd385eadafffda25ec7006230ca5412f5bf0702382a3d6f53f",
+    "movementSource": "src/engine/movement/MovementSolvers.ts",
+    "movementSourceSha256": "c37ba9c10f6ebc30cbe4f8f23a91e64180cd19a1b16ccab971febb6f457f45f0",
+    "moduleOrigin": "Original module hand-encoded in this script; validated and compiled by the WebAssembly JavaScript API",
+    "moduleBytes": 192,
+    "moduleSha256": "236e1bae64ebba0aae0b03cdd6affd5daf25a0d031e9290115298a6e3101efce",
+    "installedTools": {
+      "rustc": null,
+      "cargo": null,
+      "clang": null,
+      "wasm-opt": null
+    },
+    "rustCompiled": false,
+    "rustMeasured": false
+  },
+  "method": {
+    "expression": "current=vx*wishX+vz*wishZ; requested=(airAccel*wishSpeed)*dt; Math.min(requested,Math.max(0,wishLimit-current))",
+    "engineArithmetic": "Exact arithmetic and multiplication order from the projection increment in solveAirMovement. Wish-limit/profile selection, velocity application, speed caps and output acceleration are outside this isolated kernel.",
+    "data": "Eight packed f64 values per row; seeded finite corpus plus signed-zero, exact-boundary and finite-magnitude edge cases",
+    "parity": "Object.is for every scalar and batch result, preserving signed zero; inputs checked unchanged; zero-count batch checked",
+    "performance": "1024 seeded rows; warmup; shared power-of-two pass calibration to at least 12 ms for both candidates; fifteen samples with alternating JS/Wasm order; exact checksums; no wall-time CI gate",
+    "batchCopies": "Each timed Wasm batch includes 64 bytes per row copied into linear memory, one boundary call, 8 bytes per row copied back to a JavaScript Float64Array, and the same output checksum loop used by JS. Typed-array views and memory allocation are outside timing.",
+    "limitations": [
+      "Favorable Wasm lower bound: inputs are already packed; extracting existing Velocity/Vector3 objects, material/profile resolution, packing and application to engine objects are not modeled.",
+      "Only an isolated arithmetic scalar and boundary/copies are measured. No collision, AI, replay, audio, rendering, complete movement update or Simulation.step port is benchmarked.",
+      "Rust and a Rust-generated module are unmeasured; there is no installed Rust/Cargo/Clang/Wasm optimizer toolchain.",
+      "Node/V8 on this shared executor is the only measured runtime. Browser, office-PC, gaming-PC, whole-engine FPS and physical input latency are unmeasured."
+    ]
+  },
+  "parity": {
+    "finiteInputRows": 32795,
+    "seededRows": 32768,
+    "edgeRows": 27,
+    "scalarComparisons": 32795,
+    "batchComparisons": 131180,
+    "batchZeroCountChecked": true,
+    "positiveZeroResults": 14542,
+    "negativeZeroResults": 7,
+    "mismatches": 0
+  },
+  "timing": [
+    {
+      "label": "scalar eight-f64 JS/Wasm boundary",
+      "batchSize": 1,
+      "passesPerSample": 4096,
+      "rowsPerSample": 4194304,
+      "boundaryCallsPerWasmSample": 4194304,
+      "unit": "nanoseconds per row, including loop and checksum work",
+      "js": {
+        "min": 3.2973384857177592,
+        "median": 3.510466098785407,
+        "p90": 4.117269992828375,
+        "max": 5.195832967758184,
+        "samples": [
+          3.4718749523162815,
+          5.195832967758184,
+          4.117269992828375,
+          3.620883703231816,
+          3.395955562591555,
+          3.5382430553436253,
+          3.5316312313079776,
+          3.640406131744377,
+          3.2973384857177592,
+          3.5028202533722044,
+          3.510466098785407,
+          3.3992819786071977,
+          3.43962335586548,
+          3.5519320964813184,
+          3.4665906429290807
+        ]
+      },
+      "wasm": {
+        "min": 8.014241933822648,
+        "median": 8.502796411514286,
+        "p90": 9.71702766418457,
+        "max": 9.919364690780638,
+        "samples": [
+          8.110266208648687,
+          9.919364690780638,
+          8.342989921569815,
+          8.265693187713612,
+          8.171658039093023,
+          8.502796411514286,
+          8.515790700912468,
+          8.501251459121706,
+          8.014241933822648,
+          9.71702766418457,
+          8.670011997222886,
+          8.876224517822276,
+          8.502378702163698,
+          8.953495264053341,
+          8.607765197753896
+        ]
+      },
+      "medianSpeedupJsOverWasm": 0.4128601849188835
+    },
+    {
+      "label": "packed batch including input and output copies",
+      "batchSize": 1,
+      "passesPerSample": 2048,
+      "rowsPerSample": 2097152,
+      "boundaryCallsPerWasmSample": 2097152,
+      "unit": "nanoseconds per row, including loop and checksum work",
+      "js": {
+        "min": 7.768418788909812,
+        "median": 8.225289821624758,
+        "p90": 8.787867546081532,
+        "max": 10.110864162444967,
+        "samples": [
+          10.110864162444967,
+          8.603507995605472,
+          8.463064193725643,
+          8.17790699005126,
+          7.96177053451533,
+          7.980629920959458,
+          8.225289821624758,
+          8.211875438690228,
+          8.492161273956347,
+          8.350437641143662,
+          8.09386730194102,
+          7.874650478362959,
+          7.768418788909812,
+          8.240781307220598,
+          8.787867546081532
+        ]
+      },
+      "wasm": {
+        "min": 30.315782070159877,
+        "median": 31.71513938903805,
+        "p90": 32.37402582168566,
+        "max": 33.79266643524178,
+        "samples": [
+          31.880664825439464,
+          31.373349189758283,
+          31.71513938903805,
+          30.994410037994342,
+          30.554726123809754,
+          30.315782070159877,
+          32.0613994598388,
+          30.839993476867676,
+          31.902159690856887,
+          31.262547492980964,
+          31.83967638015748,
+          33.79266643524178,
+          30.87862730026254,
+          31.919595241546634,
+          32.37402582168566
+        ]
+      },
+      "medianSpeedupJsOverWasm": 0.25934900429501906
+    },
+    {
+      "label": "packed batch including input and output copies",
+      "batchSize": 16,
+      "passesPerSample": 4096,
+      "rowsPerSample": 4194304,
+      "boundaryCallsPerWasmSample": 262144,
+      "unit": "nanoseconds per row, including loop and checksum work",
+      "js": {
+        "min": 6.139281511306728,
+        "median": 6.359369516372631,
+        "p90": 7.075855493545521,
+        "max": 8.09039044380184,
+        "samples": [
+          6.6978430747986195,
+          6.504634141921975,
+          8.09039044380184,
+          6.527931451797406,
+          6.359369516372631,
+          6.617496967315709,
+          6.604058504104562,
+          6.222765207290608,
+          6.3567762374878125,
+          6.290472507476772,
+          6.339006423950193,
+          7.075855493545521,
+          6.343676805496212,
+          6.21202945709227,
+          6.139281511306728
+        ]
+      },
+      "wasm": {
+        "min": 4.764809370040916,
+        "median": 4.940265178680383,
+        "p90": 5.120393991470259,
+        "max": 6.221179485321076,
+        "samples": [
+          4.896927118301403,
+          4.945190906524653,
+          4.8501842021942245,
+          4.997490406036383,
+          4.848035097122153,
+          4.940265178680383,
+          4.985271930694536,
+          5.032533407211279,
+          4.972807884216345,
+          4.935546875000003,
+          5.120393991470259,
+          4.893949508666959,
+          6.221179485321076,
+          4.764809370040916,
+          4.902621984481811
+        ]
+      },
+      "medianSpeedupJsOverWasm": 1.2872526648602518
+    },
+    {
+      "label": "packed batch including input and output copies",
+      "batchSize": 128,
+      "passesPerSample": 4096,
+      "rowsPerSample": 4194304,
+      "boundaryCallsPerWasmSample": 32768,
+      "unit": "nanoseconds per row, including loop and checksum work",
+      "js": {
+        "min": 6.210659027099585,
+        "median": 6.355675458908087,
+        "p90": 6.687322378158577,
+        "max": 7.470353364944491,
+        "samples": [
+          6.400276660919265,
+          6.266131877899223,
+          6.221181869506807,
+          6.370135784149124,
+          6.687322378158577,
+          6.4133067131042765,
+          6.358882188796985,
+          6.3482925891876745,
+          6.26096701622004,
+          6.29860520362849,
+          6.358313798904432,
+          6.355675458908087,
+          7.470353364944491,
+          6.228187799453772,
+          6.210659027099585
+        ]
+      },
+      "wasm": {
+        "min": 3.4488184452056765,
+        "median": 3.5757429599762207,
+        "p90": 3.7208976745605784,
+        "max": 3.7304251194000435,
+        "samples": [
+          3.48455643653866,
+          3.5380926132202397,
+          3.6301553249358736,
+          3.4488184452056765,
+          3.7168457508086505,
+          3.7304251194000435,
+          3.5289711952209624,
+          3.6522421836852543,
+          3.7208976745605784,
+          3.473049640655558,
+          3.519802331924428,
+          3.621819734573391,
+          3.4694154262542454,
+          3.5757429599762207,
+          3.6144464015961177
+        ]
+      },
+      "medianSpeedupJsOverWasm": 1.777441927467391
+    },
+    {
+      "label": "packed batch including input and output copies",
+      "batchSize": 1024,
+      "passesPerSample": 4096,
+      "rowsPerSample": 4194304,
+      "boundaryCallsPerWasmSample": 4096,
+      "unit": "nanoseconds per row, including loop and checksum work",
+      "js": {
+        "min": 6.085131406784184,
+        "median": 6.332089185714755,
+        "p90": 7.474393367767331,
+        "max": 8.265270709991455,
+        "samples": [
+          6.194245576858492,
+          7.474393367767331,
+          8.265270709991455,
+          6.085131406784184,
+          6.6333827972412,
+          6.198132753372108,
+          6.916775226593029,
+          6.27020525932327,
+          6.332089185714755,
+          6.866130590438973,
+          6.503466606140162,
+          6.3124279975890465,
+          6.23913550376891,
+          6.2470557689667245,
+          6.358385562896859
+        ]
+      },
+      "wasm": {
+        "min": 3.946460723876916,
+        "median": 4.18082284927364,
+        "p90": 4.3301134109497745,
+        "max": 4.675136804580676,
+        "samples": [
+          4.675136804580676,
+          4.131787538528414,
+          3.971546649932968,
+          3.946460723876916,
+          4.078688383102281,
+          4.236274003982391,
+          4.3301134109497745,
+          4.125082969665648,
+          4.18082284927364,
+          4.085495948791392,
+          4.3054406642915355,
+          4.20911073684702,
+          4.240364313125647,
+          4.179965734481739,
+          4.205839633941548
+        ]
+      },
+      "medianSpeedupJsOverWasm": 1.514555725989411
+    }
+  ],
+  "checksumSink": 125443611.23190965
+}

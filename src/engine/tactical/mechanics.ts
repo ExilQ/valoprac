@@ -9,7 +9,7 @@ import type {AngleSector,TacticalLevel} from './levels';
 function builder(){
  const obstacles:Obstacle[]=[];
  const box=(x1:number,y1:number,z1:number,x2:number,y2:number,z2:number,kind:'wall'|'cover'='wall',material:SurfaceMaterial='reinforced',color=0xb8c2bb)=>{
-  const obstacle:Obstacle={box:new Box3(new Vector3(Math.min(x1,x2),y1,Math.min(z1,z2)),new Vector3(Math.max(x1,x2),y2,Math.max(z1,z2))),kind,material,color};
+  const obstacle:Obstacle={box:new Box3(new Vector3(Math.min(x1,x2),y1,Math.min(z1,z2)),new Vector3(Math.max(x1,x2),y2,Math.max(z1,z2))),kind,material,color,surfaceId:material};
   obstacles.push(obstacle);return obstacle;
  };
  return{obstacles,box};

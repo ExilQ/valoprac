@@ -1,0 +1,471 @@
+{
+  "rows": [
+    {
+      "i": 0,
+      "map": "range",
+      "drawCalls": {
+        "min": 37,
+        "max": 37
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 46,
+        "programs": 28
+      },
+      "quality": [
+        {
+          "preset": "low",
+          "memory": {
+            "geometries": 94,
+            "textures": 17
+          },
+          "materials": {
+            "quality": "low",
+            "scalarLowFallback": true,
+            "materialCount": 49,
+            "textureSets": 0,
+            "textureCount": 0,
+            "estimatedTextureBytes": 0,
+            "maxMaterialVariants": 256,
+            "disposed": false
+          }
+        },
+        {
+          "preset": "high",
+          "memory": {
+            "geometries": 109,
+            "textures": 54
+          },
+          "materials": {
+            "quality": "high",
+            "scalarLowFallback": false,
+            "materialCount": 49,
+            "textureSets": 12,
+            "textureCount": 36,
+            "estimatedTextureBytes": 3145728,
+            "maxMaterialVariants": 256,
+            "disposed": false
+          }
+        },
+        {
+          "preset": "medium",
+          "memory": {
+            "geometries": 109,
+            "textures": 42
+          },
+          "materials": {
+            "quality": "medium",
+            "scalarLowFallback": false,
+            "materialCount": 49,
+            "textureSets": 12,
+            "textureCount": 24,
+            "estimatedTextureBytes": 524292,
+            "maxMaterialVariants": 256,
+            "disposed": false
+          }
+        },
+        {
+          "preset": "ultra",
+          "memory": {
+            "geometries": 109,
+            "textures": 54
+          },
+          "materials": {
+            "quality": "ultra",
+            "scalarLowFallback": false,
+            "materialCount": 49,
+            "textureSets": 12,
+            "textureCount": 36,
+            "estimatedTextureBytes": 12582912,
+            "maxMaterialVariants": 256,
+            "disposed": false
+          }
+        },
+        {
+          "preset": "low",
+          "memory": {
+            "geometries": 109,
+            "textures": 17
+          },
+          "materials": {
+            "quality": "low",
+            "scalarLowFallback": true,
+            "materialCount": 49,
+            "textureSets": 0,
+            "textureCount": 0,
+            "estimatedTextureBytes": 0,
+            "maxMaterialVariants": 256,
+            "disposed": false
+          }
+        }
+      ],
+      "shot": {
+        "before": {
+          "programs": 70,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 70,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 109,
+          "textures": 17
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 11813956
+    },
+    {
+      "i": 1,
+      "map": "complex",
+      "drawCalls": {
+        "min": 29,
+        "max": 29
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 38,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 115,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12464165
+    },
+    {
+      "i": 2,
+      "map": "tower",
+      "drawCalls": {
+        "min": 34,
+        "max": 34
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 43,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 100,
+          "textures": 16
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12618315
+    },
+    {
+      "i": 3,
+      "map": "wallbang",
+      "drawCalls": {
+        "min": 32,
+        "max": 32
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 41,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 96,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12701175
+    },
+    {
+      "i": 4,
+      "map": "range",
+      "drawCalls": {
+        "min": 37,
+        "max": 37
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 46,
+        "programs": 28
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 28,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 28,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 96,
+          "textures": 17
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12825735
+    },
+    {
+      "i": 5,
+      "map": "complex",
+      "drawCalls": {
+        "min": 29,
+        "max": 29
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 38,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 115,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12844527
+    },
+    {
+      "i": 6,
+      "map": "tower",
+      "drawCalls": {
+        "min": 34,
+        "max": 34
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 43,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 100,
+          "textures": 16
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12943987
+    },
+    {
+      "i": 7,
+      "map": "wallbang",
+      "drawCalls": {
+        "min": 32,
+        "max": 32
+      },
+      "effects": {
+        "shotsInjected": 500,
+        "authorityUnchanged": true,
+        "decals": 12,
+        "pool": 96,
+        "calls": 41,
+        "programs": 26
+      },
+      "quality": null,
+      "shot": {
+        "before": {
+          "programs": 26,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 26,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      },
+      "disposal": {
+        "before": {
+          "geometries": 96,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      },
+      "heap": 12963707
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Short real-browser lifecycle stress, not an hour of continuous GPU use.",
+    "SwiftShader software renderer; heap after explicit GC is an estimate, no physical GPU or input-latency qualification."
+  ],
+  "stockHigh": {
+    "shaderProgramsAddedDuringFrames": 0,
+    "authorityUnchanged": true,
+    "frameMs": {
+      "median": 16.599999999998545,
+      "p95": 16.599999999998545,
+      "p99": 16.599999999998545,
+      "max": 816.6000000000022
+    },
+    "drawCalls": {
+      "min": 137,
+      "max": 137
+    },
+    "firstShot": {
+      "before": {
+        "programs": 47,
+        "shots": 0,
+        "ammo": 25
+      },
+      "after": {
+        "programs": 47,
+        "shots": 1,
+        "ammo": 24
+      },
+      "passed": true
+    },
+    "disposal": {
+      "before": {
+        "geometries": 91,
+        "textures": 72
+      },
+      "after": {
+        "geometries": 0,
+        "textures": 0
+      },
+      "canvasCount": 0
+    }
+  },
+  "passed": true,
+  "completedAt": "2026-11-15T07:51:56.813Z"
+}

@@ -9,8 +9,13 @@ export function synthesizeLanding(sampleRate:number,material:FootstepMaterial='c
   const sole=low*.95*Math.exp(-t*31)+(noise-low)*.09*Math.exp(-t*75);
   const surface=material==='steel'?(Math.sin(2*Math.PI*380*t)+.3*Math.sin(2*Math.PI*1040*t))*.12*Math.exp(-t*25)
    :material==='tile'?Math.sin(2*Math.PI*870*t)*.09*Math.exp(-t*48)
-   :material==='wood'?Math.sin(2*Math.PI*148*t)*.22*Math.exp(-t*28):0;
-  const attack=Math.min(1,t/.002);samples[i]=Math.tanh(body+sole+surface)*.75*attack;
+   :material==='wood'?Math.sin(2*Math.PI*148*t)*.22*Math.exp(-t*28)
+   :material==='glass'?Math.sin(2*Math.PI*1630*t)*.1*Math.exp(-t*43)
+   :material==='plastic'?Math.sin(2*Math.PI*470*t)*.16*Math.exp(-t*38)
+   :material==='rubber'?low*.32*Math.exp(-t*33)
+   :material==='fabric'?low*.12*Math.exp(-t*60):0;
+  const damping=material==='rubber'?.66:material==='fabric'?.4:1;
+  const attack=Math.min(1,t/.002);samples[i]=Math.tanh((body+sole)*damping+surface)*.75*attack;
  }
  return samples;
 }

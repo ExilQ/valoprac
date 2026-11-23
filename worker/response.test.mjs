@@ -20,3 +20,8 @@ test('only the homepage stays searchable across aliases, HEAD and cached respons
  const cached=await request('/index.html',{headers:{'If-None-Match':'"html"'}});assert.equal(cached.status,304);assert.match(cached.headers.get('x-robots-tag'),/noindex/);
  assert.equal((await request('/assets/app-abcd1234.js')).headers.get('x-robots-tag'),null,'Rendering resources remain crawlable');
 });
+test('malformed percent-encoded paths retain error security and HEAD semantics',async()=>{
+ for(const path of ['/%','/%FF','/%E0%A4'])for(const method of ['GET','HEAD']){
+  const r=await request(path,{method});assert.equal(r.status,400);assert.equal(r.headers.get('x-frame-options'),'DENY');assert.equal(r.headers.get('x-content-type-options'),'nosniff');assert.match(r.headers.get('strict-transport-security'),/max-age=/);assert.match(r.headers.get('content-security-policy'),/frame-ancestors 'none'/);assert.equal(r.headers.get('cache-control'),'no-store');assert.match(r.headers.get('x-robots-tag'),/noindex/);assert.match(r.headers.get('content-type'),/charset=utf-8/);assert.equal(await r.text(),method==='HEAD'?'':'잘못된 주소입니다.');
+ }
+});

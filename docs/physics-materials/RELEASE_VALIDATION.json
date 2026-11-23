@@ -1,0 +1,487 @@
+{
+  "schema": 1,
+  "release": "12.0.0",
+  "patchLabel": "12.00",
+  "baseline": {
+    "commit": "0029c162de2756aa11092748514efe726e1ee217",
+    "applicationTests": 1268,
+    "testFiles": 105,
+    "sourceRelease": "11.0.0"
+  },
+  "gates": {
+    "completed": true,
+    "renderingSourceUnchanged": true,
+    "shaderPreparationPassed": true,
+    "lifecyclePassed": true,
+    "browserPassed": true
+  },
+  "status": "executed-software-acceptance-passed; build-and-publication-receipts-recorded-separately",
+  "rendering": {
+    "source": "docs/physics-materials/RENDER_AFTER.json",
+    "baselineSource": "docs/physics-materials/RENDER_BASELINE.json",
+    "passed": true,
+    "sourceUnchanged": true,
+    "environment": {
+      "browser": "Chromium headless SwiftShader",
+      "viewport": [
+        960,
+        540
+      ],
+      "physicalGPU": false,
+      "renderCPUTiming": true,
+      "gpuTimerAvailabilityMeasured": true,
+      "simulationHz": 120,
+      "renderFrameSamples": 36,
+      "frameSchedule": "actual requestAnimationFrame; no GPU draw suppression or fake timer"
+    },
+    "limits": [
+      "No physical office/integrated/gamingGPU benchmark is available in this cloud executor.",
+      "Firstpreparation time is recorded independently, not hidden inside FPS.",
+      "This finite scene probe does not establish high-refresh hardware or physical input latency."
+    ],
+    "coreHighOverrides": {
+      "postProcessing": false,
+      "ambientOcclusion": false,
+      "antiAliasing": false
+    },
+    "physicalGPUQualified": false,
+    "rows": [
+      {
+        "map": "range",
+        "preset": "low",
+        "baselineFrameMedianMs": 200,
+        "currentFrameMedianMs": 50,
+        "baselineDrawCalls": 42,
+        "currentDrawCalls": 37,
+        "baselineTriangles": 28526,
+        "currentTriangles": 22030,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "tactical",
+        "preset": "low",
+        "baselineFrameMedianMs": 350,
+        "currentFrameMedianMs": 50,
+        "baselineDrawCalls": 22,
+        "currentDrawCalls": 19,
+        "baselineTriangles": 33706,
+        "currentTriangles": 16694,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "long",
+        "preset": "low",
+        "baselineFrameMedianMs": 216.60000000000218,
+        "currentFrameMedianMs": 50,
+        "baselineDrawCalls": 33,
+        "currentDrawCalls": 32,
+        "baselineTriangles": 40858,
+        "currentTriangles": 15746,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "garage",
+        "preset": "low",
+        "baselineFrameMedianMs": 350,
+        "currentFrameMedianMs": 66.59999999999991,
+        "baselineDrawCalls": 31,
+        "currentDrawCalls": 30,
+        "baselineTriangles": 28516,
+        "currentTriangles": 12244,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "site",
+        "preset": "low",
+        "baselineFrameMedianMs": 416.70000000000437,
+        "currentFrameMedianMs": 66.59999999999991,
+        "baselineDrawCalls": 32,
+        "currentDrawCalls": 31,
+        "baselineTriangles": 34396,
+        "currentTriangles": 13676,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "mid",
+        "preset": "low",
+        "baselineFrameMedianMs": 216.70000000000073,
+        "currentFrameMedianMs": 66.59999999999991,
+        "baselineDrawCalls": 32,
+        "currentDrawCalls": 33,
+        "baselineTriangles": 35618,
+        "currentTriangles": 14022,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "tower",
+        "preset": "low",
+        "baselineFrameMedianMs": 100.10000000000036,
+        "currentFrameMedianMs": 66.69999999999982,
+        "baselineDrawCalls": 33,
+        "currentDrawCalls": 34,
+        "baselineTriangles": 37256,
+        "currentTriangles": 15812,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "multi",
+        "preset": "low",
+        "baselineFrameMedianMs": 150,
+        "currentFrameMedianMs": 66.59999999999991,
+        "baselineDrawCalls": 33,
+        "currentDrawCalls": 34,
+        "baselineTriangles": 36226,
+        "currentTriangles": 14634,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "complex",
+        "preset": "low",
+        "baselineFrameMedianMs": 183.29999999999927,
+        "currentFrameMedianMs": 83.30000000000018,
+        "baselineDrawCalls": 28,
+        "currentDrawCalls": 29,
+        "baselineTriangles": 81726,
+        "currentTriangles": 56142,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "bunny",
+        "preset": "low",
+        "baselineFrameMedianMs": 100,
+        "currentFrameMedianMs": 16.700000000000273,
+        "baselineDrawCalls": 23,
+        "currentDrawCalls": 12,
+        "baselineTriangles": 23328,
+        "currentTriangles": 4596,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "wallbang",
+        "preset": "low",
+        "baselineFrameMedianMs": 399.90000000000146,
+        "currentFrameMedianMs": 50,
+        "baselineDrawCalls": 31,
+        "currentDrawCalls": 32,
+        "baselineTriangles": 29554,
+        "currentTriangles": 8818,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "range",
+        "preset": "high",
+        "baselineFrameMedianMs": 933.2999999999956,
+        "currentFrameMedianMs": 450,
+        "baselineDrawCalls": 70,
+        "currentDrawCalls": 60,
+        "baselineTriangles": 55998,
+        "currentTriangles": 43006,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "complex",
+        "preset": "high",
+        "baselineFrameMedianMs": 716.6000000000022,
+        "currentFrameMedianMs": 750,
+        "baselineDrawCalls": 63,
+        "currentDrawCalls": 68,
+        "baselineTriangles": 167030,
+        "currentTriangles": 117478,
+        "programsAddedDuringFrames": 0
+      },
+      {
+        "map": "tower",
+        "preset": "high",
+        "baselineFrameMedianMs": 616.5999999999985,
+        "currentFrameMedianMs": 533.1999999999998,
+        "baselineDrawCalls": 69,
+        "currentDrawCalls": 71,
+        "baselineTriangles": 76240,
+        "currentTriangles": 33352,
+        "programsAddedDuringFrames": 0
+      }
+    ],
+    "captureAt": "2026-11-15T07:51:12.532Z",
+    "mergedRemoteWallFix": "e18cdfe"
+  },
+  "shaderPreparation": {
+    "rows": [
+      {
+        "preset": "low",
+        "authorityUnchanged": true,
+        "programsAfterWarm": 28,
+        "programsAddedDuringFrames": 0,
+        "shot": {
+          "before": {
+            "programs": 28,
+            "shots": 0,
+            "ammo": 25
+          },
+          "after": {
+            "programs": 28,
+            "shots": 1,
+            "ammo": 24
+          },
+          "passed": true
+        }
+      },
+      {
+        "preset": "high",
+        "authorityUnchanged": true,
+        "programsAfterWarm": 32,
+        "programsAddedDuringFrames": 0,
+        "shot": {
+          "before": {
+            "programs": 32,
+            "shots": 0,
+            "ammo": 25
+          },
+          "after": {
+            "programs": 32,
+            "shots": 1,
+            "ammo": 24
+          },
+          "passed": true
+        }
+      }
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "lifecycle": {
+    "longSessionSource": "docs/physics-materials/LONG_SESSION.json",
+    "longSessionPassed": true,
+    "browserResourceCycles": {
+      "passed": true,
+      "source": "docs/physics-materials/BROWSER_LIFECYCLE.json",
+      "cycles": 8,
+      "floorEffectEvents": 4000,
+      "allMapResourcesReleased": true,
+      "stockHigh": {
+        "shaderProgramsAddedDuringFrames": 0,
+        "authorityUnchanged": true,
+        "frameMs": {
+          "median": 16.600000000002183,
+          "p95": 16.600000000002183,
+          "p99": 16.600000000002183,
+          "max": 883.2999999999993
+        },
+        "drawCalls": {
+          "min": 137,
+          "max": 137
+        },
+        "firstShot": {
+          "before": {
+            "programs": 47,
+            "shots": 0,
+            "ammo": 25
+          },
+          "after": {
+            "programs": 47,
+            "shots": 1,
+            "ammo": 24
+          },
+          "passed": true
+        },
+        "disposal": {
+          "before": {
+            "geometries": 91,
+            "textures": 72
+          },
+          "after": {
+            "geometries": 0,
+            "textures": 0
+          },
+          "canvasCount": 0
+        }
+      }
+    },
+    "physicalDeviceSoak": false
+  },
+  "browser": {
+    "passed": true,
+    "checks": [
+      "Real uninterrupted WebGL draws, pointer lock and trusted firing advance state and consume ammunition",
+      "Two trusted right clicks enter/exit persistent rifle ADS",
+      "Escape restores controls and pauses authority",
+      "Actual completed UI flow saves IndexedDB session and its replay reconstructs matching shots and checksum",
+      "Primary training start remains reachable across seven required desktop/mobile viewport sizes",
+      "Actual frozen simulation-2 replay file imports and verifies through the browser UI"
+    ],
+    "layouts": [
+      {
+        "width": 1280,
+        "height": 720,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 269,
+            "right": 382.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 1366,
+        "height": 768,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 269,
+            "right": 382.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 1600,
+        "height": 900,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 269,
+            "right": 382.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 425,
+            "right": 538.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 2560,
+        "height": 1440,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 745,
+            "right": 858.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 3440,
+        "height": 1440,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 1185,
+            "right": 1298.703125
+          }
+        ],
+        "passed": true
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "overflow": false,
+        "buttons": [
+          {
+            "w": 113.703125,
+            "h": 42.296875,
+            "left": 39,
+            "right": 152.703125
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "before": {
+      "time": 0,
+      "shots": 0,
+      "ammo": 25
+    },
+    "savedReplay": {
+      "passed": true,
+      "shots": 7,
+      "version": "12.0.0",
+      "checksum": "c10e1c9729129ce5"
+    },
+    "legacyReplay": {
+      "passed": true,
+      "text": "\uc7ac\uc2e4\ud589 \uc77c\uce58 \u00b7 \uccb4\ud06c\ud3ec\uc778\ud2b8\uc640 \ucd5c\uc885 \uc810\uc218 0 \ud655\uc778"
+    },
+    "completedAt": "2026-11-15T05:57:25.134Z",
+    "limits": [
+      "Chromium SwiftShader, real WebGL draws remain enabled throughout gameplay.",
+      "Trusted mouse delivery and authority changes tested; no physical input-to-photon measurement or hardware FPS qualification."
+    ],
+    "after": {
+      "time": 0.825,
+      "shots": 7,
+      "ammo": 18,
+      "calls": 51,
+      "running": true
+    },
+    "source": "docs/physics-materials/BROWSER_LOCAL.json",
+    "syntheticQASession": true
+  },
+  "build": {
+    "recipe": [
+      "npm run prebuild",
+      "npm --ignore-scripts run build"
+    ],
+    "finalArtifactBytesInSeparateReceipt": true,
+    "compressedWorkerBudgetBytes": 10485760
+  },
+  "inputLatency": {
+    "physicalMeasured": false,
+    "cpuSubmitProxy": {
+      "metric": "DOM-event-to-render-submit CPU proxy",
+      "mouse": {
+        "total": 2,
+        "samples": 2,
+        "medianMs": 100.5,
+        "p95Ms": 100.5
+      },
+      "click": {
+        "total": 1,
+        "samples": 1,
+        "medianMs": 61.199999999953434,
+        "p95Ms": 61.199999999953434
+      },
+      "inputToPhotonMs": null,
+      "shotToPhotonMs": null,
+      "limitations": [
+        "Excludes GPU completion, scanout, peripheral latency and unsampled events.",
+        "Averages do not represent externally measured end-to-end latency."
+      ]
+    },
+    "baselineComparisonMeasured": false
+  },
+  "deployment": {
+    "verified": false,
+    "receiptMaintainedSeparately": true
+  },
+  "verifiedAt": "2026-11-15T06:00:34.222698+00:00",
+  "longSession": {
+    "source": "docs/physics-materials/LONG_SESSION.json",
+    "passed": true,
+    "simulatedSecondsPerRun": 1860,
+    "runs": 2,
+    "checksum": "40899af36fc9232f",
+    "physicalHoursClaimed": false
+  }
+}

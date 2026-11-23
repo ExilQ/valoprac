@@ -3,7 +3,10 @@ import type {SimulationOptions} from '../../training/platform/SessionOptions';
 import type {MovementAction} from '../../training/movementTools/types';
 
 export const REPLAY_SCHEMA=1 as const;
-export const REPLAY_SIMULATION_VERSION='valoprac-replay-simulation-2';
+export const LEGACY_REPLAY_SIMULATION_VERSION='valoprac-replay-simulation-2';
+export const REPLAY_SIMULATION_VERSION='valoprac-replay-simulation-3';
+export const REPLAY_INPUT_VERSION='ordered-fixed-input-1';
+export const REPLAY_WEAPON_VERSION='weapons-10.0.0';
 export const REPLAY_FIXED_DT=1/120;
 export const MAX_REPLAY_COMMANDS=750_000;
 export const MAX_REPLAY_SECONDS=1800;
@@ -24,6 +27,9 @@ export type ReplayCommand=
  |[12,MovementAction]; // bounded practice-tool command; no coordinates/scripts
 export interface ReplayHeader {
  gameVersion:string;simulationVersion:string;movementVersion:string;projectionVersion:string;calibrationFingerprint:string;
+ /** Absent only on the historical simulation-2 format. The profile, seed,
+  * initial weapon/settings and ordered input stream remain authoritative. */
+ simulationRules?:import('../simulation/rules').SimulationRulesId;materialPhysicsVersion?:string;inputVersion?:string;weaponVersion?:string;
  createdAt:number;fixedHz:120;map:string;physics:string;seed:number;
  initial:{mode:Mode;weapon:WeaponId;settings:Settings;attached:boolean;options:SimulationOptions};
 }

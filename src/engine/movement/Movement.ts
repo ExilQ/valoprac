@@ -1,8 +1,9 @@
 import {Vector3} from 'three';
-import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
+import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
+import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,limitContactSpeed,landingRetention} from './MovementSolvers';
 
@@ -31,6 +32,10 @@ export class Movement {
  speedModifier=1;grounded=true;crouch=0;eyeHeight=1.64;previousEyeHeight=1.64;speed=0;landedAt=-100;
  landingSerial=0;lastLandingImpactSpeed=0;lastLandingTime=-Infinity;
  readonly weaponSpeedReference=5.4;profile:MovementPhysicsProfile;
+ private rules:SimulationRulesId=CURRENT_SIMULATION_RULES;
+ setSimulationRules(rules:SimulationRulesId){this.rules=rules;this.collision.setSimulationRules(rules);}
+ private get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
+ private supportContact(maxY:number){return this.rules==='legacy-v2'?this.collision.support(this.position,maxY,this.profile.maxSlopeCos):this.collision.supportFootprint(this.position,maxY,this.profile.radius,this.profile.maxSlopeCos,this.profile.stepMinLandingWidth??.1);}
  private takeoff:TakeoffState|null=null;
  private weaponContext:{id:WeaponId;runSpeed:number;ads:boolean}|null=null;
  private activeInput:Pick<InputState,'walk'|'crouch'>={walk:false,crouch:false};
@@ -80,7 +85,7 @@ export class Movement {
   this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*8);this.eyeHeight=p.standingEyeHeight+(p.crouchingEyeHeight-p.standingEyeHeight)*this.crouch;
   const forward=input.forward,side=input.strafe,modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(forward<0?p.backwardModifier:1)*(Math.abs(side)>0?p.lateralModifier:1)*this.speedModifier;
   const wish=wishMovement(forward,side,yaw,p.maxSpeed,modifier);this.desiredDirection.set(wish.x*wish.amount,0,wish.z*wish.amount);this.opposedInput=wish.amount>0&&wish.x*this.previousVelocity.x+wish.z*this.previousVelocity.z<-.05;
-  const supportBefore=this.collision.support(this.position,this.position.y+.01,p.maxSlopeCos);
+  const supportBefore=this.supportContact(this.position.y+.01);
   if(this.grounded&&(this.position.y-supportBefore.height>.08||!supportBefore.walkable)){this.grounded=false;this.recordTakeoff(time,'fall');}
   // Manual timing is evaluated before ground friction. Merely holding Space
   // cannot issue a fresh request after a real contact transition.
@@ -97,22 +102,29 @@ export class Movement {
   if(!this.grounded)this.velocity.y=Math.max(-55,this.velocity.y-p.gravity*dt);
   const gravityTime=!this.grounded&&p.verticalIntegration==='ballistic'?(p.gravity>0?Math.min(dt,Math.max(0,(beforeVertical+55)/p.gravity)):dt):0;
   const verticalTravel=gravityTime>0?beforeVertical*gravityTime-.5*p.gravity*gravityTime*gravityTime+this.velocity.y*(dt-gravityTime):this.velocity.y*dt;
-  this.collision.moveHorizontal(this.position,this.velocity,dt,{radius:p.radius,bodyHeight:this.bodyHeight(),grounded:this.grounded,stepHeight:p.stepHeight,maxSlopeCos:p.maxSlopeCos});
+  const airborneSweep=this.rules!=='legacy-v2'&&!this.grounded,airborneOldY=this.position.y;
+  const collisionOptions={radius:p.radius,bodyHeight:this.bodyHeight(),grounded:this.grounded,stepHeight:p.stepHeight,maxSlopeCos:p.maxSlopeCos,minLandingWidth:p.stepMinLandingWidth??.1};
+  if(airborneSweep)this.collision.moveAirborne(this.position,this.velocity,dt,verticalTravel,collisionOptions);
+  else this.collision.moveHorizontal(this.position,this.velocity,dt,collisionOptions);
   // Tactical vertical motion uses the exact constant-gravity displacement.
-  // Source presets retain their previous semi-implicit integration byte-for-byte.
-  const oldY=this.position.y;this.position.y+=verticalTravel;const contact=this.collision.support(this.position,this.grounded?oldY+p.stepHeight:oldY+.01,p.maxSlopeCos);this.supportHeight=contact.height;this.groundNormal.copy(contact.normal);
+  // Legacy replays retain their previous integration and collision order.
+  const oldY=airborneSweep?airborneOldY:this.position.y;if(!airborneSweep)this.position.y+=verticalTravel;const contact=this.supportContact(this.grounded?oldY+p.stepHeight:oldY+.01);this.supportHeight=contact.height;this.groundNormal.copy(contact.normal);
   if(this.velocity.y<=0&&this.position.y<=contact.height+1e-6){
-   const landed=!this.grounded,impact=Math.max(0,-this.velocity.y),dy=oldY-this.position.y;
+   const landed=!this.grounded,impact=Math.max(0,-this.velocity.y),dy=airborneSweep?Math.max(0,-verticalTravel):oldY-this.position.y;
    const fraction=dy>EPS?Math.min(1,Math.max(0,(oldY-contact.height)/dy)):1;
    const contactTime=p.preset==='cs2'?time-dt+fraction*dt:time;
    this.position.y=contact.height;
    if(contact.walkable){this.velocity.y=0;this.grounded=true;
     if(landed){this.landedAt=contactTime;this.hops.landings++;this.hops.lastLandingInterval=Number.isFinite(this.lastLanding)?contactTime-this.lastLanding:null;this.lastLanding=contactTime;this.landingSpeed=Math.hypot(this.velocity.x,this.velocity.z);this.groundContact=0;this.landingImpact=impact;this.landingPenaltyPending=p.preset==='cs2';this.landingSerial++;this.lastLandingImpactSpeed=impact;this.lastLandingTime=contactTime;this.hopEvent('land',contactTime);
-     const launchTime=Math.max(contactTime,this.jumps.requestedAt);if(this.launch(launchTime)&&time>launchTime){const remainder=time-launchTime;this.velocity.y-=p.gravity*remainder;this.position.y+=this.velocity.y*remainder+(p.verticalIntegration==='ballistic'?.5*p.gravity*remainder*remainder:0);}
+     const launchTime=Math.max(contactTime,this.jumps.requestedAt);if(this.launch(launchTime)&&time>launchTime){const remainder=time-launchTime;this.velocity.y-=p.gravity*remainder;this.position.y+=this.velocity.y*remainder+(p.verticalIntegration==='ballistic'?.5*p.gravity*remainder*remainder:0);
+      // A buffered CS2-inspired jump can start at contact inside this tick.
+      // Its new vertical remainder was not part of the preceding falling sweep.
+      if(this.rules!=='legacy-v2')this.collision.resolveCeiling(this.position,this.velocity,contact.height,this.bodyHeight(),p.radius);
+     }
     }
    }else{this.grounded=false;const normalSpeed=this.velocity.dot(contact.normal);if(normalSpeed<0)this.velocity.addScaledVector(contact.normal,-normalSpeed);}
   }else if(this.grounded){if(contact.walkable&&contact.height>=oldY-p.stepHeight&&contact.height<=oldY+p.stepHeight)this.position.y=contact.height;else this.grounded=false;}
-  this.collision.resolveCeiling(this.position,this.velocity,oldY,this.bodyHeight(),p.radius);
+  if(!airborneSweep)this.collision.resolveCeiling(this.position,this.velocity,oldY,this.bodyHeight(),p.radius);
   if(this.jumps.expire(time)){this.hops.missedInputs++;this.hopEvent('missed',time);}
   this.speed=Math.hypot(this.velocity.x,this.velocity.z);this.hops.peakSpeed=Math.max(this.hops.peakSpeed,this.speed);if(this.grounded)this.groundContact+=dt;
   this.acceleration.copy(this.velocity).sub(this.previousVelocity).multiplyScalar(1/dt);this.deceleration=Math.max(0,(this.previousSpeed-this.speed)/dt);
@@ -125,23 +137,23 @@ export class Movement {
  }
  clearJumpInput(){this.jumps.clear();}
  capturePracticePose(map:string,yaw:number,pitch:number,time=this.lastTime):MovementPracticePose {
-  return{schema:1,map,physicsVersion:MOVEMENT_PHYSICS_VERSION,profile:this.profile.id,preset:this.profile.preset,capturedAt:time,position:plain(this.position),velocity:plain(this.velocity),yaw,pitch,crouch:this.crouch,grounded:this.grounded,takeoff:this.takeoff?{...this.takeoff,position:plain(this.takeoff.position),velocity:plain(this.takeoff.velocity)}:null};
+  return{schema:1,map,physicsVersion:this.physicsVersion,profile:this.profile.id,preset:this.profile.preset,capturedAt:time,position:plain(this.position),velocity:plain(this.velocity),yaw,pitch,crouch:this.crouch,grounded:this.grounded,takeoff:this.takeoff?{...this.takeoff,position:plain(this.takeoff.position),velocity:plain(this.takeoff.velocity)}:null};
  }
  /** Repositions a practice attempt without awarding a landing or jump event.
   * Inputs and chain timing are cleared; real velocity and the original airborne
   * budget resume. The caller resets sound/braking encounter trackers separately. */
  restorePracticePose(pose:MovementPracticePose,currentMap:string,time=this.lastTime,bounds:readonly number[]=[-256,-256,512,512]):MovementPracticeRestore {
   const fail=(reason:string):MovementPracticeRestore=>({ok:false,reason}),p=this.profile;
-  if(!pose||pose.schema!==1||pose.map!==currentMap||pose.physicsVersion!==MOVEMENT_PHYSICS_VERSION||pose.profile!==p.id||pose.preset!==p.preset)return fail('다른 맵·물리 버전의 위치는 복원할 수 없습니다.');
+  if(!pose||pose.schema!==1||pose.map!==currentMap||pose.physicsVersion!==this.physicsVersion||pose.profile!==p.id||pose.preset!==p.preset)return fail('다른 맵·물리 버전의 위치는 복원할 수 없습니다.');
   const finiteVec=(v:Vec3)=>!!v&&[v.x,v.y,v.z].every(n=>Number.isFinite(n)&&Math.abs(n)<=1000);
   if(!finiteVec(pose.position)||!finiteVec(pose.velocity)||![pose.yaw,pose.pitch,pose.crouch,pose.capturedAt,time].every(Number.isFinite)||Math.abs(pose.yaw)>1e9||Math.abs(pose.pitch)>1.55||pose.crouch<0||pose.crouch>1||pose.capturedAt<0||time<0||typeof pose.grounded!=='boolean'||Math.hypot(pose.velocity.x,pose.velocity.z)>100||pose.velocity.y< -55||pose.velocity.y>Math.max(20,p.jumpImpulse))return fail('저장한 위치나 속도 값이 유효하지 않습니다.');
   if(bounds.length<4||!bounds.slice(0,4).every(Number.isFinite)||bounds[2]<=0||bounds[3]<=0)return fail('맵 경계를 확인하지 못했습니다.');
   const position=new Vector3(pose.position.x,pose.position.y,pose.position.z),radius=p.radius,bodyHeight=pose.crouch>.5?1.35:1.85;
   if(position.x-radius<bounds[0]||position.x+radius>bounds[0]+bounds[2]||position.z-radius<bounds[1]||position.z+radius>bounds[1]+bounds[3]||position.y<-.01||position.y>64)return fail('맵 경계 밖의 위치는 복원할 수 없습니다.');
-  this.collision.obstacles=this.obstacles;const support=this.collision.support(position,position.y+.05,p.maxSlopeCos);
+  this.collision.obstacles=this.obstacles;const support=this.rules==='legacy-v2'?this.collision.support(position,position.y+.05,p.maxSlopeCos):this.collision.supportFootprint(position,position.y+.05,radius,p.maxSlopeCos,p.stepMinLandingWidth??.1);
   if(pose.grounded){if(!support.walkable||Math.abs(position.y-support.height)>.05)return fail('발을 지지하는 바닥이 없는 위치입니다.');position.y=support.height;}
   else if(position.y<=support.height+1e-6)return fail('공중 위치가 지지면 안쪽에 있습니다.');
-  if(!this.collision.canOccupy(position,bodyHeight,radius))return fail('벽이나 천장 안쪽의 위치는 복원할 수 없습니다.');
+  if(!this.collision.canOccupy(position,bodyHeight,radius,p.maxSlopeCos))return fail('벽이나 천장 안쪽의 위치는 복원할 수 없습니다.');
   const takeoff=pose.takeoff;
   if(!pose.grounded){
    if(!takeoff||!['jump','fall'].includes(takeoff.kind)||!finiteVec(takeoff.position)||!finiteVec(takeoff.velocity)||![takeoff.time,takeoff.horizontalSpeed,takeoff.weaponRunSpeed].every(Number.isFinite)||takeoff.horizontalSpeed<0||takeoff.horizontalSpeed>100||takeoff.weaponRunSpeed<=0||takeoff.weaponRunSpeed>20||takeoff.time>pose.capturedAt+1e-6||takeoff.speedCap!==null&&(!Number.isFinite(takeoff.speedCap)||takeoff.speedCap<0||takeoff.speedCap>100))return fail('공중 이륙 상태를 확인할 수 없습니다.');

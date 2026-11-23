@@ -1,12 +1,17 @@
 // Generated builds replace this marker with same-origin asset data; no runtime network dependencies.
 const EMBEDDED = /*__ASSETS__*/{};
-const encoder=new TextEncoder();
+const SECURITY_HEADERS={
+   'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin',
+   'Permissions-Policy':'camera=(), microphone=(), geolocation=()',
+   'Strict-Transport-Security':'max-age=31536000',
+   'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+};
 function decode(entry){if(entry.text!==undefined)return entry.text;const raw=atob(entry.base64),bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);return bytes;}
 export function createAssetHandler(assets,rules=[],aliases={}){
  const decoded=new Map();
  const match=(pattern,path)=>pattern.endsWith('*')?path.startsWith(pattern.slice(0,-1)):path===pattern;
  const handler={async fetch(request){
-  const url=new URL(request.url);let path;try{path=decodeURIComponent(url.pathname);}catch{return new Response('잘못된 주소입니다.',{status:400});}
+  const url=new URL(request.url);let path;try{path=decodeURIComponent(url.pathname);}catch{return new Response(request.method==='HEAD'?null:'잘못된 주소입니다.',{status:400,headers:{...SECURITY_HEADERS,'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','X-Robots-Tag':'noindex, follow'}});}
   const original=path,documentRequest=(request.headers.get('accept')??'').includes('text/html')||request.headers.get('sec-fetch-dest')==='document';
   const hidden=path.split('/').some(p=>p.startsWith('.')||p==='_headers'||p==='_redirects');
   if(aliases[path])path=aliases[path];
@@ -16,10 +21,7 @@ export function createAssetHandler(assets,rules=[],aliases={}){
   const headers=new Headers({
    'Content-Type':entry?.type??(missingDocument?'text/html; charset=utf-8':'text/plain; charset=utf-8'),
    'Cache-Control':entry?.immutable?'public, max-age=31536000, immutable':entry?.type.startsWith('text/html')?'no-cache, max-age=0, must-revalidate':entry?.type.includes('json')?'no-store':'public, max-age=86400',
-   'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin',
-   'Permissions-Policy':'camera=(), microphone=(), geolocation=()',
-   'Strict-Transport-Security':'max-age=31536000',
-   'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+   ...SECURITY_HEADERS
   });
   for(const rule of rules)if(match(rule.path,original))for(const [name,value] of Object.entries(rule.headers))headers.set(name,value);
   // Cloudflare documents no-transform as an opt-out from injected JavaScript

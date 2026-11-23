@@ -1,0 +1,4507 @@
+{
+  "schema": 1,
+  "date": "2026-11-15T05:59:56.087Z",
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "baseline": {
+    "directory": "/workspace/physics-materials-baseline",
+    "commit": "0029c162de2756aa11092748514efe726e1ee217"
+  },
+  "sources": {
+    "baseline": {
+      "engine/simulation/Simulation.ts": "255b09dd0ee8bad4f6e932411188f9100e580512c88db97de07fe5f63ffa19d6",
+      "engine/movement/Movement.ts": "2beec6558f684f4a62c3b91f85957e161e18a750a7682ee2d4d626df9632d894",
+      "engine/movement/CollisionController.ts": "4f9d7023cbf176bcf25b2c35304fc53238d5c4608c170697bf707c678304c5f8",
+      "engine/tactical/DefenderAI.ts": "fab540c7422e3a96540f60eccf3af2e4dca20b2d956be9390a376bf3a2be72db",
+      "engine/collision/Ballistics.ts": "ffd689a0ac260468c8bb647c7e063666ba586fabdefc51f3bfad009e72113df9",
+      "engine/collision/environment.ts": "b289038f565597fbe095470726ec5ae7d8f34e37b4481cd097d257daaef53b8a",
+      "engine/collision/StaticBroadphase.ts": null,
+      "config/settings.ts": "dbace424848f515193a3b3027aa67886f1937f058c0378aab33c27df311d9e2a",
+      "config/movement.ts": "525f8859da8f0e45f9cd2d6cc46b1b0f6ce091a7829215e16dfe90364d4ffa42",
+      "config/surfaces.ts": null,
+      "config/penetration.ts": "69f1d6a1a1209ba60f88d2bd18c56808fbf7bf1901c8f0c8f1cca37062d19762",
+      "config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+      "engine/simulation/rules.ts": null,
+      "engine/tactical/map.ts": "bc05d1079608b9f52bbaae2692c38b64e704b284754edd6314ff3d48c2e9ffc9",
+      "engine/tactical/levels.ts": "044b2e3229e50f87d9155763b0a4e087ddcf4ae0bb23c9cc8f92f3ded6148001",
+      "engine/tactical/complex.ts": "172dd4cbb7b0efd7750b73fbd140996d4c61e6451668dfb055b8ee7ddcfd7314",
+      "engine/tactical/mechanics.ts": "9aad70fe25b48a10760fc847f32711cadb24a6ce5af7ea672f6f5a23095dd545"
+    },
+    "current": {
+      "engine/simulation/Simulation.ts": "bb20f56446a1259a5c2e7eef5582a4933f114161758c580777e8b75d1aeff6ec",
+      "engine/movement/Movement.ts": "baf4fcf8ade411136a13efa434f733c231e0d9a816141f5681146ff2a357d252",
+      "engine/movement/CollisionController.ts": "7ee3106fcc0d76c8ed7e01c32cdbada03bbe8817a40424a80d540a1e72c1e5cb",
+      "engine/tactical/DefenderAI.ts": "ede9e9cd860188863db0d10fb3d03892eca74a532dea7ca90aefc95b57d280fd",
+      "engine/collision/Ballistics.ts": "cd22a8906887b856f3b4d63899bfd5caad6d739bcf0ef0422a052d16d6efd7fa",
+      "engine/collision/environment.ts": "c746abf080a31e3c2a9b9485d6ebeea308f01b52febc57abfcf46971f0649d31",
+      "engine/collision/StaticBroadphase.ts": "5476d0d402e7369d90f94e6720566d30bb56f3d01e57b4ab9cf2ff7779354344",
+      "config/settings.ts": "dbace424848f515193a3b3027aa67886f1937f058c0378aab33c27df311d9e2a",
+      "config/movement.ts": "2f85ba1186fb49ec285b6d9153e585cf9d92f5be1f7e59df09b13b8684777017",
+      "config/surfaces.ts": "b5dc24b44761d31633306971e249463c1ba31f670dcc5199aafad0f662a2deb3",
+      "config/penetration.ts": "fe11df582545ab849059e4bde77a9dc7f216712737816304cd61c9f573d44300",
+      "config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+      "engine/simulation/rules.ts": "c2da4ed5248a91b26b4396415179ab25575f963ddd705deb98a2f72762339e96",
+      "engine/tactical/map.ts": "1cecb4d4a0d766e2b94a9f314f5ba28018ed961cf138bd2ab1e2205ea81b3954",
+      "engine/tactical/levels.ts": "122833f46ad4a1d64f146a2c25231fba854aa839bdafd33aed8e5f8a682e3ed9",
+      "engine/tactical/complex.ts": "ec58068143e9b6927f33d07d8dc5bfc8cf60abdc88175a4d9c2487cc4dd7ee65",
+      "engine/tactical/mechanics.ts": "2cd596d93b24ac0e35565d3d76833391ad8aed61cfdf279c654212f8fd7733d1"
+    }
+  },
+  "scriptSha256": "acd28ebfec155fd9a47db8fccc110f7b1554bb8a6d6b6c9cbc1252e0322181e4",
+  "method": {
+    "hz": 120,
+    "inputSeed": 1200721,
+    "mapGeometry": "Original authored range, complex and tower maps",
+    "inputSha256": "0ac175a4e0571ab7ddd744c4e388ff56f3353f395f23ceeacad552ae3bff169f",
+    "ticksPerRun": 840,
+    "warmupTicks": 120,
+    "repeats": 5,
+    "order": "Alternating baseline/current legacy/current materials order per round",
+    "wholeStep": "Uninstrumented step wall time measured around each actual Simulation.step; excludes constructing input and scene",
+    "component": "Separate run with prototype wrappers; inclusive elapsed and self time excluding wrapped nested calls; contains wrapper/timer overhead, not subtracted",
+    "perception": "DefenderAI.visible private runtime prototype method measured independently from DefenderAI.step; no cadence change",
+    "ballistics": "Standalone imported function is not prototype wrapped. See QUERY_BENCHMARK-FINAL.json for exact per-ray kernel timings; this report makes no per-step ballistic attribution."
+  },
+  "wrapperOverhead": {
+    "callsPerRound": 100000,
+    "rounds": 9,
+    "bareMsPerCall": {
+      "calls": 9,
+      "totalMs": 3.603777000000718e-05,
+      "medianMs": 9.481000000005224e-07,
+      "p95Ms": 1.685592999999699e-05,
+      "maxMs": 1.685592999999699e-05
+    },
+    "wrappedMsPerCall": {
+      "calls": 9,
+      "totalMs": 0.0013690191400000003,
+      "medianMs": 0.0001412137100000018,
+      "p95Ms": 0.0001820850500000006,
+      "maxMs": 0.0001820850500000006
+    },
+    "note": "Approximate no-op calibration covers a simplified timer/array wrapper. It omits prototype apply/argument creation and the full nested self-time bookkeeping, so it is not an exact cost correction. Actual component totals retain overhead; no subtraction is applied.",
+    "accumulator": 1800000
+  },
+  "rows": [
+    {
+      "map": "range",
+      "runs": {
+        "baseline": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 23.02907799999889,
+                "medianMs": 0.023304000000052838,
+                "p95Ms": 0.062302000000045155,
+                "maxMs": 2.0645419999998467
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 26.069219000001112,
+                "medianMs": 0.024717000000009648,
+                "p95Ms": 0.07287799999994604,
+                "maxMs": 2.4163630000000467
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 18.376936000001024,
+                "medianMs": 0.019888999999920998,
+                "p95Ms": 0.049852999999984604,
+                "maxMs": 0.22395200000005389
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 18.33233700000028,
+                "medianMs": 0.01949899999999616,
+                "p95Ms": 0.057765999999901396,
+                "maxMs": 0.24199799999996685
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 28.827353000001494,
+                "medianMs": 0.018677000000025146,
+                "p95Ms": 0.04994400000009591,
+                "maxMs": 12.397693000000118
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 65.52435200000082,
+              "medianMs": 0.06672900000012305,
+              "p95Ms": 0.14101900000014211,
+              "maxMs": 3.3335389999999734
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 15.62775099999999,
+                  "medianMs": 0.013910000000123546,
+                  "p95Ms": 0.02754100000015569,
+                  "maxMs": 3.2319790000001376
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 10.630664999999226,
+                  "medianMs": 0.012168000000201573,
+                  "p95Ms": 0.02351500000008855,
+                  "maxMs": 3.2282040000002326
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 4.997086000000763,
+                  "medianMs": 0.0008809999999357387,
+                  "p95Ms": 0.012788999999884254,
+                  "maxMs": 2.0582130000000234
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 4.997086000000763,
+                  "medianMs": 0.0008809999999357387,
+                  "p95Ms": 0.012788999999884254,
+                  "maxMs": 2.0582130000000234
+                }
+              },
+              "CollisionController.moveAirborne": null,
+              "DefenderAI.step": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.visible": {
+                "inclusive": null,
+                "self": null
+              }
+            },
+            "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              1.56321637440902,
+              0.8800057273630267,
+              -14.96753625454913
+            ],
+            "velocity": [
+              -3.601281085679512,
+              3.4467010308448263,
+              -2.899722488351461
+            ],
+            "health": null,
+            "perceptionUpdates": 0,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.0669464932620348,
+                  "y": 1.5289338463759392,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3348928016273519,
+                  "y": 0,
+                  "z": -17.365124076799663
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.48546955793100877,
+                  "y": 2.35310195859891,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": -1.4293699226486725,
+                  "y": 1.3394854724231837,
+                  "z": -15.260340385015233
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.363058905268187,
+                  "y": 0,
+                  "z": -20.476030994935645
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": 1.1046066890602413,
+                  "y": 1.0934782928837095,
+                  "z": -14.86508169787469
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.3937869136196201,
+                  "y": 3.631239715513674,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 0.519105350529556,
+                  "y": 1.1680548750099973,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.0136579709984987,
+                  "y": 1.2823429948724032,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.333710940482253,
+                  "y": 2.9960429814869465,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 5.7647786173581945,
+                  "y": 4.357889145515344,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3893303862808475,
+                  "y": 2.06949132696326,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.038239504464767,
+                  "y": 2.380148366723458,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.6913472461217305,
+                  "y": 2.1602120875864395,
+                  "z": -30
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -6.391874999999873,
+                  0,
+                  -15.08633178516966
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.1918749999999634,
+                  0,
+                  -15.537101380569371
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  -1.1918749999999634,
+                  0,
+                  -15.394552953865379
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.408125000000041,
+                  0,
+                  -14.34020145774441
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentLegacy": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 21.340359999997872,
+                "medianMs": 0.022842999999966196,
+                "p95Ms": 0.07280800000012277,
+                "maxMs": 0.21892300000013165
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 16.527639000005365,
+                "medianMs": 0.019178000000010798,
+                "p95Ms": 0.043224000000009255,
+                "maxMs": 0.17966500000011365
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 16.551699999997254,
+                "medianMs": 0.018977999999833628,
+                "p95Ms": 0.04338400000006004,
+                "maxMs": 0.23992500000008476
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 16.700619999996206,
+                "medianMs": 0.01859799999988354,
+                "p95Ms": 0.05476100000009865,
+                "maxMs": 0.21348599999987528
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 17.751877999998214,
+                "medianMs": 0.018577000000050248,
+                "p95Ms": 0.043694999999843276,
+                "maxMs": 1.9275500000001102
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 75.70903399999838,
+              "medianMs": 0.06637799999998606,
+              "p95Ms": 0.10625699999991411,
+              "maxMs": 4.256823999999824
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 11.680022000000235,
+                  "medianMs": 0.013660000000072614,
+                  "p95Ms": 0.02419499999996333,
+                  "maxMs": 2.0908019999999397
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 7.098736999995481,
+                  "medianMs": 0.012337999999999738,
+                  "p95Ms": 0.017875999999887426,
+                  "maxMs": 0.07905700000014804
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 4.581285000004755,
+                  "medianMs": 0.0008619999998700223,
+                  "p95Ms": 0.012357999999949243,
+                  "maxMs": 2.0841120000000046
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 4.581285000004755,
+                  "medianMs": 0.0008619999998700223,
+                  "p95Ms": 0.012357999999949243,
+                  "maxMs": 2.0841120000000046
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.step": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.visible": {
+                "inclusive": null,
+                "self": null
+              }
+            },
+            "stateSha256": "d4cd1bf432c09759205ac634d98ad2d891dab8e4a85ca7df7ef92b4a8bb7ab7a"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              1.56321637440902,
+              0.8800057273630267,
+              -14.96753625454913
+            ],
+            "velocity": [
+              -3.601281085679512,
+              3.4467010308448263,
+              -2.899722488351461
+            ],
+            "health": null,
+            "perceptionUpdates": 0,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.0669464932620348,
+                  "y": 1.5289338463759392,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3348928016273519,
+                  "y": 0,
+                  "z": -17.365124076799663
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.48546955793100877,
+                  "y": 2.35310195859891,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": -1.4293699226486725,
+                  "y": 1.3394854724231837,
+                  "z": -15.260340385015233
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.363058905268187,
+                  "y": 0,
+                  "z": -20.476030994935645
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": 1.1046066890602413,
+                  "y": 1.0934782928837095,
+                  "z": -14.86508169787469
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.3937869136196201,
+                  "y": 3.631239715513674,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 0.519105350529556,
+                  "y": 1.1680548750099973,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.0136579709984987,
+                  "y": 1.2823429948724032,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.333710940482253,
+                  "y": 2.9960429814869465,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 5.7647786173581945,
+                  "y": 4.357889145515344,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3893303862808475,
+                  "y": 2.06949132696326,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.038239504464767,
+                  "y": 2.380148366723458,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.6913472461217305,
+                  "y": 2.1602120875864395,
+                  "z": -30
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -6.391874999999873,
+                  0,
+                  -15.08633178516966
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.1918749999999634,
+                  0,
+                  -15.537101380569371
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  -1.1918749999999634,
+                  0,
+                  -15.394552953865379
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.408125000000041,
+                  0,
+                  -14.34020145774441
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentMaterials": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 22.81906600000093,
+                "medianMs": 0.022733999999900334,
+                "p95Ms": 0.07484999999996944,
+                "maxMs": 0.494811000000027
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 22.839502000001175,
+                "medianMs": 0.021411999999827458,
+                "p95Ms": 0.07107500000006439,
+                "maxMs": 2.8793769999999768
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 18.92933000000471,
+                "medianMs": 0.020279999999957,
+                "p95Ms": 0.06533599999988837,
+                "maxMs": 0.13518999999996595
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 17.700037000000066,
+                "medianMs": 0.020050000000082946,
+                "p95Ms": 0.048831999999947584,
+                "maxMs": 0.3451109999998607
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 27.601572999998325,
+                "medianMs": 0.020330000000058135,
+                "p95Ms": 0.08499600000004648,
+                "maxMs": 0.3619049999999788
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 18.288064000001214,
+              "medianMs": 0.022652999999991152,
+              "p95Ms": 0.042843999999831794,
+              "maxMs": 0.14974099999994905
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 3.807911999997714,
+                  "medianMs": 0.004517000000078042,
+                  "p95Ms": 0.00623900000005051,
+                  "maxMs": 0.10945199999991928
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 2.4933699999980945,
+                  "medianMs": 0.003004000000146334,
+                  "p95Ms": 0.004395999999815103,
+                  "maxMs": 0.10706899999991037
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 486,
+                  "totalMs": 0.9254040000002988,
+                  "medianMs": 0.0016519999999218271,
+                  "p95Ms": 0.0023830000000089058,
+                  "maxMs": 0.025767999999970925
+                },
+                "self": {
+                  "calls": 486,
+                  "totalMs": 0.9254040000002988,
+                  "medianMs": 0.0016519999999218271,
+                  "p95Ms": 0.0023830000000089058,
+                  "maxMs": 0.025767999999970925
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": {
+                  "calls": 234,
+                  "totalMs": 0.3891379999993205,
+                  "medianMs": 0.0011419999998452113,
+                  "p95Ms": 0.002412999999933163,
+                  "maxMs": 0.06167100000016035
+                },
+                "self": {
+                  "calls": 234,
+                  "totalMs": 0.3891379999993205,
+                  "medianMs": 0.0011419999998452113,
+                  "p95Ms": 0.002412999999933163,
+                  "maxMs": 0.06167100000016035
+                }
+              },
+              "DefenderAI.step": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.visible": {
+                "inclusive": null,
+                "self": null
+              }
+            },
+            "stateSha256": "9fcbbaf0ece771169cff39898b1cf2364f4e1489ab7b855c2675df19e95a5fc4"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              1.56321637440902,
+              0.8800057273630267,
+              -14.967536254549128
+            ],
+            "velocity": [
+              -3.601281085679512,
+              3.4467010308448263,
+              -2.899722488351461
+            ],
+            "health": null,
+            "perceptionUpdates": 0,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.0669464932620348,
+                  "y": 1.5289338463759392,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3348928016273519,
+                  "y": 0,
+                  "z": -17.365124076799663
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.48546955793100877,
+                  "y": 2.35310195859891,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": -1.4293699226486725,
+                  "y": 1.3394854724231837,
+                  "z": -15.260340385015233
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.363058905268187,
+                  "y": 0,
+                  "z": -20.476030994935645
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "torso",
+                "damage": 40,
+                "point": {
+                  "x": 1.1046066890602413,
+                  "y": 1.0934782928837095,
+                  "z": -14.86508169787469
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.3937869136196201,
+                  "y": 3.631239715513674,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 0.519105350529556,
+                  "y": 1.1680548750099973,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.0136579709984987,
+                  "y": 1.2823429948724032,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.333710940482253,
+                  "y": 2.9960429814869465,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 5.7647786173581945,
+                  "y": 4.357889145515344,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.3893303862808477,
+                  "y": 2.0694913269632607,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 2.038239504464767,
+                  "y": 2.3801483667234584,
+                  "z": -30
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": 1.6913472461217305,
+                  "y": 2.1602120875864395,
+                  "z": -30
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -6.391874999999873,
+                  0,
+                  -15.08633178516966
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.1918749999999634,
+                  0,
+                  -15.537101380569371
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  -1.1918749999999634,
+                  0,
+                  -15.394552953865379
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  1.408125000000041,
+                  0,
+                  -14.34020145774441
+                ],
+                "generation": 1,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        }
+      },
+      "parity": {
+        "currentLegacyMatchesBaseline": true
+      }
+    },
+    {
+      "map": "complex",
+      "runs": {
+        "baseline": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 127.27812700000186,
+                "medianMs": 0.16755800000009913,
+                "p95Ms": 0.3271340000001146,
+                "maxMs": 4.30809999999974
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 43.32169299999077,
+                "medianMs": 0.04157100000020364,
+                "p95Ms": 0.11264600000004066,
+                "maxMs": 3.4798460000001796
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 49.481960999992225,
+                "medianMs": 0.06402499999967404,
+                "p95Ms": 0.14147899999989022,
+                "maxMs": 0.4838860000004388
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 37.400501000000986,
+                "medianMs": 0.03897800000004281,
+                "p95Ms": 0.0884009999999762,
+                "maxMs": 2.2709070000000793
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 34.71200199999657,
+                "medianMs": 0.039157999999588355,
+                "p95Ms": 0.08057000000007974,
+                "maxMs": 0.3601819999998952
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 40.24581400000534,
+              "medianMs": 0.03899699999965378,
+              "p95Ms": 0.08969299999989744,
+              "maxMs": 4.0244910000001255
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 8.469348999996328,
+                  "medianMs": 0.004886999999598629,
+                  "p95Ms": 0.008803000000170869,
+                  "maxMs": 3.953426000000036
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 1.3218679999968117,
+                  "medianMs": 0.001491999999871041,
+                  "p95Ms": 0.0028640000004998,
+                  "maxMs": 0.025857000000087282
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 7.147480999999516,
+                  "medianMs": 0.0030740000001969747,
+                  "p95Ms": 0.00592899999992369,
+                  "maxMs": 3.948688999999831
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 7.147480999999516,
+                  "medianMs": 0.0030740000001969747,
+                  "p95Ms": 0.00592899999992369,
+                  "maxMs": 3.948688999999831
+                }
+              },
+              "CollisionController.moveAirborne": null,
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 21.3931749999947,
+                  "medianMs": 0.02134200000000419,
+                  "p95Ms": 0.06291299999975308,
+                  "maxMs": 0.16696700000011333
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 16.64663499999233,
+                  "medianMs": 0.020960999999715568,
+                  "p95Ms": 0.03371999999990294,
+                  "maxMs": 0.142029999999977
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 480,
+                  "totalMs": 4.746540000002369,
+                  "medianMs": 0.012218000000302709,
+                  "p95Ms": 0.01506199999994351,
+                  "maxMs": 0.09862599999996746
+                },
+                "self": {
+                  "calls": 480,
+                  "totalMs": 4.746540000002369,
+                  "medianMs": 0.012218000000302709,
+                  "p95Ms": 0.01506199999994351,
+                  "maxMs": 0.09862599999996746
+                }
+              }
+            },
+            "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              -45.52426297478283,
+              0.8800057273630267,
+              -7.52
+            ],
+            "velocity": [
+              -3.9630302294973756,
+              3.4467010308448263,
+              0
+            ],
+            "health": 150,
+            "perceptionUpdates": 140,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.014915581247095,
+                  "y": 1.6152546226477058,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.09077769776205,
+                  "y": 1.1954534955474543,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.625193513814075,
+                  "y": 2.5273321499086925,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -47.159592067893314,
+                  "y": 1.6024332025598915,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.51109749445071,
+                  "y": 1.4992247459682828,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.12471180795201,
+                  "y": 1.6395260099453848,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.74480278575828,
+                  "y": 2.5597046848636174,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.341292159692,
+                  "y": 1.6024405964567114,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.31758428563627,
+                  "y": 1.1560505309456823,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.1476814379144,
+                  "y": 1.6407816776900737,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.90503756740028,
+                  "y": 2.57085015270721,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.27688110143752,
+                  "y": 1.6410987285347405,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.078372848312604,
+                  "y": 1.6505175259616167,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.74771701188949,
+                  "y": 1.6404693139732416,
+                  "z": -7.8
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -32.00136528914794,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  -7.941283973930404,
+                  0,
+                  -34.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  15.651822999641299,
+                  0,
+                  -23.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  39.86813803560101,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentLegacy": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 58.06800599999406,
+                "medianMs": 0.0575050000002193,
+                "p95Ms": 0.15273600000000442,
+                "maxMs": 2.803486000000248
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 35.959855000001426,
+                "medianMs": 0.043122999999923195,
+                "p95Ms": 0.08237199999985023,
+                "maxMs": 0.20342100000016217
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 37.89073099999678,
+                "medianMs": 0.04295400000000882,
+                "p95Ms": 0.08684900000025664,
+                "maxMs": 0.33219099999996615
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 30.520402999995895,
+                "medianMs": 0.039689000000180386,
+                "p95Ms": 0.0589270000000397,
+                "maxMs": 0.1409680000001572
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 33.60475899999801,
+                "medianMs": 0.03925799999979063,
+                "p95Ms": 0.0602590000003147,
+                "maxMs": 3.5186429999998836
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 33.58090699999684,
+              "medianMs": 0.041692000000239204,
+              "p95Ms": 0.08235100000001694,
+              "maxMs": 0.17856399999982386
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 4.344777999999678,
+                  "medianMs": 0.004908000000341417,
+                  "p95Ms": 0.008211999999730324,
+                  "maxMs": 0.06994399999985035
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 1.3638740000060352,
+                  "medianMs": 0.0015019999996184197,
+                  "p95Ms": 0.0025120000000242726,
+                  "maxMs": 0.05879700000014054
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 2.980903999993643,
+                  "medianMs": 0.0030740000001969747,
+                  "p95Ms": 0.00588900000002468,
+                  "maxMs": 0.048070999999708874
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 2.980903999993643,
+                  "medianMs": 0.0030740000001969747,
+                  "p95Ms": 0.00588900000002468,
+                  "maxMs": 0.048070999999708874
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 18.919152999998914,
+                  "medianMs": 0.023464000000330998,
+                  "p95Ms": 0.037775999999666965,
+                  "maxMs": 0.12569600000006176
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 18.29549999999699,
+                  "medianMs": 0.02341500000011365,
+                  "p95Ms": 0.03332899999941219,
+                  "maxMs": 0.12569600000006176
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 480,
+                  "totalMs": 0.6236530000019229,
+                  "medianMs": 0.001491999999871041,
+                  "p95Ms": 0.0022630000003118766,
+                  "maxMs": 0.0035849999999300053
+                },
+                "self": {
+                  "calls": 480,
+                  "totalMs": 0.6236530000019229,
+                  "medianMs": 0.001491999999871041,
+                  "p95Ms": 0.0022630000003118766,
+                  "maxMs": 0.0035849999999300053
+                }
+              }
+            },
+            "stateSha256": "bfd940e4136ad37ddced1e3112bd21035f190862c784077640c93010ef78846e"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              -45.52426297478283,
+              0.8800057273630267,
+              -7.52
+            ],
+            "velocity": [
+              -3.9630302294973756,
+              3.4467010308448263,
+              0
+            ],
+            "health": 150,
+            "perceptionUpdates": 140,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.014915581247095,
+                  "y": 1.6152546226477058,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.09077769776205,
+                  "y": 1.1954534955474543,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.625193513814075,
+                  "y": 2.5273321499086925,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -47.159592067893314,
+                  "y": 1.6024332025598915,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.51109749445071,
+                  "y": 1.4992247459682828,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.12471180795201,
+                  "y": 1.6395260099453848,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.74480278575828,
+                  "y": 2.5597046848636174,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.341292159692,
+                  "y": 1.6024405964567114,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.31758428563627,
+                  "y": 1.1560505309456823,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.1476814379144,
+                  "y": 1.6407816776900737,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.90503756740028,
+                  "y": 2.57085015270721,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.27688110143752,
+                  "y": 1.6410987285347405,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.078372848312604,
+                  "y": 1.6505175259616167,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.74771701188949,
+                  "y": 1.6404693139732416,
+                  "z": -7.8
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -32.00136528914794,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  -7.941283973930404,
+                  0,
+                  -34.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  15.651822999641299,
+                  0,
+                  -23.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  39.86813803560101,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentMaterials": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 46.000102999997125,
+                "medianMs": 0.049113000000033935,
+                "p95Ms": 0.126006999999845,
+                "maxMs": 0.3374689999996008
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 47.36481200000617,
+                "medianMs": 0.06261300000005576,
+                "p95Ms": 0.10199099999999817,
+                "maxMs": 2.835313000000042
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 34.85592800000131,
+                "medianMs": 0.0408900000002177,
+                "p95Ms": 0.06572700000015175,
+                "maxMs": 2.24824499999977
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 31.569228000007115,
+                "medianMs": 0.039188000000194734,
+                "p95Ms": 0.0668190000001232,
+                "maxMs": 0.2688780000003135
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+            },
+            {
+              "step": {
+                "calls": 720,
+                "totalMs": 30.496363999996902,
+                "medianMs": 0.03881700000010824,
+                "p95Ms": 0.05789599999980055,
+                "maxMs": 0.14881000000013955
+              },
+              "ticks": 840,
+              "warmupTicks": 120,
+              "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 720,
+              "totalMs": 36.11448399999654,
+              "medianMs": 0.0401200000001154,
+              "p95Ms": 0.0772940000001654,
+              "maxMs": 2.675756999999976
+            },
+            "ticks": 840,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 4.343743999990693,
+                  "medianMs": 0.004847000000154367,
+                  "p95Ms": 0.007770999999593187,
+                  "maxMs": 0.1560410000001866
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 2.16492999998718,
+                  "medianMs": 0.002292999999554013,
+                  "p95Ms": 0.0034940000000460714,
+                  "maxMs": 0.1532670000001417
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 486,
+                  "totalMs": 1.6221620000037547,
+                  "medianMs": 0.002824000000146043,
+                  "p95Ms": 0.004566999999951804,
+                  "maxMs": 0.0407799999998133
+                },
+                "self": {
+                  "calls": 486,
+                  "totalMs": 1.6221620000037547,
+                  "medianMs": 0.002824000000146043,
+                  "p95Ms": 0.004566999999951804,
+                  "maxMs": 0.0407799999998133
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": {
+                  "calls": 234,
+                  "totalMs": 0.5566519999997581,
+                  "medianMs": 0.0018530000002101588,
+                  "p95Ms": 0.0029039999999440624,
+                  "maxMs": 0.08392400000002453
+                },
+                "self": {
+                  "calls": 234,
+                  "totalMs": 0.5566519999997581,
+                  "medianMs": 0.0018530000002101588,
+                  "p95Ms": 0.0029039999999440624,
+                  "maxMs": 0.08392400000002453
+                }
+              },
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 720,
+                  "totalMs": 22.30029900000227,
+                  "medianMs": 0.023123999999825173,
+                  "p95Ms": 0.03956900000002861,
+                  "maxMs": 2.6358879999997953
+                },
+                "self": {
+                  "calls": 720,
+                  "totalMs": 21.058732000002692,
+                  "medianMs": 0.023083999999926164,
+                  "p95Ms": 0.03833600000007209,
+                  "maxMs": 2.6164789999997993
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 480,
+                  "totalMs": 1.241566999999577,
+                  "medianMs": 0.0027849999996760744,
+                  "p95Ms": 0.0050369999999020365,
+                  "maxMs": 0.07122499999968568
+                },
+                "self": {
+                  "calls": 480,
+                  "totalMs": 1.241566999999577,
+                  "medianMs": 0.0027849999996760744,
+                  "p95Ms": 0.0050369999999020365,
+                  "maxMs": 0.07122499999968568
+                }
+              }
+            },
+            "stateSha256": "3d10738ab1b0bd327c7d9cf9986da4917f63b4220e879b33278f559d9f6ca6c9"
+          },
+          "finalState": {
+            "ticks": 840,
+            "time": 7,
+            "running": true,
+            "position": [
+              -45.52426297478282,
+              0.8800057273630267,
+              -7.52
+            ],
+            "velocity": [
+              -3.9630302294973756,
+              3.4467010308448263,
+              0
+            ],
+            "health": 150,
+            "perceptionUpdates": 140,
+            "playerShots": 14,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.014915581247095,
+                  "y": 1.6152546226477058,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.09077769776205,
+                  "y": 1.1954534955474543,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.625193513814075,
+                  "y": 2.5273321499086925,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -47.15959206789331,
+                  "y": 1.6024332025598915,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.5110974944507,
+                  "y": 1.4992247459682828,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.124711807952,
+                  "y": 1.6395260099453848,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.744802785758274,
+                  "y": 2.5597046848636174,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 3.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.341292159691996,
+                  "y": 1.6024405964567114,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.317584285636265,
+                  "y": 1.1560505309456823,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 4.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.14768143791439,
+                  "y": 1.6407816776900737,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.90503756740027,
+                  "y": 2.57085015270721,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 5.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -46.27688110143751,
+                  "y": 1.6410987285347405,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.008333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -45.0783728483126,
+                  "y": 1.6505175259616167,
+                  "z": -7.8
+                }
+              },
+              {
+                "timestamp": 6.508333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -44.747717011889485,
+                  "y": 1.6404693139732416,
+                  "z": -7.8
+                }
+              }
+            ],
+            "enemyShots": [],
+            "targets": [
+              {
+                "position": [
+                  -32.00136528914794,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  -7.941283973930404,
+                  0,
+                  -34.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  15.651822999641299,
+                  0,
+                  -23.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  39.86813803560101,
+                  0,
+                  -30.18
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        }
+      },
+      "parity": {
+        "currentLegacyMatchesBaseline": true
+      }
+    },
+    {
+      "map": "tower",
+      "runs": {
+        "baseline": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 17.781213000000207,
+                "medianMs": 0.05938800000012634,
+                "p95Ms": 0.156641000000036,
+                "maxMs": 1.3808720000001813
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 11.280312000006688,
+                "medianMs": 0.041481000000203494,
+                "p95Ms": 0.08915200000001278,
+                "maxMs": 0.23038099999985207
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 22.409700999996858,
+                "medianMs": 0.034460999999737396,
+                "p95Ms": 0.09890600000017002,
+                "maxMs": 12.223625000000084
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 7.716153999992457,
+                "medianMs": 0.028852999999799067,
+                "p95Ms": 0.06424500000002809,
+                "maxMs": 0.1612279999999373
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 8.639577999997528,
+                "medianMs": 0.029302999999799795,
+                "p95Ms": 0.09260700000004363,
+                "maxMs": 0.15643099999988408
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 221,
+              "totalMs": 8.428322999993725,
+              "medianMs": 0.02905300000020361,
+              "p95Ms": 0.0770129999996243,
+              "maxMs": 0.2306509999998525
+            },
+            "ticks": 341,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 0.8242850000033286,
+                  "medianMs": 0.0026939999997921404,
+                  "p95Ms": 0.0063589999999749125,
+                  "maxMs": 0.04934300000013536
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 0.2809910000005402,
+                  "medianMs": 0.0009219999997185369,
+                  "p95Ms": 0.0021139999998922576,
+                  "maxMs": 0.04205299999966883
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 0.5432940000027884,
+                  "medianMs": 0.001623000000108732,
+                  "p95Ms": 0.004887000000053376,
+                  "maxMs": 0.048021000000062486
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 0.5432940000027884,
+                  "medianMs": 0.001623000000108732,
+                  "p95Ms": 0.004887000000053376,
+                  "maxMs": 0.048021000000062486
+                }
+              },
+              "CollisionController.moveAirborne": null,
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 5.1428889999951934,
+                  "medianMs": 0.0166150000000016,
+                  "p95Ms": 0.04037900000002992,
+                  "maxMs": 0.1608379999997851
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 4.489835999995194,
+                  "medianMs": 0.0163950000001023,
+                  "p95Ms": 0.03825699999970311,
+                  "maxMs": 0.1541790000005676
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 116,
+                  "totalMs": 0.6530529999999999,
+                  "medianMs": 0.004736999999749969,
+                  "p95Ms": 0.005708000000140601,
+                  "maxMs": 0.09423999999989974
+                },
+                "self": {
+                  "calls": 116,
+                  "totalMs": 0.6530529999999999,
+                  "medianMs": 0.004736999999749969,
+                  "p95Ms": 0.005708000000140601,
+                  "maxMs": 0.09423999999989974
+                }
+              }
+            },
+            "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+          },
+          "finalState": {
+            "ticks": 341,
+            "time": 2.841666666666667,
+            "running": false,
+            "position": [
+              -0.5076091010456562,
+              0.6585141752570404,
+              -2.4063044136108225
+            ],
+            "velocity": [
+              -2.3225048070907337,
+              6.930034364178162,
+              -0.35282852624259986
+            ],
+            "health": -10,
+            "perceptionUpdates": 57,
+            "playerShots": 6,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.008889942539481,
+                  "y": 1.6252513301938847,
+                  "z": 0.34999999999999964
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.037982913926285,
+                  "y": 1.4539942735812446,
+                  "z": 0.3500000000000001
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.652498910816962,
+                  "y": 2.5462751370239127,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -3.5707281773636104,
+                  "y": 1.6302746755198012,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.5325054828255715,
+                  "y": 1.0736628478575025,
+                  "z": -6
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.0840603251501895,
+                  "y": 1.545242505986343,
+                  "z": -12
+                }
+              }
+            ],
+            "enemyShots": [
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 1,
+                "time": 2.5166666666666666,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.20510855266622624,
+                  "y": 1.6316081626927454,
+                  "z": -1.6725000916722843
+                },
+                "impact": {
+                  "x": -0.19853389999658527,
+                  "y": 1.6475415628001824,
+                  "z": -1.7718849926301807
+                },
+                "direction": {
+                  "x": -0.06518042327340644,
+                  "y": -0.157962072731667,
+                  "z": 0.9852915791785775
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.6192307692307693,
+                "information": "visual",
+                "angularError": 1.4710160378227006,
+                "trajectoryAngularError": 1.6037001647631444,
+                "shotIndex": 0,
+                "burstIndex": 1,
+                "ammoBefore": 25,
+                "recoilBefore": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "recoilAfter": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.044740152770938915,
+                  "y": 0.14133659286829703
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.25,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.5166666666666666
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 2,
+                "time": 2.625,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.25231329907007877,
+                  "y": 1.6922531665701028,
+                  "z": -2.001939945537254
+                },
+                "impact": {
+                  "x": -0.24446661236494766,
+                  "y": 1.7088267612308476,
+                  "z": -2.1059995011063375
+                },
+                "direction": {
+                  "x": -0.07426152120283458,
+                  "y": -0.15685350996635036,
+                  "z": 0.9848259759368031
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.7275641025641026,
+                "information": "visual",
+                "angularError": 0.8309446117870958,
+                "trajectoryAngularError": 0.9987511160291339,
+                "shotIndex": 1,
+                "burstIndex": 2,
+                "ammoBefore": 24,
+                "recoilBefore": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "recoilAfter": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.0261986825642182,
+                  "y": 0.05201047158559839
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.3583333333333334,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.625
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 3,
+                "time": 2.7333333333333334,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.28193497241032034,
+                  "y": 1.7383340569134604,
+                  "z": -2.2996925967951256
+                },
+                "impact": {
+                  "x": -0.2747332886067229,
+                  "y": 1.7522234966126489,
+                  "z": -2.38679679336179
+                },
+                "direction": {
+                  "x": -0.08137666301083445,
+                  "y": -0.15694610935925177,
+                  "z": 0.9842488290438626
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.835897435897436,
+                "information": "visual",
+                "angularError": 0.6471283984376004,
+                "trajectoryAngularError": 1.2627002762014743,
+                "shotIndex": 2,
+                "burstIndex": 3,
+                "ammoBefore": 23,
+                "recoilBefore": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "recoilAfter": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "compensation": {
+                  "pitch": -0.1328322517217137,
+                  "yaw": 0.005598185539478435
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.09442413632456272,
+                  "y": 0.17284454426251433
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.4666666666666668,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.7333333333333334
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 4,
+                "time": 2.841666666666667,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.30672585779063016,
+                  "y": 1.7940384504915456,
+                  "z": -2.445619997491547
+                },
+                "impact": {
+                  "x": -0.29787198438146484,
+                  "y": 1.8096282958598853,
+                  "z": -2.5463079671823747
+                },
+                "direction": {
+                  "x": -0.0865720722110661,
+                  "y": -0.15243556764546895,
+                  "z": 0.984514435663432
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 3.3150786085465613,
+                "information": "visual",
+                "angularError": 0.5773263783123014,
+                "trajectoryAngularError": 0.47761067542478836,
+                "shotIndex": 3,
+                "burstIndex": 4,
+                "ammoBefore": 22,
+                "recoilBefore": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "recoilAfter": {
+                  "pitch": 1.890675094659906,
+                  "yaw": 0.04928396510402672
+                },
+                "compensation": {
+                  "pitch": -0.38304037878925445,
+                  "yaw": -0.004161436834093186
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.1681930963501888,
+                  "y": -0.1273372886986634
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.5750000000000002,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.841666666666667
+                }
+              }
+            ],
+            "targets": [
+              {
+                "position": [
+                  0.3100195851176977,
+                  1.2,
+                  -9.459369075745343
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  9.522127491757272,
+                  2.4,
+                  -9.634281947314738
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  20.249639926850794,
+                  2.4,
+                  -9.554114876687526
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  3.9000000000000004,
+                  0,
+                  -14.906196625996381
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentLegacy": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 16.94316299999855,
+                "medianMs": 0.06242199999996956,
+                "p95Ms": 0.13472900000033405,
+                "maxMs": 0.9275809999999183
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 8.664070999995147,
+                "medianMs": 0.03430100000014136,
+                "p95Ms": 0.07070400000020527,
+                "maxMs": 0.11158500000010463
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 8.161485999994511,
+                "medianMs": 0.032537999999931344,
+                "p95Ms": 0.06069999999999709,
+                "maxMs": 0.10869099999990794
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 7.942951999999877,
+                "medianMs": 0.03142600000001039,
+                "p95Ms": 0.06045999999969354,
+                "maxMs": 0.12806899999986854
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            },
+            {
+              "step": {
+                "calls": 221,
+                "totalMs": 9.008946999998443,
+                "medianMs": 0.03190700000004654,
+                "p95Ms": 0.0832629999999881,
+                "maxMs": 0.6678569999999127
+              },
+              "ticks": 341,
+              "warmupTicks": 120,
+              "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 221,
+              "totalMs": 8.55965599999854,
+              "medianMs": 0.03214699999989534,
+              "p95Ms": 0.07350799999994706,
+              "maxMs": 0.4246679999996559
+            },
+            "ticks": 341,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 0.6486250000007203,
+                  "medianMs": 0.002603000000362954,
+                  "p95Ms": 0.004817999999886524,
+                  "maxMs": 0.012428999999883672
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 0.2432430000030763,
+                  "medianMs": 0.0009510000004411268,
+                  "p95Ms": 0.0016019999998206913,
+                  "maxMs": 0.00963499999988926
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 0.405381999997644,
+                  "medianMs": 0.0015520000001743028,
+                  "p95Ms": 0.0035649999999805004,
+                  "maxMs": 0.00486799999998766
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 0.405381999997644,
+                  "medianMs": 0.0015520000001743028,
+                  "p95Ms": 0.0035649999999805004,
+                  "maxMs": 0.00486799999998766
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": null,
+                "self": null
+              },
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 221,
+                  "totalMs": 5.23707400000103,
+                  "medianMs": 0.02010000000018408,
+                  "p95Ms": 0.03739499999983309,
+                  "maxMs": 0.14112900000009176
+                },
+                "self": {
+                  "calls": 221,
+                  "totalMs": 4.9740970000034395,
+                  "medianMs": 0.019839000000047236,
+                  "p95Ms": 0.03739499999983309,
+                  "maxMs": 0.13680199999998877
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 116,
+                  "totalMs": 0.2629769999975906,
+                  "medianMs": 0.0017920000000231084,
+                  "p95Ms": 0.004447000000254775,
+                  "maxMs": 0.005427999999938038
+                },
+                "self": {
+                  "calls": 116,
+                  "totalMs": 0.2629769999975906,
+                  "medianMs": 0.0017920000000231084,
+                  "p95Ms": 0.004447000000254775,
+                  "maxMs": 0.005427999999938038
+                }
+              }
+            },
+            "stateSha256": "449a3cba2bc049e3d6c36ddc1d1e2939610b066041aed41292681ab6431cf393"
+          },
+          "finalState": {
+            "ticks": 341,
+            "time": 2.841666666666667,
+            "running": false,
+            "position": [
+              -0.5076091010456562,
+              0.6585141752570404,
+              -2.4063044136108225
+            ],
+            "velocity": [
+              -2.3225048070907337,
+              6.930034364178162,
+              -0.35282852624259986
+            ],
+            "health": -10,
+            "perceptionUpdates": 57,
+            "playerShots": 6,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.008889942539481,
+                  "y": 1.6252513301938847,
+                  "z": 0.34999999999999964
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.037982913926285,
+                  "y": 1.4539942735812446,
+                  "z": 0.3500000000000001
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.652498910816962,
+                  "y": 2.5462751370239127,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -3.5707281773636104,
+                  "y": 1.6302746755198012,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.5325054828255715,
+                  "y": 1.0736628478575025,
+                  "z": -6
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.0840603251501895,
+                  "y": 1.545242505986343,
+                  "z": -12
+                }
+              }
+            ],
+            "enemyShots": [
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 1,
+                "time": 2.5166666666666666,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.20510855266622624,
+                  "y": 1.6316081626927454,
+                  "z": -1.6725000916722843
+                },
+                "impact": {
+                  "x": -0.19853389999658527,
+                  "y": 1.6475415628001824,
+                  "z": -1.7718849926301807
+                },
+                "direction": {
+                  "x": -0.06518042327340644,
+                  "y": -0.157962072731667,
+                  "z": 0.9852915791785775
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.6192307692307693,
+                "information": "visual",
+                "angularError": 1.4710160378227006,
+                "trajectoryAngularError": 1.6037001647631444,
+                "shotIndex": 0,
+                "burstIndex": 1,
+                "ammoBefore": 25,
+                "recoilBefore": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "recoilAfter": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.044740152770938915,
+                  "y": 0.14133659286829703
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.25,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.5166666666666666
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 2,
+                "time": 2.625,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.25231329907007877,
+                  "y": 1.6922531665701028,
+                  "z": -2.001939945537254
+                },
+                "impact": {
+                  "x": -0.24446661236494766,
+                  "y": 1.7088267612308476,
+                  "z": -2.1059995011063375
+                },
+                "direction": {
+                  "x": -0.07426152120283458,
+                  "y": -0.15685350996635036,
+                  "z": 0.9848259759368031
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.7275641025641026,
+                "information": "visual",
+                "angularError": 0.8309446117870958,
+                "trajectoryAngularError": 0.9987511160291339,
+                "shotIndex": 1,
+                "burstIndex": 2,
+                "ammoBefore": 24,
+                "recoilBefore": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "recoilAfter": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.0261986825642182,
+                  "y": 0.05201047158559839
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.3583333333333334,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.625
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 3,
+                "time": 2.7333333333333334,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.28193497241032034,
+                  "y": 1.7383340569134604,
+                  "z": -2.2996925967951256
+                },
+                "impact": {
+                  "x": -0.2747332886067229,
+                  "y": 1.7522234966126489,
+                  "z": -2.38679679336179
+                },
+                "direction": {
+                  "x": -0.08137666301083445,
+                  "y": -0.15694610935925177,
+                  "z": 0.9842488290438626
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.835897435897436,
+                "information": "visual",
+                "angularError": 0.6471283984376004,
+                "trajectoryAngularError": 1.2627002762014743,
+                "shotIndex": 2,
+                "burstIndex": 3,
+                "ammoBefore": 23,
+                "recoilBefore": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "recoilAfter": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "compensation": {
+                  "pitch": -0.1328322517217137,
+                  "yaw": 0.005598185539478435
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.09442413632456272,
+                  "y": 0.17284454426251433
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.4666666666666668,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.7333333333333334
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 4,
+                "time": 2.841666666666667,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.30672585779063016,
+                  "y": 1.7940384504915456,
+                  "z": -2.445619997491547
+                },
+                "impact": {
+                  "x": -0.29787198438146484,
+                  "y": 1.8096282958598853,
+                  "z": -2.5463079671823747
+                },
+                "direction": {
+                  "x": -0.0865720722110661,
+                  "y": -0.15243556764546895,
+                  "z": 0.984514435663432
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 3.3150786085465613,
+                "information": "visual",
+                "angularError": 0.5773263783123014,
+                "trajectoryAngularError": 0.47761067542478836,
+                "shotIndex": 3,
+                "burstIndex": 4,
+                "ammoBefore": 22,
+                "recoilBefore": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "recoilAfter": {
+                  "pitch": 1.890675094659906,
+                  "yaw": 0.04928396510402672
+                },
+                "compensation": {
+                  "pitch": -0.38304037878925445,
+                  "yaw": -0.004161436834093186
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.1681930963501888,
+                  "y": -0.1273372886986634
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.5750000000000002,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.841666666666667
+                }
+              }
+            ],
+            "targets": [
+              {
+                "position": [
+                  0.3100195851176977,
+                  1.2,
+                  -9.459369075745343
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  9.522127491757272,
+                  2.4,
+                  -9.634281947314738
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  20.249639926850794,
+                  2.4,
+                  -9.554114876687526
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  3.9000000000000004,
+                  0,
+                  -14.906196625996381
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        },
+        "currentMaterials": {
+          "uninstrumented": [
+            {
+              "step": {
+                "calls": 219,
+                "totalMs": 17.139090000004217,
+                "medianMs": 0.04787099999975908,
+                "p95Ms": 0.1303530000000137,
+                "maxMs": 3.9087100000001556
+              },
+              "ticks": 339,
+              "warmupTicks": 120,
+              "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+            },
+            {
+              "step": {
+                "calls": 219,
+                "totalMs": 11.997897999997349,
+                "medianMs": 0.0451069999999163,
+                "p95Ms": 0.1062579999997979,
+                "maxMs": 0.31061899999986053
+              },
+              "ticks": 339,
+              "warmupTicks": 120,
+              "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+            },
+            {
+              "step": {
+                "calls": 219,
+                "totalMs": 9.892521999994642,
+                "medianMs": 0.035733000000163884,
+                "p95Ms": 0.10492599999997765,
+                "maxMs": 0.20953999999983353
+              },
+              "ticks": 339,
+              "warmupTicks": 120,
+              "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+            },
+            {
+              "step": {
+                "calls": 219,
+                "totalMs": 9.394171999998889,
+                "medianMs": 0.03549299999986033,
+                "p95Ms": 0.08820000000014261,
+                "maxMs": 0.16796800000020085
+              },
+              "ticks": 339,
+              "warmupTicks": 120,
+              "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+            },
+            {
+              "step": {
+                "calls": 219,
+                "totalMs": 9.055590000000848,
+                "medianMs": 0.03480199999967226,
+                "p95Ms": 0.0832829999999376,
+                "maxMs": 0.14871999999968466
+              },
+              "ticks": 339,
+              "warmupTicks": 120,
+              "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+            }
+          ],
+          "instrumented": {
+            "step": {
+              "calls": 219,
+              "totalMs": 10.680697000000237,
+              "medianMs": 0.03727500000013606,
+              "p95Ms": 0.10543599999982689,
+              "maxMs": 0.275047000000086
+            },
+            "ticks": 339,
+            "hooks": {
+              "Movement.step": {
+                "inclusive": {
+                  "calls": 219,
+                  "totalMs": 1.3834729999980482,
+                  "medianMs": 0.005056999999851541,
+                  "p95Ms": 0.008994000000257074,
+                  "maxMs": 0.11429899999984627
+                },
+                "self": {
+                  "calls": 219,
+                  "totalMs": 0.7566499999984444,
+                  "medianMs": 0.0025239999999939755,
+                  "p95Ms": 0.004207000000405969,
+                  "maxMs": 0.10920099999975719
+                }
+              },
+              "CollisionController.moveHorizontal": {
+                "inclusive": {
+                  "calls": 161,
+                  "totalMs": 0.5148980000008123,
+                  "medianMs": 0.003004000000146334,
+                  "p95Ms": 0.004847000000154367,
+                  "maxMs": 0.011947999999847525
+                },
+                "self": {
+                  "calls": 161,
+                  "totalMs": 0.5148980000008123,
+                  "medianMs": 0.003004000000146334,
+                  "p95Ms": 0.004847000000154367,
+                  "maxMs": 0.011947999999847525
+                }
+              },
+              "CollisionController.moveAirborne": {
+                "inclusive": {
+                  "calls": 58,
+                  "totalMs": 0.11192499999879146,
+                  "medianMs": 0.0017629999997552659,
+                  "p95Ms": 0.0031640000001971202,
+                  "maxMs": 0.00465699999995195
+                },
+                "self": {
+                  "calls": 58,
+                  "totalMs": 0.11192499999879146,
+                  "medianMs": 0.0017629999997552659,
+                  "p95Ms": 0.0031640000001971202,
+                  "maxMs": 0.00465699999995195
+                }
+              },
+              "DefenderAI.step": {
+                "inclusive": {
+                  "calls": 219,
+                  "totalMs": 6.855932999998004,
+                  "medianMs": 0.02247299999999086,
+                  "p95Ms": 0.06586700000025303,
+                  "maxMs": 0.25016999999979816
+                },
+                "self": {
+                  "calls": 219,
+                  "totalMs": 6.219387999996798,
+                  "medianMs": 0.022142999999687163,
+                  "p95Ms": 0.05527100000017526,
+                  "maxMs": 0.25016999999979816
+                }
+              },
+              "DefenderAI.visible": {
+                "inclusive": {
+                  "calls": 116,
+                  "totalMs": 0.6365450000012061,
+                  "medianMs": 0.0034359999999651336,
+                  "p95Ms": 0.013179000000036467,
+                  "maxMs": 0.05052399999976842
+                },
+                "self": {
+                  "calls": 116,
+                  "totalMs": 0.6365450000012061,
+                  "medianMs": 0.0034359999999651336,
+                  "p95Ms": 0.013179000000036467,
+                  "maxMs": 0.05052399999976842
+                }
+              }
+            },
+            "stateSha256": "8778afdf7e6016a8340fc8ce4562d78e3920fd483dacee65bd39175b499b1e94"
+          },
+          "finalState": {
+            "ticks": 339,
+            "time": 2.825,
+            "running": false,
+            "position": [
+              -0.4695951320385888,
+              0.6000000000000001,
+              -2.4004239381734456
+            ],
+            "velocity": [
+              -2.01525432638166,
+              0,
+              -0.5767456736183398
+            ],
+            "health": -10,
+            "perceptionUpdates": 57,
+            "playerShots": 6,
+            "shots": [
+              {
+                "timestamp": 0.008333333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.008889942539481,
+                  "y": 1.6252513301938847,
+                  "z": 0.34999999999999964
+                }
+              },
+              {
+                "timestamp": 0.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.037982913926285,
+                  "y": 1.4539942735812446,
+                  "z": 0.3500000000000001
+                }
+              },
+              {
+                "timestamp": 1.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -4.652498910816962,
+                  "y": 2.5462751370239127,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 1.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -3.570728177363611,
+                  "y": 1.6302746755198012,
+                  "z": 0.35
+                }
+              },
+              {
+                "timestamp": 2.0083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -0.5823224940012139,
+                  "y": 1.1591072806513059,
+                  "z": -5
+                }
+              },
+              {
+                "timestamp": 2.5083333333333333,
+                "hit": "wall",
+                "damage": 0,
+                "point": {
+                  "x": -1.08406032515019,
+                  "y": 1.545242505986343,
+                  "z": -12
+                }
+              }
+            ],
+            "enemyShots": [
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 1,
+                "time": 2.5,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.19839240350211268,
+                  "y": 1.6831682534212729,
+                  "z": -1.5815502240448067
+                },
+                "impact": {
+                  "x": -0.1914068302592325,
+                  "y": 1.6996127040091247,
+                  "z": -1.689791339153225
+                },
+                "direction": {
+                  "x": -0.06367552854886524,
+                  "y": -0.14989594217545263,
+                  "z": 0.9866491947918247
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.6025641025641026,
+                "information": "visual",
+                "angularError": 1.0134922466207514,
+                "trajectoryAngularError": 1.0929958599083618,
+                "shotIndex": 0,
+                "burstIndex": 1,
+                "ammoBefore": 25,
+                "recoilBefore": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "recoilAfter": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.044740152770938915,
+                  "y": 0.14133659286829703
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.2333333333333334,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.5
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 2,
+                "time": 2.6083333333333334,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.24448125438545248,
+                  "y": 1.7331604713620945,
+                  "z": -1.9713258130569518
+                },
+                "impact": {
+                  "x": -0.23770746701038264,
+                  "y": 1.7471702736326904,
+                  "z": -2.062799818690964
+                },
+                "direction": {
+                  "x": -0.07300267092092189,
+                  "y": -0.15098687457944332,
+                  "z": 0.9858364842828362
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.710897435897436,
+                "information": "visual",
+                "angularError": 1.0608765948594008,
+                "trajectoryAngularError": 1.2653312695462182,
+                "shotIndex": 1,
+                "burstIndex": 2,
+                "ammoBefore": 24,
+                "recoilBefore": {
+                  "pitch": 0.22138708620285616,
+                  "yaw": -0.00933030923246406
+                },
+                "recoilAfter": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "compensation": {
+                  "pitch": 0,
+                  "yaw": 0
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.0261986825642182,
+                  "y": 0.05201047158559839
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.3416666666666668,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.6083333333333334
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 3,
+                "time": 2.716666666666667,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.2782042848351573,
+                  "y": 1.7942626226402443,
+                  "z": -2.2472280304282357
+                },
+                "impact": {
+                  "x": -0.2703443739260127,
+                  "y": 1.8087703627927478,
+                  "z": -2.343597438362874
+                },
+                "direction": {
+                  "x": -0.08039040663581769,
+                  "y": -0.14838375952450303,
+                  "z": 0.9856569598142664
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 2.8192307692307694,
+                "information": "visual",
+                "angularError": 0.754672181251999,
+                "trajectoryAngularError": 0.6304701808126593,
+                "shotIndex": 2,
+                "burstIndex": 3,
+                "ammoBefore": 23,
+                "recoilBefore": {
+                  "pitch": 0.6384006313154241,
+                  "yaw": 0.006935728056821976
+                },
+                "recoilAfter": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "compensation": {
+                  "pitch": -0.1328322517217137,
+                  "yaw": 0.005598185539478435
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.09442413632456272,
+                  "y": 0.17284454426251433
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.4500000000000002,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.716666666666667
+                }
+              },
+              {
+                "encounterGeneration": 1,
+                "targetGeneration": 2,
+                "id": 4,
+                "time": 2.825,
+                "bot": 0,
+                "weapon": "rifleA",
+                "origin": {
+                  "x": 0.3100195851176977,
+                  "y": 2.88,
+                  "z": -9.459369075745343
+                },
+                "aim": {
+                  "x": -0.30300204742771114,
+                  "y": 1.8685857213992942,
+                  "z": -2.4274880189063825
+                },
+                "impact": {
+                  "x": -0.2931562873059865,
+                  "y": 1.8848300785999386,
+                  "z": -2.5404272863228687
+                },
+                "direction": {
+                  "x": -0.08597000518982237,
+                  "y": -0.14184049332699902,
+                  "z": 0.9861492953201436
+                },
+                "hit": "body",
+                "hitRegion": "torso",
+                "observed": true,
+                "recoveryUntil": 3.2984119418798947,
+                "information": "visual",
+                "angularError": 0.33750677217570435,
+                "trajectoryAngularError": 0.916682692687537,
+                "shotIndex": 3,
+                "burstIndex": 4,
+                "ammoBefore": 22,
+                "recoilBefore": {
+                  "pitch": 1.197215357155772,
+                  "yaw": -0.010535266090882942
+                },
+                "recoilAfter": {
+                  "pitch": 1.890675094659906,
+                  "yaw": 0.04928396510402672
+                },
+                "compensation": {
+                  "pitch": -0.38304037878925445,
+                  "yaw": -0.004161436834093186
+                },
+                "spread": {
+                  "base": 0.25,
+                  "movement": 0,
+                  "bloom": 0,
+                  "air": 0,
+                  "landing": 0,
+                  "total": 0.25,
+                  "x": -0.1681930963501888,
+                  "y": -0.1273372886986634
+                },
+                "damage": 40,
+                "penetratedLayers": 0,
+                "penetration": [],
+                "reactionTime": 0.3583333333333334,
+                "aimAcquisitionTime": 0.5583333333333336,
+                "detectedAt": 1.9083333333333332,
+                "timing": {
+                  "preaimed": false,
+                  "contactAngleDegrees": 9.357683344290363,
+                  "detectedAt": 1.9083333333333332,
+                  "recognizedAt": 1.9433333333333331,
+                  "reactionUntil": 2.2647061703800233,
+                  "aimStartedAt": 2.2666666666666666,
+                  "acquisitionUntil": 2.3087469336061712,
+                  "triggerAt": 2.3185805589954342,
+                  "firedAt": 2.825
+                }
+              }
+            ],
+            "targets": [
+              {
+                "position": [
+                  0.3100195851176977,
+                  1.2,
+                  -9.459369075745343
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  9.522127491757272,
+                  2.4,
+                  -9.634281947314738
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  20.249639926850794,
+                  2.4,
+                  -9.554114876687526
+                ],
+                "generation": 2,
+                "active": true
+              },
+              {
+                "position": [
+                  3.9000000000000004,
+                  0,
+                  -14.906196625996381
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  6.5,
+                  0,
+                  -14.75349598559551
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  9.1,
+                  0,
+                  -14.728659776039422
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  11.700000000000001,
+                  0,
+                  -15.10095649813302
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  14.3,
+                  0,
+                  -14.998605233430862
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  16.900000000000002,
+                  0,
+                  -15.254898115200922
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  19.5,
+                  0,
+                  -14.919691323162988
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  22.1,
+                  0,
+                  -15.082404082920402
+                ],
+                "generation": 1,
+                "active": false
+              },
+              {
+                "position": [
+                  24.7,
+                  0,
+                  -15.239277120307088
+                ],
+                "generation": 1,
+                "active": false
+              }
+            ]
+          }
+        }
+      },
+      "parity": {
+        "currentLegacyMatchesBaseline": true
+      }
+    }
+  ],
+  "limits": [
+    "CPU-only Node SSR workload; not browser, GPU, office or gaming hardware performance.",
+    "Current material rules intentionally change contacts/materials, so trajectory equality is checked only between frozen baseline and current legacy rules.",
+    "If a real scene kills the player, the run ends naturally and actual measured tick count is recorded.",
+    "Component self times exclude only the named wrapped nested functions, not all transitive callees.",
+    "Early repeats can show JIT/warmup variation despite the initial range warmup and 120 untimed ticks per scene. This finite series supports bounded workload/call attribution, not a conclusive whole-step speedup claim."
+  ]
+}

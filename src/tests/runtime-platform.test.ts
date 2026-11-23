@@ -16,7 +16,7 @@ vi.mock('../engine/rendering/RangeRenderer',async()=>{
  }};
 });
 vi.mock('../engine/audio/Audio',()=>({TrainingAudio:class{
- stop=vi.fn();dispose=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
+ stop=vi.fn();resetSession=vi.fn();dispose=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
  constructor(){tracked.audios.push(this);}unlock(){return Promise.resolve();}
 }}));
 vi.mock('../aim/CombatCapture',()=>({CombatCapture:class{sample(){}shot(){}frame(){}dispose(){}flush(){return Promise.resolve([]);}}}));
@@ -40,6 +40,7 @@ describe('Platform runtime retains rendering resources and replaces authoritativ
   expect(r.replaySnapshot()).toBe(first.replay);expect(r.restartExercise()).toBe(true);
   expect(r.renderer).toBe(renderer);expect(tracked.renderers).toHaveLength(1);expect((renderer as any).disposed).toBe(0);
   expect(r.simulation).not.toBe(old);expect(r.simulation.time).toBe(0);expect(r.simulation.completed).toBe(false);expect(r.simulation.targets[0].position.toArray()).toEqual(initial.toArray());
+  expect(tracked.audios[0].resetSession).toHaveBeenCalledExactlyOnceWith(0);
   expect(old.onFinish).toBeNull();expect(old.onShot).toBeNull();expect(doc.added-doc.removed).toBe(listeners);expect(window.added-window.removed).toBe(windowListeners);
   r.finish();expect(finished).toHaveBeenCalledTimes(2);expect((await new ReplayPlayer(finished.mock.calls[1][0].replay).verify()).passed).toBe(true);
   r.dispose();expect((renderer as any).disposed).toBe(1);expect(doc.added).toBe(doc.removed);expect(window.added).toBe(window.removed);
@@ -59,6 +60,12 @@ describe('Platform runtime retains rendering resources and replaces authoritativ
   for(let n=0;n<5;n++)step(1/120);expect(audio.trainingCue).toHaveBeenCalledOnce();
   r.finish();expect(r.restartExercise()).toBe(true);r.simulation.running=true;
   for(let n=0;n<180&&audio.trainingCue.mock.calls.length<2;n++)step(1/120);expect(audio.trainingCue).toHaveBeenCalledTimes(2);r.dispose();
+ });
+ it('uses the renderer effective cap without slowing fixed simulation or rewriting recorded settings',()=>{
+  const run=(limit:number)=>{const {runtime:r}=setup(),render=vi.spyOn(r.renderer,'render');(r.renderer as unknown as {effectiveFrameLimit:number}).effectiveFrameLimit=limit;r.simulation.settings.frameLimit=0;r.simulation.running=true;
+   const frame=(r as unknown as {renderFrame:(now:number)=>void}).renderFrame;for(let i=0;i<240;i++)frame(1000+i*1000/240);
+   const result={draws:render.mock.calls.length,ticks:r.simulation.ticks,time:r.simulation.time,setting:r.simulation.settings.frameLimit};r.dispose();return result;};
+  const full=run(0),limited=run(60);expect(full.draws).toBe(240);expect(limited.draws).toBe(60);expect(limited.ticks).toBeGreaterThan(100);expect(limited.ticks).toBe(full.ticks);expect(limited.time).toBe(full.time);expect(limited.setting).toBe(0);
  });
  it('keeps the authored reaction cue finite, short and below clipping',()=>{
   const a=synthesizeTrainingCue(48000),b=synthesizeTrainingCue(48000);expect(a).toEqual(b);expect(a.length).toBe(6720);expect(a.every(Number.isFinite)).toBe(true);expect(Math.max(...a.map(Math.abs))).toBeLessThan(.31);

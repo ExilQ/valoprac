@@ -1,0 +1,44 @@
+{
+  "rows": [
+    {
+      "preset": "low",
+      "authorityUnchanged": true,
+      "programsAfterWarm": 28,
+      "programsAddedDuringFrames": 0,
+      "shot": {
+        "before": {
+          "programs": 28,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 28,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      }
+    },
+    {
+      "preset": "high",
+      "authorityUnchanged": true,
+      "programsAfterWarm": 32,
+      "programsAddedDuringFrames": 0,
+      "shot": {
+        "before": {
+          "programs": 32,
+          "shots": 0,
+          "ammo": 25
+        },
+        "after": {
+          "programs": 32,
+          "shots": 1,
+          "ammo": 24
+        },
+        "passed": true
+      }
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

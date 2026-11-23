@@ -11,13 +11,13 @@ skip={'Binaries','Intermediate','Saved','DerivedDataCache','builds','node_module
 with zipfile.ZipFile(sys.argv[1],'w',zipfile.ZIP_DEFLATED) as z:
  for root in roots:
   for current,dirs,files in os.walk(root):
-   # Optional UI comparison screenshots are served separately. Avoid embedding
+   # Optional QA screenshots are served separately. Avoid embedding
    # those binary copies twice in the self-contained response Worker.
-   dirs[:]=[d for d in dirs if d not in skip and not (current=='public' and d in {'downloads','interface-comparison'})]
+   dirs[:]=[d for d in dirs if d not in skip and not (current=='public' and d in {'downloads','interface-comparison','validation','movement-ui','corrections-ui','physics-comparison'})]
    for f in sorted(files):z.write(os.path.join(current,f))
  for f in extra:
   if not os.path.isfile(f):raise RuntimeError('Required source file missing: '+f)
   if f not in z.namelist():z.write(f)
 `,path],{stdio:'inherit'});
-writeFileSync('public/downloads/README.txt','VALOPRAC UE5.7 staging source. Not an Unreal packaged executable. Read docs/migration/README.md and VALIDATION.md. Actual Unreal build, GPU execution and latency validation are blocked. Optional interface comparison screenshots are served separately at https://valoprac.trade/interface-comparison.html; their original and lossless delivery hashes are in docs/interface-11.00/SCREENSHOTS.json. The source repository retains these images.\n');
+writeFileSync('public/downloads/README.txt','VALOPRAC UE5.7 staging source. Not an Unreal packaged executable. Read docs/migration/README.md and VALIDATION.md. Actual Unreal build, GPU execution and latency validation are blocked. Optional interface comparison screenshots are served separately at https://valoprac.trade/interface-comparison.html; their original and lossless delivery hashes are in docs/interface-11.00/SCREENSHOTS.json. Other optional QA screenshots in public/validation, public/movement-ui, public/corrections-ui and public/physics-comparison are also served separately. Original material comparison hashes are in docs/physics-materials/VISUAL_DELIVERY.json. The source repository retains all images; gameplay/source assets remain included.\n');
 console.log('Packaged UE staging source and original assets');

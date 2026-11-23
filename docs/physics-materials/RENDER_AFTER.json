@@ -1,0 +1,3904 @@
+{
+  "source": "12.00 working tree",
+  "name": "mergefinal",
+  "rows": [
+    {
+      "spec": {
+        "map": "range",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": 0,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": 0,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 603.2000000001863,
+      "preparationMs": 1700.6000000005588,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 28,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 1093.7999999998137,
+        "completedPrograms": 28,
+        "totalPrograms": 28
+      },
+      "observedFrames": 35,
+      "averageFPS": 18.10376040966224,
+      "onePercentLowFPS": 10,
+      "frameMs": {
+        "median": 50,
+        "p95": 100,
+        "p99": 100,
+        "max": 100.09999999999991
+      },
+      "renderCPUMs": {
+        "median": 1.2000000001862645,
+        "p95": 5
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 0.9500000001862645
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 57.31316,
+        "p95": 73.66775
+      },
+      "drawCalls": {
+        "min": 37,
+        "max": 37
+      },
+      "triangles": {
+        "min": 22030,
+        "max": 22030
+      },
+      "materials": 89,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 49,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 28,
+      "renderMemory": {
+        "geometries": 87,
+        "textures": 17
+      },
+      "textures": {
+        "uniqueMaterialTextures": 12,
+        "estimatedRGBA8Bytes": 3848875,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 25799076,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.699999999999818,
+          16.700000000000273,
+          66.59999999999991,
+          100,
+          100,
+          83.40000000000009,
+          49.899999999999636,
+          16.700000000000273,
+          50,
+          100.09999999999991,
+          33.30000000000018,
+          83.29999999999973,
+          16.700000000000273,
+          83.29999999999973,
+          83.30000000000018,
+          33.29999999999973,
+          66.70000000000027,
+          50,
+          66.69999999999982,
+          16.59999999999991,
+          16.700000000000273,
+          100,
+          33.29999999999973,
+          66.70000000000027,
+          66.59999999999991,
+          33.40000000000009,
+          66.69999999999982,
+          33.30000000000018,
+          83.29999999999973,
+          66.69999999999982,
+          50,
+          66.70000000000073,
+          33.29999999999927,
+          50,
+          33.30000000000018
+        ],
+        "renderCPU": [
+          3.5,
+          1.599999999627471,
+          4,
+          5,
+          2.2000000001862645,
+          2.2999999998137355,
+          1.2000000001862645,
+          1,
+          2.2999999998137355,
+          1.2000000001862645,
+          3.2999999998137355,
+          0.900000000372529,
+          3.099999999627471,
+          2.6000000005587935,
+          2.8999999994412065,
+          4.400000000372529,
+          2.900000000372529,
+          0.900000000372529,
+          5.400000000372529,
+          0.8999999994412065,
+          2.8999999994412065,
+          35.200000000186265,
+          2.2000000001862645,
+          0.8999999994412065,
+          0.6999999992549419,
+          4.099999999627471,
+          0.6999999992549419,
+          0.7999999998137355,
+          0.8999999994412065,
+          1,
+          0.7999999998137355,
+          1,
+          0.7999999998137355,
+          0.900000000372529,
+          1,
+          0.8999999994412065
+        ],
+        "simulationCPU": [
+          7.600000000093132,
+          0.6000000000931323,
+          0.35000000009313226,
+          0.39999999990686774,
+          0.35000000009313226,
+          0.35000000009313226,
+          0.35000000009313226,
+          0.25,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.2999999998137355,
+          0.25,
+          0.19999999972060323,
+          0.9500000001862645,
+          0.39999999990686774,
+          0.35000000009313226,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.3000000002793968,
+          19.300000000279397,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.25,
+          0.25,
+          0.25,
+          0.39999999990686774,
+          0.20000000018626451,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.25
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 87,
+          "textures": 17
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "tactical",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -7,
+            "y": 1.64,
+            "z": 13
+          },
+          "target": {
+            "x": -7,
+            "y": 1.64,
+            "z": -5
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -7,
+          "y": 1.64,
+          "z": 13
+        },
+        "target": {
+          "x": -7,
+          "y": 1.64,
+          "z": -5
+        },
+        "fov": 103
+      },
+      "constructMs": 418.19999999925494,
+      "preparationMs": 1383.5,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 962.3000000007451,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 18.584399723888918,
+      "onePercentLowFPS": 8.56898029134531,
+      "frameMs": {
+        "median": 50,
+        "p95": 100,
+        "p99": 116.70000000000027,
+        "max": 133.19999999999982
+      },
+      "renderCPUMs": {
+        "median": 0.7000000001862645,
+        "p95": 3.6000000005587935
+      },
+      "simulationStepMs": {
+        "median": 0.14999999990686774,
+        "p95": 1.6499999999068677
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 58.896435,
+        "p95": 73.015388
+      },
+      "drawCalls": {
+        "min": 19,
+        "max": 19
+      },
+      "triangles": {
+        "min": 16694,
+        "max": 16694
+      },
+      "materials": 71,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 45,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 73,
+        "textures": 11
+      },
+      "textures": {
+        "uniqueMaterialTextures": 3,
+        "estimatedRGBA8Bytes": 703147,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 26857337,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -7,
+          0,
+          13
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.700000000000045,
+          66.70000000000005,
+          33.299999999999955,
+          66.70000000000005,
+          33.30000000000018,
+          16.699999999999818,
+          66.59999999999991,
+          33.40000000000009,
+          66.59999999999991,
+          66.70000000000027,
+          50,
+          50,
+          33.29999999999973,
+          116.70000000000027,
+          66.59999999999991,
+          50,
+          33.40000000000009,
+          33.29999999999973,
+          66.70000000000027,
+          33.29999999999973,
+          83.40000000000009,
+          133.19999999999982,
+          16.700000000000273,
+          66.69999999999982,
+          83.30000000000018,
+          100,
+          16.699999999999818,
+          16.59999999999991,
+          83.40000000000009,
+          16.59999999999991,
+          83.40000000000009,
+          16.59999999999991,
+          66.70000000000027,
+          33.40000000000009,
+          66.59999999999991
+        ],
+        "renderCPU": [
+          2.300000000745058,
+          1,
+          1,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.7000000001862645,
+          0.39999999944120646,
+          0.7000000001862645,
+          0.7999999998137355,
+          5.400000000372529,
+          0.599999999627471,
+          0.7999999998137355,
+          3.6000000005587935,
+          4.2999999998137355,
+          0.8999999994412065,
+          0.7999999998137355,
+          0.599999999627471,
+          0.7999999998137355,
+          0.599999999627471,
+          0.7000000001862645,
+          0.7000000001862645,
+          0.7999999998137355,
+          0.7000000001862645,
+          0.5,
+          0.900000000372529,
+          0.7999999998137355,
+          0.599999999627471,
+          0.40000000037252903,
+          0.5,
+          0.6000000005587935,
+          0.7000000001862645,
+          0.599999999627471,
+          0.40000000037252903,
+          0.6000000005587935,
+          0.6999999992549419,
+          0.5
+        ],
+        "simulationCPU": [
+          4.350000000093132,
+          0.34999999962747097,
+          0.40000000037252903,
+          0.25,
+          0.3000000002793968,
+          0.3000000002793968,
+          0.10000000009313226,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.15000000037252903,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.09999999962747097,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.14999999990686774,
+          2.9499999997206032,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.14999999990686774,
+          1.6499999999068677,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.75,
+          0.20000000018626451,
+          0.09999999962747097
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 73,
+          "textures": 11
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "long",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 455.20000000018626,
+      "preparationMs": 1319.0999999996275,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 853.7999999998137,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 16.03077909586406,
+      "onePercentLowFPS": 5.455537370430996,
+      "frameMs": {
+        "median": 50,
+        "p95": 116.69999999999982,
+        "p99": 183.29999999999973,
+        "max": 200
+      },
+      "renderCPUMs": {
+        "median": 1,
+        "p95": 1.6000000005587935
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 0.7000000001862645
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 64.503891,
+        "p95": 92.563993
+      },
+      "drawCalls": {
+        "min": 32,
+        "max": 32
+      },
+      "triangles": {
+        "min": 15746,
+        "max": 15746
+      },
+      "materials": 84,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 50,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 90,
+        "textures": 14
+      },
+      "textures": {
+        "uniqueMaterialTextures": 12,
+        "estimatedRGBA8Bytes": 3848875,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 27318559,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.600000000000136,
+          16.699999999999818,
+          83.40000000000009,
+          99.90000000000009,
+          200,
+          16.699999999999818,
+          50,
+          16.700000000000273,
+          33.19999999999982,
+          66.80000000000018,
+          183.29999999999973,
+          16.700000000000273,
+          83.29999999999973,
+          16.700000000000273,
+          100,
+          33.29999999999973,
+          33.30000000000018,
+          116.69999999999982,
+          100,
+          83.30000000000018,
+          16.699999999999818,
+          50,
+          66.59999999999991,
+          83.40000000000009,
+          16.59999999999991,
+          16.700000000000273,
+          100,
+          50,
+          16.699999999999818,
+          49.90000000000009,
+          50.09999999999991,
+          49.90000000000009,
+          66.69999999999982,
+          100,
+          83.40000000000009
+        ],
+        "renderCPU": [
+          4.2999999998137355,
+          1.400000000372529,
+          1.1000000005587935,
+          5.400000000372529,
+          1.5,
+          1.099999999627471,
+          1,
+          1.099999999627471,
+          1.099999999627471,
+          1.3999999994412065,
+          1,
+          1.6000000005587935,
+          1,
+          1,
+          1,
+          0.7999999998137355,
+          0.900000000372529,
+          1.1000000005587935,
+          1.2000000001862645,
+          1.099999999627471,
+          1.2000000001862645,
+          1,
+          1.2000000001862645,
+          1.099999999627471,
+          0.7999999998137355,
+          0.900000000372529,
+          1,
+          0.7999999998137355,
+          0.8999999994412065,
+          0.7000000001862645,
+          0.7999999998137355,
+          1.2000000001862645,
+          1.099999999627471,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.8000000007450581
+        ],
+        "simulationCPU": [
+          5.4500000001862645,
+          0.7000000001862645,
+          0.25,
+          0.5,
+          0.4499999997206032,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.25,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.15000000037252903,
+          0.35000000009313226,
+          0.35000000009313226,
+          0.25,
+          1.8500000000931323,
+          0.25,
+          0.25,
+          0.39999999990686774,
+          0.35000000009313226,
+          0.25,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.14999999990686774,
+          0.3000000002793968,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.25
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 90,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "garage",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -3,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -3,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -3,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -3,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 429.70000000018626,
+      "preparationMs": 1340.5999999996275,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 902.2000000001863,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 16.40727545471592,
+      "onePercentLowFPS": 8.56898029134531,
+      "frameMs": {
+        "median": 66.59999999999991,
+        "p95": 100.09999999999991,
+        "p99": 116.70000000000027,
+        "max": 150
+      },
+      "renderCPUMs": {
+        "median": 0.900000000372529,
+        "p95": 2.900000000372529
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 0.35000000009313226
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 64.186365,
+        "p95": 89.738723
+      },
+      "drawCalls": {
+        "min": 30,
+        "max": 30
+      },
+      "triangles": {
+        "min": 12244,
+        "max": 12244
+      },
+      "materials": 84,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 49,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 86,
+        "textures": 14
+      },
+      "textures": {
+        "uniqueMaterialTextures": 12,
+        "estimatedRGBA8Bytes": 3848875,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 27803578,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -3,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.700000000000045,
+          16.600000000000136,
+          150,
+          16.699999999999818,
+          50,
+          99.90000000000009,
+          50.09999999999991,
+          33.30000000000018,
+          83.40000000000009,
+          33.29999999999973,
+          66.59999999999991,
+          50.100000000000364,
+          66.59999999999991,
+          66.69999999999982,
+          50,
+          66.59999999999991,
+          83.30000000000018,
+          50,
+          83.30000000000018,
+          66.69999999999982,
+          50,
+          66.69999999999982,
+          33.30000000000018,
+          66.69999999999982,
+          116.70000000000027,
+          33.29999999999973,
+          33.30000000000018,
+          33.40000000000009,
+          83.29999999999973,
+          100,
+          33.30000000000018,
+          66.59999999999991,
+          16.700000000000273,
+          100.09999999999991,
+          99.90000000000009
+        ],
+        "renderCPU": [
+          3.7000000001862645,
+          2.099999999627471,
+          0.8999999994412065,
+          1.2999999998137355,
+          1.400000000372529,
+          1.2000000001862645,
+          0.8999999994412065,
+          1.599999999627471,
+          2.900000000372529,
+          1.1000000005587935,
+          0.900000000372529,
+          0.7999999998137355,
+          0.8999999994412065,
+          0.900000000372529,
+          0.900000000372529,
+          0.8999999994412065,
+          1,
+          1.1000000005587935,
+          0.8000000007450581,
+          0.7999999998137355,
+          1,
+          0.8999999994412065,
+          0.7999999998137355,
+          0.7000000001862645,
+          1,
+          0.900000000372529,
+          0.7000000001862645,
+          5.400000000372529,
+          0.7999999998137355,
+          1,
+          1,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.7000000001862645,
+          1,
+          1.1000000005587935
+        ],
+        "simulationCPU": [
+          4.25,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.5500000002793968,
+          0.35000000009313226,
+          0.25,
+          0.2999999998137355,
+          0.14999999990686774,
+          0.19999999972060323,
+          0.35000000009313226,
+          0.25,
+          0.25,
+          0.25,
+          0.2999999998137355,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.25,
+          0.19999999972060323,
+          0.25,
+          0.19999999972060323,
+          0.25,
+          0.2999999998137355,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.10000000009313226,
+          0.25,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.25,
+          0.10000000009313226,
+          0.15000000037252903,
+          0.19999999972060323,
+          0.25,
+          0.35000000009313226
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 86,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "site",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4.5,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4.5,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4.5,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4.5,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 464.5,
+      "preparationMs": 1353.2999999998137,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 880.6999999992549,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 16.801075268817204,
+      "onePercentLowFPS": 10,
+      "frameMs": {
+        "median": 66.59999999999991,
+        "p95": 100,
+        "p99": 100,
+        "max": 116.70000000000027
+      },
+      "renderCPUMs": {
+        "median": 0.900000000372529,
+        "p95": 4.900000000372529
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 1.4500000001862645
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 53.6805,
+        "p95": 75.111666
+      },
+      "drawCalls": {
+        "min": 31,
+        "max": 31
+      },
+      "triangles": {
+        "min": 13676,
+        "max": 13676
+      },
+      "materials": 84,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 50,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 89,
+        "textures": 14
+      },
+      "textures": {
+        "uniqueMaterialTextures": 12,
+        "estimatedRGBA8Bytes": 3848875,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 28295109,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4.5,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.699999999999818,
+          16.600000000000136,
+          83.29999999999995,
+          100,
+          50,
+          33.30000000000018,
+          83.29999999999973,
+          116.70000000000027,
+          100,
+          16.699999999999818,
+          50,
+          50,
+          33.30000000000018,
+          33.29999999999973,
+          66.80000000000018,
+          33.29999999999973,
+          66.60000000000036,
+          50,
+          66.69999999999982,
+          83.40000000000009,
+          66.59999999999991,
+          33.30000000000018,
+          50,
+          83.39999999999964,
+          66.60000000000036,
+          50.09999999999991,
+          16.59999999999991,
+          99.90000000000009,
+          66.69999999999982,
+          83.40000000000009,
+          50,
+          66.59999999999991,
+          16.700000000000273,
+          83.39999999999964,
+          99.90000000000009
+        ],
+        "renderCPU": [
+          3,
+          2.7999999998137355,
+          1.300000000745058,
+          1.6000000005587935,
+          1.800000000745058,
+          6.6000000005587935,
+          1.199999999254942,
+          4.900000000372529,
+          1.7999999998137355,
+          1.099999999627471,
+          0.900000000372529,
+          1.099999999627471,
+          1,
+          0.7999999998137355,
+          0.7999999998137355,
+          1.1000000005587935,
+          0.900000000372529,
+          0.7999999998137355,
+          0.8999999994412065,
+          1.6000000005587935,
+          0.900000000372529,
+          34.5,
+          0.6000000005587935,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.8000000007450581,
+          0.8999999994412065,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.7999999998137355,
+          1.2000000001862645,
+          0.8999999994412065,
+          0.7999999998137355,
+          0.6999999992549419,
+          0.7999999998137355,
+          0.7999999998137355
+        ],
+        "simulationCPU": [
+          4.699999999720603,
+          0.35000000009313226,
+          0.19999999972060323,
+          0.39999999990686774,
+          1.1499999999068677,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.35000000009313226,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.25,
+          0.14999999990686774,
+          0.5,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.25,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.25,
+          0.25,
+          0.14999999990686774,
+          1.8500000000931323,
+          0.75,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.14999999990686774,
+          1.4500000001862645,
+          0.25,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.15000000037252903,
+          0.20000000018626451,
+          0.20000000018626451
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 89,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "mid",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 430.5,
+      "preparationMs": 1285.300000000745,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 845,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 17.797213464863216,
+      "onePercentLowFPS": 10,
+      "frameMs": {
+        "median": 66.59999999999991,
+        "p95": 100,
+        "p99": 100,
+        "max": 100
+      },
+      "renderCPUMs": {
+        "median": 0.900000000372529,
+        "p95": 4.2999999998137355
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 0.7999999998137355
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 62.993152,
+        "p95": 77.533182
+      },
+      "drawCalls": {
+        "min": 33,
+        "max": 33
+      },
+      "triangles": {
+        "min": 14022,
+        "max": 14022
+      },
+      "materials": 86,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 51,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 91,
+        "textures": 15
+      },
+      "textures": {
+        "uniqueMaterialTextures": 13,
+        "estimatedRGBA8Bytes": 4198400,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 28520152,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          33.30000000000018,
+          16.699999999999818,
+          100,
+          66.70000000000005,
+          66.60000000000014,
+          66.69999999999982,
+          33.30000000000018,
+          66.69999999999982,
+          33.30000000000018,
+          83.29999999999973,
+          33.40000000000009,
+          100,
+          66.59999999999991,
+          33.30000000000018,
+          50.09999999999991,
+          33.30000000000018,
+          66.69999999999982,
+          33.30000000000018,
+          83.29999999999973,
+          66.70000000000027,
+          100,
+          33.29999999999973,
+          16.700000000000273,
+          66.59999999999991,
+          33.30000000000018,
+          66.79999999999973,
+          83.30000000000018,
+          50,
+          66.59999999999991,
+          33.30000000000018,
+          66.69999999999982,
+          100,
+          50,
+          50,
+          16.699999999999818
+        ],
+        "renderCPU": [
+          3.7000000001862645,
+          1.7000000001862645,
+          0.7999999998137355,
+          1.6000000005587935,
+          1,
+          1.2999999998137355,
+          1.2000000001862645,
+          4.2999999998137355,
+          1.2000000001862645,
+          0.900000000372529,
+          1,
+          39.40000000037253,
+          0.8999999994412065,
+          1,
+          0.7000000001862645,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.8999999994412065,
+          1.2000000001862645,
+          1,
+          4.7000000001862645,
+          0.900000000372529,
+          0.7999999998137355,
+          0.599999999627471,
+          0.8999999994412065,
+          0.900000000372529,
+          0.900000000372529,
+          1,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.8999999994412065,
+          0.900000000372529,
+          0.900000000372529,
+          0.7999999998137355,
+          2.2999999998137355,
+          0.8000000007450581
+        ],
+        "simulationCPU": [
+          16.34999999962747,
+          1.0500000002793968,
+          0.7999999998137355,
+          0.39999999990686774,
+          0.4500000001862645,
+          0.25,
+          0.25,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.14999999990686774,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.25,
+          0.14999999990686774,
+          0.3000000002793968,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.14999999990686774
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 91,
+          "textures": 15
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "tower",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 468,
+      "preparationMs": 1389.800000000745,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 913.3000000007451,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 14.894250819183798,
+      "onePercentLowFPS": 5.998800239952008,
+      "frameMs": {
+        "median": 66.69999999999982,
+        "p95": 166.5999999999999,
+        "p99": 166.70000000000005,
+        "max": 183.30000000000018
+      },
+      "renderCPUMs": {
+        "median": 0.900000000372529,
+        "p95": 3.099999999627471
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 0.40000000037252903
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 68.116856,
+        "p95": 90.912054
+      },
+      "drawCalls": {
+        "min": 34,
+        "max": 34
+      },
+      "triangles": {
+        "min": 15812,
+        "max": 15812
+      },
+      "materials": 87,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 51,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 91,
+        "textures": 16
+      },
+      "textures": {
+        "uniqueMaterialTextures": 15,
+        "estimatedRGBA8Bytes": 4897451,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 26223568,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.700000000000045,
+          16.59999999999991,
+          166.70000000000005,
+          16.700000000000045,
+          66.59999999999991,
+          83.40000000000009,
+          33.30000000000018,
+          66.69999999999982,
+          99.90000000000009,
+          33.29999999999973,
+          100,
+          16.700000000000273,
+          66.69999999999982,
+          100,
+          133.4000000000001,
+          66.59999999999991,
+          16.700000000000273,
+          99.89999999999964,
+          66.70000000000027,
+          16.59999999999991,
+          100,
+          16.699999999999818,
+          66.70000000000027,
+          33.29999999999973,
+          83.30000000000018,
+          66.80000000000018,
+          49.899999999999636,
+          83.40000000000009,
+          166.5999999999999,
+          33.40000000000009,
+          16.59999999999991,
+          183.30000000000018,
+          83.30000000000018,
+          16.800000000000182,
+          66.59999999999945
+        ],
+        "renderCPU": [
+          3.099999999627471,
+          1.400000000372529,
+          2.2999999998137355,
+          1.099999999627471,
+          0.8999999994412065,
+          1.099999999627471,
+          1.2000000001862645,
+          1.5,
+          1.099999999627471,
+          4,
+          1,
+          1,
+          2.2999999998137355,
+          1.199999999254942,
+          6.7000000001862645,
+          0.900000000372529,
+          0.900000000372529,
+          0.7999999998137355,
+          0.900000000372529,
+          0.7999999998137355,
+          0.8999999994412065,
+          0.7999999998137355,
+          0.7000000001862645,
+          0.7999999998137355,
+          1.1000000005587935,
+          0.7999999998137355,
+          0.8999999994412065,
+          0.900000000372529,
+          0.8000000007450581,
+          0.6999999992549419,
+          0.900000000372529,
+          0.900000000372529,
+          0.8999999994412065,
+          0.900000000372529,
+          0.7000000001862645,
+          1
+        ],
+        "simulationCPU": [
+          6.4500000001862645,
+          0.39999999990686774,
+          0.39999999990686774,
+          0.39999999990686774,
+          0.25,
+          0.35000000009313226,
+          0.2999999998137355,
+          0.25,
+          0.20000000018626451,
+          0.25,
+          0.5500000002793968,
+          0.20000000018626451,
+          0.2999999998137355,
+          0.40000000037252903,
+          0.39999999990686774,
+          0.20000000018626451,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.3000000002793968,
+          0.25,
+          0.25,
+          0.10000000009313226,
+          0.15000000037252903,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25,
+          0.25,
+          0.25,
+          0.20000000018626451,
+          0.35000000009313226,
+          0.14999999990686774,
+          0.14999999990686774
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 91,
+          "textures": 16
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "multi",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4.5,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4.5,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4.5,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4.5,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 458.29999999981374,
+      "preparationMs": 1355.199999999255,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 888.2999999998137,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 17.50087504375219,
+      "onePercentLowFPS": 7.5018754688672065,
+      "frameMs": {
+        "median": 66.59999999999991,
+        "p95": 100,
+        "p99": 133.30000000000018,
+        "max": 133.30000000000018
+      },
+      "renderCPUMs": {
+        "median": 1.099999999627471,
+        "p95": 3.800000000745058
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 0.5499999998137355
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 57.299771,
+        "p95": 83.42631
+      },
+      "drawCalls": {
+        "min": 34,
+        "max": 34
+      },
+      "triangles": {
+        "min": 14634,
+        "max": 14634
+      },
+      "materials": 86,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 50,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 92,
+        "textures": 15
+      },
+      "textures": {
+        "uniqueMaterialTextures": 14,
+        "estimatedRGBA8Bytes": 4547925,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 29126916,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4.5,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.59999999999991,
+          16.700000000000045,
+          100,
+          83.29999999999995,
+          50.100000000000136,
+          66.60000000000014,
+          33.399999999999636,
+          133.30000000000018,
+          16.699999999999818,
+          49.90000000000009,
+          50,
+          16.700000000000273,
+          66.59999999999991,
+          50.09999999999991,
+          66.59999999999991,
+          33.40000000000009,
+          66.59999999999991,
+          33.30000000000018,
+          66.69999999999982,
+          50,
+          66.70000000000027,
+          100,
+          66.69999999999982,
+          33.19999999999982,
+          66.70000000000027,
+          50,
+          66.69999999999982,
+          33.40000000000009,
+          16.5,
+          66.80000000000018,
+          66.59999999999991,
+          66.59999999999991,
+          66.69999999999982,
+          133.30000000000018,
+          33.40000000000009
+        ],
+        "renderCPU": [
+          3.2000000001862645,
+          2.099999999627471,
+          1.7000000001862645,
+          1.599999999627471,
+          1.2000000001862645,
+          1.099999999627471,
+          1.2000000001862645,
+          2.2999999998137355,
+          1.099999999627471,
+          4.1000000005587935,
+          1.099999999627471,
+          0.8999999994412065,
+          0.8999999994412065,
+          3.3999999994412065,
+          6.6000000005587935,
+          0.900000000372529,
+          0.7999999998137355,
+          1,
+          1,
+          0.900000000372529,
+          2.7000000001862645,
+          1,
+          0.8000000007450581,
+          0.8000000007450581,
+          0.6999999992549419,
+          0.8999999994412065,
+          3.800000000745058,
+          1,
+          0.8000000007450581,
+          0.7000000001862645,
+          3.599999999627471,
+          0.8000000007450581,
+          1.099999999627471,
+          1.2999999998137355,
+          1.7000000001862645,
+          0.7999999998137355
+        ],
+        "simulationCPU": [
+          5.5499999998137355,
+          0.5499999998137355,
+          0.4499999997206032,
+          0.5500000002793968,
+          0.2999999998137355,
+          0.20000000018626451,
+          0.25,
+          0.2999999998137355,
+          0.25,
+          0.19999999972060323,
+          0.25,
+          0.15000000037252903,
+          0.20000000018626451,
+          0.25,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.2999999998137355,
+          0.2999999998137355,
+          0.25,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.15000000037252903,
+          0.19999999972060323,
+          0.25,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.10000000009313226,
+          0.19999999972060323,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.25
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 92,
+          "textures": 15
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "complex",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -45.5,
+            "y": 1.64,
+            "z": -5
+          },
+          "target": {
+            "x": -45.5,
+            "y": 1.64,
+            "z": -23
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -45.5,
+          "y": 1.64,
+          "z": -5
+        },
+        "target": {
+          "x": -45.5,
+          "y": 1.64,
+          "z": -23
+        },
+        "fov": 103
+      },
+      "constructMs": 716.4000000003725,
+      "preparationMs": 1684.7000000001863,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 959.2000000001863,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 12.962962962962964,
+      "onePercentLowFPS": 5.452562704471112,
+      "frameMs": {
+        "median": 83.30000000000018,
+        "p95": 166.5999999999999,
+        "p99": 183.39999999999964,
+        "max": 200
+      },
+      "renderCPUMs": {
+        "median": 2.6000000005587935,
+        "p95": 6.400000000372529
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 2.1499999999068677
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 79.057232,
+        "p95": 93.405112
+      },
+      "drawCalls": {
+        "min": 29,
+        "max": 29
+      },
+      "triangles": {
+        "min": 56142,
+        "max": 56142
+      },
+      "materials": 93,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 65,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 106,
+        "textures": 14
+      },
+      "textures": {
+        "uniqueMaterialTextures": 18,
+        "estimatedRGBA8Bytes": 5946027,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 37549952,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -45.5,
+          0,
+          -5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.800000000000182,
+          16.699999999999818,
+          66.5,
+          100,
+          116.69999999999982,
+          83.30000000000018,
+          83.40000000000009,
+          50,
+          100,
+          66.69999999999982,
+          16.59999999999991,
+          83.30000000000018,
+          50.09999999999991,
+          166.5999999999999,
+          83.30000000000018,
+          16.699999999999818,
+          116.60000000000036,
+          66.79999999999973,
+          33.20000000000027,
+          200,
+          83.39999999999964,
+          83.40000000000009,
+          16.59999999999991,
+          116.70000000000027,
+          16.59999999999991,
+          183.39999999999964,
+          66.60000000000036,
+          16.600000000000364,
+          83.39999999999964,
+          83.39999999999964,
+          66.60000000000036,
+          83.30000000000018,
+          83.39999999999964,
+          99.90000000000055,
+          83.39999999999964
+        ],
+        "renderCPU": [
+          2.6000000005587935,
+          2.7000000001862645,
+          1.2000000001862645,
+          5.2999999998137355,
+          3.7000000001862645,
+          1.2999999998137355,
+          1.2000000001862645,
+          1.1000000005587935,
+          3.2000000001862645,
+          5.2000000001862645,
+          1.3999999994412065,
+          0.7999999998137355,
+          1,
+          5.5,
+          0.900000000372529,
+          2.1000000005587935,
+          0.900000000372529,
+          4.1000000005587935,
+          6.699999999254942,
+          6.400000000372529,
+          5.599999999627471,
+          0.8000000007450581,
+          4.5,
+          4.5,
+          2.599999999627471,
+          0.599999999627471,
+          4.1000000005587935,
+          0.8999999994412065,
+          6.400000000372529,
+          0.7999999998137355,
+          0.900000000372529,
+          3.400000000372529,
+          3.699999999254942,
+          0.7999999998137355,
+          4.7000000001862645,
+          3.1000000005587935
+        ],
+        "simulationCPU": [
+          6.5,
+          2.5499999998137355,
+          0.35000000009313226,
+          0.35000000009313226,
+          2.1499999999068677,
+          0.20000000018626451,
+          0.25,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.19999999972060323,
+          0.3000000002793968,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.09999999962747097,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.7000000001862645,
+          0.14999999990686774,
+          0.09999999962747097,
+          0.25,
+          0.25,
+          0.39999999990686774,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.15000000037252903,
+          0.34999999962747097,
+          0.39999999990686774,
+          0.20000000018626451,
+          0.10000000009313226,
+          0.25,
+          0.14999999990686774
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 106,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "bunny",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": 0,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": 0,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 406.5,
+      "preparationMs": 1172.300000000745,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 24,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 762.3999999994412,
+        "completedPrograms": 24,
+        "totalPrograms": 24
+      },
+      "observedFrames": 35,
+      "averageFPS": 29.169097424785395,
+      "onePercentLowFPS": 10,
+      "frameMs": {
+        "median": 16.700000000000273,
+        "p95": 66.70000000000027,
+        "p99": 100,
+        "max": 100
+      },
+      "renderCPUMs": {
+        "median": 0.900000000372529,
+        "p95": 2.5
+      },
+      "simulationStepMs": {
+        "median": 0.05000000027939677,
+        "p95": 1.0500000002793968
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 19.30688,
+        "p95": 55.767483
+      },
+      "drawCalls": {
+        "min": 12,
+        "max": 12
+      },
+      "triangles": {
+        "min": 4596,
+        "max": 4596
+      },
+      "materials": 73,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 47,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 24,
+      "renderMemory": {
+        "geometries": 87,
+        "textures": 11
+      },
+      "textures": {
+        "uniqueMaterialTextures": 3,
+        "estimatedRGBA8Bytes": 703147,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 23338992,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.59999999999991,
+          50,
+          16.600000000000136,
+          16.700000000000045,
+          100,
+          33.399999999999864,
+          50,
+          16.600000000000136,
+          16.699999999999818,
+          33.30000000000018,
+          33.29999999999973,
+          33.40000000000009,
+          16.700000000000273,
+          16.59999999999991,
+          66.69999999999982,
+          16.59999999999991,
+          16.700000000000273,
+          66.69999999999982,
+          16.59999999999991,
+          66.70000000000027,
+          100,
+          16.59999999999991,
+          16.699999999999818,
+          66.70000000000027,
+          33.40000000000009,
+          16.59999999999991,
+          50,
+          16.699999999999818,
+          16.59999999999991,
+          50,
+          16.700000000000273,
+          16.699999999999818,
+          16.59999999999991,
+          50,
+          16.700000000000273
+        ],
+        "renderCPU": [
+          2.5,
+          1.400000000372529,
+          1.2000000001862645,
+          1,
+          0.8999999994412065,
+          26.399999999441206,
+          5.099999999627471,
+          2.2000000001862645,
+          2,
+          1.2000000001862645,
+          1.1000000005587935,
+          0.900000000372529,
+          0.900000000372529,
+          1,
+          0.900000000372529,
+          1,
+          0.7000000001862645,
+          0.7999999998137355,
+          1.099999999627471,
+          1.2000000001862645,
+          1.900000000372529,
+          0.7999999998137355,
+          0.8999999994412065,
+          1.199999999254942,
+          1.1000000005587935,
+          1,
+          0.7000000001862645,
+          0.6000000005587935,
+          0.6000000005587935,
+          0.6000000005587935,
+          0.7000000001862645,
+          0.7999999998137355,
+          0.7000000001862645,
+          0.7999999998137355,
+          0.6999999992549419,
+          0.7000000001862645
+        ],
+        "simulationCPU": [
+          1.3500000000931323,
+          2.5,
+          0.19999999972060323,
+          0.05000000027939677,
+          1.0500000002793968,
+          0.20000000018626451,
+          0.049999999813735485,
+          0.20000000018626451,
+          0.05000000027939677,
+          0.05000000027939677,
+          0.6000000000931323,
+          0.049999999813735485,
+          0.049999999813735485,
+          0.05000000027939677,
+          0.049999999813735485,
+          0.10000000009313226,
+          0.10000000009313226,
+          0.14999999990686774,
+          0.05000000027939677,
+          0.14999999990686774,
+          0.14999999990686774,
+          0.10000000009313226,
+          0.05000000027939677,
+          0.10000000009313226,
+          0.10000000009313226,
+          0.05000000027939677,
+          0,
+          0,
+          0.049999999813735485,
+          0,
+          0.10000000009313226,
+          0.05000000027939677,
+          0.049999999813735485,
+          0.05000000027939677,
+          0.05000000027939677,
+          0.049999999813735485
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 87,
+          "textures": 11
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "wallbang",
+        "preset": "low",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -13,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -13,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "low",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -13,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -13,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 467,
+      "preparationMs": 1362.1000000005588,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 26,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 884.7000000001863,
+        "completedPrograms": 26,
+        "totalPrograms": 26
+      },
+      "observedFrames": 35,
+      "averageFPS": 18.58538657604078,
+      "onePercentLowFPS": 8.576329331046285,
+      "frameMs": {
+        "median": 50,
+        "p95": 100,
+        "p99": 116.60000000000036,
+        "max": 166.60000000000036
+      },
+      "renderCPUMs": {
+        "median": 1.7999999998137355,
+        "p95": 6.400000000372529
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 1.1499999999068677
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 50.127751,
+        "p95": 85.303834
+      },
+      "drawCalls": {
+        "min": 32,
+        "max": 32
+      },
+      "triangles": {
+        "min": 8818,
+        "max": 8818
+      },
+      "materials": 84,
+      "materialLibrary": {
+        "quality": "low",
+        "scalarLowFallback": true,
+        "materialCount": 49,
+        "textureSets": 0,
+        "textureCount": 0,
+        "estimatedTextureBytes": 0,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 26,
+      "renderMemory": {
+        "geometries": 87,
+        "textures": 14
+      },
+      "textures": {
+        "uniqueMaterialTextures": 12,
+        "estimatedRGBA8Bytes": 3848875,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 25297370,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -13,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.600000000000136,
+          16.59999999999991,
+          83.5,
+          33.299999999999955,
+          66.59999999999991,
+          166.60000000000036,
+          16.699999999999818,
+          83.40000000000009,
+          49.90000000000009,
+          50.09999999999991,
+          49.90000000000009,
+          50,
+          33.399999999999636,
+          66.60000000000036,
+          16.799999999999727,
+          66.59999999999991,
+          116.60000000000036,
+          16.699999999999818,
+          83.40000000000009,
+          33.29999999999973,
+          83.30000000000018,
+          66.69999999999982,
+          50,
+          50,
+          16.600000000000364,
+          33.399999999999636,
+          83.30000000000018,
+          16.59999999999991,
+          66.70000000000027,
+          33.399999999999636,
+          66.60000000000036,
+          100,
+          16.59999999999991,
+          16.799999999999727,
+          66.60000000000036
+        ],
+        "renderCPU": [
+          3.5,
+          2.3999999994412065,
+          2.7000000001862645,
+          1,
+          23.5,
+          2.900000000372529,
+          3.3999999994412065,
+          6,
+          4.099999999627471,
+          36.90000000037253,
+          1.2000000001862645,
+          2.7000000001862645,
+          3.2999999998137355,
+          1,
+          1.2999999998137355,
+          0.8999999994412065,
+          6.099999999627471,
+          4.6000000005587935,
+          1.7999999998137355,
+          6.400000000372529,
+          1,
+          3.5,
+          4.2000000001862645,
+          1,
+          1.699999999254942,
+          0.900000000372529,
+          1.1000000005587935,
+          0.900000000372529,
+          0.7999999998137355,
+          4.800000000745058,
+          1.2999999998137355,
+          0.6999999992549419,
+          2.800000000745058,
+          0.7999999998137355,
+          0.7999999998137355,
+          0.7999999998137355
+        ],
+        "simulationCPU": [
+          5.0499999998137355,
+          1,
+          0.2999999998137355,
+          0.2999999998137355,
+          0.4500000001862645,
+          0.3000000002793968,
+          0.35000000009313226,
+          1.1499999999068677,
+          0.25,
+          0.14999999990686774,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.25,
+          0.19999999972060323,
+          0.25,
+          0.15000000037252903,
+          0.39999999990686774,
+          1.3999999999068677,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.4499999997206032,
+          0.14999999990686774,
+          0.25,
+          0.14999999990686774,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.10000000009313226,
+          0.19999999972060323,
+          0.10000000009313226,
+          0.14999999990686774,
+          0.19999999972060323
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 87,
+          "textures": 14
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "range",
+        "preset": "high",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "high",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": 0,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": 0,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 751.9000000003725,
+      "preparationMs": 2786.4000000003725,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 32,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 2031.1000000005588,
+        "completedPrograms": 32,
+        "totalPrograms": 32
+      },
+      "observedFrames": 35,
+      "averageFPS": 2.2876714119507953,
+      "onePercentLowFPS": 1.090988435522584,
+      "frameMs": {
+        "median": 450,
+        "p95": 866.6000000000004,
+        "p99": 916.5999999999995,
+        "max": 950
+      },
+      "renderCPUMs": {
+        "median": 1.699999999254942,
+        "p95": 4.900000000372529
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 1.1000000000931323
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 34,
+        "median": 425.661469,
+        "p95": 504.143537
+      },
+      "drawCalls": {
+        "min": 60,
+        "max": 60
+      },
+      "triangles": {
+        "min": 43006,
+        "max": 43006
+      },
+      "materials": 89,
+      "materialLibrary": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 49,
+        "textureSets": 12,
+        "textureCount": 36,
+        "estimatedTextureBytes": 3145728,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 32,
+      "renderMemory": {
+        "geometries": 87,
+        "textures": 54
+      },
+      "textures": {
+        "uniqueMaterialTextures": 48,
+        "estimatedRGBA8Bytes": 6994603,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 29867374,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          0,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.59999999999991,
+          16.800000000000182,
+          466.5999999999999,
+          433.3000000000002,
+          400,
+          466.59999999999945,
+          483.40000000000055,
+          950,
+          49.899999999999636,
+          433.40000000000055,
+          566.5999999999995,
+          450,
+          916.5999999999995,
+          49.900000000001455,
+          450.09999999999854,
+          533.3000000000011,
+          433.2999999999993,
+          400,
+          516.6000000000004,
+          416.7000000000007,
+          383.1999999999989,
+          450.10000000000036,
+          833.2000000000007,
+          16.799999999999272,
+          866.6000000000004,
+          483.1999999999989,
+          16.700000000000728,
+          800,
+          16.600000000000364,
+          400,
+          433.39999999999964,
+          466.59999999999854,
+          483.3000000000029,
+          416.6999999999971,
+          783.3000000000029
+        ],
+        "renderCPU": [
+          4.2000000001862645,
+          1.300000000745058,
+          2.2999999998137355,
+          1.7000000001862645,
+          4.199999999254942,
+          1.6000000005587935,
+          2.5,
+          3.699999999254942,
+          1.5,
+          4.900000000372529,
+          2.2000000001862645,
+          1.7000000001862645,
+          1.699999999254942,
+          5.5,
+          1.2000000001862645,
+          1.2000000001862645,
+          1.599999999627471,
+          1,
+          2,
+          4.6000000005587935,
+          1.2000000001862645,
+          1.3999999994412065,
+          2.3999999994412065,
+          1,
+          1.5,
+          1.099999999627471,
+          1.099999999627471,
+          1.2000000001862645,
+          1.400000000372529,
+          1.099999999627471,
+          1.3999999994412065,
+          29.700000000186265,
+          2.1000000005587935,
+          2,
+          1.699999999254942,
+          2.1000000005587935
+        ],
+        "simulationCPU": [
+          4.2000000001862645,
+          0.599999999627471,
+          0.5,
+          0.4499999997206032,
+          0.4499999997206032,
+          0.25,
+          0.25,
+          0.35000000009313226,
+          0.20000000018626451,
+          0.6000000000931323,
+          0.599999999627471,
+          0.34999999962747097,
+          0.25,
+          0.4500000001862645,
+          0.75,
+          0.7000000001862645,
+          0.39999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.4499999997206032,
+          0.25,
+          0.25,
+          0.25,
+          0.25,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.14999999990686774,
+          2.5499999998137355,
+          0.14999999990686774,
+          0.25,
+          0.35000000009313226,
+          0.25,
+          0.25,
+          1.1000000000931323,
+          0.25
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 87,
+          "textures": 54
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "complex",
+        "preset": "high",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -45.5,
+            "y": 1.64,
+            "z": -5
+          },
+          "target": {
+            "x": -45.5,
+            "y": 1.64,
+            "z": -23
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "high",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -45.5,
+          "y": 1.64,
+          "z": -5
+        },
+        "target": {
+          "x": -45.5,
+          "y": 1.64,
+          "z": -23
+        },
+        "fov": 103
+      },
+      "constructMs": 957.0999999996275,
+      "preparationMs": 2938,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 28,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 1972.3999999994412,
+        "completedPrograms": 28,
+        "totalPrograms": 28
+      },
+      "observedFrames": 35,
+      "averageFPS": 1.424750770383095,
+      "onePercentLowFPS": 0.8108327252087899,
+      "frameMs": {
+        "median": 750,
+        "p95": 933.3000000000011,
+        "p99": 1233.2999999999993,
+        "max": 1349.9000000000015
+      },
+      "renderCPUMs": {
+        "median": 1.900000000372529,
+        "p95": 8.5
+      },
+      "simulationStepMs": {
+        "median": 0.20000000018626451,
+        "p95": 0.5500000002793968
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 745.512181,
+        "p95": 860.165742
+      },
+      "drawCalls": {
+        "min": 68,
+        "max": 68
+      },
+      "triangles": {
+        "min": 117478,
+        "max": 117478
+      },
+      "materials": 93,
+      "materialLibrary": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 65,
+        "textureSets": 14,
+        "textureCount": 42,
+        "estimatedTextureBytes": 3670016,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 28,
+      "renderMemory": {
+        "geometries": 107,
+        "textures": 57
+      },
+      "textures": {
+        "uniqueMaterialTextures": 60,
+        "estimatedRGBA8Bytes": 9616043,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 42079168,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -45.5,
+          0,
+          -5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.699999999999818,
+          16.59999999999991,
+          633.4000000000001,
+          699.8999999999996,
+          733.3000000000002,
+          683.3000000000002,
+          683.3999999999996,
+          649.9000000000005,
+          866.5999999999995,
+          933.3000000000011,
+          850,
+          799.8999999999996,
+          700,
+          666.6000000000004,
+          783.2999999999993,
+          750,
+          916.7000000000007,
+          800,
+          783.2000000000007,
+          800,
+          750,
+          866.6999999999971,
+          699.9000000000015,
+          783.2999999999993,
+          1349.9000000000015,
+          766.5999999999985,
+          16.799999999999272,
+          649.9000000000015,
+          1233.2999999999993,
+          783.2999999999993,
+          33.30000000000291,
+          666.6999999999971,
+          783.3000000000029,
+          666.5999999999985,
+          750
+        ],
+        "renderCPU": [
+          4.6000000005587935,
+          1.7999999998137355,
+          1.5,
+          6.7000000001862645,
+          1.8999999994412065,
+          6.599999999627471,
+          1.7000000001862645,
+          1.599999999627471,
+          4.5,
+          7.900000000372529,
+          39.5,
+          3.099999999627471,
+          6,
+          1.199999999254942,
+          1.900000000372529,
+          3.599999999627471,
+          1.400000000372529,
+          5.8999999994412065,
+          7.7999999998137355,
+          1.599999999627471,
+          2.2999999998137355,
+          36.89999999944121,
+          5.300000000745058,
+          1.2000000001862645,
+          1.599999999627471,
+          1.7000000001862645,
+          1.7000000001862645,
+          1.599999999627471,
+          1.7999999998137355,
+          1.2000000001862645,
+          1.400000000372529,
+          4.900000000372529,
+          7.199999999254942,
+          1.2000000001862645,
+          3.7000000001862645,
+          8.5
+        ],
+        "simulationCPU": [
+          7.2000000001862645,
+          0.25,
+          0.39999999990686774,
+          0.7999999998137355,
+          0.3000000002793968,
+          0.2999999998137355,
+          0.19999999972060323,
+          0.20000000018626451,
+          0.14999999990686774,
+          0.2999999998137355,
+          0.14999999990686774,
+          0.25,
+          0.19999999972060323,
+          0.15000000037252903,
+          0.5,
+          0.2999999998137355,
+          0.14999999990686774,
+          0.25,
+          0.25,
+          0.10000000009313226,
+          0.20000000018626451,
+          0.5500000002793968,
+          0.25,
+          0.19999999972060323,
+          0.19999999972060323,
+          0.25,
+          0.09999999962747097,
+          0.25,
+          0.10000000009313226,
+          0.14999999990686774,
+          0.20000000018626451,
+          0.25,
+          0.20000000018626451,
+          0.10000000009313226,
+          0.19999999972060323,
+          0.19999999972060323
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 107,
+          "textures": 57
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    },
+    {
+      "spec": {
+        "map": "tower",
+        "preset": "high",
+        "frames": 36,
+        "camera": {
+          "position": {
+            "x": -4,
+            "y": 1.64,
+            "z": 5
+          },
+          "target": {
+            "x": -4,
+            "y": 1.64,
+            "z": -13
+          },
+          "fov": 103
+        }
+      },
+      "settings": {
+        "preset": "high",
+        "renderScale": 1,
+        "viewport": [
+          960,
+          540
+        ]
+      },
+      "camera": {
+        "position": {
+          "x": -4,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -4,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "constructMs": 749.3999999994412,
+      "preparationMs": 2892.7999999998137,
+      "preparationAuthorityUnchanged": true,
+      "shaderProgramsAfterWarm": 28,
+      "shaderProgramsAddedDuringFrames": 0,
+      "preparation": {
+        "stage": "ready",
+        "revision": 1,
+        "requestedRevision": 1,
+        "elapsedMs": 2135.9000000003725,
+        "completedPrograms": 28,
+        "totalPrograms": 28
+      },
+      "observedFrames": 35,
+      "averageFPS": 1.9553837300900037,
+      "onePercentLowFPS": 0.9376465072667605,
+      "frameMs": {
+        "median": 533.1999999999998,
+        "p95": 1050,
+        "p99": 1066.5,
+        "max": 1083.2000000000007
+      },
+      "renderCPUMs": {
+        "median": 3.2000000001862645,
+        "p95": 7.2999999998137355
+      },
+      "simulationStepMs": {
+        "median": 0.25,
+        "p95": 2.6000000000931323
+      },
+      "gpuTimerSupported": true,
+      "gpuFrameMs": {
+        "samples": 33,
+        "median": 518.078167,
+        "p95": 586.623664
+      },
+      "drawCalls": {
+        "min": 71,
+        "max": 71
+      },
+      "triangles": {
+        "min": 33352,
+        "max": 33352
+      },
+      "materials": 87,
+      "materialLibrary": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 51,
+        "textureSets": 14,
+        "textureCount": 42,
+        "estimatedTextureBytes": 3670016,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "characterBatches": {
+        "backend": "instanced",
+        "targetCount": 12,
+        "partCount": 11,
+        "batchCount": 11,
+        "instanceCount": 132,
+        "instanceCapacity": 132
+      },
+      "multiDrawSupported": true,
+      "shaderPrograms": 28,
+      "renderMemory": {
+        "geometries": 95,
+        "textures": 56
+      },
+      "textures": {
+        "uniqueMaterialTextures": 54,
+        "estimatedRGBA8Bytes": 8305323,
+        "method": "CPU-visible texture dimensions only, RGBA8/mipmap estimate; excludes hidden render targets and driver allocation"
+      },
+      "heap": 32969390,
+      "capabilities": {
+        "kind": "software",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+        "recommendLow": true,
+        "heuristic": false
+      },
+      "authority": {
+        "ticks": 72,
+        "time": 0.6,
+        "position": [
+          -4,
+          0,
+          5
+        ],
+        "profile": "valorant"
+      },
+      "raw": {
+        "frames": [
+          16.59999999999991,
+          16.700000000000273,
+          566.6999999999998,
+          533.3000000000002,
+          549.8999999999996,
+          500.10000000000036,
+          533.1999999999998,
+          600,
+          999.8999999999996,
+          50.100000000000364,
+          549.8999999999996,
+          1050,
+          16.700000000000728,
+          499.89999999999964,
+          516.7000000000007,
+          500,
+          500,
+          500,
+          516.5,
+          583.2999999999993,
+          1000.1000000000004,
+          16.69999999999891,
+          583.2000000000007,
+          616.7000000000007,
+          600,
+          1083.2000000000007,
+          583.2999999999993,
+          550,
+          33.39999999999782,
+          1066.5,
+          33.400000000001455,
+          1050,
+          366.59999999999854,
+          200,
+          516.7000000000007
+        ],
+        "renderCPU": [
+          3.6000000005587935,
+          3.2000000001862645,
+          2,
+          4.800000000745058,
+          2.5,
+          7,
+          1.5,
+          3.099999999627471,
+          5.5,
+          2.099999999627471,
+          1.400000000372529,
+          1.7000000001862645,
+          6.5,
+          1.2000000001862645,
+          6.900000000372529,
+          4.6000000005587935,
+          3.699999999254942,
+          2.5,
+          7.2999999998137355,
+          4.900000000372529,
+          1,
+          4.900000000372529,
+          6.8999999994412065,
+          1.5,
+          7.599999999627471,
+          6,
+          1.099999999627471,
+          1.2999999998137355,
+          1.5,
+          1.099999999627471,
+          1.2000000001862645,
+          3.7999999998137355,
+          7.2999999998137355,
+          5,
+          1.5,
+          6
+        ],
+        "simulationCPU": [
+          5.899999999906868,
+          0.5500000002793968,
+          0.34999999962747097,
+          0.4499999997206032,
+          0.3000000002793968,
+          0.25,
+          1.9500000001862645,
+          0.25,
+          0.25,
+          0.34999999962747097,
+          0.19999999972060323,
+          0.14999999990686774,
+          0.7999999998137355,
+          0.14999999990686774,
+          0.19999999972060323,
+          0.25,
+          0.35000000009313226,
+          0.15000000037252903,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.15000000037252903,
+          0.2999999998137355,
+          2.7000000001862645,
+          0.25,
+          0.20000000018626451,
+          0.15000000037252903,
+          0.25,
+          0.20000000018626451,
+          2.6000000000931323,
+          0.14999999990686774,
+          0.25,
+          0.20000000018626451,
+          0.20000000018626451,
+          0.19999999972060323,
+          1.1000000000931323
+        ]
+      },
+      "limits": [
+        "Software-renderer observations are not physical integrated/discrete GPU qualifications.",
+        "No physical input-to-photon measurement; fixed simulation-step CPU duration is measured separately.",
+        "Only finite warm frames; 1%low is an observational percentile, not long-run hardware confidence."
+      ],
+      "disposal": {
+        "before": {
+          "geometries": 95,
+          "textures": 56
+        },
+        "after": {
+          "geometries": 0,
+          "textures": 0
+        },
+        "canvasCount": 0
+      }
+    }
+  ],
+  "errors": [],
+  "environment": {
+    "browser": "Chromium headless SwiftShader",
+    "viewport": [
+      960,
+      540
+    ],
+    "physicalGPU": false,
+    "renderCPUTiming": true,
+    "gpuTimerAvailabilityMeasured": true,
+    "simulationHz": 120,
+    "renderFrameSamples": 36,
+    "frameSchedule": "actual requestAnimationFrame; no GPU draw suppression or fake timer"
+  },
+  "limits": [
+    "No physical office/integrated/gamingGPU benchmark is available in this cloud executor.",
+    "Firstpreparation time is recorded independently, not hidden inside FPS.",
+    "This finite scene probe does not establish high-refresh hardware or physical input latency."
+  ],
+  "sourceSHA256": {
+    "src/config/audio.ts": "8508e4ec30d0543719d719b9a2e3f09206c41c165209ef43955f0935077cdea5",
+    "src/config/crosshair.ts": "b6a46b369012ea89e54d487a1b1b0a4b7a43ee63b9970317a89c52ba602a37c8",
+    "src/config/crosshairCodes.ts": "2a89b460f09936e7089b902b14de16c06199bad30f5790268fc38f4b5e2c2558",
+    "src/config/footsteps.ts": "0a7d1671353b9d587e350a9b1ebd7fe9c7b0eaae2d0d464d0ff01324ef854d99",
+    "src/config/graphicsPolicy.ts": "95828ef27578eb8357c950f0f9a563fb31b8991a550c30d8ec4fdc675595b74d",
+    "src/config/materials.ts": "5648faea586ca51fbd44d5d69cec6e5b7ad4e2b9c78a8e86cc63d0bfc5706bca",
+    "src/config/movement.ts": "2f85ba1186fb49ec285b6d9153e585cf9d92f5be1f7e59df09b13b8684777017",
+    "src/config/penetration.ts": "fe11df582545ab849059e4bde77a9dc7f216712737816304cd61c9f573d44300",
+    "src/config/settings.ts": "dbace424848f515193a3b3027aa67886f1937f058c0378aab33c27df311d9e2a",
+    "src/config/surfaces.ts": "b5dc24b44761d31633306971e249463c1ba31f670dcc5199aafad0f662a2deb3",
+    "src/config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+    "src/config/weapons.ts": "6aa3cffde4e6e2fb67fb565401bff7b1c2da67bf4d2f6663a14952d5f754959b",
+    "src/dev/engine-audit.ts": "5980a50a328872a8fd6611aa617e8169cfc1c01be2575728b8e569e6dbb4eccc",
+    "src/engine/Runtime.ts": "94aa1121265a57b7d3680fd4ea1b267bc6bc360f3c5c44545252d27781bd1a34",
+    "src/engine/audio/Audio.ts": "e3dc5419eeb01839def73b939c1c621c9854f751fca05572f4243652acd2a549",
+    "src/engine/audio/FiringTimeline.ts": "d039cb31724a2d493d0532bd9681544ed1701bfc22f8814d64a376e33d48be89",
+    "src/engine/audio/footstepSynthesis.ts": "42450a0765ee15b2b853eb4c6840714d996b75e43eb58449404dbcc3ee550127",
+    "src/engine/audio/landingSynthesis.ts": "ce19379db643e55666b11a4964d79837091031acdca2f341e7c1bb6a1f9d7b5e",
+    "src/engine/audio/materialImpact.ts": "6a6b707a21a854f4c7fcbebecc6c658d53e1998b276c0ef25b6e82c4e3cf829d",
+    "src/engine/audio/occlusion.ts": "9951fe924effd41f8b18ab0b2faaaa2192ff328c50ae8320e5371d7726a3b6fe",
+    "src/engine/audio/spatial.ts": "6f6760f7f891d8dad1aa42482826cd26d9d22749b3673c6b64644a521be83171",
+    "src/engine/audio/synthesis.ts": "e3968ac11a53f276fb0fac477da9cef4e22b35590cb4a347b31b623e811dbfd5",
+    "src/engine/audio/trainingCue.ts": "c01a220ff1162c5f60371d13f385404c19865724cbb17a0f7cf8c3b7384c8d48",
+    "src/engine/collision/Ballistics.ts": "cd22a8906887b856f3b4d63899bfd5caad6d739bcf0ef0422a052d16d6efd7fa",
+    "src/engine/collision/RenderedTargets.ts": "9ddef7ce4c1fa419a2885ce5157bf468fda9ed99b93826258d36dfdb9c76575f",
+    "src/engine/collision/StaticBroadphase.ts": "5476d0d402e7369d90f94e6720566d30bb56f3d01e57b4ab9cf2ff7779354344",
+    "src/engine/collision/environment.ts": "c746abf080a31e3c2a9b9485d6ebeea308f01b52febc57abfcf46971f0649d31",
+    "src/engine/collision/floorImpact.ts": "7fac5b89892d94ae576613fd6b907f8d46648be5094587a6aeacd1277ad839eb",
+    "src/engine/collision/shoot.ts": "a9bfde9382574def9e14f820fc17259495eeda74d5e88e753b83465ff05c4671",
+    "src/engine/footsteps/Footsteps.ts": "a1f9b99bf1897d795dd07216515590d71d88715980339b541261100e27f6d243",
+    "src/engine/footsteps/Landings.ts": "dabbec211d3a48ce84cc6683dab73517da7ecc8a59982a55103e6b53840b3395",
+    "src/engine/footsteps/surfaceSelection.ts": "c3bce67869452d8525696cbf1dd9fc7a68b5a7e9f34e2c666d57646d969941ab",
+    "src/engine/input/EnvironmentCheck.ts": "f269373c1efe5cef6c37be8247a8b8e991f2c4761347ca9aec6376cbcdf8543c",
+    "src/engine/input/Input.ts": "d83a6ec57778893f0bacb81e6d93badb4a51dcf0db6d7b4af1265b3dfd403392",
+    "src/engine/input/InputCommandBuffer.ts": "da1886d9167676564124423b057a9383f077cde05ab12d30e25fdec241bec719",
+    "src/engine/input/InputDiagnostics.ts": "66b7efdef54a5a41ab07288a08be802ba8f5890636794c687ae3130d22a565ad",
+    "src/engine/input/sensitivity.ts": "cd6959b418fd4b7d086dc5704d5bb91ddaa7bd4edfb9169e8ada8af49520549b",
+    "src/engine/input/zoomSensitivity.ts": "4e82a5c447272fc5d31114eb4470781742db174dc42559cd6cef6e0d05139391",
+    "src/engine/movement/Braking.ts": "5817469e6ba79d1c3cbae02f8bdd6d5d44569b03bf688280132f0906bb82207f",
+    "src/engine/movement/CollisionController.ts": "7ee3106fcc0d76c8ed7e01c32cdbada03bbe8817a40424a80d540a1e72c1e5cb",
+    "src/engine/movement/JumpController.ts": "63c30ded389676bb418573bf071948f2286e205d9015286e5ad60b642439eb93",
+    "src/engine/movement/Movement.ts": "baf4fcf8ade411136a13efa434f733c231e0d9a816141f5681146ff2a357d252",
+    "src/engine/movement/MovementSolvers.ts": "c37ba9c10f6ebc30cbe4f8f23a91e64180cd19a1b16ccab971febb6f457f45f0",
+    "src/engine/recoil/Recoil.ts": "d33ecc52d3cd05a8fa97e20b094a29ee59a9fc3d0ecbdf8bfbece525c01d70d6",
+    "src/engine/rendering/ArchitecturalBox.ts": "a9fe479944a1b3bc98cddc1da48b22b2c60c7adc17a30f03ef2cb2433096bba7",
+    "src/engine/rendering/CharacterBatches.ts": "4be10b40334e7547819c395dfbdf0695fc18da3bc83961895d8fc3f1405c142e",
+    "src/engine/rendering/CharacterGeometry.ts": "ee298608b5580a5245e4ed51a25544b8bab9bcab30eb0d7ea522ad3522a1c187",
+    "src/engine/rendering/DefenderWeaponGeometry.ts": "2a2881c5e0b0f4756629b69c9d90780640150e75db9b7c238901e8a27bf1612a",
+    "src/engine/rendering/GraphicsCapabilities.ts": "7c32cb05c921ebf7c0372b69d96e097cedd92d7f1bcb8065b6537dcb6313de9f",
+    "src/engine/rendering/GroundContacts.ts": "bb584f1d67447e1606205818780c4ab34c5feefe24d266f9705c869792df3d39",
+    "src/engine/rendering/MovementReview.ts": "0bef7ab55cf1c335f2aa6a7cbcd6e97f4932f667110a6e750a67e65849cc43f2",
+    "src/engine/rendering/OperatorVisual.ts": "a126b9614990ee61a0275591cc4195a0907c3856c117b01baadb76a34faf7903",
+    "src/engine/rendering/ProceduralSurfaces.ts": "0fcb93116f0b6d01d0721393aaa3b9de25d9898eb1a7513e5e364af0eb628380",
+    "src/engine/rendering/RangeRenderer.ts": "5ec28724ac9d8e3de322d44b1f912274554f0aa3a8d24c93a58013314df69a5c",
+    "src/engine/rendering/RenderCadence.ts": "94e906b3c55dab798c6479403583217037263a3aa6dbf6b7550540df6487cc33",
+    "src/engine/rendering/StaticGeometry.ts": "1e00aa9283522e40d6f1b145057273a12bd2cca522b15c29182f6de810cfbe37",
+    "src/engine/rendering/SurfaceMaterials.ts": "844c4ef78ddb8237578d0bc5e0c762b5ad92fbc6d8407c4628a082c75d0286fb",
+    "src/engine/rendering/SurfaceShowcase.ts": "45cc392adb3817cd3fb7cc0cd26aa1eedcbf210357729036c51ea80168ad43ff",
+    "src/engine/rendering/TacticalArchitecture.ts": "021441680a4103faf6fd2c54fbaf1f4c1adeee8da787ae617b23d57aa4ff8b01",
+    "src/engine/rendering/WeaponView.ts": "3c83105a4bcc4237e6639afbe13cd2c9733c31c58d56dc13287e90c12903aee7",
+    "src/engine/rendering/projection.ts": "0d37ba59093de49968c1f6549f48251f55f0809a38cc680b0ce980d321e757f9",
+    "src/engine/rendering/viewmodel.ts": "0666a0e0a21213ac35467d41a5af43e4b3595f44a0c215f0d014d0d7a012973d",
+    "src/engine/replay/codec.ts": "723c61056980407b3b88a21c8df86b459bf2b6e4e9569cfea3ba364f6212974c",
+    "src/engine/replay/integrity.ts": "410fbcf6b3301299645abb86cc4e7ea261874c592d60411bd980bdeb30d3e1a7",
+    "src/engine/replay/playback.ts": "37889d8825e110bef9b987b39d19abe5ed2a12cd2c0d925fef80358adda1995b",
+    "src/engine/replay/recording.ts": "5be2b0c556d773ae870c5c8862d767c275aee2a4e98418d218c0f5acd829b597",
+    "src/engine/replay/types.ts": "db3bdd315a3ee446b116bc430cc1108192099a11e6f2ce786e6cd20ab2655695",
+    "src/engine/replay/validation.ts": "5bb4ae185d30d6a0b0bb6b00194ed04b55fdea398e52b864daafe3e0e313aafd",
+    "src/engine/simulation/FixedClock.ts": "865fe1f14db2d074a01363a049405c7c7d9d4f3d18d91f0fa6b0caa40cb689a5",
+    "src/engine/simulation/Simulation.ts": "bb20f56446a1259a5c2e7eef5582a4933f114161758c580777e8b75d1aeff6ec",
+    "src/engine/simulation/random.ts": "6e071539ea51acc26efb4c16004d881e0578589e42ce9cd9f4942ddc1ffe0893",
+    "src/engine/simulation/rules.ts": "c2da4ed5248a91b26b4396415179ab25575f963ddd705deb98a2f72762339e96",
+    "src/engine/tactical/AngleTraining.ts": "f6e9364b74d1b93e62c430393eaf60be2fcad725da6df1004293a9603e716852",
+    "src/engine/tactical/BotAimMotor.ts": "456d8fdb2ffbb24141dac7828853a19241bc02f616466a3ba0520ea8f32e32d3",
+    "src/engine/tactical/DefenderAI.ts": "ede9e9cd860188863db0d10fb3d03892eca74a532dea7ca90aefc95b57d280fd",
+    "src/engine/tactical/Exposure.ts": "d133864d60d0c00d4fc195f1d05bec958b30c9fde212c2d4679b96e0f9e8e4d5",
+    "src/engine/tactical/Hearing.ts": "4f6bdb67884f56dc07845f27df94885dc8805e604cf8e7f060cbccb1d1effac3",
+    "src/engine/tactical/complex.ts": "ec58068143e9b6927f33d07d8dc5bfc8cf60abdc88175a4d9c2487cc4dd7ee65",
+    "src/engine/tactical/complexValidation.ts": "5568be3ddfe63d73f81b2cdee31bb4422175b91dbaf24262619009c42a314863",
+    "src/engine/tactical/levels.ts": "122833f46ad4a1d64f146a2c25231fba854aa839bdafd33aed8e5f8a682e3ed9",
+    "src/engine/tactical/map.ts": "1cecb4d4a0d766e2b94a9f314f5ba28018ed961cf138bd2ab1e2205ea81b3954",
+    "src/engine/tactical/mechanics.ts": "2cd596d93b24ac0e35565d3d76833391ad8aed61cfdf279c654212f8fd7733d1",
+    "src/engine/targets/CharacterShape.ts": "ee659c0b358bdde27eee74e36b8eab35f454b03fbdc4091cad3495b63a9b9bf3",
+    "src/engine/targets/Target.ts": "9244ab76bde22a893ce2cac6efa031f4ee488baad83798039a1a0dac31d38f28",
+    "src/engine/targets/locomotion.ts": "ce46f32c05c1e7ae3d1f61df793a480cf0abadf4ad1951d93e7403f04ea1370f",
+    "src/engine/types.ts": "5e3dde854b2cb7e61b2dc921d1c8b85f75b0c628d8c8b2394447e48fd9ef87aa",
+    "src/engine/weapons/Weapon.ts": "d29518aaa3823a87668f939676c5c6045678dd0f1688258c5c9b89d57f7425e8",
+    "src/engine/weapons/trajectory.ts": "639dfc254a28ceb4dbdc5503632be83b545a202c10210620a99999ee0d457c3b"
+  },
+  "finalSourceSHA256": {
+    "src/config/audio.ts": "8508e4ec30d0543719d719b9a2e3f09206c41c165209ef43955f0935077cdea5",
+    "src/config/crosshair.ts": "b6a46b369012ea89e54d487a1b1b0a4b7a43ee63b9970317a89c52ba602a37c8",
+    "src/config/crosshairCodes.ts": "2a89b460f09936e7089b902b14de16c06199bad30f5790268fc38f4b5e2c2558",
+    "src/config/footsteps.ts": "0a7d1671353b9d587e350a9b1ebd7fe9c7b0eaae2d0d464d0ff01324ef854d99",
+    "src/config/graphicsPolicy.ts": "95828ef27578eb8357c950f0f9a563fb31b8991a550c30d8ec4fdc675595b74d",
+    "src/config/materials.ts": "5648faea586ca51fbd44d5d69cec6e5b7ad4e2b9c78a8e86cc63d0bfc5706bca",
+    "src/config/movement.ts": "2f85ba1186fb49ec285b6d9153e585cf9d92f5be1f7e59df09b13b8684777017",
+    "src/config/penetration.ts": "fe11df582545ab849059e4bde77a9dc7f216712737816304cd61c9f573d44300",
+    "src/config/settings.ts": "dbace424848f515193a3b3027aa67886f1937f058c0378aab33c27df311d9e2a",
+    "src/config/surfaces.ts": "b5dc24b44761d31633306971e249463c1ba31f670dcc5199aafad0f662a2deb3",
+    "src/config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+    "src/config/weapons.ts": "6aa3cffde4e6e2fb67fb565401bff7b1c2da67bf4d2f6663a14952d5f754959b",
+    "src/dev/engine-audit.ts": "5980a50a328872a8fd6611aa617e8169cfc1c01be2575728b8e569e6dbb4eccc",
+    "src/engine/Runtime.ts": "94aa1121265a57b7d3680fd4ea1b267bc6bc360f3c5c44545252d27781bd1a34",
+    "src/engine/audio/Audio.ts": "e3dc5419eeb01839def73b939c1c621c9854f751fca05572f4243652acd2a549",
+    "src/engine/audio/FiringTimeline.ts": "d039cb31724a2d493d0532bd9681544ed1701bfc22f8814d64a376e33d48be89",
+    "src/engine/audio/footstepSynthesis.ts": "42450a0765ee15b2b853eb4c6840714d996b75e43eb58449404dbcc3ee550127",
+    "src/engine/audio/landingSynthesis.ts": "ce19379db643e55666b11a4964d79837091031acdca2f341e7c1bb6a1f9d7b5e",
+    "src/engine/audio/materialImpact.ts": "6a6b707a21a854f4c7fcbebecc6c658d53e1998b276c0ef25b6e82c4e3cf829d",
+    "src/engine/audio/occlusion.ts": "9951fe924effd41f8b18ab0b2faaaa2192ff328c50ae8320e5371d7726a3b6fe",
+    "src/engine/audio/spatial.ts": "6f6760f7f891d8dad1aa42482826cd26d9d22749b3673c6b64644a521be83171",
+    "src/engine/audio/synthesis.ts": "e3968ac11a53f276fb0fac477da9cef4e22b35590cb4a347b31b623e811dbfd5",
+    "src/engine/audio/trainingCue.ts": "c01a220ff1162c5f60371d13f385404c19865724cbb17a0f7cf8c3b7384c8d48",
+    "src/engine/collision/Ballistics.ts": "cd22a8906887b856f3b4d63899bfd5caad6d739bcf0ef0422a052d16d6efd7fa",
+    "src/engine/collision/RenderedTargets.ts": "9ddef7ce4c1fa419a2885ce5157bf468fda9ed99b93826258d36dfdb9c76575f",
+    "src/engine/collision/StaticBroadphase.ts": "5476d0d402e7369d90f94e6720566d30bb56f3d01e57b4ab9cf2ff7779354344",
+    "src/engine/collision/environment.ts": "c746abf080a31e3c2a9b9485d6ebeea308f01b52febc57abfcf46971f0649d31",
+    "src/engine/collision/floorImpact.ts": "7fac5b89892d94ae576613fd6b907f8d46648be5094587a6aeacd1277ad839eb",
+    "src/engine/collision/shoot.ts": "a9bfde9382574def9e14f820fc17259495eeda74d5e88e753b83465ff05c4671",
+    "src/engine/footsteps/Footsteps.ts": "a1f9b99bf1897d795dd07216515590d71d88715980339b541261100e27f6d243",
+    "src/engine/footsteps/Landings.ts": "dabbec211d3a48ce84cc6683dab73517da7ecc8a59982a55103e6b53840b3395",
+    "src/engine/footsteps/surfaceSelection.ts": "c3bce67869452d8525696cbf1dd9fc7a68b5a7e9f34e2c666d57646d969941ab",
+    "src/engine/input/EnvironmentCheck.ts": "f269373c1efe5cef6c37be8247a8b8e991f2c4761347ca9aec6376cbcdf8543c",
+    "src/engine/input/Input.ts": "d83a6ec57778893f0bacb81e6d93badb4a51dcf0db6d7b4af1265b3dfd403392",
+    "src/engine/input/InputCommandBuffer.ts": "da1886d9167676564124423b057a9383f077cde05ab12d30e25fdec241bec719",
+    "src/engine/input/InputDiagnostics.ts": "66b7efdef54a5a41ab07288a08be802ba8f5890636794c687ae3130d22a565ad",
+    "src/engine/input/sensitivity.ts": "cd6959b418fd4b7d086dc5704d5bb91ddaa7bd4edfb9169e8ada8af49520549b",
+    "src/engine/input/zoomSensitivity.ts": "4e82a5c447272fc5d31114eb4470781742db174dc42559cd6cef6e0d05139391",
+    "src/engine/movement/Braking.ts": "5817469e6ba79d1c3cbae02f8bdd6d5d44569b03bf688280132f0906bb82207f",
+    "src/engine/movement/CollisionController.ts": "7ee3106fcc0d76c8ed7e01c32cdbada03bbe8817a40424a80d540a1e72c1e5cb",
+    "src/engine/movement/JumpController.ts": "63c30ded389676bb418573bf071948f2286e205d9015286e5ad60b642439eb93",
+    "src/engine/movement/Movement.ts": "baf4fcf8ade411136a13efa434f733c231e0d9a816141f5681146ff2a357d252",
+    "src/engine/movement/MovementSolvers.ts": "c37ba9c10f6ebc30cbe4f8f23a91e64180cd19a1b16ccab971febb6f457f45f0",
+    "src/engine/recoil/Recoil.ts": "d33ecc52d3cd05a8fa97e20b094a29ee59a9fc3d0ecbdf8bfbece525c01d70d6",
+    "src/engine/rendering/ArchitecturalBox.ts": "a9fe479944a1b3bc98cddc1da48b22b2c60c7adc17a30f03ef2cb2433096bba7",
+    "src/engine/rendering/CharacterBatches.ts": "4be10b40334e7547819c395dfbdf0695fc18da3bc83961895d8fc3f1405c142e",
+    "src/engine/rendering/CharacterGeometry.ts": "ee298608b5580a5245e4ed51a25544b8bab9bcab30eb0d7ea522ad3522a1c187",
+    "src/engine/rendering/DefenderWeaponGeometry.ts": "2a2881c5e0b0f4756629b69c9d90780640150e75db9b7c238901e8a27bf1612a",
+    "src/engine/rendering/GraphicsCapabilities.ts": "7c32cb05c921ebf7c0372b69d96e097cedd92d7f1bcb8065b6537dcb6313de9f",
+    "src/engine/rendering/GroundContacts.ts": "bb584f1d67447e1606205818780c4ab34c5feefe24d266f9705c869792df3d39",
+    "src/engine/rendering/MovementReview.ts": "0bef7ab55cf1c335f2aa6a7cbcd6e97f4932f667110a6e750a67e65849cc43f2",
+    "src/engine/rendering/OperatorVisual.ts": "a126b9614990ee61a0275591cc4195a0907c3856c117b01baadb76a34faf7903",
+    "src/engine/rendering/ProceduralSurfaces.ts": "0fcb93116f0b6d01d0721393aaa3b9de25d9898eb1a7513e5e364af0eb628380",
+    "src/engine/rendering/RangeRenderer.ts": "5ec28724ac9d8e3de322d44b1f912274554f0aa3a8d24c93a58013314df69a5c",
+    "src/engine/rendering/RenderCadence.ts": "94e906b3c55dab798c6479403583217037263a3aa6dbf6b7550540df6487cc33",
+    "src/engine/rendering/StaticGeometry.ts": "1e00aa9283522e40d6f1b145057273a12bd2cca522b15c29182f6de810cfbe37",
+    "src/engine/rendering/SurfaceMaterials.ts": "844c4ef78ddb8237578d0bc5e0c762b5ad92fbc6d8407c4628a082c75d0286fb",
+    "src/engine/rendering/SurfaceShowcase.ts": "45cc392adb3817cd3fb7cc0cd26aa1eedcbf210357729036c51ea80168ad43ff",
+    "src/engine/rendering/TacticalArchitecture.ts": "021441680a4103faf6fd2c54fbaf1f4c1adeee8da787ae617b23d57aa4ff8b01",
+    "src/engine/rendering/WeaponView.ts": "3c83105a4bcc4237e6639afbe13cd2c9733c31c58d56dc13287e90c12903aee7",
+    "src/engine/rendering/projection.ts": "0d37ba59093de49968c1f6549f48251f55f0809a38cc680b0ce980d321e757f9",
+    "src/engine/rendering/viewmodel.ts": "0666a0e0a21213ac35467d41a5af43e4b3595f44a0c215f0d014d0d7a012973d",
+    "src/engine/replay/codec.ts": "723c61056980407b3b88a21c8df86b459bf2b6e4e9569cfea3ba364f6212974c",
+    "src/engine/replay/integrity.ts": "410fbcf6b3301299645abb86cc4e7ea261874c592d60411bd980bdeb30d3e1a7",
+    "src/engine/replay/playback.ts": "37889d8825e110bef9b987b39d19abe5ed2a12cd2c0d925fef80358adda1995b",
+    "src/engine/replay/recording.ts": "5be2b0c556d773ae870c5c8862d767c275aee2a4e98418d218c0f5acd829b597",
+    "src/engine/replay/types.ts": "db3bdd315a3ee446b116bc430cc1108192099a11e6f2ce786e6cd20ab2655695",
+    "src/engine/replay/validation.ts": "5bb4ae185d30d6a0b0bb6b00194ed04b55fdea398e52b864daafe3e0e313aafd",
+    "src/engine/simulation/FixedClock.ts": "865fe1f14db2d074a01363a049405c7c7d9d4f3d18d91f0fa6b0caa40cb689a5",
+    "src/engine/simulation/Simulation.ts": "bb20f56446a1259a5c2e7eef5582a4933f114161758c580777e8b75d1aeff6ec",
+    "src/engine/simulation/random.ts": "6e071539ea51acc26efb4c16004d881e0578589e42ce9cd9f4942ddc1ffe0893",
+    "src/engine/simulation/rules.ts": "c2da4ed5248a91b26b4396415179ab25575f963ddd705deb98a2f72762339e96",
+    "src/engine/tactical/AngleTraining.ts": "f6e9364b74d1b93e62c430393eaf60be2fcad725da6df1004293a9603e716852",
+    "src/engine/tactical/BotAimMotor.ts": "456d8fdb2ffbb24141dac7828853a19241bc02f616466a3ba0520ea8f32e32d3",
+    "src/engine/tactical/DefenderAI.ts": "ede9e9cd860188863db0d10fb3d03892eca74a532dea7ca90aefc95b57d280fd",
+    "src/engine/tactical/Exposure.ts": "d133864d60d0c00d4fc195f1d05bec958b30c9fde212c2d4679b96e0f9e8e4d5",
+    "src/engine/tactical/Hearing.ts": "4f6bdb67884f56dc07845f27df94885dc8805e604cf8e7f060cbccb1d1effac3",
+    "src/engine/tactical/complex.ts": "ec58068143e9b6927f33d07d8dc5bfc8cf60abdc88175a4d9c2487cc4dd7ee65",
+    "src/engine/tactical/complexValidation.ts": "5568be3ddfe63d73f81b2cdee31bb4422175b91dbaf24262619009c42a314863",
+    "src/engine/tactical/levels.ts": "122833f46ad4a1d64f146a2c25231fba854aa839bdafd33aed8e5f8a682e3ed9",
+    "src/engine/tactical/map.ts": "1cecb4d4a0d766e2b94a9f314f5ba28018ed961cf138bd2ab1e2205ea81b3954",
+    "src/engine/tactical/mechanics.ts": "2cd596d93b24ac0e35565d3d76833391ad8aed61cfdf279c654212f8fd7733d1",
+    "src/engine/targets/CharacterShape.ts": "ee659c0b358bdde27eee74e36b8eab35f454b03fbdc4091cad3495b63a9b9bf3",
+    "src/engine/targets/Target.ts": "9244ab76bde22a893ce2cac6efa031f4ee488baad83798039a1a0dac31d38f28",
+    "src/engine/targets/locomotion.ts": "ce46f32c05c1e7ae3d1f61df793a480cf0abadf4ad1951d93e7403f04ea1370f",
+    "src/engine/types.ts": "5e3dde854b2cb7e61b2dc921d1c8b85f75b0c628d8c8b2394447e48fd9ef87aa",
+    "src/engine/weapons/Weapon.ts": "d29518aaa3823a87668f939676c5c6045678dd0f1688258c5c9b89d57f7425e8",
+    "src/engine/weapons/trajectory.ts": "639dfc254a28ceb4dbdc5503632be83b545a202c10210620a99999ee0d457c3b"
+  },
+  "sourceUnchanged": true,
+  "completedAt": "2026-11-15T07:51:12.532Z",
+  "passed": true
+}

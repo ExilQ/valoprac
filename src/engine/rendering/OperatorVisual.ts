@@ -1,11 +1,14 @@
 import * as T from 'three';
 import type {WeaponVisual} from './WeaponView';
 import {mergeStaticArchitecture} from './StaticGeometry';
-export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,armsFactory:(p:T.Group,s:boolean,g:typeof geometry,m:typeof material)=>{animate:(...args:number[])=>void;animateBolt?:(phase:number)=>void;dispose:()=>void}):WeaponVisual{
+import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
+import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
+export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeometry,material:(m:T.Material)=>T.Material,armsFactory:(p:T.Group,s:boolean,g:typeof geometry,m:typeof material,surfaces:SurfaceMaterialLibrary)=>{animate:(...args:number[])=>void;animateBolt?:(phase:number)=>void;dispose:()=>void},surfaceLibrary?:SurfaceMaterialLibrary):WeaponVisual{
+ const surfaces=surfaceLibrary??new SurfaceMaterialLibrary();
  const root=new T.Group(),sights=new T.Group(),magazine=new T.Group(),cylinder=new T.Group(),hammer=new T.Group(),bolt=new T.Group();root.add(sights,magazine,cylinder,hammer,bolt);root.name='original VALOPRAC precision bolt rifle';bolt.name='articulated bolt assembly';
- const mat=(color:number,roughness:number,metalness:number)=>material(new T.MeshStandardMaterial({color,roughness,metalness})) as T.MeshStandardMaterial;
- const steel=mat(0x37464d,.32,.82),edge=mat(0x869499,.28,.8),polymer=mat(0x27383d,.85,.06),rubber=mat(0x152329,.92,.01),glass=mat(0x244047,.25,.32),accent=mat(0xa59575,.5,.5);
- const mesh=(g:T.BufferGeometry,m:T.Material,p:T.Group=root)=>{const o=new T.Mesh(geometry(g),m);p.add(o);return o;};
+ const mat=(family:VisualMaterialId,color:number,roughness?:number,metalness?:number)=>material(surfaces.material(family,{tint:color,roughness,metalness})) as T.MeshStandardMaterial;
+ const steel=mat('steel',0x43545c,.32),edge=mat('brushed-metal',0x869499,.28),polymer=mat('plastic',0x30444b,.85),rubber=mat('rubber',0x1c2c33,.96),glass=mat('glass',0x385d68,.2),accent=mat('painted-metal',0xa59575,.5,.5);
+ const mesh=(g:T.BufferGeometry,m:T.Material,p:T.Group=root)=>{const family=m.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);const o=new T.Mesh(geometry(g),m);p.add(o);return o;};
  const profile=(pts:[number,number][],w:number,m:T.Material,p:T.Group=root,holes:[number,number][][]=[])=>{const sh=new T.Shape();pts.forEach(([z,y],i)=>i?sh.lineTo(-z,y):sh.moveTo(-z,y));sh.closePath();for(const points of holes){const hole=new T.Path();points.forEach(([z,y],i)=>i?hole.lineTo(-z,y):hole.moveTo(-z,y));hole.closePath();sh.holes.push(hole);}const g=new T.ExtrudeGeometry(sh,{depth:w-.004,bevelEnabled:true,bevelSize:.002,bevelThickness:.002,bevelSegments:1,steps:1});g.translate(0,0,-(w-.004)/2);g.rotateY(Math.PI/2);return mesh(g,m,p);};
  const tube=(r:number,len:number,x:number,y:number,z:number,m:T.Material,p:T.Group=root,n=16)=>{const o=mesh(new T.CylinderGeometry(r,r,len,n),m,p);o.rotation.x=Math.PI/2;o.position.set(x,y,z);return o;};
  // Varying octagonal sections make a coherent machined action, with narrow
@@ -37,7 +40,7 @@ export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeom
  const actionSlot=mesh(new T.BoxGeometry(.0016,.015,.095),rubber);actionSlot.position.set(.0254,.004,-.015);
  for(const x of [-.0262,.0262])for(const z of [-.105,.073]){const pin=mesh(new T.CylinderGeometry(.0025,.0025,.0016,8),edge);pin.rotation.z=Math.PI/2;pin.position.set(x,-.01,z);}
  for(const z of [-.39,-.34,-.29])for(const x of [-.022,.022]){const slot=mesh(new T.BoxGeometry(.002,.009,.024),rubber);slot.position.set(x,-.002,z);}
- const arms=armsFactory(root,false,geometry,material);const muzzle=mesh(new T.ConeGeometry(.025,.12,6),material(new T.MeshBasicMaterial({color:0xffd1a3,transparent:true,opacity:.7,depthWrite:false})));muzzle.rotation.x=-Math.PI/2;muzzle.position.set(0,.009,-.9);muzzle.visible=false;muzzle.name='muzzle flash';
+ const arms=armsFactory(root,false,geometry,material,surfaces);const muzzle=mesh(new T.ConeGeometry(.025,.12,6),material(new T.MeshBasicMaterial({color:0xffd1a3,transparent:true,opacity:.7,depthWrite:false})));muzzle.rotation.x=-Math.PI/2;muzzle.position.set(0,.009,-.9);muzzle.visible=false;muzzle.name='muzzle flash';
  // Keep the optic, detachable magazine and cycling bolt articulated. Every
  // other unlabelled detail can share one local-space submission per material.
  for(const parent of [root,sights,magazine,bolt]){
@@ -46,5 +49,5 @@ export function createOperatorVisual(geometry:(g:T.BufferGeometry)=>T.BufferGeom
   for(const [surface,parts] of batches){if(parts.length<2)continue;const merged=mergeStaticArchitecture(parts,'local');if(!merged)continue;const batch=new T.Mesh(geometry(merged),surface);batch.name='batched static detail';parent.add(batch);for(const part of parts){parent.remove(part);part.geometry.dispose();}}
  }
  const smooth=(a:number,b:number,p:number)=>{const t=T.MathUtils.clamp((p-a)/(b-a),0,1);return t*t*(3-2*t);};
- return {root,sights,magazine,cylinder,hammer,muzzle,accent,animate:(...args)=>arms.animate(...args),animateBolt:(phase)=>{const p=T.MathUtils.clamp(phase,0,1),pull=smooth(.17,.42,p)*(1-smooth(.58,.85,p)),lift=smooth(.04,.17,p)*(1-smooth(.85,.98,p));bolt.position.z=pull*.075;bolt.rotation.z=lift*.6;arms.animateBolt?.(p);},dispose:()=>arms.dispose()};
+ return {root,sights,magazine,cylinder,hammer,muzzle,accent,animate:(...args)=>arms.animate(...args),animateBolt:(phase)=>{const p=T.MathUtils.clamp(phase,0,1),pull=smooth(.17,.42,p)*(1-smooth(.58,.85,p)),lift=smooth(.04,.17,p)*(1-smooth(.85,.98,p));bolt.position.z=pull*.075;bolt.rotation.z=lift*.6;arms.animateBolt?.(p);},dispose:()=>{arms.dispose();if(!surfaceLibrary)surfaces.dispose();}};
 }

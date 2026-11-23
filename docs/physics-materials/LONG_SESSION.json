@@ -1,0 +1,509 @@
+{
+  "schema": 1,
+  "date": "2026-11-15T05:59:04.552Z",
+  "passed": true,
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64",
+    "gcAvailable": true
+  },
+  "method": {
+    "hz": 120,
+    "simulatedSecondsPerRun": 1860,
+    "repeats": 2,
+    "map": "range",
+    "rules": "materials-v3",
+    "physics": "VALORANT",
+    "seed": 1200731,
+    "renderedHistoryCaptureHz": 2,
+    "input": "Repeated real movement, walk/crouch/jumps, look, ADS, fire, weapon switches; automatic reload; optional movement tools enabled",
+    "recording": "First run records until existing 30-minute limit then continues live for one more minute; second run reproduces without recording"
+  },
+  "sameFinalChecksum": true,
+  "sources": {
+    "engine/simulation/Simulation.ts": "bb20f56446a1259a5c2e7eef5582a4933f114161758c580777e8b75d1aeff6ec",
+    "engine/movement/Movement.ts": "baf4fcf8ade411136a13efa434f733c231e0d9a816141f5681146ff2a357d252",
+    "engine/movement/CollisionController.ts": "7ee3106fcc0d76c8ed7e01c32cdbada03bbe8817a40424a80d540a1e72c1e5cb",
+    "engine/footsteps/Footsteps.ts": "a1f9b99bf1897d795dd07216515590d71d88715980339b541261100e27f6d243",
+    "engine/footsteps/Landings.ts": "dabbec211d3a48ce84cc6683dab73517da7ecc8a59982a55103e6b53840b3395",
+    "engine/replay/recording.ts": "5be2b0c556d773ae870c5c8862d767c275aee2a4e98418d218c0f5acd829b597",
+    "engine/replay/integrity.ts": "410fbcf6b3301299645abb86cc4e7ea261874c592d60411bd980bdeb30d3e1a7",
+    "engine/replay/types.ts": "db3bdd315a3ee446b116bc430cc1108192099a11e6f2ce786e6cd20ab2655695",
+    "training/movementTools/MovementPractice.ts": "73fa69bca465deb680517dc35d94134e37ec0886b2bdcd135e4237e1771293f1",
+    "config/settings.ts": "dbace424848f515193a3b3027aa67886f1937f058c0378aab33c27df311d9e2a",
+    "config/movement.ts": "2f85ba1186fb49ec285b6d9153e585cf9d92f5be1f7e59df09b13b8684777017",
+    "config/surfaces.ts": "b5dc24b44761d31633306971e249463c1ba31f670dcc5199aafad0f662a2deb3"
+  },
+  "scriptSha256": "763e39fca54528ade329b8a0a09e5cb4b073cd2dc5534551cb4bbbbc6358730b",
+  "rows": [
+    {
+      "repeat": 0,
+      "recording": true,
+      "simulatedSeconds": 1860,
+      "ticks": 223200,
+      "wallMs": 49083.027302,
+      "checksum": "40899af36fc9232f",
+      "heap": {
+        "gcAvailable": true,
+        "startBytes": 26349992,
+        "endBytes": 75208008,
+        "growthBytes": 48858016,
+        "samples": [
+          {
+            "simulatedSeconds": 300,
+            "heapBytesAfterGC": 38093408,
+            "shots": 1002,
+            "retainedShots": 1002,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 36904,
+              "ticks": 36000,
+              "checkpoints": 300,
+              "events": 1307
+            }
+          },
+          {
+            "simulatedSeconds": 600,
+            "heapBytesAfterGC": 47459896,
+            "shots": 2034,
+            "retainedShots": 2034,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 73809,
+              "ticks": 72000,
+              "checkpoints": 600,
+              "events": 2644
+            }
+          },
+          {
+            "simulatedSeconds": 900,
+            "heapBytesAfterGC": 54175176,
+            "shots": 2817,
+            "retainedShots": 1793,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 110714,
+              "ticks": 108000,
+              "checkpoints": 900,
+              "events": 3732
+            }
+          },
+          {
+            "simulatedSeconds": 1200,
+            "heapBytesAfterGC": 61932032,
+            "shots": 3546,
+            "retainedShots": 2010,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 147619,
+              "ticks": 144000,
+              "checkpoints": 1200,
+              "events": 4766
+            }
+          },
+          {
+            "simulatedSeconds": 1500,
+            "heapBytesAfterGC": 69329016,
+            "shots": 4525,
+            "retainedShots": 1965,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 184524,
+              "ticks": 180000,
+              "checkpoints": 1500,
+              "events": 6050
+            }
+          },
+          {
+            "simulatedSeconds": 1800,
+            "heapBytesAfterGC": 76190120,
+            "shots": 5555,
+            "retainedShots": 1971,
+            "replay": {
+              "state": "recording",
+              "reason": null,
+              "commands": 221429,
+              "ticks": 216000,
+              "checkpoints": 1800,
+              "events": 7385
+            }
+          }
+        ]
+      },
+      "counts": {
+        "totalShots": 5633,
+        "totalKills": 1,
+        "totalFootsteps": 2326,
+        "totalLandings": 930,
+        "targets": 12
+      },
+      "maxima": {
+        "shots": 2048,
+        "kills": 1,
+        "reactions": 12,
+        "footsteps": 64,
+        "landings": 32,
+        "renderedFrames": 32,
+        "movementSamples": 22,
+        "commands": 221431,
+        "checkpoints": 1800,
+        "events": 7386
+      },
+      "recordingLimit": {
+        "status": {
+          "state": "failed",
+          "reason": "리플레이 기록 한도에 도달했습니다. 훈련은 계속할 수 있습니다.",
+          "commands": 221431,
+          "ticks": 216120
+        },
+        "commandsFrozenAt": 221431,
+        "shotsAtLimit": 5555,
+        "shotsAfterLimit": 78,
+        "ticksAfterLimit": 7080
+      },
+      "minuteWindows": [
+        {
+          "minute": 1,
+          "wallMs": 636.1245389999999
+        },
+        {
+          "minute": 2,
+          "wallMs": 617.5661489999998
+        },
+        {
+          "minute": 3,
+          "wallMs": 783.4229100000002
+        },
+        {
+          "minute": 4,
+          "wallMs": 802.148342
+        },
+        {
+          "minute": 5,
+          "wallMs": 875.1454229999999
+        },
+        {
+          "minute": 6,
+          "wallMs": 1164.0915839999998
+        },
+        {
+          "minute": 7,
+          "wallMs": 1263.697416
+        },
+        {
+          "minute": 8,
+          "wallMs": 1301.3307539999987
+        },
+        {
+          "minute": 9,
+          "wallMs": 1407.1812100000006
+        },
+        {
+          "minute": 10,
+          "wallMs": 1675.0158189999984
+        },
+        {
+          "minute": 11,
+          "wallMs": 1491.7348519999996
+        },
+        {
+          "minute": 12,
+          "wallMs": 1458.5275190000011
+        },
+        {
+          "minute": 13,
+          "wallMs": 1626.537773
+        },
+        {
+          "minute": 14,
+          "wallMs": 1708.7498530000012
+        },
+        {
+          "minute": 15,
+          "wallMs": 1707.0659440000018
+        },
+        {
+          "minute": 16,
+          "wallMs": 1709.0622790000016
+        },
+        {
+          "minute": 17,
+          "wallMs": 2029.240167
+        },
+        {
+          "minute": 18,
+          "wallMs": 1926.1294970000017
+        },
+        {
+          "minute": 19,
+          "wallMs": 2443.1813199999997
+        },
+        {
+          "minute": 20,
+          "wallMs": 2138.9953320000022
+        },
+        {
+          "minute": 21,
+          "wallMs": 2016.4686020000008
+        },
+        {
+          "minute": 22,
+          "wallMs": 2034.0705659999985
+        },
+        {
+          "minute": 23,
+          "wallMs": 1891.57503
+        },
+        {
+          "minute": 24,
+          "wallMs": 1927.8697119999997
+        },
+        {
+          "minute": 25,
+          "wallMs": 2044.4489660000036
+        },
+        {
+          "minute": 26,
+          "wallMs": 1968.540298
+        },
+        {
+          "minute": 27,
+          "wallMs": 2001.9990199999957
+        },
+        {
+          "minute": 28,
+          "wallMs": 2062.6229699999967
+        },
+        {
+          "minute": 29,
+          "wallMs": 2031.367655999995
+        },
+        {
+          "minute": 30,
+          "wallMs": 2095.476514999995
+        },
+        {
+          "minute": 31,
+          "wallMs": 243.49234199999773
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "recording": false,
+      "simulatedSeconds": 1860,
+      "ticks": 223200,
+      "wallMs": 6186.541114000007,
+      "checksum": "40899af36fc9232f",
+      "heap": {
+        "gcAvailable": true,
+        "startBytes": 28217752,
+        "endBytes": 32274312,
+        "growthBytes": 4056560,
+        "samples": [
+          {
+            "simulatedSeconds": 300,
+            "heapBytesAfterGC": 30857184,
+            "shots": 1002,
+            "retainedShots": 1002,
+            "replay": null
+          },
+          {
+            "simulatedSeconds": 600,
+            "heapBytesAfterGC": 33245928,
+            "shots": 2034,
+            "retainedShots": 2034,
+            "replay": null
+          },
+          {
+            "simulatedSeconds": 900,
+            "heapBytesAfterGC": 32812000,
+            "shots": 2817,
+            "retainedShots": 1793,
+            "replay": null
+          },
+          {
+            "simulatedSeconds": 1200,
+            "heapBytesAfterGC": 33332064,
+            "shots": 3546,
+            "retainedShots": 2010,
+            "replay": null
+          },
+          {
+            "simulatedSeconds": 1500,
+            "heapBytesAfterGC": 33186952,
+            "shots": 4525,
+            "retainedShots": 1965,
+            "replay": null
+          },
+          {
+            "simulatedSeconds": 1800,
+            "heapBytesAfterGC": 33200928,
+            "shots": 5555,
+            "retainedShots": 1971,
+            "replay": null
+          }
+        ]
+      },
+      "counts": {
+        "totalShots": 5633,
+        "totalKills": 1,
+        "totalFootsteps": 2326,
+        "totalLandings": 930,
+        "targets": 12
+      },
+      "maxima": {
+        "shots": 2048,
+        "kills": 1,
+        "reactions": 12,
+        "footsteps": 64,
+        "landings": 32,
+        "renderedFrames": 32,
+        "movementSamples": 22,
+        "commands": 0,
+        "checkpoints": 0,
+        "events": 0
+      },
+      "recordingLimit": null,
+      "minuteWindows": [
+        {
+          "minute": 1,
+          "wallMs": 216.22373499999958
+        },
+        {
+          "minute": 2,
+          "wallMs": 198.36758800000098
+        },
+        {
+          "minute": 3,
+          "wallMs": 188.0119510000004
+        },
+        {
+          "minute": 4,
+          "wallMs": 197.72058300000208
+        },
+        {
+          "minute": 5,
+          "wallMs": 189.82361700000183
+        },
+        {
+          "minute": 6,
+          "wallMs": 205.9846020000041
+        },
+        {
+          "minute": 7,
+          "wallMs": 186.2124879999974
+        },
+        {
+          "minute": 8,
+          "wallMs": 182.65869399999792
+        },
+        {
+          "minute": 9,
+          "wallMs": 193.63401000000158
+        },
+        {
+          "minute": 10,
+          "wallMs": 192.705796000002
+        },
+        {
+          "minute": 11,
+          "wallMs": 203.27891400000226
+        },
+        {
+          "minute": 12,
+          "wallMs": 182.81555800000206
+        },
+        {
+          "minute": 13,
+          "wallMs": 192.06622700000298
+        },
+        {
+          "minute": 14,
+          "wallMs": 194.71527100000094
+        },
+        {
+          "minute": 15,
+          "wallMs": 189.0261260000043
+        },
+        {
+          "minute": 16,
+          "wallMs": 204.7864069999996
+        },
+        {
+          "minute": 17,
+          "wallMs": 194.05217999999877
+        },
+        {
+          "minute": 18,
+          "wallMs": 196.1748729999963
+        },
+        {
+          "minute": 19,
+          "wallMs": 203.63494200000423
+        },
+        {
+          "minute": 20,
+          "wallMs": 202.88651299999765
+        },
+        {
+          "minute": 21,
+          "wallMs": 220.5498430000007
+        },
+        {
+          "minute": 22,
+          "wallMs": 203.1353020000024
+        },
+        {
+          "minute": 23,
+          "wallMs": 195.61539400000038
+        },
+        {
+          "minute": 24,
+          "wallMs": 193.5466310000047
+        },
+        {
+          "minute": 25,
+          "wallMs": 204.87070200000016
+        },
+        {
+          "minute": 26,
+          "wallMs": 234.90273999999772
+        },
+        {
+          "minute": 27,
+          "wallMs": 197.70173500000237
+        },
+        {
+          "minute": 28,
+          "wallMs": 196.70625800000562
+        },
+        {
+          "minute": 29,
+          "wallMs": 213.9951199999996
+        },
+        {
+          "minute": 30,
+          "wallMs": 200.82608700000128
+        },
+        {
+          "minute": 31,
+          "wallMs": 209.8630059999996
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "CPU-only compressed-time simulation; not a 31-minute wall-clock browser/GPU/audio soak.",
+    "Heap includes recorder command/checkpoint/event data intentionally retained up to its explicit cap, Vite SSR and JIT caches. Growth while recording is not by itself a leak.",
+    "Two-Hz presentation-history insertion checks bounded data ownership; it does not measure frame pacing or visual correctness.",
+    "Kill/reaction ring capacity is asserted whenever sampled, but this fixed firing pattern may not fill either ring.",
+    "No physical input latency, GPU driver memory or live audio-node lifetime measurement is claimed."
+  ]
+}

@@ -12,7 +12,7 @@ import {WEAPONS} from '../config/weapons';
 import {sanitizeSettings} from '../config/settings';
 import {automaticGraphicsPatch} from '../config/graphicsPolicy';
 import {validateReplay} from '../engine/replay/validation';
-import {replayCompatibility} from '../engine/replay/integrity';
+import {replayRulesFor} from '../engine/replay/integrity';
 import type {Simulation} from '../engine/simulation/Simulation';
 import {SessionHighlights} from './SessionHighlights';
 import {trainingTitle} from './trainingPresentation';
@@ -36,8 +36,10 @@ export function replayDisplaySettings(settings:Settings,recommendLow:boolean):Se
 }
 export async function readReplayFile(file:Pick<File,'size'|'arrayBuffer'>){
  if(!Number.isFinite(file.size)||file.size<=0||file.size>MAX_REPLAY_COMPRESSED_BYTES)throw new Error(`리플레이 파일은 ${Math.round(MAX_REPLAY_COMPRESSED_BYTES/1000)}KB 이하여야 합니다.`);
- const recording=await decodeReplay(new Uint8Array(await file.arrayBuffer())),current=replayCompatibility();
- for(const key of Object.keys(current) as (keyof typeof current)[])if(recording.header[key]!==current[key])throw new Error('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');
+ const recording=await decodeReplay(new Uint8Array(await file.arrayBuffer()));
+ // Import and playback must use the same registered compatibility identities.
+ // Historical simulation-2 files stay on their retained rules, never upgraded.
+ replayRulesFor(recording.header);
  return recording;
 }
 export async function downloadReplay(recording:ReplayRecording){

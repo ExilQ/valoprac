@@ -1,13 +1,16 @@
 {
   "schema": 1,
-  "release": "11.0.0",
-  "patchLabel": "11.00",
-  "generatedAt": "2026-11-06T23:47:02.323Z",
+  "release": "12.0.0",
+  "patchLabel": "12.00",
+  "generatedAt": "2026-11-15T07:53:04.106Z",
+  "captureRelease": "11.0.0",
+  "capturePatchLabel": "11.00",
+  "captureEvidenceDirectory": "docs/interface-11.00",
   "direction": "Precision Utility",
   "tests": {
-    "application": 1268,
+    "application": 1444,
     "broker": 20,
-    "hosting": 13,
+    "hosting": 14,
     "passed": true,
     "renderSchedules": [
       60,
@@ -671,7 +674,16 @@
     "failures": 0,
     "webGLPreviewTextExcluded": true
   },
+  "currentSimulation": {
+    "gameVersion": "12.0.0",
+    "simulationVersion": "valoprac-replay-simulation-3",
+    "rules": "materials-v3",
+    "materialPhysicsVersion": "physical-surfaces-1.0.0",
+    "validation": "/physics-materials-validation.json"
+  },
   "preservation": {
+    "captureRelease": "11.0.0",
+    "scope": "Historical presentation-only release11 evidence; does not describe release12 mechanical changes.",
     "mechanicalCompatibilityVersion": "10.0.0",
     "simulationVersion": "valoprac-replay-simulation-2",
     "engineParametersChanged": false,

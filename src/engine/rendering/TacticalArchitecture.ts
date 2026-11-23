@@ -5,6 +5,10 @@ import type {Obstacle} from '../collision/environment';
 import type {Quality} from '../types';
 import {PEEK_ZONES,type PeekZone} from '../tactical/complex';
 import {BUNNY_LEVEL,WALLBANG_SAMPLES} from '../tactical/mechanics';
+import {SurfaceMaterialLibrary,writeWorldScaleUV} from './SurfaceMaterials';
+import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
+import {SURFACES} from '../../config/surfaces';
+import {baseGroundSurface} from '../footsteps/surfaceSelection';
 
 type Theme=PeekZone['theme'];
 const THEME_COLORS:Record<Theme,number>={facility:0xa8b3ad,research:0xc7cec8,urban:0xa99e89,courtyard:0xb7aa89};
@@ -12,29 +16,24 @@ const OLD_THEMES:Record<string,Theme>={tactical:'facility',garage:'facility',lon
 
 /** Original, meter-scale architectural kit. Finishes stay against existing solids;
  * silhouette landmarks and roofs stay above the character/jump visibility band. */
-export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.BufferGeometry)=>T.BufferGeometry,m:(a:T.Material)=>T.Material,texture:(a:T.Texture)=>T.Texture=a=>a){
+export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.BufferGeometry)=>T.BufferGeometry,m:(a:T.Material)=>T.Material,texture:(a:T.Texture)=>T.Texture=a=>a,surfaceLibrary?:SurfaceMaterialLibrary){
  const root=new T.Group();root.name='VALOPRAC original tactical architecture';
- const n=64,colorData=new Uint8Array(n*n*4),normalData=new Uint8Array(n*n*4);
- for(let y=0;y<n;y++)for(let x=0;x<n;x++){
-  const i=(y*n+x)*4,grain=((x*31+y*17+x*y*3)%13)-6,broad=Math.sin(x*.29)*Math.cos(y*.21)*2;
-  const c=242+grain*.6+broad;colorData[i]=colorData[i+1]=colorData[i+2]=c;colorData[i+3]=255;
-  normalData[i]=128+grain*.45;normalData[i+1]=128-grain*.4;normalData[i+2]=255;normalData[i+3]=255;
- }
- const dataTexture=(bytes:Uint8Array,colorSpace:T.ColorSpace)=>{const t=new T.DataTexture(bytes,n,n);t.colorSpace=colorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.magFilter=T.LinearFilter;t.minFilter=T.LinearMipmapLinearFilter;t.generateMipmaps=true;t.needsUpdate=true;return texture(t);};
- const stoneMap=dataTexture(colorData,T.SRGBColorSpace),stoneNormal=dataTexture(normalData,T.NoColorSpace);
- const materials=Object.fromEntries(Object.entries(THEME_COLORS).map(([key,color])=>[key,m(new T.MeshStandardMaterial({color,roughness:.87,metalness:.025,map:stoneMap,normalMap:stoneNormal,normalScale:new T.Vector2(.085,.085)}))])) as Record<Theme,T.Material>;
- const metal=m(new T.MeshStandardMaterial({color:0x40545c,roughness:.57,metalness:.47})),shadow=m(new T.MeshStandardMaterial({color:0x4c656b,roughness:.92})),warm=m(new T.MeshStandardMaterial({color:0x9b8463,roughness:.82,metalness:.08})),glass=m(new T.MeshStandardMaterial({color:0x6c8b90,roughness:.4,metalness:.18})),light=m(new T.MeshBasicMaterial({color:0xd8e4db}));
+ const surfaces=surfaceLibrary??new SurfaceMaterialLibrary(),registered=new Set<T.Texture>();
+ const surface=(id:VisualMaterialId,color:number,roughness?:number)=>{
+  const value=surfaces.material(id,{tint:color,roughness});
+  // A supplied library owns its maps across preset changes. Register fallback
+  // maps only, so renderer texture sets do not retain disposed historical maps.
+  if(!surfaceLibrary)for(const map of [value.map,value.normalMap,value.roughnessMap])if(map&&!registered.has(map)){registered.add(map);texture(map);}
+  return m(value);
+ };
+ const finishes:Record<Theme,VisualMaterialId>={facility:'painted-concrete',research:'plaster',urban:'brick',courtyard:'stone'};
+ const materials=Object.fromEntries(Object.entries(THEME_COLORS).map(([key,color])=>[key,surface(finishes[key as Theme],color)])) as Record<Theme,T.Material>;
+ const metal=surface('painted-metal',0x40545c),shadow=surface('composite',0x4c656b,.92),warm=surface('wood',0x9b8463),glass=surface('glass',0x6c8b90,.28),light=m(new T.MeshBasicMaterial({color:0xd8e4db}));
+ if(!surfaceLibrary)root.userData.disposeSurfaceMaterials=()=>surfaces.dispose();
  let detail=0,chunk='campus';
  const finishUV=(o:T.Mesh)=>{
-  o.updateMatrix();const p=o.geometry.getAttribute('position'),normal=o.geometry.getAttribute('normal');if(!normal)return;
-  const uv=new Float32Array(p.count*2),point=new T.Vector3(),dir=new T.Vector3(),nm=new T.Matrix3().getNormalMatrix(o.matrix);
-  for(let i=0;i<p.count;i++){
-   point.fromBufferAttribute(p,i).applyMatrix4(o.matrix);dir.fromBufferAttribute(normal,i).applyMatrix3(nm).normalize();
-   if(Math.abs(dir.y)>.65){uv[i*2]=point.x*.5;uv[i*2+1]=point.z*.5;}
-   else if(Math.abs(dir.x)>.65){uv[i*2]=point.z*.5;uv[i*2+1]=point.y*.5;}
-   else{uv[i*2]=point.x*.5;uv[i*2+1]=point.y*.5;}
-  }
-  o.geometry.setAttribute('uv',new T.BufferAttribute(uv,2));
+  o.updateMatrix();const mat=Array.isArray(o.material)?o.material[0]:o.material,family=mat.userData.visualMaterialId as VisualMaterialId|undefined;
+  writeWorldScaleUV(o.geometry,family?VISUAL_MATERIALS[family].metersPerTile:1,o.matrix);
  };
  const mesh=(geo:T.BufferGeometry,mat:T.Material,x:number,y:number,z:number)=>{const o=new T.Mesh(g(geo),mat);o.position.set(x,y,z);o.castShadow=detail===0;o.receiveShadow=true;o.userData.artDetail=detail;o.userData.artChunk=chunk;finishUV(o);root.add(o);return o;};
  const block=(w:number,h:number,d:number,x:number,y:number,z:number,mat:T.Material)=>mesh(new T.BoxGeometry(w,h,d),mat,x,y,z);
@@ -82,7 +81,11 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
  if(map==='complex')for(const zone of PEEK_ZONES){
   const x=zone.center.x,sign=Math.sign(zone.center.z),theme=zone.theme,color=materials[theme];chunk=`zone-${zone.id}`;detail=0;
   const frontDoorX=x-6;
-  block(23,.022,29,x,.018,sign*23,color);doorway(frontDoorX,sign*8,3,theme);doorway(zone.exit.x,sign*38,3,theme,zone.id==='F'?4.2:3.2);
+  const floorFamily=SURFACES[baseGroundSurface('complex',zone.center)].visualMaterialId;
+  const floorTint=new T.Color(THEME_COLORS[theme]).lerp(new T.Color(0xd6d7cb),.23);
+  const floor=surface(floorFamily,floorTint.getHex()),[floorX,floorZ,floorWidth,floorDepth]=zone.bounds??[x-12,Math.min(sign*8,sign*38),24,30];
+  const finish=block(floorWidth,.004,floorDepth,floorX+floorWidth/2,.002,floorZ+floorDepth/2,floor);finish.userData.floorFinish={zoneId:zone.id,surfaceId:baseGroundSurface('complex',zone.center),visualMaterialId:floorFamily,bounds:[floorX,floorZ,floorWidth,floorDepth],top:.004};
+  doorway(frontDoorX,sign*8,3,theme);doorway(zone.exit.x,sign*38,3,theme,zone.id==='F'?4.2:3.2);
   // The opaque plaque is physically supported by the crown, entirely above jump/head height.
   profile([[-2,-.45],[2,-.45],[2,.35],[1.88,.48],[-1.88,.48],[-2,.35]],.1,frontDoorX,4.1,sign*8,color);
   if(theme==='facility'||theme==='research')for(const p of [15,25,35]){
@@ -106,7 +109,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   for(const p of [10,12,14])block(.7,.008,.045,frontDoorX,.045,sign*p,warm);
  }else if(map==='bunny'){
   chunk='movement-gallery';detail=0;
-  const lane=m(new T.MeshStandardMaterial({color:0x668c92,roughness:.9})),landing=m(new T.MeshStandardMaterial({color:0xb09b72,roughness:.91}));
+  const lane=surface('painted-concrete',0x668c92,.9),landing=surface('painted-concrete',0xb09b72,.91);
   // A coherent long-span hall with structural ribs, inset services and floor
   // wayfinding. Supports remain within the boundary walls; no new combat cover.
   for(const z of [4,-6,-16,-26,-36,-43]){
@@ -131,7 +134,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   root.userData.mechanicLayout='manual-movement-connected-gallery';
  }else if(map==='wallbang'){
   chunk='ballistics-gallery';detail=0;
-  const floorMark=m(new T.MeshStandardMaterial({color:0x718c92,roughness:.94}));
+  const floorMark=surface('painted-concrete',0x718c92,.94);
   // Material bays share one architectural language. Their sample surfaces are
   // left visibly distinct: trim follows the entry wall, not the shootable panel.
   for(const sample of WALLBANG_SAMPLES){
@@ -157,7 +160,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
     profile([[-spec.width/2+.3,0],[-spec.width/2+.3,.15],[-spec.width*.25,.4],[spec.width*.25,.4],[spec.width/2-.3,.15],[spec.width/2-.3,0]],.23,i*spec.width,5.55,z,theme==='courtyard'?warm:metal);
     if(theme==='research'||theme==='facility')block(spec.width*.5,.035,.16,i*spec.width,5.42,z,light);
    }
-  }else for(const o of obstacles){const b=o.box,w=b.max.x-b.min.x,d=b.max.z-b.min.z;if(o.kind==='wall'&&w>2){chunk=`legacy-${Math.floor(b.min.z/16)}`;block(w,.14,d,(b.min.x+b.max.x)/2,b.max.y-.15,(b.min.z+b.max.z)/2,metal);}}
+  }
  }
  root.updateMatrixWorld(true);const sourceMeshes=root.children.length;
  const batches=new Map<string,{material:T.Material;meshes:T.Mesh[];detail:number;chunk:string}>(),batchMaterials=new Map<string,T.Material>();
@@ -169,12 +172,19 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   // spatial cells and their existing distance/preset visibility rules.
   const signature=materialKey(child.material),cell=child.userData.artDetail===0?'campus':`cell-${Math.floor(child.position.x/32)}-${Math.floor(child.position.z/32)}`;
   let material=batchMaterials.get(signature);
-  if(!material){const cloned=child.material.clone() as T.MeshStandardMaterial;cloned.color.setHex(0xffffff);cloned.vertexColors=true;material=m(cloned);batchMaterials.set(signature,material);}
+  if(!material){
+   const original=child.material as T.MeshStandardMaterial,family=original.userData.visualMaterialId as VisualMaterialId|undefined;
+   if(family)material=m(surfaces.material(family,{tint:0xffffff,vertexColors:true,roughness:original.roughness,metalness:original.metalness,normalStrength:original.normalScale.x}));
+   else {const cloned=child.material.clone() as T.MeshStandardMaterial;cloned.color.setHex(0xffffff);cloned.vertexColors=true;material=m(cloned);}
+   batchMaterials.set(signature,material);
+  }
   const key=`${cell}:${child.userData.artDetail}:${signature}`;const batch=batches.get(key)??{material,meshes:[] as T.Mesh[],detail:child.userData.artDetail,chunk:cell};batch.meshes.push(child);batches.set(key,batch);
  }
  for(const batch of batches.values()){
   const merged=mergeStaticArchitecture(batch.meshes,'world',true);if(!merged)continue;
-  const o=new T.Mesh(g(merged),batch.material);o.castShadow=batch.detail===0;o.receiveShadow=true;o.name=`${batch.chunk} architecture`;o.userData.artDetail=batch.detail;merged.computeBoundingSphere();
+  const o=new T.Mesh(g(merged),batch.material);o.castShadow=batch.detail===0;o.receiveShadow=true;o.name=`${batch.chunk} architecture`;o.userData.artDetail=batch.detail;
+  const floors=batch.meshes.filter(mesh=>mesh.userData.floorFinish).map(mesh=>mesh.userData.floorFinish);if(floors.length)o.userData.floorFinishes=floors;
+  merged.computeBoundingSphere();
   for(const old of batch.meshes){root.remove(old);old.geometry.dispose();}root.add(o);
  }
  root.userData.themeCount=map==='complex'?4:1;root.userData.meterScaledUVs=true;root.userData.collisionUnchanged=true;

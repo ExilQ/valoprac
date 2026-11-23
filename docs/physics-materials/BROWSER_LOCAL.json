@@ -1,0 +1,340 @@
+{
+  "checks": [
+    "Real uninterrupted WebGL draws, pointer lock and trusted firing advance state and consume ammunition",
+    "Two trusted right clicks enter/exit persistent rifle ADS",
+    "Escape restores controls and pauses authority",
+    "Actual completed UI flow saves IndexedDB session and its replay reconstructs matching shots and checksum",
+    "Primary training start remains reachable across seven required desktop/mobile viewport sizes",
+    "Actual frozen simulation-2 replay file imports and verifies through the browser UI"
+  ],
+  "layouts": [
+    {
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 269,
+          "right": 382.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 269,
+          "right": 382.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 1600,
+      "height": 900,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 269,
+          "right": 382.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 425,
+          "right": 538.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 2560,
+      "height": 1440,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 745,
+          "right": 858.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 3440,
+      "height": 1440,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 1185,
+          "right": 1298.703125
+        }
+      ],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "buttons": [
+        {
+          "w": 113.703125,
+          "h": 42.296875,
+          "left": 39,
+          "right": 152.703125
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Chromium SwiftShader, real WebGL draws remain enabled throughout gameplay.",
+    "Trusted mouse delivery and authority changes tested; no physical input-to-photon measurement or hardware FPS qualification."
+  ],
+  "phase": "legacy-replay-import",
+  "before": {
+    "time": 0.125,
+    "shots": 0,
+    "ammo": 25
+  },
+  "after": {
+    "time": 1.0083333333333333,
+    "shots": 7,
+    "ammo": 18,
+    "running": true,
+    "calls": 51,
+    "capabilities": {
+      "kind": "software",
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "reason": "\uc18c\ud504\ud2b8\uc6e8\uc5b4 \ub80c\ub354\ub7ec\uac00 \ubcf4\uace0\ub418\uc5c8\uc2b5\ub2c8\ub2e4. CPU\ub85c \uadf8\ub798\ud53d\uc744 \ucc98\ub9ac\ud560 \uc218 \uc788\uc5b4 \ub0ae\uc74c \uc124\uc815\uc744 \uad8c\uc7a5\ud569\ub2c8\ub2e4.",
+      "recommendLow": true,
+      "heuristic": false
+    },
+    "settings": {
+      "movementTools": {
+        "enabled": false,
+        "showTrajectory": true,
+        "showGhost": true,
+        "bindings": {
+          "save": "KeyK",
+          "restore": "KeyL",
+          "takeoff": "KeyT",
+          "reset": "KeyY"
+        }
+      },
+      "movementPhysics": "valorant",
+      "csMovementPreset": "cs2",
+      "physicsDiagnostics": false,
+      "wheelJump": "off",
+      "combatMode": "gunfight",
+      "defenderSkill": "normal",
+      "defenderAimSpeed": 180,
+      "defenderAimAcceleration": 1200,
+      "defenderStability": 0.7,
+      "defenderFirstShotError": 0.8,
+      "defenderRecoilControl": 0.6,
+      "defenderTactics": 0.55,
+      "botDiagnostics": false,
+      "jumpBufferMs": 80,
+      "penetrationDiagnostics": false,
+      "gameplayRevision": 2,
+      "aimTelemetry": true,
+      "peekingTimed": false,
+      "operatorScopeMode": "toggle",
+      "operatorAutoRescope": false,
+      "operatorZoomBinding": "KeyV",
+      "peekScenario": "free",
+      "defenderWeapon": "mixed",
+      "defenderReaction": 0.42,
+      "defenderAccuracy": 0.75,
+      "defenderReposition": 0.45,
+      "randomDefenders": true,
+      "practiceMap": "range",
+      "drill": "none",
+      "crouchMode": "hold",
+      "inputDiagnostics": false,
+      "adsDotSize": 2,
+      "botDifficulty": "normal",
+      "exposureEnabled": true,
+      "exposureLimit": 3,
+      "exposureMode": "continuous",
+      "footstepHud": true,
+      "soundMinimap": true,
+      "footstepVolume": 0.7,
+      "stepPerMeter": 0.625,
+      "stepWalkingGain": 0,
+      "stepWalkingDecay": 0.02,
+      "stepStationaryDecay": 3.5,
+      "stepStationaryVelocity": 0.035,
+      "stepStationaryDelay": 0.12,
+      "stepAudibleVelocity": 2.7,
+      "stepThreshold": 1,
+      "stepGraceDistance": 0.2,
+      "stepHearingRadius": 20,
+      "frameLimit": 60,
+      "hudScale": 1,
+      "showHeadshotConfirmation": true,
+      "showControlHints": true,
+      "interfaceVolume": 0.2,
+      "adsSensitivity": 1,
+      "scopeSensitivity25": 1,
+      "scopeSensitivity5": 1,
+      "autoGraphics": true,
+      "adsMode": "toggle",
+      "bindings": {
+        "forward": "KeyW",
+        "backward": "KeyS",
+        "left": "KeyA",
+        "right": "KeyD",
+        "walk": "ShiftLeft",
+        "crouch": "KeyC",
+        "jump": "Space",
+        "reload": "KeyR",
+        "weapons": "KeyB"
+      },
+      "graphicsPreset": "low",
+      "shadowQuality": "off",
+      "textureQuality": "low",
+      "postProcessing": false,
+      "ambientOcclusion": false,
+      "effectsQuality": "low",
+      "premiumTheme": true,
+      "firingVolume": 0.85,
+      "handlingVolume": 0.65,
+      "feedbackVolume": 0.7,
+      "targetCount": 1,
+      "targetSize": 1,
+      "targetSpeed": 1,
+      "targetDistance": 20,
+      "spawnInterval": 0.6,
+      "eliminationRule": "head",
+      "infiniteReserve": true,
+      "autoReload": true,
+      "practiceHud": true,
+      "recoilAnalysis": false,
+      "analysisWall": false,
+      "sensitivity": 0.35,
+      "degreesPerCount": 0.07,
+      "dpi": 800,
+      "fov": 103,
+      "duration": 60,
+      "seed": 1947,
+      "crosshairColor": "#e8fcf3",
+      "crosshairThickness": 2,
+      "crosshairGap": 5,
+      "crosshairLength": 7,
+      "crosshairAdvanced": {
+        "version": 1,
+        "primary": {
+          "outline": true,
+          "outlineThickness": 1,
+          "outlineOpacity": 0.75,
+          "centerDot": true,
+          "centerSize": 1,
+          "centerOpacity": 1,
+          "innerEnabled": true,
+          "innerOpacity": 1,
+          "outer": {
+            "enabled": false,
+            "opacity": 0.5,
+            "length": 3,
+            "thickness": 2,
+            "gap": 12
+          }
+        },
+        "adsMode": "dot",
+        "ads": {
+          "color": "#e8fcf3",
+          "outline": true,
+          "outlineThickness": 1,
+          "outlineOpacity": 0.75,
+          "centerDot": true,
+          "centerSize": 2,
+          "centerOpacity": 1,
+          "inner": {
+            "enabled": false,
+            "opacity": 1,
+            "length": 7,
+            "thickness": 2,
+            "gap": 5
+          },
+          "outer": {
+            "enabled": false,
+            "opacity": 1,
+            "length": 7,
+            "thickness": 2,
+            "gap": 5
+          }
+        },
+        "weaponVisibility": {
+          "rifleA": true,
+          "rifleB": true,
+          "sheriff": true,
+          "operator": true
+        }
+      },
+      "dynamicCrosshair": true,
+      "brakingHud": true,
+      "idealCompensation": false,
+      "volume": 0.35,
+      "renderScale": 0.5,
+      "antialias": false,
+      "showPerformance": true,
+      "behavior": "random"
+    }
+  },
+  "inputLatency": {
+    "metric": "DOM-event-to-render-submit CPU proxy",
+    "mouse": {
+      "total": 2,
+      "samples": 2,
+      "medianMs": 68.59999999962747,
+      "p95Ms": 68.59999999962747
+    },
+    "click": {
+      "total": 1,
+      "samples": 1,
+      "medianMs": 65.30000000074506,
+      "p95Ms": 65.30000000074506
+    },
+    "inputToPhotonMs": null,
+    "shotToPhotonMs": null,
+    "limitations": [
+      "Excludes GPU completion, scanout, peripheral latency and unsampled events.",
+      "Averages do not represent externally measured end-to-end latency."
+    ]
+  },
+  "savedReplay": {
+    "passed": true,
+    "shots": 7,
+    "version": "12.0.0",
+    "checksum": "446586ca0bb64dee"
+  },
+  "legacyReplay": {
+    "passed": true,
+    "text": "\uc7ac\uc2e4\ud589 \uc77c\uce58 \u00b7 \uccb4\ud06c\ud3ec\uc778\ud2b8\uc640 \ucd5c\uc885 \uc810\uc218 0 \ud655\uc778"
+  },
+  "passed": true,
+  "completedAt": "2026-11-15T07:51:27.118Z"
+}

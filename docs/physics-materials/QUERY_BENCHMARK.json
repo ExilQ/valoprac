@@ -1,0 +1,2535 @@
+{
+  "schema": 2,
+  "date": "2026-11-15T05:52:19.201Z",
+  "baseline": {
+    "directory": "/workspace/physics-materials-baseline",
+    "commit": "0029c162de2756aa11092748514efe726e1ee217",
+    "sourceSha256": {
+      "engine/collision/Ballistics.ts": "ffd689a0ac260468c8bb647c7e063666ba586fabdefc51f3bfad009e72113df9",
+      "engine/collision/environment.ts": "b289038f565597fbe095470726ec5ae7d8f34e37b4481cd097d257daaef53b8a",
+      "engine/collision/StaticBroadphase.ts": null,
+      "engine/tactical/DefenderAI.ts": "fab540c7422e3a96540f60eccf3af2e4dca20b2d956be9390a376bf3a2be72db",
+      "engine/tactical/map.ts": "bc05d1079608b9f52bbaae2692c38b64e704b284754edd6314ff3d48c2e9ffc9",
+      "engine/tactical/levels.ts": "044b2e3229e50f87d9155763b0a4e087ddcf4ae0bb23c9cc8f92f3ded6148001",
+      "engine/tactical/complex.ts": "172dd4cbb7b0efd7750b73fbd140996d4c61e6451668dfb055b8ee7ddcfd7314",
+      "engine/tactical/mechanics.ts": "9aad70fe25b48a10760fc847f32711cadb24a6ce5af7ea672f6f5a23095dd545",
+      "engine/simulation/random.ts": "6e071539ea51acc26efb4c16004d881e0578589e42ce9cd9f4942ddc1ffe0893",
+      "engine/simulation/rules.ts": null,
+      "config/weapons.ts": "6aa3cffde4e6e2fb67fb565401bff7b1c2da67bf4d2f6663a14952d5f754959b",
+      "config/penetration.ts": "69f1d6a1a1209ba60f88d2bd18c56808fbf7bf1901c8f0c8f1cca37062d19762",
+      "config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+      "config/surfaces.ts": null,
+      "config/materials.ts": null
+    }
+  },
+  "current": {
+    "directory": "/workspace/sites/valoprac",
+    "sourceSha256": {
+      "engine/collision/Ballistics.ts": "cd22a8906887b856f3b4d63899bfd5caad6d739bcf0ef0422a052d16d6efd7fa",
+      "engine/collision/environment.ts": "c746abf080a31e3c2a9b9485d6ebeea308f01b52febc57abfcf46971f0649d31",
+      "engine/collision/StaticBroadphase.ts": "5476d0d402e7369d90f94e6720566d30bb56f3d01e57b4ab9cf2ff7779354344",
+      "engine/tactical/DefenderAI.ts": "ede9e9cd860188863db0d10fb3d03892eca74a532dea7ca90aefc95b57d280fd",
+      "engine/tactical/map.ts": "1cecb4d4a0d766e2b94a9f314f5ba28018ed961cf138bd2ab1e2205ea81b3954",
+      "engine/tactical/levels.ts": "122833f46ad4a1d64f146a2c25231fba854aa839bdafd33aed8e5f8a682e3ed9",
+      "engine/tactical/complex.ts": "ec58068143e9b6927f33d07d8dc5bfc8cf60abdc88175a4d9c2487cc4dd7ee65",
+      "engine/tactical/mechanics.ts": "2cd596d93b24ac0e35565d3d76833391ad8aed61cfdf279c654212f8fd7733d1",
+      "engine/simulation/random.ts": "6e071539ea51acc26efb4c16004d881e0578589e42ce9cd9f4942ddc1ffe0893",
+      "engine/simulation/rules.ts": "c2da4ed5248a91b26b4396415179ab25575f963ddd705deb98a2f72762339e96",
+      "config/weapons.ts": "6aa3cffde4e6e2fb67fb565401bff7b1c2da67bf4d2f6663a14952d5f754959b",
+      "config/penetration.ts": "fe11df582545ab849059e4bde77a9dc7f216712737816304cd61c9f573d44300",
+      "config/tactical.ts": "0c878429885aaac1b7f080479dc052c5eb9adc3b49a02115b7e800cf955fd809",
+      "config/surfaces.ts": "b5dc24b44761d31633306971e249463c1ba31f670dcc5199aafad0f662a2deb3",
+      "config/materials.ts": "5648faea586ca51fbd44d5d69cec6e5b7ad4e2b9c78a8e86cc63d0bfc5706bca"
+    }
+  },
+  "benchmarkSourceSha256": "c3e0d170b6043dcfa2c9e355c100e7c07dc97bb6dd31031904faa124f1cb552c",
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "arch": "x64",
+    "cpu": "AMD EPYC 9V74 80-Core Processor",
+    "logicalCpus": 3
+  },
+  "method": {
+    "maps": "Original authored geometry loaded from frozen worktree, exact geometry comparison, no synthetic scaling",
+    "queryMix": "Original route/defender human samples plus seeded map-wide rays; separate authored face/inside/near-parallel/floor edge cases",
+    "parity": "assert.deepStrictEqual, preserves signed zero, exact distance/points/normals/material/thickness/segments/order, all four weapons",
+    "performance": "Same query objects and original obstacle arrays; nearest retains original linear scan, occlusion exits after first exact hit, ballistics uses ordered BVH candidates; warmup, alternating order, fifteen calibrated repeated-batch samples targeting 20 ms of baseline work (bounded to 256 passes); no wall-time CI gate",
+    "currentVision": "materials-v3 visibility checked against original nearest tests over current sight-blocking obstacles; separate module instances isolate oracle/v3 feedback from legacy timings; separately timed on actual current arrays with no legacy speedup ratio",
+    "scope": "CPU query kernels only; does not claim GPU or end-to-end frame speedup"
+  },
+  "parity": {
+    "queries": 3880,
+    "intervals": 180989,
+    "weaponTraces": 15520,
+    "nearestHits": 3880,
+    "currentVisionQueries": 3880,
+    "mismatches": 0
+  },
+  "maps": [
+    {
+      "map": "range",
+      "obstacles": 6,
+      "geometrySha256": "194448fb34e4ad527c4acbf5a020961b9389212ba192643a1b1c0a025c0595e5",
+      "baselineCollidersSha256": "7697ce6b9f0a083b016792a6fb3812a84696cbacc1c6f260d4c97d827e300b81",
+      "currentCollidersSha256": "2dbeb7437252358f8496fcef8907eb47f912211f7c3e2af843143982aa2ac9e3",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 160,
+      "edgeQueries": 18,
+      "candidates": {
+        "min": 3,
+        "median": 6,
+        "p90": 6,
+        "max": 6,
+        "mean": 5.15625,
+        "nodeTestsMean": 3,
+        "linearClipCalls": 960,
+        "indexedClipCalls": 825,
+        "reduction": 0.140625
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 1931,
+        "indexedVector3": 324,
+        "referencePlaneArrays": 6720,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 71,
+          "baseline": {
+            "min": 0.13332323943662802,
+            "median": 0.14156091549294378,
+            "p90": 0.3155453345070454,
+            "max": 0.4787866197183232,
+            "samples": [
+              0.4787866197183232,
+              0.3155453345070454,
+              0.14164815140844667,
+              0.13864630281690052,
+              0.14532095070422546,
+              0.15459806338029725,
+              0.1485784330985836,
+              0.14115264084506646,
+              0.14652957746477968,
+              0.13332323943662802,
+              0.1372559859154996,
+              0.14156091549294378,
+              0.13486329225353413,
+              0.13412544014083955,
+              0.13751073943660364
+            ]
+          },
+          "optimized": {
+            "min": 0.13114383802817556,
+            "median": 0.13846998239436012,
+            "p90": 0.3312837147887303,
+            "max": 0.6672691021126803,
+            "samples": [
+              0.6672691021126803,
+              0.3312837147887303,
+              0.13845765845068925,
+              0.15591249999999945,
+              0.14956311619719095,
+              0.14739621478874698,
+              0.13846998239436012,
+              0.13114383802817556,
+              0.1469500880281691,
+              0.1348518485915512,
+              0.13266100352111576,
+              0.132561443661962,
+              0.13983556338028053,
+              0.13204744718309547,
+              0.1350035211267498
+            ]
+          },
+          "medianSpeedup": 1.0223220444253451
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.08388090820312111,
+            "median": 0.08790866699218691,
+            "p90": 0.09793811035155864,
+            "max": 0.19742836914062312,
+            "samples": [
+              0.19742836914062312,
+              0.09793811035155864,
+              0.08670668945312543,
+              0.0938484863281297,
+              0.08428850097655927,
+              0.08790866699218691,
+              0.08616557617187603,
+              0.08617268066405948,
+              0.09129731445312594,
+              0.08976987304687434,
+              0.08814609375000226,
+              0.08658808593750011,
+              0.08555112304687862,
+              0.088103808593748,
+              0.08388090820312111
+            ]
+          },
+          "optimized": {
+            "min": 0.08877888183593807,
+            "median": 0.09401184082031278,
+            "p90": 0.10602299804687298,
+            "max": 0.16549353027343616,
+            "samples": [
+              0.16549353027343616,
+              0.10602299804687298,
+              0.09032905273437808,
+              0.0918850830078144,
+              0.09401184082031278,
+              0.09580209960937114,
+              0.09923278808594005,
+              0.09600798339843841,
+              0.0932741455078101,
+              0.08877888183593807,
+              0.09429033203124937,
+              0.09498618164062167,
+              0.0913344726562515,
+              0.0891329345703129,
+              0.09290639648437682
+            ]
+          },
+          "medianSpeedup": 0.9350807964733824
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 38,
+          "baseline": {
+            "min": 1.6921115131578808,
+            "median": 1.9597856907894673,
+            "p90": 3.0663825657894885,
+            "max": 3.18789046052632,
+            "samples": [
+              2.5315296052631413,
+              3.0663825657894885,
+              2.221729605263153,
+              1.9597856907894673,
+              2.0012327302631814,
+              3.18789046052632,
+              2.8834389802631524,
+              1.7336342105263283,
+              1.7388921052631714,
+              1.8434766447368276,
+              1.7795565789473686,
+              2.274807565789491,
+              1.816337006578924,
+              1.6921115131578808,
+              1.7541121710526246
+            ]
+          },
+          "optimized": {
+            "min": 0.6577478618421209,
+            "median": 0.7262190789473784,
+            "p90": 0.795391776315799,
+            "max": 0.9372097039473796,
+            "samples": [
+              0.9372097039473796,
+              0.758281907894723,
+              0.795391776315799,
+              0.7428574013157697,
+              0.7262190789473784,
+              0.7129276315789698,
+              0.7515365131578957,
+              0.6577478618421209,
+              0.7157245065789578,
+              0.7543417763158132,
+              0.7052697368420904,
+              0.6874717105263229,
+              0.74592434210526,
+              0.6860863486842187,
+              0.7185067434210692
+            ]
+          },
+          "medianSpeedup": 2.6986149876840027
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "optimized": {
+            "min": 0.24632592773437548,
+            "median": 0.27109182128906006,
+            "p90": 0.32073239746093773,
+            "max": 0.3663723876953129,
+            "samples": [
+              0.3663723876953129,
+              0.25058962402343954,
+              0.2528332275390621,
+              0.24632592773437548,
+              0.2536467041015622,
+              0.2549843994140655,
+              0.248334790039062,
+              0.32073239746093773,
+              0.2604312988281232,
+              0.28122199707031337,
+              0.29257790527343897,
+              0.2894352539062506,
+              0.28211909179687855,
+              0.29268474121094123,
+              0.27109182128906006
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "tactical",
+      "obstacles": 84,
+      "geometrySha256": "752721fc3e0fd3e96109e78ba938ffe69c064038731cd211c5a8eaf572477c9e",
+      "baselineCollidersSha256": "5945a31d21e36378a7aafcf17346e391d55aec6230a9fa415c6f0bf531bbd44f",
+      "currentCollidersSha256": "093f7a0cc2abea110e64474fef9434d9eae3eb731617a4e63f6e14b3f6146efc",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 160,
+      "edgeQueries": 252,
+      "candidates": {
+        "min": 0,
+        "median": 14,
+        "p90": 20,
+        "max": 26,
+        "mean": 13.41875,
+        "nodeTestsMean": 25.7,
+        "linearClipCalls": 13440,
+        "indexedClipCalls": 2147,
+        "reduction": 0.8402529761904762
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 26924,
+        "indexedVector3": 1030,
+        "referencePlaneArrays": 94080,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 99,
+          "baseline": {
+            "min": 0.9784155934343371,
+            "median": 1.0668273358585867,
+            "p90": 1.3002542297979685,
+            "max": 1.3772659090908852,
+            "samples": [
+              1.0771158459596022,
+              1.121760416666667,
+              1.1766362373737311,
+              1.0383822601010129,
+              1.0651913510100983,
+              1.059936174242426,
+              1.0668273358585867,
+              1.3002542297979685,
+              1.0743422348484888,
+              1.3772659090908852,
+              1.197526388888878,
+              0.9908316919191953,
+              1.0264026515151479,
+              1.001265656565657,
+              0.9784155934343371
+            ]
+          },
+          "optimized": {
+            "min": 0.9904902777777818,
+            "median": 1.132970075757574,
+            "p90": 1.213559027777775,
+            "max": 1.3361893308080763,
+            "samples": [
+              0.9904902777777818,
+              1.0292226641414033,
+              1.1884304924242366,
+              1.152765845959604,
+              1.1094876262626285,
+              1.213559027777775,
+              1.0611377525252566,
+              1.1777686868686779,
+              1.1106599116161682,
+              1.0942498737373922,
+              1.3361893308080763,
+              1.1596617424242304,
+              1.132970075757574,
+              1.1050543560606119,
+              1.1770441287878977
+            ]
+          },
+          "medianSpeedup": 0.941620046888917
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 121,
+          "baseline": {
+            "min": 1.001996126033069,
+            "median": 1.0665612086776997,
+            "p90": 1.1184788739669334,
+            "max": 1.135919524793394,
+            "samples": [
+              1.0747121900826377,
+              1.001996126033069,
+              1.1019529442148863,
+              1.0184517561983344,
+              1.0650579545454526,
+              1.1066913223140586,
+              1.003549070247941,
+              1.135919524793394,
+              1.0665612086776997,
+              1.1184788739669334,
+              1.0431003615702434,
+              1.068139979338858,
+              1.0783911673553723,
+              1.0274304235537337,
+              1.0105588842975286
+            ]
+          },
+          "optimized": {
+            "min": 0.46218135330578264,
+            "median": 0.4946073863636252,
+            "p90": 0.5183170454545526,
+            "max": 0.5461594008264373,
+            "samples": [
+              0.5112063016529069,
+              0.46218135330578264,
+              0.4893346074380054,
+              0.4650150309917428,
+              0.5461594008264373,
+              0.49745666322313503,
+              0.48171126033057704,
+              0.4935852272727189,
+              0.4907887396694269,
+              0.5183170454545526,
+              0.472746022727257,
+              0.4980345041322292,
+              0.4946073863636252,
+              0.5068036673553857,
+              0.5151476239669415
+            ]
+          },
+          "medianSpeedup": 2.156379459916892
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 8,
+          "baseline": {
+            "min": 16.42985859375017,
+            "median": 17.695528906250146,
+            "p90": 18.678076562499868,
+            "max": 18.95903046875027,
+            "samples": [
+              16.42985859375017,
+              18.630850000000265,
+              18.54301640624989,
+              17.800989843749804,
+              17.10129687499986,
+              17.635360937500266,
+              18.616578906250325,
+              17.695528906250146,
+              18.188782031250028,
+              17.037360156249903,
+              17.521458593749983,
+              17.210264062499903,
+              16.81589140624986,
+              18.95903046875027,
+              18.678076562499868
+            ]
+          },
+          "optimized": {
+            "min": 5.105899218749954,
+            "median": 5.406515625000097,
+            "p90": 5.971273437500102,
+            "max": 6.527525781250176,
+            "samples": [
+              5.19154218749982,
+              5.430278124999788,
+              6.527525781250176,
+              5.2198570312498305,
+              5.369969531249907,
+              5.971273437500102,
+              5.769905468750025,
+              5.105899218749954,
+              5.404340624999904,
+              5.406515625000097,
+              5.418282812500053,
+              5.854170312500173,
+              5.586798437499851,
+              5.192707812500075,
+              5.376111718749854
+            ]
+          },
+          "medianSpeedup": 3.2730006040165343
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 64,
+          "optimized": {
+            "min": 1.7803620117187169,
+            "median": 1.917700878906281,
+            "p90": 1.9684097656250008,
+            "max": 2.028194531250005,
+            "samples": [
+              1.9558932617187441,
+              1.9152648437499753,
+              1.8957338867187534,
+              1.9284923828124967,
+              1.9345208007812698,
+              2.028194531250005,
+              1.8728337890625113,
+              1.8923254882812657,
+              1.9213362304687287,
+              1.9684097656250008,
+              1.9584916992187564,
+              1.8444148437499752,
+              1.8996674804687697,
+              1.7803620117187169,
+              1.917700878906281
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "long",
+      "obstacles": 18,
+      "geometrySha256": "fb2c5b544ba4c8adb7eefafccca44fe125742661814aeaf96d82853395ca7cba",
+      "baselineCollidersSha256": "1b682c4e77adec03eb447133eb02c015c9916b78062b302bf5987ba06c13679e",
+      "currentCollidersSha256": "bd29d8afab97ad49176dcdbcca352978fdf06432e648699c4f4a7bba9fc425a7",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 54,
+      "candidates": {
+        "min": 0,
+        "median": 12,
+        "p90": 13,
+        "max": 16,
+        "mean": 10.964,
+        "nodeTestsMean": 10.32,
+        "linearClipCalls": 4500,
+        "indexedClipCalls": 2741,
+        "reduction": 0.39088888888888884
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 9014,
+        "indexedVector3": 1212,
+        "referencePlaneArrays": 31500,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 71,
+          "baseline": {
+            "min": 0.21931042253522143,
+            "median": 0.2547301408450667,
+            "p90": 0.27938135211267034,
+            "max": 0.2943956056337875,
+            "samples": [
+              0.27938135211267034,
+              0.2727907042253591,
+              0.25593870422534576,
+              0.2589324507042247,
+              0.2943956056337875,
+              0.23942754929577834,
+              0.25305954929579355,
+              0.24317847887323296,
+              0.21931042253522143,
+              0.23003729577464238,
+              0.22458529577465602,
+              0.2547301408450667,
+              0.24228754929577584,
+              0.26695611267606295,
+              0.2652470985915603
+            ]
+          },
+          "optimized": {
+            "min": 0.22166997183099535,
+            "median": 0.24757594366196253,
+            "p90": 0.2768756056338018,
+            "max": 0.3473658591549242,
+            "samples": [
+              0.23585712676055703,
+              0.22166997183099535,
+              0.3473658591549242,
+              0.24361346478874854,
+              0.24264129577465904,
+              0.23923904225352677,
+              0.249811323943658,
+              0.2768756056338018,
+              0.25727870422536364,
+              0.24757594366196253,
+              0.2755214647887429,
+              0.24691408450703867,
+              0.2357239999999903,
+              0.26585138028169986,
+              0.2586232676056452
+            ]
+          },
+          "medianSpeedup": 1.0288969803660424
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.238256312499999,
+            "median": 0.24835187499999734,
+            "p90": 0.27192253124999866,
+            "max": 0.28658298437499496,
+            "samples": [
+              0.24136840624999678,
+              0.27192253124999866,
+              0.25508996874999923,
+              0.23941334375000167,
+              0.28658298437499496,
+              0.25673693750000126,
+              0.2526853125000059,
+              0.24835187499999734,
+              0.24248553124999717,
+              0.25884818749999994,
+              0.24439601562500002,
+              0.2435228437500001,
+              0.24432684375000238,
+              0.26019346874999627,
+              0.238256312499999
+            ]
+          },
+          "optimized": {
+            "min": 0.14611417187499853,
+            "median": 0.15922718750000087,
+            "p90": 0.18376174999999506,
+            "max": 0.19384637499999968,
+            "samples": [
+              0.15635918749999433,
+              0.14611417187499853,
+              0.16172429687500056,
+              0.15688356249999913,
+              0.16272892187499366,
+              0.18376174999999506,
+              0.15960853125000085,
+              0.15603009375000454,
+              0.19384637499999968,
+              0.156387500000001,
+              0.15922718750000087,
+              0.15008442187500037,
+              0.17284090625000204,
+              0.14931657812500276,
+              0.16121606250000298
+            ]
+          },
+          "medianSpeedup": 1.5597328502709122
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 16,
+          "baseline": {
+            "min": 4.811640000000011,
+            "median": 4.987269749999996,
+            "p90": 5.316694750000124,
+            "max": 5.334603750000042,
+            "samples": [
+              4.811640000000011,
+              5.169021250000014,
+              5.316694750000124,
+              5.229856499999869,
+              4.949331250000114,
+              4.9614864999998645,
+              4.906928500000049,
+              5.105341999999837,
+              5.334603750000042,
+              4.884082249999892,
+              4.986921750000192,
+              5.253178250000019,
+              4.981974499999978,
+              4.987269749999996,
+              5.016455749999977
+            ]
+          },
+          "optimized": {
+            "min": 1.733720250000033,
+            "median": 1.9397229999999581,
+            "p90": 2.116358999999875,
+            "max": 2.161971499999936,
+            "samples": [
+              1.9123297500000263,
+              1.9200862500001676,
+              1.9583380000001396,
+              1.8560440000001108,
+              1.9193577500000174,
+              2.0112962499999867,
+              1.733720250000033,
+              2.116358999999875,
+              2.161971499999936,
+              2.069735000000037,
+              1.8514297500000794,
+              2.075986999999941,
+              2.0177807500001563,
+              1.9094629999999597,
+              1.9397229999999581
+            ]
+          },
+          "medianSpeedup": 2.5711247172921614
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 75,
+          "optimized": {
+            "min": 0.47788581333331726,
+            "median": 0.5379224000000007,
+            "p90": 0.5689993066666648,
+            "max": 0.5707276799999819,
+            "samples": [
+              0.5604453333333368,
+              0.5689993066666648,
+              0.5498274666666596,
+              0.5403926400000152,
+              0.5144161600000128,
+              0.47788581333331726,
+              0.5036605333333136,
+              0.5149337066666825,
+              0.5563010666666863,
+              0.5188643200000418,
+              0.5707276799999819,
+              0.5379224000000007,
+              0.5554769066666388,
+              0.5201494399999986,
+              0.5371019733333378
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "garage",
+      "obstacles": 18,
+      "geometrySha256": "f8b29a29b349ce89aec0165bb884f43f4cad618f292fad16919f1d0c91b167ec",
+      "baselineCollidersSha256": "f4458752cd35d4b2250fb83dbcb4436e27b852618e0759d4c7771297b048051b",
+      "currentCollidersSha256": "62bfdf85e764369bbe41dc50cf4c0d5c3455e76263c05e34885b38d67123d6e8",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 54,
+      "candidates": {
+        "min": 4,
+        "median": 11,
+        "p90": 16,
+        "max": 18,
+        "mean": 11.368,
+        "nodeTestsMean": 9.88,
+        "linearClipCalls": 4500,
+        "indexedClipCalls": 2842,
+        "reduction": 0.36844444444444446
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 9026,
+        "indexedVector3": 1160,
+        "referencePlaneArrays": 31500,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.2404654999999991,
+            "median": 0.2549885624999888,
+            "p90": 0.2750202343749919,
+            "max": 0.28012199999999154,
+            "samples": [
+              0.2750202343749919,
+              0.2404654999999991,
+              0.24892254687500778,
+              0.28012199999999154,
+              0.26350037499999246,
+              0.2532630312500004,
+              0.24365068749999352,
+              0.2549885624999888,
+              0.26150023437499215,
+              0.25931996875000607,
+              0.25445668749999584,
+              0.25722295312499455,
+              0.24867421874999707,
+              0.2507704375000088,
+              0.26434021874999303
+            ]
+          },
+          "optimized": {
+            "min": 0.23136737500000493,
+            "median": 0.2604859218750022,
+            "p90": 0.29618078125000125,
+            "max": 0.31899960937499827,
+            "samples": [
+              0.2608461406250058,
+              0.23363446874999738,
+              0.25883190625000907,
+              0.25856198437500666,
+              0.25066389062499184,
+              0.26532934374999684,
+              0.31899960937499827,
+              0.29618078125000125,
+              0.2619580937499961,
+              0.23136737500000493,
+              0.23876017187500054,
+              0.2652315312500093,
+              0.2536642656250052,
+              0.2604859218750022,
+              0.26682529687499823
+            ]
+          },
+          "medianSpeedup": 0.9788957524635387
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.24055571875000226,
+            "median": 0.25875131249999583,
+            "p90": 0.2710473281250074,
+            "max": 0.2760168749999963,
+            "samples": [
+              0.2760168749999963,
+              0.24769918750000386,
+              0.25966923437501066,
+              0.25875131249999583,
+              0.2710473281250074,
+              0.2604707343749908,
+              0.25266764062500613,
+              0.2583037812499924,
+              0.2627852499999932,
+              0.25936973437499944,
+              0.2578136718749988,
+              0.25015078124999945,
+              0.26279918750000775,
+              0.25035807812500366,
+              0.24055571875000226
+            ]
+          },
+          "optimized": {
+            "min": 0.15903831250000167,
+            "median": 0.1710617343750016,
+            "p90": 0.1832231562500084,
+            "max": 0.1924283281250041,
+            "samples": [
+              0.17083715625000195,
+              0.15903831250000167,
+              0.1832231562500084,
+              0.17572720312500678,
+              0.1924283281250041,
+              0.17054282812499366,
+              0.18190965624999933,
+              0.1590572343749983,
+              0.17429854687499358,
+              0.1768864375000021,
+              0.1697277031250053,
+              0.16393085937500018,
+              0.17332474999999192,
+              0.1710617343750016,
+              0.1674271562499996
+            ]
+          },
+          "medianSpeedup": 1.512619484687096
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 15,
+          "baseline": {
+            "min": 4.766301866666618,
+            "median": 5.134330933333453,
+            "p90": 5.490961866666718,
+            "max": 5.872464533333308,
+            "samples": [
+              5.301570933333278,
+              5.064354133333351,
+              5.048290133333164,
+              5.490961866666718,
+              5.307246399999955,
+              4.9150234666665105,
+              4.766301866666618,
+              5.872464533333308,
+              5.0496626666667,
+              5.085252000000037,
+              5.219303733333315,
+              5.430813066666693,
+              5.134330933333453,
+              5.0713255999997875,
+              5.22222559999985
+            ]
+          },
+          "optimized": {
+            "min": 1.7302960000000893,
+            "median": 2.0014090666666258,
+            "p90": 2.484541600000133,
+            "max": 2.8947861333334,
+            "samples": [
+              2.077691466666632,
+              2.8947861333334,
+              1.8864128000001075,
+              2.0917418666666587,
+              1.843500533333281,
+              1.8830823999999362,
+              2.484541600000133,
+              2.0168431999998573,
+              1.8855421333333653,
+              1.8375901333335303,
+              2.0014090666666258,
+              2.3318514666668007,
+              1.7302960000000893,
+              1.8855074666666043,
+              2.1073520000000525
+            ]
+          },
+          "medianSpeedup": 2.565358086382986
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 118,
+          "optimized": {
+            "min": 0.48833532203389046,
+            "median": 0.5271317966101579,
+            "p90": 0.5825019322034014,
+            "max": 0.7287592203389931,
+            "samples": [
+              0.5633325423728758,
+              0.48833532203389046,
+              0.7287592203389931,
+              0.5401856271186323,
+              0.5253328474576292,
+              0.5163311864406889,
+              0.5304265762711958,
+              0.5405862033898363,
+              0.5351896610169452,
+              0.5825019322034014,
+              0.5131807118644139,
+              0.4979358305084796,
+              0.5035849491525399,
+              0.4976937627118678,
+              0.5271317966101579
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "site",
+      "obstacles": 18,
+      "geometrySha256": "f13ed35d36451a7321f4ae3e618dee316c862895191f9dfc45049f1b7efbb8f6",
+      "baselineCollidersSha256": "282e8ddc039f94fb45e95f100214c5bf3e4cac89652515f1439675c631c9634d",
+      "currentCollidersSha256": "3fa781434aabd1f914f56784784e684e65da1f18ad68b025d9c5aefbcbad8b80",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 54,
+      "candidates": {
+        "min": 4,
+        "median": 11,
+        "p90": 16,
+        "max": 18,
+        "mean": 11.048,
+        "nodeTestsMean": 9.912,
+        "linearClipCalls": 4500,
+        "indexedClipCalls": 2762,
+        "reduction": 0.38622222222222224
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 9023,
+        "indexedVector3": 1080,
+        "referencePlaneArrays": 31500,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.21072535937500447,
+            "median": 0.2205424375000007,
+            "p90": 0.23116320312499283,
+            "max": 0.2858735156249992,
+            "samples": [
+              0.2858735156249992,
+              0.23116320312499283,
+              0.21917475000000763,
+              0.22021412499999826,
+              0.2220410781249882,
+              0.2207178593750001,
+              0.22653392187498866,
+              0.21072535937500447,
+              0.2150418281249955,
+              0.21898821874999896,
+              0.22167207812499612,
+              0.22534464062501058,
+              0.21486015624999766,
+              0.2205424375000007,
+              0.21855100000000505
+            ]
+          },
+          "optimized": {
+            "min": 0.20882109375000368,
+            "median": 0.21813803125000675,
+            "p90": 0.24293914062499766,
+            "max": 0.3752499687499977,
+            "samples": [
+              0.3752499687499977,
+              0.24293914062499766,
+              0.21855068749999873,
+              0.21206940625000925,
+              0.21905143749999922,
+              0.22369417187499607,
+              0.2196382500000027,
+              0.21181590624999558,
+              0.21813803125000675,
+              0.22065682812500143,
+              0.2106508906250042,
+              0.20882109375000368,
+              0.2138409687499916,
+              0.21772460937499716,
+              0.2126477812500127
+            ]
+          },
+          "medianSpeedup": 1.0110224074005614
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 256,
+          "baseline": {
+            "min": 0.21763821874999678,
+            "median": 0.2270467812499959,
+            "p90": 0.2330541562499917,
+            "max": 0.23700195312500227,
+            "samples": [
+              0.22007454687499717,
+              0.2270467812499959,
+              0.22970882812499838,
+              0.23700195312500227,
+              0.2259580624999984,
+              0.21763821874999678,
+              0.2223642187500019,
+              0.22768595312500395,
+              0.2237807187500067,
+              0.22091737499999908,
+              0.2282763750000072,
+              0.2330541562499917,
+              0.23005998437500352,
+              0.2237353437500076,
+              0.23091439062500285
+            ]
+          },
+          "optimized": {
+            "min": 0.14283057812500033,
+            "median": 0.14958601562500462,
+            "p90": 0.17125054687500096,
+            "max": 0.20824570312500157,
+            "samples": [
+              0.14507065625001303,
+              0.14428009374999817,
+              0.1550218281250011,
+              0.20824570312500157,
+              0.16172704687500072,
+              0.14958601562500462,
+              0.15430873437499315,
+              0.14837014062500486,
+              0.14435459375000903,
+              0.14872957812499976,
+              0.14643426562500395,
+              0.17125054687500096,
+              0.15943267187499544,
+              0.14283057812500033,
+              0.16052742187500257
+            ]
+          },
+          "medianSpeedup": 1.5178342728185015
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 17,
+          "baseline": {
+            "min": 4.468019764705841,
+            "median": 4.642184470588236,
+            "p90": 4.703683764705869,
+            "max": 4.745443058823559,
+            "samples": [
+              4.629881647058723,
+              4.545908470588235,
+              4.703683764705869,
+              4.65846541176485,
+              4.468019764705841,
+              4.537960235294175,
+              4.642184470588236,
+              4.745443058823559,
+              4.617278823529513,
+              4.533381647058858,
+              4.695118117647166,
+              4.62540635294114,
+              4.652084235294109,
+              4.692891294117597,
+              4.6962750588234705
+            ]
+          },
+          "optimized": {
+            "min": 1.619824235294158,
+            "median": 1.7384185882352434,
+            "p90": 1.8254665882351915,
+            "max": 1.8363418823528799,
+            "samples": [
+              1.725988000000036,
+              1.7018955294117726,
+              1.8254665882351915,
+              1.8363418823528799,
+              1.8025192941176476,
+              1.6504185882352913,
+              1.758476941176495,
+              1.7597117647057852,
+              1.7163432941175845,
+              1.6915317647058947,
+              1.7384185882352434,
+              1.756099058823619,
+              1.702329176470598,
+              1.619824235294158,
+              1.7491734117647866
+            ]
+          },
+          "medianSpeedup": 2.670349075880943
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 160,
+          "optimized": {
+            "min": 0.4833302499999945,
+            "median": 0.5003345000000081,
+            "p90": 0.5098682999999937,
+            "max": 0.5231249250000019,
+            "samples": [
+              0.4913427749999983,
+              0.5028309999999919,
+              0.48828242500001123,
+              0.5028960999999982,
+              0.5003345000000081,
+              0.5081675000000132,
+              0.49050075000000104,
+              0.489408874999981,
+              0.5098682999999937,
+              0.4942175749999933,
+              0.4833302499999945,
+              0.48522809999999483,
+              0.5040169999999989,
+              0.5028517749999992,
+              0.5231249250000019
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "mid",
+      "obstacles": 20,
+      "geometrySha256": "433fdd9e9d1abbff60725869a698b2086924348e87882abfda52a37faf17a58b",
+      "baselineCollidersSha256": "172572913fefa53924198e561ab3015f7e44cc80de42f3b21a68a2cb19f24239",
+      "currentCollidersSha256": "42d12a7a790aed3b4e152072d200d4a586c17a4cf6bd822becfe977ea73fd520",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 60,
+      "candidates": {
+        "min": 3,
+        "median": 11,
+        "p90": 15,
+        "max": 18,
+        "mean": 10.312,
+        "nodeTestsMean": 12.952,
+        "linearClipCalls": 5000,
+        "indexedClipCalls": 2578,
+        "reduction": 0.48440000000000005
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 10030,
+        "indexedVector3": 1382,
+        "referencePlaneArrays": 35250,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 114,
+          "baseline": {
+            "min": 0.28943715789472135,
+            "median": 0.3050715087719207,
+            "p90": 0.334087263157894,
+            "max": 0.3369476842105079,
+            "samples": [
+              0.3369476842105079,
+              0.3116241403508946,
+              0.30295112280704445,
+              0.2939523508772062,
+              0.28943715789472135,
+              0.2962003157894638,
+              0.3050715087719207,
+              0.30554199999999565,
+              0.334087263157894,
+              0.3043757192982619,
+              0.30422354385965467,
+              0.3122945964912281,
+              0.3113120701754381,
+              0.3107955438596643,
+              0.2932189824561264
+            ]
+          },
+          "optimized": {
+            "min": 0.288482736842126,
+            "median": 0.3030902807017571,
+            "p90": 0.33119136842102753,
+            "max": 0.35450491228070935,
+            "samples": [
+              0.32287364912282784,
+              0.32022228070175185,
+              0.30249287719296963,
+              0.2907306666666843,
+              0.3030150526315801,
+              0.3110425263157754,
+              0.288482736842126,
+              0.31075898245616007,
+              0.3030902807017571,
+              0.2903430877192972,
+              0.33119136842102753,
+              0.301789719298253,
+              0.3050237192982374,
+              0.30104224561402687,
+              0.35450491228070935
+            ]
+          },
+          "medianSpeedup": 1.0065367588349463
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 233,
+          "baseline": {
+            "min": 0.2823887553648154,
+            "median": 0.29581575965664453,
+            "p90": 0.30688111587981404,
+            "max": 0.31639254935623007,
+            "samples": [
+              0.3025804120171677,
+              0.3018208068669406,
+              0.29713706437768383,
+              0.28712633476393246,
+              0.2823887553648154,
+              0.28886544206006054,
+              0.2832331158798285,
+              0.3023056652360507,
+              0.2914200000000067,
+              0.29835328755365276,
+              0.29249749356224264,
+              0.29581575965664453,
+              0.31639254935623007,
+              0.30688111587981404,
+              0.29323850643775845
+            ]
+          },
+          "optimized": {
+            "min": 0.15343745922747337,
+            "median": 0.1651350042918625,
+            "p90": 0.17362309012872687,
+            "max": 0.2050099055794087,
+            "samples": [
+              0.2050099055794087,
+              0.16958664377682012,
+              0.16232442918455037,
+              0.16628489270384744,
+              0.16024183690988997,
+              0.15456757081544267,
+              0.17174508154508158,
+              0.17296614592275114,
+              0.17362309012872687,
+              0.15381519313305345,
+              0.1651350042918625,
+              0.15792453218883007,
+              0.159843793991429,
+              0.15343745922747337,
+              0.16708712446353577
+            ]
+          },
+          "medianSpeedup": 1.791357083406826
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 14,
+          "baseline": {
+            "min": 5.46025028571447,
+            "median": 6.356986571428673,
+            "p90": 6.997627428571702,
+            "max": 7.5782437142853665,
+            "samples": [
+              6.997627428571702,
+              6.04863571428567,
+              6.521158285714462,
+              5.46025028571447,
+              7.5782437142853665,
+              6.542121428571201,
+              6.655863428571528,
+              6.377059428571166,
+              6.41635571428612,
+              6.235896571428644,
+              6.123853999999743,
+              6.356986571428673,
+              6.047428000000114,
+              5.9915871428571075,
+              5.890856285714108
+            ]
+          },
+          "optimized": {
+            "min": 2.23564971428589,
+            "median": 2.567035142857224,
+            "p90": 2.68233942857114,
+            "max": 2.835059714285827,
+            "samples": [
+              2.6177197142855477,
+              2.6769225714285443,
+              2.2939828571428995,
+              2.23564971428589,
+              2.6656085714286224,
+              2.303473999999759,
+              2.657430285714197,
+              2.602219428571386,
+              2.4112014285710757,
+              2.68233942857114,
+              2.4259922857142686,
+              2.567035142857224,
+              2.3154691428571823,
+              2.835059714285827,
+              2.517249142857119
+            ]
+          },
+          "medianSpeedup": 2.4763924986056347
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 88,
+          "optimized": {
+            "min": 0.5255653636364018,
+            "median": 0.5993354999999693,
+            "p90": 0.6382955454544736,
+            "max": 0.6933000454545519,
+            "samples": [
+              0.6933000454545519,
+              0.5810671818181535,
+              0.5550623181817917,
+              0.6121401818181766,
+              0.6006442727273018,
+              0.6202532727272475,
+              0.6164739545454061,
+              0.5993354999999693,
+              0.5587209545454408,
+              0.5255653636364018,
+              0.6382955454544736,
+              0.5992667727272916,
+              0.5986781818182035,
+              0.5911937272727631,
+              0.6078241818182009
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "tower",
+      "obstacles": 29,
+      "geometrySha256": "8d6fd8612aea7bb8215e067185bf8713c3a54ad21b7e01b3cf8a2ce98b368c21",
+      "baselineCollidersSha256": "9092f6e0998f90eeedd2a29518414ef948f88a2a3a7a1de617e30bc650ce5969",
+      "currentCollidersSha256": "78210f518c8b75cf989dfd103a637ce894ee120602a52f05d271b3cb70213171",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 87,
+      "candidates": {
+        "min": 3,
+        "median": 15,
+        "p90": 22,
+        "max": 26,
+        "mean": 14.516,
+        "nodeTestsMean": 11.68,
+        "linearClipCalls": 7250,
+        "indexedClipCalls": 3629,
+        "reduction": 0.49944827586206897
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 14541,
+        "indexedVector3": 1408,
+        "referencePlaneArrays": 51250,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 87,
+          "baseline": {
+            "min": 0.41983149425279154,
+            "median": 0.46362349425289306,
+            "p90": 0.5295701609195502,
+            "max": 0.6585322758621114,
+            "samples": [
+              0.6585322758621114,
+              0.4916526436781974,
+              0.5295701609195502,
+              0.4260512643677534,
+              0.44596528735631696,
+              0.43139259770111815,
+              0.46362349425289306,
+              0.48800399999999666,
+              0.48720041379311135,
+              0.4849001839080385,
+              0.46637029885058495,
+              0.4299936551723968,
+              0.4549870344827918,
+              0.41983149425279154,
+              0.43719517241379957
+            ]
+          },
+          "optimized": {
+            "min": 0.4231655632184006,
+            "median": 0.48484924137928515,
+            "p90": 0.5068455172413973,
+            "max": 0.5521309425287122,
+            "samples": [
+              0.48897829885056293,
+              0.4892605057470607,
+              0.4871912643678209,
+              0.47447931034490126,
+              0.5068455172413973,
+              0.5521309425287122,
+              0.4231655632184006,
+              0.4730034942528629,
+              0.5050552643677648,
+              0.4734460229885225,
+              0.4826247816092145,
+              0.48484924137928515,
+              0.44712114942527037,
+              0.45614597701155457,
+              0.48916965517236843
+            ]
+          },
+          "medianSpeedup": 0.9562219648606447
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 89,
+          "baseline": {
+            "min": 0.4122497078651475,
+            "median": 0.4380173483146341,
+            "p90": 0.5196394157303096,
+            "max": 0.5553643146067566,
+            "samples": [
+              0.5196394157303096,
+              0.4190539325842682,
+              0.4258095280898753,
+              0.45481568539326783,
+              0.4249251235954678,
+              0.45380615730334356,
+              0.44851784269661277,
+              0.48707923595499236,
+              0.42214166292128696,
+              0.4678921797752624,
+              0.4373205393258308,
+              0.4122497078651475,
+              0.42256835955057787,
+              0.5553643146067566,
+              0.4380173483146341
+            ]
+          },
+          "optimized": {
+            "min": 0.19802970786520419,
+            "median": 0.2199525393259004,
+            "p90": 0.23597671910118131,
+            "max": 0.2406240449437585,
+            "samples": [
+              0.20912161797752377,
+              0.22139240449431463,
+              0.2406240449437585,
+              0.2172199550561059,
+              0.2258111011235925,
+              0.19802970786520419,
+              0.21649438202251312,
+              0.21541231460679647,
+              0.2262229662921752,
+              0.2199525393259004,
+              0.2278968988764237,
+              0.2098845842696126,
+              0.23597671910118131,
+              0.20334233707865096,
+              0.2301113707865451
+            ]
+          },
+          "medianSpeedup": 1.9914175560648124
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 13,
+          "baseline": {
+            "min": 6.882835692307988,
+            "median": 7.7181261538459625,
+            "p90": 9.114031999999918,
+            "max": 9.711443692307512,
+            "samples": [
+              6.882835692307988,
+              7.644957846154284,
+              9.114031999999918,
+              9.711443692307512,
+              7.8622781538461615,
+              7.769318769230897,
+              7.7181261538459625,
+              7.502461846153892,
+              7.6786123076923944,
+              7.808786769230769,
+              7.672877538461762,
+              7.593418153846309,
+              7.229272307692065,
+              7.880964307692641,
+              8.348518769231026
+            ]
+          },
+          "optimized": {
+            "min": 2.5200581538464086,
+            "median": 2.722758769230635,
+            "p90": 3.3386255384612014,
+            "max": 3.4071547692309156,
+            "samples": [
+              2.71302123076916,
+              2.547502153845786,
+              3.4071547692309156,
+              3.1448615384612753,
+              2.681374461538396,
+              3.2685215384615454,
+              3.3386255384612014,
+              2.722758769230635,
+              2.68652953846154,
+              2.7463504615381957,
+              2.715236615384548,
+              2.9341304615383987,
+              2.7043436923077726,
+              2.5200581538464086,
+              2.8150433846156093
+            ]
+          },
+          "medianSpeedup": 2.834671305099445
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 72,
+          "optimized": {
+            "min": 0.7570527222221952,
+            "median": 0.8058260555554726,
+            "p90": 0.9129949444445123,
+            "max": 0.9155476111111258,
+            "samples": [
+              0.9155476111111258,
+              0.9129949444445123,
+              0.778583444444444,
+              0.762541388888874,
+              0.8523399999999633,
+              0.7888192222222238,
+              0.8765815000000051,
+              0.8203859999999218,
+              0.7758316111111425,
+              0.7798269999999926,
+              0.7615215555555955,
+              0.81865733333335,
+              0.7570527222221952,
+              0.8260410555555305,
+              0.8058260555554726
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "multi",
+      "obstacles": 22,
+      "geometrySha256": "af449cb9b4c4ba535afbca9aefb2ae7d4c226b012456feedee0ddeacf9669ee0",
+      "baselineCollidersSha256": "25a8cf8595f426091f5f719fb89419fb3ff251fc7865279f1ec3e594e606eef0",
+      "currentCollidersSha256": "07c7487c3f5c8ca017f87a312421e4a1a104dd89f9c8d9f0a05d61f25e3a0fc8",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 66,
+      "candidates": {
+        "min": 3,
+        "median": 12,
+        "p90": 17,
+        "max": 19,
+        "mean": 11.392,
+        "nodeTestsMean": 12.424,
+        "linearClipCalls": 5500,
+        "indexedClipCalls": 2848,
+        "reduction": 0.48218181818181816
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 11030,
+        "indexedVector3": 1470,
+        "referencePlaneArrays": 39000,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 171,
+          "baseline": {
+            "min": 0.3175487953216659,
+            "median": 0.3671760467836417,
+            "p90": 0.5956545730994293,
+            "max": 0.6393712982455795,
+            "samples": [
+              0.6393712982455795,
+              0.5956545730994293,
+              0.37330278362570796,
+              0.40308540350879574,
+              0.3882760935672269,
+              0.37697700584793736,
+              0.3671760467836417,
+              0.3765728888889041,
+              0.3394486315789505,
+              0.3468727485379899,
+              0.3175487953216659,
+              0.3256932865497326,
+              0.3336119064327659,
+              0.33011667836254616,
+              0.32060198830408304
+            ]
+          },
+          "optimized": {
+            "min": 0.3051285380117183,
+            "median": 0.3545231345029308,
+            "p90": 0.5770173801169359,
+            "max": 0.5848661988304059,
+            "samples": [
+              0.5848661988304059,
+              0.5770173801169359,
+              0.3933709005847602,
+              0.3912046315789353,
+              0.39495873684208227,
+              0.3777472748538058,
+              0.43281391812866277,
+              0.3545231345029308,
+              0.33348987134504887,
+              0.3338115087719086,
+              0.33295431578944934,
+              0.3211304795321459,
+              0.3259790643274989,
+              0.3051285380117183,
+              0.3233876257309978
+            ]
+          },
+          "medianSpeedup": 1.0356899481283535
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 226,
+          "baseline": {
+            "min": 0.30901856637170017,
+            "median": 0.3431408141592988,
+            "p90": 0.5778954159291987,
+            "max": 0.9768021592920385,
+            "samples": [
+              0.3431408141592988,
+              0.36491008849558393,
+              0.33710143362832323,
+              0.3293035044247904,
+              0.34027888495575503,
+              0.30901856637170017,
+              0.351845575221227,
+              0.3622104955752266,
+              0.3153775398230177,
+              0.5778954159291987,
+              0.9768021592920385,
+              0.42373815929202674,
+              0.32979113274336064,
+              0.3776592389380779,
+              0.3390912743362823
+            ]
+          },
+          "optimized": {
+            "min": 0.1629833451327219,
+            "median": 0.1740564070796528,
+            "p90": 0.20330683185840778,
+            "max": 0.2120681415929225,
+            "samples": [
+              0.17909467256637893,
+              0.1629833451327219,
+              0.18220759292037342,
+              0.1675807787610573,
+              0.1740564070796528,
+              0.17492476106192237,
+              0.16753079646018584,
+              0.16561610619471212,
+              0.17479483185840675,
+              0.17341297345133694,
+              0.2120681415929225,
+              0.20330683185840778,
+              0.16716635398230226,
+              0.17239304424780064,
+              0.17551431858405883
+            ]
+          },
+          "medianSpeedup": 1.9714345476651631
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 12,
+          "baseline": {
+            "min": 5.649900999999469,
+            "median": 5.922441666666904,
+            "p90": 6.359202333333087,
+            "max": 6.388469000000137,
+            "samples": [
+              5.922441666666904,
+              5.854230333333059,
+              6.060353000000153,
+              5.660326333333312,
+              5.8373723333334055,
+              5.865814333333523,
+              5.649900999999469,
+              6.359202333333087,
+              5.921106333333228,
+              6.388469000000137,
+              5.931571666666666,
+              5.995022666666651,
+              5.875097999999829,
+              5.968092666666659,
+              5.95033299999947
+            ]
+          },
+          "optimized": {
+            "min": 2.2541509999997893,
+            "median": 2.3830756666666275,
+            "p90": 2.563376000000062,
+            "max": 2.7375109999999645,
+            "samples": [
+              2.350497333333503,
+              2.320509333333272,
+              2.319187333333806,
+              2.3788593333332146,
+              2.4929449999999633,
+              2.255476333333111,
+              2.539944666666391,
+              2.51246733333331,
+              2.563376000000062,
+              2.7375109999999645,
+              2.3830756666666275,
+              2.4812743333332037,
+              2.334867333333629,
+              2.2541509999997893,
+              2.4045909999998307
+            ]
+          },
+          "medianSpeedup": 2.4852092401040005
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 129,
+          "optimized": {
+            "min": 0.5912357209302335,
+            "median": 0.6156219224806612,
+            "p90": 0.6511151627907051,
+            "max": 0.677959751938005,
+            "samples": [
+              0.6418850542635651,
+              0.6251911627907192,
+              0.6174690232558271,
+              0.592812341085275,
+              0.607240837209275,
+              0.677959751938005,
+              0.5912357209302335,
+              0.6135326511627731,
+              0.6051602480620486,
+              0.6132534573643373,
+              0.6156219224806612,
+              0.6200871627907316,
+              0.6511151627907051,
+              0.6054266666666475,
+              0.6253147596899351
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "complex",
+      "obstacles": 108,
+      "geometrySha256": "649d21a1c35bf3dfcab90a39cbfcd51b3dde0bb267f2e6a5a3e57ea153d25de0",
+      "baselineCollidersSha256": "8ee830eaff513da84fd01f7214259052a5c9c6d6d1e7da2d5b5c37ded4b860c6",
+      "currentCollidersSha256": "eb636b8a840796cb0f52f8736a66b88e3ef7c75bcc6c4c78a5e1a59d2409535c",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 555,
+      "edgeQueries": 324,
+      "candidates": {
+        "min": 6,
+        "median": 25,
+        "p90": 41,
+        "max": 53,
+        "mean": 26.225225225225227,
+        "nodeTestsMean": 32.347747747747746,
+        "linearClipCalls": 59940,
+        "indexedClipCalls": 14555,
+        "reduction": 0.7571738405071738
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 119892,
+        "indexedVector3": 5908,
+        "referencePlaneArrays": 421800,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 22,
+          "baseline": {
+            "min": 1.6525706797706934,
+            "median": 1.73753202293211,
+            "p90": 1.8157674856674864,
+            "max": 1.8304706797706718,
+            "samples": [
+              1.73753202293211,
+              1.7637936936937426,
+              1.8157674856674864,
+              1.7097800163798915,
+              1.661387141687121,
+              1.742173546273563,
+              1.7682326781326185,
+              1.8304706797706718,
+              1.7274646191646401,
+              1.7051909090908717,
+              1.7422990990991618,
+              1.7140614250614779,
+              1.7755613431614115,
+              1.7265181818182458,
+              1.6525706797706934
+            ]
+          },
+          "optimized": {
+            "min": 1.6528897624897898,
+            "median": 1.762353398853453,
+            "p90": 1.878012940212834,
+            "max": 1.8985216216215888,
+            "samples": [
+              1.783136855036894,
+              1.703508599508573,
+              1.8985216216215888,
+              1.6721254709254616,
+              1.6528897624897898,
+              1.7856631449631557,
+              1.8707055692056909,
+              1.6752759213759374,
+              1.878012940212834,
+              1.762353398853453,
+              1.73007624897638,
+              1.811536036036087,
+              1.7323088452087398,
+              1.7501871416872052,
+              1.7915999180999118
+            ]
+          },
+          "medianSpeedup": 0.9859157783350995
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 21,
+          "baseline": {
+            "min": 1.6958580866580464,
+            "median": 1.8399438867439406,
+            "p90": 2.1780065208065142,
+            "max": 3.097881338481331,
+            "samples": [
+              1.8405583011583158,
+              1.9253480051480736,
+              1.7357585585586,
+              1.8399438867439406,
+              1.7643903903903255,
+              1.7831544401544945,
+              1.7179054483053628,
+              2.1780065208065142,
+              1.6958580866580464,
+              3.097881338481331,
+              1.8939105105103946,
+              1.8444318318318795,
+              1.7453042471042715,
+              1.8930366366367468,
+              1.8376571428571566
+            ]
+          },
+          "optimized": {
+            "min": 0.5984519948520547,
+            "median": 0.6577591591592606,
+            "p90": 0.7059043329043406,
+            "max": 0.7568575718574972,
+            "samples": [
+              0.644211840411947,
+              0.631718833118936,
+              0.6197302445302113,
+              0.6632507936507545,
+              0.6577591591592606,
+              0.5984519948520547,
+              0.6497773487773524,
+              0.6869332475332783,
+              0.6353510081509048,
+              0.6364843414842933,
+              0.7038634920635216,
+              0.7568575718574972,
+              0.7059043329043406,
+              0.6699944229943596,
+              0.6786845988845617
+            ]
+          },
+          "medianSpeedup": 2.7972911682381336
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 3,
+          "baseline": {
+            "min": 22.834328528527816,
+            "median": 24.12889909909836,
+            "p90": 25.089039639639957,
+            "max": 25.98248648648589,
+            "samples": [
+              23.897380780781038,
+              24.195322522521842,
+              23.035278678678758,
+              22.834328528527816,
+              24.312097897898248,
+              24.12889909909836,
+              24.144904504504524,
+              25.089039639639957,
+              23.198279279279415,
+              23.492672072071556,
+              23.283018618618456,
+              24.90627327327359,
+              23.120042042041216,
+              24.883055855856686,
+              25.98248648648589
+            ]
+          },
+          "optimized": {
+            "min": 7.036318918918633,
+            "median": 7.593297897898362,
+            "p90": 8.133999399399512,
+            "max": 11.003728528529253,
+            "samples": [
+              7.098670870871026,
+              7.268745345345588,
+              7.318959159159489,
+              7.41548768768793,
+              7.652750150150454,
+              8.064045045044928,
+              7.593297897898362,
+              8.133999399399512,
+              7.402351351351985,
+              7.658609009009885,
+              7.64652432432437,
+              7.036318918918633,
+              7.7645873873873965,
+              7.375301501502014,
+              11.003728528529253
+            ]
+          },
+          "medianSpeedup": 3.177657379381447
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 15,
+          "optimized": {
+            "min": 2.0899225225225604,
+            "median": 2.234515195195308,
+            "p90": 2.92117969969979,
+            "max": 3.057654654654722,
+            "samples": [
+              2.291794954954904,
+              2.3175933933934836,
+              2.191604564564464,
+              2.1190881681683678,
+              2.099188108108132,
+              2.118686366366228,
+              2.103289129129164,
+              2.0899225225225604,
+              2.100069909909988,
+              2.234515195195308,
+              2.92117969969979,
+              3.057654654654722,
+              2.5247228828829265,
+              2.2953907507507574,
+              2.463676516516524
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "bunny",
+      "obstacles": 24,
+      "geometrySha256": "16cbfc3716df8e97ddc68d13b08d5a597ac65d0f4289db503537adcb055c41a9",
+      "baselineCollidersSha256": "1f70bdd2a5241bca89d1a84b7d015226cc15c7252197072481779fb2b3b82bce",
+      "currentCollidersSha256": "aef9d8dedce1d3e0ef1ec7aca234cb57633cf7c7b402c2d49ae895d1c55148ce",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 160,
+      "edgeQueries": 72,
+      "candidates": {
+        "min": 3,
+        "median": 6,
+        "p90": 12,
+        "max": 18,
+        "mean": 7.725,
+        "nodeTestsMean": 11.075,
+        "linearClipCalls": 3840,
+        "indexedClipCalls": 1236,
+        "reduction": 0.678125
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 7693,
+        "indexedVector3": 358,
+        "referencePlaneArrays": 27360,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 79,
+          "baseline": {
+            "min": 0.5995278481012214,
+            "median": 0.7251718354429809,
+            "p90": 0.9141662183545042,
+            "max": 0.9793492879746541,
+            "samples": [
+              0.9141662183545042,
+              0.6076350474682852,
+              0.6608381329113089,
+              0.6762631329113993,
+              0.7730632120253084,
+              0.6717357594937576,
+              0.5995278481012214,
+              0.7526829905063832,
+              0.7255070411392635,
+              0.9793492879746541,
+              0.7282143987341915,
+              0.7251718354429809,
+              0.7467737341772315,
+              0.675824920886101,
+              0.6060281645570192
+            ]
+          },
+          "optimized": {
+            "min": 0.6108367879746075,
+            "median": 0.6795861550633358,
+            "p90": 0.8226105221518693,
+            "max": 0.8287170094936761,
+            "samples": [
+              0.6741356803796476,
+              0.6108367879746075,
+              0.6142715189872733,
+              0.6836183544303627,
+              0.6795861550633358,
+              0.6440994462024454,
+              0.6581053797467978,
+              0.8287170094936761,
+              0.7612147151898562,
+              0.6855951740506706,
+              0.8226105221518693,
+              0.7093927215189784,
+              0.7957134493671784,
+              0.6729631329113844,
+              0.6770055379746149
+            ]
+          },
+          "medianSpeedup": 1.0670785889912615
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 102,
+          "baseline": {
+            "min": 0.6215187499999592,
+            "median": 0.7021395220588192,
+            "p90": 0.7611936887254909,
+            "max": 0.8788582720587427,
+            "samples": [
+              0.7269720588235308,
+              0.7107835784313689,
+              0.7157603553921758,
+              0.637550735294045,
+              0.6215187499999592,
+              0.7021395220588192,
+              0.7129080882352764,
+              0.7611936887254909,
+              0.6653515931372799,
+              0.6627458946078222,
+              0.8788582720587427,
+              0.6324075367646687,
+              0.7426561274509786,
+              0.6723264705882747,
+              0.6425103553922059
+            ]
+          },
+          "optimized": {
+            "min": 0.5268781862745455,
+            "median": 0.5859310661764102,
+            "p90": 1.0308825980392193,
+            "max": 1.2368873774508915,
+            "samples": [
+              0.8431185049019797,
+              0.5350613970587765,
+              0.5766740196079087,
+              0.5293494485294568,
+              0.5575196691176652,
+              0.5859310661764102,
+              0.570606066176482,
+              0.5949660539215529,
+              0.7437833946078306,
+              0.5268781862745455,
+              0.8227049019607796,
+              0.5396485294117976,
+              1.2368873774508915,
+              1.0308825980392193,
+              0.663873835784287
+            ]
+          },
+          "medianSpeedup": 1.198331275794517
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 21,
+          "baseline": {
+            "min": 5.368886607142746,
+            "median": 5.653323511905043,
+            "p90": 6.744599702381038,
+            "max": 7.794611607143256,
+            "samples": [
+              5.5248541666666515,
+              5.589051785714327,
+              7.794611607143256,
+              5.454492857143123,
+              5.378387797619174,
+              5.653323511905043,
+              5.566622023809487,
+              5.368886607142746,
+              5.637811607142513,
+              6.744599702381038,
+              6.32297113095265,
+              6.55021279761903,
+              5.736606845237887,
+              6.16963630952417,
+              6.2834809523814155
+            ]
+          },
+          "optimized": {
+            "min": 1.5594747023810451,
+            "median": 1.74549613095245,
+            "p90": 1.9085910714282017,
+            "max": 2.7730193452379397,
+            "samples": [
+              1.882367559524244,
+              1.7662770833334478,
+              1.8088348214286314,
+              1.5800633928571577,
+              1.6682788690472774,
+              1.6028238095237786,
+              1.74549613095245,
+              1.8472613095241286,
+              1.6715845238098024,
+              1.8370175595237015,
+              2.7730193452379397,
+              1.6749047619051842,
+              1.9085910714282017,
+              1.5594747023810451,
+              1.6893071428572037
+            ]
+          },
+          "medianSpeedup": 3.238806097393205
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 45,
+          "optimized": {
+            "min": 1.3300944444444618,
+            "median": 1.3911837500000324,
+            "p90": 1.4866530555557094,
+            "max": 1.7059562499998213,
+            "samples": [
+              1.7059562499998213,
+              1.4043058333332838,
+              1.3994376388887355,
+              1.4059763888889796,
+              1.37760374999996,
+              1.3911837500000324,
+              1.3720343055554924,
+              1.3783576388889034,
+              1.417960972222166,
+              1.3468845833333236,
+              1.4866530555557094,
+              1.3645691666665192,
+              1.4253606944445587,
+              1.3825890277778146,
+              1.3300944444444618
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    },
+    {
+      "map": "wallbang",
+      "obstacles": 18,
+      "geometrySha256": "60f4f5f340b779238f4411ca42623ee5774c1610d6b04bf4257a9770a320def8",
+      "baselineCollidersSha256": "2615309ca595265a1873734ca8555cf27102f398e2971903c84a3c310dfa7511",
+      "currentCollidersSha256": "23941fcb6e4fe753ed8b24c5ff516c58e03998795e03264f1750ddce4d90593c",
+      "currentVision": {
+        "transparentObstacles": 0,
+        "differentFromLegacy": 0,
+        "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+      },
+      "queries": 250,
+      "edgeQueries": 54,
+      "candidates": {
+        "min": 3,
+        "median": 9,
+        "p90": 13,
+        "max": 16,
+        "mean": 9.824,
+        "nodeTestsMean": 9.064,
+        "linearClipCalls": 4500,
+        "indexedClipCalls": 2456,
+        "reduction": 0.4542222222222222
+      },
+      "explicitClipAllocations": {
+        "method": "Source-derived counts for actual queries: old creates 2 normal Vector3 per box plus inside clone; new creates 2 only per candidate returning a non-null interval; excludes required result output allocations.",
+        "referenceVector3": 9014,
+        "indexedVector3": 1188,
+        "referencePlaneArrays": 31500,
+        "indexedPlaneArrays": 0
+      },
+      "timing": {
+        "nearest": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 162,
+          "baseline": {
+            "min": 0.43084693827157383,
+            "median": 0.44616175308643213,
+            "p90": 0.5046200987654393,
+            "max": 0.504676222222186,
+            "samples": [
+              0.43863479012348017,
+              0.4447440987654166,
+              0.4781242469136127,
+              0.4352087160493991,
+              0.4321473827160698,
+              0.4442134320987536,
+              0.43084693827157383,
+              0.47898402469141776,
+              0.4389911111110798,
+              0.5026601481481914,
+              0.4559065925926085,
+              0.5046200987654393,
+              0.44616175308643213,
+              0.504676222222186,
+              0.4694019259259221
+            ]
+          },
+          "optimized": {
+            "min": 0.39420812345678663,
+            "median": 0.44579874074074327,
+            "p90": 0.49634041975307663,
+            "max": 0.519651654321035,
+            "samples": [
+              0.4389950617283538,
+              0.39420812345678663,
+              0.42815130864197093,
+              0.4074957283950493,
+              0.4673175802469174,
+              0.44579874074074327,
+              0.4358489135802863,
+              0.4395450123456949,
+              0.43749876543212995,
+              0.45802874074074623,
+              0.46589498765433185,
+              0.519651654321035,
+              0.489719456790125,
+              0.48139429629633396,
+              0.49634041975307663
+            ]
+          },
+          "medianSpeedup": 1.0008142964807072
+        },
+        "occlusion": {
+          "baselineImplementation": "original whole-map nearest-hit scan",
+          "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 177,
+          "baseline": {
+            "min": 0.45850657627121666,
+            "median": 0.5027362485875811,
+            "p90": 0.5452479322033633,
+            "max": 0.5566451751412779,
+            "samples": [
+              0.5452479322033633,
+              0.5065201807909876,
+              0.5566451751412779,
+              0.5242547344633096,
+              0.5375909152542507,
+              0.5125159774010798,
+              0.46164657627118916,
+              0.5299395480225919,
+              0.4717071638417912,
+              0.4621720903954767,
+              0.4632700112994266,
+              0.5027362485875811,
+              0.4657396610169691,
+              0.4716537627119388,
+              0.45850657627121666
+            ]
+          },
+          "optimized": {
+            "min": 0.24067462146897817,
+            "median": 0.28347326553670693,
+            "p90": 0.31871993220338896,
+            "max": 0.3541763615819144,
+            "samples": [
+              0.31871993220338896,
+              0.29197584180791775,
+              0.3541763615819144,
+              0.312721875706266,
+              0.27871005649710967,
+              0.3183507796610103,
+              0.27643977401128283,
+              0.2529837514123699,
+              0.28347326553670693,
+              0.2627783954802224,
+              0.3043899887005797,
+              0.2606398418079075,
+              0.3027703954802371,
+              0.24067462146897817,
+              0.2781564519773691
+            ]
+          },
+          "medianSpeedup": 1.7734873432799323
+        },
+        "ballistic": {
+          "baselineImplementation": "original whole-map convex clipping",
+          "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 15,
+          "baseline": {
+            "min": 4.963957599999655,
+            "median": 5.702119733333045,
+            "p90": 6.79138133333278,
+            "max": 7.7106277333339674,
+            "samples": [
+              5.275905866666775,
+              5.704766133333518,
+              5.784754133333142,
+              5.7785157333331885,
+              5.611903200000719,
+              6.3928935999991765,
+              6.79138133333278,
+              5.564419199999732,
+              7.7106277333339674,
+              5.624748800000331,
+              5.2121954666664045,
+              5.702119733333045,
+              4.963957599999655,
+              5.402474933332996,
+              6.542027199999818
+            ]
+          },
+          "optimized": {
+            "min": 2.20542453333328,
+            "median": 2.5159146666662613,
+            "p90": 2.818117866667065,
+            "max": 2.894145066666533,
+            "samples": [
+              2.6673738666664577,
+              2.6196392000002864,
+              2.5159146666662613,
+              2.460325333333458,
+              2.894145066666533,
+              2.818117866667065,
+              2.521394399999796,
+              2.4781437333333693,
+              2.2872047999999876,
+              2.7816125333338277,
+              2.3511472000003173,
+              2.20542453333328,
+              2.23508186666683,
+              2.2481546666667174,
+              2.810185866667113
+            ]
+          },
+          "medianSpeedup": 2.266420164754116
+        },
+        "currentVision": {
+          "rules": "materials-v3",
+          "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+          "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+          "passesPerSample": 89,
+          "optimized": {
+            "min": 0.7291178426967235,
+            "median": 0.7767237752809757,
+            "p90": 0.8234231460674697,
+            "max": 0.8944089438200842,
+            "samples": [
+              0.7767237752809757,
+              0.8234231460674697,
+              0.8012072808987898,
+              0.8177900674157408,
+              0.8944089438200842,
+              0.7822416179773876,
+              0.7910817078650887,
+              0.7875708314605525,
+              0.7692929438202187,
+              0.7291178426967235,
+              0.755725438202165,
+              0.7488630561797692,
+              0.7376671910112308,
+              0.7625355056179308,
+              0.7499316404493502
+            ]
+          },
+          "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+        }
+      }
+    }
+  ],
+  "wasmEvaluation": {
+    "installedTools": {
+      "rustc": null,
+      "cargo": null,
+      "clang": null,
+      "wasm-opt": null
+    },
+    "decision": "Retain TypeScript for this patch",
+    "experiment": "docs/physics-materials/WASM_EVALUATION.json",
+    "reason": "A separate original 192-byte WASM scalar/batch experiment is retained with exact parity and measured JS boundary/copy costs. It is not a full movement/collision/frame benchmark, so TypeScript remains the production path; no full-engine WASM or Rust speedup is claimed."
+  }
+}

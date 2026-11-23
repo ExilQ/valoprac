@@ -1,6 +1,7 @@
 import {Matrix4,Vector3} from 'three';
 import {Simulation} from '../simulation/Simulation';
-import {replayCompatibility,replayOutcome,simulationChecksum} from './integrity';
+import {replayRulesFor,replayOutcome,simulationChecksum} from './integrity';
+import type {SimulationRulesId} from '../simulation/rules';
 import {validateReplay} from './validation';
 import {REPLAY_FIXED_DT,ReplayError,unpackInput,type ReplayCommand,type ReplayProgress,type ReplayRecording,type ReplayVerification} from './types';
 
@@ -21,8 +22,9 @@ const yieldTask=()=>new Promise<void>(resolve=>setTimeout(resolve,0));
 export class ReplayPlayer {
  simulation:Simulation;private cursor=0;private checkpointCursor=0;private generation=0;
  readonly mismatches:ReplayVerification['mismatches']=[];
- constructor(readonly recording:ReplayRecording){validateReplay(recording);const current=replayCompatibility();for(const key of Object.keys(current) as (keyof typeof current)[])if(recording.header[key]!==current[key])throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');this.simulation=this.create();}
- private create(){const i=this.recording.header.initial,s=new Simulation(i.mode,i.weapon,structuredClone(i.settings),structuredClone(i.options));if(i.attached)s.renderedTargets.attach();return s;}
+ readonly rules:SimulationRulesId;
+ constructor(readonly recording:ReplayRecording){validateReplay(recording);this.rules=replayRulesFor(recording.header);this.simulation=this.create();}
+ private create(){const i=this.recording.header.initial,s=new Simulation(i.mode,i.weapon,structuredClone(i.settings),structuredClone(i.options),this.rules);if(i.attached)s.renderedTargets.attach();return s;}
  get time(){return this.simulation.time;}
  get ended(){return this.cursor>=this.recording.commands.length;}
  get events(){return this.recording.events;}
@@ -45,7 +47,12 @@ export class ReplayPlayer {
   while(!this.ended){const c=this.recording.commands[this.cursor];if(c[0]===0&&this.simulation.ticks>=target)break;this.one();}return this.progress();
  }
  async seek(seconds:number,options:{signal?:AbortSignal;chunkSize?:number}={}):Promise<ReplayProgress>{
-  if(!Number.isFinite(seconds))throw new ReplayError('유효한 리플레이 시점이 아닙니다.');const generation=++this.generation,target=Math.max(0,Math.min(this.recording.ticks,Math.floor(seconds/REPLAY_FIXED_DT+1e-8))),chunk=Math.max(100,Math.min(20_000,options.chunkSize??2000));
+  if(!Number.isFinite(seconds))throw new ReplayError('유효한 리플레이 시점이 아닙니다.');
+  // An already-cancelled request must not replace the displayed authority or
+  // supersede another seek. A non-finite chunk budget must still make progress.
+  abort(options.signal);
+  const requestedChunk=options.chunkSize??2000,chunk=Number.isFinite(requestedChunk)?Math.max(100,Math.min(20_000,Math.floor(requestedChunk))):2000;
+  const generation=++this.generation,target=Math.max(0,Math.min(this.recording.ticks,Math.floor(seconds/REPLAY_FIXED_DT+1e-8)));
   this.simulation=this.create();this.cursor=0;this.checkpointCursor=0;this.mismatches.length=0;
   while(!this.ended){abort(options.signal);if(generation!==this.generation)throw new DOMException('새 탐색으로 대체됐습니다.','AbortError');let n=0;
    while(!this.ended&&n++<chunk){const c=this.recording.commands[this.cursor];if(c[0]===0&&this.simulation.ticks>=target)return this.progress();this.one();}

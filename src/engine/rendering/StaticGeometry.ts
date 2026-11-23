@@ -1,15 +1,34 @@
-import {BufferGeometry,Float32BufferAttribute,Material,type Mesh,type Color} from 'three';
+import {BufferGeometry,Float32BufferAttribute,Material,type Texture,type Mesh,type Color,type JSONMeta,type TextureJSON} from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 
-/** Conservative palette batching for immutable, untextured architecture only.
- * Serialized material state retains every supported depth/blend/PBR flag. The
- * sole shading change is moving its constant linear color into vertex colors. */
+const textureIdentities=new WeakMap<Texture,number>();let nextTextureIdentity=1;
+function textureState(texture:Texture){
+  let identity=textureIdentities.get(texture);if(identity===undefined){identity=nextTextureIdentity++;textureIdentities.set(texture,identity);}
+  return [identity,texture.channel,texture.mapping,texture.wrapS,texture.wrapT,texture.magFilter,texture.minFilter,texture.anisotropy,texture.colorSpace,texture.flipY,texture.offset.toArray(),texture.repeat.toArray(),texture.center.toArray(),texture.rotation,texture.matrixAutoUpdate,texture.matrix.toArray()];
+}
+
+/** Conservative palette batching: immutable untextured finishes, or managed
+ * texture families with identical texture objects and sampling transforms.
+ * Constant linear color is the only shading state moved into vertex colors. */
 export function colorBatchSignature(material:Material):string|null {
-  if(!['MeshStandardMaterial','MeshBasicMaterial'].includes(material.type)||material.clippingPlanes?.length||material.onBeforeCompile!==Material.prototype.onBeforeCompile||material.customProgramCacheKey!==Material.prototype.customProgramCacheKey)return null;
-  // Texture authoring/quality changes and custom shaders retain their identity.
-  if(Object.keys(material).some(key=>/map$/i.test(key)&&!!(material as unknown as Record<string,unknown>)[key]))return null;
-  const state=material.toJSON() as unknown as Record<string,unknown>;
+  if(!['MeshStandardMaterial','MeshBasicMaterial'].includes(material.type)||material.transparent||material.clippingPlanes?.length||material.onBeforeCompile!==Material.prototype.onBeforeCompile||material.customProgramCacheKey!==Material.prototype.customProgramCacheKey)return null;
+  const record=material as unknown as Record<string,unknown>,maps=Object.keys(material).filter(key=>/map$/i.test(key)&&!!record[key]).sort();
+  const family=material.userData.visualMaterialId as VisualMaterialId|undefined;
+  const managed=material.type==='MeshStandardMaterial'&&material.userData.surfaceMaterialManaged===true&&!!family&&Object.hasOwn(VISUAL_MATERIALS,family);
+  if(maps.length&&!managed)return null;
+  const textureStates:Record<string,unknown>={},meta:JSONMeta={geometries:{},materials:{},textures:{},images:{},shapes:{},skeletons:{},animations:{},nodes:{}};
+  for(const key of maps){
+    const map=record[key] as Texture;if(!map.isTexture)return null;
+    textureStates[key]=textureState(map);
+    // Material.toJSON needs only texture UUIDs. Preseeding its metadata avoids
+    // copying procedural image buffers while computing every batch signature.
+    meta.textures[map.uuid]={uuid:map.uuid} as TextureJSON;
+  }
+  const state=material.toJSON(meta) as unknown as Record<string,unknown>;
   for(const key of ['metadata','uuid','name','color','userData'])delete state[key];
+  for(const key of maps)state[key]=textureStates[key];
+  if(managed)state.surfaceMaterialFamily=family;
   return JSON.stringify(Object.fromEntries(Object.keys(state).sort().map(key=>[key,state[key]])));
 }
 

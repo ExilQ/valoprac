@@ -15,6 +15,9 @@ import {Exposure} from '../tactical/Exposure';
 import {spreadDirection} from '../weapons/trajectory';
 import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
+import {resolveGroundSurface} from '../footsteps/surfaceSelection';
+import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
+import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from './rules';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
 import {TacticalHearing} from '../tactical/Hearing';
@@ -22,7 +25,7 @@ import {obstaclesFor} from '../tactical/map';
 import { Ray, Vector3, MathUtils } from 'three';
 import type { Mode, Settings, PracticeMap, WeaponId, InputState, ShotEvent, KillEvent, DirectionResponse, SessionData } from '../types';
 import { Movement } from '../movement/Movement';
-import {MOVEMENT_PHYSICS_VERSION} from '../../config/movement';
+import {MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION} from '../../config/movement';
 import { Braking } from '../movement/Braking';
 import { Weapon } from '../weapons/Weapon';
 import { Target } from '../targets/Target';
@@ -59,7 +62,8 @@ export class Simulation {
   private currentInput!:InputState;
   private pendingBrakeShot:ShotEvent|null=null;
   private physicsTransitions:{time:number;profile:string;preset:string|null}[]=[];
-  constructor(public mode:Mode,public weaponId:WeaponId,public settings:Settings,options:SimulationOptions={}){
+  constructor(public mode:Mode,public weaponId:WeaponId,public settings:Settings,options:SimulationOptions={},readonly rules:SimulationRulesId=CURRENT_SIMULATION_RULES){
+    this.movement.setSimulationRules(rules);
     this.options=validateSessionOptions(options);this.scenario=this.options.scenario?compileScenario(this.options.scenario):null;
     if(this.options.exercise||this.scenario)this.mode='free';
     if(this.scenario)this.weaponId=this.scenario.weapon;
@@ -67,8 +71,12 @@ export class Simulation {
     mode=this.mode;weaponId=this.weaponId;settings=this.settings;
     this.practiceMap=mode==='free'?settings.practiceMap:'range';this.settings.practiceMap=this.practiceMap;this.obstacles=obstaclesFor(this.practiceMap);this.movement.obstacles=this.obstacles;this.movement.configurePhysics(this.settings,0);
     this.physicsTransitions.push({time:0,profile:this.movement.profile.id,preset:this.movement.profile.preset});
-    this.footsteps=new Footsteps(footstepProfile(this.settings));this.footsteps.onStep=e=>{e.material=this.practiceMap==='complex'?zoneAt(e.position)?.material:undefined;this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onFootstep?.(e);};
-    this.landings.resetEncounter(this.movement);this.landings.onLanding=e=>{this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onLanding?.(e);};
+    this.footsteps=new Footsteps(footstepProfile(this.settings));this.footsteps.onStep=e=>{
+      if(this.rules==='legacy-v2')e.material=this.practiceMap==='complex'?zoneAt(e.position)?.material:undefined;
+      else{e.surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,e.position,this.rules,this.movement.profile);e.material=SURFACES[e.surfaceId].footstepSoundProfile;}
+      this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onFootstep?.(e);
+    };
+    this.landings.resetEncounter(this.movement);this.landings.onLanding=e=>{if(this.rules!=='legacy-v2'){e.surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,e.position,this.rules,this.movement.profile);e.material=SURFACES[e.surfaceId].footstepSoundProfile;}this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onLanding?.(e);};
     if(this.practiceMap==='tactical'){this.movement.position.set(-7,0,13);this.movement.previous.copy(this.movement.position);}
 
     this.level=levelFor(this.practiceMap);this.exposureLabels=this.level?.angles.map(a=>a.label)??[];if(this.level){this.movement.position.set(this.level.spawn.x,this.level.spawn.y,this.level.spawn.z);this.movement.previous.copy(this.movement.position);}
@@ -85,6 +93,7 @@ export class Simulation {
     const minX=Math.min(...this.obstacles.map(o=>o.box.min.x)),minZ=Math.min(...this.obstacles.map(o=>o.box.min.z));
     this.practiceBounds=this.level?.bounds??[minX,minZ,Math.max(...this.obstacles.map(o=>o.box.max.x))-minX,Math.max(...this.obstacles.map(o=>o.box.max.z))-minZ];
     if(this.scenario){this.angles=null;this.hearing=null;this.movement.reset(this.scenario.spawn,0,true);this.yaw=this.scenario.yaw;this.pitch=this.scenario.pitch;this.applyScenarioTargets();}
+    this.defenders?.setSimulationRules(this.rules);
     if(this.options.exercise){this.exercise=new Exercises(this.options.exercise,this.settings.seed);this.exercise.initialize(this);}
   }
   private movementContext(){return{movement:this.movement,map:this.practiceMap,bounds:this.practiceBounds,yaw:this.yaw,pitch:this.pitch,time:this.time,ticks:this.ticks};}
@@ -106,11 +115,11 @@ export class Simulation {
     for(const target of this.targets){const sector=sectors[target.id];target.enabled=!!sector;target.active=!!sector;if(!sector)continue;target.scale=1;target.behavior='stationary';target.speedMultiplier=1;target.spawn(sector.position.x,sector.position.z,this.time,sector.position.y);}
     if(this.defenders){this.defenders.setSectors(sectors);this.defenders.retry();}
     else this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.scenario.spawn,this.settings.seed,sectors);
-    this.exposure.reset();
+    this.defenders.setSimulationRules(this.rules);this.exposure.reset();
   }
   private spawn(t:Target){
     t.difficulty=this.settings.botDifficulty;t.scale=this.mode==='free'?this.settings.targetSize:1;t.speedMultiplier=this.mode==='free'?this.settings.targetSpeed:1;
-    if(this.angles){this.angles.spawn(t,this.time);return;}
+    if(this.angles){this.angles.spawn(t,this.time,this.rules);return;}
     if(this.hearing){this.hearing.spawn(t,this.time,this.movement.position.x,this.movement.position.z);return;}
 
     const positions=[[-6,-19],[-3,-15],[0,-21],[3,-17],[6,-23]];
@@ -150,7 +159,7 @@ export class Simulation {
     if(this.settings.movementTools?.enabled)this.movementPractice.beforeStep(this.movementContext());
     this.movement.step(input,movementYaw,dt,this.time);
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
-    this.landings.step(this.movement,this.time,dt,p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined,this.settings.stepHearingRadius);
+    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius);
     this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
     this.footsteps.step(this.movement,input.walk,dt,this.time);
     const pending=this.pendingBrakeShot,b=this.braking;
@@ -167,7 +176,7 @@ export class Simulation {
     }
     this.exercise?.afterTargets(this,dt);
     if(this.defenders){this.defenders.step(dt,this.time,{position:this.movement.position,velocity:this.movement.velocity,eyeHeight:this.movement.eyeHeight,crouch:this.movement.crouch,grounded:this.movement.grounded,yaw:this.viewYaw,pitch:this.viewPitch,scoped:this.weaponId==='operator'&&this.ads});for(let i=0;i<this.defenders.memories.length;i++){const value=this.defenders.memories[i].exposure;this.exposure.values[i]=value;this.exposure.max=Math.max(this.exposure.max,value);}if(this.defenders.death){const d=this.defenders.death;this.exposure.death={bot:d.bot,angle:`${d.weapon} · ${d.region}`,duration:d.duration,time:d.time,player:d.player,defender:d.defender};this.exposure.deaths=this.defenders.report.deaths;this.running=false;return;}}
-    if(this.level&&!this.defenders){this.exposure.step(this.targets,this.movement.position,this.movement.eyeHeight,this.obstacles,this.settings,dt,this.time,this.exposureLabels,this.readyAt);if(this.exposure.death){this.running=false;return;}}
+    if(this.level&&!this.defenders){this.exposure.step(this.targets,this.movement.position,this.movement.eyeHeight,this.obstacles,this.settings,dt,this.time,this.exposureLabels,this.readyAt,this.rules);if(this.exposure.death){this.running=false;return;}}
     this.currentInput=input;const originalAds=input.ads;input.ads=this.ads;this.weapon.step(this.time,dt,input,this.fireShot);input.ads=originalAds;this.clearFireView();
     for(const id of WEAPON_ORDER){if(id!==this.weaponId){const w=this.weapons[id];w.recoil.recover(dt,w.profile,this.time-w.lastShot);w.bloom=Math.max(0,w.bloom-w.profile.bloomRecovery*dt);}}
     if(this.mode==='tracking'||this.mode==='free')this.sampleTracking();
@@ -185,7 +194,7 @@ export class Simulation {
     const yaw=this.bulletYaw,pitch=this.bulletPitch;
     this.origin.copy(m.position);this.origin.y+=m.eyeHeight;
     spreadDirection(yaw,pitch,spread.x,spread.y,this.direction);
-    this.ray.set(this.origin,this.direction);castWeaponShot(this.ray,this.targets,this.hit,w.profile,this.obstacles,frame);
+    this.ray.set(this.origin,this.direction);castWeaponShot(this.ray,this.targets,this.hit,w.profile,this.obstacles,frame,this.rules);
     // Fire along the pre-kick aim; recoil from this shot affects the next shot.
     w.recoil.kick(w.shotIndex,w.profile,w.recoilRng,m.crouch,this.time);
     const t=this.hit.target,b=this.braking,shown=t&&frame?poseForTarget(t,frame):undefined,targetPosition=t?(shown?.position??t.position):null;
@@ -255,5 +264,5 @@ export class Simulation {
   resetStatistics(){this.tap=new TapDrill(this.settings.drill);this.stats=new LifetimeStats();for(const key of Object.keys(this.operatorStats) as (keyof typeof this.operatorStats)[])this.operatorStats[key]=0;this.operatorLastShot=null;this.shots.length=0;this.kills.length=0;this.reactions.length=0;this.tracking={samples:0,onHead:0,errorSquared:0};this.pendingBrakeShot=null;}
   hudSummary(){return this.stats.apply(this.emptySummary,this.pendingBrakeShot);}
   summary(){return this.stats.apply(summarize(this.shots,this.kills,this.reactions,this.tracking),this.pendingBrakeShot);}
-  snapshot():SessionData{return {sessionOptions:structuredClone(this.options),exercise:this.exercise?.snapshot(),movementPractice:this.settings.movementTools?.enabled?this.movementPractice.snapshot():undefined,landings:{events:this.landings.totalEvents,recent:this.landings.historyRecent()},physics:{version:MOVEMENT_PHYSICS_VERSION,current:this.movement.physicsSnapshot(),transitions:this.physicsTransitions.map(t=>({...t}))},movement:this.movement.hopSnapshot(),operator:{...this.operatorStats},peeking:this.defenders?.snapshot(),tactical:this.level?{clears:this.defenders?.report.clears??this.angles?.clears??0,deaths:this.exposure.deaths,maxExposure:this.exposure.max,lastDeath:this.exposure.death}:undefined,drill:{...this.tap.stats},footsteps:{events:this.footsteps.totalEvents,botHeardEvents:this.defenders?.report.heardEvents??this.hearing?.heardEvents??this.angles?.heardEvents??0,finalAccumulation:this.footsteps.footstepAccumulation,recent:this.footsteps.historyRecent()},id:globalThis.crypto?.randomUUID?.()??`session-${Date.now()}-${this.settings.seed}`,createdAt:Date.now(),mode:this.mode,weapon:this.weaponId,duration:this.time,seed:this.settings.seed,settings:{...this.settings},shots:this.shots.slice(),kills:this.kills.slice(),reactions:this.reactions.slice(),tracking:{...this.tracking},summary:this.summary(),weaponTotals:structuredClone(this.stats.weapons),detailLimit:DETAIL_LIMIT};}
+  snapshot():SessionData{return {sessionOptions:structuredClone(this.options),exercise:this.exercise?.snapshot(),movementPractice:this.settings.movementTools?.enabled?this.movementPractice.snapshot():undefined,landings:{events:this.landings.totalEvents,recent:this.landings.historyRecent()},physics:{version:this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION,...(this.rules!=='legacy-v2'?{rules:this.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),current:this.movement.physicsSnapshot(),transitions:this.physicsTransitions.map(t=>({...t}))},movement:this.movement.hopSnapshot(),operator:{...this.operatorStats},peeking:this.defenders?.snapshot(),tactical:this.level?{clears:this.defenders?.report.clears??this.angles?.clears??0,deaths:this.exposure.deaths,maxExposure:this.exposure.max,lastDeath:this.exposure.death}:undefined,drill:{...this.tap.stats},footsteps:{events:this.footsteps.totalEvents,botHeardEvents:this.defenders?.report.heardEvents??this.hearing?.heardEvents??this.angles?.heardEvents??0,finalAccumulation:this.footsteps.footstepAccumulation,recent:this.footsteps.historyRecent()},id:globalThis.crypto?.randomUUID?.()??`session-${Date.now()}-${this.settings.seed}`,createdAt:Date.now(),mode:this.mode,weapon:this.weaponId,duration:this.time,seed:this.settings.seed,settings:{...this.settings},shots:this.shots.slice(),kills:this.kills.slice(),reactions:this.reactions.slice(),tracking:{...this.tracking},summary:this.summary(),weaponTotals:structuredClone(this.stats.weapons),detailLimit:DETAIL_LIMIT};}
 }

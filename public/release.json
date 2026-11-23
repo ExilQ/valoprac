@@ -1,7 +1,7 @@
 {
   "application": "VALOPRAC",
-  "version": "11.0.0",
-  "calibration": "weapons-3.0-movement-provisional",
+  "version": "12.0.0",
+  "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
     "vandal",
@@ -131,7 +131,22 @@
     "shared-replay-movement-ghost",
     "five-original-tactical-route-scenarios",
     "validated-local-scenario-editor-and-codes",
-    "optional-lazy-english-interface"
+    "optional-lazy-english-interface",
+    "versioned-swept-contact-rules",
+    "stable-physical-surface-registry",
+    "original-procedural-pbr-material-library",
+    "surface-aware-footstep-landing-impact",
+    "indexed-static-ballistic-and-visibility-queries",
+    "compacted-character-and-defender-weapon-instances",
+    "hardware-qualified-multi-draw-character-batching",
+    "representative-character-and-impact-shader-preparation",
+    "pooled-instanced-surface-decals",
+    "legacy-simulation2-replay-reconstruction",
+    "benchmarked-typescript-wasm-evaluation",
+    "restart-safe-audio-event-identities",
+    "bounded-replay-export-and-seek",
+    "transactional-local-history-retention",
+    "authored-boundary-only-material-impacts"
   ],
   "unreal": {
     "engine": "5.7",
@@ -146,7 +161,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "11.00",
+  "patchLabel": "12.00",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -228,7 +243,7 @@
     "softwareGPUPerformanceImprovementVerified": false
   },
   "movement": {
-    "calibration": "dual-movement-1.1.0-provisional",
+    "calibration": "dual-movement-1.2.0-provisional",
     "simulationHz": 120,
     "defaultProfile": "valorant",
     "profiles": [
@@ -252,7 +267,7 @@
     "allExistingMaps": true,
     "newMapsOrModes": 0,
     "separateLandingAudio": true,
-    "validation": "/movement-validation.json",
+    "validation": "/physics-materials-validation.json",
     "nativeParityVerified": false,
     "nativeCS2SubtickImplemented": false,
     "hardwareFPSVerified": false,
@@ -284,7 +299,9 @@
     "model": "resistance-metres-1.0.0",
     "sharedWithBots": true,
     "nativeFormulaVerified": false,
-    "materials": 10
+    "materials": 22,
+    "materialPhysicsVersion": "physical-surfaces-1.0.0",
+    "visualPropertiesDetermineResistance": false
   },
   "corrections": {
     "validation": "/corrections-validation.json",
@@ -354,10 +371,18 @@
     "optionalLanguage": null,
     "replay": {
       "schema": 1,
-      "simulationVersion": "valoprac-replay-simulation-2",
+      "simulationVersion": "valoprac-replay-simulation-3",
       "strictVersionCompatibility": true,
       "videoRecording": false,
-      "localOnly": true
+      "localOnly": true,
+      "acceptedLegacyVersions": [
+        {
+          "gameVersion": "10.0.0",
+          "simulationVersion": "valoprac-replay-simulation-2",
+          "rules": "legacy-v2"
+        }
+      ],
+      "materialPhysicsVersion": "physical-surfaces-1.0.0"
     },
     "walkingSpeedRatioChanged": false,
     "walkingLandingSilenceChanged": false,
@@ -384,7 +409,40 @@
     ],
     "settingsCategories": 8,
     "validation": "/interface-validation.json",
-    "gameplayParametersChanged": false,
-    "gameplayCompatibilityVersion": "10.0.0"
-  }
+    "gameplayParametersChanged": true,
+    "gameplayCompatibilityVersion": "12.0.0",
+    "captureRelease": "11.0.0",
+    "note": "The retained interface evidence describes release11; release12 changes collision and physical surface rules, versioned separately from appearance."
+  },
+  "physicsMaterials": {
+    "validation": "/physics-materials-validation.json",
+    "simulationRules": "materials-v3",
+    "simulationVersion": "valoprac-replay-simulation-3",
+    "materialPhysicsVersion": "physical-surfaces-1.0.0",
+    "visualFamilies": 15,
+    "physicalSurfaces": 22,
+    "fixedHz": 120,
+    "legacyReconstruction": true,
+    "softwareRendererLowFallback": true,
+    "hardwareFPSVerified": false,
+    "physicalInputLatencyVerified": false,
+    "rustAdopted": false,
+    "productionWASM": false,
+    "walkingRatioChanged": false,
+    "walkingLandingSilenceChanged": false,
+    "comprehensiveAudit": {
+      "scope": [
+        "movement-collision",
+        "material-boundaries",
+        "runtime-audio",
+        "input-clock",
+        "replay-compatibility-and-limits",
+        "local-history-concurrency",
+        "render-resource-lifecycle"
+      ],
+      "validation": "/physics-materials-validation.json",
+      "formalProofOfAllCode": false
+    }
+  },
+  "releaseDate": "2026-11-15"
 }

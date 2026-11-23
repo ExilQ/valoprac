@@ -16,7 +16,7 @@ const focus=['스윙 거리와 제동 후 첫 발','사격 유도와 볼트 회�
 export const PEEK_ZONES:PeekZone[]=[];
 export const COMPLEX_OBSTACLES:Obstacle[]=[];
 const box=(x1:number,y1:number,z1:number,x2:number,y2:number,z2:number,kind:'wall'|'cover'='wall',color=0x9aa8a5)=>{
- const o:Obstacle={box:new Box3(new Vector3(Math.min(x1,x2),y1,Math.min(z1,z2)),new Vector3(Math.max(x1,x2),y2,Math.max(z1,z2))),kind,color};
+ const o:Obstacle={box:new Box3(new Vector3(Math.min(x1,x2),y1,Math.min(z1,z2)),new Vector3(Math.max(x1,x2),y2,Math.max(z1,z2))),kind,color,surfaceId:kind==='cover'?'paintedMetal':'plasteredConcrete'};
  COMPLEX_OBSTACLES.push(o);return o;
 };
 const angles:AngleSector[]=[];
@@ -62,16 +62,16 @@ for(let i=0;i<8;i++){
   box(x-3.7,0,sign*12,x-2.5,i===3?1.35:3.2,sign*22,'cover',0x697f83);
   const targetDepth=i===1||i===4?34:i===2?23:30;let height=0;
   if(i===5){
-   height=2.4;box(x-1,0,27,x+10,2.4,37,'cover');
-   const ramp=box(x+6,0,14,x+8.4,2.4,27,'cover');ramp.ramp={axis:'z',low:0,high:2.4,ascending:1};
+   height=2.4;box(x-1,0,27,x+10,2.4,37,'cover').surfaceId='concrete';
+   const ramp=box(x+6,0,14,x+8.4,2.4,27,'cover');ramp.ramp={axis:'z',low:0,high:2.4,ascending:1};ramp.surfaceId='concrete';
    // Twelve 20cm risers run the entire 13m approach and meet the platform.
-   for(let k=0;k<12;k++)box(x-.8,0,14+k*13/12,x+1,(k+1)*.2,14+(k+1)*13/12,'cover');
-   const rear=box(x+5.7,0,37,x+8.3,2.4,43,'cover');rear.ramp={axis:'z',low:0,high:2.4,ascending:-1};
+   for(let k=0;k<12;k++)box(x-.8,0,14+k*13/12,x+1,(k+1)*.2,14+(k+1)*13/12,'cover').surfaceId='concrete';
+   const rear=box(x+5.7,0,37,x+8.3,2.4,43,'cover');rear.ramp={axis:'z',low:0,high:2.4,ascending:-1};rear.surfaceId='concrete';
   }
   if(i===7){
-   height=1.2;box(x+2,0,27,x+10,1.2,36,'cover');
-   const ramp=box(x+7,0,16,x+9,1.2,27,'cover');ramp.ramp={axis:'z',low:0,high:1.2,ascending:1};
-   const rear=box(x+5.7,0,36,x+8.3,1.2,43,'cover');rear.ramp={axis:'z',low:0,high:1.2,ascending:-1};
+   height=1.2;box(x+2,0,27,x+10,1.2,36,'cover').surfaceId='concrete';
+   const ramp=box(x+7,0,16,x+9,1.2,27,'cover');ramp.ramp={axis:'z',low:0,high:1.2,ascending:1};ramp.surfaceId='concrete';
+   const rear=box(x+5.7,0,36,x+8.3,1.2,43,'cover');rear.ramp={axis:'z',low:0,high:1.2,ascending:-1};rear.surfaceId='concrete';
    addAngle(2,-7,31,0,'rifleB');box(x-.5,0,19,x+1,1.1,23,'cover');
   }
   if(i===3){box(x-9,0,sign*25,x-4,.92,sign*26,'cover');box(x+.5,0,sign*18,x+2,1.35,sign*20,'cover');}

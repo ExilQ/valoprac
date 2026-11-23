@@ -1,0 +1,182 @@
+{
+  "rows": [
+    {
+      "lighting": "daylight",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "indoor",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "high",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "low",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "shadow",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "dark",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 3
+    },
+    {
+      "lighting": "daylight",
+      "quality": "low",
+      "materials": {
+        "quality": "low",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 15,
+        "estimatedTextureBytes": 81930,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 4
+    },
+    {
+      "lighting": "daylight",
+      "quality": "medium",
+      "materials": {
+        "quality": "medium",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 30,
+        "estimatedTextureBytes": 655365,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 5
+    },
+    {
+      "lighting": "daylight",
+      "quality": "ultra",
+      "materials": {
+        "quality": "ultra",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 15728640,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 5
+    },
+    {
+      "lighting": "daylight",
+      "quality": "high",
+      "materials": {
+        "quality": "high",
+        "scalarLowFallback": false,
+        "materialCount": 15,
+        "textureSets": 15,
+        "textureCount": 45,
+        "estimatedTextureBytes": 3932160,
+        "maxMaterialVariants": 256,
+        "disposed": false
+      },
+      "drawCalls": 61,
+      "triangles": 12122,
+      "shaderPrograms": 5
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Procedural material inspection on Chromium SwiftShader; no physical GPU or human monitor calibration.",
+    "15 original families, shared 1m forms. Texture byte values estimate mipmapped channels, not total driver allocation."
+  ],
+  "canvasCount": 0,
+  "passed": true,
+  "completedAt": "2026-11-08T01:28:56.173Z"
+}

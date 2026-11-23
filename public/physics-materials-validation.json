@@ -1,0 +1,3471 @@
+{
+  "schema": 1,
+  "release": "12.0.0",
+  "patchLabel": "12.00",
+  "generatedAt": "2026-11-15T07:53:04.106Z",
+  "tests": {
+    "application": 1444,
+    "broker": 20,
+    "hosting": 14,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "simulation": {
+    "gameVersion": "12.0.0",
+    "version": "valoprac-replay-simulation-3",
+    "rules": "materials-v3",
+    "fixedHz": 120,
+    "movementVersion": "dual-movement-1.2.0",
+    "materialPhysicsVersion": "physical-surfaces-1.0.0",
+    "weaponVersion": "weapons-10.0.0",
+    "acceptedLegacy": [
+      {
+        "gameVersion": "10.0.0",
+        "simulationVersion": "valoprac-replay-simulation-2",
+        "rules": "legacy-v2"
+      }
+    ]
+  },
+  "measuredReleaseEvidence": {
+    "schema": 1,
+    "release": "12.0.0",
+    "patchLabel": "12.00",
+    "baseline": {
+      "commit": "0029c162de2756aa11092748514efe726e1ee217",
+      "applicationTests": 1268,
+      "testFiles": 105,
+      "sourceRelease": "11.0.0"
+    },
+    "gates": {
+      "completed": true,
+      "renderingSourceUnchanged": true,
+      "shaderPreparationPassed": true,
+      "lifecyclePassed": true,
+      "browserPassed": true
+    },
+    "status": "executed-software-acceptance-passed; build-and-publication-receipts-recorded-separately",
+    "rendering": {
+      "source": "docs/physics-materials/RENDER_AFTER.json",
+      "baselineSource": "docs/physics-materials/RENDER_BASELINE.json",
+      "passed": true,
+      "sourceUnchanged": true,
+      "environment": {
+        "browser": "Chromium headless SwiftShader",
+        "viewport": [
+          960,
+          540
+        ],
+        "physicalGPU": false,
+        "renderCPUTiming": true,
+        "gpuTimerAvailabilityMeasured": true,
+        "simulationHz": 120,
+        "renderFrameSamples": 36,
+        "frameSchedule": "actual requestAnimationFrame; no GPU draw suppression or fake timer"
+      },
+      "limits": [
+        "No physical office/integrated/gamingGPU benchmark is available in this cloud executor.",
+        "Firstpreparation time is recorded independently, not hidden inside FPS.",
+        "This finite scene probe does not establish high-refresh hardware or physical input latency."
+      ],
+      "coreHighOverrides": {
+        "postProcessing": false,
+        "ambientOcclusion": false,
+        "antiAliasing": false
+      },
+      "physicalGPUQualified": false,
+      "rows": [
+        {
+          "map": "range",
+          "preset": "low",
+          "baselineFrameMedianMs": 200,
+          "currentFrameMedianMs": 50,
+          "baselineDrawCalls": 42,
+          "currentDrawCalls": 37,
+          "baselineTriangles": 28526,
+          "currentTriangles": 22030,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "tactical",
+          "preset": "low",
+          "baselineFrameMedianMs": 350,
+          "currentFrameMedianMs": 50,
+          "baselineDrawCalls": 22,
+          "currentDrawCalls": 19,
+          "baselineTriangles": 33706,
+          "currentTriangles": 16694,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "long",
+          "preset": "low",
+          "baselineFrameMedianMs": 216.60000000000218,
+          "currentFrameMedianMs": 50,
+          "baselineDrawCalls": 33,
+          "currentDrawCalls": 32,
+          "baselineTriangles": 40858,
+          "currentTriangles": 15746,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "garage",
+          "preset": "low",
+          "baselineFrameMedianMs": 350,
+          "currentFrameMedianMs": 66.59999999999991,
+          "baselineDrawCalls": 31,
+          "currentDrawCalls": 30,
+          "baselineTriangles": 28516,
+          "currentTriangles": 12244,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "site",
+          "preset": "low",
+          "baselineFrameMedianMs": 416.70000000000437,
+          "currentFrameMedianMs": 66.59999999999991,
+          "baselineDrawCalls": 32,
+          "currentDrawCalls": 31,
+          "baselineTriangles": 34396,
+          "currentTriangles": 13676,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "mid",
+          "preset": "low",
+          "baselineFrameMedianMs": 216.70000000000073,
+          "currentFrameMedianMs": 66.59999999999991,
+          "baselineDrawCalls": 32,
+          "currentDrawCalls": 33,
+          "baselineTriangles": 35618,
+          "currentTriangles": 14022,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "tower",
+          "preset": "low",
+          "baselineFrameMedianMs": 100.10000000000036,
+          "currentFrameMedianMs": 66.69999999999982,
+          "baselineDrawCalls": 33,
+          "currentDrawCalls": 34,
+          "baselineTriangles": 37256,
+          "currentTriangles": 15812,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "multi",
+          "preset": "low",
+          "baselineFrameMedianMs": 150,
+          "currentFrameMedianMs": 66.59999999999991,
+          "baselineDrawCalls": 33,
+          "currentDrawCalls": 34,
+          "baselineTriangles": 36226,
+          "currentTriangles": 14634,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "complex",
+          "preset": "low",
+          "baselineFrameMedianMs": 183.29999999999927,
+          "currentFrameMedianMs": 83.30000000000018,
+          "baselineDrawCalls": 28,
+          "currentDrawCalls": 29,
+          "baselineTriangles": 81726,
+          "currentTriangles": 56142,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "bunny",
+          "preset": "low",
+          "baselineFrameMedianMs": 100,
+          "currentFrameMedianMs": 16.700000000000273,
+          "baselineDrawCalls": 23,
+          "currentDrawCalls": 12,
+          "baselineTriangles": 23328,
+          "currentTriangles": 4596,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "wallbang",
+          "preset": "low",
+          "baselineFrameMedianMs": 399.90000000000146,
+          "currentFrameMedianMs": 50,
+          "baselineDrawCalls": 31,
+          "currentDrawCalls": 32,
+          "baselineTriangles": 29554,
+          "currentTriangles": 8818,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "range",
+          "preset": "high",
+          "baselineFrameMedianMs": 933.2999999999956,
+          "currentFrameMedianMs": 450,
+          "baselineDrawCalls": 70,
+          "currentDrawCalls": 60,
+          "baselineTriangles": 55998,
+          "currentTriangles": 43006,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "complex",
+          "preset": "high",
+          "baselineFrameMedianMs": 716.6000000000022,
+          "currentFrameMedianMs": 750,
+          "baselineDrawCalls": 63,
+          "currentDrawCalls": 68,
+          "baselineTriangles": 167030,
+          "currentTriangles": 117478,
+          "programsAddedDuringFrames": 0
+        },
+        {
+          "map": "tower",
+          "preset": "high",
+          "baselineFrameMedianMs": 616.5999999999985,
+          "currentFrameMedianMs": 533.1999999999998,
+          "baselineDrawCalls": 69,
+          "currentDrawCalls": 71,
+          "baselineTriangles": 76240,
+          "currentTriangles": 33352,
+          "programsAddedDuringFrames": 0
+        }
+      ],
+      "captureAt": "2026-11-15T07:51:12.532Z",
+      "mergedRemoteWallFix": "e18cdfe"
+    },
+    "shaderPreparation": {
+      "rows": [
+        {
+          "preset": "low",
+          "authorityUnchanged": true,
+          "programsAfterWarm": 28,
+          "programsAddedDuringFrames": 0,
+          "shot": {
+            "before": {
+              "programs": 28,
+              "shots": 0,
+              "ammo": 25
+            },
+            "after": {
+              "programs": 28,
+              "shots": 1,
+              "ammo": 24
+            },
+            "passed": true
+          }
+        },
+        {
+          "preset": "high",
+          "authorityUnchanged": true,
+          "programsAfterWarm": 32,
+          "programsAddedDuringFrames": 0,
+          "shot": {
+            "before": {
+              "programs": 32,
+              "shots": 0,
+              "ammo": 25
+            },
+            "after": {
+              "programs": 32,
+              "shots": 1,
+              "ammo": 24
+            },
+            "passed": true
+          }
+        }
+      ],
+      "errors": [],
+      "passed": true
+    },
+    "lifecycle": {
+      "longSessionSource": "docs/physics-materials/LONG_SESSION.json",
+      "longSessionPassed": true,
+      "browserResourceCycles": {
+        "passed": true,
+        "source": "docs/physics-materials/BROWSER_LIFECYCLE.json",
+        "cycles": 8,
+        "floorEffectEvents": 4000,
+        "allMapResourcesReleased": true,
+        "stockHigh": {
+          "shaderProgramsAddedDuringFrames": 0,
+          "authorityUnchanged": true,
+          "frameMs": {
+            "median": 16.600000000002183,
+            "p95": 16.600000000002183,
+            "p99": 16.600000000002183,
+            "max": 883.2999999999993
+          },
+          "drawCalls": {
+            "min": 137,
+            "max": 137
+          },
+          "firstShot": {
+            "before": {
+              "programs": 47,
+              "shots": 0,
+              "ammo": 25
+            },
+            "after": {
+              "programs": 47,
+              "shots": 1,
+              "ammo": 24
+            },
+            "passed": true
+          },
+          "disposal": {
+            "before": {
+              "geometries": 91,
+              "textures": 72
+            },
+            "after": {
+              "geometries": 0,
+              "textures": 0
+            },
+            "canvasCount": 0
+          }
+        }
+      },
+      "physicalDeviceSoak": false
+    },
+    "browser": {
+      "passed": true,
+      "checks": [
+        "Real uninterrupted WebGL draws, pointer lock and trusted firing advance state and consume ammunition",
+        "Two trusted right clicks enter/exit persistent rifle ADS",
+        "Escape restores controls and pauses authority",
+        "Actual completed UI flow saves IndexedDB session and its replay reconstructs matching shots and checksum",
+        "Primary training start remains reachable across seven required desktop/mobile viewport sizes",
+        "Actual frozen simulation-2 replay file imports and verifies through the browser UI"
+      ],
+      "layouts": [
+        {
+          "width": 1280,
+          "height": 720,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 269,
+              "right": 382.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 1366,
+          "height": 768,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 269,
+              "right": 382.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 1600,
+          "height": 900,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 269,
+              "right": 382.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 1920,
+          "height": 1080,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 425,
+              "right": 538.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 2560,
+          "height": 1440,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 745,
+              "right": 858.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 3440,
+          "height": 1440,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 1185,
+              "right": 1298.703125
+            }
+          ],
+          "passed": true
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "overflow": false,
+          "buttons": [
+            {
+              "w": 113.703125,
+              "h": 42.296875,
+              "left": 39,
+              "right": 152.703125
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "before": {
+        "time": 0,
+        "shots": 0,
+        "ammo": 25
+      },
+      "savedReplay": {
+        "passed": true,
+        "shots": 7,
+        "version": "12.0.0",
+        "checksum": "c10e1c9729129ce5"
+      },
+      "legacyReplay": {
+        "passed": true,
+        "text": "재실행 일치 · 체크포인트와 최종 점수 0 확인"
+      },
+      "completedAt": "2026-11-15T05:57:25.134Z",
+      "limits": [
+        "Chromium SwiftShader, real WebGL draws remain enabled throughout gameplay.",
+        "Trusted mouse delivery and authority changes tested; no physical input-to-photon measurement or hardware FPS qualification."
+      ],
+      "after": {
+        "time": 0.825,
+        "shots": 7,
+        "ammo": 18,
+        "calls": 51,
+        "running": true
+      },
+      "source": "docs/physics-materials/BROWSER_LOCAL.json",
+      "syntheticQASession": true
+    },
+    "build": {
+      "recipe": [
+        "npm run prebuild",
+        "npm --ignore-scripts run build"
+      ],
+      "finalArtifactBytesInSeparateReceipt": true,
+      "compressedWorkerBudgetBytes": 10485760
+    },
+    "inputLatency": {
+      "physicalMeasured": false,
+      "cpuSubmitProxy": {
+        "metric": "DOM-event-to-render-submit CPU proxy",
+        "mouse": {
+          "total": 2,
+          "samples": 2,
+          "medianMs": 100.5,
+          "p95Ms": 100.5
+        },
+        "click": {
+          "total": 1,
+          "samples": 1,
+          "medianMs": 61.199999999953434,
+          "p95Ms": 61.199999999953434
+        },
+        "inputToPhotonMs": null,
+        "shotToPhotonMs": null,
+        "limitations": [
+          "Excludes GPU completion, scanout, peripheral latency and unsampled events.",
+          "Averages do not represent externally measured end-to-end latency."
+        ]
+      },
+      "baselineComparisonMeasured": false
+    },
+    "deployment": {
+      "verified": false,
+      "receiptMaintainedSeparately": true
+    },
+    "verifiedAt": "2026-11-15T06:00:34.222698+00:00",
+    "longSession": {
+      "source": "docs/physics-materials/LONG_SESSION.json",
+      "passed": true,
+      "simulatedSecondsPerRun": 1860,
+      "runs": 2,
+      "checksum": "40899af36fc9232f",
+      "physicalHoursClaimed": false
+    }
+  },
+  "collision": {
+    "benchmark": "physics-materials-collision",
+    "fixedHz": 120,
+    "rows": [
+      {
+        "probe": "high-speed-wedge",
+        "ascending": -1,
+        "legacy": [
+          99999,
+          0,
+          0
+        ],
+        "current": [
+          -0.28,
+          0,
+          0
+        ]
+      },
+      {
+        "probe": "high-speed-wedge",
+        "ascending": 1,
+        "legacy": [
+          -99998,
+          0,
+          0
+        ],
+        "current": [
+          1.28,
+          0,
+          0
+        ]
+      },
+      {
+        "probe": "high-speed-diagonal-corner",
+        "legacy": [
+          99999,
+          0,
+          99999
+        ],
+        "current": [
+          -0.28,
+          0,
+          -0.28
+        ]
+      },
+      {
+        "probe": "multiple-risers",
+        "legacy": [
+          0.6551724137931036,
+          0,
+          0
+        ],
+        "current": [
+          2.9999999999999996,
+          0.6,
+          0
+        ]
+      },
+      {
+        "probe": "minimum-tread-width",
+        "widthMeters": 0.01,
+        "minWidthMeters": 0.1,
+        "legacySupport": 0.2,
+        "current": [
+          -0.28,
+          0,
+          0
+        ],
+        "narrowAllowed": [
+          -2.7755575615628914e-17,
+          0.2,
+          0
+        ]
+      },
+      {
+        "probe": "steep-slide",
+        "profile": "valorant",
+        "legacy": [
+          0,
+          1.5,
+          -0.5
+        ],
+        "current": [
+          0,
+          0,
+          0.299631152609063
+        ]
+      },
+      {
+        "probe": "steep-slide",
+        "profile": "counterStrike",
+        "legacy": [
+          0,
+          1.5,
+          -0.5
+        ],
+        "current": [
+          0,
+          0,
+          0.6047177525517434
+        ]
+      },
+      {
+        "probe": "transient-ceiling-corner",
+        "legacy": [
+          -0.18333333333333335,
+          0.16692222222222222,
+          0.36666666666666664
+        ],
+        "legacyVerticalSpeed": 6.830666666666667,
+        "current": [
+          -0.18333333333333335,
+          0.1399999999999999,
+          0.3666666666666667
+        ],
+        "currentVerticalSpeed": 0
+      }
+    ],
+    "schema": 1,
+    "baselineCommit": "0029c16",
+    "legacyRules": "legacy-v2",
+    "currentRules": "materials-v3",
+    "movementVersion": "dual-movement-1.2.0",
+    "nativeGameMeasured": false,
+    "validation": {
+      "testFiles": 15,
+      "tests": 240,
+      "passed": true,
+      "typecheck": "passed"
+    }
+  },
+  "visualComparison": {
+    "captureAt": "2026-11-08T01:38:28.675Z",
+    "baselineSource": "0029c162de2756aa11092748514efe726e1ee217",
+    "candidate": "Unreleased12 material implementation captured November8; subsequent November15 fixes are separately verified, not re-labelled as these original captures.",
+    "method": "Same camera, seeded scene, High with AO/post/AA equallydisabled; original WebGL screenshots, losslesspixel-identical delivery",
+    "rows": [
+      {
+        "phase": "before",
+        "scene": "range",
+        "url": "/physics-comparison/before/range.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "d7d84df49f17684c7ad30fdea66ba7733212d36e44f715ea2e55ac0d347d12fa",
+        "deliverySHA256": "b364ad5b28cbf2d7960a3593a373a711e63bf59fbd02d8a613d5122a67ab793f",
+        "decodedPixelSHA256": "0f23876b3c2af434d5f12fdd02d76d898ce8e3d83419f07be993363f4f3ce41f",
+        "decodedPixelsIdentical": true,
+        "bytes": 217536
+      },
+      {
+        "phase": "before",
+        "scene": "complex-bay",
+        "url": "/physics-comparison/before/complex-bay.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "50d27a573d2627490256daa435f68120be3699e5c3aa36ac985799cf8eab37f0",
+        "deliverySHA256": "c4fa8fe8c6a3ea5cdef61dced72f378857bb846954e5dc6605581e85f30ddd33",
+        "decodedPixelSHA256": "d1aaa823b7f5540fc309c3f8ab9c90b2c688242316ea75370e9fbcddb569e368",
+        "decodedPixelsIdentical": true,
+        "bytes": 105758
+      },
+      {
+        "phase": "before",
+        "scene": "rifleA-hip",
+        "url": "/physics-comparison/before/rifleA-hip.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "9700d18f96a44bfb6a119e8e92e3c9db3e5d6423a81ade2a5d589b0a8e9dea31",
+        "deliverySHA256": "70e75091ed4ec3ab85e9b02885be5ae661119e0f116c326e274045b8739cee8c",
+        "decodedPixelSHA256": "81a419b652898bad1df271a4ee4befe65cc64ca0c0122bf08f9bfcdd48746ae5",
+        "decodedPixelsIdentical": true,
+        "bytes": 166208
+      },
+      {
+        "phase": "after",
+        "scene": "range",
+        "url": "/physics-comparison/after/range.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "9914ad15a8f58a4f7dcda015fc5dd9c05b8cc89f8d91ee95d77ae0d346045ed0",
+        "deliverySHA256": "de47285e90622ccffba3564892feb3752c7641e73f8a2d72d29f9f8c61a18a24",
+        "decodedPixelSHA256": "d8585d8c4ea11256a7b6a28383d06ddc70e8b642417ac9d6d71c9f47e378343a",
+        "decodedPixelsIdentical": true,
+        "bytes": 289056
+      },
+      {
+        "phase": "after",
+        "scene": "complex-bay",
+        "url": "/physics-comparison/after/complex-bay.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "443a593048c8a0bb0e12cea1ce03e9e2a04353550814719732262624aeeceb68",
+        "deliverySHA256": "faa37f0ce7717fdd0aedc70e1e4ef7550e87bf82957afe933cfc9229e2bc1089",
+        "decodedPixelSHA256": "f78f5169927d71666383ab5f689329eaf6257eb997b126c7446be9f64012c120",
+        "decodedPixelsIdentical": true,
+        "bytes": 192460
+      },
+      {
+        "phase": "after",
+        "scene": "rifleA-hip",
+        "url": "/physics-comparison/after/rifleA-hip.webp",
+        "dimensions": [
+          1100,
+          680
+        ],
+        "originalPngSHA256": "fc86543d7c810a567d08185dffb506ad404c007137c94f5063fa2a58257e92f3",
+        "deliverySHA256": "16fc30d0e4153c1d3c8611350f9113fea3e7e477d368babd1f38552f6020ffb4",
+        "decodedPixelSHA256": "366681d1fce52d646156821ad61dd824ecc94e946b802dd7076141afb504fde9",
+        "decodedPixelsIdentical": true,
+        "bytes": 271336
+      }
+    ],
+    "url": "/physics-materials.html"
+  },
+  "queries": {
+    "captureDate": "2026-11-15T05:52:19.201Z",
+    "baseline": "0029c162de2756aa11092748514efe726e1ee217",
+    "runtime": {
+      "node": "v24.22.1",
+      "platform": "linux",
+      "arch": "x64",
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "logicalCpus": 3
+    },
+    "method": {
+      "maps": "Original authored geometry loaded from frozen worktree, exact geometry comparison, no synthetic scaling",
+      "queryMix": "Original route/defender human samples plus seeded map-wide rays; separate authored face/inside/near-parallel/floor edge cases",
+      "parity": "assert.deepStrictEqual, preserves signed zero, exact distance/points/normals/material/thickness/segments/order, all four weapons",
+      "performance": "Same query objects and original obstacle arrays; nearest retains original linear scan, occlusion exits after first exact hit, ballistics uses ordered BVH candidates; warmup, alternating order, fifteen calibrated repeated-batch samples targeting 20 ms of baseline work (bounded to 256 passes); no wall-time CI gate",
+      "currentVision": "materials-v3 visibility checked against original nearest tests over current sight-blocking obstacles; separate module instances isolate oracle/v3 feedback from legacy timings; separately timed on actual current arrays with no legacy speedup ratio",
+      "scope": "CPU query kernels only; does not claim GPU or end-to-end frame speedup"
+    },
+    "parity": {
+      "queries": 3880,
+      "intervals": 180989,
+      "weaponTraces": 15520,
+      "nearestHits": 3880,
+      "currentVisionQueries": 3880,
+      "mismatches": 0
+    },
+    "maps": [
+      {
+        "map": "range",
+        "obstacles": 6,
+        "geometrySha256": "194448fb34e4ad527c4acbf5a020961b9389212ba192643a1b1c0a025c0595e5",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 6,
+          "p90": 6,
+          "max": 6,
+          "mean": 5.15625,
+          "nodeTestsMean": 3,
+          "linearClipCalls": 960,
+          "indexedClipCalls": 825,
+          "reduction": 0.140625
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 71,
+            "baseline": {
+              "min": 0.13332323943662802,
+              "median": 0.14156091549294378,
+              "p90": 0.3155453345070454,
+              "max": 0.4787866197183232,
+              "samples": [
+                0.4787866197183232,
+                0.3155453345070454,
+                0.14164815140844667,
+                0.13864630281690052,
+                0.14532095070422546,
+                0.15459806338029725,
+                0.1485784330985836,
+                0.14115264084506646,
+                0.14652957746477968,
+                0.13332323943662802,
+                0.1372559859154996,
+                0.14156091549294378,
+                0.13486329225353413,
+                0.13412544014083955,
+                0.13751073943660364
+              ]
+            },
+            "optimized": {
+              "min": 0.13114383802817556,
+              "median": 0.13846998239436012,
+              "p90": 0.3312837147887303,
+              "max": 0.6672691021126803,
+              "samples": [
+                0.6672691021126803,
+                0.3312837147887303,
+                0.13845765845068925,
+                0.15591249999999945,
+                0.14956311619719095,
+                0.14739621478874698,
+                0.13846998239436012,
+                0.13114383802817556,
+                0.1469500880281691,
+                0.1348518485915512,
+                0.13266100352111576,
+                0.132561443661962,
+                0.13983556338028053,
+                0.13204744718309547,
+                0.1350035211267498
+              ]
+            },
+            "medianSpeedup": 1.0223220444253451
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.08388090820312111,
+              "median": 0.08790866699218691,
+              "p90": 0.09793811035155864,
+              "max": 0.19742836914062312,
+              "samples": [
+                0.19742836914062312,
+                0.09793811035155864,
+                0.08670668945312543,
+                0.0938484863281297,
+                0.08428850097655927,
+                0.08790866699218691,
+                0.08616557617187603,
+                0.08617268066405948,
+                0.09129731445312594,
+                0.08976987304687434,
+                0.08814609375000226,
+                0.08658808593750011,
+                0.08555112304687862,
+                0.088103808593748,
+                0.08388090820312111
+              ]
+            },
+            "optimized": {
+              "min": 0.08877888183593807,
+              "median": 0.09401184082031278,
+              "p90": 0.10602299804687298,
+              "max": 0.16549353027343616,
+              "samples": [
+                0.16549353027343616,
+                0.10602299804687298,
+                0.09032905273437808,
+                0.0918850830078144,
+                0.09401184082031278,
+                0.09580209960937114,
+                0.09923278808594005,
+                0.09600798339843841,
+                0.0932741455078101,
+                0.08877888183593807,
+                0.09429033203124937,
+                0.09498618164062167,
+                0.0913344726562515,
+                0.0891329345703129,
+                0.09290639648437682
+              ]
+            },
+            "medianSpeedup": 0.9350807964733824
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 38,
+            "baseline": {
+              "min": 1.6921115131578808,
+              "median": 1.9597856907894673,
+              "p90": 3.0663825657894885,
+              "max": 3.18789046052632,
+              "samples": [
+                2.5315296052631413,
+                3.0663825657894885,
+                2.221729605263153,
+                1.9597856907894673,
+                2.0012327302631814,
+                3.18789046052632,
+                2.8834389802631524,
+                1.7336342105263283,
+                1.7388921052631714,
+                1.8434766447368276,
+                1.7795565789473686,
+                2.274807565789491,
+                1.816337006578924,
+                1.6921115131578808,
+                1.7541121710526246
+              ]
+            },
+            "optimized": {
+              "min": 0.6577478618421209,
+              "median": 0.7262190789473784,
+              "p90": 0.795391776315799,
+              "max": 0.9372097039473796,
+              "samples": [
+                0.9372097039473796,
+                0.758281907894723,
+                0.795391776315799,
+                0.7428574013157697,
+                0.7262190789473784,
+                0.7129276315789698,
+                0.7515365131578957,
+                0.6577478618421209,
+                0.7157245065789578,
+                0.7543417763158132,
+                0.7052697368420904,
+                0.6874717105263229,
+                0.74592434210526,
+                0.6860863486842187,
+                0.7185067434210692
+              ]
+            },
+            "medianSpeedup": 2.6986149876840027
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "optimized": {
+              "min": 0.24632592773437548,
+              "median": 0.27109182128906006,
+              "p90": 0.32073239746093773,
+              "max": 0.3663723876953129,
+              "samples": [
+                0.3663723876953129,
+                0.25058962402343954,
+                0.2528332275390621,
+                0.24632592773437548,
+                0.2536467041015622,
+                0.2549843994140655,
+                0.248334790039062,
+                0.32073239746093773,
+                0.2604312988281232,
+                0.28122199707031337,
+                0.29257790527343897,
+                0.2894352539062506,
+                0.28211909179687855,
+                0.29268474121094123,
+                0.27109182128906006
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "tactical",
+        "obstacles": 84,
+        "geometrySha256": "752721fc3e0fd3e96109e78ba938ffe69c064038731cd211c5a8eaf572477c9e",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 0,
+          "median": 14,
+          "p90": 20,
+          "max": 26,
+          "mean": 13.41875,
+          "nodeTestsMean": 25.7,
+          "linearClipCalls": 13440,
+          "indexedClipCalls": 2147,
+          "reduction": 0.8402529761904762
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 99,
+            "baseline": {
+              "min": 0.9784155934343371,
+              "median": 1.0668273358585867,
+              "p90": 1.3002542297979685,
+              "max": 1.3772659090908852,
+              "samples": [
+                1.0771158459596022,
+                1.121760416666667,
+                1.1766362373737311,
+                1.0383822601010129,
+                1.0651913510100983,
+                1.059936174242426,
+                1.0668273358585867,
+                1.3002542297979685,
+                1.0743422348484888,
+                1.3772659090908852,
+                1.197526388888878,
+                0.9908316919191953,
+                1.0264026515151479,
+                1.001265656565657,
+                0.9784155934343371
+              ]
+            },
+            "optimized": {
+              "min": 0.9904902777777818,
+              "median": 1.132970075757574,
+              "p90": 1.213559027777775,
+              "max": 1.3361893308080763,
+              "samples": [
+                0.9904902777777818,
+                1.0292226641414033,
+                1.1884304924242366,
+                1.152765845959604,
+                1.1094876262626285,
+                1.213559027777775,
+                1.0611377525252566,
+                1.1777686868686779,
+                1.1106599116161682,
+                1.0942498737373922,
+                1.3361893308080763,
+                1.1596617424242304,
+                1.132970075757574,
+                1.1050543560606119,
+                1.1770441287878977
+              ]
+            },
+            "medianSpeedup": 0.941620046888917
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 121,
+            "baseline": {
+              "min": 1.001996126033069,
+              "median": 1.0665612086776997,
+              "p90": 1.1184788739669334,
+              "max": 1.135919524793394,
+              "samples": [
+                1.0747121900826377,
+                1.001996126033069,
+                1.1019529442148863,
+                1.0184517561983344,
+                1.0650579545454526,
+                1.1066913223140586,
+                1.003549070247941,
+                1.135919524793394,
+                1.0665612086776997,
+                1.1184788739669334,
+                1.0431003615702434,
+                1.068139979338858,
+                1.0783911673553723,
+                1.0274304235537337,
+                1.0105588842975286
+              ]
+            },
+            "optimized": {
+              "min": 0.46218135330578264,
+              "median": 0.4946073863636252,
+              "p90": 0.5183170454545526,
+              "max": 0.5461594008264373,
+              "samples": [
+                0.5112063016529069,
+                0.46218135330578264,
+                0.4893346074380054,
+                0.4650150309917428,
+                0.5461594008264373,
+                0.49745666322313503,
+                0.48171126033057704,
+                0.4935852272727189,
+                0.4907887396694269,
+                0.5183170454545526,
+                0.472746022727257,
+                0.4980345041322292,
+                0.4946073863636252,
+                0.5068036673553857,
+                0.5151476239669415
+              ]
+            },
+            "medianSpeedup": 2.156379459916892
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 8,
+            "baseline": {
+              "min": 16.42985859375017,
+              "median": 17.695528906250146,
+              "p90": 18.678076562499868,
+              "max": 18.95903046875027,
+              "samples": [
+                16.42985859375017,
+                18.630850000000265,
+                18.54301640624989,
+                17.800989843749804,
+                17.10129687499986,
+                17.635360937500266,
+                18.616578906250325,
+                17.695528906250146,
+                18.188782031250028,
+                17.037360156249903,
+                17.521458593749983,
+                17.210264062499903,
+                16.81589140624986,
+                18.95903046875027,
+                18.678076562499868
+              ]
+            },
+            "optimized": {
+              "min": 5.105899218749954,
+              "median": 5.406515625000097,
+              "p90": 5.971273437500102,
+              "max": 6.527525781250176,
+              "samples": [
+                5.19154218749982,
+                5.430278124999788,
+                6.527525781250176,
+                5.2198570312498305,
+                5.369969531249907,
+                5.971273437500102,
+                5.769905468750025,
+                5.105899218749954,
+                5.404340624999904,
+                5.406515625000097,
+                5.418282812500053,
+                5.854170312500173,
+                5.586798437499851,
+                5.192707812500075,
+                5.376111718749854
+              ]
+            },
+            "medianSpeedup": 3.2730006040165343
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 64,
+            "optimized": {
+              "min": 1.7803620117187169,
+              "median": 1.917700878906281,
+              "p90": 1.9684097656250008,
+              "max": 2.028194531250005,
+              "samples": [
+                1.9558932617187441,
+                1.9152648437499753,
+                1.8957338867187534,
+                1.9284923828124967,
+                1.9345208007812698,
+                2.028194531250005,
+                1.8728337890625113,
+                1.8923254882812657,
+                1.9213362304687287,
+                1.9684097656250008,
+                1.9584916992187564,
+                1.8444148437499752,
+                1.8996674804687697,
+                1.7803620117187169,
+                1.917700878906281
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "long",
+        "obstacles": 18,
+        "geometrySha256": "fb2c5b544ba4c8adb7eefafccca44fe125742661814aeaf96d82853395ca7cba",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 0,
+          "median": 12,
+          "p90": 13,
+          "max": 16,
+          "mean": 10.964,
+          "nodeTestsMean": 10.32,
+          "linearClipCalls": 4500,
+          "indexedClipCalls": 2741,
+          "reduction": 0.39088888888888884
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 71,
+            "baseline": {
+              "min": 0.21931042253522143,
+              "median": 0.2547301408450667,
+              "p90": 0.27938135211267034,
+              "max": 0.2943956056337875,
+              "samples": [
+                0.27938135211267034,
+                0.2727907042253591,
+                0.25593870422534576,
+                0.2589324507042247,
+                0.2943956056337875,
+                0.23942754929577834,
+                0.25305954929579355,
+                0.24317847887323296,
+                0.21931042253522143,
+                0.23003729577464238,
+                0.22458529577465602,
+                0.2547301408450667,
+                0.24228754929577584,
+                0.26695611267606295,
+                0.2652470985915603
+              ]
+            },
+            "optimized": {
+              "min": 0.22166997183099535,
+              "median": 0.24757594366196253,
+              "p90": 0.2768756056338018,
+              "max": 0.3473658591549242,
+              "samples": [
+                0.23585712676055703,
+                0.22166997183099535,
+                0.3473658591549242,
+                0.24361346478874854,
+                0.24264129577465904,
+                0.23923904225352677,
+                0.249811323943658,
+                0.2768756056338018,
+                0.25727870422536364,
+                0.24757594366196253,
+                0.2755214647887429,
+                0.24691408450703867,
+                0.2357239999999903,
+                0.26585138028169986,
+                0.2586232676056452
+              ]
+            },
+            "medianSpeedup": 1.0288969803660424
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.238256312499999,
+              "median": 0.24835187499999734,
+              "p90": 0.27192253124999866,
+              "max": 0.28658298437499496,
+              "samples": [
+                0.24136840624999678,
+                0.27192253124999866,
+                0.25508996874999923,
+                0.23941334375000167,
+                0.28658298437499496,
+                0.25673693750000126,
+                0.2526853125000059,
+                0.24835187499999734,
+                0.24248553124999717,
+                0.25884818749999994,
+                0.24439601562500002,
+                0.2435228437500001,
+                0.24432684375000238,
+                0.26019346874999627,
+                0.238256312499999
+              ]
+            },
+            "optimized": {
+              "min": 0.14611417187499853,
+              "median": 0.15922718750000087,
+              "p90": 0.18376174999999506,
+              "max": 0.19384637499999968,
+              "samples": [
+                0.15635918749999433,
+                0.14611417187499853,
+                0.16172429687500056,
+                0.15688356249999913,
+                0.16272892187499366,
+                0.18376174999999506,
+                0.15960853125000085,
+                0.15603009375000454,
+                0.19384637499999968,
+                0.156387500000001,
+                0.15922718750000087,
+                0.15008442187500037,
+                0.17284090625000204,
+                0.14931657812500276,
+                0.16121606250000298
+              ]
+            },
+            "medianSpeedup": 1.5597328502709122
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 16,
+            "baseline": {
+              "min": 4.811640000000011,
+              "median": 4.987269749999996,
+              "p90": 5.316694750000124,
+              "max": 5.334603750000042,
+              "samples": [
+                4.811640000000011,
+                5.169021250000014,
+                5.316694750000124,
+                5.229856499999869,
+                4.949331250000114,
+                4.9614864999998645,
+                4.906928500000049,
+                5.105341999999837,
+                5.334603750000042,
+                4.884082249999892,
+                4.986921750000192,
+                5.253178250000019,
+                4.981974499999978,
+                4.987269749999996,
+                5.016455749999977
+              ]
+            },
+            "optimized": {
+              "min": 1.733720250000033,
+              "median": 1.9397229999999581,
+              "p90": 2.116358999999875,
+              "max": 2.161971499999936,
+              "samples": [
+                1.9123297500000263,
+                1.9200862500001676,
+                1.9583380000001396,
+                1.8560440000001108,
+                1.9193577500000174,
+                2.0112962499999867,
+                1.733720250000033,
+                2.116358999999875,
+                2.161971499999936,
+                2.069735000000037,
+                1.8514297500000794,
+                2.075986999999941,
+                2.0177807500001563,
+                1.9094629999999597,
+                1.9397229999999581
+              ]
+            },
+            "medianSpeedup": 2.5711247172921614
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 75,
+            "optimized": {
+              "min": 0.47788581333331726,
+              "median": 0.5379224000000007,
+              "p90": 0.5689993066666648,
+              "max": 0.5707276799999819,
+              "samples": [
+                0.5604453333333368,
+                0.5689993066666648,
+                0.5498274666666596,
+                0.5403926400000152,
+                0.5144161600000128,
+                0.47788581333331726,
+                0.5036605333333136,
+                0.5149337066666825,
+                0.5563010666666863,
+                0.5188643200000418,
+                0.5707276799999819,
+                0.5379224000000007,
+                0.5554769066666388,
+                0.5201494399999986,
+                0.5371019733333378
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "garage",
+        "obstacles": 18,
+        "geometrySha256": "f8b29a29b349ce89aec0165bb884f43f4cad618f292fad16919f1d0c91b167ec",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 4,
+          "median": 11,
+          "p90": 16,
+          "max": 18,
+          "mean": 11.368,
+          "nodeTestsMean": 9.88,
+          "linearClipCalls": 4500,
+          "indexedClipCalls": 2842,
+          "reduction": 0.36844444444444446
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.2404654999999991,
+              "median": 0.2549885624999888,
+              "p90": 0.2750202343749919,
+              "max": 0.28012199999999154,
+              "samples": [
+                0.2750202343749919,
+                0.2404654999999991,
+                0.24892254687500778,
+                0.28012199999999154,
+                0.26350037499999246,
+                0.2532630312500004,
+                0.24365068749999352,
+                0.2549885624999888,
+                0.26150023437499215,
+                0.25931996875000607,
+                0.25445668749999584,
+                0.25722295312499455,
+                0.24867421874999707,
+                0.2507704375000088,
+                0.26434021874999303
+              ]
+            },
+            "optimized": {
+              "min": 0.23136737500000493,
+              "median": 0.2604859218750022,
+              "p90": 0.29618078125000125,
+              "max": 0.31899960937499827,
+              "samples": [
+                0.2608461406250058,
+                0.23363446874999738,
+                0.25883190625000907,
+                0.25856198437500666,
+                0.25066389062499184,
+                0.26532934374999684,
+                0.31899960937499827,
+                0.29618078125000125,
+                0.2619580937499961,
+                0.23136737500000493,
+                0.23876017187500054,
+                0.2652315312500093,
+                0.2536642656250052,
+                0.2604859218750022,
+                0.26682529687499823
+              ]
+            },
+            "medianSpeedup": 0.9788957524635387
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.24055571875000226,
+              "median": 0.25875131249999583,
+              "p90": 0.2710473281250074,
+              "max": 0.2760168749999963,
+              "samples": [
+                0.2760168749999963,
+                0.24769918750000386,
+                0.25966923437501066,
+                0.25875131249999583,
+                0.2710473281250074,
+                0.2604707343749908,
+                0.25266764062500613,
+                0.2583037812499924,
+                0.2627852499999932,
+                0.25936973437499944,
+                0.2578136718749988,
+                0.25015078124999945,
+                0.26279918750000775,
+                0.25035807812500366,
+                0.24055571875000226
+              ]
+            },
+            "optimized": {
+              "min": 0.15903831250000167,
+              "median": 0.1710617343750016,
+              "p90": 0.1832231562500084,
+              "max": 0.1924283281250041,
+              "samples": [
+                0.17083715625000195,
+                0.15903831250000167,
+                0.1832231562500084,
+                0.17572720312500678,
+                0.1924283281250041,
+                0.17054282812499366,
+                0.18190965624999933,
+                0.1590572343749983,
+                0.17429854687499358,
+                0.1768864375000021,
+                0.1697277031250053,
+                0.16393085937500018,
+                0.17332474999999192,
+                0.1710617343750016,
+                0.1674271562499996
+              ]
+            },
+            "medianSpeedup": 1.512619484687096
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 15,
+            "baseline": {
+              "min": 4.766301866666618,
+              "median": 5.134330933333453,
+              "p90": 5.490961866666718,
+              "max": 5.872464533333308,
+              "samples": [
+                5.301570933333278,
+                5.064354133333351,
+                5.048290133333164,
+                5.490961866666718,
+                5.307246399999955,
+                4.9150234666665105,
+                4.766301866666618,
+                5.872464533333308,
+                5.0496626666667,
+                5.085252000000037,
+                5.219303733333315,
+                5.430813066666693,
+                5.134330933333453,
+                5.0713255999997875,
+                5.22222559999985
+              ]
+            },
+            "optimized": {
+              "min": 1.7302960000000893,
+              "median": 2.0014090666666258,
+              "p90": 2.484541600000133,
+              "max": 2.8947861333334,
+              "samples": [
+                2.077691466666632,
+                2.8947861333334,
+                1.8864128000001075,
+                2.0917418666666587,
+                1.843500533333281,
+                1.8830823999999362,
+                2.484541600000133,
+                2.0168431999998573,
+                1.8855421333333653,
+                1.8375901333335303,
+                2.0014090666666258,
+                2.3318514666668007,
+                1.7302960000000893,
+                1.8855074666666043,
+                2.1073520000000525
+              ]
+            },
+            "medianSpeedup": 2.565358086382986
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 118,
+            "optimized": {
+              "min": 0.48833532203389046,
+              "median": 0.5271317966101579,
+              "p90": 0.5825019322034014,
+              "max": 0.7287592203389931,
+              "samples": [
+                0.5633325423728758,
+                0.48833532203389046,
+                0.7287592203389931,
+                0.5401856271186323,
+                0.5253328474576292,
+                0.5163311864406889,
+                0.5304265762711958,
+                0.5405862033898363,
+                0.5351896610169452,
+                0.5825019322034014,
+                0.5131807118644139,
+                0.4979358305084796,
+                0.5035849491525399,
+                0.4976937627118678,
+                0.5271317966101579
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "site",
+        "obstacles": 18,
+        "geometrySha256": "f13ed35d36451a7321f4ae3e618dee316c862895191f9dfc45049f1b7efbb8f6",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 4,
+          "median": 11,
+          "p90": 16,
+          "max": 18,
+          "mean": 11.048,
+          "nodeTestsMean": 9.912,
+          "linearClipCalls": 4500,
+          "indexedClipCalls": 2762,
+          "reduction": 0.38622222222222224
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.21072535937500447,
+              "median": 0.2205424375000007,
+              "p90": 0.23116320312499283,
+              "max": 0.2858735156249992,
+              "samples": [
+                0.2858735156249992,
+                0.23116320312499283,
+                0.21917475000000763,
+                0.22021412499999826,
+                0.2220410781249882,
+                0.2207178593750001,
+                0.22653392187498866,
+                0.21072535937500447,
+                0.2150418281249955,
+                0.21898821874999896,
+                0.22167207812499612,
+                0.22534464062501058,
+                0.21486015624999766,
+                0.2205424375000007,
+                0.21855100000000505
+              ]
+            },
+            "optimized": {
+              "min": 0.20882109375000368,
+              "median": 0.21813803125000675,
+              "p90": 0.24293914062499766,
+              "max": 0.3752499687499977,
+              "samples": [
+                0.3752499687499977,
+                0.24293914062499766,
+                0.21855068749999873,
+                0.21206940625000925,
+                0.21905143749999922,
+                0.22369417187499607,
+                0.2196382500000027,
+                0.21181590624999558,
+                0.21813803125000675,
+                0.22065682812500143,
+                0.2106508906250042,
+                0.20882109375000368,
+                0.2138409687499916,
+                0.21772460937499716,
+                0.2126477812500127
+              ]
+            },
+            "medianSpeedup": 1.0110224074005614
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 256,
+            "baseline": {
+              "min": 0.21763821874999678,
+              "median": 0.2270467812499959,
+              "p90": 0.2330541562499917,
+              "max": 0.23700195312500227,
+              "samples": [
+                0.22007454687499717,
+                0.2270467812499959,
+                0.22970882812499838,
+                0.23700195312500227,
+                0.2259580624999984,
+                0.21763821874999678,
+                0.2223642187500019,
+                0.22768595312500395,
+                0.2237807187500067,
+                0.22091737499999908,
+                0.2282763750000072,
+                0.2330541562499917,
+                0.23005998437500352,
+                0.2237353437500076,
+                0.23091439062500285
+              ]
+            },
+            "optimized": {
+              "min": 0.14283057812500033,
+              "median": 0.14958601562500462,
+              "p90": 0.17125054687500096,
+              "max": 0.20824570312500157,
+              "samples": [
+                0.14507065625001303,
+                0.14428009374999817,
+                0.1550218281250011,
+                0.20824570312500157,
+                0.16172704687500072,
+                0.14958601562500462,
+                0.15430873437499315,
+                0.14837014062500486,
+                0.14435459375000903,
+                0.14872957812499976,
+                0.14643426562500395,
+                0.17125054687500096,
+                0.15943267187499544,
+                0.14283057812500033,
+                0.16052742187500257
+              ]
+            },
+            "medianSpeedup": 1.5178342728185015
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 17,
+            "baseline": {
+              "min": 4.468019764705841,
+              "median": 4.642184470588236,
+              "p90": 4.703683764705869,
+              "max": 4.745443058823559,
+              "samples": [
+                4.629881647058723,
+                4.545908470588235,
+                4.703683764705869,
+                4.65846541176485,
+                4.468019764705841,
+                4.537960235294175,
+                4.642184470588236,
+                4.745443058823559,
+                4.617278823529513,
+                4.533381647058858,
+                4.695118117647166,
+                4.62540635294114,
+                4.652084235294109,
+                4.692891294117597,
+                4.6962750588234705
+              ]
+            },
+            "optimized": {
+              "min": 1.619824235294158,
+              "median": 1.7384185882352434,
+              "p90": 1.8254665882351915,
+              "max": 1.8363418823528799,
+              "samples": [
+                1.725988000000036,
+                1.7018955294117726,
+                1.8254665882351915,
+                1.8363418823528799,
+                1.8025192941176476,
+                1.6504185882352913,
+                1.758476941176495,
+                1.7597117647057852,
+                1.7163432941175845,
+                1.6915317647058947,
+                1.7384185882352434,
+                1.756099058823619,
+                1.702329176470598,
+                1.619824235294158,
+                1.7491734117647866
+              ]
+            },
+            "medianSpeedup": 2.670349075880943
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 160,
+            "optimized": {
+              "min": 0.4833302499999945,
+              "median": 0.5003345000000081,
+              "p90": 0.5098682999999937,
+              "max": 0.5231249250000019,
+              "samples": [
+                0.4913427749999983,
+                0.5028309999999919,
+                0.48828242500001123,
+                0.5028960999999982,
+                0.5003345000000081,
+                0.5081675000000132,
+                0.49050075000000104,
+                0.489408874999981,
+                0.5098682999999937,
+                0.4942175749999933,
+                0.4833302499999945,
+                0.48522809999999483,
+                0.5040169999999989,
+                0.5028517749999992,
+                0.5231249250000019
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "mid",
+        "obstacles": 20,
+        "geometrySha256": "433fdd9e9d1abbff60725869a698b2086924348e87882abfda52a37faf17a58b",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 11,
+          "p90": 15,
+          "max": 18,
+          "mean": 10.312,
+          "nodeTestsMean": 12.952,
+          "linearClipCalls": 5000,
+          "indexedClipCalls": 2578,
+          "reduction": 0.48440000000000005
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 114,
+            "baseline": {
+              "min": 0.28943715789472135,
+              "median": 0.3050715087719207,
+              "p90": 0.334087263157894,
+              "max": 0.3369476842105079,
+              "samples": [
+                0.3369476842105079,
+                0.3116241403508946,
+                0.30295112280704445,
+                0.2939523508772062,
+                0.28943715789472135,
+                0.2962003157894638,
+                0.3050715087719207,
+                0.30554199999999565,
+                0.334087263157894,
+                0.3043757192982619,
+                0.30422354385965467,
+                0.3122945964912281,
+                0.3113120701754381,
+                0.3107955438596643,
+                0.2932189824561264
+              ]
+            },
+            "optimized": {
+              "min": 0.288482736842126,
+              "median": 0.3030902807017571,
+              "p90": 0.33119136842102753,
+              "max": 0.35450491228070935,
+              "samples": [
+                0.32287364912282784,
+                0.32022228070175185,
+                0.30249287719296963,
+                0.2907306666666843,
+                0.3030150526315801,
+                0.3110425263157754,
+                0.288482736842126,
+                0.31075898245616007,
+                0.3030902807017571,
+                0.2903430877192972,
+                0.33119136842102753,
+                0.301789719298253,
+                0.3050237192982374,
+                0.30104224561402687,
+                0.35450491228070935
+              ]
+            },
+            "medianSpeedup": 1.0065367588349463
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 233,
+            "baseline": {
+              "min": 0.2823887553648154,
+              "median": 0.29581575965664453,
+              "p90": 0.30688111587981404,
+              "max": 0.31639254935623007,
+              "samples": [
+                0.3025804120171677,
+                0.3018208068669406,
+                0.29713706437768383,
+                0.28712633476393246,
+                0.2823887553648154,
+                0.28886544206006054,
+                0.2832331158798285,
+                0.3023056652360507,
+                0.2914200000000067,
+                0.29835328755365276,
+                0.29249749356224264,
+                0.29581575965664453,
+                0.31639254935623007,
+                0.30688111587981404,
+                0.29323850643775845
+              ]
+            },
+            "optimized": {
+              "min": 0.15343745922747337,
+              "median": 0.1651350042918625,
+              "p90": 0.17362309012872687,
+              "max": 0.2050099055794087,
+              "samples": [
+                0.2050099055794087,
+                0.16958664377682012,
+                0.16232442918455037,
+                0.16628489270384744,
+                0.16024183690988997,
+                0.15456757081544267,
+                0.17174508154508158,
+                0.17296614592275114,
+                0.17362309012872687,
+                0.15381519313305345,
+                0.1651350042918625,
+                0.15792453218883007,
+                0.159843793991429,
+                0.15343745922747337,
+                0.16708712446353577
+              ]
+            },
+            "medianSpeedup": 1.791357083406826
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 14,
+            "baseline": {
+              "min": 5.46025028571447,
+              "median": 6.356986571428673,
+              "p90": 6.997627428571702,
+              "max": 7.5782437142853665,
+              "samples": [
+                6.997627428571702,
+                6.04863571428567,
+                6.521158285714462,
+                5.46025028571447,
+                7.5782437142853665,
+                6.542121428571201,
+                6.655863428571528,
+                6.377059428571166,
+                6.41635571428612,
+                6.235896571428644,
+                6.123853999999743,
+                6.356986571428673,
+                6.047428000000114,
+                5.9915871428571075,
+                5.890856285714108
+              ]
+            },
+            "optimized": {
+              "min": 2.23564971428589,
+              "median": 2.567035142857224,
+              "p90": 2.68233942857114,
+              "max": 2.835059714285827,
+              "samples": [
+                2.6177197142855477,
+                2.6769225714285443,
+                2.2939828571428995,
+                2.23564971428589,
+                2.6656085714286224,
+                2.303473999999759,
+                2.657430285714197,
+                2.602219428571386,
+                2.4112014285710757,
+                2.68233942857114,
+                2.4259922857142686,
+                2.567035142857224,
+                2.3154691428571823,
+                2.835059714285827,
+                2.517249142857119
+              ]
+            },
+            "medianSpeedup": 2.4763924986056347
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 88,
+            "optimized": {
+              "min": 0.5255653636364018,
+              "median": 0.5993354999999693,
+              "p90": 0.6382955454544736,
+              "max": 0.6933000454545519,
+              "samples": [
+                0.6933000454545519,
+                0.5810671818181535,
+                0.5550623181817917,
+                0.6121401818181766,
+                0.6006442727273018,
+                0.6202532727272475,
+                0.6164739545454061,
+                0.5993354999999693,
+                0.5587209545454408,
+                0.5255653636364018,
+                0.6382955454544736,
+                0.5992667727272916,
+                0.5986781818182035,
+                0.5911937272727631,
+                0.6078241818182009
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "tower",
+        "obstacles": 29,
+        "geometrySha256": "8d6fd8612aea7bb8215e067185bf8713c3a54ad21b7e01b3cf8a2ce98b368c21",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 15,
+          "p90": 22,
+          "max": 26,
+          "mean": 14.516,
+          "nodeTestsMean": 11.68,
+          "linearClipCalls": 7250,
+          "indexedClipCalls": 3629,
+          "reduction": 0.49944827586206897
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 87,
+            "baseline": {
+              "min": 0.41983149425279154,
+              "median": 0.46362349425289306,
+              "p90": 0.5295701609195502,
+              "max": 0.6585322758621114,
+              "samples": [
+                0.6585322758621114,
+                0.4916526436781974,
+                0.5295701609195502,
+                0.4260512643677534,
+                0.44596528735631696,
+                0.43139259770111815,
+                0.46362349425289306,
+                0.48800399999999666,
+                0.48720041379311135,
+                0.4849001839080385,
+                0.46637029885058495,
+                0.4299936551723968,
+                0.4549870344827918,
+                0.41983149425279154,
+                0.43719517241379957
+              ]
+            },
+            "optimized": {
+              "min": 0.4231655632184006,
+              "median": 0.48484924137928515,
+              "p90": 0.5068455172413973,
+              "max": 0.5521309425287122,
+              "samples": [
+                0.48897829885056293,
+                0.4892605057470607,
+                0.4871912643678209,
+                0.47447931034490126,
+                0.5068455172413973,
+                0.5521309425287122,
+                0.4231655632184006,
+                0.4730034942528629,
+                0.5050552643677648,
+                0.4734460229885225,
+                0.4826247816092145,
+                0.48484924137928515,
+                0.44712114942527037,
+                0.45614597701155457,
+                0.48916965517236843
+              ]
+            },
+            "medianSpeedup": 0.9562219648606447
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 89,
+            "baseline": {
+              "min": 0.4122497078651475,
+              "median": 0.4380173483146341,
+              "p90": 0.5196394157303096,
+              "max": 0.5553643146067566,
+              "samples": [
+                0.5196394157303096,
+                0.4190539325842682,
+                0.4258095280898753,
+                0.45481568539326783,
+                0.4249251235954678,
+                0.45380615730334356,
+                0.44851784269661277,
+                0.48707923595499236,
+                0.42214166292128696,
+                0.4678921797752624,
+                0.4373205393258308,
+                0.4122497078651475,
+                0.42256835955057787,
+                0.5553643146067566,
+                0.4380173483146341
+              ]
+            },
+            "optimized": {
+              "min": 0.19802970786520419,
+              "median": 0.2199525393259004,
+              "p90": 0.23597671910118131,
+              "max": 0.2406240449437585,
+              "samples": [
+                0.20912161797752377,
+                0.22139240449431463,
+                0.2406240449437585,
+                0.2172199550561059,
+                0.2258111011235925,
+                0.19802970786520419,
+                0.21649438202251312,
+                0.21541231460679647,
+                0.2262229662921752,
+                0.2199525393259004,
+                0.2278968988764237,
+                0.2098845842696126,
+                0.23597671910118131,
+                0.20334233707865096,
+                0.2301113707865451
+              ]
+            },
+            "medianSpeedup": 1.9914175560648124
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 13,
+            "baseline": {
+              "min": 6.882835692307988,
+              "median": 7.7181261538459625,
+              "p90": 9.114031999999918,
+              "max": 9.711443692307512,
+              "samples": [
+                6.882835692307988,
+                7.644957846154284,
+                9.114031999999918,
+                9.711443692307512,
+                7.8622781538461615,
+                7.769318769230897,
+                7.7181261538459625,
+                7.502461846153892,
+                7.6786123076923944,
+                7.808786769230769,
+                7.672877538461762,
+                7.593418153846309,
+                7.229272307692065,
+                7.880964307692641,
+                8.348518769231026
+              ]
+            },
+            "optimized": {
+              "min": 2.5200581538464086,
+              "median": 2.722758769230635,
+              "p90": 3.3386255384612014,
+              "max": 3.4071547692309156,
+              "samples": [
+                2.71302123076916,
+                2.547502153845786,
+                3.4071547692309156,
+                3.1448615384612753,
+                2.681374461538396,
+                3.2685215384615454,
+                3.3386255384612014,
+                2.722758769230635,
+                2.68652953846154,
+                2.7463504615381957,
+                2.715236615384548,
+                2.9341304615383987,
+                2.7043436923077726,
+                2.5200581538464086,
+                2.8150433846156093
+              ]
+            },
+            "medianSpeedup": 2.834671305099445
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 72,
+            "optimized": {
+              "min": 0.7570527222221952,
+              "median": 0.8058260555554726,
+              "p90": 0.9129949444445123,
+              "max": 0.9155476111111258,
+              "samples": [
+                0.9155476111111258,
+                0.9129949444445123,
+                0.778583444444444,
+                0.762541388888874,
+                0.8523399999999633,
+                0.7888192222222238,
+                0.8765815000000051,
+                0.8203859999999218,
+                0.7758316111111425,
+                0.7798269999999926,
+                0.7615215555555955,
+                0.81865733333335,
+                0.7570527222221952,
+                0.8260410555555305,
+                0.8058260555554726
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "multi",
+        "obstacles": 22,
+        "geometrySha256": "af449cb9b4c4ba535afbca9aefb2ae7d4c226b012456feedee0ddeacf9669ee0",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 12,
+          "p90": 17,
+          "max": 19,
+          "mean": 11.392,
+          "nodeTestsMean": 12.424,
+          "linearClipCalls": 5500,
+          "indexedClipCalls": 2848,
+          "reduction": 0.48218181818181816
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 171,
+            "baseline": {
+              "min": 0.3175487953216659,
+              "median": 0.3671760467836417,
+              "p90": 0.5956545730994293,
+              "max": 0.6393712982455795,
+              "samples": [
+                0.6393712982455795,
+                0.5956545730994293,
+                0.37330278362570796,
+                0.40308540350879574,
+                0.3882760935672269,
+                0.37697700584793736,
+                0.3671760467836417,
+                0.3765728888889041,
+                0.3394486315789505,
+                0.3468727485379899,
+                0.3175487953216659,
+                0.3256932865497326,
+                0.3336119064327659,
+                0.33011667836254616,
+                0.32060198830408304
+              ]
+            },
+            "optimized": {
+              "min": 0.3051285380117183,
+              "median": 0.3545231345029308,
+              "p90": 0.5770173801169359,
+              "max": 0.5848661988304059,
+              "samples": [
+                0.5848661988304059,
+                0.5770173801169359,
+                0.3933709005847602,
+                0.3912046315789353,
+                0.39495873684208227,
+                0.3777472748538058,
+                0.43281391812866277,
+                0.3545231345029308,
+                0.33348987134504887,
+                0.3338115087719086,
+                0.33295431578944934,
+                0.3211304795321459,
+                0.3259790643274989,
+                0.3051285380117183,
+                0.3233876257309978
+              ]
+            },
+            "medianSpeedup": 1.0356899481283535
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 226,
+            "baseline": {
+              "min": 0.30901856637170017,
+              "median": 0.3431408141592988,
+              "p90": 0.5778954159291987,
+              "max": 0.9768021592920385,
+              "samples": [
+                0.3431408141592988,
+                0.36491008849558393,
+                0.33710143362832323,
+                0.3293035044247904,
+                0.34027888495575503,
+                0.30901856637170017,
+                0.351845575221227,
+                0.3622104955752266,
+                0.3153775398230177,
+                0.5778954159291987,
+                0.9768021592920385,
+                0.42373815929202674,
+                0.32979113274336064,
+                0.3776592389380779,
+                0.3390912743362823
+              ]
+            },
+            "optimized": {
+              "min": 0.1629833451327219,
+              "median": 0.1740564070796528,
+              "p90": 0.20330683185840778,
+              "max": 0.2120681415929225,
+              "samples": [
+                0.17909467256637893,
+                0.1629833451327219,
+                0.18220759292037342,
+                0.1675807787610573,
+                0.1740564070796528,
+                0.17492476106192237,
+                0.16753079646018584,
+                0.16561610619471212,
+                0.17479483185840675,
+                0.17341297345133694,
+                0.2120681415929225,
+                0.20330683185840778,
+                0.16716635398230226,
+                0.17239304424780064,
+                0.17551431858405883
+              ]
+            },
+            "medianSpeedup": 1.9714345476651631
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 12,
+            "baseline": {
+              "min": 5.649900999999469,
+              "median": 5.922441666666904,
+              "p90": 6.359202333333087,
+              "max": 6.388469000000137,
+              "samples": [
+                5.922441666666904,
+                5.854230333333059,
+                6.060353000000153,
+                5.660326333333312,
+                5.8373723333334055,
+                5.865814333333523,
+                5.649900999999469,
+                6.359202333333087,
+                5.921106333333228,
+                6.388469000000137,
+                5.931571666666666,
+                5.995022666666651,
+                5.875097999999829,
+                5.968092666666659,
+                5.95033299999947
+              ]
+            },
+            "optimized": {
+              "min": 2.2541509999997893,
+              "median": 2.3830756666666275,
+              "p90": 2.563376000000062,
+              "max": 2.7375109999999645,
+              "samples": [
+                2.350497333333503,
+                2.320509333333272,
+                2.319187333333806,
+                2.3788593333332146,
+                2.4929449999999633,
+                2.255476333333111,
+                2.539944666666391,
+                2.51246733333331,
+                2.563376000000062,
+                2.7375109999999645,
+                2.3830756666666275,
+                2.4812743333332037,
+                2.334867333333629,
+                2.2541509999997893,
+                2.4045909999998307
+              ]
+            },
+            "medianSpeedup": 2.4852092401040005
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 129,
+            "optimized": {
+              "min": 0.5912357209302335,
+              "median": 0.6156219224806612,
+              "p90": 0.6511151627907051,
+              "max": 0.677959751938005,
+              "samples": [
+                0.6418850542635651,
+                0.6251911627907192,
+                0.6174690232558271,
+                0.592812341085275,
+                0.607240837209275,
+                0.677959751938005,
+                0.5912357209302335,
+                0.6135326511627731,
+                0.6051602480620486,
+                0.6132534573643373,
+                0.6156219224806612,
+                0.6200871627907316,
+                0.6511151627907051,
+                0.6054266666666475,
+                0.6253147596899351
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "complex",
+        "obstacles": 108,
+        "geometrySha256": "649d21a1c35bf3dfcab90a39cbfcd51b3dde0bb267f2e6a5a3e57ea153d25de0",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 6,
+          "median": 25,
+          "p90": 41,
+          "max": 53,
+          "mean": 26.225225225225227,
+          "nodeTestsMean": 32.347747747747746,
+          "linearClipCalls": 59940,
+          "indexedClipCalls": 14555,
+          "reduction": 0.7571738405071738
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 22,
+            "baseline": {
+              "min": 1.6525706797706934,
+              "median": 1.73753202293211,
+              "p90": 1.8157674856674864,
+              "max": 1.8304706797706718,
+              "samples": [
+                1.73753202293211,
+                1.7637936936937426,
+                1.8157674856674864,
+                1.7097800163798915,
+                1.661387141687121,
+                1.742173546273563,
+                1.7682326781326185,
+                1.8304706797706718,
+                1.7274646191646401,
+                1.7051909090908717,
+                1.7422990990991618,
+                1.7140614250614779,
+                1.7755613431614115,
+                1.7265181818182458,
+                1.6525706797706934
+              ]
+            },
+            "optimized": {
+              "min": 1.6528897624897898,
+              "median": 1.762353398853453,
+              "p90": 1.878012940212834,
+              "max": 1.8985216216215888,
+              "samples": [
+                1.783136855036894,
+                1.703508599508573,
+                1.8985216216215888,
+                1.6721254709254616,
+                1.6528897624897898,
+                1.7856631449631557,
+                1.8707055692056909,
+                1.6752759213759374,
+                1.878012940212834,
+                1.762353398853453,
+                1.73007624897638,
+                1.811536036036087,
+                1.7323088452087398,
+                1.7501871416872052,
+                1.7915999180999118
+              ]
+            },
+            "medianSpeedup": 0.9859157783350995
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 21,
+            "baseline": {
+              "min": 1.6958580866580464,
+              "median": 1.8399438867439406,
+              "p90": 2.1780065208065142,
+              "max": 3.097881338481331,
+              "samples": [
+                1.8405583011583158,
+                1.9253480051480736,
+                1.7357585585586,
+                1.8399438867439406,
+                1.7643903903903255,
+                1.7831544401544945,
+                1.7179054483053628,
+                2.1780065208065142,
+                1.6958580866580464,
+                3.097881338481331,
+                1.8939105105103946,
+                1.8444318318318795,
+                1.7453042471042715,
+                1.8930366366367468,
+                1.8376571428571566
+              ]
+            },
+            "optimized": {
+              "min": 0.5984519948520547,
+              "median": 0.6577591591592606,
+              "p90": 0.7059043329043406,
+              "max": 0.7568575718574972,
+              "samples": [
+                0.644211840411947,
+                0.631718833118936,
+                0.6197302445302113,
+                0.6632507936507545,
+                0.6577591591592606,
+                0.5984519948520547,
+                0.6497773487773524,
+                0.6869332475332783,
+                0.6353510081509048,
+                0.6364843414842933,
+                0.7038634920635216,
+                0.7568575718574972,
+                0.7059043329043406,
+                0.6699944229943596,
+                0.6786845988845617
+              ]
+            },
+            "medianSpeedup": 2.7972911682381336
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 3,
+            "baseline": {
+              "min": 22.834328528527816,
+              "median": 24.12889909909836,
+              "p90": 25.089039639639957,
+              "max": 25.98248648648589,
+              "samples": [
+                23.897380780781038,
+                24.195322522521842,
+                23.035278678678758,
+                22.834328528527816,
+                24.312097897898248,
+                24.12889909909836,
+                24.144904504504524,
+                25.089039639639957,
+                23.198279279279415,
+                23.492672072071556,
+                23.283018618618456,
+                24.90627327327359,
+                23.120042042041216,
+                24.883055855856686,
+                25.98248648648589
+              ]
+            },
+            "optimized": {
+              "min": 7.036318918918633,
+              "median": 7.593297897898362,
+              "p90": 8.133999399399512,
+              "max": 11.003728528529253,
+              "samples": [
+                7.098670870871026,
+                7.268745345345588,
+                7.318959159159489,
+                7.41548768768793,
+                7.652750150150454,
+                8.064045045044928,
+                7.593297897898362,
+                8.133999399399512,
+                7.402351351351985,
+                7.658609009009885,
+                7.64652432432437,
+                7.036318918918633,
+                7.7645873873873965,
+                7.375301501502014,
+                11.003728528529253
+              ]
+            },
+            "medianSpeedup": 3.177657379381447
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 15,
+            "optimized": {
+              "min": 2.0899225225225604,
+              "median": 2.234515195195308,
+              "p90": 2.92117969969979,
+              "max": 3.057654654654722,
+              "samples": [
+                2.291794954954904,
+                2.3175933933934836,
+                2.191604564564464,
+                2.1190881681683678,
+                2.099188108108132,
+                2.118686366366228,
+                2.103289129129164,
+                2.0899225225225604,
+                2.100069909909988,
+                2.234515195195308,
+                2.92117969969979,
+                3.057654654654722,
+                2.5247228828829265,
+                2.2953907507507574,
+                2.463676516516524
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "bunny",
+        "obstacles": 24,
+        "geometrySha256": "16cbfc3716df8e97ddc68d13b08d5a597ac65d0f4289db503537adcb055c41a9",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 6,
+          "p90": 12,
+          "max": 18,
+          "mean": 7.725,
+          "nodeTestsMean": 11.075,
+          "linearClipCalls": 3840,
+          "indexedClipCalls": 1236,
+          "reduction": 0.678125
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 79,
+            "baseline": {
+              "min": 0.5995278481012214,
+              "median": 0.7251718354429809,
+              "p90": 0.9141662183545042,
+              "max": 0.9793492879746541,
+              "samples": [
+                0.9141662183545042,
+                0.6076350474682852,
+                0.6608381329113089,
+                0.6762631329113993,
+                0.7730632120253084,
+                0.6717357594937576,
+                0.5995278481012214,
+                0.7526829905063832,
+                0.7255070411392635,
+                0.9793492879746541,
+                0.7282143987341915,
+                0.7251718354429809,
+                0.7467737341772315,
+                0.675824920886101,
+                0.6060281645570192
+              ]
+            },
+            "optimized": {
+              "min": 0.6108367879746075,
+              "median": 0.6795861550633358,
+              "p90": 0.8226105221518693,
+              "max": 0.8287170094936761,
+              "samples": [
+                0.6741356803796476,
+                0.6108367879746075,
+                0.6142715189872733,
+                0.6836183544303627,
+                0.6795861550633358,
+                0.6440994462024454,
+                0.6581053797467978,
+                0.8287170094936761,
+                0.7612147151898562,
+                0.6855951740506706,
+                0.8226105221518693,
+                0.7093927215189784,
+                0.7957134493671784,
+                0.6729631329113844,
+                0.6770055379746149
+              ]
+            },
+            "medianSpeedup": 1.0670785889912615
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 102,
+            "baseline": {
+              "min": 0.6215187499999592,
+              "median": 0.7021395220588192,
+              "p90": 0.7611936887254909,
+              "max": 0.8788582720587427,
+              "samples": [
+                0.7269720588235308,
+                0.7107835784313689,
+                0.7157603553921758,
+                0.637550735294045,
+                0.6215187499999592,
+                0.7021395220588192,
+                0.7129080882352764,
+                0.7611936887254909,
+                0.6653515931372799,
+                0.6627458946078222,
+                0.8788582720587427,
+                0.6324075367646687,
+                0.7426561274509786,
+                0.6723264705882747,
+                0.6425103553922059
+              ]
+            },
+            "optimized": {
+              "min": 0.5268781862745455,
+              "median": 0.5859310661764102,
+              "p90": 1.0308825980392193,
+              "max": 1.2368873774508915,
+              "samples": [
+                0.8431185049019797,
+                0.5350613970587765,
+                0.5766740196079087,
+                0.5293494485294568,
+                0.5575196691176652,
+                0.5859310661764102,
+                0.570606066176482,
+                0.5949660539215529,
+                0.7437833946078306,
+                0.5268781862745455,
+                0.8227049019607796,
+                0.5396485294117976,
+                1.2368873774508915,
+                1.0308825980392193,
+                0.663873835784287
+              ]
+            },
+            "medianSpeedup": 1.198331275794517
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 21,
+            "baseline": {
+              "min": 5.368886607142746,
+              "median": 5.653323511905043,
+              "p90": 6.744599702381038,
+              "max": 7.794611607143256,
+              "samples": [
+                5.5248541666666515,
+                5.589051785714327,
+                7.794611607143256,
+                5.454492857143123,
+                5.378387797619174,
+                5.653323511905043,
+                5.566622023809487,
+                5.368886607142746,
+                5.637811607142513,
+                6.744599702381038,
+                6.32297113095265,
+                6.55021279761903,
+                5.736606845237887,
+                6.16963630952417,
+                6.2834809523814155
+              ]
+            },
+            "optimized": {
+              "min": 1.5594747023810451,
+              "median": 1.74549613095245,
+              "p90": 1.9085910714282017,
+              "max": 2.7730193452379397,
+              "samples": [
+                1.882367559524244,
+                1.7662770833334478,
+                1.8088348214286314,
+                1.5800633928571577,
+                1.6682788690472774,
+                1.6028238095237786,
+                1.74549613095245,
+                1.8472613095241286,
+                1.6715845238098024,
+                1.8370175595237015,
+                2.7730193452379397,
+                1.6749047619051842,
+                1.9085910714282017,
+                1.5594747023810451,
+                1.6893071428572037
+              ]
+            },
+            "medianSpeedup": 3.238806097393205
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 45,
+            "optimized": {
+              "min": 1.3300944444444618,
+              "median": 1.3911837500000324,
+              "p90": 1.4866530555557094,
+              "max": 1.7059562499998213,
+              "samples": [
+                1.7059562499998213,
+                1.4043058333332838,
+                1.3994376388887355,
+                1.4059763888889796,
+                1.37760374999996,
+                1.3911837500000324,
+                1.3720343055554924,
+                1.3783576388889034,
+                1.417960972222166,
+                1.3468845833333236,
+                1.4866530555557094,
+                1.3645691666665192,
+                1.4253606944445587,
+                1.3825890277778146,
+                1.3300944444444618
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      },
+      {
+        "map": "wallbang",
+        "obstacles": 18,
+        "geometrySha256": "60f4f5f340b779238f4411ca42623ee5774c1610d6b04bf4257a9770a320def8",
+        "currentVision": {
+          "transparentObstacles": 0,
+          "differentFromLegacy": 0,
+          "oracle": "original exact nearest tests over current obstacles filtered only by blocksSight=false"
+        },
+        "candidates": {
+          "min": 3,
+          "median": 9,
+          "p90": 13,
+          "max": 16,
+          "mean": 9.824,
+          "nodeTestsMean": 9.064,
+          "linearClipCalls": 4500,
+          "indexedClipCalls": 2456,
+          "reduction": 0.4542222222222222
+        },
+        "timing": {
+          "nearest": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original whole-map nearest-hit scan (retained)",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 162,
+            "baseline": {
+              "min": 0.43084693827157383,
+              "median": 0.44616175308643213,
+              "p90": 0.5046200987654393,
+              "max": 0.504676222222186,
+              "samples": [
+                0.43863479012348017,
+                0.4447440987654166,
+                0.4781242469136127,
+                0.4352087160493991,
+                0.4321473827160698,
+                0.4442134320987536,
+                0.43084693827157383,
+                0.47898402469141776,
+                0.4389911111110798,
+                0.5026601481481914,
+                0.4559065925926085,
+                0.5046200987654393,
+                0.44616175308643213,
+                0.504676222222186,
+                0.4694019259259221
+              ]
+            },
+            "optimized": {
+              "min": 0.39420812345678663,
+              "median": 0.44579874074074327,
+              "p90": 0.49634041975307663,
+              "max": 0.519651654321035,
+              "samples": [
+                0.4389950617283538,
+                0.39420812345678663,
+                0.42815130864197093,
+                0.4074957283950493,
+                0.4673175802469174,
+                0.44579874074074327,
+                0.4358489135802863,
+                0.4395450123456949,
+                0.43749876543212995,
+                0.45802874074074623,
+                0.46589498765433185,
+                0.519651654321035,
+                0.489719456790125,
+                0.48139429629633396,
+                0.49634041975307663
+              ]
+            },
+            "medianSpeedup": 1.0008142964807072
+          },
+          "occlusion": {
+            "baselineImplementation": "original whole-map nearest-hit scan",
+            "optimizedImplementation": "original exact opaque tests with first-hit boolean return",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 177,
+            "baseline": {
+              "min": 0.45850657627121666,
+              "median": 0.5027362485875811,
+              "p90": 0.5452479322033633,
+              "max": 0.5566451751412779,
+              "samples": [
+                0.5452479322033633,
+                0.5065201807909876,
+                0.5566451751412779,
+                0.5242547344633096,
+                0.5375909152542507,
+                0.5125159774010798,
+                0.46164657627118916,
+                0.5299395480225919,
+                0.4717071638417912,
+                0.4621720903954767,
+                0.4632700112994266,
+                0.5027362485875811,
+                0.4657396610169691,
+                0.4716537627119388,
+                0.45850657627121666
+              ]
+            },
+            "optimized": {
+              "min": 0.24067462146897817,
+              "median": 0.28347326553670693,
+              "p90": 0.31871993220338896,
+              "max": 0.3541763615819144,
+              "samples": [
+                0.31871993220338896,
+                0.29197584180791775,
+                0.3541763615819144,
+                0.312721875706266,
+                0.27871005649710967,
+                0.3183507796610103,
+                0.27643977401128283,
+                0.2529837514123699,
+                0.28347326553670693,
+                0.2627783954802224,
+                0.3043899887005797,
+                0.2606398418079075,
+                0.3027703954802371,
+                0.24067462146897817,
+                0.2781564519773691
+              ]
+            },
+            "medianSpeedup": 1.7734873432799323
+          },
+          "ballistic": {
+            "baselineImplementation": "original whole-map convex clipping",
+            "optimizedImplementation": "ordered static-BVH candidates plus exact convex clipping",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 15,
+            "baseline": {
+              "min": 4.963957599999655,
+              "median": 5.702119733333045,
+              "p90": 6.79138133333278,
+              "max": 7.7106277333339674,
+              "samples": [
+                5.275905866666775,
+                5.704766133333518,
+                5.784754133333142,
+                5.7785157333331885,
+                5.611903200000719,
+                6.3928935999991765,
+                6.79138133333278,
+                5.564419199999732,
+                7.7106277333339674,
+                5.624748800000331,
+                5.2121954666664045,
+                5.702119733333045,
+                4.963957599999655,
+                5.402474933332996,
+                6.542027199999818
+              ]
+            },
+            "optimized": {
+              "min": 2.20542453333328,
+              "median": 2.5159146666662613,
+              "p90": 2.818117866667065,
+              "max": 2.894145066666533,
+              "samples": [
+                2.6673738666664577,
+                2.6196392000002864,
+                2.5159146666662613,
+                2.460325333333458,
+                2.894145066666533,
+                2.818117866667065,
+                2.521394399999796,
+                2.4781437333333693,
+                2.2872047999999876,
+                2.7816125333338277,
+                2.3511472000003173,
+                2.20542453333328,
+                2.23508186666683,
+                2.2481546666667174,
+                2.810185866667113
+              ]
+            },
+            "medianSpeedup": 2.266420164754116
+          },
+          "currentVision": {
+            "rules": "materials-v3",
+            "implementation": "first exact sight-blocking hit with physical-surface resolution on actual current obstacles",
+            "unit": "milliseconds per 1000 queries (calibrated repeated batch)",
+            "passesPerSample": 89,
+            "optimized": {
+              "min": 0.7291178426967235,
+              "median": 0.7767237752809757,
+              "p90": 0.8234231460674697,
+              "max": 0.8944089438200842,
+              "samples": [
+                0.7767237752809757,
+                0.8234231460674697,
+                0.8012072808987898,
+                0.8177900674157408,
+                0.8944089438200842,
+                0.7822416179773876,
+                0.7910817078650887,
+                0.7875708314605525,
+                0.7692929438202187,
+                0.7291178426967235,
+                0.755725438202165,
+                0.7488630561797692,
+                0.7376671910112308,
+                0.7625355056179308,
+                0.7499316404493502
+              ]
+            },
+            "comparison": "No speedup ratio: transparent glass intentionally changes legacy visibility"
+          }
+        }
+      }
+    ],
+    "documentation": "docs/physics-materials/QUERY_BENCHMARK.json"
+  },
+  "simulationProfile": {
+    "captureDate": "2026-11-15T05:59:56.087Z",
+    "runtime": {
+      "node": "v24.22.1",
+      "platform": "linux",
+      "arch": "x64"
+    },
+    "method": {
+      "hz": 120,
+      "inputSeed": 1200721,
+      "mapGeometry": "Original authored range, complex and tower maps",
+      "inputSha256": "0ac175a4e0571ab7ddd744c4e388ff56f3353f395f23ceeacad552ae3bff169f",
+      "ticksPerRun": 840,
+      "warmupTicks": 120,
+      "repeats": 5,
+      "order": "Alternating baseline/current legacy/current materials order per round",
+      "wholeStep": "Uninstrumented step wall time measured around each actual Simulation.step; excludes constructing input and scene",
+      "component": "Separate run with prototype wrappers; inclusive elapsed and self time excluding wrapped nested calls; contains wrapper/timer overhead, not subtracted",
+      "perception": "DefenderAI.visible private runtime prototype method measured independently from DefenderAI.step; no cadence change",
+      "ballistics": "Standalone imported function is not prototype wrapped. See QUERY_BENCHMARK-FINAL.json for exact per-ray kernel timings; this report makes no per-step ballistic attribution."
+    },
+    "limits": [
+      "CPU-only Node SSR workload; not browser, GPU, office or gaming hardware performance.",
+      "Current material rules intentionally change contacts/materials, so trajectory equality is checked only between frozen baseline and current legacy rules.",
+      "If a real scene kills the player, the run ends naturally and actual measured tick count is recorded.",
+      "Component self times exclude only the named wrapped nested functions, not all transitive callees.",
+      "Early repeats can show JIT/warmup variation despite the initial range warmup and 120 untimed ticks per scene. This finite series supports bounded workload/call attribution, not a conclusive whole-step speedup claim."
+    ],
+    "documentation": "docs/physics-materials/STEP_PROFILE.json"
+  },
+  "wasm": {
+    "captureDate": "2026-11-08T00:35:34.977Z",
+    "decision": "Retain TypeScript; no demonstrated whole-engine benefit",
+    "runtime": {
+      "node": "v24.19.0",
+      "platform": "linux",
+      "arch": "x64",
+      "cpu": "AMD EPYC 9V74 80-Core Processor",
+      "logicalCpus": 3
+    },
+    "parity": {
+      "finiteInputRows": 32795,
+      "seededRows": 32768,
+      "edgeRows": 27,
+      "scalarComparisons": 32795,
+      "batchComparisons": 131180,
+      "batchZeroCountChecked": true,
+      "positiveZeroResults": 14542,
+      "negativeZeroResults": 7,
+      "mismatches": 0
+    },
+    "timing": [
+      {
+        "label": "scalar eight-f64 JS/Wasm boundary",
+        "batchSize": 1,
+        "passesPerSample": 4096,
+        "rowsPerSample": 4194304,
+        "boundaryCallsPerWasmSample": 4194304,
+        "unit": "nanoseconds per row, including loop and checksum work",
+        "js": {
+          "min": 3.2973384857177592,
+          "median": 3.510466098785407,
+          "p90": 4.117269992828375,
+          "max": 5.195832967758184,
+          "samples": [
+            3.4718749523162815,
+            5.195832967758184,
+            4.117269992828375,
+            3.620883703231816,
+            3.395955562591555,
+            3.5382430553436253,
+            3.5316312313079776,
+            3.640406131744377,
+            3.2973384857177592,
+            3.5028202533722044,
+            3.510466098785407,
+            3.3992819786071977,
+            3.43962335586548,
+            3.5519320964813184,
+            3.4665906429290807
+          ]
+        },
+        "wasm": {
+          "min": 8.014241933822648,
+          "median": 8.502796411514286,
+          "p90": 9.71702766418457,
+          "max": 9.919364690780638,
+          "samples": [
+            8.110266208648687,
+            9.919364690780638,
+            8.342989921569815,
+            8.265693187713612,
+            8.171658039093023,
+            8.502796411514286,
+            8.515790700912468,
+            8.501251459121706,
+            8.014241933822648,
+            9.71702766418457,
+            8.670011997222886,
+            8.876224517822276,
+            8.502378702163698,
+            8.953495264053341,
+            8.607765197753896
+          ]
+        },
+        "medianSpeedupJsOverWasm": 0.4128601849188835
+      },
+      {
+        "label": "packed batch including input and output copies",
+        "batchSize": 1,
+        "passesPerSample": 2048,
+        "rowsPerSample": 2097152,
+        "boundaryCallsPerWasmSample": 2097152,
+        "unit": "nanoseconds per row, including loop and checksum work",
+        "js": {
+          "min": 7.768418788909812,
+          "median": 8.225289821624758,
+          "p90": 8.787867546081532,
+          "max": 10.110864162444967,
+          "samples": [
+            10.110864162444967,
+            8.603507995605472,
+            8.463064193725643,
+            8.17790699005126,
+            7.96177053451533,
+            7.980629920959458,
+            8.225289821624758,
+            8.211875438690228,
+            8.492161273956347,
+            8.350437641143662,
+            8.09386730194102,
+            7.874650478362959,
+            7.768418788909812,
+            8.240781307220598,
+            8.787867546081532
+          ]
+        },
+        "wasm": {
+          "min": 30.315782070159877,
+          "median": 31.71513938903805,
+          "p90": 32.37402582168566,
+          "max": 33.79266643524178,
+          "samples": [
+            31.880664825439464,
+            31.373349189758283,
+            31.71513938903805,
+            30.994410037994342,
+            30.554726123809754,
+            30.315782070159877,
+            32.0613994598388,
+            30.839993476867676,
+            31.902159690856887,
+            31.262547492980964,
+            31.83967638015748,
+            33.79266643524178,
+            30.87862730026254,
+            31.919595241546634,
+            32.37402582168566
+          ]
+        },
+        "medianSpeedupJsOverWasm": 0.25934900429501906
+      },
+      {
+        "label": "packed batch including input and output copies",
+        "batchSize": 16,
+        "passesPerSample": 4096,
+        "rowsPerSample": 4194304,
+        "boundaryCallsPerWasmSample": 262144,
+        "unit": "nanoseconds per row, including loop and checksum work",
+        "js": {
+          "min": 6.139281511306728,
+          "median": 6.359369516372631,
+          "p90": 7.075855493545521,
+          "max": 8.09039044380184,
+          "samples": [
+            6.6978430747986195,
+            6.504634141921975,
+            8.09039044380184,
+            6.527931451797406,
+            6.359369516372631,
+            6.617496967315709,
+            6.604058504104562,
+            6.222765207290608,
+            6.3567762374878125,
+            6.290472507476772,
+            6.339006423950193,
+            7.075855493545521,
+            6.343676805496212,
+            6.21202945709227,
+            6.139281511306728
+          ]
+        },
+        "wasm": {
+          "min": 4.764809370040916,
+          "median": 4.940265178680383,
+          "p90": 5.120393991470259,
+          "max": 6.221179485321076,
+          "samples": [
+            4.896927118301403,
+            4.945190906524653,
+            4.8501842021942245,
+            4.997490406036383,
+            4.848035097122153,
+            4.940265178680383,
+            4.985271930694536,
+            5.032533407211279,
+            4.972807884216345,
+            4.935546875000003,
+            5.120393991470259,
+            4.893949508666959,
+            6.221179485321076,
+            4.764809370040916,
+            4.902621984481811
+          ]
+        },
+        "medianSpeedupJsOverWasm": 1.2872526648602518
+      },
+      {
+        "label": "packed batch including input and output copies",
+        "batchSize": 128,
+        "passesPerSample": 4096,
+        "rowsPerSample": 4194304,
+        "boundaryCallsPerWasmSample": 32768,
+        "unit": "nanoseconds per row, including loop and checksum work",
+        "js": {
+          "min": 6.210659027099585,
+          "median": 6.355675458908087,
+          "p90": 6.687322378158577,
+          "max": 7.470353364944491,
+          "samples": [
+            6.400276660919265,
+            6.266131877899223,
+            6.221181869506807,
+            6.370135784149124,
+            6.687322378158577,
+            6.4133067131042765,
+            6.358882188796985,
+            6.3482925891876745,
+            6.26096701622004,
+            6.29860520362849,
+            6.358313798904432,
+            6.355675458908087,
+            7.470353364944491,
+            6.228187799453772,
+            6.210659027099585
+          ]
+        },
+        "wasm": {
+          "min": 3.4488184452056765,
+          "median": 3.5757429599762207,
+          "p90": 3.7208976745605784,
+          "max": 3.7304251194000435,
+          "samples": [
+            3.48455643653866,
+            3.5380926132202397,
+            3.6301553249358736,
+            3.4488184452056765,
+            3.7168457508086505,
+            3.7304251194000435,
+            3.5289711952209624,
+            3.6522421836852543,
+            3.7208976745605784,
+            3.473049640655558,
+            3.519802331924428,
+            3.621819734573391,
+            3.4694154262542454,
+            3.5757429599762207,
+            3.6144464015961177
+          ]
+        },
+        "medianSpeedupJsOverWasm": 1.777441927467391
+      },
+      {
+        "label": "packed batch including input and output copies",
+        "batchSize": 1024,
+        "passesPerSample": 4096,
+        "rowsPerSample": 4194304,
+        "boundaryCallsPerWasmSample": 4096,
+        "unit": "nanoseconds per row, including loop and checksum work",
+        "js": {
+          "min": 6.085131406784184,
+          "median": 6.332089185714755,
+          "p90": 7.474393367767331,
+          "max": 8.265270709991455,
+          "samples": [
+            6.194245576858492,
+            7.474393367767331,
+            8.265270709991455,
+            6.085131406784184,
+            6.6333827972412,
+            6.198132753372108,
+            6.916775226593029,
+            6.27020525932327,
+            6.332089185714755,
+            6.866130590438973,
+            6.503466606140162,
+            6.3124279975890465,
+            6.23913550376891,
+            6.2470557689667245,
+            6.358385562896859
+          ]
+        },
+        "wasm": {
+          "min": 3.946460723876916,
+          "median": 4.18082284927364,
+          "p90": 4.3301134109497745,
+          "max": 4.675136804580676,
+          "samples": [
+            4.675136804580676,
+            4.131787538528414,
+            3.971546649932968,
+            3.946460723876916,
+            4.078688383102281,
+            4.236274003982391,
+            4.3301134109497745,
+            4.125082969665648,
+            4.18082284927364,
+            4.085495948791392,
+            4.3054406642915355,
+            4.20911073684702,
+            4.240364313125647,
+            4.179965734481739,
+            4.205839633941548
+          ]
+        },
+        "medianSpeedupJsOverWasm": 1.514555725989411
+      }
+    ],
+    "productionAdopted": false,
+    "rustMeasured": false
+  },
+  "surfaces": {
+    "physicalIds": 22,
+    "visualFamilies": 15,
+    "allContactFrictionMultipliers": 1,
+    "physicalPropertiesIndependentFromPBR": true,
+    "calibration": "provisional"
+  },
+  "preserved": {
+    "fixedSimulation": true,
+    "dualProfiles": true,
+    "threeProfilesIncludingSourceClassic": true,
+    "footstepAccumulation": true,
+    "allWeapons": true,
+    "allExistingModes": true,
+    "koreanInterface": true,
+    "strictCSP": true,
+    "trackingAdded": false
+  },
+  "limits": {
+    "nativeGameParityVerified": false,
+    "directWalkingRatioMeasurement": false,
+    "directSilentLandingMeasurement": false,
+    "hardwareIntegratedGPUQualified": false,
+    "hardwareFPSVerified": false,
+    "physicalInputLatencyVerified": false,
+    "humanListeningTested": false,
+    "fullRustOrWASMEngineBenchmarked": false
+  },
+  "documentation": "/physics-materials.html",
+  "deployment": {
+    "verified": false,
+    "note": "Build evidence only; actual publication receipt is maintained separately."
+  }
+}
