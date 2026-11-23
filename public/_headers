@@ -13,3 +13,5 @@
 /index.html
   Cache-Control: no-cache, max-age=0, must-revalidate, no-transform
 # The response Worker also enforces no-transform on every resolved HTML alias.
+/review/*
+  Cache-Control: no-cache, max-age=0, must-revalidate

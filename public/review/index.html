@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#132923">
+  <meta name="description" content="훈련 기록과 실전 복기를 연결해 개인의 지표 변화를 비교하는 VALOPRAC 복기 연구실">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://valoprac.trade/review/">
+  <title>VALOPRAC 복기 연구실</title>
+  <link rel="stylesheet" href="/review/style.css">
+  <script type="module" src="/review/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">본문으로 건너뛰기</a>
+  <aside class="sidebar">
+    <a href="#overview" class="brand" aria-label="VALOPRAC 복기 연구실 대시보드">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span><b>VALOPRAC</b><small>복기 연구실</small></span>
+    </a>
+    <nav id="nav" aria-label="주 메뉴">
+      <a href="#overview"><i aria-hidden="true">▥</i> 대시보드</a>
+      <a href="#records"><i aria-hidden="true">▤</i> 세션 기록</a>
+      <a href="#issues"><i aria-hidden="true">◎</i> 문제 분석</a>
+      <a href="#weekly"><i aria-hidden="true">▣</i> 주간 계획</a>
+    </nav>
+    <div class="side-bottom">
+      <button id="profile-button" class="profile" data-action="profile"></button>
+      <a class="game-link" href="/statistics.html">VALOPRAC 훈련 기록 <span aria-hidden="true">↗</span></a>
+      <div class="local"><span></span> 이 브라우저에 저장</div>
+    </div>
+  </aside>
+  <main id="main">
+    <header class="topbar">
+      <span id="crumb"></span>
+      <div class="top-actions">
+        <button data-action="import" class="button secondary">가져오기</button>
+        <button data-action="export" class="button secondary">내보내기</button>
+        <button data-action="add" class="button primary"><span aria-hidden="true">＋</span> 기록 추가</button>
+      </div>
+    </header>
+    <div class="content">
+      <div id="demo-banner"></div>
+      <div id="view"></div>
+    </div>
+  </main>
+  <dialog id="modal" aria-labelledby="modal-title"></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

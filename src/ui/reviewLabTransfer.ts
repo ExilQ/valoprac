@@ -3,7 +3,7 @@ import { selectedTraining } from '../app/trainingNavigation';
 import { WEAPONS } from '../config/weapons';
 import { trainingMapTitle, trainingTitle } from './trainingPresentation';
 
-export const REVIEW_LAB_URL = 'https://valoprac-review-lab.thatglezoa.chatgpt.site/';
+export const REVIEW_LAB_URL = 'https://valoprac.trade/review/';
 
 const hit = (zone: string) => ['head', 'torso', 'arm', 'leg'].includes(zone);
 const rate = (count: number, total: number) => total > 0 ? 100 * count / total : null;

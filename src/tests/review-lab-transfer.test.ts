@@ -16,7 +16,8 @@ describe('Review Lab transfer', () => {
   it('sends only summary fields and puts the transfer in the address fragment', () => {
     const row = session();
     const url = new URL(reviewLabSessionURL(row));
-    expect(url.origin).toBe('https://valoprac-review-lab.thatglezoa.chatgpt.site');
+    expect(url.origin).toBe('https://valoprac.trade');
+    expect(url.pathname).toBe('/review/');
     expect(url.search).toBe('');
     const payload = JSON.parse(decodeURIComponent(url.hash.slice('#import='.length)));
     expect(payload).toMatchObject({ schema: 1, source: 'valoprac.trade', sessions: [{ id: row.id, mode: 'movement' }] });

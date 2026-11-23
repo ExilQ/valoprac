@@ -9,6 +9,15 @@ const checks=[];async function visit(dir){for(const item of readdirSync(dir,{wit
 await visit('dist-client');
 for(const path of ['/not-a-real-page','/not-a-real-page/','/not-a-real-page.html']){const missing=await req(path,{accept:'text/html'});assert.equal(missing.status,404);assert.doesNotMatch(await missing.text(),/id="root"/);assert.match(missing.headers.get('cache-control'),/no-transform/);}assert.equal((await req('/assets/missing.js',{accept:'text/html'})).status,404);assert.equal((await req('/_headers')).status,404);
 for(const route of ['training','settings','statistics','results','weapons','unreal','aim','guide','footsteps','tactical-guide','aim-methodology','migration'])for(const path of [`/${route}`,`/${route}/`]){const response=await req(path,{accept:'text/html'});assert.equal(response.status,200,path);assert.match(response.headers.get('cache-control'),/no-transform/,path);assert.match(response.headers.get('x-robots-tag'),/noindex/,path);}
+for(const path of ['/review','/review/']){
+ const response=await req(path,{accept:'text/html'});
+ assert.equal(response.status,200);
+ const html=await response.text();
+ assert(html.includes('https://valoprac.trade/review/'));
+ assert(html.includes('src="/review/app.js"'));
+ assert(!html.includes('/usage.js'),'The Review Lab must not send usage events');
+}
+assert.match((await req('/review/app.js')).headers.get('cache-control'),/must-revalidate/);
 const first=await req('/');assert.doesNotMatch(first.headers.get('x-robots-tag'),/noindex/);assert.doesNotMatch((await req('/?utm_source=chatgpt.com')).headers.get('x-robots-tag'),/noindex/);const cached=await req('/',{'If-None-Match':first.headers.get('etag')});assert.equal(cached.status,304);assert.match(cached.headers.get('cache-control'),/no-transform/);
 assert.equal((await req('/',{}, 'HEAD')).status,200);assert(!JSON.parse(readFileSync('dist/.openai/hosting.json','utf8')).static);
 console.log(JSON.stringify({responseWorkerVerified:true,assetResponses:checks.length,headers:true,htmlNoTransform:true,immutableAssets:true,knownRoutes:true,unknownDocument404:true,asset404:true}));

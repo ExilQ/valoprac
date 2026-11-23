@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.13",
+  "version": "12.0.14",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -193,7 +193,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.13",
+  "patchLabel": "12.14",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -517,5 +517,10 @@
     "baseline": "12.06",
     "geometryVersion": "field-agent-2",
     "reference": "https://playvalorant.com/en-us/agents/phoenix/"
+  },
+  "reviewLab": {
+    "url": "https://valoprac.trade/review/",
+    "storage": "browser-local",
+    "supportsLegacyBackup": true
   }
 }
