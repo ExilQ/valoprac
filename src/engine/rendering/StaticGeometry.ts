@@ -1,4 +1,4 @@
-import {BufferGeometry,Float32BufferAttribute,Material,type Texture,type Mesh,type Color,type JSONMeta,type TextureJSON} from 'three';
+import {BufferGeometry,Float32BufferAttribute,BufferAttribute,Material,type Texture,type Mesh,type Color,type JSONMeta,type TextureJSON} from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 
@@ -32,16 +32,18 @@ export function colorBatchSignature(material:Material):string|null {
   return JSON.stringify(Object.fromEntries(Object.keys(state).sort().map(key=>[key,state[key]])));
 }
 
-/** Batch authored architecture after normalizing the primitive formats. Rounded
- * boxes are non-indexed; box trim is indexed; ramp faces have no UV channel.
- * Normalize temporary copies so every material batch keeps identical world-space
- * surfaces, instead of silently falling back to hundreds of separate draws. */
+/**
+ * Batch immutable surfaces with their authored normals, tint and UVs intact.
+ * Retain vertex reuse when the complete index stream costs less than expanding
+ * the same triangles into repeated attributes.
+ */
 export function mergeStaticArchitecture(meshes:readonly Mesh[],space:'world'|'local'='world',vertexTints=false):BufferGeometry|null {
+  if(!meshes.length)return null;
   const copies:BufferGeometry[]=[];
   try{
     for(const mesh of meshes){
       const source=mesh.geometry;
-      const copy=source.index?source.toNonIndexed():source.clone();
+      const copy=source.index&&!source.getAttribute('normal')?source.toNonIndexed():source.clone();
       copies.push(copy);
       for(const name of Object.keys(copy.attributes))if(!['position','normal','uv',...(vertexTints?['color']:[])].includes(name))copy.deleteAttribute(name);
       if(!copy.getAttribute('normal'))copy.computeVertexNormals();
@@ -54,6 +56,29 @@ export function mergeStaticArchitecture(meshes:readonly Mesh[],space:'world'|'lo
       }
       if(space==='local')mesh.updateMatrix();
       copy.applyMatrix4(space==='local'?mesh.matrix:mesh.matrixWorld);
+    }
+    const vertexCount=copies.reduce((sum,copy)=>sum+copy.getAttribute('position').count,0);
+    const indexBytes=vertexCount>65535?4:2;
+    let expandedBytes=0,indexedBytes=0;
+    for(const copy of copies){
+      const count=copy.getAttribute('position').count;
+      const corners=copy.index?.count??count;
+      const stride=Object.values(copy.attributes).reduce((sum,attribute)=>sum+attribute.itemSize*attribute.array.BYTES_PER_ELEMENT,0);
+      expandedBytes+=corners*stride;
+      indexedBytes+=count*stride+corners*indexBytes;
+    }
+    const keepIndices=indexedBytes<expandedBytes;
+    for(let i=0;i<copies.length;i++){
+      const copy=copies[i];
+      if(keepIndices&&!copy.index){
+        const count=copy.getAttribute('position').count;
+        const index=new BufferAttribute(count>65535?new Uint32Array(count):new Uint16Array(count),1);
+        for(let n=0;n<count;n++)index.setX(n,n);
+        copy.setIndex(index);
+      }else if(!keepIndices&&copy.index){
+        copies[i]=copy.toNonIndexed();
+        copy.dispose();
+      }
     }
     return mergeGeometries(copies,false);
   }finally{for(const copy of copies)copy.dispose();}

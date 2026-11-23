@@ -71,13 +71,16 @@ export class SurfaceMaterialLibrary {
   }
   private textureSet(id:VisualMaterialId){
     const cached=this.textures.get(id);if(cached)return cached;
-    const q=SURFACE_QUALITY[this.quality],pixels=generateSurfacePixels(id,q.size);
-    const create=(data:Uint8Array,colorSpace:T.ColorSpace,channel:string)=>{
-      const texture=new T.DataTexture(data,q.size,q.size,T.RGBAFormat,T.UnsignedByteType);
+    const q=SURFACE_QUALITY[this.quality],pixels=generateSurfacePixels(id,q.size,q);
+    const create=(data:Uint8Array,colorSpace:T.ColorSpace,channel:string,format:T.PixelFormat=T.RGBAFormat)=>{
+      const texture=new T.DataTexture(data,q.size,q.size,format,T.UnsignedByteType);
       texture.name=`VALOPRAC ${id} ${channel} ${q.size}`;texture.colorSpace=colorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.magFilter=T.LinearFilter;texture.minFilter=T.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.anisotropy=Math.min(q.anisotropy,this.anisotropy);texture.needsUpdate=true;return texture;
     };
-    const base=create(pixels.base,T.SRGBColorSpace,'base'),roughness=q.roughness?create(pixels.roughness,T.NoColorSpace,'roughness'):null,normal=q.normal?create(pixels.normal,T.NoColorSpace,'normal'):null;
-    const maps={base,roughness,normal,bytes:Math.ceil(q.size*q.size*4*(1+Number(q.roughness)+Number(q.normal))*4/3)};
+    const base=create(pixels.base,T.SRGBColorSpace,'base');
+    const roughness=pixels.roughness?create(pixels.roughness,T.NoColorSpace,'roughness',T.RGFormat):null;
+    const normal=pixels.normal?create(pixels.normal,T.NoColorSpace,'normal'):null;
+    const levelBytes=pixels.base.byteLength+(pixels.roughness?.byteLength??0)+(pixels.normal?.byteLength??0);
+    const maps={base,roughness,normal,bytes:Math.ceil(levelBytes*4/3)};
     this.textures.set(id,maps);return maps;
   }
   stats(){return {quality:this.quality,scalarLowFallback:this.scalarLow&&this.quality==='low',materialCount:this.materials.size,textureSets:this.textures.size,textureCount:[...this.textures.values()].reduce((n,t)=>n+1+Number(!!t.roughness)+Number(!!t.normal),0),estimatedTextureBytes:[...this.textures.values()].reduce((n,t)=>n+t.bytes,0),maxMaterialVariants:this.maxVariants,disposed:this.disposed};}

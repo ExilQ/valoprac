@@ -30,18 +30,21 @@ function splitAtHeight(vertices:Vector3[],height:number):[Vector3[],Vector3[]] {
 export function architecturalBox(width:number,height:number,depth:number,bevel=.035,finishes?:readonly BoxFinish[]):BufferGeometry {
  const dimensions=[width,height,depth],half=dimensions.map(n=>n/2),r=Math.max(0,Math.min(bevel,Math.min(...dimensions)*.49));
  if(r<1e-7)return new BoxGeometry(width,height,depth);
- const positions:number[]=[],normals:number[]=[],uv:number[]=[],colors:number[]=[];
+ const positions:number[]=[],normals:number[]=[],uv:number[]=[],colors:number[]=[],indices:number[]=[];
  const polygon=(input:number[][])=>{
   const vertices=input.map(p=>new Vector3(...p as [number,number,number])),center=vertices.reduce((c,p)=>c.add(p),new Vector3()).multiplyScalar(1/vertices.length);
   let normal=vertices[1].clone().sub(vertices[0]).cross(vertices[2].clone().sub(vertices[0])).normalize();
   if(normal.dot(center)<0){vertices.reverse();normal=normal.negate();}
   const dominant=Math.abs(normal.x)>=Math.abs(normal.y)&&Math.abs(normal.x)>=Math.abs(normal.z)?0:Math.abs(normal.y)>=Math.abs(normal.z)?1:2;
   const triangulate=(face:Vector3[],color?:Color)=>{
-   for(let i=1;i<face.length-1;i++)for(const p of [face[0],face[i],face[i+1]]){
+   if(face.length<3)return;
+   const first=positions.length/3;
+   for(const p of face){
     positions.push(p.x,p.y,p.z);normals.push(normal.x,normal.y,normal.z);
     if(dominant===0)uv.push(p.z/depth+.5,p.y/height+.5);else if(dominant===1)uv.push(p.x/width+.5,p.z/depth+.5);else uv.push(p.x/width+.5,p.y/height+.5);
     if(color)colors.push(color.r,color.g,color.b);
    }
+   for(let i=1;i<face.length-1;i++)indices.push(first,first+i,first+i+1);
   };
   if(!finishes){triangulate(vertices);return;}
   // Split the existing face at each finish boundary so each color owns its area.
@@ -66,6 +69,7 @@ export function architecturalBox(width:number,height:number,depth:number,bevel=.
   [sx*(half[0]-r),sy*(half[1]-r),sz*half[2]]
  ]);
  const geometry=new BufferGeometry();geometry.setAttribute('position',new Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new Float32BufferAttribute(normals,3));geometry.setAttribute('uv',new Float32BufferAttribute(uv,2));
+ geometry.setIndex(indices);
  if(finishes)geometry.setAttribute('color',new Float32BufferAttribute(colors,3));
  return geometry;
 }

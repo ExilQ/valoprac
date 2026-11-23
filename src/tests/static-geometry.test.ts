@@ -13,6 +13,8 @@ describe('Architecture batching across authored primitive formats',()=>{
   const merged=mergeStaticArchitecture(originals,'local')!,batch=new Mesh(merged,material);
   group.add(batch);
   try{
+   expect(merged.index!.count).toBe(2*geometry.index!.count);
+   expect(merged.getAttribute('position').count).toBe(2*geometry.getAttribute('position').count);
    for(const offset of [0,.18]){
     group.position.y=-.06-offset;group.rotation.z=.2+offset;group.updateMatrixWorld(true);
     const expected=originals.reduce((box,mesh)=>box.union(new Box3().setFromObject(mesh,true)),new Box3()),actual=new Box3().setFromObject(batch,true);
@@ -39,9 +41,23 @@ describe('Architecture batching across authored primitive formats',()=>{
    merged!.computeBoundingBox();
    expect(merged!.boundingBox!.min.distanceTo(bounds.min)).toBeLessThan(1e-6);
    expect(merged!.boundingBox!.max.distanceTo(bounds.max)).toBeLessThan(1e-6);
-   expect(merged!.getAttribute('position').count).toBe(vertices);
+   const position=merged!.getAttribute('position');
+   const index=merged!.index;
+   expect(index?.count??position.count).toBe(vertices);
+   // Expand the submitted triangles and compare every transformed corner.
+   let corner=0,maxError=0;
+   for(const mesh of meshes){
+    const source=mesh.geometry.getAttribute('position');
+    const count=mesh.geometry.index?.count??source.count;
+    for(let i=0;i<count;i++,corner++){
+     const expected=new Vector3().fromBufferAttribute(source,mesh.geometry.index?.getX(i)??i).applyMatrix4(mesh.matrixWorld);
+     const actual=new Vector3().fromBufferAttribute(position,index?.getX(corner)??corner);
+     maxError=Math.max(maxError,actual.distanceTo(expected));
+    }
+   }
+   expect(maxError).toBeLessThan(1e-6);
    for(const name of ['position','normal','uv']){
-    const attribute=merged!.getAttribute(name);expect(attribute.count).toBe(vertices);
+    const attribute=merged!.getAttribute(name);expect(attribute.count).toBe(position.count);
     expect(Array.from(attribute.array).every(Number.isFinite)).toBe(true);
    }
    expect(geometries.map(g=>Array.from(g.getAttribute('position').array))).toEqual(originals);

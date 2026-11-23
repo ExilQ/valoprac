@@ -1,0 +1,306 @@
+{
+  "schema": 1,
+  "release": "12.0.4",
+  "patchLabel": "12.04",
+  "baselineRelease": "12.0.3",
+  "baselineCommit": "10694753639ee506a18509cfc25c377c250e2b0c",
+  "graphics": {
+    "renderer": "Chromium 154.0.8037.57 / SwiftShader",
+    "viewport": [
+      960,
+      540
+    ],
+    "framesPerScene": 36,
+    "stockPostProcessing": false,
+    "geometryMethod": "Sum byte lengths of unique vertex and index typed arrays across the scene and viewmodel.",
+    "textureMethod": "Estimated mipmapped base, roughness and normal uploads in the shared surface library."
+  },
+  "pairs": [
+    {
+      "map": "range",
+      "preset": "low",
+      "scenario": null,
+      "camera": {
+        "position": {
+          "x": 0,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": 0,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "before": {
+        "geometryBytes": 2205128,
+        "materialTextureBytesEstimate": 0,
+        "drawCalls": {
+          "min": 37,
+          "max": 37
+        },
+        "triangles": {
+          "min": 22030,
+          "max": 22030
+        }
+      },
+      "after": {
+        "geometryBytes": 1777240,
+        "materialTextureBytesEstimate": 0,
+        "drawCalls": {
+          "min": 37,
+          "max": 37
+        },
+        "triangles": {
+          "min": 22030,
+          "max": 22030
+        }
+      },
+      "simulationStateMatched": true,
+      "geometryReductionPercent": 19.4,
+      "textureReductionPercent": null
+    },
+    {
+      "map": "range",
+      "preset": "high",
+      "scenario": null,
+      "camera": {
+        "position": {
+          "x": 0,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": 0,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "before": {
+        "geometryBytes": 2205128,
+        "materialTextureBytesEstimate": 3145728,
+        "drawCalls": {
+          "min": 60,
+          "max": 60
+        },
+        "triangles": {
+          "min": 43006,
+          "max": 43006
+        }
+      },
+      "after": {
+        "geometryBytes": 1777240,
+        "materialTextureBytesEstimate": 2621448,
+        "drawCalls": {
+          "min": 60,
+          "max": 60
+        },
+        "triangles": {
+          "min": 43006,
+          "max": 43006
+        }
+      },
+      "simulationStateMatched": true,
+      "geometryReductionPercent": 19.4,
+      "textureReductionPercent": 16.67
+    },
+    {
+      "map": "complex",
+      "preset": "medium",
+      "scenario": "wide",
+      "camera": {
+        "position": {
+          "x": -27,
+          "y": 1.64,
+          "z": -12
+        },
+        "target": {
+          "x": -30,
+          "y": 1.64,
+          "z": -31
+        },
+        "fov": 103
+      },
+      "before": {
+        "geometryBytes": 10327152,
+        "materialTextureBytesEstimate": 611674,
+        "drawCalls": {
+          "min": 68,
+          "max": 68
+        },
+        "triangles": {
+          "min": 118204,
+          "max": 118204
+        }
+      },
+      "after": {
+        "geometryBytes": 7833672,
+        "materialTextureBytesEstimate": 458752,
+        "drawCalls": {
+          "min": 68,
+          "max": 68
+        },
+        "triangles": {
+          "min": 118204,
+          "max": 118204
+        }
+      },
+      "simulationStateMatched": true,
+      "geometryReductionPercent": 24.14,
+      "textureReductionPercent": 25.0
+    },
+    {
+      "map": "complex",
+      "preset": "high",
+      "scenario": "wide",
+      "camera": {
+        "position": {
+          "x": -27,
+          "y": 1.64,
+          "z": -12
+        },
+        "target": {
+          "x": -30,
+          "y": 1.64,
+          "z": -31
+        },
+        "fov": 103
+      },
+      "before": {
+        "geometryBytes": 10327152,
+        "materialTextureBytesEstimate": 3670016,
+        "drawCalls": {
+          "min": 68,
+          "max": 68
+        },
+        "triangles": {
+          "min": 118204,
+          "max": 118204
+        }
+      },
+      "after": {
+        "geometryBytes": 7833672,
+        "materialTextureBytesEstimate": 3058356,
+        "drawCalls": {
+          "min": 68,
+          "max": 68
+        },
+        "triangles": {
+          "min": 118204,
+          "max": 118204
+        }
+      },
+      "simulationStateMatched": true,
+      "geometryReductionPercent": 24.14,
+      "textureReductionPercent": 16.67
+    },
+    {
+      "map": "wallbang",
+      "preset": "high",
+      "scenario": null,
+      "camera": {
+        "position": {
+          "x": -13,
+          "y": 1.64,
+          "z": 5
+        },
+        "target": {
+          "x": -13,
+          "y": 1.64,
+          "z": -13
+        },
+        "fov": 103
+      },
+      "before": {
+        "geometryBytes": 1857192,
+        "materialTextureBytesEstimate": 3670016,
+        "drawCalls": {
+          "min": 64,
+          "max": 64
+        },
+        "triangles": {
+          "min": 19002,
+          "max": 19002
+        }
+      },
+      "after": {
+        "geometryBytes": 1583640,
+        "materialTextureBytesEstimate": 3058356,
+        "drawCalls": {
+          "min": 64,
+          "max": 64
+        },
+        "triangles": {
+          "min": 19002,
+          "max": 19002
+        }
+      },
+      "simulationStateMatched": true,
+      "geometryReductionPercent": 14.73,
+      "textureReductionPercent": 16.67
+    }
+  ],
+  "showcase": [
+    {
+      "preset": "high",
+      "families": 15,
+      "beforeBytes": 3932160,
+      "afterBytes": 3276810,
+      "reductionPercent": 16.67
+    },
+    {
+      "preset": "medium",
+      "families": 15,
+      "beforeBytes": 655365,
+      "afterBytes": 491520,
+      "reductionPercent": 25.0
+    },
+    {
+      "preset": "low",
+      "families": 15,
+      "beforeBytes": 81930,
+      "afterBytes": 81930,
+      "reductionPercent": 0.0
+    },
+    {
+      "preset": "ultra",
+      "families": 15,
+      "beforeBytes": 15728640,
+      "afterBytes": 13107210,
+      "reductionPercent": 16.67
+    }
+  ],
+  "firstShot": {
+    "before": {
+      "programs": 28,
+      "shots": 0,
+      "ammo": 25
+    },
+    "after": {
+      "programs": 28,
+      "shots": 1,
+      "ammo": 24
+    },
+    "passed": true
+  },
+  "cleanup": {
+    "before": {
+      "geometries": 91,
+      "textures": 51
+    },
+    "after": {
+      "geometries": 0,
+      "textures": 0
+    },
+    "canvasCount": 0
+  },
+  "limits": {
+    "hardwareFPSMeasured": false,
+    "driverAllocationMeasured": false,
+    "frameTimingComparisonQualified": false,
+    "reason": "Software rendering shared CPU with development tasks. Frame timings do not qualify a hardware FPS improvement."
+  },
+  "passed": true
+}

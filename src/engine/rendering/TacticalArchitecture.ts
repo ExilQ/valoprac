@@ -82,7 +82,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   const x=zone.center.x,sign=Math.sign(zone.center.z),theme=zone.theme,color=materials[theme];chunk=`zone-${zone.id}`;detail=0;
   const frontDoorX=x-6;
   const floorFamily=SURFACES[baseGroundSurface('complex',zone.center)].visualMaterialId;
-  const floorTint=new T.Color(THEME_COLORS[theme]).lerp(new T.Color(0xd6d7cb),.23);
+  const floorTint=new T.Color(VISUAL_MATERIALS[floorFamily].color).lerp(new T.Color(THEME_COLORS[theme]),.45);
   const floor=surface(floorFamily,floorTint.getHex()),[floorX,floorZ,floorWidth,floorDepth]=zone.bounds??[x-12,Math.min(sign*8,sign*38),24,30];
   const finish=block(floorWidth,.004,floorDepth,floorX+floorWidth/2,.002,floorZ+floorDepth/2,floor);finish.userData.floorFinish={zoneId:zone.id,surfaceId:baseGroundSurface('complex',zone.center),visualMaterialId:floorFamily,bounds:[floorX,floorZ,floorWidth,floorDepth],top:.004};
   doorway(frontDoorX,sign*8,3,theme);doorway(zone.exit.x,sign*38,3,theme,zone.id==='F'?4.2:3.2);

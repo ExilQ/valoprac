@@ -51,3 +51,18 @@ const physics12=JSON.parse(read('physics-materials-validation.json'));assert.equ
 assert.equal(physics12.simulation.acceptedLegacy[0].gameVersion,'10.0.0');assert.equal(physics12.simulation.acceptedLegacy[0].rules,'legacy-v2');
 assert.equal(physics12.visualComparison.rows.length,6);assert(physics12.visualComparison.rows.every(row=>row.decodedPixelsIdentical));
 for(const row of physics12.visualComparison.rows){const bytes=readFileSync(join(root,row.url));assert.equal(createHash('sha256').update(bytes).digest('hex'),row.deliverySHA256,'Material comparison must retain its original lossless delivery bytes');assert(read('physics-materials.html').includes(row.url));}
+
+
+const graphics=JSON.parse(read(release.graphicsReview.report.slice(1)));
+assert.equal(graphics.release,release.version);
+assert(graphics.passed&&graphics.firstShot.passed&&graphics.cleanup.canvasCount===0);
+assert.equal(graphics.pairs.length,5);
+for(const pair of graphics.pairs){
+ assert(pair.simulationStateMatched&&pair.after.geometryBytes<pair.before.geometryBytes);
+ assert.deepEqual(pair.after.drawCalls,pair.before.drawCalls);
+ assert.deepEqual(pair.after.triangles,pair.before.triangles);
+ assert(pair.after.materialTextureBytesEstimate<=pair.before.materialTextureBytesEstimate);
+}
+assert.equal(graphics.showcase.length,4);
+assert(graphics.showcase.every(row=>row.families===15));
+console.log(JSON.stringify({graphicsValidation:true,maps:graphics.pairs.length,showcasePresets:graphics.showcase.length}));

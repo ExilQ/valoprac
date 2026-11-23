@@ -79,9 +79,9 @@ export class RangeRenderer {
     if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
     this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=0.38;
     this.scene.fog=new THREE.Fog(0x9aafb3,38,110);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
-    this.scene.add(new THREE.HemisphereLight(0xe2edf0,0x9a9184,1.85));
+    this.scene.add(new THREE.HemisphereLight(0xe7eff6,0xa39884,1.68));
     const sun=this.sun=new THREE.DirectionalLight(0xffeedb,2.5);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
-    const fill=new THREE.DirectionalLight(0xb8d8e5,.8);fill.position.set(4,5,-18);this.scene.add(fill);
+    const fill=new THREE.DirectionalLight(0xc2d9eb,.68);fill.position.set(4,5,-18);this.scene.add(fill);
     this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
@@ -210,7 +210,7 @@ export class RangeRenderer {
   private buildEnvironment(){
     if(this.simulation.practiceMap!=='range'){this.buildTactical();return;}
 
-    const floor=this.material(0x89958f,.94,'raw-concrete'),trim=this.material(0x3e535b,.7,'painted-metal'),metal=this.material(0x667b80,.55,'brushed-metal'),accent=this.material(0xbcb18b,.85,'painted-concrete');
+    const floor=this.material(0x8a9089,.94,'raw-concrete'),trim=this.material(0x3e535b,.7,'painted-metal'),metal=this.material(0x667b80,.55,'brushed-metal'),accent=this.material(0xbcb18b,.85,'painted-concrete');
     this.box(24,0.15,40,0,-0.075,-10,floor);
     // Broad expansion seams give depth without high-frequency combat clutter.
     const seam=this.material(0x76857f,.95);for(let z=5;z>-30;z-=5)this.box(23.9,.006,.024,0,.004,z,seam);
@@ -286,7 +286,7 @@ export class RangeRenderer {
     const m=this.materialLibrary.material(family,{tint,...(id==='glass'?{transparent:true,opacity:.32,depthWrite:false}:{})});this.materials.add(m);return m;
   }
   private buildTactical(){
-    const trim=this.material(0x52666c,.68,'painted-metal'),floor=this.material(0x89968e,.96,'raw-concrete'),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
+    const trim=this.material(0x52666c,.68,'painted-metal'),floor=this.material(0x858d87,.96,'raw-concrete'),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.075,b[1]+b[3]/2,floor);
     for(const o of this.simulation.obstacles){const mesh=this.obstacleBox(o,this.tacticalSurface(o),true);if(o.ramp){const b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);const family=(mesh.material as THREE.Material).userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.refineObstacle(o);}
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);

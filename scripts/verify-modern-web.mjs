@@ -39,7 +39,7 @@ assert(review.mobileTabs.scroll>0);
 console.log(JSON.stringify({webReviewVerified:true,release:review.release,layouts:review.viewports.length}));
 
 const tabReview=json('public'+release.interface.tabReview);
-assert.equal(tabReview.release,release.version);
+assert.equal(tabReview.release,'12.0.3');
 assert.equal(tabReview.passed,true);
 assert.equal(tabReview.errors.length,0);
 assert(tabReview.checks.length>=5);

@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.3",
+  "version": "12.0.4",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -165,7 +165,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.03",
+  "patchLabel": "12.04",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -463,5 +463,12 @@
       "formalProofOfAllCode": false
     }
   },
-  "releaseDate": "2026-11-19"
+  "releaseDate": "2026-11-19",
+  "graphicsReview": {
+    "report": "/graphics-validation.json",
+    "baseline": "12.03",
+    "settings": "Fixed paired scenes",
+    "visualMaterialChannels": "RGBA8 base and normal, linear RG8 roughness",
+    "triangleOrderPreserved": true
+  }
 }

@@ -1,5 +1,5 @@
 import {describe,expect,it,vi} from 'vitest';
-import {BufferGeometry,Color,Float32BufferAttribute,LinearMipmapLinearFilter,Material,Matrix4,Mesh,MeshStandardMaterial,NoColorSpace,RepeatWrapping,SRGBColorSpace} from 'three';
+import {BufferGeometry,Color,Float32BufferAttribute,LinearMipmapLinearFilter,Material,Matrix4,Mesh,MeshStandardMaterial,NoColorSpace,RepeatWrapping,RGFormat,SRGBColorSpace} from 'three';
 import {VISUAL_MATERIAL_IDS,VISUAL_MATERIALS} from '../config/materials';
 import {generateSurfacePixels} from '../engine/rendering/ProceduralSurfaces';
 import {applyWorldScaleUV,SurfaceMaterialLibrary,writeWorldScaleUV} from '../engine/rendering/SurfaceMaterials';
@@ -17,21 +17,43 @@ describe('Original deterministic surface maps',()=>{
       const signatures=new Set<string>();
       for(const id of VISUAL_MATERIAL_IDS){
         const first=generateSurfacePixels(id,32),again=generateSurfacePixels(id,32);
-        expect(first).toEqual(again);
+        expect(first.base.every((byte,i)=>byte===again.base[i])).toBe(true);
+        expect(first.roughness!.every((byte,i)=>byte===again.roughness![i])).toBe(true);
+        expect(first.normal!.every((byte,i)=>byte===again.normal![i])).toBe(true);
         expect(first.base).not.toBe(again.base);
         expect(first.base).not.toBe(first.roughness);
-        expect(checksum(first.base)).not.toBe(checksum(first.roughness));
+        expect(checksum(first.base)).not.toBe(checksum(first.roughness!));
         expect(first.base.length).toBe(32*32*4);
+        expect(first.roughness!.length).toBe(32*32*2);
         expect([...first.base].filter((_,i)=>i%4===3).every(v=>v===255)).toBe(true);
-        signatures.add([checksum(first.base),checksum(first.roughness),checksum(first.normal)].join(':'));
-        for(let i=0;i<first.normal.length;i+=4){
-          const x=first.normal[i]/255*2-1,y=first.normal[i+1]/255*2-1,z=first.normal[i+2]/255*2-1;
-          expect(Math.hypot(x,y,z)).toBeCloseTo(1,1);
-          expect(z).toBeGreaterThan(.75);
+        signatures.add([checksum(first.base),checksum(first.roughness!),checksum(first.normal!)].join(':'));
+        let maxDeviation=0,minZ=1;
+        for(let i=0;i<first.normal!.length;i+=4){
+          const x=first.normal![i]/255*2-1,y=first.normal![i+1]/255*2-1,z=first.normal![i+2]/255*2-1;
+          maxDeviation=Math.max(maxDeviation,Math.abs(Math.hypot(x,y,z)-1));
+          minZ=Math.min(minZ,z);
         }
+        expect(maxDeviation).toBeLessThan(.05);
+        expect(minZ).toBeGreaterThan(.75);
       }
       expect(signatures.size).toBe(15);
     }finally{random.mockRestore();}
+  });
+
+  it('omits unused channels without changing base color and keeps linear roughness in green',()=>{
+    const complete=generateSurfacePixels('raw-concrete',64);
+    const medium=generateSurfacePixels('raw-concrete',64,{roughness:true,normal:false});
+    const low=generateSurfacePixels('raw-concrete',64,{roughness:false,normal:false});
+    expect(low.base).toEqual(complete.base);
+    expect(medium.base).toEqual(complete.base);
+    expect(medium.roughness).toEqual(complete.roughness);
+    expect(low.roughness).toBeNull();
+    expect(medium.normal).toBeNull();
+    expect(low.normal).toBeNull();
+    const texels=complete.roughness!;
+    expect(texels[0]).toBe(0);
+    expect(texels[1]).toBeGreaterThan(200);
+    expect(texels.filter((_,index)=>index%2===0).every(value=>value===0)).toBe(true);
   });
 
   it('rejects texture dimensions outside the bounded mipmapped sizes',()=>{
@@ -48,7 +70,7 @@ describe('Renderer-owned shared PBR materials',()=>{
       expect(otherTint.map).toBe(steel.map);expect(otherTint.roughnessMap).toBe(steel.roughnessMap);expect(otherTint.normalMap).toBe(steel.normalMap);
       expect(otherTint.userData.materialSignature).toBe(steel.userData.materialSignature);
       expect(steel).toBeInstanceOf(MeshStandardMaterial);
-      expect(steel.map?.colorSpace).toBe(SRGBColorSpace);expect(steel.roughnessMap?.colorSpace).toBe(NoColorSpace);expect(steel.normalMap?.colorSpace).toBe(NoColorSpace);
+      expect(steel.map?.colorSpace).toBe(SRGBColorSpace);expect(steel.roughnessMap?.colorSpace).toBe(NoColorSpace);expect(steel.roughnessMap?.format).toBe(RGFormat);expect(steel.normalMap?.colorSpace).toBe(NoColorSpace);
       expect(steel.map?.wrapS).toBe(RepeatWrapping);expect(steel.map?.wrapT).toBe(RepeatWrapping);expect(steel.map?.minFilter).toBe(LinearMipmapLinearFilter);expect(steel.map?.generateMipmaps).toBe(true);expect(steel.map?.anisotropy).toBe(2);
       const plastic=library.material('plastic'),fabric=library.material('fabric'),rubber=library.material('rubber'),glass=library.material('glass');
       expect(steel.metalness).toBeGreaterThan(.9);expect(plastic.metalness).toBe(0);expect(fabric.roughness).toBeGreaterThan(.95);expect(rubber.roughness).toBeGreaterThan(plastic.roughness);

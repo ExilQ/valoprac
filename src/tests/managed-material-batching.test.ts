@@ -46,13 +46,13 @@ describe('Managed textured palette batching',()=>{
       expect(colorBatchSignature(a.material)).toBe(colorBatchSignature(b.material));
       const uv=merged.getAttribute('uv'),colors=merged.getAttribute('color'),sourceUV=a.geometry.getAttribute('uv');
       for(let i=0;i<aCount;i++){
-        const sourceIndex=a.geometry.index!.getX(i);expect(uv.getX(i)).toBe(sourceUV.getX(sourceIndex));expect(uv.getY(i)).toBe(sourceUV.getY(sourceIndex));
+        const sourceIndex=a.geometry.index!.getX(i),batchIndex=merged.index?.getX(i)??i;expect(uv.getX(batchIndex)).toBe(sourceUV.getX(sourceIndex));expect(uv.getY(batchIndex)).toBe(sourceUV.getY(sourceIndex));
         for(const component of [0,1,2]){
           const baseTexel=[.85,.92,.97][component],sourceLinear=a.material.color.toArray()[component];
-          expect(baseTexel*colors.getComponent(i,component)).toBeCloseTo(baseTexel*sourceLinear,6);
+          expect(baseTexel*colors.getComponent(batchIndex,component)).toBeCloseTo(baseTexel*sourceLinear,6);
         }
       }
-      expect(colors.getX(aCount)).toBeCloseTo(b.material.color.r,6);expect(a.geometry.getAttribute('uv').array).toEqual(before);
+      expect(colors.getX(merged.index?.getX(aCount)??aCount)).toBeCloseTo(b.material.color.r,6);expect(a.geometry.getAttribute('uv').array).toEqual(before);
       const palette=library.material('painted-metal',{tint:0xffffff,vertexColors:true}),paletteSignature=colorBatchSignature(palette),old=palette.map;
       library.setQuality('low');expect(palette.map).not.toBe(old);expect(palette.normalMap).toBeNull();expect(colorBatchSignature(palette)).not.toBe(paletteSignature);
       expect(colorBatchSignature(a.material)).toBe(colorBatchSignature(b.material));expect(merged.getAttribute('uv')).toBe(uv);
