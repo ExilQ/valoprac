@@ -133,7 +133,7 @@ in docs/combat/PENETRATION_MODEL.md.
 
 ## openVaim (open-aim)
 
-The orbit camera calculations and sensitivity conversion table are adapted from version 1.4.3 of https://github.com/unkwsr/open-aim.
+The orbit camera calculations, sensitivity conversion table, and Studio surface options and default scales are adapted from version 1.4.3 of https://github.com/unkwsr/open-aim.
 
 MIT License
 

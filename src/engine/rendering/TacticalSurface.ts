@@ -1,20 +1,46 @@
-import { BufferGeometry, Float32BufferAttribute, Vector3 } from 'three';
+import { BufferGeometry, Color, Float32BufferAttribute, Vector3 } from 'three';
+import { arenaPalette } from '../../config/arenaAppearance';
 import { PENETRATION_MATERIALS } from '../../config/penetration';
 import { surfaceForObstacle, SURFACES } from '../../config/surfaces';
 import { surfaceHeight, type Obstacle } from '../collision/environment';
+import type { BoxFinish } from './ArchitecturalBox';
 import { PEEK_ZONES } from '../tactical/complex';
 
-const palette = {
-  facility:[0xa8b8b5,0x607c7c], research:[0xb8c7cc,0x607b8a],
-  urban:[0xb5a38e,0x837b6e], courtyard:[0xc5b28e,0x8e967b],
-} as const;
+export function paletteAt(map:string,x:number,z:number) {
+ const theme=map==='complex'?PEEK_ZONES.find(zone=>Math.abs(zone.center.x-x)<12.1&&Math.sign(zone.center.z)===Math.sign(z))?.theme:undefined;
+ return arenaPalette(map,theme);
+}
 
 export function tacticalSurfaceStyle(obstacle:Obstacle,map:string){
-  const id=surfaceForObstacle(obstacle);
-  const {min,max}=obstacle.box,x=(min.x+max.x)/2,z=(min.z+max.z)/2;
-  const theme=map==='complex'?PEEK_ZONES.find(zone=>Math.abs(zone.center.x-x)<12.1&&Math.sign(zone.center.z)===Math.sign(z))?.theme:undefined;
-  const tint=obstacle.material?PENETRATION_MATERIALS[obstacle.material].color:theme?palette[theme][obstacle.kind==='cover'?1:0]:obstacle.kind==='cover'?0x718e8b:0xc6bfae;
-  return {family:SURFACES[id].visualMaterialId,tint,glass:id==='glass'};
+ const id=surfaceForObstacle(obstacle);
+ const {min,max}=obstacle.box,x=(min.x+max.x)/2,z=(min.z+max.z)/2;
+ const palette=paletteAt(map,x,z);
+ const solid=obstacle.kind==='cover';
+ const visibleWall=!solid&&!obstacle.material&&id==='plasteredConcrete';
+ const tint=obstacle.material?PENETRATION_MATERIALS[obstacle.material].color:id==='glass'?0x9fcaca:obstacle.ramp?palette.skirt:solid?palette.cover:palette.wall;
+ const family=visibleWall?palette.wallFamily:SURFACES[id].visualMaterialId;
+ return {family,tint,glass:id==='glass',palette};
+}
+
+export function tacticalBands(obstacle:Obstacle,map:string):BoxFinish[]|undefined {
+ if(obstacle.ramp||obstacle.material)return undefined;
+ const {min,max}=obstacle.box,height=max.y-min.y;
+ const {tint,glass,palette}=tacticalSurfaceStyle(obstacle,map);
+ if(glass)return undefined;
+ const half=height/2;
+ if(obstacle.kind==='cover'){
+  if(height<.48)return undefined;
+  const rim=Math.min(.10,height*.16);
+  return [{below:half-rim,color:new Color(tint)},{below:Infinity,color:new Color(palette.coverPanel)}];
+ }
+ if(height<2.15)return undefined;
+ const waist=-half+Math.min(1.03,height*.36);
+ return [
+  {below:waist,color:new Color(palette.skirt)},
+  {below:waist+.055,color:new Color(palette.accent)},
+  {below:half-.10,color:new Color(tint)},
+  {below:Infinity,color:new Color(palette.trim)},
+ ];
 }
 
 /** Build the same top plane that the shared collision system samples. */

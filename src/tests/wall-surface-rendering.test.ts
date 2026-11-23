@@ -1,5 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {Box3,BufferGeometry,DirectionalLight,Material,Mesh,MeshStandardMaterial,Raycaster,Scene,Texture,Vector3} from 'three';
+import {loadArenaPatterns} from '../config/arenaPatterns';
 import {SurfaceMaterialLibrary} from '../engine/rendering/SurfaceMaterials';
 import {RangeRenderer} from '../engine/rendering/RangeRenderer';
 import {obstacleFinishes} from '../engine/rendering/ObstacleFinishes';
@@ -94,7 +95,7 @@ function renderEnvironment(map:string,obstacles:Obstacle[]){
   const materialLibrary=new SurfaceMaterialLibrary({quality:'low'});
   // Build the real environment and batches without a WebGL context.
   const renderer=Object.assign(Object.create(RangeRenderer.prototype),{
-    scene,geometries,materials,textures,materialLibrary,
+    scene,geometries,materials,textures,materialLibrary,patterns:loadArenaPatterns(),
     simulation:{practiceMap:map,obstacles,level:levelFor(map)},
     size:new Vector3(),position:new Vector3(),sun:new DirectionalLight(),
     surfaceMaterials:[],archMaterials:new Map(),addSign(){},

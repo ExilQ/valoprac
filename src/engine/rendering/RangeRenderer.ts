@@ -1,3 +1,7 @@
+import {arenaPattern,loadArenaPatterns,type ArenaPatternSpec} from '../../config/arenaPatterns';
+import {arenaLight,arenaPalette} from '../../config/arenaAppearance';
+import {arenaSky} from './ArenaAtmosphere';
+import {arenaGroundPaint} from './ArenaGroundPaint';
 import {floorImpactSurface,floorImpactSurfaceAt} from '../collision/floorImpact';
 import {SURFACES,SURFACE_PARTICLE_PROFILES,type SurfaceId} from '../../config/surfaces';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
@@ -13,7 +17,7 @@ import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
 import {obstacleFinishes} from './ObstacleFinishes';
 import type {Obstacle} from '../collision/environment';
-import {tacticalRampGeometry,tacticalSurfaceStyle} from './TacticalSurface';
+import {tacticalBands,tacticalRampGeometry,tacticalSurfaceStyle} from './TacticalSurface';
 import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
 import type { Simulation } from '../simulation/Simulation';
@@ -37,9 +41,6 @@ import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
 import {cameraVerticalFov} from './projection';
 import {subscribeLocale,translateText} from '../../i18n/locale';
 const DEG=Math.PI/180;
-const WALL_PLINTH=new THREE.Color(0x7a8982);
-const WALL_CORNICE=new THREE.Color(0x617577);
-const TACTICAL_CORNICE=new THREE.Color(0x52666c);
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
 export interface ShaderPreparationReport {revision:number;milliseconds:number;programs:number;method:'parallel'|'synchronous';disposed:boolean;}
 export interface ShaderPreparationStatus {stage:'idle'|'compiling'|'warming'|'gpu'|'ready'|'failed'|'disposed';revision:number;requestedRevision:number;elapsedMs:number;completedPrograms:number|null;totalPrograms:number;}
@@ -66,7 +67,8 @@ export class RangeRenderer {
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
   private entryMarker:THREE.Mesh|null=null;
   private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private fxaa:ShaderPass|null=null;private adsBlend=0;private settingsKey='';
-  private materialLibrary!:SurfaceMaterialLibrary;private environmentSize=0;
+  private materialLibrary!:SurfaceMaterialLibrary;
+  private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
   private shells:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private shellIndex=0;
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
@@ -81,14 +83,17 @@ export class RangeRenderer {
     this.capabilities=detectGraphicsCapabilities(this.renderer.getContext());
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};this.settings=settings;
     this.materialLibrary=new SurfaceMaterialLibrary({quality:settings.textureQuality,anisotropy:this.renderer.capabilities.getMaxAnisotropy(),scalarLow:this.capabilities.kind==='software'});
-    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x9aafb3);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
+    const light=arenaLight(simulation.practiceMap),sky=arenaSky(light.zenith,light.horizon);
+    this.textures.add(sky);
+    this.scene.background=sky;
+    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
     if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
-    this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=0.38;
-    this.scene.fog=new THREE.Fog(0x9aafb3,38,110);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
-    this.scene.add(new THREE.HemisphereLight(0xe7eff6,0xa39884,1.68));
-    const sun=this.sun=new THREE.DirectionalLight(0xffeedb,2.5);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
-    const fill=new THREE.DirectionalLight(0xc2d9eb,.68);fill.position.set(4,5,-18);this.scene.add(fill);
-    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildEntryMarker();this.batchStaticArchitecture();this.applySettings(settings);
+    this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=.31;
+    this.scene.fog=new THREE.Fog(light.horizon,45,140);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
+    this.scene.add(new THREE.HemisphereLight(light.ambient,light.ground,1.42));
+    const sun=this.sun=new THREE.DirectionalLight(light.sun,2.85);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
+    const fill=new THREE.DirectionalLight(light.fill,.49);fill.position.set(4,5,-18);this.scene.add(fill);
+    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildGroundPaint();this.buildEntryMarker();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
     // initialization succeeds so failed attempts do not retain the renderer.
@@ -192,50 +197,53 @@ export class RangeRenderer {
   }
   get materialMemory(){return this.materialLibrary.stats();}
   get characterRendering(){return this.characterBatches?.getStats()??null;}
-  private material(color:number,_roughness=.8,family:VisualMaterialId='painted-concrete'){
-    const m=this.materialLibrary.material(family,{tint:color});this.materials.add(m);return m;
+  private material(color:number,_roughness=.8,family:VisualMaterialId='painted-concrete',pattern:ArenaPatternSpec={}){
+    const m=this.materialLibrary.material(family,{tint:color,...pattern});this.materials.add(m);return m;
   }
-  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material,finishes?:readonly BoxFinish[]){const r=Math.min(.035,Math.min(w,h,d)*.12),g=finishes||Math.min(w,h,d)>.09?architecturalBox(w,h,d,r,finishes):new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.updateMatrix();const family=material.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,VISUAL_MATERIALS[family].metersPerTile,m.matrix);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
-  private obstacleBox(obstacle:Obstacle,material:THREE.MeshStandardMaterial,tactical=false){
-    obstacle.box.getSize(this.size);
-    obstacle.box.getCenter(this.position);
-    const {x:width,y:height,z:depth}=this.size;
-    const {x,y,z}=this.position;
-    const plinth=obstacle.kind==='wall'&&!obstacle.material&&height>=2.5;
-    if(obstacle.ramp||material.transparent||(obstacle.kind==='cover'&&obstacle.material)||(!plinth&&!tactical)){
-      const mesh=this.box(width,height,depth,x,y,z,material);
-      if(material.transparent){
-        // Glass panes sort individually and do not cast a solid box shadow.
-        mesh.userData.staticRange=false;
-        mesh.castShadow=false;
-      }
+  private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material,finishes?:readonly BoxFinish[]){const r=Math.min(.035,Math.min(w,h,d)*.12),g=finishes||Math.min(w,h,d)>.09?architecturalBox(w,h,d,r,finishes):new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.updateMatrix();const family=material.userData.visualMaterialId as VisualMaterialId|undefined;if(family)writeWorldScaleUV(g,material.userData.surfaceMetersPerTile??VISUAL_MATERIALS[family].metersPerTile,m.matrix);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
+  private obstacleBox(obstacle:Obstacle,material:THREE.MeshStandardMaterial){
+    const {x:w,y:h,z:d}=obstacle.box.getSize(this.size);
+    const {x,y,z}=obstacle.box.getCenter(this.position);
+    const finishes=tacticalBands(obstacle,this.simulation.practiceMap);
+    if(!finishes){
+      const mesh=this.box(w,h,d,x,y,z,material);
+      if(material.transparent){mesh.userData.staticRange=false;mesh.castShadow=false;}
       return mesh;
     }
-
-    const finishes:BoxFinish[]=[];
-    if(plinth)finishes.push({below:-height/2+.22,color:WALL_PLINTH});
-    finishes.push(
-      {below:height/2-Math.min(.12,height/3),color:material.color},
-      {below:Infinity,color:plinth?WALL_CORNICE:TACTICAL_CORNICE},
-    );
-    const painted=this.materialLibrary.material(material.userData.visualMaterialId??'painted-concrete',{tint:0xffffff,roughness:material.roughness,metalness:material.metalness,vertexColors:true});this.materials.add(painted);
-    return this.box(width,height,depth,x,y,z,painted,finishes);
+    const family=material.userData.visualMaterialId as VisualMaterialId;
+    const painted=this.materialLibrary.material(family,{
+      tint:0xffffff,roughness:material.roughness,metalness:material.metalness,
+      normalStrength:material.normalScale.x,vertexColors:true,
+      surfacePattern:material.userData.surfacePattern,metersPerTile:material.userData.surfaceMetersPerTile,
+    });
+    this.materials.add(painted);
+    return this.box(w,h,d,x,y,z,painted,finishes);
+  }
+  private buildGroundPaint(){
+    const geometry=arenaGroundPaint(this.simulation.practiceMap);
+    if(!geometry)return;
+    const material=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.9,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    const mesh=new THREE.Mesh(geometry,material);
+    mesh.name='VALOPRAC route and lane paint';
+    mesh.receiveShadow=true;
+    this.geometries.add(geometry);this.materials.add(material);this.scene.add(mesh);
   }
   private buildEnvironment(){
     if(this.simulation.practiceMap!=='range'){this.buildTactical();return;}
 
-    const floor=this.material(0x8a9089,.94,'raw-concrete'),trim=this.material(0x3e535b,.7,'painted-metal'),metal=this.material(0x667b80,.55,'brushed-metal'),accent=this.material(0xbcb18b,.85,'painted-concrete');
+    const style=arenaPalette('range');
+    const floor=this.material(style.floor,.94,style.floorFamily,arenaPattern('range',true,this.patterns)),trim=this.material(style.trim,.7,'painted-metal'),metal=this.material(style.skirt,.55,'brushed-metal'),accent=this.material(style.accent,.85,'painted-concrete');
     this.box(24,0.15,40,0,-0.075,-10,floor);
     // Broad expansion seams give depth without high-frequency combat clutter.
-    const seam=this.material(0x76857f,.95);for(let z=5;z>-30;z-=5)this.box(23.9,.006,.024,0,.004,z,seam);
+    const seam=this.material(0x7a8d90,.95);for(let z=5;z>-30;z-=5)this.box(23.9,.006,.024,0,.004,z,seam);
     for(const o of this.simulation.obstacles)this.obstacleBox(o,this.tacticalSurface(o));
     for(let z=6;z>-30;z-=6){this.box(0.12,5,0.3,-11.94,2.5,z,metal);this.box(0.12,5,0.3,11.94,2.5,z,metal);this.box(24,0.22,0.3,0,5,z,trim);}
     for(let x=-10;x<=10;x+=5){this.box(0.06,0.015,35,x,0.013,-10,metal);}
     this.box(21,0.08,0.06,0,0.014,0,accent);this.box(0.06,0.015,28,0,0.013,-14,accent);
-    this.box(18,3.9,0.08,0,2,-29.94,this.material(0x728780,.92));
+    this.box(18,3.9,0.08,0,2,-29.94,this.material(0x557783,.92,'painted-concrete'));
     const points:THREE.Vector3[]=[];for(let x=-9;x<=9;x+=0.5){points.push(new THREE.Vector3(x,0.1,-29.885),new THREE.Vector3(x,3.9,-29.885));}for(let y=0.1;y<=3.9;y+=0.5){points.push(new THREE.Vector3(-9,y,-29.885),new THREE.Vector3(9,y,-29.885));}
-    const geometry=new THREE.BufferGeometry().setFromPoints(points);this.geometries.add(geometry);const mat=new THREE.LineBasicMaterial({color:0x607c78,transparent:true,opacity:0.35});this.materials.add(mat);this.scene.add(new THREE.LineSegments(geometry,mat));
-    for(const radius of [0.07,0.3,0.65,1.1]){const g=new THREE.RingGeometry(radius-0.009,radius,64);this.geometries.add(g);const m=new THREE.MeshBasicMaterial({color:0x9bcab6,side:THREE.DoubleSide});this.materials.add(m);const ring=new THREE.Mesh(g,m);ring.position.set(0,1.64,-29.87);this.scene.add(ring);}
+    const geometry=new THREE.BufferGeometry().setFromPoints(points);this.geometries.add(geometry);const mat=new THREE.LineBasicMaterial({color:0xb5d4cb,transparent:true,opacity:0.36});this.materials.add(mat);this.scene.add(new THREE.LineSegments(geometry,mat));
+    for(const radius of [0.07,0.3,0.65,1.1]){const g=new THREE.RingGeometry(radius-0.009,radius,64);this.geometries.add(g);const m=new THREE.MeshBasicMaterial({color:0xe7dcab,side:THREE.DoubleSide});this.materials.add(m);const ring=new THREE.Mesh(g,m);ring.position.set(0,1.64,-29.87);this.scene.add(ring);}
     this.addSign('01',-10,3.4,-29.82,1.2);this.addSign('머리만 유효',0,4.5,-29.82,2.6);
     for(const [label,z] of [['10 미터',-5],['20 미터',-15],['30 미터',-25]] as const)this.addSign(label,-10.7,0.025,z,1.6,true);
     // Simple faux skylight strips use emissive materials with no dynamic shadow cost.
@@ -256,7 +264,7 @@ export class RangeRenderer {
   }
   private addSign(text:string,x:number,y:number,z:number,width:number,floor=false,reverse=false){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d');if(!ctx)return;
     const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;this.textures.add(texture);
-    const paint=()=>{ctx.clearRect(0,0,512,128);ctx.fillStyle='#e3e5d9';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(translateText(text),256,64,490);texture.needsUpdate=true;};
+    const paint=()=>{ctx.clearRect(0,0,512,128);ctx.fillStyle='#fff3cd';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='600 48px sans-serif';ctx.fillText(translateText(text),256,64,490);texture.needsUpdate=true;};
     paint();this.localizedSigns.push(paint);
     const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false});this.materials.add(material);const g=new THREE.PlaneGeometry(width,width/4);this.geometries.add(g);const mesh=new THREE.Mesh(g,material);mesh.position.set(x,y,z);if(floor)mesh.rotation.x=-Math.PI/2;else if(reverse)mesh.rotation.y=Math.PI;this.scene.add(mesh);
   }
@@ -329,15 +337,17 @@ export class RangeRenderer {
   clearImpacts(){this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
   private tacticalSurface(obstacle:Obstacle){
     const {family,tint,glass}=tacticalSurfaceStyle(obstacle,this.simulation.practiceMap);
-    const material=this.materialLibrary.material(family,{tint,...(glass?{transparent:true,opacity:.32,depthWrite:false}:{})});
+    const pattern=obstacle.material||glass||obstacle.ramp||obstacle.kind==='cover'?{}:arenaPattern(this.simulation.practiceMap,false,this.patterns);
+    const material=this.materialLibrary.material(family,{tint,...pattern,...(glass?{transparent:true,opacity:.32,depthWrite:false}:{})});
     this.materials.add(material);
     return material;
   }
   private buildTactical(){
-    const trim=this.material(0x52666c,.68,'painted-metal'),floor=this.material(0x858d87,.96,'raw-concrete'),light=new THREE.MeshBasicMaterial({color:0xc3c4b3});this.materials.add(light);
+    const style=arenaPalette(this.simulation.practiceMap);
+    const trim=this.material(style.trim,.68,'painted-metal'),floor=this.material(style.floor,.96,style.floorFamily,arenaPattern(this.simulation.practiceMap,true,this.patterns)),light=new THREE.MeshBasicMaterial({color:style.accent});this.materials.add(light);
     const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.075,b[1]+b[3]/2,floor);
     for(const obstacle of this.simulation.obstacles){
-      if(!obstacle.ramp){this.obstacleBox(obstacle,this.tacticalSurface(obstacle),true);continue;}
+      if(!obstacle.ramp){this.obstacleBox(obstacle,this.tacticalSurface(obstacle));continue;}
       const material=this.tacticalSurface(obstacle),geometry=tacticalRampGeometry(obstacle);
       writeWorldScaleUV(geometry,VISUAL_MATERIALS[material.userData.visualMaterialId as VisualMaterialId].metersPerTile);
       const mesh=new THREE.Mesh(geometry,material);
@@ -348,7 +358,7 @@ export class RangeRenderer {
     }
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
     if(this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
-    if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(0xa9bdc0,65,160);}
+    if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(arenaLight('complex').horizon,65,160);}
     this.sun.shadow.camera.left=-30;this.sun.shadow.camera.right=30;this.sun.shadow.camera.top=36;this.sun.shadow.camera.bottom=-30;this.sun.shadow.camera.updateProjectionMatrix();
     const centerX=b[0]+b[2]/2,centerZ=b[1]+b[3]/2,span=Math.max(b[2],b[3])*.64;
     this.sun.position.set(centerX-35,65,centerZ+38);this.sun.target.position.set(centerX,0,centerZ);
@@ -358,10 +368,11 @@ export class RangeRenderer {
     if(this.simulation.practiceMap==='range')this.buildRangePolish();
     this.buildObstacleFinishes();
     this.buildArchitecturalLayers();
-    if(this.simulation.practiceMap!=='range'){this.architecture=tacticalArchitecture(this.simulation.practiceMap,this.simulation.obstacles,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},t=>{this.textures.add(t);return t;},this.materialLibrary);this.scene.add(this.architecture);}
+    if(this.simulation.practiceMap!=='range'){this.architecture=tacticalArchitecture(this.simulation.practiceMap,this.simulation.obstacles,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},t=>{this.textures.add(t);return t;},this.materialLibrary,this.patterns);this.scene.add(this.architecture);}
   }
   private buildRangePolish(){
-    const concrete=this.material(0xa8b1a5,.92,'raw-concrete'),paint=this.material(0x52686c,.7,'painted-metal'),rubber=this.material(0x596c69,.97,'rubber'),edge=this.material(0x93a6a3,.65,'aluminum');
+    const style=arenaPalette('range');
+    const concrete=this.material(style.wall,.92,style.wallFamily),paint=this.material(style.trim,.7,'painted-metal'),rubber=this.material(0x456369,.97,'rubber',arenaPattern('range',true,this.patterns)),edge=this.material(style.coverPanel,.65,'aluminum');
     this.surfaceMaterials.push(concrete,rubber);concrete.userData.surface='concrete';rubber.userData.surface='rubber';
     this.box(23.8,0.012,9.4,0,-0.004,5,rubber);this.box(24,0.26,0.4,0,0.13,9.7,paint);
     for(const x of [-11.85,11.85]){this.box(0.12,1.15,39,x,0.58,-10,concrete);this.box(0.13,0.045,39,x,1.2,-10,edge);for(let z=7;z>-30;z-=4){this.box(0.16,2.6,0.11,x,2.75,z,paint);this.box(0.05,0.08,1.8,x+(x<0?0.03:-0.03),2.3,z-1,edge);}}
@@ -373,7 +384,7 @@ export class RangeRenderer {
     this.addSign('발로프랙 · 전술 훈련 시설',0,5.4,-29.8,5.2);
   }
   private buildObstacleFinishes(){
-    const geometry=obstacleFinishes(this.simulation.obstacles);
+    const geometry=obstacleFinishes(this.simulation.obstacles,this.simulation.practiceMap);
     if(!geometry)return;
     const family='painted-metal';
     writeWorldScaleUV(geometry,VISUAL_MATERIALS[family].metersPerTile);
@@ -388,7 +399,8 @@ export class RangeRenderer {
   private archMaterials=new Map<string,THREE.MeshStandardMaterial>();
   private archMaterial(key:string,color:number,roughness:number){let m=this.archMaterials.get(key);if(!m){const family:VisualMaterialId=/metal|trim|frame/.test(key)?'painted-metal':/base|concrete/.test(key)?'raw-concrete':/warm/.test(key)?'wood':'painted-concrete';m=this.materialLibrary.material(family,{tint:color,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});this.materials.add(m);m.polygonOffset=true;m.polygonOffsetFactor=-1;m.polygonOffsetUnits=-1;this.archMaterials.set(key,m);}return m;}
   private buildArchitecturalLayers(){
-    const frame=this.archMaterial('metal',0x405861,.63),inset=this.archMaterial('inset',0x809d9d,.8),warm=this.archMaterial('warm',0xc5b998,.88);
+    const style=arenaPalette(this.simulation.practiceMap);
+    const frame=this.archMaterial('metal',style.trim,.63),inset=this.archMaterial('inset',style.coverPanel,.8),warm=this.archMaterial('warm',style.accent,.88);
     if(this.simulation.practiceMap==='range'){
       // High clerestory openings and paired ribs compose an original training
       // campus. All new forms are above combat height or outside the play area.
@@ -413,7 +425,7 @@ export class RangeRenderer {
   private batchStaticArchitecture(){
     this.scene.updateMatrixWorld(true);const groups=new Map<string,{material:THREE.Material;list:THREE.Mesh[];palette:boolean}>();
     for(const child of this.scene.children){if(!(child instanceof THREE.Mesh)||!child.userData.staticRange||Array.isArray(child.material))continue;const signature=colorBatchSignature(child.material),key=signature??child.material.uuid;const group=groups.get(key)??{material:child.material,list:[] as THREE.Mesh[],palette:signature!==null};group.list.push(child);groups.set(key,group);}
-    for(const {material,list,palette} of groups.values()){if(list.length<2)continue;const merged=mergeStaticArchitecture(list,'world',palette);if(!merged)continue;let surface=material;if(palette){const family=material.userData.visualMaterialId as VisualMaterialId|undefined;const source=material as THREE.MeshStandardMaterial;const tinted=family?this.materialLibrary.material(family,{tint:0xffffff,vertexColors:true,roughness:source.roughness,metalness:source.metalness,normalStrength:source.normalScale.x,polygonOffset:source.polygonOffset,polygonOffsetFactor:source.polygonOffsetFactor,polygonOffsetUnits:source.polygonOffsetUnits}):material.clone() as THREE.MeshStandardMaterial;tinted.color.setHex(0xffffff);tinted.vertexColors=true;surface=tinted;this.materials.add(surface);}this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,surface);mesh.name='batched structural palette';mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
+    for(const {material,list,palette} of groups.values()){if(list.length<2)continue;const merged=mergeStaticArchitecture(list,'world',palette);if(!merged)continue;let surface=material;if(palette){const family=material.userData.visualMaterialId as VisualMaterialId|undefined;const source=material as THREE.MeshStandardMaterial;const tinted=family?this.materialLibrary.material(family,{tint:0xffffff,vertexColors:true,roughness:source.roughness,metalness:source.metalness,normalStrength:source.normalScale.x,surfacePattern:source.userData.surfacePattern,metersPerTile:source.userData.surfaceMetersPerTile,polygonOffset:source.polygonOffset,polygonOffsetFactor:source.polygonOffsetFactor,polygonOffsetUnits:source.polygonOffsetUnits}):material.clone() as THREE.MeshStandardMaterial;tinted.color.setHex(0xffffff);tinted.vertexColors=true;surface=tinted;this.materials.add(surface);}this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,surface);mesh.name='batched structural palette';mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
   }
   applySettings(settings:Settings){
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};

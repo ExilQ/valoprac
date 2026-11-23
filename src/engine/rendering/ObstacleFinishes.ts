@@ -1,21 +1,16 @@
 import {BufferGeometry,Color,Float32BufferAttribute} from 'three';
 import {surfaceForObstacle} from '../../config/surfaces';
+import {paletteAt} from './TacticalSurface';
 import type {Obstacle} from '../collision/environment';
 
 type Axis='x'|'y'|'z';
-
-const REVEAL=new Color(0x596c6d);
-const CLADDING=new Color(0x849995);
-const EDGE=new Color(0x9dad9f);
-const CASING=new Color(0x4d6468);
-const LOUVER=new Color(0x637c7c);
 
 // Keep the cladding on the flat part of the chamfered solid. The small offset
 // avoids coplanar depth fighting without visibly extending the cover.
 const INSET=.06;
 const OFFSET=.002;
 
-export function obstacleFinishes(obstacles:readonly Obstacle[]):BufferGeometry|null {
+export function obstacleFinishes(obstacles:readonly Obstacle[],map='range'):BufferGeometry|null {
   const positions:number[]=[],colors:number[]=[],indices:number[]=[];
   function quad(axis:Axis,positive:boolean,plane:number,u0:number,v0:number,u1:number,v1:number,color:Color){
     const base=positions.length/3;
@@ -32,14 +27,17 @@ export function obstacleFinishes(obstacles:readonly Obstacle[]):BufferGeometry|n
   for(const obstacle of obstacles){
     if(obstacle.ramp||obstacle.material||surfaceForObstacle(obstacle)==='glass')continue;
     const {min,max}=obstacle.box;
+    const colors=paletteAt(map,(min.x+max.x)/2,(min.z+max.z)/2);
+    const reveal=new Color(colors.trim),cladding=new Color(colors.coverPanel),edge=new Color(colors.accent);
+    const casing=new Color(colors.cover),louver=new Color(colors.skirt);
     const width=max.x-min.x,depth=max.z-min.z,height=max.y-min.y;
     if(obstacle.kind==='cover'){
       if(width<=.35||depth<=.35||height<.45)continue;
       const top=max.y+OFFSET;
       const band=.045;
-      quad('y',true,top,min.x+INSET,min.z+INSET,max.x-INSET,min.z+INSET+band,EDGE);
-      quad('y',true,top,min.x+INSET,min.z+INSET+band,max.x-INSET,max.z-INSET-band,CASING);
-      quad('y',true,top,min.x+INSET,max.z-INSET-band,max.x-INSET,max.z-INSET,EDGE);
+      quad('y',true,top,min.x+INSET,min.z+INSET,max.x-INSET,min.z+INSET+band,edge);
+      quad('y',true,top,min.x+INSET,min.z+INSET+band,max.x-INSET,max.z-INSET-band,casing);
+      quad('y',true,top,min.x+INSET,max.z-INSET-band,max.x-INSET,max.z-INSET,edge);
 
       // Inset steel face with a narrow top reveal and a protected lower rail.
       const bottom=min.y+height*.19,upper=max.y-height*.19;
@@ -49,9 +47,9 @@ export function obstacleFinishes(obstacles:readonly Obstacle[]):BufferGeometry|n
         const left=min[spanAxis]+span*.09,right=max[spanAxis]-span*.09;
         for(const positive of [false,true]){
           const plane=positive?max[axis]+OFFSET:min[axis]-OFFSET;
-          quad(axis,positive,plane,left,bottom,right,bottom+band,CASING);
-          quad(axis,positive,plane,left,bottom+band,right,upper-band,CLADDING);
-          quad(axis,positive,plane,left,upper-band,right,upper,REVEAL);
+          quad(axis,positive,plane,left,bottom,right,bottom+band,casing);
+          quad(axis,positive,plane,left,bottom+band,right,upper-band,cladding);
+          quad(axis,positive,plane,left,upper-band,right,upper,reveal);
         }
       }
       continue;
@@ -64,14 +62,14 @@ export function obstacleFinishes(obstacles:readonly Obstacle[]):BufferGeometry|n
     const rail=max.y-Math.min(1.65,height*.17);
     for(const positive of [false,true]){
       const plane=positive?max[normalAxis]+OFFSET:min[normalAxis]-OFFSET;
-      quad(normalAxis,positive,plane,min[spanAxis]+INSET,rail,max[spanAxis]-INSET,rail+.045,REVEAL);
+      quad(normalAxis,positive,plane,min[spanAxis]+INSET,rail,max[spanAxis]-INSET,rail+.045,reveal);
       if(height<=4)continue;
       const ventWidth=Math.min(1.88,pitch-.3),ventTop=max.y-.29,ventBottom=rail+.18;
       for(let panel=0;panel<count;panel++){
         const center=min[spanAxis]+(panel+.5)*pitch,left=center-ventWidth/2,right=center+ventWidth/2;
         const row=(ventTop-ventBottom)/5;
         for(let slat=0;slat<5;slat++){
-          quad(normalAxis,positive,plane,left,ventBottom+slat*row,right,ventBottom+(slat+1)*row,slat%2===0?CASING:LOUVER);
+          quad(normalAxis,positive,plane,left,ventBottom+slat*row,right,ventBottom+(slat+1)*row,slat%2===0?casing:louver);
         }
       }
     }

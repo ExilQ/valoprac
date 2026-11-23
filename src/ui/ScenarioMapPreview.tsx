@@ -1,10 +1,12 @@
+import {arenaPattern,loadArenaPatterns} from '../config/arenaPatterns';
+import {arenaLight,arenaPalette} from '../config/arenaAppearance';
 import { useEffect, useRef, useState } from 'react';
 import { BoxGeometry, BufferGeometry, Color, DirectionalLight, Group, HemisphereLight, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, MeshStandardMaterial, PlaneGeometry, Scene, SphereGeometry, Vector3 } from 'three';
 import { VISUAL_MATERIALS } from '../config/materials';
 import { architecturalBox } from '../engine/rendering/ArchitecturalBox';
 import { createOrbitPreview, disposePreviewGeometry } from '../engine/rendering/OrbitPreview';
 import { SurfaceMaterialLibrary, writeWorldScaleUV } from '../engine/rendering/SurfaceMaterials';
-import { tacticalRampGeometry, tacticalSurfaceStyle } from '../engine/rendering/TacticalSurface';
+import { tacticalBands, tacticalRampGeometry, tacticalSurfaceStyle } from '../engine/rendering/TacticalSurface';
 import { gateEndpoints, scenarioEntryGate } from '../training/scenarios/entryGate';
 import { scenarioApproach, scenarioLevel } from '../training/scenarios/validation';
 import type { ScenarioDefinition } from '../training/scenarios/types';
@@ -33,9 +35,10 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
     const scene=new Scene();
     const [left,top,width,depth]=level.bounds;
     const center=new Vector3(left+width/2,0,top+depth/2);
-    scene.background=new Color(detailed?0x15262b:0x182e35);
+    const style=arenaPalette(level.id),sky=arenaLight(level.id);
+    scene.background=new Color(detailed?sky.horizon:0x182e35);
     scene.add(new HemisphereLight(0xf0f7ef,0x87958d,2.35));
-    const sun=new DirectionalLight(0xffe7cb,2.05);
+    const sun=new DirectionalLight(sky.sun,2.05);
     sun.position.set(center.x-25,40,center.z+18);
     scene.add(sun);
     const available:Mesh[]=[];
@@ -48,23 +51,26 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
     } catch {setFailed(true);return;}
     setFailed(false);
     preview.current=orbit;
+    const patterns=loadArenaPatterns();
     const surfaces=new SurfaceMaterialLibrary({quality:'high',anisotropy:orbit.renderer.capabilities.getMaxAnisotropy()});
     const blocked=new MeshStandardMaterial({color:0x789094,roughness:.92});
     const cover=new MeshStandardMaterial({color:0x427b76,roughness:.74});
     const ground=new MeshStandardMaterial({color:0x506861,roughness:.96});
-    const floor=new Mesh(new PlaneGeometry(width,depth),detailed?surfaces.material('raw-concrete',0x7a8277):ground);
+    const floor=new Mesh(new PlaneGeometry(width,depth),detailed?surfaces.material(style.floorFamily,{tint:style.floor,...arenaPattern(level.id,true,patterns)}):ground);
     floor.rotation.x=-Math.PI/2;floor.position.copy(center);floor.updateMatrix();
-    if(detailed)writeWorldScaleUV(floor.geometry,VISUAL_MATERIALS['raw-concrete'].metersPerTile,floor.matrix);
+    if(detailed)writeWorldScaleUV(floor.geometry,floor.material.userData.surfaceMetersPerTile??VISUAL_MATERIALS[style.floorFamily].metersPerTile,floor.matrix);
     scene.add(floor);available.push(floor);
     for(const obstacle of level.obstacles){
       const {x:w,y:h,z:d}=obstacle.box.getSize(new Vector3());
       const style=tacticalSurfaceStyle(obstacle,level.id);
-      const material=detailed?surfaces.material(style.family,{tint:style.tint,metalness:style.glass?.1:undefined}):obstacle.kind==='cover'?cover:blocked;
-      const geometry=obstacle.ramp?tacticalRampGeometry(obstacle):detailed?architecturalBox(w,h,d):new BoxGeometry(w,h,d);
+      const bands=detailed?tacticalBands(obstacle,level.id):undefined;
+      const pattern=obstacle.material||style.glass||obstacle.ramp||obstacle.kind==='cover'?{}:arenaPattern(level.id,false,patterns);
+      const material=detailed?surfaces.material(style.family,{tint:bands?0xffffff:style.tint,vertexColors:!!bands,metalness:style.glass?.1:undefined,...pattern}):obstacle.kind==='cover'?cover:blocked;
+      const geometry=obstacle.ramp?tacticalRampGeometry(obstacle):detailed?architecturalBox(w,h,d,.035,bands):new BoxGeometry(w,h,d);
       const mesh=new Mesh(geometry,material);
       if(!obstacle.ramp)obstacle.box.getCenter(mesh.position);
       mesh.updateMatrix();
-      if(detailed)writeWorldScaleUV(geometry,VISUAL_MATERIALS[style.family].metersPerTile,mesh.matrix);
+      if(detailed)writeWorldScaleUV(geometry,material.userData.surfaceMetersPerTile??VISUAL_MATERIALS[style.family].metersPerTile,mesh.matrix);
       scene.add(mesh);available.push(mesh);
     }
 

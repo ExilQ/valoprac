@@ -1,3 +1,4 @@
+import type {ArenaPatternSpec,SurfacePatternStyle} from '../../config/arenaPatterns';
 import * as T from 'three';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 import type {Quality} from '../types';
@@ -10,7 +11,7 @@ export const SURFACE_QUALITY:Readonly<Record<Quality,{size:number;normal:boolean
   high:{size:128,normal:true,roughness:true,anisotropy:4},
   ultra:{size:256,normal:true,roughness:true,anisotropy:8},
 };
-export interface SurfaceMaterialOptions {
+export interface SurfaceMaterialOptions extends ArenaPatternSpec {
   tint?:T.ColorRepresentation;
   vertexColors?:boolean;
   roughness?:number;
@@ -27,7 +28,7 @@ export interface SurfaceMaterialOptions {
   opacity?:number;
 }
 interface TextureSet {base:T.DataTexture;roughness:T.DataTexture|null;normal:T.DataTexture|null;bytes:number;}
-interface CachedMaterial {id:VisualMaterialId;value:T.MeshStandardMaterial;normalStrength:number;}
+interface CachedMaterial {id:VisualMaterialId;value:T.MeshStandardMaterial;normalStrength:number;pattern?:SurfacePatternStyle;}
 
 /** Renderer-scoped ownership. Texture sets are shared per family; tint variants
  * share programs and maps. Quality changes rebind existing materials, then free
@@ -37,7 +38,7 @@ export class SurfaceMaterialLibrary {
   private readonly anisotropy:number;
   private readonly maxVariants:number;
   private readonly scalarLow:boolean;
-  private readonly textures=new Map<VisualMaterialId,TextureSet>();
+  private readonly textures=new Map<string,TextureSet>();
   private readonly materials=new Map<string,CachedMaterial>();
   private disposed=false;
   constructor(options:{quality?:Quality;anisotropy?:number;maxVariants?:number;scalarLow?:boolean}={}){
@@ -49,14 +50,14 @@ export class SurfaceMaterialLibrary {
     const o:SurfaceMaterialOptions=typeof tintOrOptions==='object'&&!(tintOrOptions instanceof T.Color)?tintOrOptions:{tint:tintOrOptions as T.ColorRepresentation};
     const color=new T.Color(o.tint??d.color),emissive=new T.Color(o.emissive??0),roughness=T.MathUtils.clamp(o.roughness??d.roughness,0,1),metalness=T.MathUtils.clamp(o.metalness??d.metalness,0,1),normalStrength=o.normalStrength??d.normalStrength;
     const opacity=T.MathUtils.clamp(o.opacity??1,0,1);
-    const key=JSON.stringify([id,color.getHex(),!!o.vertexColors,roughness,metalness,normalStrength,emissive.getHex(),o.emissiveIntensity??1,!!o.polygonOffset,o.polygonOffsetFactor??0,o.polygonOffsetUnits??0,o.depthWrite??true,!!o.transparent,opacity]);
+    const key=JSON.stringify([id,color.getHex(),!!o.vertexColors,roughness,metalness,normalStrength,emissive.getHex(),o.emissiveIntensity??1,!!o.polygonOffset,o.polygonOffsetFactor??0,o.polygonOffsetUnits??0,o.depthWrite??true,!!o.transparent,opacity,o.surfacePattern,o.metersPerTile]);
     const cached=this.materials.get(key);if(cached)return cached.value;
     if(this.materials.size>=this.maxVariants)throw new RangeError(`Surface material variant budget (${this.maxVariants}) exceeded`);
     const value=new T.MeshStandardMaterial({color,roughness,metalness,vertexColors:!!o.vertexColors,emissive,emissiveIntensity:o.emissiveIntensity??1,polygonOffset:!!o.polygonOffset,polygonOffsetFactor:o.polygonOffsetFactor??0,polygonOffsetUnits:o.polygonOffsetUnits??0,depthWrite:o.depthWrite??true,transparent:!!o.transparent,opacity});
-    value.name=`VALOPRAC ${id}`;value.userData.visualMaterialId=id;value.userData.materialFamily=id;value.userData.surfaceMaterialManaged=true;
+    value.name=`VALOPRAC ${id}`;value.userData.visualMaterialId=id;value.userData.materialFamily=id;value.userData.surfaceMaterialManaged=true;value.userData.surfacePattern=o.surfacePattern;value.userData.surfaceMetersPerTile=o.metersPerTile??d.metersPerTile;
     // Default glass is an opaque coating/optic finish. Explicit physical sheet
     // glass can opt into standard alpha blending without transmission passes.
-    const entry={id,value,normalStrength};this.bind(entry);this.materials.set(key,entry);return value;
+    const entry={id,value,normalStrength,pattern:o.surfacePattern};this.bind(entry);this.materials.set(key,entry);return value;
   }
   setQuality(quality:Quality){
     if(this.disposed||this.quality===quality)return;
@@ -65,23 +66,24 @@ export class SurfaceMaterialLibrary {
     for(const maps of old)this.disposeTextures(maps);
   }
   private bind(entry:CachedMaterial){
-    const maps=this.scalarLow&&this.quality==='low'?null:this.textureSet(entry.id),m=entry.value;
+    const maps=this.scalarLow&&this.quality==='low'&&!entry.pattern?null:this.textureSet(entry.id,entry.pattern),m=entry.value;
     m.map=maps?.base??null;m.roughnessMap=maps?.roughness??null;m.normalMap=maps?.normal??null;m.normalScale.setScalar(entry.normalStrength);
-    m.userData.materialSignature=JSON.stringify([entry.id,this.quality,m.roughness,m.metalness,entry.normalStrength,m.vertexColors,m.transparent,m.opacity,m.depthWrite,m.polygonOffset,m.polygonOffsetFactor,m.polygonOffsetUnits,m.emissive.getHex(),m.emissiveIntensity,m.side]);m.needsUpdate=true;
+    m.userData.materialSignature=JSON.stringify([entry.id,entry.pattern,this.quality,m.roughness,m.metalness,entry.normalStrength,m.vertexColors,m.transparent,m.opacity,m.depthWrite,m.polygonOffset,m.polygonOffsetFactor,m.polygonOffsetUnits,m.emissive.getHex(),m.emissiveIntensity,m.side]);m.needsUpdate=true;
   }
-  private textureSet(id:VisualMaterialId){
-    const cached=this.textures.get(id);if(cached)return cached;
-    const q=SURFACE_QUALITY[this.quality],pixels=generateSurfacePixels(id,q.size,q);
+  private textureSet(id:VisualMaterialId,pattern?:SurfacePatternStyle){
+    const key=pattern?`${id}:${pattern}`:id;
+    const cached=this.textures.get(key);if(cached)return cached;
+    const q=SURFACE_QUALITY[this.quality],pixels=generateSurfacePixels(id,q.size,q,pattern);
     const create=(data:Uint8Array,colorSpace:T.ColorSpace,channel:string,format:T.PixelFormat=T.RGBAFormat)=>{
       const texture=new T.DataTexture(data,q.size,q.size,format,T.UnsignedByteType);
-      texture.name=`VALOPRAC ${id} ${channel} ${q.size}`;texture.colorSpace=colorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.magFilter=T.LinearFilter;texture.minFilter=T.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.anisotropy=Math.min(q.anisotropy,this.anisotropy);texture.needsUpdate=true;return texture;
+      texture.name=`VALOPRAC ${key} ${channel} ${q.size}`;texture.colorSpace=colorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.magFilter=T.LinearFilter;texture.minFilter=T.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.anisotropy=Math.min(q.anisotropy,this.anisotropy);texture.needsUpdate=true;return texture;
     };
     const base=create(pixels.base,T.SRGBColorSpace,'base');
     const roughness=pixels.roughness?create(pixels.roughness,T.NoColorSpace,'roughness',T.RGFormat):null;
     const normal=pixels.normal?create(pixels.normal,T.NoColorSpace,'normal'):null;
     const levelBytes=pixels.base.byteLength+(pixels.roughness?.byteLength??0)+(pixels.normal?.byteLength??0);
     const maps={base,roughness,normal,bytes:Math.ceil(levelBytes*4/3)};
-    this.textures.set(id,maps);return maps;
+    this.textures.set(key,maps);return maps;
   }
   stats(){return {quality:this.quality,scalarLowFallback:this.scalarLow&&this.quality==='low',materialCount:this.materials.size,textureSets:this.textures.size,textureCount:[...this.textures.values()].reduce((n,t)=>n+1+Number(!!t.roughness)+Number(!!t.normal),0),estimatedTextureBytes:[...this.textures.values()].reduce((n,t)=>n+t.bytes,0),maxMaterialVariants:this.maxVariants,disposed:this.disposed};}
   private disposeTextures(maps:TextureSet){maps.base.dispose();maps.roughness?.dispose();maps.normal?.dispose();}

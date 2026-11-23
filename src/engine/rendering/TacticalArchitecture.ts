@@ -1,3 +1,5 @@
+import {arenaPattern,loadArenaPatterns,type ArenaPatternPreferences,type ArenaPatternSpec} from '../../config/arenaPatterns';
+import {arenaPalette,BAY_APPEARANCE} from '../../config/arenaAppearance';
 import {LEVEL_SPECS} from '../../config/tactical';
 import * as T from 'three';
 import {mergeStaticArchitecture} from './StaticGeometry';
@@ -11,29 +13,31 @@ import {SURFACES} from '../../config/surfaces';
 import {baseGroundSurface} from '../footsteps/surfaceSelection';
 
 type Theme=PeekZone['theme'];
-const THEME_COLORS:Record<Theme,number>={facility:0xa8b3ad,research:0xc7cec8,urban:0xa99e89,courtyard:0xb7aa89};
 const OLD_THEMES:Record<string,Theme>={tactical:'facility',garage:'facility',long:'courtyard',site:'courtyard',mid:'urban',tower:'urban',multi:'research',bunny:'facility',wallbang:'research'};
 
 /** Original, meter-scale architectural kit. Finishes stay against existing solids;
  * silhouette landmarks and roofs stay above the character/jump visibility band. */
-export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.BufferGeometry)=>T.BufferGeometry,m:(a:T.Material)=>T.Material,texture:(a:T.Texture)=>T.Texture=a=>a,surfaceLibrary?:SurfaceMaterialLibrary){
+export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.BufferGeometry)=>T.BufferGeometry,m:(a:T.Material)=>T.Material,texture:(a:T.Texture)=>T.Texture=a=>a,surfaceLibrary?:SurfaceMaterialLibrary,patterns:ArenaPatternPreferences=loadArenaPatterns()){
  const root=new T.Group();root.name='VALOPRAC original tactical architecture';
  const surfaces=surfaceLibrary??new SurfaceMaterialLibrary(),registered=new Set<T.Texture>();
- const surface=(id:VisualMaterialId,color:number,roughness?:number)=>{
-  const value=surfaces.material(id,{tint:color,roughness});
+ const surface=(id:VisualMaterialId,color:number,roughness?:number,pattern:ArenaPatternSpec={})=>{
+  const value=surfaces.material(id,{tint:color,roughness,...pattern});
   // A supplied library owns its maps across preset changes. Register fallback
   // maps only, so renderer texture sets do not retain disposed historical maps.
   if(!surfaceLibrary)for(const map of [value.map,value.normalMap,value.roughnessMap])if(map&&!registered.has(map)){registered.add(map);texture(map);}
   return m(value);
  };
- const finishes:Record<Theme,VisualMaterialId>={facility:'painted-concrete',research:'plaster',urban:'brick',courtyard:'stone'};
- const materials=Object.fromEntries(Object.entries(THEME_COLORS).map(([key,color])=>[key,surface(finishes[key as Theme],color)])) as Record<Theme,T.Material>;
- const metal=surface('painted-metal',0x40545c),shadow=surface('composite',0x4c656b,.92),warm=surface('wood',0x9b8463),glass=surface('glass',0x6c8b90,.28),light=m(new T.MeshBasicMaterial({color:0xd8e4db}));
+ const style=arenaPalette(map);
+ const materials=Object.fromEntries(Object.entries(BAY_APPEARANCE).map(([key,zone])=>{
+  const colors=map==='complex'?zone:style;
+  return [key,surface(colors.wallFamily,colors.coverPanel)];
+ })) as Record<Theme,T.Material>;
+ const metal=surface('painted-metal',style.trim),shadow=surface('composite',style.cover,.92),warm=surface('wood',style.accent),glass=surface('glass',0x7d9daa,.28),light=m(new T.MeshBasicMaterial({color:style.accent}));
  if(!surfaceLibrary)root.userData.disposeSurfaceMaterials=()=>surfaces.dispose();
  let detail=0,chunk='campus';
  const finishUV=(o:T.Mesh)=>{
   o.updateMatrix();const mat=Array.isArray(o.material)?o.material[0]:o.material,family=mat.userData.visualMaterialId as VisualMaterialId|undefined;
-  writeWorldScaleUV(o.geometry,family?VISUAL_MATERIALS[family].metersPerTile:1,o.matrix);
+  writeWorldScaleUV(o.geometry,family?(mat.userData.surfaceMetersPerTile??VISUAL_MATERIALS[family].metersPerTile):1,o.matrix);
  };
  const mesh=(geo:T.BufferGeometry,mat:T.Material,x:number,y:number,z:number)=>{const o=new T.Mesh(g(geo),mat);o.position.set(x,y,z);o.castShadow=detail===0;o.receiveShadow=true;o.userData.artDetail=detail;o.userData.artChunk=chunk;finishUV(o);root.add(o);return o;};
  const block=(w:number,h:number,d:number,x:number,y:number,z:number,mat:T.Material)=>mesh(new T.BoxGeometry(w,h,d),mat,x,y,z);
@@ -82,8 +86,8 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   const x=zone.center.x,sign=Math.sign(zone.center.z),theme=zone.theme,color=materials[theme];chunk=`zone-${zone.id}`;detail=0;
   const frontDoorX=x-6;
   const floorFamily=SURFACES[baseGroundSurface('complex',zone.center)].visualMaterialId;
-  const floorTint=new T.Color(VISUAL_MATERIALS[floorFamily].color).lerp(new T.Color(THEME_COLORS[theme]),.45);
-  const floor=surface(floorFamily,floorTint.getHex()),[floorX,floorZ,floorWidth,floorDepth]=zone.bounds??[x-12,Math.min(sign*8,sign*38),24,30];
+  const floorTint=new T.Color(arenaPalette(map,theme).floor);
+  const floor=surface(floorFamily,floorTint.getHex(),undefined,arenaPattern(map,true,patterns)),[floorX,floorZ,floorWidth,floorDepth]=zone.bounds??[x-12,Math.min(sign*8,sign*38),24,30];
   const finish=block(floorWidth,.004,floorDepth,floorX+floorWidth/2,.002,floorZ+floorDepth/2,floor);finish.userData.floorFinish={zoneId:zone.id,surfaceId:baseGroundSurface('complex',zone.center),visualMaterialId:floorFamily,bounds:[floorX,floorZ,floorWidth,floorDepth],top:.004};
   doorway(frontDoorX,sign*8,3,theme);doorway(zone.exit.x,sign*38,3,theme,zone.id==='F'?4.2:3.2);
   // The opaque plaque is physically supported by the crown, entirely above jump/head height.
@@ -174,7 +178,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   let material=batchMaterials.get(signature);
   if(!material){
    const original=child.material as T.MeshStandardMaterial,family=original.userData.visualMaterialId as VisualMaterialId|undefined;
-   if(family)material=m(surfaces.material(family,{tint:0xffffff,vertexColors:true,roughness:original.roughness,metalness:original.metalness,normalStrength:original.normalScale.x}));
+   if(family)material=m(surfaces.material(family,{tint:0xffffff,vertexColors:true,roughness:original.roughness,metalness:original.metalness,normalStrength:original.normalScale.x,surfacePattern:original.userData.surfacePattern,metersPerTile:original.userData.surfaceMetersPerTile}));
    else {const cloned=child.material.clone() as T.MeshStandardMaterial;cloned.color.setHex(0xffffff);cloned.vertexColors=true;material=m(cloned);}
    batchMaterials.set(signature,material);
   }

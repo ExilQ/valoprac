@@ -1,3 +1,4 @@
+import type {SurfacePatternStyle} from '../../config/arenaPatterns';
 import {VISUAL_MATERIALS,type VisualMaterialId} from '../../config/materials';
 
 export interface SurfacePixels {
@@ -28,23 +29,28 @@ function sample(id:VisualMaterialId,u:number,v:number){
   let height=middle*.16+fine*.09,shade=broad*.012+middle*.008,rough=middle*.035+fine*.025;
   switch(d.grain){
     case 'mineral': {
-      const aggregate=smooth(clamp((fine-.12)/.7));
-      height=middle*.32+fine*.18-aggregate*.1;
-      shade=broad*.034+middle*.037-aggregate*.045;
-      rough=broad*.035+middle*.06+fine*.055;
+      const aggregate=smooth(clamp((fine-.19)/.72));
+      const expansion=1-smooth(clamp(Math.min(u,1-u,v,1-v)/.018));
+      height=middle*.18+fine*.10-aggregate*.07-expansion*.15;
+      shade=broad*.023+middle*.027-aggregate*.025-expansion*.085;
+      rough=broad*.035+middle*.04+fine*.035+expansion*.025;
       break;
     }
-    case 'plaster':
-      height=middle*.19+fine*.065;
-      shade=broad*.016+middle*.013;
-      rough=broad*.02+middle*.045;
+    case 'plaster': {
+      const brush=1-smooth(clamp((Math.min(u,1-u)+.012)/.034));
+      height=middle*.072+fine*.025-brush*.048;
+      shade=broad*.027+middle*.01-brush*.037;
+      rough=broad*.018+middle*.03;
       break;
+    }
     case 'stone': {
-      const layer=Math.sin(TAU*(u*3+v*2)+broad*2.3+middle*.6);
-      const seam=smooth(clamp((layer-.65)/.35));
-      height=middle*.24+fine*.13-seam*.09;
-      shade=broad*.039+seam*.048+middle*.015;
-      rough=middle*.04-seam*.035;
+      const row=Math.floor(v*2),blockU=fract(u+(row%2)*.5),blockV=fract(v*2);
+      const joint=1-smooth(clamp(Math.min(blockU,1-blockU,blockV*.5,(1-blockV)*.5)/.024));
+      const strata=Math.sin(TAU*(v*2+.14*broad));
+      const slabTone=(hash(row,2,s)-.5)*.048;
+      height=middle*.13+fine*.045-joint*.17;
+      shade=broad*.025+strata*.017+slabTone-joint*.075;
+      rough=middle*.04+joint*.033;
       break;
     }
     case 'brick': {
@@ -61,10 +67,12 @@ function sample(id:VisualMaterialId,u:number,v:number){
     }
     case 'metal': height=fine*.045;shade=middle*.004;rough=fine*.022;break;
     case 'paint': {
-      const coat=id==='painted-metal'?smooth(clamp((fine+.24)*.85)):0;
-      height=middle*.12+fine*.08+coat*.14;
-      shade=broad*.014+middle*.008+fine*.006-coat*.032;
-      rough=middle*.035+fine*.028-coat*.085;
+      const coated=id==='painted-metal';
+      const coat=coated?smooth(clamp((fine+.24)*.85)):0;
+      const panel=coated?1-smooth(clamp(Math.min(u,1-u)/.028)):0;
+      height=middle*.09+fine*.05+coat*.105-panel*.14;
+      shade=broad*.021+middle*.011+fine*.004-coat*.025-panel*.066;
+      rough=middle*.035+fine*.025-coat*.086+panel*.023;
       break;
     }
     case 'wood': {
@@ -85,6 +93,19 @@ function sample(id:VisualMaterialId,u:number,v:number){
   return {height,shade,rough};
 }
 
+/** Original textures for the three Studio-style pattern choices.
+ * Use the same periodic sampling for the color, relief, and roughness seam. */
+function surfaceJoint(u:number,v:number,pattern:SurfacePatternStyle){
+ const x=Math.min(u,1-u),y=Math.min(v,1-v);
+ const joint=pattern==='industrial'
+  ? Math.min(x,Math.min(v,1-v)*1.7)
+  : Math.min(x,y);
+ const width=pattern==='squares'?.016:pattern==='industrial-grid'?.025:.032;
+ const bevel=1-smooth(clamp(joint/width));
+ const inset=pattern==='squares'?0:1-smooth(clamp(Math.abs(joint-width*2.0)/(width*.75)));
+ return {height:-bevel*.32+inset*.08,shade:-bevel*.18+inset*.035,rough:bevel*.06};
+}
+
 /**
  * Generate only the channels used by the preset. RG8 stores linear roughness
  * in green, which is the channel Three's standard roughness shader reads.
@@ -92,7 +113,8 @@ function sample(id:VisualMaterialId,u:number,v:number){
 export function generateSurfacePixels(
   id:VisualMaterialId,
   size:number,
-  channels:{roughness:boolean;normal:boolean}={roughness:true,normal:true}
+  channels:{roughness:boolean;normal:boolean}={roughness:true,normal:true},
+  pattern?:SurfacePatternStyle
 ):SurfacePixels {
   if(!Number.isInteger(size)||size<16||size>256||(size&(size-1))!==0)throw new RangeError('Surface size must be a power of two from 16 to 256');
   const count=size*size;
@@ -102,7 +124,11 @@ export function generateSurfacePixels(
   const normal=heights?new Uint8Array(count*4):null;
   for(let y=0;y<size;y++)for(let x=0;x<size;x++){
     const sampleIndex=y*size+x;
-    const surface=sample(id,x/size,y/size);
+    const u=x/size,v=y/size,surface=sample(id,u,v);
+    if(pattern){
+      const joint=surfaceJoint(u,v,pattern);
+      surface.height+=joint.height;surface.shade+=joint.shade;surface.rough+=joint.rough;
+    }
     const rgba=sampleIndex*4;
     const color=Math.round(clamp(.955+surface.shade)*255);
     base[rgba]=base[rgba+1]=base[rgba+2]=color;
