@@ -11,6 +11,7 @@ import {Simulation} from '../engine/simulation/Simulation';
 import {BrowserInput} from '../engine/input/Input';
 import {DEFAULT_SETTINGS} from '../config/settings';
 import {emptyInput} from '../engine/types';
+import {PENETRATION_MATERIALS,PENETRATION_WEAPONS} from '../config/penetration';
 
 const result=():HitResult=>({zone:'miss',target:null,point:new Vector3(),distance:150});
 function target(id=0){const t=new Target(id,'stationary',new SeededRandom(7));t.spawn(0,-10,0);return t;}
@@ -59,8 +60,8 @@ describe('Shot collision follows submitted target poses, independently of the ne
   const t=target(),history=new RenderedTargets(),shown=frame(history,t,100),ray=rayAtHead(shown.targets[0]!.matrices[0],0,0),thin:Obstacle={box:new Box3(new Vector3(-2,0,-5.2),new Vector3(2,3,-5)),kind:'cover',color:0};
   t.position.x=2;t.updatePose(1);
   expect(castShot(ray,[t],result(),[thin],shown).zone).toBe('wall');
-  const through=castOperatorShot(ray,[t],result(),[thin],shown);expect(through.zone).toBe('head');expect(through.penetrationScale).toBeCloseTo(.65);expect(through.penetratedLayers).toBe(1);
-  const thick={...thin,box:thin.box.clone()};thick.box.min.z=-6;
+  const through=castOperatorShot(ray,[t],result(),[thin],shown);expect(through.zone).toBe('head');expect(through.penetrationScale).toBeCloseTo(PENETRATION_MATERIALS.thickWood.retention*Math.exp(-.2*PENETRATION_MATERIALS.thickWood.resistance/PENETRATION_WEAPONS.high.power*PENETRATION_WEAPONS.high.loss));expect(through.penetratedLayers).toBe(1);
+  const thick={...thin,box:thin.box.clone()};thick.box.min.z=-8;
   expect(castOperatorShot(ray,[t],result(),[thick],shown).zone).toBe('wall');
  });
  for(const invalid of['disabled','eliminated','new-generation','not-drawn'] as const)it(`does not award a hit to a ${invalid} target from an earlier frame`,()=>{

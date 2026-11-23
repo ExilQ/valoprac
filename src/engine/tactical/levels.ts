@@ -1,4 +1,5 @@
 import {COMPLEX_LEVEL} from './complex';
+import {MECHANICS_LEVELS} from './mechanics';
 import {LEVEL_IDS,LEVEL_SPECS as specs} from '../../config/tactical';
 export {LEVEL_IDS} from '../../config/tactical';
 import {Box3,Ray,Vector3} from 'three';
@@ -40,7 +41,7 @@ export function makeLevel(id:typeof LEVEL_IDS[number]):TacticalLevel{
  return {id,title:s.title,family:s.family,description:s.description,obstacles,angles,route,spawn:route[0],bounds:[-width/2-.5,-s.depth-1,last+width+1,s.depth+9]};
 }
 export const LEVELS=Object.fromEntries(LEVEL_IDS.map(id=>[id,makeLevel(id)])) as Record<typeof LEVEL_IDS[number],TacticalLevel>;
-export const levelFor=(id:string):TacticalLevel|null=>LEVELS[id as typeof LEVEL_IDS[number]]??(id==='complex'?COMPLEX_LEVEL:null);
+export const levelFor=(id:string):TacticalLevel|null=>LEVELS[id as typeof LEVEL_IDS[number]]??MECHANICS_LEVELS[id as keyof typeof MECHANICS_LEVELS]??(id==='complex'?COMPLEX_LEVEL:null);
 const ray=new Ray(),from=new Vector3(),to=new Vector3(),hit=new Vector3();
 export function visibleBetween(obstacles:Obstacle[],a:Vec3,b:Vec3){from.set(a.x,a.y,a.z);to.set(b.x,b.y,b.z).sub(from);const d=to.length();if(d<1e-6)return true;ray.set(from,to.multiplyScalar(1/d));return nearestEnvironmentHit(ray,d-1e-5,hit,obstacles)>=d-1e-5;}
 export function standingSpace(obstacles:Obstacle[],p:Vec3,radius=.3,height=1.85){for(const o of obstacles){if(o.ramp)continue;const b=o.box;if(p.y>=b.max.y-1e-6||p.y+height<=b.min.y)continue;if(p.x+radius>b.min.x&&p.x-radius<b.max.x&&p.z+radius>b.min.z&&p.z-radius<b.max.z)return false;}return true;}

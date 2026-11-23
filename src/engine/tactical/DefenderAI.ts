@@ -1,8 +1,13 @@
 import {Box3,Matrix4,Ray,Sphere,Vector3} from 'three';
-import type {Settings,Vec3,WeaponId,ShotEvent} from '../types';
+import {emptyInput,type Settings,type Vec3,type WeaponId,type ShotEvent} from '../types';
 import type {Target} from '../targets/Target';
 import type {Obstacle} from '../collision/environment';
-import {surfaceHeight,nearestEnvironmentHit} from '../collision/environment';
+import {surfaceHeight} from '../collision/environment';
+import {traceBallisticRay,type PenetrationSegment} from '../collision/Ballistics';
+import {Weapon} from '../weapons/Weapon';
+import {Movement} from '../movement/Movement';
+import {spreadDirection} from '../weapons/trajectory';
+import {BotAimMotor,resolveBotProfile,wrapAngle,type BotControlProfile} from './BotAimMotor';
 import {visibleBetween,standingSpace} from './levels';
 import type {FootstepEvent} from '../footsteps/Footsteps';
 import {SeededRandom} from '../simulation/random';
@@ -13,11 +18,36 @@ export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch
 /** These samples and hit volumes form the explicit human body proxy used by defender
  * perception and bullets. Sample fraction is not projected screen-space body area. */
 export interface DefenderSector {facingYaw?:number;navigation?:Vec3[];alternatives?:Vec3[];weapon?:WeaponId;}
-export interface DefenderShot {id?:number;time:number;bot:number;weapon:WeaponId;origin:Vec3;aim:Vec3;impact:Vec3;hit:'head'|'body'|'leg'|'miss';hitRegion?:'head'|'torso'|'arm'|'leg';observed:boolean;recoveryUntil:number;}
-export interface DefenderDeath {bot:number;weapon:WeaponId;region:string;cause:'shot'|'exposure';time:number;duration:number;player:Vec3;defender:Vec3;line:Vec3[];path:Vec3[];}
+export type PerceptionPhase='unaware'|'detected'|'recognized'|'reacting'|'aiming'|'tracking'|'lost';
+export interface DefenderShot {
+ id?:number;time:number;bot:number;weapon:WeaponId;origin:Vec3;aim:Vec3;impact:Vec3;
+ hit:'head'|'body'|'leg'|'miss';hitRegion?:'head'|'torso'|'arm'|'leg';observed:boolean;recoveryUntil:number;
+ encounterGeneration?:number;targetGeneration?:number;direction?:Vec3;information?:'visual'|'memory'|'sound';angularError?:number;trajectoryAngularError?:number;shotIndex?:number;burstIndex?:number;ammoBefore?:number;
+ recoilBefore?:{pitch:number;yaw:number};recoilAfter?:{pitch:number;yaw:number};compensation?:{pitch:number;yaw:number};
+ spread?:{base:number;movement:number;bloom:number;air:number;landing:number;total:number;x:number;y:number};
+ damage?:number;penetratedLayers?:number;penetration?:PenetrationSegment[];reactionTime?:number;aimAcquisitionTime?:number;detectedAt?:number;
+}
+export interface DefenderDeath {bot:number;weapon:WeaponId;region:string;cause:'shot'|'exposure';time:number;duration:number;player:Vec3;defender:Vec3;line:Vec3[];path:Vec3[];reactionTime?:number;aimAcquisitionTime?:number;shotsFired?:number;hits?:number;penetratedLayers?:number;playerVisible?:boolean;playerShotVelocity?:number|null;}
 export interface PeekEpisode {started:number;ended:number;duration:number;distance:number;peakSpeed:number;peakVisibleFraction:number;verticalDisplacement:number;shots:number;hits:number;shotVelocity:number|null;acquisitionTime:number|null;returnToCover:number|null;timeToCover?:number|null;}
-export interface PeekReport {health:number;deaths:number;clears:number;baits:number;recoveryExploits:number;heardEvents:number;enemyShots:number;exposure:number;maxVisibleFraction:number;distance:number;peakSpeed:number;episodes:PeekEpisode[];lastDeath:DefenderDeath|null;path:Vec3[];currentTime?:number;observedRecoveryUntil?:number;visibilityMethod?:string;totalAngles?:number;currentClears?:number;unclearedAngles?:number;operator:{scopedShots:number;scopedHits:number;unscopedShots:number;unscopedHits:number;scopeTransitionSum:number;holdingSeconds:number;firstShots:number;firstHits:number;};}
-interface Memory {state:DefenderState;weapon:WeaponId;visible:number;exposure:number;acquired:number;nextShot:number;lastSeen:number;known:Vec3|null;alertUntil:number;destination:Vec3|null;repeats:number;lastExposed:number;face:Vec3;decision:number;aim:Vec3|null;path:Vec3[];pathIndex:number;burst:number;lastShot:DefenderShot|null;holdingFace:Vec3;pose:number;}
+export interface CombatSummary {shots:number;hits:number;firstShots:number;firstHits:number;followupShots:number;followupHits:number;damage:number;firstHitRate:number;followupHitRate:number;meanReaction:number;meanAcquisition:number;meanFirstShotDelay:number;recoilRms:number;residualRecoilRms:number;}
+export interface PeekReport {combatSummary?:CombatSummary;health:number;deaths:number;clears:number;baits:number;recoveryExploits:number;heardEvents:number;enemyShots:number;exposure:number;maxVisibleFraction:number;distance:number;peakSpeed:number;episodes:PeekEpisode[];lastDeath:DefenderDeath|null;path:Vec3[];currentTime?:number;observedRecoveryUntil?:number;visibilityMethod?:string;totalAngles?:number;currentClears?:number;unclearedAngles?:number;operator:{scopedShots:number;scopedHits:number;unscopedShots:number;unscopedHits:number;scopeTransitionSum:number;holdingSeconds:number;firstShots:number;firstHits:number;};}
+interface Observation {time:number;point:Vec3;position:Vec3;velocity:Vec3;}
+interface RecoilObservation {time:number;pitch:number;yaw:number;}
+/** Renderer compatibility fields (face/state/pose/lastShot) remain authoritative. */
+export interface DefenderMemory {
+ state:DefenderState;weapon:WeaponId;visible:number;exposure:number;acquired:number;nextShot:number;lastSeen:number;known:Vec3|null;alertUntil:number;destination:Vec3|null;repeats:number;lastExposed:number;face:Vec3;decision:number;aim:Vec3|null;path:Vec3[];pathIndex:number;burst:number;lastShot:DefenderShot|null;holdingFace:Vec3;pose:number;
+ gun:Weapon;motor:BotAimMotor;movement:Movement;profile:BotControlProfile;rng:SeededRandom;generation:number;initialized:boolean;
+ perceptionPhase:PerceptionPhase;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firstShotAt:number;
+ observations:Observation[];recoilHistory:RecoilObservation[];nextRecoilObservation:number;lastHeard:number;lastHeardPoint:Vec3|null;
+ preferHead:boolean;burstGoal:number;burstRemaining:number;pauseUntil:number;engagementShots:number;engagementHits:number;speculativeShots:number;pressureUntil:number;consecutiveMisses:number;uncertainty:Vec3;uncertaintyAt:number;
+}
+type Memory=DefenderMemory;
+export interface BotDiagnostic {
+ bot:number;state:DefenderState;phase:PerceptionPhase;weapon:WeaponId;visible:number;known:Vec3|null;lastSeen:number;lastHeard:number;uncertaintyMetres:number;
+ detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;
+ ammo:number;reserve:number;reloadingUntil:number|null;nextShot:number;burstRemaining:number;recoil:{pitch:number;yaw:number};motor:ReturnType<BotAimMotor['snapshot']>;
+}
+const CONTROL_KEYS=['defenderSkill','botDifficulty','defenderReaction','defenderAimSpeed','defenderAimAcceleration','defenderStability','defenderFirstShotError','defenderRecoilControl','defenderTactics','defenderAccuracy'] as const;
 const vec=(p:Vec3):Vec3=>({x:p.x,y:p.y,z:p.z});
 const distance2=(a:Vec3,b:Vec3)=>Math.hypot(a.x-b.x,a.z-b.z);
 const clamp=(n:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,n));
@@ -46,57 +76,144 @@ export function intersectPlayerBody(ray:Ray,p:PlayerBody,out:Vector3){
 export class DefenderAI {
  memories:Memory[]=[];shots:DefenderShot[]=[];health=150;death:DefenderDeath|null=null;onShot:((s:DefenderShot)=>void)|null=null;perceptionUpdates=0;
  report:PeekReport={health:150,deaths:0,clears:0,baits:0,recoveryExploits:0,heardEvents:0,enemyShots:0,exposure:0,maxVisibleFraction:0,distance:0,peakSpeed:0,episodes:[],lastDeath:null,path:[],currentTime:0,observedRecoveryUntil:0,visibilityMethod:'Nine yawed human-body samples; approximate coverage, not projected body area',operator:{scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,scopeTransitionSum:0,holdingSeconds:0,firstShots:0,firstHits:0}};
- private rng:SeededRandom;private current:PeekEpisode|null=null;private episodeOrigin:Vec3|null=null;private episodeLow=0;private episodeHigh=0;private returningAt:number|null=null;private last:Vec3|null=null;private pathAt=0;private perceptionAt=0;private head=new Vector3();private ray=new Ray();private hit=new Vector3();private sequence=0;private usedBaits=new Set<number>();private usedRecoveries=new Set<number>();
- constructor(public targets:Target[],public obstacles:Obstacle[],public settings:Settings,private holdingPoint:Vec3,seed=1947,private sectors:readonly DefenderSector[]=[]){this.rng=new SeededRandom(seed^0xd3f3);this.retry();}
+ private controlValues:unknown[]=[];private lastPlayerShotVelocity:number|null=null;private lastPlayerShotAt=-100;private combatTotals={timingContacts:0,shots:0,hits:0,firstShots:0,firstHits:0,damage:0,reaction:0,acquisition:0,firstShotDelay:0,recoilSquared:0,residualSquared:0};private epoch=0;private clock=0;private seed:number;private rng:SeededRandom;private current:PeekEpisode|null=null;private episodeOrigin:Vec3|null=null;private episodeLow=0;private episodeHigh=0;private returningAt:number|null=null;private last:Vec3|null=null;private pathAt=0;private perceptionAt=0;private head=new Vector3();private ray=new Ray();private hit=new Vector3();private sequence=0;private usedBaits=new Set<number>();private usedRecoveries=new Set<number>();
+ constructor(public targets:Target[],public obstacles:Obstacle[],public settings:Settings,private holdingPoint:Vec3,seed=1947,private sectors:readonly DefenderSector[]=[]){this.seed=seed;this.rng=new SeededRandom(seed^0xd3f3);this.retry();}
  setSectors(sectors:readonly DefenderSector[]){this.sectors=sectors;}
  retry(){
-  this.health=150;this.death=null;this.current=null;this.last=null;this.episodeOrigin=null;this.returningAt=null;this.pathAt=0;this.perceptionAt=0;this.shots.length=0;this.report.health=150;this.report.path=[];this.report.observedRecoveryUntil=0;this.usedBaits.clear();this.usedRecoveries.clear();
-  this.memories=this.targets.map((t,i)=>{const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)};return{state:'holding',weapon:this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0};});
+  this.epoch++;this.lastPlayerShotVelocity=null;this.lastPlayerShotAt=-100;this.health=150;this.death=null;this.current=null;this.last=null;this.episodeOrigin=null;this.returningAt=null;this.pathAt=0;this.perceptionAt=0;this.shots.length=0;this.report.health=150;this.report.path=[];this.report.observedRecoveryUntil=0;this.usedBaits.clear();this.usedRecoveries.clear();
+  this.memories=this.targets.map((t,i)=>this.newMemory(t,i));
+ }
+ private newMemory(t:Target,i:number):Memory{
+  const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)},weapon=this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon;
+  const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(WEAPONS[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
+  gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;
+  return{state:'holding',weapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0,
+   gun,motor:new BotAimMotor(wrapAngle(-yaw-Math.PI),rng),movement:new Movement(undefined,this.obstacles),profile:resolveBotProfile(this.settings,weapon),rng,generation:t.generation,initialized:false,
+   perceptionPhase:'unaware',detectedAt:-100,recognizedAt:Infinity,reactionUntil:Infinity,aimStartedAt:-100,acquisitionUntil:Infinity,triggerAt:Infinity,firstShotAt:-100,
+   observations:[],recoilHistory:[],nextRecoilObservation:0,lastHeard:-100,lastHeardPoint:null,preferHead:false,burstGoal:0,burstRemaining:0,pauseUntil:0,engagementShots:0,engagementHits:0,speculativeShots:0,pressureUntil:0,consecutiveMisses:0,uncertainty:{x:0,y:0,z:0},uncertaintyAt:-100};
  }
  hear(e:FootstepEvent){
   // No key state or current hidden player position reaches this memory. A sound is
   // a dated observation at its emitted location, attenuated by intervening cover.
   let heard=false;
   for(const t of this.targets){if(!t.enabled||!t.active)continue;const m=this.memories[t.id];if(!m)continue;t.headPosition(this.head);const source={...e.position,y:e.position.y+1};const clear=visibleBetween(this.obstacles,vec(this.head),source);if(Math.hypot(t.position.x-e.position.x,t.position.y-e.position.y,t.position.z-e.position.z)>e.radius*(clear?1:.7))continue;
-   if(m.visible<=0){m.known=vec(e.position);m.alertUntil=e.timestamp+2.2;if(m.state==='holding')m.state='listening';}heard=true;
+   if(m.visible<=0){m.known=vec(e.position);m.lastHeard=e.timestamp;m.lastHeardPoint=vec(e.position);m.alertUntil=e.timestamp+2.2;m.uncertainty={x:m.rng.range(-1,1),y:m.rng.range(-.2,.2),z:m.rng.range(-1,1)};m.uncertaintyAt=e.timestamp;if(m.state==='holding')m.state='listening';}heard=true;
   }
   if(heard)this.report.heardEvents++;
  }
  eliminated(id:number){const m=this.memories[id];if(m&&m.state!=='eliminated'){m.state='eliminated';m.visible=0;m.destination=null;m.path=[];this.report.clears++;}}
- private visible(t:Target,p:PlayerBody,m:Memory){
+ private visible(t:Target,p:PlayerBody,m:Memory,recordAim=true){
   t.headPosition(this.head);const from=vec(this.head),dx=p.position.x-from.x,dz=p.position.z-from.z,d=Math.hypot(dx,dz);if(d>65)return 0;if((dx*m.face.x+dz*m.face.z)/Math.max(.001,d)<Math.cos(80*Math.PI/180))return 0;
   const points=playerVisibilitySamples(p);let n=0,selected:Vec3|null=null,best=Infinity;
-  for(const point of points){if(!visibleBetween(this.obstacles,from,point))continue;n++;const score=Math.abs(point.y-(p.position.y+p.eyeHeight*.7));if(score<best){best=score;selected=point;}}
-  if(selected)m.aim=selected;
-  return n/points.length;
+  for(let i=0;i<points.length;i++){const point=points[i];if(!visibleBetween(this.obstacles,from,point))continue;n++;const score=m.preferHead?Math.abs(point.y-(p.position.y+p.eyeHeight+.04))+Math.abs(i===0?0:point.x-p.position.x)*.1:Math.abs(point.y-(p.position.y+p.eyeHeight*.7));if(score<best){best=score;selected=point;}}
+  if(recordAim&&selected)m.aim=vec(selected);return n/points.length;
+ }
+ private detect(t:Target,m:Memory,p:PlayerBody,time:number){
+  const previous=m.visible;m.visible=this.visible(t,p,m);
+  if(m.visible>0){
+   const fresh=time-m.lastSeen>1.5||m.detectedAt<0;
+   if(fresh){m.detectedAt=time;m.recognizedAt=time+m.profile.recognition;m.reactionUntil=m.recognizedAt+m.profile.reaction*m.rng.range(.88,1.14);m.aimStartedAt=-100;m.acquisitionUntil=Infinity;m.triggerAt=Infinity;m.engagementShots=0;m.engagementHits=0;m.firstShotAt=-100;m.observations=[];m.preferHead=m.rng.next()<.12+m.profile.tactics*.35;this.visible(t,p,m);m.perceptionPhase='detected';}
+   else if(previous<=0&&time-m.lastSeen>.18){m.repeats++;m.triggerAt=Math.max(m.triggerAt,time+.12);m.burstRemaining=0;}
+   if(time-m.lastExposed>.18)m.repeats++;m.lastExposed=time;m.lastSeen=time;m.known=vec(p.position);m.speculativeShots=0;
+   if(m.aim){m.observations.push({time,point:vec(m.aim),position:vec(p.position),velocity:vec(p.velocity)});if(m.observations.length>40)m.observations.shift();}
+  }else if(previous>0)this.loseContact(m,time);
+ }
+ private loseContact(m:Memory,time:number){m.visible=0;m.perceptionPhase='lost';m.uncertainty={x:m.rng.range(-1,1),y:m.rng.range(-.25,.25),z:m.rng.range(-1,1)};m.uncertaintyAt=time;m.burstRemaining=0;}
+ private rememberedAim(m:Memory,time:number):Vec3|null{
+  if(m.visible>0&&m.observations.length){const deadline=time-m.profile.trackingDelay;let observation=m.observations[0];for(const candidate of m.observations){if(candidate.time>deadline)break;observation=candidate;}
+   // Prediction is based only on an old visible observation. Direction changes
+   // inside the perception/tracking delay remain unknown to the controller.
+   const prediction=Math.min(.055,Math.max(0,time-observation.time)*.3);return{x:observation.point.x+observation.velocity.x*prediction,y:observation.point.y+observation.velocity.y*prediction,z:observation.point.z+observation.velocity.z*prediction};}
+  if(m.aim&&time-m.lastSeen<1.5){const age=Math.max(0,time-m.lastSeen);return{x:m.aim.x+m.uncertainty.x*age*.65,y:m.aim.y+m.uncertainty.y*age*.4,z:m.aim.z+m.uncertainty.z*age*.65};}
+  if(m.lastHeardPoint&&time<m.alertUntil){const age=Math.max(0,time-m.lastHeard),point=m.lastHeardPoint;return{x:point.x+m.uncertainty.x*(.35+age*.8),y:point.y+1.15+m.uncertainty.y,z:point.z+m.uncertainty.z*(.35+age*.8)};}
+  return null;
  }
  step(dt:number,time:number,p:PlayerBody){
-  if(this.death||!(dt>0))return;this.report.currentTime=time;let any=0;const perception=time+1e-9>=this.perceptionAt;if(perception){this.perceptionAt=time+.04;this.perceptionUpdates++;}
+  if(this.death||!(dt>0))return;
+  let controlsChanged=false;for(let i=0;i<CONTROL_KEYS.length;i++)if(this.controlValues[i]!==this.settings[CONTROL_KEYS[i]]){controlsChanged=true;break;}
+  if(controlsChanged){this.controlValues=CONTROL_KEYS.map(key=>this.settings[key]);for(const memory of this.memories)memory.profile=resolveBotProfile(this.settings,memory.weapon);}
+  this.clock=time;this.report.currentTime=time;let any=0;const perception=time+1e-9>=this.perceptionAt;if(perception){this.perceptionAt=time+.05;this.perceptionUpdates++;}
+  const epoch=this.epoch;
   for(const t of this.targets){
-   if(!t.enabled)continue;const m=this.memories[t.id];if(!m)continue;if(!t.active){this.eliminated(t.id);continue;}t.previous.copy(t.position);
-   if(perception){m.visible=this.visible(t,p,m);if(m.visible>0){m.lastSeen=time;m.known=vec(p.position);if(time-m.lastExposed>.18){m.repeats++;m.acquired=0;}m.lastExposed=time;}}
+   if(!t.enabled)continue;let m=this.memories[t.id];if(!m)continue;if(!t.active){this.eliminated(t.id);continue;}if(m.generation!==t.generation){m=this.newMemory(t,t.id);this.memories[t.id]=m;}
+   if(!m.initialized){m.initialized=true;m.nextRecoilObservation=time;m.gun.resetForEncounter(time,true);}
+   t.previous.copy(t.position);
+   if(perception)this.detect(t,m,p,time);
+   // A cheap current obstruction check invalidates a cached visible observation;
+   // it never acquires a new concealed location between perception updates.
+   else if(m.visible>0&&m.aim){t.headPosition(this.head);if(!visibleBetween(this.obstacles,vec(this.head),m.aim)){this.loseContact(m,time);}}
    const seen=m.visible>0;any=Math.max(any,m.visible);
    if(seen){m.exposure+=dt;m.acquired+=dt;}else{m.acquired=Math.max(0,m.acquired-dt*2);m.exposure=this.settings.exposureMode==='continuous'?0:Math.max(0,m.exposure-dt*.65);}
-   const knownFresh=m.known&&(time-m.lastSeen<1.5||time<m.alertUntil),look=knownFresh?m.known:null;this.turn(m,look,t,dt);
-   if(time<m.nextShot){
-    m.state='recovering';if(m.weapon==='operator'||m.weapon==='sheriff')m.acquired=0;
-    if(time>=m.decision&&!m.destination){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}
-   }else if(seen){
-    m.state='tracking';const reaction=Math.max(.15,this.settings.defenderReaction*(this.settings.botDifficulty==='easy'?1.5:this.settings.botDifficulty==='hard'?.8:1)*(m.weapon==='operator'?1.15:1));
-    if(m.acquired>=reaction&&Math.hypot(t.velocity.x,t.velocity.z)<.55){
-     // Perception is bounded at 25 Hz. Firing admission performs one fresh physical
-     // sight check so a cached sample never grants a shot through new cover.
-     m.visible=this.visible(t,p,m);if(m.visible>0){m.state='firing';this.fire(t,m,p,time);}else{m.acquired=0;m.burst=0;}
-    }
-   }else if(m.destination)m.state=time-m.lastSeen<3?'repositioning':'returning';else m.state=m.alertUntil>time?'alert':'holding';
-   if(!seen&&time-m.lastSeen>1.5&&time>m.alertUntil){m.known=null;m.aim=null;}
+   if(seen&&time>=m.recognizedAt&&time<m.reactionUntil)m.perceptionPhase=time<m.recognizedAt+dt?'recognized':'reacting';
+   if(seen&&time>=m.reactionUntil&&m.aimStartedAt<0){m.aimStartedAt=time;m.motor.begin(time,m.profile);const point=this.rememberedAim(m,time);t.headPosition(this.head);const dx=(point?.x??0)-this.head.x,dy=(point?.y??0)-this.head.y,dz=(point?.z??0)-this.head.z,angle=m.motor.error(Math.atan2(-dx,-dz),Math.atan2(dy,Math.hypot(dx,dz)));m.acquisitionUntil=time+clamp(m.profile.acquisition+angle/m.profile.maxSpeed*.3,.15,.4);m.triggerAt=Math.max(m.detectedAt+.45,m.acquisitionUntil+m.rng.range(.045,.085));}
+   if(seen&&m.aimStartedAt>=0)m.perceptionPhase=time<m.acquisitionUntil?'aiming':'tracking';
+   const look=this.rememberedAim(m,time);t.headPosition(this.head);const canAim=m.aimStartedAt>=0||!seen&&m.lastHeardPoint!==null;
+   let yaw=wrapAngle(-Math.atan2(m.holdingFace.x,m.holdingFace.z)-Math.PI),pitch=0;
+   if(canAim&&look){const dx=look.x-this.head.x,dy=look.y-this.head.y,dz=look.z-this.head.z;yaw=Math.atan2(-dx,-dz);pitch=Math.atan2(dy,Math.hypot(dx,dz));}
+   // Angular motor uses bounded substeps even for external callers with a coarse
+   // timestep. The production loop supplies fixed 120 Hz simulation steps.
+   const n=Math.max(1,Math.ceil(dt/(1/120)));for(let k=0;k<n;k++)m.motor.step(dt/n,time-dt+(k+1)*dt/n,yaw,pitch,m.profile,m.burst/6);
+   m.face={x:-Math.sin(m.motor.yaw),y:0,z:-Math.cos(m.motor.yaw)};
+   const feedbackAt=time-m.profile.compensationDelay;let feedback:RecoilObservation|undefined;for(const sample of m.recoilHistory){if(sample.time>feedbackAt)break;feedback=sample;}m.motor.compensate(dt,feedback?.pitch??0,feedback?.yaw??0,m.profile);
+   const recovering=time<m.nextShot||m.gun.reloadingUntil!==null;
+   if(recovering){m.state='recovering';if(time>=m.decision&&!m.destination){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}}
+   else if(seen)m.state='tracking';else if(m.destination)m.state=time-m.lastSeen<3?'repositioning':'returning';else m.state=m.alertUntil>time?'alert':'holding';
    this.move(t,m,dt,time);
-   if(this.settings.exposureEnabled&&m.exposure>=this.settings.exposureLimit&&!this.death&&this.visible(t,p,m)>0)this.kill(t,m,p,time,'exposure','노출 제한');
+   this.controlWeapon(t,m,p,time,dt,look,yaw,pitch);
+   if(epoch!==this.epoch)return;
+   if(!seen&&time-m.lastSeen>1.5&&time>m.alertUntil){m.known=null;m.aim=null;m.lastHeardPoint=null;m.perceptionPhase='unaware';m.aimStartedAt=-100;m.detectedAt=-100;}
+   // Learning/exposure are timer-only; realistic gunfights are bullet-only.
+   const timerMode=this.settings.combatMode!=='gunfight'&&(this.settings.combatMode==='exposure'||this.settings.exposureEnabled);
+   if(timerMode&&m.exposure>=this.settings.exposureLimit&&!this.death&&this.visible(t,p,m,false)>0)this.kill(t,m,p,time,'exposure','노출 제한');
    if(this.death)break;
   }
   this.measure(dt,time,p,any);
  }
- private turn(m:Memory,point:Vec3|null,t:Target,dt:number){const desired=point?Math.atan2(point.x-t.position.x,point.z-t.position.z):Math.atan2(m.holdingFace.x,m.holdingFace.z),current=Math.atan2(m.face.x,m.face.z),delta=Math.atan2(Math.sin(desired-current),Math.cos(desired-current)),yaw=current+clamp(delta,-5*dt,5*dt);m.face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)};}
+ private controlWeapon(t:Target,m:Memory,p:PlayerBody,time:number,dt:number,look:Vec3|null,yaw:number,pitch:number){
+  const gun=m.gun,input=emptyInput(),speed=Math.hypot(t.velocity.x,t.velocity.z),distance=look?Math.hypot(look.x-t.position.x,look.z-t.position.z):Infinity;
+  gun.infiniteReserve=this.settings.infiniteReserve;
+  // Adapter exposes the actual collision-resolved bot velocity to the same
+  // movement/spread code used by the player. It does not run a second physics loop.
+  m.movement.position.copy(t.position);m.movement.velocity.copy(t.velocity);m.movement.speed=speed;m.movement.crouch=t.crouch;m.movement.grounded=true;
+  input.ads=m.weapon!=='sheriff'&&distance>18;input.scopeHeld=true;
+  // Holding scope through an empty-magazine reload does not create another
+  // human input edge. Explicitly release/re-press once the bot has reloaded.
+  if(m.weapon==='operator'&&gun.scopeLevel===0&&gun.reloadingUntil===null&&time>=gun.boltUntil&&time-gun.lastShot>1/gun.profile.fireRate)gun.updateScope(time,0,{...input,scopeHeld:false});
+  gun.updateScope(time,dt,input);
+  const heardReady=m.lastHeard>-90&&time>=m.lastHeard+Math.max(.45,m.profile.reaction+.2);
+  const ready=(time>=m.triggerAt||m.visible===0&&heardReady)&&time>=m.pauseUntil&&time>=m.nextShot&&gun.reloadingUntil===null&&time>=gun.equipUntil&&time>=gun.boltUntil;
+  const angularError=m.motor.error(yaw,pitch),tolerance=Math.max(.8*Math.PI/180,Math.atan2(.22,Math.max(1,distance)));
+  let information:'visual'|'memory'|'sound'='visual',admit=false;
+  if(this.settings.combatMode==='gunfight'&&look&&ready&&speed<(m.weapon==='operator'?.5:m.profile.tactics<.4?1.4:.55)){
+   if(m.visible>0&&time>=m.acquisitionUntil&&angularError<tolerance*(m.burstRemaining?1.6:1)){
+    // Fresh LOS gates ordinary shots. A memory wallbang has a separate explicit
+    // admission path below and never changes this perception result.
+    const fresh=this.visible(t,p,m,false);if(fresh>0)admit=true;else this.loseContact(m,time);
+   }
+   if(!admit&&m.visible===0&&m.speculativeShots<2&&(time>=m.triggerAt||heardReady)){
+    const memory=time-m.lastSeen<.6&&time>=m.triggerAt,sound=time-m.lastHeard<1.1&&heardReady;
+    if((memory||sound)&&angularError<tolerance*1.8&&time>=m.decision){m.decision=time+.25;
+     t.headPosition(this.head);const direction=new Vector3(look.x-this.head.x,look.y-this.head.y,look.z-this.head.z),length=direction.length();this.ray.set(this.head.clone(),direction.normalize());
+     const preview=traceBallisticRay(this.ray,gun.profile,{distance:length,zone:'torso',point:look},this.obstacles);
+     if(preview.stopReason==='target'&&preview.penetratedLayers>0&&m.rng.next()<m.profile.tactics*.32){admit=true;information=memory?'memory':'sound';}
+    }
+   }
+  }
+  // Operator only fires when its real scope transition is complete. Cadence,
+  // bolt state, magazine and reload restrictions are still enforced by Weapon.
+  if(gun.ammo===0)admit=false;
+  if(m.weapon==='operator'&&(!gun.ads||gun.scopeAmount<.985||time<gun.scopeReadyAt))admit=false;
+  const residual=Math.hypot(gun.recoil.pitch+m.motor.compensationPitch*180/Math.PI,gun.recoil.yaw+m.motor.compensationYaw*180/Math.PI);
+  if(admit&&gun.profile.fireMode==='auto'&&(residual>(distance>18?2.2:6)||m.consecutiveMisses>=4&&distance>12)){m.burstRemaining=0;m.pauseUntil=time+gun.profile.resetTime+.06;m.consecutiveMisses=0;admit=false;}
+  if(admit){
+   if(m.burstRemaining<=0){m.burstGoal=this.burstSize(m,distance,angularError,time);m.burstRemaining=m.burstGoal;m.burst=0;}
+   input.fire=true;input.firePresses=gun.profile.fireMode==='auto'?0:1;m.state='firing';
+  }
+  const epoch=this.epoch;
+  gun.step(time,dt,input,()=>{if(epoch!==this.epoch||m.generation!==t.generation||this.death)return;this.fire(t,m,p,time,information,yaw,pitch);});
+  if(epoch!==this.epoch)return;
+  if(time+1e-9>=m.nextRecoilObservation){m.nextRecoilObservation=time+.04;m.recoilHistory.push({time,pitch:gun.recoil.pitch,yaw:gun.recoil.yaw});if(m.recoilHistory.length>40)m.recoilHistory.shift();}
+ }
  /** A supported floor height close enough to traverse without flying or climbing walls. */
  private ground(x:number,z:number,fromY:number):number|null{
   const heights=[0];for(const o of this.obstacles){const b=o.box;if((o.kind!=='cover'&&!o.ramp)||x<b.min.x-.001||x>b.max.x+.001||z<b.min.z-.001||z>b.max.z+.001)continue;heights.push(surfaceHeight(o,x,z));}
@@ -140,18 +257,51 @@ export class DefenderAI {
   }else t.velocity.set(0,0,0);
   t.updatePose(time);const aim=['tracking','firing'].includes(m.state)?1:m.state==='recovering'?.8:m.destination?.25:m.state==='alert'||m.state==='listening'?.6:.35;m.pose+=(aim-m.pose)*(1-Math.exp(-dt*9));t.leftArm.rotation.set(-m.pose,.0,.4*m.pose);t.rightArm.rotation.set(-1.18*m.pose,0,-.4*m.pose);t.root.rotation.y=Math.atan2(m.face.x,m.face.z);t.root.updateMatrixWorld(true);for(const part of t.parts)part.inverse.copy(part.node.matrixWorld).invert();
  }
- private fire(t:Target,m:Memory,p:PlayerBody,time:number){
-  const profile=WEAPONS[m.weapon];if(!m.aim||!profile)return;m.burst++;const interval=m.weapon==='operator'?1/.6:m.weapon==='sheriff'?.65:1/profile.fireRate;m.nextShot=time+interval;if(m.weapon==='operator'||m.weapon==='sheriff'||m.burst>=3){if(m.weapon==='rifleA'||m.weapon==='rifleB')m.nextShot=time+.42;m.burst=0;m.acquired=0;}m.decision=time+.25;
-  t.headPosition(this.head);const origin=this.head.clone(),aim=new Vector3(m.aim.x,m.aim.y,m.aim.z),distance=origin.distanceTo(aim),accuracy=clamp(this.settings.defenderAccuracy,.1,.98),error=(1-accuracy)*(m.weapon==='operator'?.028:.045);aim.x+=this.rng.range(-1,1)*distance*error;aim.y+=this.rng.range(-1,1)*distance*error;this.ray.set(origin,aim.clone().sub(origin).normalize());
-  let region:DefenderShot['hit']='miss',detail:DefenderShot['hitRegion'];const impact=origin.clone().addScaledVector(this.ray.direction,Math.max(distance,1)),playerHit=intersectPlayerBody(this.ray,p,this.hit),wall=nearestEnvironmentHit(this.ray,Math.max(distance+2,100),new Vector3(),this.obstacles);
-  if(playerHit&&playerHit.distance<=wall+1e-6){detail=playerHit.region;region=detail==='head'?'head':detail==='leg'?'leg':'body';impact.copy(this.hit);}else if(Number.isFinite(wall)&&wall<distance+2)impact.copy(origin).addScaledVector(this.ray.direction,wall);
-  const playerEye={x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z},observed=distance<=(m.weapon==='operator'?80:35)||visibleBetween(this.obstacles,playerEye,vec(origin));
-  const shot:DefenderShot={id:++this.sequence,time,bot:t.id,weapon:m.weapon,origin:vec(origin),aim:vec(aim),impact:vec(impact),hit:region,hitRegion:detail,observed,recoveryUntil:m.nextShot};m.lastShot=shot;this.shots.push(shot);if(this.shots.length>96)this.shots.shift();this.report.enemyShots++;
-  if(observed&&m.weapon==='operator')this.report.observedRecoveryUntil=Math.max(this.report.observedRecoveryUntil??0,m.nextShot);
-  if(region!=='miss'){this.health-=damageAt(profile,detail==='head'?'head':detail==='leg'?'leg':detail==='arm'?'arm':'torso',playerHit!.distance);this.report.health=Math.max(0,this.health);if(this.health<=0)this.kill(t,m,p,time,'shot',detail??region,shot);}this.onShot?.(shot);
+ /** Short utility policy: these inputs are all observed or owned state. No
+  * concealed player position or future trajectory enters burst selection. */
+ private burstSize(m:Memory,distance:number,error:number,time:number){
+  if(m.weapon==='operator'||m.weapon==='sheriff')return 1;
+  let count=distance>30?1:distance>18?2+Number(m.rng.next()<m.profile.tactics):distance>8?3+Math.floor(m.rng.next()*3):6+Math.floor(m.rng.next()*6);
+  const observation=m.observations.at(-1),motion=observation?Math.hypot(observation.velocity.x,observation.velocity.z):0;
+  const confidence=clamp(1-error/(2*Math.PI/180),0,1),residual=Math.hypot(m.gun.recoil.pitch+m.motor.compensationPitch*180/Math.PI,m.gun.recoil.yaw+m.motor.compensationYaw*180/Math.PI);
+  if(distance>8&&(motion>2.5||confidence<.55||residual>1))count=Math.max(1,count-1);
+  if(time<m.pressureUntil||m.repeats>3&&m.profile.tactics>.5)count=Math.max(1,count-1);
+  if(m.profile.skill==='beginner'&&distance>8)count=Math.min(count,3);
+  return Math.min(m.gun.ammo,Math.max(1,count));
  }
+ private fire(t:Target,m:Memory,p:PlayerBody,time:number,information:'visual'|'memory'|'sound',desiredYaw:number,desiredPitch:number){
+  const gun=m.gun,profile=gun.profile,recoilBefore={pitch:gun.recoil.pitch,yaw:gun.recoil.yaw};
+  const spread={...gun.calculateSpread(m.movement,gun.ads,time-m.movement.landedAt<.16)};
+  const direction=spreadDirection(m.motor.yaw+m.motor.compensationYaw+recoilBefore.yaw*Math.PI/180,m.motor.pitch+m.motor.compensationPitch+recoilBefore.pitch*Math.PI/180,spread.x,spread.y,new Vector3());
+  t.headPosition(this.head);const origin=this.head.clone();this.ray.set(origin,direction);const playerHit=intersectPlayerBody(this.ray,p,this.hit),trace=traceBallisticRay(this.ray,profile,playerHit?{distance:playerHit.distance,zone:playerHit.region,point:vec(this.hit)}:null,this.obstacles);
+  const detail=trace.zone==='head'||trace.zone==='torso'||trace.zone==='arm'||trace.zone==='leg'?trace.zone:undefined,region:DefenderShot['hit']=detail==='head'?'head':detail==='leg'?'leg':detail?'body':'miss';
+  // Exactly the player recoil profile and RNG streams affect the next ray.
+  // Compensation lives in the motor and cannot erase the weapon's true recoil.
+  gun.recoil.kick(gun.shotIndex,profile,gun.recoilRng,t.crouch,time);
+  m.consecutiveMisses=region==='miss'?m.consecutiveMisses+1:0;m.burst++;m.burstRemaining--;m.engagementShots++;m.engagementHits+=Number(region!=='miss');if(m.firstShotAt<0)m.firstShotAt=time;
+  const interval=1/(gun.ads?profile.adsFireRate:profile.fireRate);
+  m.nextShot=time+interval;
+  if(m.burstRemaining<=0){const pause=m.weapon==='operator'?interval+profile.adsTransition:m.weapon==='sheriff'?Math.max(.650001,profile.resetTime+.1):profile.resetTime+m.rng.range(.05,.18);m.pauseUntil=time+pause;m.nextShot=Math.max(m.nextShot,m.pauseUntil);}
+  if(information!=='visual')m.speculativeShots++;
+  m.decision=time+.25;
+  const distance=origin.distanceTo(new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z)),playerEye={x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z},observed=distance<=(m.weapon==='operator'?80:35)||visibleBetween(this.obstacles,playerEye,vec(origin));
+  const damage=detail?damageAt(profile,detail,trace.distance)*trace.damageScale:0;
+  const visualContact=m.detectedAt>=0&&m.aimStartedAt>=0;
+  const shot:DefenderShot={encounterGeneration:this.epoch,targetGeneration:t.generation,id:++this.sequence,time,bot:t.id,weapon:m.weapon,origin:vec(origin),aim:vec(origin.clone().addScaledVector(direction,Math.max(1,distance))),impact:vec(trace.point),direction:vec(direction),hit:region,hitRegion:detail,observed,recoveryUntil:m.nextShot,
+   information,angularError:m.motor.error(desiredYaw,desiredPitch)*180/Math.PI,trajectoryAngularError:direction.angleTo(spreadDirection(desiredYaw,desiredPitch,0,0,new Vector3()))*180/Math.PI,shotIndex:gun.shotIndex,burstIndex:m.burst,ammoBefore:gun.ammo,recoilBefore,recoilAfter:{pitch:gun.recoil.pitch,yaw:gun.recoil.yaw},compensation:{pitch:m.motor.compensationPitch*180/Math.PI,yaw:m.motor.compensationYaw*180/Math.PI},spread,damage,penetratedLayers:trace.penetratedLayers,penetration:trace.segments,reactionTime:visualContact?m.aimStartedAt-m.detectedAt:undefined,aimAcquisitionTime:visualContact?time-m.aimStartedAt:undefined,detectedAt:visualContact?m.detectedAt:undefined};
+  const totals=this.combatTotals;totals.shots++;totals.hits+=Number(region!=='miss');totals.damage+=damage;totals.recoilSquared+=recoilBefore.pitch**2+recoilBefore.yaw**2;totals.residualSquared+=(recoilBefore.pitch+shot.compensation!.pitch)**2+(recoilBefore.yaw+shot.compensation!.yaw)**2;
+  if(m.engagementShots===1){totals.firstShots++;totals.firstHits+=Number(region!=='miss');if(visualContact){totals.timingContacts++;totals.reaction+=shot.reactionTime!;totals.acquisition+=shot.aimAcquisitionTime!;totals.firstShotDelay+=time-m.detectedAt;}}
+  this.report.combatSummary=this.combatSummary();
+  m.lastShot=shot;this.shots.push(shot);if(this.shots.length>96)this.shots.shift();this.report.enemyShots++;
+  if(observed&&m.weapon==='operator')this.report.observedRecoveryUntil=Math.max(this.report.observedRecoveryUntil??0,m.nextShot);
+  if(damage>0){this.health-=damage;this.report.health=Math.max(0,this.health);if(this.health<=0)this.kill(t,m,p,time,'shot',detail??region,shot);}this.onShot?.(shot);
+ }
+ private combatSummary():CombatSummary{const t=this.combatTotals,followupShots=t.shots-t.firstShots,followupHits=t.hits-t.firstHits;return{shots:t.shots,hits:t.hits,firstShots:t.firstShots,firstHits:t.firstHits,followupShots,followupHits,damage:t.damage,firstHitRate:t.firstShots?t.firstHits/t.firstShots:0,followupHitRate:followupShots?followupHits/followupShots:0,meanReaction:t.timingContacts?t.reaction/t.timingContacts:0,meanAcquisition:t.timingContacts?t.acquisition/t.timingContacts:0,meanFirstShotDelay:t.timingContacts?t.firstShotDelay/t.timingContacts:0,recoilRms:t.shots?Math.sqrt(t.recoilSquared/t.shots):0,residualRecoilRms:t.shots?Math.sqrt(t.residualSquared/t.shots):0};}
+ /** Debug data is returned only on explicit request; gameplay HUD must gate it
+  * behind botDiagnostics so concealed opponent knowledge is not disclosed. */
+ diagnostics():BotDiagnostic[]{return this.targets.filter(t=>t.active&&t.enabled).flatMap(t=>{const m=this.memories[t.id];if(!m)return[];return[{bot:t.id,state:m.state,phase:m.perceptionPhase,weapon:m.weapon,visible:m.visible,known:m.known?vec(m.known):null,lastSeen:m.lastSeen,lastHeard:m.lastHeard,uncertaintyMetres:m.visible>0?0:Math.max(0,this.clock-Math.max(m.lastSeen,m.lastHeard))*.8,detectedAt:m.detectedAt,recognizedAt:m.recognizedAt,reactionUntil:m.reactionUntil,aimStartedAt:m.aimStartedAt,acquisitionUntil:m.acquisitionUntil,triggerAt:m.triggerAt,ammo:m.gun.ammo,reserve:m.gun.reserve,reloadingUntil:m.gun.reloadingUntil,nextShot:m.nextShot,burstRemaining:m.burstRemaining,recoil:{pitch:m.gun.recoil.pitch,yaw:m.gun.recoil.yaw},motor:m.motor.snapshot()}];});}
  private kill(t:Target,m:Memory,p:PlayerBody,time:number,cause:'shot'|'exposure',region:string,shot?:DefenderShot){
-  if(this.death)return;const path=[...this.report.path.slice(-59).map(vec),vec(p.position)];this.death={bot:t.id,weapon:m.weapon,region,cause,time,duration:m.exposure,player:vec(p.position),defender:vec(t.position),line:shot?[vec(shot.origin),vec(shot.impact)]:[{x:t.position.x,y:t.position.y+1.68,z:t.position.z},{x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z}],path};this.report.lastDeath=this.death;this.report.deaths++;
+  if(this.death)return;const path=[...this.report.path.slice(-59).map(vec),vec(p.position)];this.death={bot:t.id,weapon:m.weapon,region,cause,time,playerVisible:m.visible>0,playerShotVelocity:time-this.lastPlayerShotAt<3?this.lastPlayerShotVelocity:null,duration:m.exposure,player:vec(p.position),defender:vec(t.position),reactionTime:shot?.reactionTime,aimAcquisitionTime:shot?.aimAcquisitionTime,shotsFired:m.engagementShots,hits:m.engagementHits,penetratedLayers:shot?.penetratedLayers,line:shot?[vec(shot.origin),vec(shot.impact)]:[{x:t.position.x,y:t.position.y+1.68,z:t.position.z},{x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z}],path};this.report.lastDeath=this.death;this.report.deaths++;
  }
  private closeEpisode(time:number,covered:boolean){if(!this.current)return;const e=this.current;e.ended=time;e.duration=Math.max(0,time-e.started);e.timeToCover=covered?e.duration:null;e.returnToCover=covered&&this.returningAt!==null?time-this.returningAt:null;this.report.episodes.push({...e});if(this.report.episodes.length>64)this.report.episodes.shift();
   if(covered&&this.health>0)for(const shot of this.shots){const id=shot.id??0;if(shot.time<e.started||shot.time>time||shot.hit!=='miss'||shot.weapon!=='operator'||!shot.observed||shot.recoveryUntil<=time||this.usedBaits.has(id))continue;this.usedBaits.add(id);this.report.baits++;}this.current=null;this.episodeOrigin=null;this.returningAt=null;
@@ -166,11 +316,15 @@ export class DefenderAI {
   if(this.death)this.closeEpisode(time,false);
  }
  shot(s:ShotEvent){
+  this.lastPlayerShotAt=s.timestamp;this.lastPlayerShotVelocity=Math.hypot(s.velocity.x,s.velocity.z);
+  // A physical impact on this defender can cause caution without revealing the
+  // shooter's hidden coordinates. The dated visual/sound memories stay intact.
+  if(s.targetId!==null){const memory=this.memories[s.targetId];if(memory)memory.pressureUntil=s.timestamp+.8;}
   const hit=['head','torso','arm','leg'].includes(s.hit);if(this.current){this.current.shots++;this.current.hits+=Number(hit);this.current.shotVelocity=Math.hypot(s.velocity.x,s.velocity.z);}
   if(hit&&s.targetId!==null){const m=this.memories[s.targetId],enemyShot=m?.lastShot,id=enemyShot?.id??0,t=this.targets[s.targetId];if(enemyShot&&m.weapon==='operator'&&enemyShot.observed&&s.timestamp>=enemyShot.time&&s.timestamp<enemyShot.recoveryUntil&&(s.targetGeneration===null||s.targetGeneration===undefined||s.targetGeneration===t?.generation)&&!this.usedRecoveries.has(id)){this.usedRecoveries.add(id);this.report.recoveryExploits++;}}
   if(s.weapon==='operator'){const o=this.report.operator;if(s.ads){o.scopedShots++;o.scopedHits+=Number(hit);o.scopeTransitionSum+=s.adsTransition??0;}else{o.unscopedShots++;o.unscopedHits+=Number(hit);}if(this.current?this.current.shots===1:s.firstShot){o.firstShots++;o.firstHits+=Number(hit);}}
   // Sets retain only the same bounded recent event horizon as the shot journal.
   const oldest=this.shots[0]?.id??0;for(const set of [this.usedBaits,this.usedRecoveries])for(const id of set)if(id<oldest)set.delete(id);
  }
- snapshot():PeekReport{const enabled=this.targets.filter(t=>t.enabled),unclearedAngles=enabled.filter(t=>t.active).length;return{...this.report,totalAngles:enabled.length,currentClears:enabled.length-unclearedAngles,unclearedAngles,health:Math.max(0,this.health),episodes:[...this.report.episodes.map(e=>({...e})),...this.current?[{...this.current}]:[]],path:this.report.path.map(vec),lastDeath:this.report.lastDeath?{...this.report.lastDeath,player:vec(this.report.lastDeath.player),defender:vec(this.report.lastDeath.defender),line:this.report.lastDeath.line.map(vec),path:this.report.lastDeath.path.map(vec)}:null,operator:{...this.report.operator}};}
+ snapshot():PeekReport{const enabled=this.targets.filter(t=>t.enabled),unclearedAngles=enabled.filter(t=>t.active).length;return{...this.report,combatSummary:this.combatSummary(),totalAngles:enabled.length,currentClears:enabled.length-unclearedAngles,unclearedAngles,health:Math.max(0,this.health),episodes:[...this.report.episodes.map(e=>({...e})),...this.current?[{...this.current}]:[]],path:this.report.path.map(vec),lastDeath:this.report.lastDeath?{...this.report.lastDeath,player:vec(this.report.lastDeath.player),defender:vec(this.report.lastDeath.defender),line:this.report.lastDeath.line.map(vec),path:this.report.lastDeath.path.map(vec)}:null,operator:{...this.report.operator}};}
 }

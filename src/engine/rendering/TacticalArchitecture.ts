@@ -4,10 +4,11 @@ import {mergeStaticArchitecture} from './StaticGeometry';
 import type {Obstacle} from '../collision/environment';
 import type {Quality} from '../types';
 import {PEEK_ZONES,type PeekZone} from '../tactical/complex';
+import {BUNNY_LEVEL,WALLBANG_SAMPLES} from '../tactical/mechanics';
 
 type Theme=PeekZone['theme'];
 const THEME_COLORS:Record<Theme,number>={facility:0xa8b3ad,research:0xc7cec8,urban:0xa99e89,courtyard:0xb7aa89};
-const OLD_THEMES:Record<string,Theme>={tactical:'facility',garage:'facility',long:'courtyard',site:'courtyard',mid:'urban',tower:'urban',multi:'research'};
+const OLD_THEMES:Record<string,Theme>={tactical:'facility',garage:'facility',long:'courtyard',site:'courtyard',mid:'urban',tower:'urban',multi:'research',bunny:'facility',wallbang:'research'};
 
 /** Original, meter-scale architectural kit. Finishes stay against existing solids;
  * silhouette landmarks and roofs stay above the character/jump visibility band. */
@@ -103,6 +104,50 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   // Railing parts sit at the existing solid platform edge; no invisible new blocker.
   if(zone.vertical){const height=zone.vertical;for(let px=x+2;px<x+10;px+=1.8)block(.045,.85,.045,px,height+.45,sign*36.85,metal);block(8,.05,.045,x+6,height+.88,sign*36.85,metal);}
   for(const p of [10,12,14])block(.7,.008,.045,frontDoorX,.045,sign*p,warm);
+ }else if(map==='bunny'){
+  chunk='movement-gallery';detail=0;
+  const lane=m(new T.MeshStandardMaterial({color:0x668c92,roughness:.9})),landing=m(new T.MeshStandardMaterial({color:0xb09b72,roughness:.91}));
+  // A coherent long-span hall with structural ribs, inset services and floor
+  // wayfinding. Supports remain within the boundary walls; no new combat cover.
+  for(const z of [4,-6,-16,-26,-36,-43]){
+   for(const side of [-1,1])block(.22,5.4,.32,side*12.15,2.7,z,metal);
+   profile([[-12.2,0],[-12.2,.18],[-9.4,.52],[9.4,.52],[12.2,.18],[12.2,0]],.28,0,5.55,z,metal);
+   block(7.4,.03,.18,0,5.48,z,light);
+  }
+  for(const x of [-5.6,4.6,10.2])block(.045,.008,48,x,.008,-18,lane);
+  for(let z=3;z>=-41;z-=4){
+   block(.65,.008,.045,-5,.012,z,lane);
+   profile([[-.28,-.12],[.28,-.12],[0,.3]],.006,-5,.014,z,lane).rotation.x=-Math.PI/2;
+  }
+  for(const solid of BUNNY_LEVEL.obstacles){
+   if(solid.kind!=='cover'||solid.ramp)continue;const b=solid.box;
+   if(b.min.x===-2.8){block(5.1,.008,.055,0,b.max.y+.006,b.min.z+.07,landing);block(5.1,.008,.055,0,b.max.y+.006,b.max.z-.07,landing);}
+  }
+  // Narrow service bands sit inside the existing side wall volume. Their
+  // contrast stays above the typical head-height band used by jump peeking.
+  detail=1;for(const side of [-1,1])for(const z of [-4,-14,-24,-34]){
+   block(.025,.5,3.6,side*12.005,4.32,z,glass);block(.03,.04,4,side*12.006,3.99,z,metal);
+  }detail=0;
+  root.userData.mechanicLayout='manual-movement-connected-gallery';
+ }else if(map==='wallbang'){
+  chunk='ballistics-gallery';detail=0;
+  const floorMark=m(new T.MeshStandardMaterial({color:0x718c92,roughness:.94}));
+  // Material bays share one architectural language. Their sample surfaces are
+  // left visibly distinct: trim follows the entry wall, not the shootable panel.
+  for(const sample of WALLBANG_SAMPLES){
+   const x=sample.centerX;doorway(x,0,2.8,'research',3.25);
+   block(8.8,.008,.035,x,.008,3,floorMark);
+   for(const z of [-3,-6,-10,-14,-18])block(.045,.008,.5,x+3,.008,z,floorMark);
+   for(const z of [-4,-12,-20]){
+    profile([[-4.7,0],[-4.7,.12],[-3,.4],[3,.4],[4.7,.12],[4.7,0]],.2,x,5.5,z,metal);
+    block(4.5,.025,.15,x,5.42,z,light);
+   }
+   // Recessed back-wall layers frame targets without intersecting their head
+   // silhouettes or supplying non-colliding apparent cover beside a sample.
+   block(9.5,.09,.025,x,4.8,-20.986,metal);
+   detail=1;block(5.4,.5,.015,x,4.27,-20.99,glass);detail=0;
+  }
+  root.userData.mechanicLayout='material-thickness-angle-bays';
  }else{
   const spec=LEVEL_SPECS[map as keyof typeof LEVEL_SPECS],theme=OLD_THEMES[map]??'facility';
   if(spec)for(let i=0;i<3;i++){

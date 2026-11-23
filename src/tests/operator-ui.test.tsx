@@ -62,7 +62,7 @@ describe('Operator and peeking interface contracts (server markup, not browser g
   const html=renderToStaticMarkup(<TacticalControls menu/>);
   for(const id of LEVEL_IDS)expect(html).toContain(LEVEL_SPECS[id].title);
   expect(html).toContain('기본 사격장');expect(html).toContain('기존 코너 피킹');
-  const duration=html.slice(html.indexOf('aria-label="피킹 훈련 시간"'),html.indexOf('훈련 과제'));
+  const durationStart=html.indexOf('aria-label="피킹 훈련 시간"'),duration=html.slice(durationStart,html.indexOf('</section>',durationStart));
   expect(duration).toContain('시간제 피킹');for(const n of [30,60,120])expect(duration).toContain(`${n}초`);
   expect(duration.match(/aria-pressed="true"/g)).toHaveLength(1);
   const hud=renderToStaticMarkup(<GameHUD runtime={null} settings={{...DEFAULT_SETTINGS,practiceMap:'complex',peekingTimed:true,duration:60}} telemetry={{...INITIAL_TELEMETRY,time:20}} mode="free" weapon="operator"/>);

@@ -15,7 +15,7 @@ import { Results } from '../ui/Results';
 import { useInterfaceAudio } from '../ui/useInterfaceAudio';
 const AimDashboard=lazy(()=>import('../aim/ui/AimDashboard').then(m=>({default:m.AimDashboard})));
 const StreamingStage=lazy(()=>import('../streaming/StreamingStage').then(m=>({default:m.StreamingStage})));
-const TRAINING_LABELS:Record<TrainingNavigation,string>={free:'자유 훈련장',timed:'시간제 훈련',braking:'톡브레이킹 훈련',spray:'반동 연습',tactical:'각체크·피킹',vertical:'수직 각체크 훈련'};
+const TRAINING_LABELS:Record<TrainingNavigation,string>={free:'자유 훈련장',timed:'시간제 훈련',braking:'톡브레이킹 훈련',spray:'반동 연습',tactical:'각체크·피킹',vertical:'수직 각체크 훈련',bunny:'버니합 훈련',wallbang:'월샷 훈련'};
 const NAVIGATION_KEY='valoprac-training-navigation-open';
 export function App(){
   useNavigation();useInterfaceAudio();
@@ -34,6 +34,8 @@ export function App(){
     <button className={activeTraining==='tactical'?'active':''} onClick={()=>selectTraining('tactical')}><ScanLine size={18}/> 각체크·피킹</button>
     <button className={activeTraining==='braking'?'active':''} onClick={()=>selectTraining('braking')}><MoveHorizontal size={18}/> 톡브레이킹 훈련</button>
     <button className={activeTraining==='vertical'?'active':''} onClick={()=>selectTraining('vertical')}><Layers3 size={18}/> 수직 각체크 훈련</button>
+    <button className={activeTraining==='bunny'?'active':''} onClick={()=>selectTraining('bunny')}><MoveHorizontal size={18}/> 버니합 훈련</button>
+    <button className={activeTraining==='wallbang'?'active':''} onClick={()=>selectTraining('wallbang')}><Crosshair size={18}/> 월샷 훈련</button>
     <button className={tab==='aim'?'active':''} onClick={()=>setTab('aim')}><Target size={18}/> 에임 분석 · 감도 탐색</button>
     <span className="nav-section-label nav-separator">훈련 환경</span>
     <button className={tab==='weapons'?'active':''} onClick={()=>setTab('weapons')}><Crosshair size={19}/> 무기 선택</button>

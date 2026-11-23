@@ -1,6 +1,6 @@
 import type {Drill,ShotEvent} from '../../engine/types';
 export interface DrillStats {attempts:number;successes:number;early:number;wrongDirection:number;lastSpeed:number;lastWindow:number|null;}
-export const DRILL_LABELS:Record<Drill,string>={none:'자유 연습',tapAD:'왼쪽 이동 → 오른쪽 톡 → 사격',tapDA:'오른쪽 이동 → 왼쪽 톡 → 사격',release:'좌우 이동 → 키 해제 → 사격',wide:'와이드 스윙 → 제동 → 헤드샷',repeat:'반복 좌우 스트레이핑',stopMoving:'이동 표적 → 제동 → 사격',corner:'코너 피킹 훈련',vertical:'수직 각체크 훈련',mixed:'복합 전술 훈련',moving:'이동 중 사격'};
+export const DRILL_LABELS:Record<Drill,string>={none:'자유 연습',tapAD:'왼쪽 이동 → 오른쪽 톡 → 사격',tapDA:'오른쪽 이동 → 왼쪽 톡 → 사격',release:'좌우 이동 → 키 해제 → 사격',wide:'와이드 스윙 → 제동 → 헤드샷',repeat:'반복 좌우 스트레이핑',stopMoving:'이동 표적 → 제동 → 사격',corner:'코너 피킹 훈련',vertical:'수직 각체크 훈련',mixed:'복합 전술 훈련',moving:'이동 중 사격',bunny:'버니합 훈련',wallbang:'월샷 훈련'};
 export class TapDrill {
  stats:DrillStats={attempts:0,successes:0,early:0,wrongDirection:0,lastSpeed:0,lastWindow:null};last='좌우로 충분히 이동한 뒤 제동하세요.';
  constructor(public drill:Drill){}

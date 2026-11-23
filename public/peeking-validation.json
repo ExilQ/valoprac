@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "7.0.0",
-  "patchLabel": "07.00",
-  "generatedAt": "2026-10-27T06:46:55.301Z",
+  "release": "8.0.0",
+  "patchLabel": "08.00",
+  "generatedAt": "2026-10-27T16:53:00.064Z",
   "tests": {
-    "application": 607,
+    "application": 722,
     "broker": 20,
     "hosting": 12,
     "passed": true,

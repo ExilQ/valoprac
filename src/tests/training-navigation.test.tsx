@@ -20,7 +20,7 @@ describe('Named training entry points and visible tactical-map selection',()=>{
   expect(selectedTraining(choice.mode,settings)).toBe('tactical');
  });
  const cases:[Mode,Partial<Settings>,string][]=[
-  ['free',{practiceMap:'range'},'자유 훈련장'],['precision',{},'시간제 훈련'],['tracking',{},'시간제 훈련'],
+  ['free',{practiceMap:'range'},'자유 훈련장'],['free',{practiceMap:'bunny',drill:'bunny'},'버니합 훈련'],['free',{practiceMap:'wallbang',drill:'wallbang'},'월샷 훈련'],['precision',{},'시간제 훈련'],['tracking',{},'시간제 훈련'],
   ['braking',{drill:'tapAD'},'톡브레이킹 훈련'],['spray',{},'반동 연습'],
   ['free',{practiceMap:'mid',drill:'vertical'},'수직 각체크 훈련'],
   ['free',{practiceMap:'garage',drill:'corner'},'각체크·피킹'],['free',{practiceMap:'complex',drill:'none'},'각체크·피킹']
@@ -34,6 +34,9 @@ describe('Named training entry points and visible tactical-map selection',()=>{
   const visible=html.slice(0,advanced);expect(visible).toContain('aria-label="전술 맵 선택"');
   for(const id of LEVEL_IDS)expect(visible).toContain(LEVEL_SPECS[id].title);
   expect(visible).toContain('전술 피킹 연구실');expect(visible).not.toContain('기존 코너 피킹');
+ });
+ it('enters dedicated movement and material training without inheriting lethal bot settings',()=>{
+  for(const id of ['bunny','wallbang'] as const){const c=trainingChoice(id),settings={...DEFAULT_SETTINGS,...c.settings};expect(c.mode).toBe('free');expect(settings.practiceMap).toBe(id);expect(settings.drill).toBe(id);expect(settings.combatMode).toBe('learning');expect(settings.exposureEnabled).toBe(false);expect(selectedTraining(c.mode,settings)).toBe(id);}
  });
  it('keeps each timed or recoil task on the range instead of inheriting a tactical preview',()=>{
   for(const id of['timed','spray','braking']as const){const c=trainingChoice(id);expect(c.settings.practiceMap).toBe('range');expect(selectedTraining(c.mode,{...DEFAULT_SETTINGS,...c.settings})).toBe(id);}

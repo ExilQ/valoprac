@@ -1,8 +1,9 @@
 /* VALOPRAC / original tactical interface foundations. System font stack supports Korean. */
 :root {
- --accent:#EF5261; --accent-hover:#ff6977; --accent-soft:rgba(239,82,97,.09);
- --bg:#111820; --surface:#1B252F; --surface-raised:#23313c; --surface-deep:#0d141c;
- --ink:#ECEDEB; --muted:#A8B0B8; --subtle:#7f8c98; --line:#38424C;
+ --accent:#FF5964; --accent-hover:#ff7881; --accent-soft:rgba(255,89,100,.09);
+ --bg:#101820; --surface:#1B2732; --surface-raised:#263540; --surface-deep:#0d141c;
+ --ink:#F1F3F2; --muted:#B4C0C9; --subtle:#9eafb9; --line:#43535f;
+ --interactive:#58C9D6; --success:#64D8A1; --warning:#F1BC66; --danger:#FF5964;
  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px;
  --type-small:11px; --type-body:13px; --type-title:32px;
  --font-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;

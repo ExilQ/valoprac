@@ -3,14 +3,17 @@ import type { HitZone } from '../types';
 import type { Target } from '../targets/Target';
 import { nearestEnvironmentHit,ENVIRONMENT,type Obstacle } from './environment';
 import {poseForTarget,type RenderedTargetFrame} from './RenderedTargets';
+import {WEAPONS,type WeaponProfile} from '../../config/weapons';
+import {traceBallisticRay,type PenetrationSegment} from './Ballistics';
 const environmentPoint=new Vector3(),targetPoint=new Vector3();
-export interface HitResult {zone:HitZone;target:Target|null;point:Vector3;distance:number;penetrationScale?:number;penetratedLayers?:number}
+export interface HitResult {zone:HitZone;target:Target|null;point:Vector3;distance:number;penetrationScale?:number;penetratedLayers?:number;segments?:PenetrationSegment[];stopReason?:string}
 function intersectTarget(target:Target,ray:Ray,out:Vector3,frame?:RenderedTargetFrame){
   if(!target.enabled||!target.active)return null;
   if(!frame)return target.intersect(ray,out);
   const pose=poseForTarget(target,frame);return pose?target.intersect(ray,out,pose.matrices):null;
 }
 export function castShot(ray:Ray,targets:Target[],out:HitResult,obstacles:Obstacle[]=ENVIRONMENT,frame?:RenderedTargetFrame){
+  out.penetrationScale=1;out.penetratedLayers=0;out.segments=[];out.stopReason=undefined;
   const wallDistance=nearestEnvironmentHit(ray,150,environmentPoint,obstacles);
   out.zone=Number.isFinite(wallDistance)?'wall':'miss';out.target=null;out.distance=Number.isFinite(wallDistance)?wallDistance:150;
   out.point.copy(ray.direction).multiplyScalar(out.distance).add(ray.origin);
@@ -20,17 +23,13 @@ export function castShot(ray:Ray,targets:Target[],out:HitResult,obstacles:Obstac
   }return out;
 }
 
-/** Versioned high-penetration approximation. Actual Riot material thickness tables
- * are not public calibration data. Thick structure/ramp volumes remain solid. */
-export function castOperatorShot(ray:Ray,targets:Target[],out:HitResult,obstacles:Obstacle[]=ENVIRONMENT,frame?:RenderedTargetFrame){
- castShot(ray,targets,out,obstacles,frame);out.penetrationScale=1;out.penetratedLayers=0;
- if(out.zone!=='wall')return out;
- const blockedDistance=out.distance,point=new Vector3();let closest=150;
- for(const target of targets){const hit=intersectTarget(target,ray,point,frame);if(!hit||hit.distance>=closest||hit.distance<blockedDistance)continue;const segments:{entry:number;exit:number;limit:number}[]=[];
-  for(const o of obstacles){let entry=-Infinity,exit=Infinity;for(const axis of ['x','y','z'] as const){const d=ray.direction[axis],start=ray.origin[axis],lo=o.box.min[axis],hi=o.box.max[axis];if(Math.abs(d)<1e-9){if(start<lo||start>hi){entry=Infinity;break;}}else{const a=(lo-start)/d,b=(hi-start)/d;entry=Math.max(entry,Math.min(a,b));exit=Math.min(exit,Math.max(a,b));}}if(exit>=Math.max(0,entry)&&entry<hit.distance&&exit>0)segments.push({entry:Math.max(0,entry),exit:Math.min(exit,hit.distance),limit:o.ramp?0:o.kind==='cover'?.8:.35});
-  }
-  segments.sort((a,b)=>a.entry-b.entry);let total=0,allowed=segments.length>0&&segments.length<=2;for(const s of segments){const thickness=s.exit-s.entry;total+=thickness;if(thickness>s.limit+1e-6)allowed=false;}if(total>1.1)allowed=false;
-  if(allowed){out.zone=hit.zone;out.target=target;out.distance=hit.distance;out.point.copy(point);out.penetrationScale=Math.pow(.65,segments.length);out.penetratedLayers=segments.length;closest=hit.distance;}
- }
- return out;
+/** Geometry and attenuation shared with defender bullets. The closest body
+ * candidate is tested at the submitted pose; walls decide whether it is reachable. */
+export function castWeaponShot(ray:Ray,targets:Target[],out:HitResult,profile:WeaponProfile,obstacles:Obstacle[]=ENVIRONMENT,frame?:RenderedTargetFrame){
+ let nearest=150,zone:HitZone='miss',selected:Target|null=null;const point=new Vector3();
+ for(const target of targets){const hit=intersectTarget(target,ray,targetPoint,frame);if(hit&&hit.distance<nearest){nearest=hit.distance;zone=hit.zone;selected=target;point.copy(targetPoint);}}
+ const trace=traceBallisticRay(ray,profile,selected?{zone,distance:nearest,point}:null,obstacles);
+ out.zone=trace.zone;out.target=trace.zone==='wall'||trace.zone==='miss'?null:selected;out.point.copy(trace.point);out.distance=trace.distance;out.penetrationScale=trace.damageScale;out.penetratedLayers=trace.penetratedLayers;out.segments=trace.segments;out.stopReason=trace.stopReason;return out;
 }
+/** Compatibility entry: Operator now follows the same material traversal. */
+export function castOperatorShot(ray:Ray,targets:Target[],out:HitResult,obstacles:Obstacle[]=ENVIRONMENT,frame?:RenderedTargetFrame){return castWeaponShot(ray,targets,out,WEAPONS.operator,obstacles,frame);}

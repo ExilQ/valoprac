@@ -49,8 +49,8 @@ describe('Peeking scenarios integrated with the real simulation clock',()=>{
 });
 
 describe('Retry, scope and analytics preserve the intended independent state',()=>{
- it('retries a real exposure death locally, clearing scope and health while preserving ammunition, time, statistics and footstep accumulation',()=>{
-  const s=simulation({practiceMap:'garage',targetCount:3,defenderReaction:1.5,exposureEnabled:true,exposureLimit:.5});s.running=true;
+ it('retries a real exposure death locally, restoring ammunition and life-local state while preserving time and session statistics',()=>{
+  const s=simulation({practiceMap:'garage',combatMode:'exposure',targetCount:3,defenderReaction:1.5,exposureEnabled:true,exposureLimit:.5});s.running=true;
   advance(s,1,{scopePresses:1});advance(s,90);advance(s,1,{firePresses:1});advance(s,240);
   expect(s.shots).toHaveLength(1);advance(s,1,{scopePresses:1});advance(s,90);expect(s.weapon.scopeLevel).toBe(1);
   s.movement.position.set(0,0,5);s.movement.previous.copy(s.movement.position);advance(s,200);
@@ -59,7 +59,7 @@ describe('Retry, scope and analytics preserve the intended independent state',()
   s.retryTactical();
   expect(s.defenders!.death).toBeNull();expect(s.exposure.death).toBeNull();expect(s.defenders!.health).toBe(150);expect(s.targets.filter(t=>t.enabled&&t.active)).toHaveLength(3);
   expect(s.weapon.scopeLevel).toBe(0);expect(s.weapon.scopeAmount).toBe(0);expect(s.weapon.scopeZoom).toBe(1);expect(s.ads).toBe(false);
-  expect(s.weapon.ammo).toBe(saved.ammo);expect(s.weapon.reserve).toBe(saved.reserve);expect(s.time).toBe(saved.time);expect(s.stats.shots).toBe(saved.shots);expect(s.defenders!.report.deaths).toBe(saved.deaths);expect(s.footsteps.footstepAccumulation).toBe(.61);
+  expect(s.weapon.ammo).toBe(s.weapon.profile.magazine);expect(s.weapon.reserve).toBe(s.weapon.profile.reserve);expect(s.time).toBe(saved.time);expect(s.stats.shots).toBe(saved.shots);expect(s.defenders!.report.deaths).toBe(saved.deaths);expect(s.footsteps.footstepAccumulation).toBe(0);
   s.running=true;advance(s,1);expect(s.weapon.scopeLevel).toBe(0);expect(s.ads).toBe(false);
  });
  it('resets Operator totals alongside ordinary statistics without refilling ammo or erasing movement distance',()=>{

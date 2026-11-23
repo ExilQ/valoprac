@@ -1,3 +1,6 @@
+import {synthesizeMaterialImpact} from './materialImpact';
+import {PENETRATION_MATERIALS,type SurfaceMaterial} from '../../config/penetration';
+import type {PenetrationSegment} from '../collision/Ballistics';
 import {synthesizeFootstep} from './footstepSynthesis';
 import {FOOTSTEP_MATERIALS,type FootstepEvent,type FootstepMaterial} from '../footsteps/Footsteps';
 import { AUDIO_PROFILES, AUDIO_ACTIONS, type AudioAction } from '../../config/audio';
@@ -18,6 +21,7 @@ export class TrainingAudio {
       this.channels={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.channels))g.connect(this.master);
       for(const id of WEAPON_ORDER)for(const action of AUDIO_ACTIONS){const values=synthesize(id,action,c.sampleRate),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.buffers.set(`${id}:${action}`,b);}
       for(const material of FOOTSTEP_MATERIALS){const pair:AudioBuffer[]=[];for(let side=0;side<2;side++){const values=synthesizeFootstep(c.sampleRate,side,material),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);pair.push(b);}this.stepBuffers.set(material,pair);}
+      for(const material of Object.keys(PENETRATION_MATERIALS) as SurfaceMaterial[])for(const exit of [false,true]){const values=synthesizeMaterialImpact(material,c.sampleRate,exit),b=c.createBuffer(1,values.length,c.sampleRate);b.copyToChannel(values,0);this.buffers.set(`impact:${material}:${exit}`,b);}
       this.loading=this.preload(c);
     }
     await this.context.resume();await this.loading;
@@ -32,9 +36,10 @@ export class TrainingAudio {
   sync(time:number){if(this.context)this.anchor=this.context.currentTime-time;}
   levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;this.channels.firing.gain.value=s.firingVolume;this.channels.handling.gain.value=s.handlingVolume;this.channels.feedback.gain.value=s.feedbackVolume;this.channels.footsteps.gain.value=s.footstepVolume;}
   selectWeapon(id:WeaponId){if(this.weapon!==id){this.stop();this.weapon=id;}}
-  shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
+  shot(s:ShotEvent){const key=`${s.weapon}:${s.timestamp}:${s.magazineShot}`;if(key===this.lastShot)return;this.lastShot=key;this.events++;this.play(s.weapon,'fire','firing',s.timestamp);this.impacts(s.penetrationSegments??[],s.timestamp);if(s.hit==='head')this.play(s.weapon,'elimination','feedback');else if(['torso','arm','leg'].includes(s.hit))this.play(s.weapon,'equip','feedback',undefined,0.35);}
   footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;const b=this.stepBuffers.get(e.material??'concrete')?.[e.id%2];if(b)this.playBuffer(b,'footsteps',e.timestamp,.65);}
   enemyShot(id:WeaponId,distance:number){this.play(id,'fire','firing',undefined,Math.max(.08,Math.min(.65,9/Math.max(9,distance))));}
+  impacts(segments:PenetrationSegment[],time?:number,scale=1){for(const segment of segments.slice(0,4)){const entry=this.buffers.get(`impact:${segment.material}:false`);if(entry)this.playBuffer(entry,'feedback',time,.38*scale);if(segment.penetrated){const exit=this.buffers.get(`impact:${segment.material}:true`);if(exit)this.playBuffer(exit,'feedback',time,.22*scale);}}}
   action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){this.play(id,action,'handling');}
   private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1){
     const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale);

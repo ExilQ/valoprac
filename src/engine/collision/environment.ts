@@ -1,5 +1,6 @@
 import { Box3, Vector3, Ray } from 'three';
-export interface Obstacle {box:Box3; color:number; kind:'cover'|'wall';ramp?:{axis:'x'|'z';low:number;high:number;ascending:1|-1}}
+import type {SurfaceMaterial} from '../../config/penetration';
+export interface Obstacle {box:Box3; color:number; kind:'cover'|'wall';material?:SurfaceMaterial;ramp?:{axis:'x'|'z';low:number;high:number;ascending:1|-1}}
 export function surfaceHeight(o:Obstacle,x:number,z:number){if(!o.ramp)return o.box.max.y;const r=o.ramp,v=r.axis==='x'?x:z,min=o.box.min[r.axis],max=o.box.max[r.axis];const t=Math.max(0,Math.min(1,(v-min)/(max-min)));return r.low+(r.high-r.low)*(r.ascending===1?t:1-t);}
 const box=(x:number,y:number,z:number,w:number,h:number,d:number,color:number,kind:'cover'|'wall'='wall'):Obstacle=>({box:new Box3(new Vector3(x-w/2,y-h/2,z-d/2),new Vector3(x+w/2,y+h/2,z+d/2)),color,kind});
 export const ENVIRONMENT:Obstacle[]=[

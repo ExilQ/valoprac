@@ -1,3 +1,9 @@
+# VALOPRAC 8.0.0 — physical combat, movement and material training
+
+Patch **08.00** extends the existing browser engine with staged perception, finite bot aim motors, real shared weapon recoil/spread/ammunition/reloading, four difficulty profiles, independent combat/exposure learning modes, full encounter reset, velocity-aware footstep recovery, buffered manual hops and bounded air control, shared multi-material bullet traversal, and original movement/material training environments. All existing weapons, maps, aim experiments, Korean settings and local history remain available.
+
+Calibration and software evidence are in [combat documentation](docs/combat/README.md) and the generated `/combat-validation.json`. These independent training models are not verified native VALORANT formulas or measured human skill profiles. The runtime remains Three.js/WebGL; the included Unreal staging source remains disabled.
+
 # VALOPRAC 5.0.0 — visual redesign
 
 Patch **05.00** refines original weapon geometry, skinned first-person gloves/arms, articulated tactical characters, architectural materials/lighting and the complete Korean interface within the existing Three.js engine. See [visual audit and implementation](docs/visual/REDESIGN.md). Existing mechanics, local records and production Site identity remain in place. Hardware FPS and physical input latency require real-device validation.

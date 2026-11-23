@@ -49,3 +49,28 @@ h1,h2,h3,h4{word-break:keep-all;overflow-wrap:normal;text-wrap:pretty}
 .training-navigation-toggle:hover{background:var(--accent-soft)}
 @media(max-width:700px){.training-navigation{margin-top:12px}.training-navigation-toggle{padding:10px 8px}.sidebar .training-navigation>nav{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){.training-navigation-toggle>svg{transition:none}}
+/* Readable Korean content and a restrained semantic color hierarchy. */
+p,label,button,summary,small,th,td{word-break:keep-all;overflow-wrap:normal}
+.field-note,.view-title>p:last-child,.training-tip p,.weapon-handling p,.home-footer,.legal-notice,.result-footnote{color:var(--muted)}
+.field-note,.settings-card .field-note{font-size:11px;line-height:1.8}
+.settings-card{background:var(--surface);border-color:var(--line)}
+.settings-card h3,.data-card h3{color:var(--ink);font-size:13px}
+.practice-toggle,.practice-select,.toggle-field,.number-field,.range-field>span,.range-field b{font-size:12px;color:var(--muted)}
+.practice-select select,.number-field input,.binding-grid input{font-size:12px;color:var(--ink)}
+.practice-toggle input,.toggle-field input{accent-color:var(--interactive)}
+.range-field input{accent-color:var(--interactive)}
+.primary-button,.start-button{background:var(--accent);color:var(--bg)}
+.primary-button:hover,.start-button:hover{background:var(--accent-hover)}
+.start-button small{color:var(--bg)}
+.secondary-button,.weapon-quick-select,.settings-card a{color:var(--interactive)}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--interactive);outline-offset:3px}
+.mode-card.selected:before,.weapon-card.selected:before,.sidebar nav button.active:before{background:var(--interactive)}
+.selected .mode-icon,.selected .mode-arrow,.weapon-card-heading>svg,.selected-label{color:var(--interactive)}
+.weapon-options button.active,.quality-options button.active,.target-speed-options button[aria-pressed=true]{border-color:var(--interactive);background:#16313b;color:var(--ink)}
+.inline-notice,.global-notice{color:var(--warning);border-color:#9b794a70;background:#312a20}
+.status-dot,.local-badge i{background:var(--success)}
+button:disabled{color:var(--subtle);opacity:.65;cursor:default}
+.patch-dialog header small,.patch-dialog section>small,.data-card h3>span,.weapon-specifications dt{color:var(--muted)}
+@media(max-width:700px){.mode-card .mode-copy{min-width:0}.mode-card .mode-copy p{font-size:11px;line-height:1.6}.mode-card .mode-copy h3{font-size:13px}.training-navigation-current{font-size:11px}}
+body{color:var(--ink)}
+@media(min-width:701px){.sidebar{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}.sidebar .brand-button,.sidebar .training-navigation,.sidebar-bottom{flex-shrink:0}}

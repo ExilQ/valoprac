@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -76,7 +76,22 @@
     "segmented-aim-kinematics",
     "goal-normalized-paired-evidence",
     "independent-ads-assessment",
-    "longitudinal-sensitivity-stability"
+    "longitudinal-sensitivity-stability",
+    "continuous-bot-aim-motor",
+    "perception-recognition-reaction-acquisition",
+    "shared-bot-weapon-recoil-and-magazines",
+    "independent-combat-training-modes",
+    "four-defender-skill-profiles",
+    "complete-generation-owned-encounter-reset",
+    "velocity-aware-footstep-braking-recovery",
+    "buffered-manual-bunny-hops",
+    "bounded-air-strafe-inertia",
+    "material-thickness-ballistic-traversal",
+    "shared-player-bot-wallbang",
+    "original-material-impact-audio",
+    "bunny-hop-training-map",
+    "wallbang-material-training-map",
+    "persisted-hop-and-combat-analysis"
   ],
   "unreal": {
     "engine": "5.7",
@@ -86,12 +101,12 @@
     "productionEnabled": false
   },
   "footsteps": {
-    "calibration": "provisional-v2",
+    "calibration": "provisional-v3-braking",
     "actualValorantMeasured": false,
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "07.00",
+  "patchLabel": "08.00",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -112,7 +127,7 @@
   },
   "tactical": {
     "sections": 6,
-    "exposureDefaultSeconds": 2,
+    "exposureDefaultSeconds": 3,
     "exactValorantParity": false,
     "gpuVisualQA": false,
     "keyboardShortcutCaptureHardwareVerified": false,
@@ -138,7 +153,7 @@
     "softwareVisualQA": true,
     "browserPointerLockVerified": true,
     "browserFullscreenVerified": true,
-    "hudLayoutsVerified": 8
+    "hudLayoutsVerified": 32
   },
   "operator": {
     "calibration": "operator-1.0.0",
@@ -156,5 +171,33 @@
     "pose": "last-submitted-render-frame-at-input-time",
     "physicalScanoutVerified": false,
     "validation": "/correctness-validation.json"
+  },
+  "combat": {
+    "calibration": "combat-1.0.0-provisional",
+    "validation": "/combat-validation.json",
+    "defaultMode": "gunfight",
+    "skills": [
+      "beginner",
+      "normal",
+      "advanced",
+      "expert"
+    ],
+    "physicalAimAndRecoil": true,
+    "humanFairnessVerified": false,
+    "nativeParityVerified": false,
+    "softwareGPUPerformanceImprovementVerified": false
+  },
+  "movement": {
+    "calibration": "movement-4.0-provisional",
+    "simulationHz": 120,
+    "manualJumpBufferDefaultMs": 80,
+    "airSpeedCapMetersPerSecond": 5.5,
+    "nativeParityVerified": false
+  },
+  "penetration": {
+    "model": "resistance-metres-1.0.0",
+    "sharedWithBots": true,
+    "nativeFormulaVerified": false,
+    "materials": 10
   }
 }

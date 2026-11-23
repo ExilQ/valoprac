@@ -1,3 +1,6 @@
+import {PENETRATION_MATERIALS} from '../../config/penetration';
+import type {PenetrationSegment} from '../collision/Ballistics';
+import type {Vec3} from '../types';
 import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
@@ -28,6 +31,7 @@ export class RangeRenderer {
   private geometries=new Set<THREE.BufferGeometry>();private materials=new Set<THREE.Material>();private textures=new Set<THREE.Texture>();
   private architecture:THREE.Group|null=null;private defenderWeapons=new Map<WeaponId,THREE.InstancedMesh>();private heldMatrix=new THREE.Matrix4();private heldPose=new THREE.Object3D();
   private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetMatrices:THREE.Matrix4[][]=[];private renderedTargetPositions:THREE.Vector3[]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
+  private surfaceImpacts:THREE.Mesh[]=[];private surfaceImpactIndex=0;
   private tracers:THREE.Line[]=[];private tracerIndex=0;private weapon=new THREE.Group();private muzzle!:THREE.Mesh;
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
@@ -99,7 +103,7 @@ export class RangeRenderer {
       for(const t of this.simulation.targets){const memory=ai.memories[t.id];
         if(!memory||memory.weapon!==id||!t.enabled||!t.active){this.heldMatrix.makeScale(0,0,0);batch.setMatrixAt(t.id,this.heldMatrix);continue;}
         equipped++;
-        const pose=(memory as {pose?:number}).pose??.35;this.heldPose.position.set(.13,.9+.37*pose,.1+.35*pose);this.heldPose.rotation.set((1-pose)*.75,0,0);this.heldPose.scale.setScalar(1);this.heldPose.updateMatrix();
+        const pose=(memory as {pose?:number}).pose??.35;this.heldPose.position.set(.13,.9+.37*pose,.1+.35*pose);const pitch=memory.motor.pitch+memory.motor.compensationPitch+memory.gun.recoil.pitch*DEG;this.heldPose.rotation.set((1-pose)*.75-pitch*pose,memory.motor.compensationYaw+memory.gun.recoil.yaw*DEG,0);this.heldPose.scale.setScalar(1);this.heldPose.updateMatrix();
         this.heldMatrix.multiplyMatrices(t.root.matrixWorld,this.heldPose.matrix);this.heldMatrix.elements[12]+=(t.previous.x-t.position.x)*(1-alpha);this.heldMatrix.elements[14]+=(t.previous.z-t.position.z)*(1-alpha);batch.setMatrixAt(t.id,this.heldMatrix);
       }
       batch.visible=equipped>0;batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';
@@ -113,9 +117,9 @@ export class RangeRenderer {
     const g=new THREE.CylinderGeometry(0.008,0.008,0.03,6);this.geometries.add(g);const m=this.material(0xa58e52,0.28);
     for(let i=0;i<24;i++){const mesh=new THREE.Mesh(g,m);mesh.visible=false;this.scene.add(mesh);this.shells.push({mesh,velocity:new THREE.Vector3(),until:0});}
     const particleGeometry=new THREE.SphereGeometry(0.012,4,3);this.geometries.add(particleGeometry);const particleMaterial=new THREE.MeshBasicMaterial({color:0xffd7a4});this.materials.add(particleMaterial);
-    for(let i=0;i<32;i++){const mesh=new THREE.Mesh(particleGeometry,particleMaterial);mesh.visible=false;this.scene.add(mesh);this.sparks.push({mesh,velocity:new THREE.Vector3(),until:0});}
+    for(let i=0;i<32;i++){const pm=particleMaterial.clone();this.materials.add(pm);const mesh=new THREE.Mesh(particleGeometry,pm);mesh.visible=false;this.scene.add(mesh);this.sparks.push({mesh,velocity:new THREE.Vector3(),until:0});}
   }
-  clearImpacts(){for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
+  clearImpacts(){this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
   private surfaceTexture(kind:string){
     const key=kind+this.settings.textureQuality;const existing=this.surfaceTextures.get(key);if(existing)return existing;
     const n={low:32,medium:64,high:128,ultra:256}[this.settings.textureQuality],data=new Uint8Array(n*n*4);
@@ -123,6 +127,7 @@ export class RangeRenderer {
     const t=new THREE.DataTexture(data,n,n);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(kind==='rubber'?12:5,kind==='rubber'?20:5);t.colorSpace=kind.endsWith('normal')?THREE.NoColorSpace:THREE.SRGBColorSpace;t.needsUpdate=true;t.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());this.textures.add(t);this.surfaceTextures.set(key,t);return t;
   }
   private tacticalSurface(o:import('../collision/environment').Obstacle){
+    if(o.material){const def=PENETRATION_MATERIALS[o.material],metal=def.impact==='metal';const material=this.archMaterial(`surface-${o.material}`,def.color,metal?.48:.88);material.metalness=metal?.55:.04;return material;}
     const b=o.box,x=(b.min.x+b.max.x)/2,z=(b.min.z+b.max.z)/2;
     const theme=this.simulation.practiceMap==='complex'?PEEK_ZONES.find(q=>Math.abs(q.center.x-x)<12.1&&Math.sign(q.center.z)===Math.sign(z))?.theme:undefined;
     const palette={facility:[0xa8b8b5,0x607c7c],research:[0xb8c7cc,0x607b8a],urban:[0xb5a38e,0x837b6e],courtyard:[0xc5b28e,0x8e967b]} as const;
@@ -161,6 +166,7 @@ export class RangeRenderer {
   /** Visual dressing follows existing solids; surface reveals stay within 2 cm. No colliders, spawn points,
    * navigation surfaces or head-height sightlines are changed. */
   private refineObstacle(o:import('../collision/environment').Obstacle){
+    if(o.material)return;
     if(o.ramp)return;const b=o.box,w=b.max.x-b.min.x,h=b.max.y-b.min.y,d=b.max.z-b.min.z,cx=(b.min.x+b.max.x)/2,cz=(b.min.z+b.max.z)/2;
     const trim=this.archMaterial('trim',0x617577,.78),base=this.archMaterial('base',0x7a8982,.92),panel=this.archMaterial('panel',0xa6b4ab,.91),metal=this.archMaterial('metal',0x405861,.63);
     if(o.kind==='cover'){
@@ -237,23 +243,43 @@ export class RangeRenderer {
         this.composer.addPass(new OutputPass());
       }
     }
+    this.surfaceImpacts.forEach((mesh,i)=>{if(i>={low:12,medium:24,high:48,ultra:96}[settings.effectsQuality])mesh.visible=false;});
     for(const id of WEAPON_ORDER)this.visuals[id].accent.emissiveIntensity=settings.premiumTheme?0.65:0.08;
     this.resize();
   }
   private disposeComposer(){if(this.composer){for(const pass of this.composer.passes)pass.dispose();this.composer.dispose();}this.composer=null;this.ao=null;this.bloom=null;this.fxaa=null;}
   private buildImpacts(){
     const geo=new THREE.SphereGeometry(0.022,6,4);this.geometries.add(geo);const mat=new THREE.MeshBasicMaterial({color:0xc0ff98});this.materials.add(mat);
+    const decal=new THREE.CircleGeometry(.025,8);this.geometries.add(decal);for(let i=0;i<96;i++){const material=new THREE.MeshBasicMaterial({color:0x303530,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});this.materials.add(material);const mesh=new THREE.Mesh(decal,material);mesh.visible=false;this.scene.add(mesh);this.surfaceImpacts.push(mesh);}
     for(let i=0;i<160;i++){const mesh=new THREE.Mesh(geo,mat);mesh.visible=false;this.scene.add(mesh);this.impacts.push({mesh,shot:null});}
     const tracerMat=new THREE.LineBasicMaterial({color:0xffddb1,transparent:true,opacity:0.23});this.materials.add(tracerMat);
     for(let i=0;i<8;i++){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3));this.geometries.add(g);const l=new THREE.Line(g,tracerMat);l.visible=false;l.frustumCulled=false;this.tracers.push(l);this.scene.add(l);}
   }
+  private penetrationEffects(segments:PenetrationSegment[]){
+    for(const segment of segments){const definition=PENETRATION_MATERIALS[segment.material];
+      for(const exit of segment.penetrated?[false,true]:[false]){
+        const p=exit?segment.exit:segment.entry,n=exit?segment.exitNormal:segment.entryNormal;
+        const budget={low:12,medium:24,high:48,ultra:96}[this.settings.effectsQuality],mesh=this.surfaceImpacts[this.surfaceImpactIndex++%budget];
+        mesh.position.set(p.x+n.x*.004,p.y+n.y*.004,p.z+n.z*.004);
+        mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),new THREE.Vector3(n.x,n.y,n.z));
+        (mesh.material as THREE.MeshBasicMaterial).color.setHex(definition.color).multiplyScalar(exit?.48:.32);mesh.scale.setScalar(exit?1.5:1);mesh.visible=true;
+        if(this.settings.effectsQuality!=='low'){const count=exit?3:2;for(let i=0;i<count;i++){const spark=this.sparks[this.sparkIndex++%this.sparks.length];spark.mesh.position.copy(mesh.position);(spark.mesh.material as THREE.MeshBasicMaterial).color.setHex(definition.impact==='metal'?0xffc17d:definition.impact==='wood'?0xd2ae7c:definition.impact==='glass'?0xb8e4e8:0xc1c0af);spark.mesh.scale.setScalar(definition.impact==='metal'?.65:definition.impact==='masonry'?1.3:.9);spark.velocity.set(n.x*(.4+i*.16)+(i-1)*.12,n.y*.7+.3+i*.12,n.z*(.4+i*.16));spark.until=this.simulation.time+.13;spark.mesh.visible=true;}}
+      }
+    }
+  }
+  addDefenderShot(shot:{origin:Vec3;impact:Vec3;segments?:PenetrationSegment[]}){
+    this.penetrationEffects(shot.segments??[]);this.addTracer(shot.origin,shot.impact);
+  }
+  private addTracer(origin:Vec3,impact:Vec3){const tracer=this.tracers[this.tracerIndex++%this.tracers.length],a=tracer.geometry.getAttribute('position') as THREE.BufferAttribute;a.setXYZ(0,origin.x,origin.y,origin.z);a.setXYZ(1,impact.x,impact.y,impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+.045;}
   addShot(shot:ShotEvent){
+    if(shot.lifeGeneration!==undefined&&shot.lifeGeneration!==this.simulation.lifeGeneration)return;
+    this.penetrationEffects(shot.penetrationSegments??[]);
     this.lastShotAt=this.simulation.time;this.gunSlide=1;
     if(shot.weapon!=='sheriff'&&this.settings.effectsQuality!=='low'){
       const shell=this.shells[this.shellIndex++%this.shells.length];shell.mesh.position.set(0.16,-0.12,-0.2).applyMatrix4(this.camera.matrixWorld);shell.velocity.set(1.5,1.8,-0.3).applyQuaternion(this.camera.quaternion);shell.until=this.simulation.time+0.8;shell.mesh.visible=true;
     }
-    if(shot.hit!=='miss'&&this.settings.effectsQuality!=='low'){const count=this.settings.effectsQuality==='ultra'?6:this.settings.effectsQuality==='high'?4:2;for(let i=0;i<count;i++){const p=this.sparks[this.sparkIndex++%this.sparks.length];p.mesh.position.set(shot.impact.x,shot.impact.y,shot.impact.z+0.02);p.velocity.set(((shot.magazineShot+i*7)%9-4)*0.24,0.4+i*0.12,0.5+(i%3)*0.2);p.until=this.simulation.time+0.18;p.mesh.visible=true;}}
-    if(shot.hit==='wall'){const entry=this.impacts[this.impactIndex++%this.impacts.length];entry.shot=shot;entry.mesh.position.set(shot.impact.x,shot.impact.y,shot.impact.z+0.015);entry.mesh.visible=true;}
+    if(shot.hit!=='miss'&&(shot.hit!=='wall'||!shot.penetrationSegments?.length)&&this.settings.effectsQuality!=='low'){const count=this.settings.effectsQuality==='ultra'?6:this.settings.effectsQuality==='high'?4:2;for(let i=0;i<count;i++){const p=this.sparks[this.sparkIndex++%this.sparks.length];p.mesh.position.set(shot.impact.x,shot.impact.y,shot.impact.z+0.02);(p.mesh.material as THREE.MeshBasicMaterial).color.setHex(0xffd7a4);p.mesh.scale.setScalar(1);p.velocity.set(((shot.magazineShot+i*7)%9-4)*0.24,0.4+i*0.12,0.5+(i%3)*0.2);p.until=this.simulation.time+0.18;p.mesh.visible=true;}}
+    if(shot.hit==='wall'&&!shot.penetrationSegments?.length){const entry=this.impacts[this.impactIndex++%this.impacts.length];entry.shot=shot;entry.mesh.position.set(shot.impact.x,shot.impact.y,shot.impact.z+0.015);entry.mesh.visible=true;}
     const tracer=this.tracers[this.tracerIndex++%this.tracers.length];const a=tracer.geometry.getAttribute('position') as THREE.BufferAttribute;
     a.setXYZ(0,shot.position.x+0.2,shot.position.y+this.simulation.movement.eyeHeight-0.16,shot.position.z-0.35);a.setXYZ(1,shot.impact.x,shot.impact.y,shot.impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+0.045;
   }
@@ -266,7 +292,7 @@ export class RangeRenderer {
       // Preview the selected real bay, including rear-facing zones. The old
       // fixed camera pointed into a gallery wall for half of the complex.
       this.camera.position.set(zone.entry.x+2,3.1,sign*10.4);this.camera.lookAt(zone.center.x+2,1.5+zone.vertical*.45,zone.center.z);
-    }else if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);this.camera.lookAt(s.level.angles[1].position.x,1.5,-8);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
+    }else if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);const focus=s.level.angles[1]?.position??s.level.route[Math.min(3,s.level.route.length-1)]??s.level.spawn;this.camera.lookAt(focus.x,focus.y+1.5,focus.z);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
     else{
       this.camera.position.lerpVectors(m.previous,m.position,alpha);this.camera.position.y+=m.previousEyeHeight+(m.eyeHeight-m.previousEyeHeight)*alpha;
       // Mouse rotation is applied directly at render cadence; no extra look smoothing.

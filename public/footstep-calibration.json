@@ -1,6 +1,6 @@
 {
   "benchmark": "footstep-comparison",
-  "calibration": "provisional-v2",
+  "calibration": "provisional-v3-braking",
   "actualValorantMeasured": false,
   "data": [
     {
@@ -40,10 +40,10 @@
       "exactGameParityVerified": false
     }
   ],
-  "release": "7.0.0",
+  "release": "8.0.0",
   "date": "2026-10-24",
   "fixedTimestep": 0.008333333333333333,
-  "applicationTests": 607,
+  "applicationTests": 722,
   "brokerTests": 20,
   "requiredScenarios": [
     "A",
@@ -82,5 +82,10 @@
       }
     ],
     "valorantMeasured": false
+  },
+  "brakingRecovery": {
+    "model": "actual-resolved-velocity-and-deceleration",
+    "provisional": true,
+    "documentation": "docs/combat/MOVEMENT_CALIBRATION.md"
   }
 }

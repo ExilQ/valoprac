@@ -121,3 +121,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
+
+## Combat 08.00 original content
+
+The movement/material training architecture, continuous bot aim controller,
+penetration calibration tables, material impact synthesis and entry/exit effect
+geometry are original VALOPRAC source. No Riot models, recordings, map geometry,
+textures or private game code were imported for this update. Public weapon
+category references are distinguished from the provisional independent formulas
+in docs/combat/PENETRATION_MODEL.md.

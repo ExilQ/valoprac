@@ -15,12 +15,12 @@ function serverState(patch:Partial<ReturnType<typeof useApp.getState>>){
 }
 afterEach(()=>{Object.assign(useApp.getInitialState(),initialSnapshot);useApp.setState(initialSnapshot);});
 describe('Korean React screen rendering (server markup, not browser QA)',()=>{
-  it('offers all seven training entry points with a selected state and a start control',()=>{
+  it('offers all nine training entry points with a selected state and a start control',()=>{
     serverState({screen:'menu',activeTab:'training',mode:'free',settings:{...DEFAULT_SETTINGS,practiceMap:'range'}});
     const html=renderToString(<MainMenu/>);
-    for(const title of ['자유 훈련장','시간제 훈련','톡브레이킹 훈련','반동 연습','각체크·피킹','감도 탐색','에임 분석'])expect(html).toContain(`<h3>${title}</h3>`);
+    for(const title of ['자유 훈련장','시간제 훈련','톡브레이킹 훈련','반동 연습','각체크·피킹','버니합 훈련','월샷 훈련','감도 탐색','에임 분석'])expect(html).toContain(`<h3>${title}</h3>`);
     const rows=html.match(/<button[^>]*aria-pressed="(?:true|false)"[^>]*class="mode-card[^"]*"/g)??[];
-    expect(rows).toHaveLength(7);
+    expect(rows).toHaveLength(9);
     expect(rows.filter(row=>row.includes('aria-pressed="true"'))).toHaveLength(1);
     expect(html).toContain('훈련 시작');expect(html).toContain('직접 종료할 때까지');
   });

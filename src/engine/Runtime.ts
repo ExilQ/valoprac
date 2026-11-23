@@ -19,9 +19,9 @@ export class Runtime {
     this.preview=preview;this.simulation=new Simulation(mode,weapon,settings);this.renderer=new RangeRenderer(host,this.simulation,settings);
     this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,onError,()=>this.publishTelemetry(),id=>{this.switchWeapon(id);this.onWeapon(id);});
     if(!preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode,assessment,()=>this.input.rawConfirmation);this.input.observer=this.aimCapture;}
-    if(this.simulation.defenders)this.simulation.defenders.onShot=e=>{if(e.observed)this.audio.enemyShot(e.weapon,Math.hypot(e.origin.x-this.simulation.movement.position.x,e.origin.z-this.simulation.movement.position.z));};
+    if(this.simulation.defenders)this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,Math.hypot(e.origin.x-this.simulation.movement.position.x,e.origin.z-this.simulation.movement.position.z));this.audio.impacts(e.penetration??[],e.time,.55);}this.renderer.addDefenderShot({...e,segments:e.penetration});};
     this.simulation.onFootstep=e=>this.audio.footstep(e);
-    this.simulation.onShot=s=>{this.renderer.addShot(s);this.audio.shot(s);this.aimCapture?.shot(s);};
+    this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>{const data=this.simulation.snapshot();if(document.pointerLockElement===this.renderer.canvas)document.exitPointerLock();this.onFinish(data);};
     this.renderer.canvas.addEventListener('webglcontextlost',this.contextLost);
@@ -63,7 +63,7 @@ export class Runtime {
   }
   switchWeapon(id:WeaponId){this.input.reset();this.audio.selectWeapon(id);this.simulation.switchWeapon(id);this.publishTelemetry();}
   configure(settings:Settings){this.simulation.configure(settings);this.renderer.applySettings(settings);this.audio.levels(settings);this.publishTelemetry();}
-  retryTactical(){this.input.reset();this.audio.stop();this.simulation.retryTactical();this.clock=new FixedClock();this.publishTelemetry();}
+  retryTactical(){this.input.reset();this.audio.stop();this.simulation.retryTactical();this.clock=new FixedClock();this.previousTime=0;this.renderer.clearImpacts();this.latency.clearPending();this.publishTelemetry();}
   resetTargets(){this.simulation.resetTargets();this.publishTelemetry();}
   resetStatistics(){this.simulation.resetStatistics();this.renderer.clearImpacts();this.publishTelemetry();}
   dispose(){this.disposed=true;this.aimCapture?.dispose();cancelAnimationFrame(this.frame);this.renderer.canvas.removeEventListener('webglcontextlost',this.contextLost);this.renderer.canvas.removeEventListener('mousemove',this.probeMouse);this.renderer.canvas.removeEventListener('mousedown',this.probeClick);this.input.dispose();this.audio.dispose();this.renderer.dispose();this.simulation.onFootstep=null;this.simulation.footsteps.onStep=null;this.simulation.onShot=null;this.simulation.onFinish=null;this.simulation.onKill=null;for(const w of Object.values(this.simulation.weapons))w.onAction=null;}

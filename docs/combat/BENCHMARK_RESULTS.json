@@ -1,0 +1,833 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-10-27T11:42:53.036229+00:00",
+  "baseline": {
+    "capturedAt": "2026-10-27T11:18:10.647214+00:00",
+    "sourceCommit": "59295203ddd2d54ffb1495b7b456508b81d0f7c9",
+    "sourceState": "frozen07.00",
+    "sourceSha256": {
+      "src/engine/tactical/DefenderAI.ts": "20f518df61589ca74412a0b759ffc32e2b7a3d50a3f410ee4fed2549a1127df1",
+      "src/engine/weapons/Weapon.ts": "4c87fe04872ff6897f2b28d4cb109f38f01a6cdae745213713340419a63e0fca",
+      "src/config/settings.ts": "6746722b73612f7a2634aab0d9f9d43b39d085a502371a285f218867b95e6244"
+    },
+    "rawSha256": "340cf746ea7643238c58bd8348f925637228b3a92a17237749d1d7e74e7ea820",
+    "rawArtifact": "baseline-encounters.json",
+    "aggregate": {
+      "encounters": 256,
+      "medianFirstShotSeconds": 0.35,
+      "medianEliminationSecondsAmongEliminated": 0.9916666666666667,
+      "survivalAtSeconds": {
+        "1": 0.4609375,
+        "2": 0.2890625,
+        "3": 0.07421875,
+        "8": 0.00390625
+      },
+      "shots": 951,
+      "hits": 783,
+      "headHits": 0,
+      "hitRate": 0.8233438485804416,
+      "firstShotHitRate": 0.859375,
+      "followShotHitRate": 0.8100719424460432,
+      "medianControlledAngularErrorDegrees": null,
+      "medianTrajectoryAngularErrorDegrees": null,
+      "medianDetectionToAimStartSecondsAllShots": null,
+      "medianAimStartToEmissionSecondsAllShots": null,
+      "medianFirstShotDetectionToAimStartSeconds": null,
+      "medianFirstShotAimStartToEmissionSeconds": null,
+      "exposureDeaths": 0
+    },
+    "bySkill": {
+      "normal": {
+        "encounters": 256,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 0.9916666666666667,
+        "survivalAtSeconds": {
+          "1": 0.4609375,
+          "2": 0.2890625,
+          "3": 0.07421875,
+          "8": 0.00390625
+        },
+        "shots": 951,
+        "hits": 783,
+        "headHits": 0,
+        "hitRate": 0.8233438485804416,
+        "firstShotHitRate": 0.859375,
+        "followShotHitRate": 0.8100719424460432,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      }
+    },
+    "normalByWeapon": {
+      "rifleA": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 0.9916666666666667,
+        "survivalAtSeconds": {
+          "1": 0.25,
+          "2": 0.03125,
+          "3": 0.015625,
+          "8": 0.0
+        },
+        "shots": 316,
+        "hits": 256,
+        "headHits": 0,
+        "hitRate": 0.810126582278481,
+        "firstShotHitRate": 0.84375,
+        "followShotHitRate": 0.8015873015873016,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "rifleB": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 1.05,
+        "survivalAtSeconds": {
+          "1": 0.5,
+          "2": 0.03125,
+          "3": 0.015625,
+          "8": 0.0
+        },
+        "shots": 332,
+        "hits": 272,
+        "headHits": 0,
+        "hitRate": 0.8192771084337349,
+        "firstShotHitRate": 0.84375,
+        "followShotHitRate": 0.8134328358208955,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "sheriff": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 2.3333333333333335,
+        "survivalAtSeconds": {
+          "1": 1.0,
+          "2": 1.0,
+          "3": 0.234375,
+          "8": 0.015625
+        },
+        "shots": 230,
+        "hits": 191,
+        "headHits": 0,
+        "hitRate": 0.8304347826086956,
+        "firstShotHitRate": 0.84375,
+        "followShotHitRate": 0.8253012048192772,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "operator": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.4083333333333333,
+        "medianEliminationSecondsAmongEliminated": 0.4083333333333333,
+        "survivalAtSeconds": {
+          "1": 0.09375,
+          "2": 0.09375,
+          "3": 0.03125,
+          "8": 0.0
+        },
+        "shots": 73,
+        "hits": 64,
+        "headHits": 0,
+        "hitRate": 0.8767123287671232,
+        "firstShotHitRate": 0.90625,
+        "followShotHitRate": 0.6666666666666666,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      }
+    },
+    "normalByPose": {
+      "stationary": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 0.9916666666666667,
+        "survivalAtSeconds": {
+          "1": 0.25,
+          "2": 0.25,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 192,
+        "hits": 192,
+        "headHits": 0,
+        "hitRate": 1.0,
+        "firstShotHitRate": 1.0,
+        "followShotHitRate": 1.0,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "strafe": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 1.05,
+        "survivalAtSeconds": {
+          "1": 0.5,
+          "2": 0.25,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 208,
+        "hits": 208,
+        "headHits": 0,
+        "hitRate": 1.0,
+        "firstShotHitRate": 1.0,
+        "followShotHitRate": 1.0,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "crouch": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 1.7416666666666667,
+        "survivalAtSeconds": {
+          "1": 0.84375,
+          "2": 0.40625,
+          "3": 0.296875,
+          "8": 0.015625
+        },
+        "shots": 359,
+        "hits": 191,
+        "headHits": 0,
+        "hitRate": 0.532033426183844,
+        "firstShotHitRate": 0.4375,
+        "followShotHitRate": 0.5525423728813559,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      },
+      "jump": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.35,
+        "medianEliminationSecondsAmongEliminated": 0.9916666666666667,
+        "survivalAtSeconds": {
+          "1": 0.25,
+          "2": 0.25,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 192,
+        "hits": 192,
+        "headHits": 0,
+        "hitRate": 1.0,
+        "firstShotHitRate": 1.0,
+        "followShotHitRate": 1.0,
+        "medianControlledAngularErrorDegrees": null,
+        "medianTrajectoryAngularErrorDegrees": null,
+        "medianDetectionToAimStartSecondsAllShots": null,
+        "medianAimStartToEmissionSecondsAllShots": null,
+        "medianFirstShotDetectionToAimStartSeconds": null,
+        "medianFirstShotAimStartToEmissionSeconds": null,
+        "exposureDeaths": 0
+      }
+    },
+    "cpuProbe": {
+      "elapsedMs": 390.70212400000014,
+      "simulationTicks": 45583,
+      "microsecondsPerTick": 8.571224447710772
+    }
+  },
+  "current": {
+    "capturedAt": "2026-10-27T11:36:15.203195+00:00",
+    "sourceCommit": null,
+    "sourceState": "08.00 working tree; source file hashes identify measured implementation",
+    "sourceSha256": {
+      "src/engine/tactical/DefenderAI.ts": "b52c355e8ccf448cdcb727fb26d819c45f4548a8b5ab9a995379f797c802bec8",
+      "src/engine/tactical/BotAimMotor.ts": "116bf804b8b6fdda05f8a192c6f8c019cd5f1a73b827221d4115155b41c0cf54",
+      "src/engine/weapons/Weapon.ts": "d29518aaa3823a87668f939676c5c6045678dd0f1688258c5c9b89d57f7425e8",
+      "src/config/settings.ts": "9f57fcfa74afeef550225ce3a1ee83a27d2625aa86b82d627be350d24a48d385",
+      "src/engine/collision/Ballistics.ts": "ffd689a0ac260468c8bb647c7e063666ba586fabdefc51f3bfad009e72113df9"
+    },
+    "rawSha256": "b8a661f62ed1d98c52c83c02f31098a739009958f083e4f26f7732c469808e5d",
+    "rawArtifact": "current-encounters.json",
+    "aggregate": {
+      "encounters": 1024,
+      "medianFirstShotSeconds": 0.75,
+      "medianEliminationSecondsAmongEliminated": 1.425,
+      "survivalAtSeconds": {
+        "1": 0.662109375,
+        "2": 0.333984375,
+        "3": 0.107421875,
+        "8": 0.033203125
+      },
+      "shots": 3305,
+      "hits": 2231,
+      "headHits": 473,
+      "hitRate": 0.6750378214826022,
+      "firstShotHitRate": 0.6728515625,
+      "followShotHitRate": 0.6760192897851819,
+      "medianControlledAngularErrorDegrees": 0.37205858763440336,
+      "medianTrajectoryAngularErrorDegrees": 0.4304105499931386,
+      "medianDetectionToAimStartSecondsAllShots": 0.425,
+      "medianAimStartToEmissionSecondsAllShots": 0.8833333333333333,
+      "medianFirstShotDetectionToAimStartSeconds": 0.425,
+      "medianFirstShotAimStartToEmissionSeconds": 0.26666666666666666,
+      "exposureDeaths": 0
+    },
+    "bySkill": {
+      "beginner": {
+        "encounters": 256,
+        "medianFirstShotSeconds": 1,
+        "medianEliminationSecondsAmongEliminated": 1.8833333333333333,
+        "survivalAtSeconds": {
+          "1": 0.91796875,
+          "2": 0.55078125,
+          "3": 0.28515625,
+          "8": 0.1328125
+        },
+        "shots": 1102,
+        "hits": 627,
+        "headHits": 62,
+        "hitRate": 0.5689655172413793,
+        "firstShotHitRate": 0.54296875,
+        "followShotHitRate": 0.5768321513002365,
+        "medianControlledAngularErrorDegrees": 0.49933486974417046,
+        "medianTrajectoryAngularErrorDegrees": 0.5081443015540374,
+        "medianDetectionToAimStartSecondsAllShots": 0.6583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 1.0333333333333332,
+        "medianFirstShotDetectionToAimStartSeconds": 0.6583333333333333,
+        "medianFirstShotAimStartToEmissionSeconds": 0.32500000000000007,
+        "exposureDeaths": 0
+      },
+      "normal": {
+        "encounters": 256,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 1.4083333333333332,
+        "survivalAtSeconds": {
+          "1": 0.640625,
+          "2": 0.29296875,
+          "3": 0.0546875,
+          "8": 0.0
+        },
+        "shots": 741,
+        "hits": 575,
+        "headHits": 125,
+        "hitRate": 0.7759784075573549,
+        "firstShotHitRate": 0.703125,
+        "followShotHitRate": 0.8144329896907216,
+        "medianControlledAngularErrorDegrees": 0.36726170774271844,
+        "medianTrajectoryAngularErrorDegrees": 0.4241992947333976,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.4916666666666667,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      },
+      "advanced": {
+        "encounters": 256,
+        "medianFirstShotSeconds": 0.625,
+        "medianEliminationSecondsAmongEliminated": 1.3,
+        "survivalAtSeconds": {
+          "1": 0.56640625,
+          "2": 0.28125,
+          "3": 0.07421875,
+          "8": 0.0
+        },
+        "shots": 773,
+        "hits": 523,
+        "headHits": 140,
+        "hitRate": 0.6765847347994826,
+        "firstShotHitRate": 0.69921875,
+        "followShotHitRate": 0.6653771760154739,
+        "medianControlledAngularErrorDegrees": 0.34223489210054553,
+        "medianTrajectoryAngularErrorDegrees": 0.41352590316518634,
+        "medianDetectionToAimStartSecondsAllShots": 0.3833333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.6833333333333333,
+        "medianFirstShotDetectionToAimStartSeconds": 0.39166666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.23333333333333328,
+        "exposureDeaths": 0
+      },
+      "expert": {
+        "encounters": 256,
+        "medianFirstShotSeconds": 0.575,
+        "medianEliminationSecondsAmongEliminated": 1.2166666666666666,
+        "survivalAtSeconds": {
+          "1": 0.5234375,
+          "2": 0.2109375,
+          "3": 0.015625,
+          "8": 0.0
+        },
+        "shots": 689,
+        "hits": 506,
+        "headHits": 146,
+        "hitRate": 0.7343976777939042,
+        "firstShotHitRate": 0.74609375,
+        "followShotHitRate": 0.7274826789838337,
+        "medianControlledAngularErrorDegrees": 0.2870006410187387,
+        "medianTrajectoryAngularErrorDegrees": 0.38659762525451413,
+        "medianDetectionToAimStartSecondsAllShots": 0.3333333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.5083333333333333,
+        "medianFirstShotDetectionToAimStartSeconds": 0.3416666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.23333333333333334,
+        "exposureDeaths": 0
+      }
+    },
+    "normalByWeapon": {
+      "rifleA": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 1.4416666666666667,
+        "survivalAtSeconds": {
+          "1": 0.75,
+          "2": 0.234375,
+          "3": 0.03125,
+          "8": 0.0
+        },
+        "shots": 246,
+        "hits": 182,
+        "headHits": 34,
+        "hitRate": 0.7398373983739838,
+        "firstShotHitRate": 0.65625,
+        "followShotHitRate": 0.7692307692307693,
+        "medianControlledAngularErrorDegrees": 0.3295385168515737,
+        "medianTrajectoryAngularErrorDegrees": 0.4465558904062052,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.5,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      },
+      "rifleB": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 1.425,
+        "survivalAtSeconds": {
+          "1": 0.75,
+          "2": 0.203125,
+          "3": 0.15625,
+          "8": 0.0
+        },
+        "shots": 250,
+        "hits": 192,
+        "headHits": 36,
+        "hitRate": 0.768,
+        "firstShotHitRate": 0.703125,
+        "followShotHitRate": 0.7903225806451613,
+        "medianControlledAngularErrorDegrees": 0.3411085720267121,
+        "medianTrajectoryAngularErrorDegrees": 0.42048995651421084,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.5499999999999999,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      },
+      "sheriff": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 2.0083333333333333,
+        "survivalAtSeconds": {
+          "1": 0.84375,
+          "2": 0.515625,
+          "3": 0.03125,
+          "8": 0.0
+        },
+        "shots": 167,
+        "hits": 137,
+        "headHits": 33,
+        "hitRate": 0.8203592814371258,
+        "firstShotHitRate": 0.671875,
+        "followShotHitRate": 0.912621359223301,
+        "medianControlledAngularErrorDegrees": 0.36589911198570724,
+        "medianTrajectoryAngularErrorDegrees": 0.34420616497498036,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.9166666666666665,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      },
+      "operator": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 0.7583333333333333,
+        "survivalAtSeconds": {
+          "1": 0.21875,
+          "2": 0.21875,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 78,
+        "hits": 64,
+        "headHits": 22,
+        "hitRate": 0.8205128205128205,
+        "firstShotHitRate": 0.78125,
+        "followShotHitRate": 1.0,
+        "medianControlledAngularErrorDegrees": 0.5244428264009445,
+        "medianTrajectoryAngularErrorDegrees": 0.5088561306091163,
+        "medianDetectionToAimStartSecondsAllShots": 0.4666666666666666,
+        "medianAimStartToEmissionSecondsAllShots": 0.26666666666666666,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      }
+    },
+    "normalByPose": {
+      "stationary": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.7166666666666667,
+        "medianEliminationSecondsAmongEliminated": 1.3666666666666667,
+        "survivalAtSeconds": {
+          "1": 0.5625,
+          "2": 0.140625,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 155,
+        "hits": 144,
+        "headHits": 24,
+        "hitRate": 0.9290322580645162,
+        "firstShotHitRate": 0.859375,
+        "followShotHitRate": 0.978021978021978,
+        "medianControlledAngularErrorDegrees": 0.2641474932673084,
+        "medianTrajectoryAngularErrorDegrees": 0.30665320379241107,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.3666666666666667,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.2583333333333333,
+        "exposureDeaths": 0
+      },
+      "strafe": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.8583333333333333,
+        "medianEliminationSecondsAmongEliminated": 2.808333333333333,
+        "survivalAtSeconds": {
+          "1": 0.796875,
+          "2": 0.59375,
+          "3": 0.203125,
+          "8": 0.0
+        },
+        "shots": 237,
+        "hits": 156,
+        "headHits": 26,
+        "hitRate": 0.6582278481012658,
+        "firstShotHitRate": 0.515625,
+        "followShotHitRate": 0.7109826589595376,
+        "medianControlledAngularErrorDegrees": 0.7478262405644635,
+        "medianTrajectoryAngularErrorDegrees": 0.723859403762285,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 1.0833333333333333,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.3833333333333333,
+        "exposureDeaths": 0
+      },
+      "crouch": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.7166666666666667,
+        "medianEliminationSecondsAmongEliminated": 1.4083333333333332,
+        "survivalAtSeconds": {
+          "1": 0.625,
+          "2": 0.328125,
+          "3": 0.0,
+          "8": 0.0
+        },
+        "shots": 194,
+        "hits": 144,
+        "headHits": 24,
+        "hitRate": 0.7422680412371134,
+        "firstShotHitRate": 0.6875,
+        "followShotHitRate": 0.7692307692307693,
+        "medianControlledAngularErrorDegrees": 0.07289437218316952,
+        "medianTrajectoryAngularErrorDegrees": 0.27874853548218387,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.49166666666666664,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.25833333333333336,
+        "exposureDeaths": 0
+      },
+      "jump": {
+        "encounters": 64,
+        "medianFirstShotSeconds": 0.75,
+        "medianEliminationSecondsAmongEliminated": 1.375,
+        "survivalAtSeconds": {
+          "1": 0.578125,
+          "2": 0.109375,
+          "3": 0.015625,
+          "8": 0.0
+        },
+        "shots": 155,
+        "hits": 131,
+        "headHits": 51,
+        "hitRate": 0.8451612903225807,
+        "firstShotHitRate": 0.75,
+        "followShotHitRate": 0.9120879120879121,
+        "medianControlledAngularErrorDegrees": 0.3879453486894531,
+        "medianTrajectoryAngularErrorDegrees": 0.4465558904062052,
+        "medianDetectionToAimStartSecondsAllShots": 0.4583333333333333,
+        "medianAimStartToEmissionSecondsAllShots": 0.37500000000000006,
+        "medianFirstShotDetectionToAimStartSeconds": 0.4666666666666666,
+        "medianFirstShotAimStartToEmissionSeconds": 0.26666666666666666,
+        "exposureDeaths": 0
+      }
+    },
+    "cpuProbe": {
+      "elapsedMs": 2117.46254,
+      "simulationTicks": 227951,
+      "microsecondsPerTick": 9.289112747915123
+    }
+  },
+  "protocol": {
+    "fixedHz": 120,
+    "secondsPerEncounter": 8,
+    "heldOutSeeds": [
+      730001,
+      737920,
+      745839,
+      753758,
+      761677,
+      769596,
+      777515,
+      785434,
+      793353,
+      801272,
+      809191,
+      817110,
+      825029,
+      832948,
+      840867,
+      848786
+    ],
+    "weapons": [
+      "rifleA",
+      "rifleB",
+      "sheriff",
+      "operator"
+    ],
+    "playerPoses": [
+      "stationary",
+      "strafe",
+      "crouch",
+      "jump"
+    ],
+    "baselineEncounters": 256,
+    "currentEncounters": 1024,
+    "comparison": "Compare baseline normal to current normal. Current aggregate pools four distinct skills and is not a same-skill comparator.",
+    "trajectories": "Frozen07.00 physical Movement; stationary, alternating .65s strafe, continuous crouch, manually pressed jumps every .85s.",
+    "conditions": "Single stationary defender at20m; no walls, sounds, return fire, targetrandomization or reposition. Exposurelimit disabled. Default baseline settings and newskillprofiles. This probe measures deterministic game behavior, not human fairness.",
+    "settings": "Old default reaction0.35s/new default0.42s; otherwise production defaults with no exposurelimit, targetSpeed0, reposition0, randomDefendersfalse. One stationary defender at20m. Newskillprofiles use default independentcontrol values.",
+    "timingFields": "DefenderShot.reactionTime is detection-to-aim-start, including recognition and reaction delay. aimAcquisitionTime is aim-start-to-emission and includes follow-up time; first-shot medians are separately recorded.",
+    "aimError": "controlledAngularError compares finite motor orientation against its delayed observed aim. trajectoryAngularError compares actual emitted ray including recoil/spread to delayed desired direction.",
+    "cpu": "Elapsed single-process Vitest CPU wallclock. Different death times cause different active tick counts. Per-tick numbers are directional single-defender serverCPU probes, not a renderer or scalability benchmark."
+  },
+  "limits": {
+    "humanParticipants": 0,
+    "nativeValorantParityVerified": false,
+    "hardwareFpsMeasured": false,
+    "physicalInputLatencyMeasured": false,
+    "fairnessConclusion": "No human fairness guarantee. These are seeded deterministic physical-ray encounters without player returnfire, cover, emitted sounds or tactical reposition.",
+    "survivalInterpretation": "8s open exposure with no returnfire is deliberately lethal, not an expected player encounter. Earlier survival horizons are also reported.",
+    "sampling": "16held-out seeds \u00d74weapons \u00d74physical playerposes; four newskill profiles. Synthetic trajectories are frozen07.00 movement to isolate combat implementation changes.",
+    "softwareGpuOnly": true
+  },
+  "browserPerformance": {
+    "schema": 1,
+    "generatedAt": "2026-10-27T16:42:26.076561+00:00",
+    "baseline": {
+      "capturedAt": "2026-10-27T16:40:27.311409+00:00",
+      "rawSha256": "bbbc811dc9f2e193305b21356d42bce360db2e7ec49b12303b4415c17d7a43e7",
+      "rawArtifact": "performance-baseline.json",
+      "method": "Same-host sequential clean gameplay-canvas render benchmark. Paused-only runs isolate rendering; actual AI CPU cost is measured separately. 1366x768, Low preset, renderScale0.5, no pause-overlay blur, Vandal, 10rAF warmup, 60rAF samples. SoftwareGPU is not player hardware. Development Vite load timing is not CDN asset latency. GPU utilization and physical input latency unavailable.",
+      "errors": [],
+      "samples": [
+        {
+          "map": "garage",
+          "active": false,
+          "sampleCount": 60,
+          "averageFPS": 4.248810333106282,
+          "frameMsP50": 183.40000000000146,
+          "frameMsP95": 499.90000000000146,
+          "frameMsP99": 1533.2999999999993,
+          "drawCalls": 55,
+          "triangles": 33924,
+          "geometries": 50,
+          "textures": 10,
+          "jsHeapBytes": 56459098,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "gpuLoadPercent": null,
+          "inputLatency": null,
+          "simulation": {
+            "active": false,
+            "runningAtEnd": false,
+            "ticks": 0,
+            "seconds": 0,
+            "enemyShots": 0,
+            "artificialBenchmarkHealth": null
+          },
+          "load": {
+            "responseEnd": 163.69999999552965,
+            "domContentLoaded": 1431.1000000014901,
+            "transferSize": 1926,
+            "resourceCount": 130,
+            "lastResourceMs": 12355.10000000149
+          }
+        }
+      ]
+    },
+    "current": {
+      "capturedAt": "2026-10-27T16:42:25.713636+00:00",
+      "rawSha256": "8ea7e9016985d8bc40e31310dbaaba6b9e1cf97683e0c86c5855bd2fea766d69",
+      "rawArtifact": "performance-current.json",
+      "method": "Same-host sequential clean gameplay-canvas render benchmark. Paused-only runs isolate rendering; actual AI CPU cost is measured separately. 1366x768, Low preset, renderScale0.5, no pause-overlay blur, Vandal, 10rAF warmup, 60rAF samples. SoftwareGPU is not player hardware. Development Vite load timing is not CDN asset latency. GPU utilization and physical input latency unavailable.",
+      "errors": [],
+      "samples": [
+        {
+          "map": "garage",
+          "active": false,
+          "sampleCount": 60,
+          "averageFPS": 3.4948741845296607,
+          "frameMsP50": 200,
+          "frameMsP95": 850,
+          "frameMsP99": 899.8999999999978,
+          "drawCalls": 55,
+          "triangles": 33924,
+          "geometries": 50,
+          "textures": 10,
+          "jsHeapBytes": 56335778,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "gpuLoadPercent": null,
+          "inputLatency": null,
+          "simulation": {
+            "active": false,
+            "runningAtEnd": false,
+            "ticks": 0,
+            "seconds": 0,
+            "enemyShots": 0,
+            "artificialBenchmarkHealth": null
+          },
+          "load": {
+            "responseEnd": 60.30000000447035,
+            "domContentLoaded": 1675.3999999985099,
+            "transferSize": 1942,
+            "resourceCount": 137,
+            "lastResourceMs": 13655.30000000447
+          }
+        },
+        {
+          "map": "bunny",
+          "active": false,
+          "sampleCount": 60,
+          "averageFPS": 7.617693362451291,
+          "frameMsP50": 116.70000000000073,
+          "frameMsP95": 216.60000000000218,
+          "frameMsP99": 366.59999999999854,
+          "drawCalls": 38,
+          "triangles": 27304,
+          "geometries": 36,
+          "textures": 7,
+          "jsHeapBytes": 45654266,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "gpuLoadPercent": null,
+          "inputLatency": null,
+          "simulation": {
+            "active": false,
+            "runningAtEnd": false,
+            "ticks": 0,
+            "seconds": 0,
+            "enemyShots": 0,
+            "artificialBenchmarkHealth": null
+          },
+          "load": {
+            "responseEnd": 22.899999998509884,
+            "domContentLoaded": 2223.5,
+            "transferSize": 1942,
+            "resourceCount": 137,
+            "lastResourceMs": 19765.5
+          }
+        },
+        {
+          "map": "wallbang",
+          "active": false,
+          "sampleCount": 60,
+          "averageFPS": 6.653655074523134,
+          "frameMsP50": 150,
+          "frameMsP95": 299.90000000000146,
+          "frameMsP99": 316.6000000000022,
+          "drawCalls": 51,
+          "triangles": 33722,
+          "geometries": 44,
+          "textures": 10,
+          "jsHeapBytes": 59185560,
+          "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+          "gpuLoadPercent": null,
+          "inputLatency": null,
+          "simulation": {
+            "active": false,
+            "runningAtEnd": false,
+            "ticks": 0,
+            "seconds": 0,
+            "enemyShots": 0,
+            "artificialBenchmarkHealth": null
+          },
+          "load": {
+            "responseEnd": 25.799999997019768,
+            "domContentLoaded": 1605.2000000029802,
+            "transferSize": 1942,
+            "resourceCount": 137,
+            "lastResourceMs": 18839.60000000149
+          }
+        }
+      ]
+    },
+    "limits": {
+      "softwareGpuOnly": true,
+      "hardwareFpsMeasured": false,
+      "physicalInputLatencyMeasured": false,
+      "gpuUtilizationMeasured": false,
+      "productionAssetLoadMeasured": false,
+      "activeGameplayBenchmarkSucceeded": false,
+      "activeAttemptAborted": {
+        "reason": "runtime long frame safety pause",
+        "validGameplayBenchmark": false
+      },
+      "comparison": "Only paired paused garage scenes can be compared. New-map scenes have no baseline equivalent. This is a single sequential software-GPU probe, not evidence of hardware gameplay FPS, input latency or native game performance.",
+      "memory": "Accessible JS heap is a point sample and may include cached modules or prior allocations; GPU memory consumption is unavailable.",
+      "assetLoad": "Development-server navigation/resource timing is reported; not production-CDN asset timing."
+    },
+    "pairedPausedGarage": {
+      "baselineFPS": 4.248810333106282,
+      "currentFPS": 3.4948741845296607,
+      "fpsRatio": 0.8225535880709878,
+      "baselineP95Ms": 499.90000000000146,
+      "currentP95Ms": 850,
+      "drawCallChange": 0,
+      "triangleChange": 0,
+      "geometryCountChange": 0,
+      "textureCountChange": 0
+    }
+  }
+}

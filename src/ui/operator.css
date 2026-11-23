@@ -13,3 +13,40 @@
 .game-hud .ammo-hud>strong{grid-column:1/-1;grid-row:2}
 .game-hud .ammo-hud>p{grid-column:1/-1;grid-row:3}
 @media(max-height:800px){.game-hud .peeking-hud{padding:8px 12px;gap:4px}.game-hud .live-recoil svg{height:40px}.game-hud .ammo-hud{padding:8px 12px}}
+/* Semantic combat states and compact technical readouts share the UI tokens. */
+.combat-controls{min-width:0;border-top:1px solid var(--line);padding-top:16px;margin:18px 0}
+.combat-controls h4,.movement-configuration h4,.wallbang-configuration h4{font-size:13px;font-weight:600;margin:0 0 12px;color:var(--ink)}
+.combat-mode-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.combat-mode-options button{text-align:left;background:var(--surface-deep);border:1px solid var(--line);padding:11px 12px;min-width:0;color:var(--muted);line-height:1.6;transition:border-color var(--ease-fast),background var(--ease-fast)}
+.combat-mode-options strong{display:block;font-size:12px;color:var(--ink);margin-bottom:5px;font-weight:600}
+.combat-mode-options span{display:block;font-size:11px;word-break:keep-all;overflow-wrap:normal}
+.combat-mode-options button[aria-pressed=true]{border-color:var(--interactive);background:#16313b;box-shadow:inset 2px 0 var(--interactive)}
+.combat-mode-options button[aria-pressed=true] strong{color:var(--interactive)}
+.combat-advanced,.exposure-controls{border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+.combat-advanced>summary{font-size:12px;line-height:1.6;color:var(--muted);cursor:pointer}
+.combat-advanced .range-field{margin:16px 0}.combat-advanced .range-field>span,.combat-advanced .range-field b{font-size:12px}
+.combat-controls input[type=range]{accent-color:var(--interactive)}
+.mechanics-hud,.combat-diagnostics{background:#101b25ed;border:1px solid #53657080;color:var(--ink);padding:11px 12px;font-size:11px;line-height:1.6;min-width:0;display:grid;gap:6px}
+.mechanics-hud h3{font-size:12px;margin:0 0 3px;color:var(--ink)}
+.mechanics-readouts,.death-feedback{display:grid;gap:6px;font-size:11px}
+.mechanics-readouts>span,.death-feedback>span{display:flex;justify-content:space-between;gap:10px;color:var(--muted)}
+.mechanics-readouts b,.death-feedback b{font-weight:500;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.mechanics-hud small{font-size:10px;color:var(--muted)}
+.combat-diagnostics{max-height:175px;overflow:auto;pointer-events:auto;border-color:#a77e45;font:10px/1.6 ui-monospace,monospace;overflow-wrap:anywhere}
+.combat-diagnostics>b{color:var(--warning);font-size:10px}.combat-diagnostics small{color:var(--muted);font-size:10px}
+.death-feedback{border-block:1px solid var(--line);padding:11px 0;margin:12px 0}
+.game-hud .hud-right-dock{overflow-y:auto;scrollbar-width:thin}
+.game-hud .mechanics-hud,.game-hud .combat-diagnostics{flex-shrink:0}
+.game-hud .speed>b.ready,.observed-recovery{color:var(--success)}
+.game-hud .speed>b.not-ready,.game-hud .step-risk{color:var(--warning)}
+.game-hud .timer.danger,.early-feedback{color:var(--danger)}
+@media(max-width:700px){.combat-mode-options{grid-template-columns:1fr}.combat-mode-options button{padding:9px 11px}.combat-mode-options strong{margin-bottom:2px}}
+@media(max-height:800px){.mechanics-hud{padding:9px 11px;gap:4px}.mechanics-readouts{gap:3px}.combat-diagnostics{max-height:145px}}
+.game-hud .peeking-hud .low-health{color:var(--danger)}
+/* Keep ammunition outside the optional, scrollable diagnostics stack. */
+.game-hud .hud-right-dock{overflow:visible}
+.hud-right-stack{min-height:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;scrollbar-width:thin;pointer-events:auto}
+.hud-right-stack>*{flex-shrink:0}
+.game-hud .hud-right-dock>.ammo-hud{flex-shrink:0;margin-top:auto}
+.death-context{font-size:11px;line-height:1.7;color:var(--muted)}
+.combat-summary{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}.combat-summary h4{font-size:13px;color:var(--ink);margin:0 0 14px}

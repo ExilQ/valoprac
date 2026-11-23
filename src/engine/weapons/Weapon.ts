@@ -28,6 +28,18 @@ export class Weapon {
   onAction:((action:'reload'|'equip'|'bolt'|'scope')=>void)|null=null;
   spread={base:0,movement:0,bloom:0,air:0,landing:0,total:0,x:0,y:0};
   constructor(public profile:WeaponProfile,seed:number){this.ammo=profile.magazine;this.reserve=profile.reserve;this.rng=new SeededRandom(seed);this.recoilRng=new SeededRandom(seed^0xA91E);}
+  /** Start a new life without carrying chamber, reload, input or recoil state.
+   * RNG streams and user options remain session-scoped. Bots may start ready. */
+  resetForEncounter(time=0,ready=false){
+    this.ammo=this.profile.magazine;this.reserve=this.profile.reserve;
+    this.reloadingUntil=null;this.reloadStarted=0;this.equipUntil=ready?time:time+this.profile.equipTime;
+    this.lastShot=-100;this.nextShot=this.equipUntil;this.firedAt=0;
+    this.shotIndex=0;this.magazineShot=0;this.bloom=0;this.recoil=new Recoil();
+    this.ads=false;this.scopeLevel=0;this.scopeAmount=0;this.scopeZoom=1;this.scopeReadyAt=time;
+    this.boltUntil=0;this.boltStarted=-100;this.rescope=0;this.heldScope=false;this.scopeActiveLast=false;
+    this.wasFire=false;this.lastInterval=0;this.lastTime=time;
+    this.spread={base:0,movement:0,bloom:0,air:0,landing:0,total:0,x:0,y:0};
+  }
   requestReload(time:number){if(this.reloadingUntil===null&&time>=this.equipUntil&&this.ammo<this.profile.magazine&&(this.infiniteReserve||this.reserve>0)){if(this.profile.id==='operator'){this.setScope(0,time);this.rescope=0;}this.reloadStarted=time;this.reloadingUntil=time+this.profile.reloadTime;this.onAction?.('reload');}}
   equip(time:number){this.reloadingUntil=null;this.equipUntil=time+this.profile.equipTime;this.wasFire=true;this.ads=false;this.scopeLevel=0;this.scopeAmount=0;this.scopeZoom=1;this.rescope=0;this.heldScope=false;this.scopeActiveLast=false;this.onAction?.('equip');}
   step(time:number,dt:number,input:InputState,onShot:()=>void){

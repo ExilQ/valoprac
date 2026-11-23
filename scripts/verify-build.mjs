@@ -31,3 +31,5 @@ assert.equal(JSON.parse(read('streaming-config.json')).enabled,release.unreal.pr
 console.log(JSON.stringify({release:release.version,manifestEntries:Object.keys(manifest).length,assetCount:readdirSync(join(root,'assets')).length,passed:true}));
 
 const precision=JSON.parse(read('precision-validation.json'));assert.equal(precision.release,release.version);assert.equal(precision.algorithm,'aim-2.0.0');assert.equal(precision.optimizer.humanParticipants,0);assert.equal(precision.optimizer.profiles,9);assert.equal(precision.optimizer.methods.length,4);assert.equal(precision.tests.passed,true);assert(Object.keys(manifest).some(k=>k.includes('TacticalAssessment')),'Real FPS calibration must load on demand');
+
+const combat=JSON.parse(read('combat-validation.json'));assert.equal(combat.release,release.version);assert.equal(combat.tests.passed,true);assert.equal(combat.nativeParityVerified,false);assert.equal(combat.humanFairnessVerified,false);assert.equal(combat.browserQA.passed,true);assert(combat.browserQA.layouts.length>=8);assert(read('tactical-guide.html').includes('버니합 훈련'));assert(read('tactical-guide.html').includes('월샷 훈련'));
