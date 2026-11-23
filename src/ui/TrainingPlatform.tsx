@@ -13,7 +13,7 @@ const ReplayLibrary=lazy(()=>import('./ReplayViewer').then(m=>({default:m.Replay
 const TABS={warmup:'1분 워밍업',movement:'이동 도구',routes:'전술 경로',drills:'내 드릴',editor:'시나리오 편집',flash:'플래시 회피',replays:'리플레이'} as const;
 const TOOL_TABS=Object.entries(TABS).map(([id,label])=>({id:id as keyof typeof TABS,label}));
 export function TrainingPlatform(){
- const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':typeof location!=='undefined'&&location.hash==='#drills'?'drills':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
+ const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':typeof location!=='undefined'&&location.hash==='#drills'?'drills':typeof location!=='undefined'&&location.hash==='#routes'?'routes':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
  const start=useApp(s=>s.startSession),settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),history=useApp(s=>s.history);
  const tools=settings.movementTools;
  const platform=useRef<HTMLElement>(null);

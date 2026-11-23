@@ -1,6 +1,6 @@
 import {approachVelocity,BOT_DIFFICULTY} from './locomotion';
 import {intersectCharacterPart} from './CharacterShape';
-import {FIELD_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from './characterProfile';
+import {FIELD_CHARACTER_GEOMETRY,usesTailoredRig,type CharacterGeometryVersion} from './characterProfile';
 import {MOVEMENT} from '../../config/movement';
 import { Box3, Matrix4, Object3D, Ray, Sphere, Vector3 } from 'three';
 import type { Behavior, HitZone } from '../types';
@@ -16,7 +16,7 @@ export class Target {
   difficulty:'easy'|'normal'|'hard'='normal';enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
   direction=1;directionZ=0;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
   constructor(public id:number,public behavior:Behavior,public rng:SeededRandom,readonly characterGeometry:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
-    const tailored=characterGeometry===FIELD_CHARACTER_GEOMETRY;
+    const tailored=usesTailoredRig(characterGeometry);
     this.root.add(this.upper,this.leftHip,this.rightHip);
     this.head=this.part('head',this.upper,0,1.68,0,0.34,0.34,0.34,'sphere');
     this.part('torso',this.upper,0,tailored ? 1.208 : 1.13,0,0.48,tailored ? .50 : .58,0.28);
@@ -72,7 +72,7 @@ export class Target {
     this.root.position.copy(this.position);this.root.scale.setScalar(this.scale);this.root.rotation.y=0;
     const stride=Math.sin(time*9+this.phase)*Math.min(0.32,Math.hypot(this.velocity.x,this.velocity.z)*0.13);
     this.upper.position.y=-0.43*this.crouch+Math.abs(stride)*0.025;this.upper.rotation.z=stride*0.04;
-    this.leftHip.position.y=this.rightHip.position.y= (this.characterGeometry===FIELD_CHARACTER_GEOMETRY ? .79 : .63)-0.2*this.crouch;
+    this.leftHip.position.y=this.rightHip.position.y= (usesTailoredRig(this.characterGeometry) ? .79 : .63)-0.2*this.crouch;
     this.leftHip.rotation.x=stride-0.7*this.crouch;this.rightHip.rotation.x=-stride-0.7*this.crouch;
     this.leftKnee.rotation.x=Math.max(0,-stride)+1.25*this.crouch;this.rightKnee.rotation.x=Math.max(0,stride)+1.25*this.crouch;
     this.leftArm.rotation.x=-stride*0.6;this.rightArm.rotation.x=stride*0.6;

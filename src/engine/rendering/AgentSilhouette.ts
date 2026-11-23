@@ -18,9 +18,14 @@ const lapel:readonly Point[]=[[-.37,.31],[-.14,.05],[-.20,.34],[-.20,.49],[-.30,
 const pocket:readonly Point[]=[[-.19,-.22],[.12,-.29],[.25,-.16],[.23,.18],[-.16,.23],[-.24,.11]];
 const brow:readonly Point[]=[[-.249,.094],[-.089,.084],[-.071,.106],[-.174,.132],[-.229,.122]];
 const eyelid:readonly Point[]=[[-.231,.040],[-.17,.014],[-.088,.027],[-.079,.048],[-.166,.072],[-.216,.062]];
+const chestPlate:readonly Point[]=[[-.255,.03],[-.16,-.115],[.16,-.115],[.255,.03],[.195,.195],[-.195,.195]];
+const chestInset:readonly Point[]=[[-.165,.035],[.165,.035],[.133,.084],[-.133,.084]];
+const shinGuard:readonly Point[]=[[-.216,-.075],[-.13,-.22],[.105,-.225],[.202,-.053],[.182,.297],[.041,.377],[-.189,.286]];
+const warmShell=finish(0x3f696d,.84),warmShoulder=finish(0x699799,.77),plate=finish(0x293c46,.56,.12),bevel=finish(0x52646a,.48,.16);
 const mirror=(outline:readonly Point[]):Point[]=>outline.map(([x,y]):Point=>[-x,y]).reverse();
 
-export function buildAgentPart(index:number,loft:Loft,panel:Panel){
+export function buildAgentPart(index:number,loft:Loft,panel:Panel,fieldKit:boolean){
+  const jacket=fieldKit?warmShell:shell,shoulderCloth=fieldKit?warmShoulder:shoulder;
   if(index===0){
     loft([[-.70,.174,.181,-.018],[-.52,.174,.178,-.008],[-.34,.165,.17]],skin,10,'torso');
     // Vary depth and width independently from chin to brow. The hairline
@@ -72,21 +77,31 @@ export function buildAgentPart(index:number,loft:Loft,panel:Panel){
       [.335,.331,.319,-.058,hair,-.019],[.425,.244,.261,-.079,hairLight,-.067],
       [.453,.102,.155,-.082,hair,-.11]],hair,10);
     panel([[-.31,.196],[-.295,.054],[-.214,.124],[-.162,.207],[.016,.173],[.215,.214],[.29,.29],[.13,.368],[-.16,.364]],.13,.31,hair,hairLight);
+    if(fieldKit){
+      // The earpiece is attached to the same head surface used for hit testing.
+      loft([[-.124,.051,.067,-.036,sole,.327],[-.092,.071,.083,-.044,sole,.34],
+        [.041,.068,.085,-.057,plate,.349],[.074,.041,.055,-.061,bevel,.348]],plate,8);
+      panel([[.275,-.144],[.305,-.159],[.341,-.122],[.326,-.083]],.097,.194,signal,plate);
+    }
     panel([[-.281,.245],[-.216,.187],[-.054,.233],[.169,.285],[.203,.317],[.019,.291]],.251,.319,hairLight,hair);
   }else if(index===1){
-    loft([[-.515,.346,.397,0,lining],[-.433,.352,.402,0,lining],[-.409,.35,.396,0,shell],[-.35,.35,.39],[.015,.428,.455,.018],[.255,.489,.44],
-      [.392,.458,.381,-.014,shoulder],[.482,.371,.322,-.021,shoulder],[.513,.245,.287,-.023,lining],[.619,.217,.247,-.029,lining],[.641,.209,.239,-.030,shoulder]],shell,10);
+    loft([[-.515,.346,.397,0,lining],[-.433,.352,.402,0,lining],[-.409,.35,.396,0,jacket],[-.35,.35,.39],[.015,.428,.455,.018],[.255,.489,.44],
+      [.392,.458,.381,-.014,shoulderCloth],[.482,.371,.322,-.021,shoulderCloth],[.513,.245,.287,-.023,lining],[.619,.217,.247,-.029,lining],[.641,.209,.239,-.030,shoulderCloth]],jacket,10);
     panel([[-.105,-.38],[.118,-.38],[.205,.33],[.123,.442],[-.137,.442],[-.195,.30]],.273,.471,undershirt,lining);
-    panel(chest,.185,.471,shell,shoulder);
-    panel(mirror(chest),.181,.474,shoulder,shell);
-    panel(lapel,.153,.433,lining,shoulder);
-    panel(mirror(lapel),.154,.435,shell,piping);
+    panel(chest,.185,.471,jacket,shoulderCloth);
+    panel(mirror(chest),.181,.474,shoulderCloth,jacket);
+    panel(lapel,.153,.433,lining,shoulderCloth);
+    panel(mirror(lapel),.154,.435,jacket,piping);
     // A diagonal webbing strap crosses the open shell and terminates at a
     // contrasting rectangular adjuster above the waist.
     panel([[-.285,-.299],[-.214,-.331],[.31,.29],[.252,.341]],.37,.498,lining,undershirt);
     panel([[-.093,-.094],[-.02,-.135],[.029,-.076],[-.05,-.032]],.482,.511,steel,lining);
     panel([[-.338,.014],[-.165,.005],[-.146,.057],[-.314,.075]],.434,.487,piping,lining);
-    panel([[-.36,.24],[-.20,.176],[.265,.267],[.35,.347],[.238,.37],[-.22,.30]],-.275,-.43,shoulder,shell);
+    panel([[-.36,.24],[-.20,.176],[.265,.267],[.35,.347],[.238,.37],[-.22,.30]],-.275,-.43,shoulderCloth,jacket);
+    if(fieldKit){
+      panel(chestPlate,.40,.535,plate,bevel,.0,-.035,.86);
+      panel(chestInset,.522,.548,piping,bevel,.0,-.053,.8);
+    }
   }else if(index===2){
     loft([[-.59,.322,.314],[-.37,.403,.395],[-.02,.437,.431],[.204,.421,.44],[.222,.425,.449,0,leather],[.48,.389,.42,0,leather]],trousers,8);
     panel([[-.113,.25],[.091,.25],[.117,.324],[.104,.446],[-.105,.439]],.365,.473,steel,sole);
@@ -113,6 +128,7 @@ export function buildAgentPart(index:number,loft:Loft,panel:Panel){
     loft([[-.38,.263,.302,-.058],[-.14,.286,.357,-.087],[.12,.351,.413,-.085],
       [.32,.362,.405,-.035],[.53,.306,.356,.035]],trousers,8);
     panel([[-.197,.34],[.02,.254],[.214,.31],[.205,.396],[-.048,.385]],.235,.414,fold,trousers);
+    if(fieldKit)panel(shinGuard,.202,.421,plate,bevel,0,.08,.83);
     loft([[-.50,.368,.644,.151,sole],[-.464,.387,.673,.152,sole],[-.39,.38,.638,.14,leather],
       [-.309,.327,.503,.08,leather],[-.20,.297,.366,-.019,leather],[-.15,.323,.369,-.036,lining]],leather,8);
   }

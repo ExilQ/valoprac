@@ -2,7 +2,7 @@ import {BufferGeometry,Float32BufferAttribute,ShapeUtils,Uint8BufferAttribute,Ve
 import {finish,type Finish,type Ring,type Point} from './CharacterSurfaces';
 import {buildAgentPart} from './AgentSilhouette';
 import type {HitZone} from '../types';
-import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
+import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,usesTailoredRig,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {legacyCharacterPartGeometry} from './LegacyCharacterGeometry';
 
 /** Each region is a span of triangle corners in draw order. For indexed
@@ -89,8 +89,8 @@ function buildFieldPart(index:number,version:CharacterGeometryVersion){
     region(start,zone);
   }
 
-  if(version===FIELD_CHARACTER_GEOMETRY){
-    buildAgentPart(index,loft,panel);
+  if(usesTailoredRig(version)){
+    buildAgentPart(index,loft,panel,version===FIELD_CHARACTER_GEOMETRY);
   }else if(index===0){
     loft([[-.69,.176,.186],[-.43,.18,.19],[-.28,.175,.17]],NECK,8,'torso');
     loft([[-.45,.14,.18,.025],[-.38,.23,.265,.03],[-.2,.31,.345,.015],[.04,.345,.38],[.28,.3,.32]],FACE,12);

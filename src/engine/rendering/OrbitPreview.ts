@@ -1,6 +1,11 @@
 import { ACESFilmicToneMapping, PerspectiveCamera, Raycaster, SRGBColorSpace, Vector2, Vector3, WebGLRenderer, type Scene, type Object3D } from 'three';
 
-export function createOrbitPreview(host: HTMLElement, scene: Scene, label: string, target: Vector3, distance: number, onPick?: (ray: Raycaster) => void) {
+interface ObjectDrag {
+ preview:(ray:Raycaster)=>void;
+ finish:(ray:Raycaster|null,moved:boolean)=>void;
+}
+
+export function createOrbitPreview(host: HTMLElement, scene: Scene, label: string, target: Vector3, distance: number, onPick?: (ray: Raycaster) => void, pickDrag?: (ray: Raycaster) => ObjectDrag|undefined) {
   const renderer = new WebGLRenderer({ antialias:true, alpha:false, powerPreference:'low-power' });
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
@@ -13,7 +18,7 @@ export function createOrbitPreview(host: HTMLElement, scene: Scene, label: strin
   const pointer = new Vector2();
   const ray = new Raycaster();
   let frame = 0;
-  let drag:{id:number;x:number;y:number;distance:number}|null = null;
+  let drag:{id:number;x:number;y:number;distance:number;objectDrag?:ObjectDrag}|null = null;
 
   /*! openVaim v1.4.3 orbit calculation, Copyright (c) 2026 unkwsr. MIT notice: /licenses/openVaim-MIT.txt */
   const paint = () => {
@@ -45,10 +50,18 @@ export function createOrbitPreview(host: HTMLElement, scene: Scene, label: strin
     orbit.dist = Math.max(minimumDistance, Math.min(distance * 2.5, orbit.dist * factor));
     draw();
   };
+  const pointerRay = (event: PointerEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.set((event.clientX-rect.left)/rect.width*2-1, -(event.clientY-rect.top)/rect.height*2+1);
+    ray.setFromCamera(pointer,camera);
+    return ray;
+  };
   const start = (event:PointerEvent) => {
     if (drag || event.button !== 0) return;
-    drag = {id:event.pointerId,x:event.clientX,y:event.clientY,distance:0};
+    const objectDrag=pickDrag?.(pointerRay(event));
+    drag = {id:event.pointerId,x:event.clientX,y:event.clientY,distance:0,objectDrag};
     canvas.setPointerCapture(event.pointerId);
+    if(objectDrag)canvas.classList.add('dragging-marker');
   };
   const move = (event:PointerEvent) => {
     if (!drag || event.pointerId !== drag.id) return;
@@ -56,18 +69,23 @@ export function createOrbitPreview(host: HTMLElement, scene: Scene, label: strin
     drag.distance += Math.hypot(dx,dy);
     drag.x=event.clientX;
     drag.y=event.clientY;
-    if (drag.distance >= 5) turn(dx,dy);
+    if(drag.distance<5)return;
+    if(drag.objectDrag)drag.objectDrag.preview(pointerRay(event));
+    else turn(dx,dy);
   };
-  const cancel = () => { drag = null; };
+  const cancel = (event:PointerEvent) => {
+    if(!drag||event.pointerId!==drag.id)return;
+    drag.objectDrag?.finish(null,false);
+    drag=null;
+    canvas.classList.remove('dragging-marker');
+  };
   const end = (event:PointerEvent) => {
     if (!drag || event.pointerId !== drag.id) return;
-    const click = drag.distance < 5;
-    cancel();
-    if (!click || !onPick) return;
-    const rect = canvas.getBoundingClientRect();
-    pointer.set((event.clientX-rect.left)/rect.width*2-1, -(event.clientY-rect.top)/rect.height*2+1);
-    ray.setFromCamera(pointer,camera);
-    onPick(ray);
+    const {distance,objectDrag}=drag;
+    drag=null;
+    canvas.classList.remove('dragging-marker');
+    if(objectDrag){objectDrag.finish(pointerRay(event),distance>=5);return;}
+    if(distance<5)onPick?.(pointerRay(event));
   };
   canvas.addEventListener('pointerdown',start);
   canvas.addEventListener('pointermove',move);

@@ -124,7 +124,7 @@ export class Simulation {
       if(!this.scenario.entryGate&&(!chained||target.id===0))this.activateScenarioTarget(target.id);
     }
     if(this.defenders){this.defenders.setSectors(sectors);this.defenders.retry();}
-    else this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.scenario.spawn,this.settings.seed,sectors);
+    else this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.scenario.spawn,this.settings.seed,sectors,this.options.scenario.rules.defenderPolicy);
     this.defenders.setSimulationRules(this.rules);this.exposure.reset();
   }
   private activateScenarioTarget(index:number){

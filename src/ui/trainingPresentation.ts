@@ -24,6 +24,7 @@ export function trainingTitle(mode:Mode,s:TrainingSettings,options?:SimulationOp
 }
 export function trainingDescription(mode:Mode,s:TrainingSettings,options?:SimulationOptions){
  if(options?.exercise)return options.exercise.kind==='warmup'?'각을 잡고 지나가는 표적을 조준하세요. 60초 동안 실제 사격으로 제거한 수를 기록하며, 완료 후 같은 설정으로 즉시 다시 시작할 수 있습니다.':'시각·소리 신호를 확인하면 직접 시야를 돌리세요. 실제 카메라 회전 시작과 기준 각도 도달을 120Hz 시뮬레이션 시각으로 기록합니다.';
+ if(options?.scenario?.rules.defenderPolicy)return '엄폐에서 머리 높이에 조준한 채 진입하세요. 첫 탄이 나오기 전에 앉아서 피하고, 수비수가 자세를 낮추면 머리 높이를 다시 맞추세요.';
  if(options?.scenario)return options.scenario.title+' · 직접 이동해 방어각을 확인하고 엄폐·제동·사격 결과를 비교하세요.';
  switch(selectedTraining(mode,s)){
   case 'tactical':return s.practiceMap==='tactical'

@@ -29,3 +29,14 @@ export function scenarioRoute(id:ScenarioRouteId){const route=SCENARIO_ROUTES.fi
 export function createScenario(routeId:ScenarioRouteId):ScenarioDefinition{
  const route=scenarioRoute(routeId);return{schema:1,id:`route-${routeId}`,title:route.title,template:route.template,routeId,seed:1947,player:{position:clone(route.spawn),yaw:route.yaw,pitch:0,weapon:route.recommended},bots:clone(route.primaryBots),rules:{difficulty:route.difficulty==='입문'?'beginner':route.difficulty==='고급'?'advanced':'normal',combatMode:'gunfight',duration:null,exposureLimit:3,randomSpawns:false,infiniteReserve:true,autoReload:true,exposurePolicy:'sequential'}};
 }
+
+export function createHeadlineScenario():ScenarioDefinition {
+ const scenario=createScenario('close-corner');
+ scenario.id='close-corner-headline';
+ scenario.title='헤드라인·앉기 교전';
+ scenario.player.weapon='rifleA';
+ scenario.bots[0].weapon='rifleB';
+ scenario.rules.difficulty='normal';
+ scenario.rules.defenderPolicy={style:'crouch-counter'};
+ return scenario;
+}

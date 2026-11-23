@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.11",
+  "version": "12.0.12",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -173,7 +173,11 @@
     "tactical-training-briefing",
     "segmented-live-magazine-hud",
     "combat-health-and-timed-round-readouts",
-    "configured-control-key-hints"
+    "configured-control-key-hints",
+    "head-line-duel-and-crouch-evasion",
+    "player-replay-calibrated-defender-tempo",
+    "editable-2d-and-articulated-3d-placements",
+    "third-version-original-field-agent"
   ],
   "unreal": {
     "engine": "5.7",
@@ -188,7 +192,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.11",
+  "patchLabel": "12.12",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,

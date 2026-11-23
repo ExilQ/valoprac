@@ -1,4 +1,5 @@
 import type {Settings,Vec3,WeaponId} from '../../engine/types';
+import type {DefenderPolicy} from './defenderPolicy';
 import type {AngleSector} from '../../engine/tactical/levels';
 
 export const SCENARIO_SCHEMA=1 as const;
@@ -15,7 +16,7 @@ export interface ScenarioBot {
 export interface ScenarioDefinition {
  schema:1;id:string;title:string;template:ScenarioTemplate;routeId:ScenarioRouteId;seed:number;
  player:{position:Vec3;yaw:number;pitch:number;weapon:WeaponId};bots:ScenarioBot[];
- rules:{difficulty:Settings['defenderSkill'];combatMode:Settings['combatMode'];duration:number|null;exposureLimit:number;randomSpawns:boolean;infiniteReserve:boolean;autoReload:boolean;arrival?:'after-clear';startOnEntry?:true;exposurePolicy:'sequential'|'crossfire'};
+ rules:{difficulty:Settings['defenderSkill'];combatMode:Settings['combatMode'];duration:number|null;exposureLimit:number;randomSpawns:boolean;infiniteReserve:boolean;autoReload:boolean;arrival?:'after-clear';startOnEntry?:true;defenderPolicy?:DefenderPolicy;exposurePolicy:'sequential'|'crossfire'};
 }
 export interface ScenarioRoute {
  id:ScenarioRouteId;title:string;description:string;objective:string;template:ScenarioTemplate;route:Vec3[];spawn:Vec3;yaw:number;

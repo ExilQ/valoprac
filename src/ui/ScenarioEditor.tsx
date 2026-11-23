@@ -1,12 +1,15 @@
-import {lazy,Suspense,useEffect,useMemo,useState,type FormEvent} from 'react';
+import {lazy,Suspense,useEffect,useMemo,useRef,useState,type FormEvent} from 'react';
 import {WEAPONS,WEAPON_ORDER} from '../config/weapons';
 import {createScenario,SCENARIO_ROUTES} from '../training/scenarios/templates';
 import {scenarioPlacement,validateScenario,validateScenarioWithGeometry} from '../training/scenarios/validation';
 import {decodeScenario,encodeScenario,scenarioCodeFromURL,scenarioURL} from '../training/scenarios/codec';
 import {MAX_SCENARIO_BYTES,type ScenarioDefinition,type ScenarioRouteId} from '../training/scenarios/types';
 import {saveDrill} from '../training/scenarios/library';
+import type {ReplayRecording} from '../engine/replay/types';
 import type {Vec3} from '../engine/types';
-import {ScenarioPlan} from './ScenarioPlan';
+import {useApp} from '../app/store';
+import {DEFENDER_STYLE_LABELS,playerTempoFromReplays,type DefenderStyle} from '../training/scenarios/defenderPolicy';
+import {ScenarioPlan,type ScenarioSelection} from './ScenarioPlan';
 import './scenarios.css';
 import './orbitPreview.css';
 
@@ -21,6 +24,7 @@ const labels={x:'X',y:'높이',z:'Z'} as const;
 const coordinateValue=(value:number)=>{const snap=Math.round(value*1e6)/1e6;return Math.abs(value-snap)<1e-12?snap:value;};
 export interface ScenarioEditorProps {onStart:(definition:ScenarioDefinition)=>void;initialScenario?:ScenarioDefinition;}
 export function ScenarioEditor({onStart,initialScenario}:ScenarioEditorProps){
+ const history=useApp(state=>state.history);
  const [mapView,setMapView]=useState<'plan'|'blockout'|'materials'>('plan');
  const[initial]=useState(()=>initialScenarioEditorState(initialScenario)),[definition,setDefinition]=useState(initial.definition),[selected,setSelected]=useState<number|'player'>(0),[code,setCode]=useState(''),[message,setMessage]=useState(initial.message);
  useEffect(()=>{if(initialScenario){try{setDefinition(validateScenario(initialScenario));setSelected(0);setMessage('');}catch(e){setMessage((e as Error).message);}}},[initialScenario]);
@@ -29,13 +33,43 @@ export function ScenarioEditor({onStart,initialScenario}:ScenarioEditorProps){
   window.addEventListener('hashchange',addressChanged);window.addEventListener('popstate',addressChanged);
   return()=>{window.removeEventListener('hashchange',addressChanged);window.removeEventListener('popstate',addressChanged);};
  },[]);
+ const draftId=useRef(definition.id);draftId.current=definition.id;
+ const [calibrating,setCalibrating]=useState(false);
  const audit=useMemo(()=>{try{const {definition:valid,geometry}=validateScenarioWithGeometry(definition);return{valid,geometry,error:''};}catch(error){return{valid:null,geometry:null,error:(error as Error).message};}},[definition]);
  const update=(change:(next:ScenarioDefinition)=>void)=>setDefinition(current=>{const next=structuredClone(current);change(next);return next;});
+ const policy=definition.rules.defenderPolicy;
  const location=selected==='player'?definition.player.position:definition.bots[selected]?.position??definition.player.position;
- const place=(point:Vec3)=>update(d=>{
-  const target=selected==='player'?d.player:d.bots[selected];
-  if(target)target.position=point;
+ const place=(point:Vec3,which:ScenarioSelection=selected)=>update(d=>{
+  const target=which==='player'?d.player:d.bots[which];
+  if(target)target.position=scenarioPlacement(d,point.x,point.z,point.y);
  });
+ const changePolicy=(style:DefenderStyle|'standard')=>update(d=>{
+  if(style==='standard')delete d.rules.defenderPolicy;
+  else d.rules.defenderPolicy={style};
+ });
+ const usePlayerTempo=(replays:ReplayRecording[],source:string)=>{
+  const tempo=playerTempoFromReplays(replays);
+  if(!tempo){setMessage('사격을 새로 시작한 기록이 8회 이상 필요합니다.');return;}
+  update(d=>{d.rules.defenderPolicy={style:'crouch-counter',playerTempo:tempo};});
+  setMessage(source+'에서 앉기와 사격 간격을 반영했습니다.');
+ };
+ const calibrate=()=>{
+  const recents=history.filter(session=>session.replay&&!session.exercise&&session.peeking).slice(0,12);
+  usePlayerTempo(recents.flatMap(session=>session.replay?[session.replay]:[]),'최근 전술 훈련 리플레이');
+ };
+ const importPlayerTempo=async(files:File[])=>{
+  if(!files.length)return;
+  const id=definition.id;
+  setCalibrating(true);
+  try {
+   const {readReplayFile}=await import('./ReplayViewer');
+   const recordings:ReplayRecording[]=[];
+   for(const file of files.slice(0,12))recordings.push(await readReplayFile(file));
+   if(draftId.current===id) usePlayerTempo(recordings,'가져온 플레이 리플레이');
+  } catch(error){
+   if(draftId.current===id)setMessage('플레이 리플레이를 읽지 못했습니다. '+(error instanceof Error?error.message:'지원하지 않는 형식입니다.'));
+  } finally {setCalibrating(false);}
+ };
  const coordinates=(which:number|'player')=>(axis:'x'|'y'|'z',value:number)=>update(d=>{(which==='player'?d.player.position:d.bots[which].position)[axis]=value;});
  const start=(event:FormEvent)=>{event.preventDefault();try{onStart(validateScenario(definition));}catch(error){setMessage((error as Error).message);}};
  const importCode=()=>{try{const incoming=/^https?:\/\//.test(code.trim())?scenarioCodeFromURL(code):code;const next=decodeScenario(incoming);setDefinition(next);setSelected(0);setMessage('검증된 시나리오를 불러왔습니다.');}catch(error){setMessage((error as Error).message);}};
@@ -44,7 +78,10 @@ export function ScenarioEditor({onStart,initialScenario}:ScenarioEditorProps){
  const importFile=async(file:File|undefined)=>{if(!file)return;try{if(file.size>MAX_SCENARIO_BYTES)throw new Error('시나리오 파일은 24KB 이하여야 합니다.');const next=validateScenario(JSON.parse(await file.text()));setDefinition(next);setSelected(0);setMessage('파일의 지형·훈련 규칙을 검증했습니다.');}catch(error){setMessage((error as Error).message);}};
  return <section className="scenario-editor" aria-label="시나리오 편집기"><header className="view-title"><p className="eyebrow">SCENARIO / 맞춤 전술 훈련</p><h2>시나리오 편집</h2><p>수비 위치와 진입 조건을 조정하고, 같은 배치를 코드로 나누세요.</p></header>
  <form onSubmit={start}><div className="scenario-editor-layout"><div><div className="scenario-map-views" role="group" aria-label="편집기 보기">{([['plan','평면도'],['blockout','3D 구조'],['materials','3D 재질']] as const).map(([mode,label])=><button type="button" key={mode} aria-pressed={mapView===mode} onClick={()=>setMapView(mode)}>{label}</button>)}</div>
- {mapView==='plan'?<><ScenarioPlan definition={definition} selected={selected} onPlace={(x,z)=>place(scenarioPlacement(definition,x,z,location.y))}/><p className="field-note">평면도를 누르거나 좌표를 입력하세요. 가까운 바닥·경사로 높이에 맞춥니다.</p></>:<Suspense fallback={<p role="status">3D 편집기를 불러오는 중입니다.</p>}><ScenarioMapPreview definition={definition} selected={selected} detailed={mapView==='materials'} onPlace={point=>place(scenarioPlacement(definition,point.x,point.z,point.y))}/></Suspense>}
+ {mapView==='plan'?<><ScenarioPlan definition={definition} selected={selected} onSelect={setSelected} onPlace={(x,z,which)=>{
+  const point=which==='player'?definition.player.position:definition.bots[which].position;
+  place({x,y:point.y,z},which);
+ }}/><p className="field-note">시작점이나 수비수를 잡아 옮기세요. 표식을 선택한 뒤 방향키로 0.25m, Shift와 방향키로 1m 이동할 수 있습니다.</p></>:<Suspense fallback={<p role="status">3D 편집기를 불러오는 중입니다.</p>}><ScenarioMapPreview definition={definition} selected={selected} detailed={mapView==='materials'} onPlace={place} onSelect={setSelected}/></Suspense>}
  <div className="scenario-readout"><span>수비수 {definition.bots.length}명</span>{audit.geometry&&<><span>경로 표본 {audit.geometry.routeSamples}개</span><span>동시 위협 최대 {audit.geometry.maxSimultaneousThreats}개</span></>}</div><p className={`scenario-status ${audit.error?'invalid':''}`} role="status">{audit.error||'엄폐·바닥·진입 사선 검증 통과'}</p><button type="submit" className="primary-button" disabled={!audit.valid}>이 배치로 훈련 시작</button></div>
  <div><div className="scenario-editor-fields"><label>전술 경로<select aria-label="편집 전술 경로" value={definition.routeId} onChange={e=>{setDefinition(createScenario(e.target.value as ScenarioRouteId));setSelected(0);setMessage('');}}>{SCENARIO_ROUTES.map(r=><option key={r.id} value={r.id}>{r.title}</option>)}</select></label><label>시나리오 이름<input aria-label="시나리오 이름" value={definition.title} maxLength={64} onChange={e=>update(d=>{d.title=e.target.value;})}/></label><label>난수 시드<input aria-label="시나리오 시드" type="number" min={1} max={2147483647} step={1} value={definition.seed} onChange={e=>update(d=>{d.seed=+e.target.value;})}/></label><label>난이도<select aria-label="시나리오 난이도" value={definition.rules.difficulty} onChange={e=>update(d=>{d.rules.difficulty=e.target.value as typeof d.rules.difficulty;})}>{[['beginner','입문'],['normal','보통'],['advanced','고급'],['expert','전문가']].map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label></div>
  <h3>시작 위치와 무기</h3><div className="scenario-editor-fields"><label>내 무기<select aria-label="시나리오 내 무기" value={definition.player.weapon} onChange={e=>update(d=>{d.player.weapon=e.target.value as typeof d.player.weapon;})}>{WEAPON_ORDER.map(id=><option key={id} value={id}>{WEAPONS[id].name}</option>)}</select></label><button type="button" className="secondary-button" aria-pressed={selected==='player'} onClick={()=>setSelected('player')}>시작 위치 선택</button></div><div className="scenario-coordinate-row">{(['x','y','z']as const).map(axis=><label key={axis}>시작 {labels[axis]}<input aria-label={`시작 ${labels[axis]}`} type="number" step=".1" value={coordinateValue(definition.player.position[axis])} onChange={e=>coordinates('player')(axis,+e.target.value)}/></label>)}</div><div className="scenario-editor-fields"><label>시작 수평 방향 · 도<input aria-label="시작 수평 방향" type="number" min={-360} max={360} step={1} value={Math.round(definition.player.yaw*180/Math.PI)} onChange={e=>update(d=>{d.player.yaw=+e.target.value*Math.PI/180;})}/></label><label>시작 상하 조준 · 도<input aria-label="시작 상하 조준" type="number" min={-84} max={84} value={Math.round(definition.player.pitch*180/Math.PI)} onChange={e=>update(d=>{d.player.pitch=+e.target.value*Math.PI/180;})}/></label></div>
@@ -52,6 +89,16 @@ export function ScenarioEditor({onStart,initialScenario}:ScenarioEditorProps){
  {selected!=='player'&&definition.bots[selected]&&<><div className="scenario-coordinate-row">{(['x','y','z']as const).map(axis=><label key={axis}>수비수 {labels[axis]}<input aria-label={`수비수 ${labels[axis]}`} type="number" step=".1" value={coordinateValue(location[axis])} onChange={e=>coordinates(selected)(axis,+e.target.value)}/></label>)}</div><div className="scenario-editor-fields"><label>수비 무기<select aria-label="수비 무기" value={definition.bots[selected].weapon} onChange={e=>update(d=>{d.bots[selected].weapon=e.target.value as typeof d.bots[number]['weapon'];})}>{WEAPON_ORDER.map(id=><option key={id} value={id}>{WEAPONS[id].name}</option>)}</select></label><label>수비 이동<select aria-label="수비 이동" value={definition.bots[selected].movement} onChange={e=>update(d=>{d.bots[selected].movement=e.target.value as 'hold'|'reposition';})}><option value="hold">각 고정</option><option value="reposition">검증한 위치로 재배치</option></select></label></div>
  <p className="field-note">빈 원은 대체 배치입니다. 각 고정 수비수는 선택된 위치에서 움직이지 않습니다.</p>{definition.bots[selected].alternatives.map((point,index)=><div className="scenario-coordinate-row" key={index}>{(['x','y','z']as const).map(axis=><label key={axis}>대체 {index+1} {labels[axis]}<input aria-label={`대체 ${index+1} ${labels[axis]}`} type="number" step=".1" value={coordinateValue(point[axis])} onChange={e=>update(d=>{d.bots[selected].alternatives[index][axis]=+e.target.value;})}/></label>)}<button type="button" aria-label={`대체 위치 ${index+1} 삭제`} onClick={()=>update(d=>{d.bots[selected].alternatives.splice(index,1);})}>삭제</button></div>)}<div className="scenario-route-actions"><button type="button" disabled={definition.bots[selected].alternatives.length>=4} onClick={()=>update(d=>{const bot=d.bots[selected];bot.alternatives.push({...bot.position,x:bot.position.x+.2});})}>대체 위치 추가</button><button type="button" disabled={definition.bots.length<=1} onClick={()=>{update(d=>{d.bots.splice(selected,1);});setSelected(0);}}>수비수 삭제</button></div></>}
  <button type="button" className="secondary-button" disabled={definition.bots.length>=12} onClick={()=>{const index=definition.bots.length;update(d=>{const b=structuredClone(d.bots[0]);b.id=`bot-${Date.now().toString(36)}-${index}`;b.position.x+=1.1;b.alternatives=[];b.movement='hold';d.bots.push(b);});setSelected(index);}}>수비수 추가</button>
+ <h3>수비수 행동</h3>
+ <label className="practice-select">조준과 자세<select aria-label="수비수 조준과 자세" value={policy?.style??'standard'} onChange={event=>changePolicy(event.target.value as DefenderStyle|'standard')}>
+  <option value="standard">기본 판단</option>
+  {Object.entries(DEFENDER_STYLE_LABELS).map(([id,label])=><option key={id} value={id}>{label}</option>)}
+ </select></label>
+ <p className="field-note">헤드라인 수비수는 보이는 머리 높이에 조준합니다. 조준이 따라오기 전에 앉거나, 몸을 낮춘 수비수의 머리를 다시 잡는 연습을 할 수 있습니다.</p>
+ <div className="scenario-route-actions"><button type="button" className="secondary-button" disabled={calibrating} onClick={calibrate}>최근 플레이 기록 반영</button>
+ <label className="scenario-file-input">{calibrating?'리플레이를 읽는 중…':'플레이 리플레이 파일 반영'}<input type="file" multiple accept=".vpr,.gz,application/gzip,application/octet-stream" disabled={calibrating} onChange={event=>{void importPlayerTempo(Array.from(event.currentTarget.files??[]));event.currentTarget.value='';}}/></label>{policy?.playerTempo&&<button type="button" className="secondary-button" onClick={()=>changePolicy('crouch-counter')}>기본 교전 타이밍으로 복원</button>}</div>
+ <p className="field-note">최근 전술 기록이나 호환 리플레이 파일을 최대 12개까지 이 브라우저에서 분석합니다. 공유 코드에는 집계된 값만 저장됩니다.</p>
+ {policy?.playerTempo&&<p className="field-note">사격 시작 {policy.playerTempo.encounters}회 · 앉아서 시작 {policy.playerTempo.crouchRate}% · 앉기 {policy.playerTempo.crouchHoldMs}ms · 사격 간격 {policy.playerTempo.burstPauseMs}ms</p>}
  <h3>시간과 교전 조건</h3><label className="scenario-checkbox"><input type="checkbox" checked={definition.rules.startOnEntry===true} onChange={event=>update(d=>{if(event.target.checked)d.rules.startOnEntry=true;else delete d.rules.startOnEntry;})}/>보라색 진입선을 넘으면 수비수 등장</label><div className="scenario-editor-fields"><label>교전 규칙<select aria-label="교전 규칙" value={definition.rules.combatMode} onChange={e=>update(d=>{d.rules.combatMode=e.target.value as typeof d.rules.combatMode;})}><option value="learning">각 학습 · 피해 없음</option><option value="gunfight">실제 사격 교전</option><option value="exposure">노출 시간 사망</option></select></label><label>진입 사선<select aria-label="진입 사선" value={definition.rules.exposurePolicy} onChange={e=>update(d=>{d.rules.exposurePolicy=e.target.value as typeof d.rules.exposurePolicy;})}><option value="sequential">한 번에 한 각</option><option value="crossfire">복수 사선 · 교차 사격</option></select></label><label>수비수 등장<select aria-label="수비수 등장" value={definition.rules.arrival??'together'} onChange={e=>update(d=>{if(e.target.value==='after-clear')d.rules.arrival='after-clear';else delete d.rules.arrival;})}><option value="together">훈련 시작과 동시에</option><option value="after-clear">앞 수비수 제거 후 차례대로</option></select></label><label>노출 제한 · 초<input aria-label="시나리오 노출 제한" type="number" min=".5" max={5} step=".1" value={definition.rules.exposureLimit} onChange={e=>update(d=>{d.rules.exposureLimit=+e.target.value;})}/></label><label>훈련 시간 · 초<input aria-label="시나리오 훈련 시간" type="number" min={15} max={600} step={15} disabled={definition.rules.duration===null} value={definition.rules.duration??60} onChange={e=>update(d=>{d.rules.duration=+e.target.value;})}/></label></div><div className="scenario-editor-fields">{([['duration','시간 무제한'],['randomSpawns','검증한 위치 중 무작위 배치'],['infiniteReserve','예비 탄약 무제한'],['autoReload','자동 재장전']]as const).map(([key,label])=><label className="scenario-checkbox" key={key}><input aria-label={label} type="checkbox" checked={key==='duration'?definition.rules.duration===null:definition.rules[key]} onChange={e=>update(d=>{if(key==='duration')d.rules.duration=e.target.checked?null:60;else d.rules[key]=e.target.checked;})}/>{label}</label>)}</div>
  </div></div></form>
  <section className="scenario-sharing"><h3>시나리오 코드 · 파일</h3><label>공유 코드 또는 링크<textarea aria-label="시나리오 공유 코드" spellCheck={false} maxLength={40000} value={code} onChange={e=>setCode(e.target.value)}/></label><div className="scenario-route-actions"><button type="button" onClick={exportCode} disabled={!audit.valid}>코드 만들기</button><button type="button" onClick={importCode}>코드 불러오기</button><button type="button" onClick={()=>{try{const text=encodeScenario(validateScenario(definition));setCode(text);void navigator.clipboard.writeText(text).then(()=>setMessage('공유 코드를 복사했습니다.')).catch(()=>setMessage('복사하지 못했습니다. 코드 입력란에서 직접 복사하세요.'));}catch(e){setMessage((e as Error).message);}}} disabled={!audit.valid}>코드 복사</button><button type="button" onClick={()=>{try{setCode(scenarioURL(validateScenario(definition)));setMessage('링크의 배치 자료는 주소의 fragment에 담깁니다.');}catch(e){setMessage((e as Error).message);}}} disabled={!audit.valid}>공유 링크 만들기</button><button type="button" onClick={exportFile} disabled={!audit.valid}>파일 저장</button><label className="scenario-file-input">파일 불러오기<input type="file" accept=".json,application/json" onChange={e=>{void importFile(e.target.files?.[0]);e.currentTarget.value='';}}/></label><button type="button" disabled={!audit.valid} onClick={()=>{try{saveDrill(definition);setMessage('내 드릴에 저장했습니다.');}catch(error){setMessage(error instanceof Error?error.message:'배치를 저장하지 못했습니다.');}}}>내 드릴에 저장</button></div><p className="field-note">계정 없이 이 브라우저에서 검증합니다. 좌표·규칙만 포함하며 스크립트나 외부 자료는 실행하지 않습니다.</p></section>

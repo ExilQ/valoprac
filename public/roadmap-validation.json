@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.11",
-  "patchLabel": "12.11",
-  "generatedAt": "2026-11-22T08:18:24.087Z",
+  "release": "12.0.12",
+  "patchLabel": "12.12",
+  "generatedAt": "2026-11-22T08:31:19.873Z",
   "tests": {
-    "application": 1492,
+    "application": 1496,
     "broker": 28,
     "hosting": 28,
     "passed": true,
@@ -17287,11 +17287,11 @@
       "renderedFrames": 3600,
       "commands": 70801,
       "rawBytes": 906521,
-      "gzipBytes": 134433,
+      "gzipBytes": 134429,
       "verification": {
         "passed": true,
         "mismatches": [],
-        "checksum": "50f342e4607848da",
+        "checksum": "34df7ab1a2e5597b",
         "score": 0,
         "shots": 172,
         "hits": 0,
@@ -17325,13 +17325,13 @@
       "replay": {
         "passed": true,
         "mismatches": [],
-        "checksum": "e22f9a447c3d5156",
+        "checksum": "0c4072c432e38096",
         "score": 103,
         "shots": 103,
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7796,
+      "gzipBytes": 7792,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18176,7 +18176,7 @@
       "replay": {
         "passed": true,
         "mismatches": [],
-        "checksum": "ad8e878f067a2583",
+        "checksum": "ecdaaec42b9f8382",
         "score": 43,
         "shots": 0,
         "hits": 0,
@@ -18208,12 +18208,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "1604b619593f6875",
+        "checksum": "a7f8e13219104674",
         "passed": true,
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3107
+        "replayGzipBytes": 3103
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18224,12 +18224,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "5c18020881f86040",
+        "checksum": "a4a1f6a7b6b8b2c1",
         "passed": true,
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3104
+        "replayGzipBytes": 3103
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18240,12 +18240,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "1a9c56ba55f65644",
+        "checksum": "42aa0bfb4dfca5a5",
         "passed": true,
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2955
+        "replayGzipBytes": 2953
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18256,7 +18256,7 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "7701343f6c524e31",
+        "checksum": "7031e6e66f84c690",
         "passed": true,
         "routeSamples": 101,
         "maxThreats": 1,
@@ -18272,12 +18272,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "4dd855ada0687803",
+        "checksum": "3e362ee81cb5ca22",
         "passed": true,
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 2999
+        "replayGzipBytes": 2998
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18288,12 +18288,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "eda118bdc0563225",
+        "checksum": "641d5c6893b4fa84",
         "passed": true,
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 2998
+        "replayGzipBytes": 2997
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18304,12 +18304,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "268503a95a88b0b1",
+        "checksum": "60c69d5e37f34430",
         "passed": true,
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 769,
-        "replayGzipBytes": 3378
+        "replayGzipBytes": 3379
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18320,12 +18320,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "ff46b1c118964815",
+        "checksum": "69054c8099b2c9f4",
         "passed": true,
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 768,
-        "replayGzipBytes": 3374
+        "replayGzipBytes": 3372
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18336,12 +18336,12 @@
         "bots": 3,
         "score": 1,
         "hits": 1,
-        "checksum": "990b58967142f108",
+        "checksum": "4001e8e70634f329",
         "passed": true,
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1436,
-        "replayGzipBytes": 4509
+        "replayGzipBytes": 4510
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18352,12 +18352,12 @@
         "bots": 3,
         "score": 1,
         "hits": 1,
-        "checksum": "bfaf31a6ded3541c",
+        "checksum": "735595ed93b52e95",
         "passed": true,
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4509
+        "replayGzipBytes": 4506
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18368,7 +18368,7 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "361917aa53ba585c",
+        "checksum": "9e7dfe894d40755d",
         "passed": true,
         "routeSamples": 291,
         "maxThreats": 1,
@@ -18384,12 +18384,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "fd26f850240f7b7e",
+        "checksum": "72c82589efd9525f",
         "passed": true,
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 5461
+        "replayGzipBytes": 5459
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18400,12 +18400,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "087f4c01ef38ae91",
+        "checksum": "e1d6ff5ca8b05570",
         "passed": true,
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 868,
-        "replayGzipBytes": 5324
+        "replayGzipBytes": 5318
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18416,12 +18416,12 @@
         "bots": 1,
         "score": 1,
         "hits": 1,
-        "checksum": "2f64d1048e32a23e",
+        "checksum": "d6846aef71ffac7f",
         "passed": true,
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 866,
-        "replayGzipBytes": 5316
+        "replayGzipBytes": 5318
       }
     ],
     "browser": {

@@ -6,3 +6,13 @@
 .drill-library-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
 .drill-library-row h3 { margin: 0; overflow-wrap: anywhere; }
 .drill-library-row small { color: var(--muted); }
+
+.scenario-plan.editable{touch-action:none;user-select:none}
+.scenario-plan [data-placement-marker]{cursor:grab}
+.scenario-plan.dragging,.scenario-plan.dragging [data-placement-marker]{cursor:grabbing}
+.scenario-plan [data-placement-marker]:focus-visible{outline:none}
+.scenario-plan [data-placement-marker]:focus-visible .scenario-marker-hit{stroke:var(--focus,#146d73);stroke-width:2;vector-effect:non-scaling-stroke}
+
+.scenario-headline-drill{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding:16px 18px;background:var(--surface-raised);border-left:3px solid var(--accent)}
+.scenario-headline-drill h3{margin:0;font-size:18px}
+.scenario-headline-drill p{margin:5px 0 0;font-size:14px;color:var(--muted)}

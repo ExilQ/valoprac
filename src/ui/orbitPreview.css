@@ -6,3 +6,6 @@
 .orbit-preview-actions button, .scenario-map-views button { padding: .5rem .65rem; min-block-size: 2.75rem; color: var(--ink); background: var(--surface); border: 1px solid var(--control-border); border-radius: .35rem; font-size: .875rem; }
 .scenario-map-views button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
 .weapon-inspect .orbit-preview-viewport { block-size: clamp(15rem,30vw,22rem); }
+
+.orbit-preview-viewport canvas.dragging-marker{cursor:grabbing}
+.orbit-preview-actions button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
