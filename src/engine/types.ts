@@ -31,6 +31,7 @@ export interface Settings {
   renderScale: number; antialias: boolean; showPerformance: boolean; behavior: Behavior;
 }
 export interface ShotEvent {
+  targetPoseSource?:'rendered-frame'|'simulation';renderedFrameTime?:number;inputTime?:number;
   timestamp: number; weapon: WeaponId; damage?:number; ads?:boolean; scopeZoom?:number; recoveryUntil?:number;penetratedLayers?:number; accuracyState?:string; horizontalDirection?:number; shotIndex: number; magazineShot: number; firstShot: boolean;
   position: Vec3; velocity: Vec3; direction: Vec3; aim: {yaw:number;pitch:number};
   recoil: {pitch:number;yaw:number}; spread: {base:number;movement:number;bloom:number;air:number;total:number;x:number;y:number};

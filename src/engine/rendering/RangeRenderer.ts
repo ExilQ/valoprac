@@ -27,7 +27,7 @@ export class RangeRenderer {
   private size=new THREE.Vector3();private color=new THREE.Color();private position=new THREE.Vector3();
   private geometries=new Set<THREE.BufferGeometry>();private materials=new Set<THREE.Material>();private textures=new Set<THREE.Texture>();
   private architecture:THREE.Group|null=null;private defenderWeapons=new Map<WeaponId,THREE.InstancedMesh>();private heldMatrix=new THREE.Matrix4();private heldPose=new THREE.Object3D();
-  private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
+  private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetMatrices:THREE.Matrix4[][]=[];private renderedTargetPositions:THREE.Vector3[]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
   private tracers:THREE.Line[]=[];private tracerIndex=0;private weapon=new THREE.Group();private muzzle!:THREE.Mesh;
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
@@ -38,7 +38,7 @@ export class RangeRenderer {
   constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings){
     this.renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:false});
     this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(0x9aafb3);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
-    this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
+    simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
     const probe=new RoomEnvironment(),pmrem=new THREE.PMREMGenerator(this.renderer);this.environmentTarget=pmrem.fromScene(probe,0.04);this.scene.environment=this.environmentTarget.texture;this.scene.environmentIntensity=0.38;probe.dispose();pmrem.dispose();
     this.scene.fog=new THREE.Fog(0x9aafb3,38,110);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
     this.scene.add(new THREE.HemisphereLight(0xe2edf0,0x9a9184,1.85));
@@ -83,7 +83,7 @@ export class RangeRenderer {
     const materials=colors.map(()=>{const m=new THREE.MeshStandardMaterial({color:0xffffff,vertexColors:true,roughness:.77,metalness:.06});this.materials.add(m);return m;});
     const count=this.simulation.targets.length;
     for(let j=0;j<11;j++){const g=characterPartGeometry(j);this.geometries.add(g);const material=materials[j===0?0:j<3?1:j<7?2:3];const batch=new THREE.InstancedMesh(g,material,count);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;this.targetBatches.push(batch);this.scene.add(batch);}
-    for(let i=0;i<count;i++){const target=this.simulation.targets[i],meshes:THREE.Mesh[]=[];for(let j=0;j<target.parts.length;j++){const batch=this.targetBatches[j],m=new THREE.Mesh(batch.geometry,batch.material);m.matrixAutoUpdate=false;m.userData.batch=batch;m.userData.slot=i;meshes.push(m);}this.targetMeshes.push(meshes);
+    for(let i=0;i<count;i++){const target=this.simulation.targets[i],meshes:THREE.Mesh[]=[];for(let j=0;j<target.parts.length;j++){const batch=this.targetBatches[j],m=new THREE.Mesh(batch.geometry,batch.material);m.matrixAutoUpdate=false;m.userData.batch=batch;m.userData.slot=i;meshes.push(m);}this.targetMeshes.push(meshes);this.targetMatrices.push(meshes.map(mesh=>mesh.matrix));this.renderedTargetPositions.push(new THREE.Vector3());
       const g=new THREE.RingGeometry(.45,.46,32);this.geometries.add(g);const mat=new THREE.MeshBasicMaterial({color:0x9aa8a5,transparent:true,opacity:.2,side:THREE.DoubleSide,depthWrite:false});this.materials.add(mat);const ring=new THREE.Mesh(g,mat);ring.rotation.x=-Math.PI/2;this.scene.add(ring);this.targetRings.push(ring);
     }
   }
@@ -290,6 +290,7 @@ export class RangeRenderer {
         if(!t.active){mesh.matrix.elements[13]-=death*0.85;mesh.matrix.scale(this.size.setScalar(1-death*0.45));}
         if(!mesh.visible)mesh.matrix.scale(this.size.setScalar(0));const batch=mesh.userData.batch as THREE.InstancedMesh;batch.setMatrixAt(mesh.userData.slot,mesh.matrix);
       }
+      this.renderedTargetPositions[i].set(t.position.x+dx,t.position.y,t.position.z+dz);
       this.targetRings[i].position.set(t.position.x+dx,t.previous.y+(t.position.y-t.previous.y)*alpha+.016,t.position.z+dz);this.targetRings[i].visible=t.active&&t.enabled;const contact=this.targetRings[i].userData.contactShadow as THREE.Mesh;contact.position.copy(this.targetRings[i].position);contact.visible=t.active&&t.enabled;contact.scale.setScalar(t.scale);
     }
     this.updateDefenderWeapons(alpha);
@@ -299,6 +300,7 @@ export class RangeRenderer {
     for(const p of this.sparks){if(!p.mesh.visible)continue;if(s.time>=p.until){p.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;p.velocity.y-=5*dt;p.mesh.position.addScaledVector(p.velocity,dt);}
     if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
     if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
+    if(!preview)s.renderedTargets.capture(s.targets,this.targetMatrices,performance.now(),this.renderedTargetPositions);
   }
   get calls(){return this.renderer.info.render.calls;}
   dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}

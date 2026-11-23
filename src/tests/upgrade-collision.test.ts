@@ -1,12 +1,13 @@
 import { describe,it,expect } from 'vitest';
-import { Ray,Vector3 } from 'three';
+import { Ray,Vector3,Mesh,MeshBasicMaterial,Raycaster } from 'three';
+import {characterPartGeometry} from '../engine/rendering/CharacterGeometry';
 import { Target } from '../engine/targets/Target';
 import { SeededRandom } from '../engine/simulation/random';
 import { sanitizeSettings,DEFAULT_SETTINGS } from '../config/settings';
 import { Simulation } from '../engine/simulation/Simulation';
 import { emptyInput } from '../engine/types';
 describe('Scaled animated target geometry and bounded cover peeking',()=>{
- for(const size of [.5,1,2])it(`preserves actual animated head collisions at scale ${size}`,()=>{const t=new Target(0,'crouch',new SeededRandom(1));t.scale=size;t.spawn(0,-16,0);for(let i=0;i<90;i++)t.step(i/120,1/120);const head=t.headPosition(new Vector3()),origin=new Vector3(0,head.y,5),hit=new Vector3();const result=t.intersect(new Ray(origin,head.clone().sub(origin).normalize()),hit);expect(result?.zone).toBe('head');expect(hit.distanceTo(head)).toBeCloseTo(.17*size,4);});
+ for(const size of [.5,1,2])it(`preserves actual animated head collisions at scale ${size}`,()=>{const t=new Target(0,'crouch',new SeededRandom(1));t.scale=size;t.spawn(0,-16,0);for(let i=0;i<90;i++)t.step(i/120,1/120);const head=t.headPosition(new Vector3()),origin=new Vector3(0,head.y,5),hit=new Vector3();const result=t.intersect(new Ray(origin,head.clone().sub(origin).normalize()),hit);expect(result?.zone).toBe('head');const geometry=characterPartGeometry(0),material=new MeshBasicMaterial(),mesh=new Mesh(geometry,material);mesh.matrixAutoUpdate=false;mesh.matrixWorld.copy(t.head.node.matrixWorld).scale(t.head.size);try{const reference=new Raycaster(origin,head.clone().sub(origin).normalize()).intersectObject(mesh)[0];expect(reference).toBeDefined();expect(hit.distanceTo(reference.point)).toBeLessThan(1e-7);expect(result!.distance).toBeCloseTo(reference.distance,7);}finally{geometry.dispose();material.dispose();}});
  it('does not stack multiple free-practice targets at the same cover position',()=>{const s=new Simulation('free','rifleA',{...DEFAULT_SETTINGS,behavior:'peek',targetCount:12});expect(s.targets.filter(t=>t.enabled)).toHaveLength(1);s.configure({targetCount:8});expect(s.targets.filter(t=>t.enabled)).toHaveLength(1);});
  it('sanitizes duplicate and reserved bindings to a usable unique set',()=>{const s=sanitizeSettings({bindings:{forward:'KeyS',backward:'KeyS',reload:'Digit1'}});expect(new Set(Object.values(s.bindings)).size).toBe(Object.keys(s.bindings).length);expect(s.bindings.reload).not.toBe('Digit1');});
  it('keeps settings changes out of shared defaults and the stored preferences object',()=>{const original={...DEFAULT_SETTINGS,bindings:{...DEFAULT_SETTINGS.bindings}};const s=new Simulation('free','rifleA',original);s.configure({targetSize:2});s.settings.bindings.forward='ArrowUp';expect(original.targetSize).toBe(1);expect(DEFAULT_SETTINGS.targetSize).toBe(1);expect(original.bindings.forward).toBe('KeyW');});

@@ -53,13 +53,22 @@ export class Weapon {
   calculateSpread(m:Movement,ads:boolean,landingPenalty:boolean){
     const p=this.profile,s=this.spread;
     if(p.id==='operator'){const scoped=ads&&this.scopeLevel>0&&this.lastTime>=this.scopeReadyAt&&this.scopeAmount>.98;const threshold=.15*5.13*.72;const move=Math.max(0,(m.speed-threshold)/(5.13-threshold));s.base=scoped?.02:p.firstSpread;s.movement=move*(scoped?9:5);s.bloom=this.bloom;s.air=m.grounded?0:12;s.landing=m.grounded&&landingPenalty?7:0;s.total=(s.base+s.movement+s.bloom+s.air+s.landing)*(1-.15*m.crouch);const theta=this.rng.next()*Math.PI*2,r=Math.sqrt(this.rng.next())*s.total;s.x=Math.cos(theta)*r;s.y=Math.sin(theta)*r;return s;}
-const crouch=1+(p.crouchSpread-1)*m.crouch,aim=ads&&p.adsZoom>1?p.adsSpread:1;
+    const crouch=1+(p.crouchSpread-1)*m.crouch,aim=ads&&p.adsZoom>1?p.adsSpread:1;
     s.base=p.firstSpread*crouch*aim;
     const threshold=m.profile.accuracyVelocityThreshold,walk=m.profile.maxSpeed*m.profile.walkModifier;
     // Configured walking/running values are total no-bloom hip-fire half-cone radii.
     const walkCone=p.walkingSpread??p.movementSpread*.5;
-    const total=m.speed<=threshold?p.firstSpread:m.speed<=walk?p.firstSpread+(walkCone-p.firstSpread)*(m.speed-threshold)/(walk-threshold):walkCone+(p.movementSpread-walkCone)*Math.min(1.5,(m.speed-walk)/(m.profile.maxSpeed-walk));
-    s.movement=Math.max(0,total-p.firstSpread)*crouch*aim;s.bloom=this.bloom*crouch*aim;s.air=m.grounded?0:p.airSpread;s.landing=m.grounded&&landingPenalty?0.35:0;
+    const standingCone=(speed:number)=>speed<=threshold?p.firstSpread:speed<=walk?p.firstSpread+(walkCone-p.firstSpread)*(speed-threshold)/(walk-threshold):walkCone+(p.movementSpread-walkCone)*Math.min(1.5,(speed-walk)/(m.profile.maxSpeed-walk));
+    const total=standingCone(m.speed);
+    let poseCone=total*crouch;
+    if(p.crouchMovingSpread!==undefined){
+      // Crouch motion is its own calibrated curve. A stationary crouch benefit
+      // cannot author this endpoint by scaling the much larger walking cone.
+      const crouchBase=p.firstSpread*p.crouchSpread,crouchSpeed=Math.max(threshold+1e-6,m.profile.maxSpeed*m.profile.crouchModifier),crouchEnd=Math.max(crouchBase,p.crouchMovingSpread);
+      const crouchCone=m.speed<=threshold?crouchBase:m.speed<=crouchSpeed?crouchBase+(crouchEnd-crouchBase)*(m.speed-threshold)/(crouchSpeed-threshold):crouchEnd+Math.max(0,total-standingCone(crouchSpeed))*p.crouchSpread;
+      const amount=Math.min(1,Math.max(0,m.crouch));poseCone=total+(crouchCone-total)*amount;
+    }
+    s.movement=Math.max(0,poseCone*aim-s.base);s.bloom=this.bloom*crouch*aim;s.air=m.grounded?0:p.airSpread;s.landing=m.grounded&&landingPenalty?0.35:0;
     s.total=s.base+s.movement+s.bloom+s.air+s.landing;
     const theta=this.rng.next()*Math.PI*2,r=Math.sqrt(this.rng.next())*s.total;
     s.x=Math.cos(theta)*r;s.y=Math.sin(theta)*r;return s;

@@ -1,12 +1,18 @@
 import { describe,it,expect } from 'vitest';
-import { Vector3,Ray } from 'three';
+import { Vector3,Ray,Mesh,MeshBasicMaterial,Raycaster } from 'three';
+import {characterPartGeometry} from '../engine/rendering/CharacterGeometry';
 import { Target } from '../engine/targets/Target';
 import { SeededRandom } from '../engine/simulation/random';
 import { castShot,type HitResult } from '../engine/collision/shoot';
 const makeTarget=(x=0,z=-15)=>{const t=new Target(0,'stationary',new SeededRandom(1));t.spawn(x,z,0);return t;};
 const cast=(ray:Ray,targets:Target[])=>castShot(ray,targets,{zone:'miss',target:null,point:new Vector3(),distance:150} satisfies HitResult);
 describe('Exact 3D head, torso, limb and environment hit detection',()=>{
-  it('classifies the head sphere before the torso below it',()=>{const t=makeTarget();const hit=cast(new Ray(new Vector3(0,1.68,0),new Vector3(0,0,-1)),[t]);expect(hit.zone).toBe('head');expect(hit.target).toBe(t);expect(hit.point.z).toBeCloseTo(-14.83,6);});
+  it('classifies the visible head surface before the torso below it',()=>{
+    const t=makeTarget(),ray=new Ray(new Vector3(0,1.68,0),new Vector3(0,0,-1)),hit=cast(ray,[t]);
+    const geometry=characterPartGeometry(0),material=new MeshBasicMaterial(),visibleHead=new Mesh(geometry,material);
+    visibleHead.matrixAutoUpdate=false;visibleHead.matrixWorld.copy(t.head.node.matrixWorld).scale(t.head.size);
+    try{const surface=new Raycaster(ray.origin,ray.direction).intersectObject(visibleHead)[0];expect(surface).toBeDefined();expect(hit.zone).toBe('head');expect(hit.target).toBe(t);expect(hit.point.distanceTo(surface.point)).toBeLessThan(1e-6);}finally{geometry.dispose();material.dispose();}
+  });
   it('classifies torso and leg shots without labeling them as heads',()=>{const t=makeTarget();expect(cast(new Ray(new Vector3(0,1.1,0),new Vector3(0,0,-1)),[t]).zone).toBe('torso');expect(cast(new Ray(new Vector3(0.13,0.2,0),new Vector3(0,0,-1)),[t]).zone).toBe('leg');});
   it('classifies an arm independently',()=>{const t=makeTarget();expect(cast(new Ray(new Vector3(0.34,1.16,0),new Vector3(0,0,-1)),[t]).zone).toBe('arm');});
   it('does not count the empty corners of a head bounding square',()=>{const t=makeTarget();expect(cast(new Ray(new Vector3(0.16,1.84,0),new Vector3(0,0,-1)),[t]).zone).not.toBe('head');});

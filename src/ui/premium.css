@@ -28,3 +28,11 @@
  .game-hud .game-bottom-center,.game-hud kbd,.game-hud .performance-hud{font-size:11px}.game-hud .drill-hud{font-size:12px}
 }
 @media(min-width:1001px){.game-hud .input-diagnostics{max-height:none;overflow:visible;font-size:10px}.game-hud .input-diagnostics small{font-size:10px}.game-hud .braking-times b,.game-hud .speed>span,.game-hud .speed>b,.game-hud .footstep-gauge>span{font-size:11px}}
+/* Korean headings wrap between words; emergency breaks are reserved for links. */
+h1,h2,h3,h4{word-break:keep-all;overflow-wrap:normal;text-wrap:pretty}
+.field-note a,.global-notice a,.legal-notice a{overflow-wrap:anywhere}
+.tactical-map-selection{min-width:0}.primary-map-selection{margin:22px 0 26px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tactical-map-selection>header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px}.tactical-map-selection h2{font-size:15px;margin:0}.tactical-map-selection header p{font-size:12px;line-height:1.6;color:var(--muted);margin:0;word-break:keep-all}
+.primary-map-selection .tactical-map-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.tactical-map-selection .tactical-map-grid button{min-width:0;font-size:12px;line-height:1.6;word-break:keep-all}.tactical-map-selection .tactical-map-grid small{line-height:1.6}.advanced-map-selection{margin:20px 0}
+@media(max-width:1000px){.primary-map-selection .tactical-map-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.tactical-map-selection>header{display:block}.tactical-map-selection header p{margin-top:8px}.primary-map-selection .tactical-map-grid{grid-template-columns:1fr}}

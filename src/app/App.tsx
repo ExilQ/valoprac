@@ -3,6 +3,7 @@ import {PatchNotes} from '../ui/PatchNotes';
 import { lazy, Suspense, useEffect } from 'react';
 import { Crosshair, SlidersHorizontal, History as HistoryIcon, ArrowUpRight, Infinity, Timer, Activity, Layers3, MoveHorizontal, ScanLine, Target } from 'lucide-react';
 import { useNavigation } from './useNavigation';
+import {selectedTraining,trainingChoice,type TrainingNavigation} from './trainingNavigation';
 import { useApp } from './store';
 import { Brand } from '../components/Brand';
 import { MainMenu } from '../ui/MainMenu';
@@ -16,18 +17,19 @@ const AimDashboard=lazy(()=>import('../aim/ui/AimDashboard').then(m=>({default:m
 const StreamingStage=lazy(()=>import('../streaming/StreamingStage').then(m=>({default:m.StreamingStage})));
 export function App(){
   useNavigation();useInterfaceAudio();
-  const practiceMap=useApp(s=>s.settings.practiceMap);
+  const settings=useApp(s=>s.settings);
   const screen=useApp(s=>s.screen),tab=useApp(s=>s.activeTab),mode=useApp(s=>s.mode),setMode=useApp(s=>s.setMode),setTab=useApp(s=>s.setTab),refresh=useApp(s=>s.refreshHistory),notice=useApp(s=>s.notice);
   useEffect(()=>{void refresh();},[refresh]);
   if(screen==='training')return <GameStage/>;
-  const selectTraining=(next:typeof mode)=>{setMode(next);setTab('training');};
+  const activeTraining=tab==='training'&&screen==='menu'?selectedTraining(mode,settings):null;
+  const selectTraining=(next:TrainingNavigation)=>{const choice=trainingChoice(next);useApp.getState().updateSettings(choice.settings);setMode(choice.mode);setTab('training');};
   return <div className="app-shell tactical-shell"><aside className="sidebar"><button className="brand-button" aria-label="훈련장 홈" onClick={()=>selectTraining('free')}><Brand/></button><nav aria-label="주 메뉴"><span className="nav-section-label">개인 훈련</span>
-    <button className={tab==='training'&&mode==='free'&&practiceMap==='range'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'none'});selectTraining('free');}}><Infinity size={19}/> 자유 훈련장<span>01</span></button>
-    <button className={tab==='training'&&['precision','braking','tracking'].includes(mode)&&screen==='menu'?'active':''} onClick={()=>selectTraining('precision')}><Timer size={19}/> 시간제 훈련</button>
-    <button className={tab==='training'&&mode==='spray'&&screen==='menu'?'active':''} onClick={()=>selectTraining('spray')}><Activity size={19}/> 반동 연습</button>
-    <button className={tab==='training'&&mode==='free'&&(practiceMap==='tactical'||practiceMap==='complex')&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'complex',peekScenario:'free',targetCount:11,eliminationRule:'damage'});selectTraining('free');}}><ScanLine size={18}/> 각체크·피킹</button>
-    <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'tapAD',analysisWall:false});selectTraining('braking');}}><MoveHorizontal size={18}/> 톡브레이킹 훈련</button>
-    <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'mid',drill:'vertical',analysisWall:false});selectTraining('free');}}><Layers3 size={18}/> 수직 각체크 훈련</button>
+    <button className={activeTraining==='free'?'active':''} onClick={()=>selectTraining('free')}><Infinity size={19}/> 자유 훈련장<span>01</span></button>
+    <button className={activeTraining==='timed'?'active':''} onClick={()=>selectTraining('timed')}><Timer size={19}/> 시간제 훈련</button>
+    <button className={activeTraining==='spray'?'active':''} onClick={()=>selectTraining('spray')}><Activity size={19}/> 반동 연습</button>
+    <button className={activeTraining==='tactical'?'active':''} onClick={()=>selectTraining('tactical')}><ScanLine size={18}/> 각체크·피킹</button>
+    <button className={activeTraining==='braking'?'active':''} onClick={()=>selectTraining('braking')}><MoveHorizontal size={18}/> 톡브레이킹 훈련</button>
+    <button className={activeTraining==='vertical'?'active':''} onClick={()=>selectTraining('vertical')}><Layers3 size={18}/> 수직 각체크 훈련</button>
     <button className={tab==='aim'?'active':''} onClick={()=>setTab('aim')}><Target size={18}/> 에임 분석 · 감도 탐색</button>
     <span className="nav-section-label nav-separator">훈련 환경</span>
     <button className={tab==='weapons'?'active':''} onClick={()=>setTab('weapons')}><Crosshair size={19}/> 무기 선택</button>

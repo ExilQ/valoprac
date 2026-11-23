@@ -1,6 +1,7 @@
 import type { Settings, Quality } from '../engine/types';
+export const CURRENT_SETTINGS_REVISION=2;
 export const DEFAULT_SETTINGS: Settings = {
-  gameplayRevision:1,aimTelemetry:true,peekingTimed:false,operatorScopeMode:'toggle',operatorAutoRescope:false,operatorZoomBinding:'KeyV',peekScenario:'free',defenderWeapon:'mixed',defenderReaction:.35,defenderAccuracy:.75,defenderReposition:.45,randomDefenders:true,
+  gameplayRevision:CURRENT_SETTINGS_REVISION,aimTelemetry:true,peekingTimed:false,operatorScopeMode:'toggle',operatorAutoRescope:false,operatorZoomBinding:'KeyV',peekScenario:'free',defenderWeapon:'mixed',defenderReaction:.35,defenderAccuracy:.75,defenderReposition:.45,randomDefenders:true,
   practiceMap:'range',drill:'none',crouchMode:'hold',inputDiagnostics:false,adsDotSize:2,botDifficulty:'normal',exposureEnabled:true,exposureLimit:2,exposureMode:'continuous',footstepHud:true,soundMinimap:true,footstepVolume:.7,
   stepPerMeter:.625,stepWalkingGain:0,stepWalkingDecay:.02,stepStationaryDecay:3.5,stepStationaryVelocity:.035,stepStationaryDelay:.12,stepAudibleVelocity:2.7,stepThreshold:1,stepGraceDistance:.2,stepHearingRadius:20,
 
@@ -14,9 +15,13 @@ export const DEFAULT_SETTINGS: Settings = {
   dynamicCrosshair:true,brakingHud:true,idealCompensation:false,volume:0.35,
   renderScale:1,antialias:true,showPerformance:true,behavior:'random'
 };
+const storedRevision=(o:Record<string,unknown>)=>typeof o.gameplayRevision==='number'&&Number.isSafeInteger(o.gameplayRevision)&&o.gameplayRevision>=0?o.gameplayRevision:0;
 export function sanitizeSettings(raw: unknown): Settings {
   const s={...DEFAULT_SETTINGS,bindings:{...DEFAULT_SETTINGS.bindings}}; if(!raw || typeof raw!=='object')return s;
-  const o=raw as Record<string,unknown>;
+  const o=raw as Record<string,unknown>,revision=storedRevision(o);
+  // A future client may already have written a newer revision. Never turn that
+  // profile back into an old migration candidate when saving supported fields.
+  s.gameplayRevision=Math.max(CURRENT_SETTINGS_REVISION,revision);
   if(typeof o.frameLimit==='number'&&[0,60,120,144,165,240].includes(o.frameLimit))s.frameLimit=o.frameLimit;
   if(typeof o.hudScale==='number'&&Number.isFinite(o.hudScale))s.hudScale=Math.max(0.75,Math.min(1.25,o.hudScale));
   if(typeof o.interfaceVolume==='number'&&Number.isFinite(o.interfaceVolume))s.interfaceVolume=Math.max(0,Math.min(1,o.interfaceVolume));
@@ -44,16 +49,44 @@ export function sanitizeSettings(raw: unknown): Settings {
     for(const k of Object.keys(proposed) as (keyof Settings['bindings'])[]){const v=b[k];if(typeof v==='string'&&/^(Key[A-Z]|Digit[05-9]|Space|ShiftLeft|ShiftRight|ControlLeft|ControlRight|AltLeft|AltRight|ArrowUp|ArrowDown|ArrowLeft|ArrowRight)$/.test(v))proposed[k]=v;}
     if(new Set(Object.values(proposed)).size===Object.keys(proposed).length)s.bindings=proposed;
   }
+  // 3.x stored no revision and used CtrlLeft + Hold as its defaults. Revision 1
+  // unfortunately stamped legacy profiles without updating those controls.
+  // Only its exact legacy pair is migrated; C/custom crouch + Hold and
+  // CtrlLeft + Toggle may represent deliberate revision-1 choices and stay.
+  // The old data cannot distinguish an intentional CtrlLeft/Hold pair from a
+  // carried-over default. Revision 2 is the one-time boundary: every explicit
+  // choice made after it (including CtrlLeft and Hold) is preserved unchanged.
+  const legacyBindings=o.bindings&&typeof o.bindings==='object'?o.bindings as Record<string,unknown>:null;
+  const migrateControls=revision<1||(revision===1&&legacyBindings?.crouch==='ControlLeft'&&o.adsMode==='hold');
+  if(migrateControls){
+    if(legacyBindings?.crouch==='ControlLeft'&&s.bindings.crouch==='ControlLeft'){
+      const occupied=new Set(Object.entries(s.bindings).filter(([action])=>action!=='crouch').map(([,key])=>key));
+      occupied.add(typeof o.operatorZoomBinding==='string'&&/^Key[A-Z]$/.test(o.operatorZoomBinding)?o.operatorZoomBinding:'KeyV');
+      // Respect an existing custom action on C rather than resetting all keys.
+      s.bindings.crouch=['KeyC','KeyX','KeyZ',...Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ',c=>`Key${c}`)].find(key=>!occupied.has(key))!;
+    }
+    if(o.adsMode==='hold')s.adsMode='toggle';
+  }
   // Resolve the optional sniper key after user movement/reload bindings. The
   // fallback must also remain available when an older profile already uses V.
   const used=new Set(Object.values(s.bindings));
   const desired=typeof o.operatorZoomBinding==='string'&&/^Key[A-Z]$/.test(o.operatorZoomBinding)?o.operatorZoomBinding:'KeyV';
   s.operatorZoomBinding=!used.has(desired)?desired:['KeyV','KeyN','KeyM',...Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ',c=>`Key${c}`)].find(key=>!used.has(key))!;
-  if(o.gameplayRevision!==1&&o.stepStationaryDecay===1.4)s.stepStationaryDecay=3.5;
+  if(revision<1&&o.stepStationaryDecay===1.4)s.stepStationaryDecay=3.5;
   s.targetCount=Math.round(s.targetCount);s.seed=Math.round(s.seed);s.duration=Math.round(s.duration);return s;
 }
 export const SETTINGS_KEY='tactical-aim-settings-v1';
-export function loadSettings(storage?:Pick<Storage,'getItem'>):Settings {try{return sanitizeSettings(JSON.parse((storage??localStorage).getItem(SETTINGS_KEY)??'null'));}catch{return {...DEFAULT_SETTINGS};}}
+export function loadSettings(storage?:Pick<Storage,'getItem'>&Partial<Pick<Storage,'setItem'>>):Settings {
+  try{
+    const target=storage??localStorage,raw=JSON.parse(target.getItem(SETTINGS_KEY)??'null'),settings=sanitizeSettings(raw);
+    if(raw&&typeof raw==='object'&&!Array.isArray(raw)&&storedRevision(raw)<CURRENT_SETTINGS_REVISION&&typeof target.setItem==='function'){
+      // Persist the boundary once. A blocked/quota-limited store must not discard
+      // the successfully migrated sensitivity, bindings or other preferences.
+      try{target.setItem(SETTINGS_KEY,JSON.stringify(settings));}catch{/* Use the migrated in-memory profile. */}
+    }
+    return settings;
+  }catch{return sanitizeSettings(null);}
+}
 export function persistSettings(settings:Settings,storage?:Pick<Storage,'setItem'>):boolean{try{(storage??localStorage).setItem(SETTINGS_KEY,JSON.stringify(sanitizeSettings(settings)));return true;}catch{return false;}}
 
 export const GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={

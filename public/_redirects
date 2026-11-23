@@ -1,1 +1,25 @@
-/* /index.html 200
+# Concrete client entries only. Unknown URLs retain a genuine HTTP 404.
+/training /training/index.html 200
+/training/ /training/index.html 200
+/settings /settings/index.html 200
+/settings/ /settings/index.html 200
+/statistics /statistics/index.html 200
+/statistics/ /statistics/index.html 200
+/results /results/index.html 200
+/results/ /results/index.html 200
+/weapons /weapons/index.html 200
+/weapons/ /weapons/index.html 200
+/unreal /unreal/index.html 200
+/unreal/ /unreal/index.html 200
+/aim /aim/index.html 200
+/aim/ /aim/index.html 200
+/guide /guide.html 200
+/guide/ /guide.html 200
+/footsteps /footsteps.html 200
+/footsteps/ /footsteps.html 200
+/tactical-guide /tactical-guide.html 200
+/tactical-guide/ /tactical-guide.html 200
+/aim-methodology /aim-methodology.html 200
+/aim-methodology/ /aim-methodology.html 200
+/migration /migration.html 200
+/migration/ /migration.html 200

@@ -1,11 +1,12 @@
 import {approachVelocity,BOT_DIFFICULTY} from './locomotion';
+import {intersectCharacterPart} from './CharacterShape';
 import {MOVEMENT} from '../../config/movement';
 import { Box3, Matrix4, Object3D, Ray, Sphere, Vector3 } from 'three';
 import type { Behavior, HitZone } from '../types';
 import { SeededRandom } from '../simulation/random';
 export interface HitPart {zone:HitZone;node:Object3D;shape:'sphere'|'box';size:Vector3;inverse:Matrix4;box:Box3;sphere:Sphere}
 const MIXED_PATTERNS=['short','long','reactive','stopGo','wide','crouch'] as const;
-const localRay=new Ray(),localHit=new Vector3(),worldHit=new Vector3();
+const localRay=new Ray(),localHit=new Vector3(),worldHit=new Vector3(),model=new Matrix4(),modelInverse=new Matrix4();
 export class Target {
   root=new Object3D();parts:HitPart[]=[];head!:HitPart;previous=new Vector3();anchor=new Vector3();
   upper=new Object3D();leftHip=new Object3D();rightHip=new Object3D();leftKnee=new Object3D();rightKnee=new Object3D();
@@ -64,12 +65,13 @@ export class Target {
     this.root.updateMatrixWorld(true);for(const p of this.parts)p.inverse.copy(p.node.matrixWorld).invert();
   }
   headPosition(out:Vector3){return out.setFromMatrixPosition(this.head.node.matrixWorld);}
-  intersect(ray:Ray,out:Vector3):{zone:HitZone;distance:number}|null{
+  intersect(ray:Ray,out:Vector3,matrices?:readonly Matrix4[]):{zone:HitZone;distance:number}|null{
     if(!this.active)return null;let distance=Infinity;let zone:HitZone='miss';
-    for(const p of this.parts){
-      localRay.copy(ray).applyMatrix4(p.inverse);
-      const hit=p.shape==='sphere'?localRay.intersectSphere(p.sphere,localHit):localRay.intersectBox(p.box,localHit);
-      if(hit){worldHit.copy(localHit).applyMatrix4(p.node.matrixWorld);const d=ray.origin.distanceTo(worldHit);if(d<distance-1e-6||(Math.abs(d-distance)<1e-6&&p.zone==='head')){distance=d;zone=p.zone;out.copy(worldHit);}}
+    for(let i=0;i<this.parts.length;i++){
+      const p=this.parts[i];if(matrices){if(!matrices[i])continue;model.copy(matrices[i]);}else model.copy(p.node.matrixWorld).scale(p.size);
+      modelInverse.copy(model).invert();localRay.copy(ray).applyMatrix4(modelInverse);
+      const hit=intersectCharacterPart(localRay,i,localHit);
+      if(hit){worldHit.copy(localHit).applyMatrix4(model);const d=ray.origin.distanceTo(worldHit);if(d<distance-1e-6||(Math.abs(d-distance)<1e-6&&hit.zone==='head')){distance=d;zone=hit.zone;out.copy(worldHit);}}
     }this.hitResult.zone=zone;this.hitResult.distance=distance;return Number.isFinite(distance)?this.hitResult:null;
   }
 }

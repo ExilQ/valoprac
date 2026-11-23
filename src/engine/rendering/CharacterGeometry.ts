@@ -1,9 +1,12 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import type {HitZone} from '../types';
 
-/** Original VALOPRAC uniform, authored in normalized hit-part space. Each part is
- * attached to the authoritative articulated rig; collision geometry stays separate.
+/** Original VALOPRAC uniform in normalized articulated-part space. Rendering and
+ * shooting use this canonical surface; no separate generous sphere/box hit shape.
  * Vertex-colour layering lets all eleven articulated parts share four materials. */
+export interface CharacterHitRegion {start:number;count:number;zone:HitZone;}
+const SOURCES:THREE.BufferGeometry[]=[];
 const COLORS={cloth:0x596979,vest:0x334653,trim:0x94a7ac,boot:0x293941,skin:0xeab69b,mask:0x566b76,visor:0x273d49,head:0xda8c72};
 function tint(g:THREE.BufferGeometry,color:number){const c=new THREE.Color(color),a=new Float32Array(g.getAttribute('position').count*3);for(let i=0;i<a.length;i+=3){a[i]=c.r;a[i+1]=c.g;a[i+2]=c.b;}g.setAttribute('color',new THREE.BufferAttribute(a,3));return g;}
 function torso(top:number,bottom:number,depth:number){
@@ -14,16 +17,17 @@ function torso(top:number,bottom:number,depth:number){
   for(let i=1;i<7;i++)indices.push(0,i+1,i,8,8+i,8+i+1);
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));g.setIndex(indices);g.computeVertexNormals();return g;
 }
-export function characterPartGeometry(index:number){
-  const parts:THREE.BufferGeometry[]=[];
-  const add=(g:THREE.BufferGeometry,c:number,x=0,y=0,z=0)=>{g.translate(x,y,z);const p=g.toNonIndexed();p.deleteAttribute('uv');parts.push(tint(p,c));g.dispose();};
+function buildCharacterPartGeometry(index:number){
+  const parts:THREE.BufferGeometry[]=[],regions:CharacterHitRegion[]=[];let offset=0;
+  const defaultZone:HitZone=index===0?'head':index<3?'torso':index<7?'arm':'leg';
+  const add=(g:THREE.BufferGeometry,c:number,x=0,y=0,z=0,zone:HitZone=defaultZone)=>{g.translate(x,y,z);const p=g.toNonIndexed();p.deleteAttribute('uv');const count=p.getAttribute('position').count;regions.push({start:offset,count,zone});offset+=count;parts.push(tint(p,c));g.dispose();};
   const box=(w:number,h:number,d:number,c:number,x=0,y=0,z=0)=>add(new THREE.BoxGeometry(w,h,d),c,x,y,z);
   if(index===0){
     const g=new THREE.SphereGeometry(.5,16,12);g.scale(.83,1,.9);add(g,COLORS.head);
     // Slim brow and face covering, rather than a spherical target ball.
     const mask=torso(.73,.6,.47);mask.scale(1,.42,1);add(mask,COLORS.mask,0,-.18,.22);
     box(.56,.14,.065,COLORS.visor,0,.08,.405);
-    const neck=new THREE.CylinderGeometry(.22,.25,.25,10);add(neck,COLORS.skin,0,-.51,0);
+    const neck=new THREE.CylinderGeometry(.22,.25,.25,10);add(neck,COLORS.skin,0,-.51,0,'torso');
   }else if(index===1){
     add(torso(.98,.73,.9),COLORS.cloth);
     const vest=torso(.78,.65,.16);vest.scale(1,.74,1);add(vest,COLORS.vest,0,-.015,.46);
@@ -51,11 +55,17 @@ export function characterPartGeometry(index:number){
     box(.83,.06,1.3,COLORS.trim,0,-.485,.14);
   }
   const merged=mergeGeometries(parts)!;for(const g of parts)g.dispose();
-  // The collision rig retains its generous historical arm envelope. Bring only
-  // the rendered upper/lower arms inward by the same 5.1 cm so sleeves overlap
-  // the vest shoulder naturally and the elbows/wrists remain in one line.
-  // Normalize by each authoritative part width; no Target transforms change.
+  // The authored sleeve placement is part of the canonical geometry, so the
+  // same inward offset applies to rendered triangles and collision triangles.
   if(index===3||index===5)merged.translate(index===3?.3:-.3,0,0);
   if(index===4||index===6)merged.translate(index===4?.34:-.34,0,0);
-  merged.computeBoundingSphere();return merged;
+  merged.userData.hitRegions=regions;merged.computeBoundingBox();merged.computeBoundingSphere();return merged;
 }
+
+/** Immutable CPU source. Callers must not mutate or dispose this canonical mesh. */
+export function characterPartSourceGeometry(index:number){
+ if(!Number.isInteger(index)||index<0||index>=11)throw new RangeError('Invalid character part');
+ return SOURCES[index]??(SOURCES[index]=buildCharacterPartGeometry(index));
+}
+/** A renderer-owned clone, exactly matching the shared shooting surface. */
+export function characterPartGeometry(index:number){return characterPartSourceGeometry(index).clone();}

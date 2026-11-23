@@ -1,0 +1,199 @@
+{
+  "schema": 1,
+  "release": "6.0.1",
+  "patchLabel": "06.01",
+  "generatedAt": "2026-10-27T00:57:39.645Z",
+  "tests": {
+    "application": 531,
+    "broker": 20,
+    "hosting": 12,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "surfaces": {
+    "benchmark": "target-visual-alignment",
+    "method": "Independent Three.Mesh.raycast versus shared-surface shooting BVH",
+    "sampledRays": 12480,
+    "visibleSurfaceHits": 4388,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "poses": [
+      "standing",
+      "strafe",
+      "crouch",
+      "rotation90",
+      "rotation45-scale0.5",
+      "rotation-45-scale2"
+    ]
+  },
+  "surfaceCPU": {
+    "benchmark": "target-surface-cpu",
+    "casts": 20000,
+    "triangles": 1568,
+    "bvhNodes": 469,
+    "elapsedMilliseconds": 564.2416269999999,
+    "meanMicroseconds": 28.212081349999995,
+    "gpuTested": false,
+    "inputLatencyMeasured": false
+  },
+  "renderedFrames": [
+    {
+      "benchmark": "rendered-target-alignment",
+      "renderHz": 30,
+      "physicsHz": 120,
+      "speed": 5.4,
+      "phaseCases": 5,
+      "oldLeadMetersMin": 0.04544999999999977,
+      "oldLeadMetersMax": 0.08999999999999986,
+      "oldLeadMetersMean": 0.06758999999999986,
+      "visibleEdgeMisses": 0,
+      "blankSpaceHits": 0,
+      "reference": "Independent Three.Mesh.raycast; submitted CPU transforms, not physical scanout"
+    },
+    {
+      "benchmark": "rendered-target-alignment",
+      "renderHz": 60,
+      "physicsHz": 120,
+      "speed": 5.4,
+      "phaseCases": 5,
+      "oldLeadMetersMin": 0.04544999999999999,
+      "oldLeadMetersMax": 0.08999999999999986,
+      "oldLeadMetersMean": 0.0675899999999999,
+      "visibleEdgeMisses": 0,
+      "blankSpaceHits": 0,
+      "reference": "Independent Three.Mesh.raycast; submitted CPU transforms, not physical scanout"
+    },
+    {
+      "benchmark": "rendered-target-alignment",
+      "renderHz": 144,
+      "physicsHz": 120,
+      "speed": 5.4,
+      "phaseCases": 5,
+      "oldLeadMetersMin": 0.04875000000000007,
+      "oldLeadMetersMax": 0.08294999999999986,
+      "oldLeadMetersMean": 0.06908999999999992,
+      "visibleEdgeMisses": 0,
+      "blankSpaceHits": 0,
+      "reference": "Independent Three.Mesh.raycast; submitted CPU transforms, not physical scanout"
+    },
+    {
+      "benchmark": "rendered-target-alignment",
+      "renderHz": 240,
+      "physicsHz": 120,
+      "speed": 5.4,
+      "phaseCases": 5,
+      "oldLeadMetersMin": 0.04544999999999999,
+      "oldLeadMetersMax": 0.08999999999999986,
+      "oldLeadMetersMean": 0.0675899999999999,
+      "visibleEdgeMisses": 0,
+      "blankSpaceHits": 0,
+      "reference": "Independent Three.Mesh.raycast; submitted CPU transforms, not physical scanout"
+    }
+  ],
+  "alignmentBaseline": {
+    "schema": 1,
+    "method": "Orthographic CPU front probe. Visible reference: Three.Mesh.raycast on renderer clones. Legacy:06.00 Target.parts analytic sphere/box. After:canonical mesh/BVH. Sample centers, no GPU/AA or physical input claim.",
+    "pose": "Standing stationary, yaw0, scale1, targetorigin0; viewfrom+z",
+    "denominators": {
+      "ghost": "hit pixels in empty space / all collision-hit pixels",
+      "missing": "visible pixels without collision / all visible pixels",
+      "headExtra": "(legacy head classification area - visible head classification area) / visible head classification area",
+      "headEmptyArea": "legacy headshot pixels with no visible human body × sample-cell area"
+    },
+    "body": {
+      "bounds": {
+        "x0": -0.5,
+        "x1": 0.5,
+        "y0": 0,
+        "y1": 1.95,
+        "step": 0.005,
+        "width": 200,
+        "height": 390
+      },
+      "metrics": {
+        "samples": 78000,
+        "visible": 29738,
+        "legacyHit": 34996,
+        "afterHit": 29738,
+        "legacyGhost": 6824,
+        "legacyVisibleMiss": 1566,
+        "afterGhost": 0,
+        "afterVisibleMiss": 0,
+        "visibleHead": 2908,
+        "legacyHead": 3640,
+        "afterHead": 2908,
+        "legacyHeadOutsideVisibleHead": 732,
+        "legacyHeadInEmptySpace": 622,
+        "legacyVisibleHeadWithoutHeadshot": 0,
+        "afterHeadOutsideVisibleHead": 0,
+        "afterVisibleHeadWithoutHeadshot": 0,
+        "cellAreaCm2": 0.25,
+        "legacyGhostPercentOfHit": 19.499371356726485,
+        "legacyMissingPercentOfVisible": 5.265989642881162,
+        "afterGhostPercentOfHit": 0,
+        "afterMissingPercentOfVisible": 0,
+        "legacyHeadAreaCm2": 910,
+        "visibleHeadAreaCm2": 727,
+        "legacyHeadExtraPercentOfVisibleHead": 25.17193947730399,
+        "legacyHeadInEmptySpaceCm2": 155.5,
+        "afterHeadInEmptySpaceCm2": 0
+      }
+    },
+    "head": {
+      "bounds": {
+        "x0": -0.19,
+        "x1": 0.19,
+        "y0": 1.44,
+        "y1": 1.9,
+        "step": 0.0025,
+        "width": 152,
+        "height": 184
+      },
+      "metrics": {
+        "samples": 27968,
+        "visible": 13306,
+        "legacyHit": 14536,
+        "afterHit": 13306,
+        "legacyGhost": 2490,
+        "legacyVisibleMiss": 1260,
+        "afterGhost": 0,
+        "afterVisibleMiss": 0,
+        "visibleHead": 11618,
+        "legacyHead": 14536,
+        "afterHead": 11618,
+        "legacyHeadOutsideVisibleHead": 2918,
+        "legacyHeadInEmptySpace": 2490,
+        "legacyVisibleHeadWithoutHeadshot": 0,
+        "afterHeadOutsideVisibleHead": 0,
+        "afterVisibleHeadWithoutHeadshot": 0,
+        "cellAreaCm2": 0.0625,
+        "legacyGhostPercentOfHit": 17.129884424876167,
+        "legacyMissingPercentOfVisible": 9.46941229520517,
+        "afterGhostPercentOfHit": 0,
+        "afterMissingPercentOfVisible": 0,
+        "legacyHeadAreaCm2": 908.5,
+        "visibleHeadAreaCm2": 726.125,
+        "legacyHeadExtraPercentOfVisibleHead": 25.116199001549322,
+        "legacyHeadInEmptySpaceCm2": 155.625,
+        "afterHeadInEmptySpaceCm2": 0
+      }
+    }
+  },
+  "comparison": "/hit-alignment.svg",
+  "crouchMovingSpreadDegrees": {
+    "vandal": 0.8,
+    "phantom": 0.8,
+    "sheriff": 0.5
+  },
+  "limits": {
+    "physicalScanoutVerified": false,
+    "hardwareFPSVerified": false,
+    "physicalInputLatencyVerified": false,
+    "allNativeValorantAccuracyConventionsVerified": false
+  }
+}

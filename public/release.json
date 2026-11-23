@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -62,7 +62,13 @@
     "observed-sniper-recovery",
     "instant-encounter-retry",
     "peeking-session-analysis",
-    "surface-footstep-audio"
+    "surface-footstep-audio",
+    "shared-visual-hit-surfaces",
+    "rendered-frame-shot-registration",
+    "legacy-control-migration",
+    "crouch-movement-spread-calibration",
+    "html-no-transform",
+    "true-route-not-found"
   ],
   "unreal": {
     "engine": "5.7",
@@ -77,7 +83,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "06.00",
+  "patchLabel": "06.01",
   "aimScience": {
     "algorithm": "aim-1.0.0",
     "browserImplemented": true,
@@ -127,5 +133,11 @@
       5
     ],
     "boltMechanicsVerified": true
+  },
+  "hitRegistration": {
+    "surface": "shared-rendered-triangles",
+    "pose": "last-submitted-render-frame-at-input-time",
+    "physicalScanoutVerified": false,
+    "validation": "/correctness-validation.json"
   }
 }

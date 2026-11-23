@@ -1,5 +1,7 @@
 import {PeekingMapSelection} from './PeekingMapSelection';
 import {TacticalControls} from './TacticalControls';
+import {TacticalMapSelection} from './TacticalMapSelection';
+import {selectedTraining,trainingChoice,type TrainingNavigation} from '../app/trainingNavigation';
 import { Infinity, ArrowRight, Crosshair, MoveHorizontal, Activity, ScanLine, Clock3, MousePointer2, ArrowUpRight, SlidersHorizontal, Target, ChartNoAxesCombined } from 'lucide-react';
 import { useApp } from '../app/store';
 import { GameStage } from '../components/LazyGameStage';
@@ -9,19 +11,21 @@ import { WEAPONS } from '../config/weapons';
 export function MainMenu(){
  const mode=useApp(s=>s.mode),weapon=useApp(s=>s.weapon),setMode=useApp(s=>s.setMode),start=useApp(s=>s.start),s=useApp(x=>x.settings),update=useApp(x=>x.updateSettings),setTab=useApp(x=>x.setTab),history=useApp(s=>s.history);
  const recent=history.find(h=>h.mode===mode);
- const tactical=s.practiceMap!=='range',timed=mode!=='free'||s.practiceMap==='complex'&&s.peekingTimed;
+ const selection=selectedTraining(mode,s),tactical=mode==='free'&&s.practiceMap!=='range',timed=mode!=='free'||s.practiceMap==='complex'&&s.peekingTimed;
+ const chooseTraining=(id:TrainingNavigation)=>{const choice=trainingChoice(id);setMode(choice.mode);update(choice.settings);};
  const openAim=(section:'explore'|'analysis')=>{setTab('aim');if(typeof window!=='undefined'){try{window.history.replaceState(null,'',`/aim.html#${section}`);}catch{/* The analysis overview remains reachable if browser history is restricted. */}}};
  const rows=[
-  {id:'free',name:'자유 훈련장',desc:'시간 제한 없이 나만의 루틴',tag:'FUNDAMENTALS',Icon:Infinity,active:mode==='free'&&!tactical,action:()=>{setMode('free');update({practiceMap:'range',drill:'none'});}},
-  {id:'timed',name:'시간제 훈련',desc:'첫 발의 정밀도와 이동 표적 추적',tag:'PRECISION',Icon:Crosshair,active:['precision','tracking'].includes(mode),action:()=>{setMode('precision');update({practiceMap:'range',drill:'none'});}},
-  {id:'braking',name:'톡브레이킹 훈련',desc:'이동 · 제동 · 정확한 사격 타이밍',tag:'MOVEMENT',Icon:MoveHorizontal,active:mode==='braking',action:()=>{setMode('braking');update({practiceMap:'range',drill:'tapAD',analysisWall:false});}},
-  {id:'spray',name:'반동 연습',desc:'연사 탄착군과 보정 궤적 분석',tag:'CONTROL',Icon:Activity,active:mode==='spray',action:()=>{setMode('spray');update({practiceMap:'range',drill:'none'});}},
-  {id:'tactical',name:'각체크·피킹',desc:'엄폐와 고저차를 이용한 각 분리',tag:'TACTICAL',Icon:ScanLine,active:mode==='free'&&tactical,action:()=>{setMode('free');update({practiceMap:'complex',peekScenario:'free',targetCount:11,eliminationRule:'damage',drill:'none'});}},
+  {id:'free',name:'자유 훈련장',desc:'시간 제한 없이 나만의 루틴',tag:'FUNDAMENTALS',Icon:Infinity,active:selection==='free',action:()=>chooseTraining('free')},
+  {id:'timed',name:'시간제 훈련',desc:'첫 발의 정밀도와 이동 표적 추적',tag:'PRECISION',Icon:Crosshair,active:selection==='timed',action:()=>chooseTraining('timed')},
+  {id:'braking',name:'톡브레이킹 훈련',desc:'이동 · 제동 · 정확한 사격 타이밍',tag:'MOVEMENT',Icon:MoveHorizontal,active:selection==='braking',action:()=>chooseTraining('braking')},
+  {id:'spray',name:'반동 연습',desc:'연사 탄착군과 보정 궤적 분석',tag:'CONTROL',Icon:Activity,active:selection==='spray',action:()=>chooseTraining('spray')},
+  {id:'tactical',name:'각체크·피킹',desc:'엄폐와 고저차를 이용한 각 분리',tag:'TACTICAL',Icon:ScanLine,active:selection==='tactical'||selection==='vertical',action:()=>chooseTraining('tactical')},
   {id:'sensitivity',name:'감도 탐색',desc:'후보 감도를 같은 조건에서 비교',tag:'CALIBRATION',Icon:Target,active:false,action:()=>openAim('explore')},
   {id:'analysis',name:'에임 분석',desc:'플릭·추적·클릭 타이밍의 근거',tag:'ANALYTICS',Icon:ChartNoAxesCombined,active:false,action:()=>openAim('analysis')}
  ];
  return <main className="training-home"><header className="home-heading"><div><p className="eyebrow"><span className="status-dot"/> VALOPRAC / 개인 훈련</p><h1>반복은 정교하게.<br/><span>한 발은 정확하게.</span></h1><p className="hero-description">정지, 조준, 발사. 기본기를 완성하는 나만의 훈련 공간.</p></div><div className="session-number"><span>장착 무기 / LOADOUT</span><b>{WEAPONS[weapon].name}</b><button onClick={()=>setTab('weapons')}>무기고 열기 <ArrowUpRight size={14}/></button></div></header>
- {s.practiceMap==='complex'&&<PeekingMapSelection/>}
+ {tactical&&<TacticalMapSelection/>}
+ {tactical&&s.practiceMap==='complex'&&<PeekingMapSelection/>}
  <div className="home-workspace"><section className="mode-section"><div className="section-heading"><h2>훈련 선택</h2><span>01 — 07 / TRAINING</span></div><div className="mode-grid">{rows.map((r,i)=><button key={r.id} aria-pressed={r.active} className={`mode-card ${r.active?'selected':''}`} onClick={r.action}><span className="mode-index">{String(i+1).padStart(2,'0')}</span><r.Icon size={18} strokeWidth={1.5} className="mode-icon"/><span className="mode-copy"><h3>{r.name}</h3><p>{r.desc}</p></span><span className="mode-skill">{r.tag}</span><ArrowUpRight size={14} className="mode-arrow"/></button>)}</div>
  {['precision','tracking'].includes(mode)&&<div className="timed-submodes" aria-label="시간제 세부 훈련"><button aria-pressed={mode==='precision'} onClick={()=>setMode('precision')}>헤드샷 정밀도</button><button aria-pressed={mode==='tracking'} onClick={()=>setMode('tracking')}>이동 표적 추적</button></div>}
  <div className="session-config"><div><span className="control-label">훈련 시간</span><div className="duration-options">{!timed?<span className="unlimited-label"><Infinity size={16}/> 직접 종료할 때까지</span>:[30,60,120].map(n=><button key={n} className={s.duration===n?'active':''} onClick={()=>update({duration:n})}>{n}초</button>)}</div></div><button className="weapon-quick-select" onClick={()=>setTab('weapons')}><span className="control-label">장착 무기</span><strong>{WEAPONS[weapon].name}<ArrowRight size={14}/></strong></button></div>
