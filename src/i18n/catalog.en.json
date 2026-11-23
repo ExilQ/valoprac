@@ -12545,6 +12545,21 @@
       "id": "msg_ba3f8b4219a7",
       "source": "현재 체력",
       "en": "Current health"
+    },
+    {
+      "id": "msg_4e7722f8c29f",
+      "source": "복기 연구실 열기",
+      "en": "Open the Review Lab"
+    },
+    {
+      "id": "msg_a25eb2b09d06",
+      "source": "이 기록을 복기 연구실로",
+      "en": "Send this record to the Review Lab"
+    },
+    {
+      "id": "msg_8a833d2019bd",
+      "source": "복기 연구실용 파일 저장",
+      "en": "Download records for the Review Lab"
     }
   ]
 }

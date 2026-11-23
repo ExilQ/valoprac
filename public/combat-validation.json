@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generatedAt": "2026-11-22T08:31:19.873Z",
+  "generatedAt": "2026-11-22T08:37:09.197Z",
   "baseline": {
     "capturedAt": "2026-10-27T11:18:10.647214+00:00",
     "sourceCommit": "59295203ddd2d54ffb1495b7b456508b81d0f7c9",
@@ -830,10 +830,10 @@
       "textureCountChange": 0
     }
   },
-  "release": "12.0.12",
-  "patchLabel": "12.12",
+  "release": "12.0.13",
+  "patchLabel": "12.13",
   "tests": {
-    "application": 1496,
+    "application": 1498,
     "broker": 28,
     "hosting": 28,
     "passed": true,
