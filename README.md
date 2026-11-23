@@ -1,3 +1,11 @@
+# VALOPRAC11.0.0 — Precision Utility interface
+
+Release11.00 introduces a warm light-first neutral/teal interface with independent Light/Dark/System preference, six primary routes, eight settings categories, compact tactical HUD, accessible paused HUD inspection and an original measurement-led visual system. Korean is the product interface. All existing training, maps, weapons, recoil, input, audio, analysis, replay and local history remain available.
+
+The package/interface release is11.0.0 while the mechanical compatibility version deliberately stays10.0.0: a presentation update does not invalidate compatible recordings, personal records or sensitivity comparisons. An independently generated10.00 input replay is reconstructed in the current test suite.
+
+See [design audit and verification](docs/interface-11.00/REPORT.md). Genuine same-state screenshot comparisons are published at `/interface-comparison.html`; current measured evidence is `/interface-validation.json`. Physical input latency, hardware GPU performance and human usability improvement are not claimed without direct measurements.
+
 # VALOPRAC 10.0.0 — calibrated engine and replay-based training
 
 Patch **10.00** extends the existing Three.js trainer with takeoff-based airborne speed budgets, ballistic jump calibration, expert-only pre-aim timing corrections, timestamp-aware audio, map occlusion and material batching. The existing zoom projection, rifle ADS spread, independent scope sensitivity and rotation-count diagnostics remain available. These are independently calibrated training rules, not verified native VALORANT equations.

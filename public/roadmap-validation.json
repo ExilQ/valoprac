@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "10.0.0",
-  "patchLabel": "10.00",
-  "generatedAt": "2026-11-04T10:29:48.615Z",
+  "release": "11.0.0",
+  "patchLabel": "11.00",
+  "generatedAt": "2026-11-06T23:47:02.323Z",
   "tests": {
-    "application": 1232,
+    "application": 1268,
     "broker": 20,
     "hosting": 13,
     "passed": true,
@@ -17329,7 +17329,7 @@
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7699,
+      "gzipBytes": 7701,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18227,7 +18227,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3023
+        "replayGzipBytes": 3021
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18243,7 +18243,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2868
+        "replayGzipBytes": 2869
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18259,7 +18259,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 790,
-        "replayGzipBytes": 2872
+        "replayGzipBytes": 2870
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18307,7 +18307,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 769,
-        "replayGzipBytes": 3283
+        "replayGzipBytes": 3284
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18323,7 +18323,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 768,
-        "replayGzipBytes": 3285
+        "replayGzipBytes": 3281
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18339,7 +18339,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1436,
-        "replayGzipBytes": 4423
+        "replayGzipBytes": 4422
       },
       {
         "benchmark": "scenario-common-replay",

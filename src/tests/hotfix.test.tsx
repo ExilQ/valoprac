@@ -28,7 +28,7 @@ describe('Shared HUD flow structure',()=>{
 });
 
 describe('Player guidance and independent branding',()=>{
- it('shows a usable sensitivity instruction and keeps advanced gain separate',async()=>{const {SettingsPanel}=await import('../ui/SettingsPanel');const html=renderToString(<SettingsPanel initialTab="controls"/>);expect(html).toContain('게임 감도를 그대로 입력하세요');expect(html).toContain('0.07');expect(html).toContain('고급 입력 보정');expect(html).not.toContain('기본 계수는 임시값');});
+ it('shows a usable sensitivity instruction and keeps advanced gain separate',async()=>{const {SettingsPanel}=await import('../ui/SettingsPanel');const html=renderToString(<SettingsPanel initialTab="sensitivity"/>);expect(html).toContain('게임 감도를 그대로 입력하세요');expect(html).toContain('0.07');expect(html).toContain('고급 입력 보정');expect(html).not.toContain('기본 계수는 임시값');});
  it('labels original weapon audio without premium collection names',async()=>{const {WeaponSelection}=await import('../ui/WeaponSelection');const html=renderToString(<WeaponSelection/>);expect(html).toContain('자체 제작 대체음');expect(html).not.toContain('챔피언스');expect(html).not.toContain('아이온');});
  it('keeps inactive streaming out of ordinary navigation and displays the Riot notice',async()=>{const {App}=await import('../app/App'),{useApp}=await import('../app/store');useApp.setState({screen:'menu',activeTab:'training'});const html=renderToString(<App/>);expect(html).not.toContain('엔진 연결 상태');expect(html).toContain('라이엇 게임즈의 승인이나 후원을 받지 않는');expect(html).toContain('실전 속도');});
 });

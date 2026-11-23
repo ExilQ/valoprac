@@ -8,7 +8,7 @@ writeFileSync('dist-client/index.html',html);
 // The production static host resolves concrete documents, not Pages rewrite rules.
 // Export every client entry route while retaining the same SPA and absolute asset URLs.
 const aimIntroduction=`<main data-search-intro class="site-intro"><h1>발로란트 감도 찾기·에임 분석</h1><p>${aim.description}</p><nav aria-label="감도 안내"><a href="/aim-methodology.html">감도 비교·측정 방법 읽기</a><a href="/valorant-aim-trainer.html">에임 연습 소개</a><a href="/">훈련장으로 돌아가기</a></nav><noscript><p>감도 비교 과제에는 자바스크립트가 필요합니다.</p></noscript></main>`;
-for(const route of ['training','settings','statistics','results','weapons','unreal','aim','tools']){
+for(const route of ['training','settings','statistics','results','weapons','unreal','aim','tools','maps']){
  const page=route==='aim'?decorate(html.replace(/<main data-search-intro[\s\S]*?<\/main>/,aimIntroduction),aim):withIndexingPolicy(html,false);
  mkdirSync(`dist-client/${route}`,{recursive:true});
  writeFileSync(`dist-client/${route}/index.html`,page);

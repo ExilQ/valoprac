@@ -1,0 +1,49 @@
+@import url("/precision-tokens.css");
+/* Precision Utility documentation shares the application's neutral palette. */
+:root{color-scheme:light;--doc-bg:var(--bg);--doc-panel:var(--surface);--doc-soft:var(--surface-raised);--doc-ink:var(--ink);--doc-muted:var(--muted);--doc-line:var(--line);--doc-accent:var(--accent);--doc-warning:var(--warning);font-family:var(--font-body);background:var(--doc-bg);color:var(--doc-ink)}
+
+body{margin:0;background:var(--doc-bg);color:var(--doc-ink);font-size:15px;line-height:1.8;word-break:keep-all}
+body>main,body>nav,body>footer{width:auto;max-width:980px;margin-left:auto;margin-right:auto;padding:24px 28px}
+body>nav{display:flex;gap:22px;flex-wrap:wrap;border-bottom:1px solid var(--doc-line);font-size:14px}
+body>main h1{font-size:32px;line-height:1.35;letter-spacing:-.04em;color:var(--doc-ink);margin:24px 0}
+body>main h2{font-size:22px;line-height:1.4;color:var(--doc-ink);margin:36px 0 16px}
+body>main h3{font-size:18px;color:var(--doc-ink)}
+body>main :is(p,li,td,small){color:var(--doc-muted);line-height:1.85;font-size:14px}
+body>main :is(strong,b,th){color:var(--doc-ink)}
+a{color:var(--doc-accent);text-underline-offset:3px}a:focus-visible{outline:2px solid var(--doc-accent);outline-offset:4px}
+body>main :is(table,section){border-color:var(--doc-line)}
+body>main table{width:100%;border-collapse:collapse;background:var(--doc-panel);font-variant-numeric:tabular-nums}
+body>main :is(th,td){padding:12px 14px;border-bottom:1px solid var(--doc-line);text-align:left;font-size:14px}
+body>main :is(.tip,.notice,.warning){background:var(--doc-soft);color:var(--doc-ink);border-left:3px solid var(--doc-warning);padding:16px 20px;box-shadow:none;border-radius:3px}
+body>main :is(pre,code){background:var(--doc-soft);color:var(--doc-ink);font-size:13px;overflow-wrap:anywhere}
+body>main pre{padding:16px;overflow:auto}kbd{background:var(--doc-soft);color:var(--doc-ink);border:1px solid #798b8b;border-radius:3px;font-size:12px;padding:2px 6px}
+body>main .actions a{background:var(--doc-accent);color:var(--doc-panel);border-radius:3px;box-shadow:none;font-size:14px;line-height:1.4;padding:12px 16px;border:1px solid var(--doc-accent)}
+:root[data-theme=dark] body>main .actions a{color:#173638}
+body>footer{border-top:1px solid var(--doc-line);color:var(--doc-muted);font-size:12px;line-height:1.8}
+.site-intro{background:var(--doc-bg);color:var(--doc-ink);border-color:var(--doc-line);box-shadow:none;border-radius:0}
+.site-intro :is(p,li){color:var(--doc-muted);font-size:14px;line-height:1.8}.site-intro :is(h1,h2,h3){color:var(--doc-ink)}.site-intro nav a{color:var(--doc-accent);background:transparent;border-color:var(--doc-line)}
+@media(max-width:700px){body>main,body>nav,body>footer{padding:20px}body>main h1{font-size:28px}body>main table{display:block;overflow:auto}body>main :is(th,td){white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{:root{--doc-bg:#fff;--doc-panel:#fff;--doc-soft:#eee;--doc-ink:#111;--doc-muted:#333;--doc-accent:#146d73}body>nav{display:none}}
+/* Older authored guides include direct-body sections as well as main wrappers. */
+:root[data-theme] body>h1,:root[data-theme] body>main h1{color:var(--doc-ink);font-size:32px;line-height:1.35}
+:root[data-theme] body>h2,:root[data-theme] body>main h2{color:var(--doc-ink);font-size:22px}
+:root[data-theme] body>small,:root[data-theme] body>footer p,:root[data-theme] figcaption{color:var(--doc-muted);font-size:13px}
+:root[data-theme] body>.note,:root[data-theme] body>main .note{color:var(--doc-muted);background:var(--doc-soft);border-color:var(--doc-line);font-size:14px}
+:root[data-theme] body :is(th,td){color:var(--doc-ink);border-color:var(--doc-line)}
+:root[data-theme] body.search-page{background:var(--doc-bg);color:var(--doc-ink)}
+:root[data-theme] .search-page :is(.search-card,.search-routine li){background:var(--doc-panel);color:var(--doc-ink);border-color:var(--doc-line);box-shadow:none}
+:root[data-theme] .search-page :is(h1,h2,h3,strong){color:var(--doc-ink)}
+:root[data-theme] .search-page :is(p,li,small){color:var(--doc-muted)}
+:root[data-theme] .search-page .search-start{background:var(--doc-accent);color:#fff;border:1px solid var(--doc-accent);border-radius:3px}
+:root[data-theme=dark] .search-page .search-start{color:#173638}
+.not-found>main{max-width:720px;margin:8vh auto 0;padding:28px}
+.not-found>main>a{display:inline-flex;padding:10px 16px;background:var(--doc-accent);color:var(--doc-panel);border-radius:3px;text-decoration:none}
+:root[data-theme=dark] .not-found>main>a{color:#173638}
+body.document-article{max-width:1040px;margin:0 auto;padding:28px}
+@media(max-width:700px){body.document-article{padding:20px}}
+:root[data-theme] .search-page a{color:var(--doc-accent)}
+:root[data-theme] .search-page .search-brand{color:var(--doc-ink)}
+:root[data-theme] .search-page h1>span{color:var(--doc-accent)}
+:root[data-theme] .search-page .search-button{color:var(--doc-accent);background:var(--doc-panel);border:1px solid var(--doc-accent);border-radius:3px}
+:root[data-theme] .search-page .search-button.primary{color:var(--on-accent);background:var(--doc-accent)}

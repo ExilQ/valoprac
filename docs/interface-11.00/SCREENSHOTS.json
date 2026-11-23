@@ -1,0 +1,444 @@
+{
+  "baselineSource": "479cebefad88d00670cb5aba98df68232107de8b",
+  "captureResolution": [
+    1366,
+    768
+  ],
+  "fixture": "ActualReact UI and deterministic realSimulation state; no video fabrication or human performance claim.",
+  "files": [
+    {
+      "path": "public/interface-comparison/after/history.webp",
+      "bytes": 35862,
+      "sha256": "f005a280c99c71076f41b4f4cad300408e1a2dc0fbdc2645bc497bc866df32ef",
+      "originalPNG": {
+        "path": "after/history.png",
+        "bytes": 96641,
+        "sha256": "1b098ed8275deda701248966a3742ee81887e935ad1656ca151909c0508f5a43"
+      },
+      "pixelSize": [
+        1366,
+        1146
+      ],
+      "decodedRGBA256": "31288f5aa9aec67843c01c40b7755b20fb2c1dcd3a4fd0c66e5010912e739857",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/hud-dark.webp",
+      "bytes": 33088,
+      "sha256": "25749d3e1dac9c1a91f45b016980fedacb33dafc01971413051664eca8566ffa",
+      "originalPNG": {
+        "path": "after/hud-dark.png",
+        "bytes": 89328,
+        "sha256": "48a18447716ab73ae12fe1ce9364f1eb01716fec5cc4696267b9aa5ea732e185"
+      },
+      "pixelSize": [
+        1366,
+        768
+      ],
+      "decodedRGBA256": "bb72d1bb4f655b9eb13db16e299ebe1b067d583bcbfa364fa9f117d21a6e16be",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/hud-light.webp",
+      "bytes": 32944,
+      "sha256": "cf024e967fbf7e71877bf93844a15dbbcde362469d9e89cadf0fe9210e6d4420",
+      "originalPNG": {
+        "path": "after/hud-light.png",
+        "bytes": 88837,
+        "sha256": "419922a77a672be105baa095938a9c013a402dffd5897edcc369350580a8f0ca"
+      },
+      "pixelSize": [
+        1366,
+        768
+      ],
+      "decodedRGBA256": "a3ac635139fd1d4773b41d3e03808e930e895089d6f817e0bbd6bae05988d836",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/lab.webp",
+      "bytes": 60994,
+      "sha256": "dfd81be1ea0e3d2d955b494459c2d464a9b9952cd3cfd21ca4e8c863e63ec98f",
+      "originalPNG": {
+        "path": "after/lab.png",
+        "bytes": 162094,
+        "sha256": "46cd9b046d492f1330b3eaf1c8261843421662b00738e36a3a34e97d674dc90f"
+      },
+      "pixelSize": [
+        1366,
+        1238
+      ],
+      "decodedRGBA256": "9a5ed96b46304ecd140b7e249b336fc9113d89b2ead40759b0d4d469a369c0f1",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/main.webp",
+      "bytes": 233240,
+      "sha256": "c7b9f1178a17a6eb73e4c64c99422cce3c60f807104376ffff4bc2790ab44c53",
+      "originalPNG": {
+        "path": "after/main.png",
+        "bytes": 370848,
+        "sha256": "58b1ba2db9de33bf59386918e3243993714400f453cb70f8fdcd658b5339aa77"
+      },
+      "pixelSize": [
+        1366,
+        1874
+      ],
+      "decodedRGBA256": "6225f303607da82cd223ffa2c798cd647083a3a4da1fc2098212b3d876d8da8a",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/patch.webp",
+      "bytes": 259806,
+      "sha256": "b79ac81c150b91a42c732210b8177d5181643db30e5f82fb16d28551c9ce3826",
+      "originalPNG": {
+        "path": "after/patch.png",
+        "bytes": 420203,
+        "sha256": "17f55e4a3be81aa07bceace21f6ec3892bb680faebdb600cc19cda790feece30"
+      },
+      "pixelSize": [
+        1366,
+        1874
+      ],
+      "decodedRGBA256": "ad5055fb4ab12529f03198ec45e5075a88fb2420e7e06f0cba3115b4318ba4b1",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/results.webp",
+      "bytes": 50288,
+      "sha256": "412e001c27feffb096ec504e10bf7e8a1022e5212137fed9b19424399e6d8a1a",
+      "originalPNG": {
+        "path": "after/results.png",
+        "bytes": 146208,
+        "sha256": "b121cd9644303bf301ceb847330f139e673a42bee58d6c0e1c1caf26e131f415"
+      },
+      "pixelSize": [
+        1366,
+        1587
+      ],
+      "decodedRGBA256": "d3cdc3d8acf4325809df592d4ab078e0c5b17d3db2e8ed560c4732c9560c86d4",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/settings.webp",
+      "bytes": 40408,
+      "sha256": "2ea0c80710b455f8efe9c36a425b8e6f43641c3d2d37c2dc7c4971ac2e561552",
+      "originalPNG": {
+        "path": "after/settings.png",
+        "bytes": 111668,
+        "sha256": "d88caa3afc798cd4f21d15a03ac98a280ef6076f3594f70af4b8449e4d0c6227"
+      },
+      "pixelSize": [
+        1366,
+        1229
+      ],
+      "decodedRGBA256": "f0b1b28e5bf2f27c172ac186308172f3e2bb3f178dc6e012d062b395895d3f63",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/tools.webp",
+      "bytes": 34642,
+      "sha256": "d46c833a9eb64c9959552ab4238de697ecfd9ae491baa4982bff5dedafaa8753",
+      "originalPNG": {
+        "path": "after/tools.png",
+        "bytes": 89750,
+        "sha256": "e427605aa4648872747f5957c69a30d5030e280bd1d1222d1a6718cbba0c6310"
+      },
+      "pixelSize": [
+        1366,
+        812
+      ],
+      "decodedRGBA256": "6320ba2a0a4be26ff88582d39b427c1bcd7bb53a59e3a05c9e684c5debd0cdfe",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/training.webp",
+      "bytes": 233074,
+      "sha256": "b4b125a39a69c22363be28193666825a86b8b90f585a993d5801e1382826e0fb",
+      "originalPNG": {
+        "path": "after/training.png",
+        "bytes": 369619,
+        "sha256": "20317a73cc4ddc26f06e9b135955cfec2343ba76f5e76082ee753be2daa4acc2"
+      },
+      "pixelSize": [
+        1366,
+        1812
+      ],
+      "decodedRGBA256": "36b01ca7c63cd0cfc3399470c5316e7d9ca7ada4782fb2c7a5a39f7893236cb4",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/after/weapons.webp",
+      "bytes": 42294,
+      "sha256": "002eda6d9225b60169385578fc56e75bd680210674e04d8649e2e94f20c528af",
+      "originalPNG": {
+        "path": "after/weapons.png",
+        "bytes": 109020,
+        "sha256": "6ec07585acb0364708ac1433803b40b2d8e3c001893166d9baed192793adbf26"
+      },
+      "pixelSize": [
+        1366,
+        919
+      ],
+      "decodedRGBA256": "96edf019fe9f0720d3aa39b5b054ca75bcf61634b5466de4a064ca939b15825d",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/history.webp",
+      "bytes": 31916,
+      "sha256": "3721da293c5942e118b586211c8c6c5d354bbb41d6e9f448bcf793d14c317baa",
+      "originalPNG": {
+        "path": "before/history.png",
+        "bytes": 90103,
+        "sha256": "489fa67777f03d3c0d4e8af1997fe3812fc7a0b7f1e6e9bc02042114a1e2f408"
+      },
+      "pixelSize": [
+        1366,
+        1111
+      ],
+      "decodedRGBA256": "21dba9783267aec00f01e199356b811eb7e6676c0ea46e38b4f6b1a30a23cc50",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/hud-dark.webp",
+      "bytes": 40668,
+      "sha256": "1c5f95a97c988f14555df49f3a7ab39c668d0bba64c6216b70cba0e2391ccba1",
+      "originalPNG": {
+        "path": "before/hud-dark.png",
+        "bytes": 99232,
+        "sha256": "a3cc7de85c71e4d285f828dbb88603d7870b9e83709e4ec091d4d7c4b040660a"
+      },
+      "pixelSize": [
+        1366,
+        768
+      ],
+      "decodedRGBA256": "0681684d8e9303e9ee805a7865b5f18bcd85a521cdc4d31c74804b3791265f9d",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/hud-light.webp",
+      "bytes": 41694,
+      "sha256": "a7d89902a6c9ea6544ce0a69a3f83feeaa1bbe436da4c85d2df8eaa74c016328",
+      "originalPNG": {
+        "path": "before/hud-light.png",
+        "bytes": 97607,
+        "sha256": "c8d4aba4f84cfd845ad3493673f61b343a970ac3c038dc35bd6f8a6e9285239c"
+      },
+      "pixelSize": [
+        1366,
+        768
+      ],
+      "decodedRGBA256": "a3368889d055feda29e2bdce821b1b0afcc39ef3ad894085b77c0b02f9f1db77",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/lab.webp",
+      "bytes": 53384,
+      "sha256": "54883495804588bfeed8f41ea563954583686b45154f24035de35ec6eed269a8",
+      "originalPNG": {
+        "path": "before/lab.png",
+        "bytes": 149924,
+        "sha256": "be5ca139b5924fa53fb7656d8528ba09b3410cfd791f4b08be829a05d4338ea6"
+      },
+      "pixelSize": [
+        1366,
+        1139
+      ],
+      "decodedRGBA256": "4a0984e38bb9358e461ccdeadd11f480db41b3307f8867a1e3c287e7b679a8d4",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/main.webp",
+      "bytes": 246454,
+      "sha256": "f098595fd92f4c60efc4721b795ed078818ebd245cb68a7d1168075faf6e21dc",
+      "originalPNG": {
+        "path": "before/main.png",
+        "bytes": 403865,
+        "sha256": "4e4eb8eb5a97a7d0b6db3cb205dd199bb77c266703f5e5deec68005696ca7dcc"
+      },
+      "pixelSize": [
+        1366,
+        1724
+      ],
+      "decodedRGBA256": "bf006e119c12c7fe4378260043925e43d5d795023c5cb18141a37be37a1f635b",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/patch.webp",
+      "bytes": 261010,
+      "sha256": "20056b55677fb920f4be2d5ac81ea74886cf78328dc7d487c1f0ab4485f97258",
+      "originalPNG": {
+        "path": "before/patch.png",
+        "bytes": 420031,
+        "sha256": "7ee1ef430cd1d01a930b96809537f6a33303fd0cdf166841faa890294947ff82"
+      },
+      "pixelSize": [
+        1366,
+        1724
+      ],
+      "decodedRGBA256": "10cf4cbc807bdd378f4685df089d8ce26d267c7f5a95b1899c7825f22e0fcd12",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/results.webp",
+      "bytes": 105690,
+      "sha256": "666cd3e0742dd92134a11c8d0fc269a29a60314fe26fb5b9eecd1af042424c2d",
+      "originalPNG": {
+        "path": "before/results.png",
+        "bytes": 306045,
+        "sha256": "210debb364bfb2d073b5bf21763c89065e84cabc12f528692198d1b8880f5346"
+      },
+      "pixelSize": [
+        1366,
+        4016
+      ],
+      "decodedRGBA256": "cb82b86bc3efca3c3c4266201cc44a6425a7b874e14d447dedc4e650546d0b4c",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/settings.webp",
+      "bytes": 32056,
+      "sha256": "7ab175a332a299ac9c82d1042c66e9b26df7a5adc783fbf8efa1b46e59fb2e69",
+      "originalPNG": {
+        "path": "before/settings.png",
+        "bytes": 95864,
+        "sha256": "a11009150c97becf97db683afc5a01f98c3c1c1c46ada51952879326f88fa390"
+      },
+      "pixelSize": [
+        1366,
+        997
+      ],
+      "decodedRGBA256": "50482d792e380b7115f506b2235919bb7928edabbcb3c370bf745f4fa7a39ca1",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/tools.webp",
+      "bytes": 33626,
+      "sha256": "7dd7467de76e2c612ab55b1d700373c9bb0e3449df9385d00ce43fb4fbfd5249",
+      "originalPNG": {
+        "path": "before/tools.png",
+        "bytes": 90932,
+        "sha256": "6566c02229bfb054da674871b68e1a978ffbbb681ae9bd6c197a30705010f139"
+      },
+      "pixelSize": [
+        1366,
+        768
+      ],
+      "decodedRGBA256": "9daeb078470b6c2c4a1f203db12bb072fa894d6cf3ab2578dbaabd96ce940a2c",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/training.webp",
+      "bytes": 243260,
+      "sha256": "a3f48d2ae1a8b6d1a47fe49ceb7593ed0d72e82e34cd5602aae3d45337f37a6e",
+      "originalPNG": {
+        "path": "before/training.png",
+        "bytes": 398930,
+        "sha256": "041c28eb87fdf61d8862f8350a1b8db2428f73bba7f9152419629ef966955b7b"
+      },
+      "pixelSize": [
+        1366,
+        1698
+      ],
+      "decodedRGBA256": "379915973cf0e09d97267877cda3a28fbbf9482c54e71f005c5c1dd43644b927",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/before/weapons.webp",
+      "bytes": 71674,
+      "sha256": "d5bea7c90927011a04e690cb800cbe9bdc952033689b9b4470f84c19c74282d8",
+      "originalPNG": {
+        "path": "before/weapons.png",
+        "bytes": 136129,
+        "sha256": "c2b6494fb4322ecbc07a99dfd778fc23af3c38bc283beb30aef300f2db7c6603"
+      },
+      "pixelSize": [
+        1366,
+        1223
+      ],
+      "decodedRGBA256": "4f12473079861c43ec4e5739363fa321ad7049c748675adb0ad8f0f2f8cbcc48",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/dark/lab.webp",
+      "bytes": 58020,
+      "sha256": "b82d70afbd243ed5c138d381783698714500f4b8106c4853fc8c8c0b879d33d0",
+      "originalPNG": {
+        "path": "dark/lab.png",
+        "bytes": 162257,
+        "sha256": "cc9ade9db3cf884cdce12b1e35feaeda85204c60bde9022ea9a0af06d661a1ea"
+      },
+      "pixelSize": [
+        1366,
+        1238
+      ],
+      "decodedRGBA256": "5a2b1435f25b173be24669591633371b361affc83841efcbf01ece220c2530ae",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/dark/results.webp",
+      "bytes": 48256,
+      "sha256": "b246040d039ca859acab055ee28a6f73c647760e54c9e3a9374786fd2b9be995",
+      "originalPNG": {
+        "path": "dark/results.png",
+        "bytes": 146543,
+        "sha256": "3b74e45bd80479cb0af0f2f47070f56832869ff6d1f9496717934c9ef3c098ed"
+      },
+      "pixelSize": [
+        1366,
+        1587
+      ],
+      "decodedRGBA256": "c76ec5f342849c425b17aa68a4a52afdc428bf2eded1f51320af1b1a813b1fb3",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/dark/settings.webp",
+      "bytes": 38714,
+      "sha256": "ce27a00a528a3ba7568e00ec2cd32b58042f431e73b73029fb702608e36d32f6",
+      "originalPNG": {
+        "path": "dark/settings.png",
+        "bytes": 111834,
+        "sha256": "bd3a9e5b5c02e06001ab370e39bab958f4ff79e8fbb0569f21c874ae5c49ef83"
+      },
+      "pixelSize": [
+        1366,
+        1229
+      ],
+      "decodedRGBA256": "a3ad0401bf877d18a3d5a58a463755997bb33ad6ad14e8c23906f1194bac9e48",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/dark/tools.webp",
+      "bytes": 33646,
+      "sha256": "d85b5c8bb87c74cb4cb9f4504d48076401517c6b99f3fdf9164a95ee03b699e9",
+      "originalPNG": {
+        "path": "dark/tools.png",
+        "bytes": 89869,
+        "sha256": "cf709e6a20071a059b6305c71a14ddb8259025eda79a15f7dbb4876d9937a8f7"
+      },
+      "pixelSize": [
+        1366,
+        812
+      ],
+      "decodedRGBA256": "357ad882949d3a1473ba0ada4414ae0f9f8faefc148734454509a74cdb14613f",
+      "losslessPixelsVerified": true
+    },
+    {
+      "path": "public/interface-comparison/dark/weapons.webp",
+      "bytes": 40436,
+      "sha256": "dc9f2eb50671bae02684ea8640306c25fab1c17144e6b671bdfdb296581c3fc1",
+      "originalPNG": {
+        "path": "dark/weapons.png",
+        "bytes": 109134,
+        "sha256": "e27b57b9657cce19403d04a201883a86837f0523478abb32f79483d5e1de6f5a"
+      },
+      "pixelSize": [
+        1366,
+        919
+      ],
+      "decodedRGBA256": "a340b75806a9d95ce7df060356c0c052d27b0c10999f8558a890181134054299",
+      "losslessPixelsVerified": true
+    }
+  ],
+  "delivery": "Lossless WebP transcoding only; decoded RGBA bytes verified identical to original PNG screenshots. Original PNG capture hashes retained per file.",
+  "sourceCapture": "Actual 10.00 frozen checkout and final 11.00 presentation working tree"
+}

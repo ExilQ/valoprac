@@ -25,9 +25,10 @@ describe('Named training entry points and visible tactical-map selection',()=>{
   ['free',{practiceMap:'mid',drill:'vertical'},'수직 각체크 훈련'],
   ['free',{practiceMap:'garage',drill:'corner'},'각체크·피킹'],['free',{practiceMap:'complex',drill:'none'},'각체크·피킹']
  ];
- for(const[mode,settings,label]of cases)it(`highlights only ${label} for ${mode}/${settings.practiceMap??'range'}`,()=>{
+ for(const[mode,settings,label]of cases)it(`highlights the training section and only ${label} for ${mode}/${settings.practiceMap??'range'}`,()=>{
   state(mode,settings);const html=renderToStaticMarkup(<App/>),nav=html.slice(html.indexOf('<nav aria-label="주 메뉴"'),html.indexOf('</nav>'));
-  const active=nav.match(/<button class="active"[^>]*>[\s\S]*?<\/button>/g)??[];expect(active).toHaveLength(1);expect(active[0]).toContain(label);
+  const active=nav.match(/<button class="active"[^>]*>[\s\S]*?<\/button>/g)??[];expect(active).toHaveLength(1);expect(active[0]).toContain('훈련');expect(nav.match(/<button/g)).toHaveLength(6);
+  const menu=renderToStaticMarkup(<MainMenu/>),selected=menu.match(/<button[^>]*aria-pressed="true"[^>]*class="mode-card selected"[^>]*>[\s\S]*?<\/button>/g)??[];expect(selected).toHaveLength(1);expect(selected[0]).toContain(label);
  });
  it('keeps the six authored maps outside the collapsed advanced settings',()=>{
   state('free',{practiceMap:'complex'});const html=renderToStaticMarkup(<MainMenu/>),advanced=html.indexOf('<details class="training-configuration"');

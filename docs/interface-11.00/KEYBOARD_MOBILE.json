@@ -1,0 +1,63 @@
+{
+  "checks": [
+    "mobile patch notes fit, scroll and close byEscape",
+    "keybinding input passesTab without changingbinding",
+    "tooltabs supportroving focus/Arrow/Home/End onmobile",
+    "reducedmotion removes UI transitions"
+  ],
+  "layouts": [
+    {
+      "dialog": {
+        "top": 59.078125,
+        "bottom": 784.90625,
+        "left": 16,
+        "right": 374
+      },
+      "parts": [
+        {
+          "tag": "HEADER",
+          "cls": "",
+          "top": 60.078125,
+          "bottom": 166.171875,
+          "left": 17,
+          "right": 373
+        },
+        {
+          "tag": "DIV",
+          "cls": "practice-buttons",
+          "top": 166.171875,
+          "bottom": 227.171875,
+          "left": 17,
+          "right": 373
+        },
+        {
+          "tag": "DIV",
+          "cls": "",
+          "top": 227.171875,
+          "bottom": 691.90625,
+          "left": 17,
+          "right": 373
+        },
+        {
+          "tag": "P",
+          "cls": "field-note",
+          "top": 691.90625,
+          "bottom": 783.90625,
+          "left": 17,
+          "right": 373
+        }
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    }
+  ],
+  "errors": [],
+  "motion": {
+    "matches": true,
+    "transition": "1e-05s"
+  },
+  "passed": true,
+  "completedAt": "2026-11-06T23:36:29.615Z"
+}

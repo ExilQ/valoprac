@@ -1,5 +1,6 @@
 import type {CalibrationConfig} from './precision/calibration';
 export const AIM_VERSION='aim-2.0.0';
+// Mechanical compatibility stays stable across the presentation-only 11.00 release.
 export const GAME_VERSION='10.0.0';
 export const TASKS=['large','small','micro','smooth','reactive','switch','dynamic'] as const;
 export type AimTask=typeof TASKS[number]|'tactical';

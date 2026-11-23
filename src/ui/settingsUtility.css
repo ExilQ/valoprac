@@ -1,0 +1,70 @@
+/* Precision Utility settings: navigation and controls use the shared palette. */
+.precision-settings{max-width:1440px;margin:0 auto;word-break:keep-all}
+.precision-settings .settings-page-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:30px}
+.precision-settings .settings-page-heading h1{font-size:32px;letter-spacing:-1.1px;line-height:1.2;margin:7px 0 11px}
+.precision-settings .settings-page-heading p:not(.eyebrow){font-size:14px;line-height:1.7;color:var(--muted)}
+.precision-settings .settings-save-status{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;padding-bottom:3px;font-size:12px;color:var(--muted)}
+.precision-settings .settings-save-status>span{height:5px;width:5px;background:var(--success);border-radius:50%}
+.precision-settings .settings-layout{display:grid;grid-template-columns:144px minmax(0,1fr);gap:32px;align-items:start}
+.precision-settings .settings-tabs{display:flex;flex-direction:column;gap:3px;border:0;border-right:1px solid var(--line);padding:0 16px 0 0;margin:0;position:sticky;top:24px;overflow:visible}
+.precision-settings .settings-tabs>button{width:100%;min-height:42px;padding:10px 14px;text-align:left;border:0;border-left:2px solid transparent;border-radius:0;background:transparent;color:var(--muted);font-size:14px;white-space:nowrap;transition:background var(--ease-fast),color var(--ease-fast)}
+.precision-settings .settings-tabs>button:hover{background:var(--surface-raised);color:var(--ink)}
+.precision-settings .settings-tabs>button[aria-selected=true]{background:var(--accent-soft);border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.precision-settings .settings-tab-content{min-width:0;outline-offset:6px}
+.precision-settings .settings-section-heading{padding:0 0 20px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.precision-settings .settings-section-heading h2{font-size:21px;line-height:1.35;letter-spacing:-.5px;color:var(--ink);margin:0 0 8px}
+.precision-settings .settings-section-heading p{font-size:14px;color:var(--muted);line-height:1.7;margin:0}
+.precision-settings .settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.precision-settings .settings-card{min-width:0;padding:24px;border:1px solid var(--line);background:var(--surface);border-radius:2px;box-shadow:none}
+.precision-settings .settings-card h3{display:flex;align-items:center;gap:9px;font-size:17px;line-height:1.5;font-weight:650;color:var(--ink);margin:0 0 20px}
+.precision-settings .settings-card h3 svg{color:var(--muted);width:17px;height:17px}
+.precision-settings .settings-theme-card{grid-column:1/-1}
+.precision-settings .field-note,.precision-settings .rotation-counts>p{font-size:13px;line-height:1.75;color:var(--muted);margin-top:12px;overflow-wrap:anywhere}
+.precision-settings .range-field,.precision-settings .practice-select,.precision-settings .number-field{font-size:14px;color:var(--ink);margin:0;padding:13px 0;line-height:1.6}
+.precision-settings .settings-number-field{display:grid;gap:10px}
+.precision-settings .settings-field-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.precision-settings .settings-field-heading label{font-size:14px;color:var(--ink)}
+.precision-settings .settings-field-heading output{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.precision-settings .settings-field-heading output small{font-size:12px;margin-left:4px}
+.precision-settings .settings-control-pair{display:grid;grid-template-columns:minmax(0,1fr) 78px;align-items:center;gap:16px}
+.precision-settings .settings-control-pair input[type=range]{min-width:0;width:100%;height:24px;margin:0;accent-color:var(--accent);padding:0}
+.precision-settings .settings-value-input{width:100%;min-width:0;height:40px;padding:7px 8px;text-align:right;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:2px;font-variant-numeric:tabular-nums;font-size:14px}
+.precision-settings .practice-select select,.precision-settings .number-field input,.precision-settings .binding-grid input,.precision-settings .scope-key-field input{min-height:40px;font-size:14px;border-radius:2px;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.precision-settings .toggle-field,.precision-settings .practice-toggle{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:48px;padding:11px 0;margin:0;font-size:14px;line-height:1.6;color:var(--ink);border-bottom:1px solid var(--line)}
+.precision-settings .toggle-field:last-child,.precision-settings .practice-toggle:last-child{border-bottom:0}
+.precision-settings .toggle-field>span,.precision-settings .practice-toggle>span{min-width:0}
+.precision-settings .toggle-field input,.precision-settings .practice-toggle input{accent-color:var(--accent);flex-shrink:0}
+.precision-settings .settings-subsection-label{display:flex;align-items:center;gap:8px;color:var(--muted);margin:28px 0 14px}
+.precision-settings .settings-subsection-label h3{font-size:15px;color:var(--ink);font-weight:600;margin:0}
+.precision-settings .advanced-settings{margin-top:20px}
+.precision-settings .advanced-settings>.settings-card{margin-top:0}
+.precision-settings .settings-advanced,.precision-settings .settings-disclosure{background:var(--surface);border:1px solid var(--line);border-radius:2px;margin-top:20px;padding:0;box-shadow:none}
+.precision-settings .settings-disclosure{border-width:1px 0;margin-bottom:8px}
+.precision-settings details>summary{font-size:14px;line-height:1.5;color:var(--ink);min-height:44px;padding:13px 16px;cursor:pointer;font-weight:550}
+.precision-settings details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.precision-settings .settings-disclosure>div,.precision-settings .settings-disclosure>.field-note{margin-left:16px;margin-right:16px}
+.precision-settings .settings-advanced>.advanced-settings{margin:0;padding:8px 16px 16px}
+.precision-settings .settings-advanced>.settings-card{border:0}
+.precision-settings .setting-readout{padding:12px 0;gap:16px;align-items:baseline;font-size:13px;border-color:var(--line);color:var(--muted)}
+.precision-settings .setting-readout strong{font-size:14px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.precision-settings .setting-readout strong small{font-size:12px;font-weight:400;color:var(--muted);margin-left:4px}
+.precision-settings .settings-calibration-values{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:5px 0 21px;border-bottom:1px solid var(--line)}
+.precision-settings .settings-calibration-values>div{display:grid;gap:12px;align-content:start}
+.precision-settings .settings-calibration-values span{font-size:12px;line-height:1.6;color:var(--muted)}
+.precision-settings .settings-calibration-values strong{font-size:26px;letter-spacing:-.7px;line-height:1.2;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.precision-settings .settings-calibration-values strong small{font-size:12px;font-weight:400;letter-spacing:0;margin-left:5px;color:var(--muted)}
+.precision-settings .rotation-counts{border:0;padding:8px 0 0;background:transparent;margin-top:0}
+.precision-settings .settings-reset{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:16px;border-top:1px solid var(--line);margin-top:32px;padding-top:18px;font-size:13px;color:var(--muted)}
+.precision-settings .settings-reset>button{display:inline-flex;align-items:center;gap:6px;min-height:40px;font-size:13px;color:var(--muted)}
+.precision-settings .settings-reset>button:hover{color:var(--ink)}
+.precision-settings .settings-reset .settings-reset-confirm{color:var(--danger);font-weight:650}
+.precision-settings .binding-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.precision-settings .binding-grid label{font-size:13px;color:var(--muted);display:grid;gap:7px}
+.precision-settings .binding-grid input{width:100%;min-width:0;padding:8px 10px;color:var(--ink);font-size:14px}
+.precision-settings .operator-scope-controls{background:transparent;border-color:var(--line);border-radius:2px}
+.precision-settings .operator-scope-controls .operator-scope-fields{gap:16px}
+.precision-settings .mechanics-values{font-size:13px;gap:10px;line-height:1.6}
+@media(max-width:1200px){.precision-settings .settings-layout{grid-template-columns:124px minmax(0,1fr);gap:24px}.precision-settings .settings-card{padding:20px}.precision-settings .settings-grid{gap:16px}.precision-settings .settings-calibration-values{grid-template-columns:1fr}.precision-settings .settings-calibration-values strong{font-size:24px}}
+@media(max-width:1000px){.precision-settings .settings-grid{grid-template-columns:1fr}.precision-settings .settings-theme-card{grid-column:auto}.precision-settings .settings-calibration-values{grid-template-columns:1fr 1fr}.precision-settings .operator-scope-fields{grid-template-columns:1fr}}
+@media(max-width:680px){.precision-settings .settings-page-heading{align-items:flex-start;margin-bottom:22px}.precision-settings .settings-page-heading h1{font-size:28px}.precision-settings .settings-save-status{padding-top:5px}.precision-settings .settings-layout{display:block}.precision-settings .settings-tabs{position:static;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);padding:0;margin-bottom:24px;overflow:visible}.precision-settings .settings-tabs>button{text-align:center;font-size:13px;min-height:42px;padding:10px 4px;border-left:0;border-bottom:2px solid transparent}.precision-settings .settings-tabs>button[aria-selected=true]{border-bottom-color:var(--accent);border-left-color:transparent}.precision-settings .settings-card{padding:18px}.precision-settings .settings-calibration-values{gap:12px}.precision-settings .settings-control-pair{gap:12px;grid-template-columns:minmax(0,1fr) 76px}.precision-settings .settings-reset{justify-content:flex-start}.precision-settings .binding-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.precision-settings .settings-tabs>button{transition:none}}

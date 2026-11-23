@@ -1,0 +1,73 @@
+/* Original Precision Utility inventory: compact choices and one equipment sheet. */
+.weapon-selection.precision-weapons{max-width:1320px;margin:0 auto;padding:28px 36px 32px;color:var(--ink);--weapon-metal:#58717a;--weapon-outline:#233a43;--weapon-polymer:#344e58;--weapon-light-metal:#748991;--weapon-dark-metal:#425a65;--weapon-edge:#82969e;--weapon-detail:#263e48}
+.weapon-selection.precision-weapons .weapon-utility-heading{margin:0 0 24px}
+.weapon-selection.precision-weapons .weapon-utility-heading .eyebrow{font-size:12px;color:var(--accent);letter-spacing:.06em;margin:0 0 9px}
+.weapon-selection.precision-weapons .weapon-utility-heading h1{font-size:30px;line-height:1.3;letter-spacing:-.055em;margin:0 0 10px}
+.weapon-selection.precision-weapons .weapon-utility-heading>p:last-child{font-size:14px;line-height:1.65;color:var(--muted);word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-utility-layout{display:grid;grid-template-columns:minmax(290px,.8fr) minmax(0,1.2fr);gap:28px;align-items:start}
+.weapon-selection.precision-weapons .weapon-inventory-caption{display:flex;justify-content:space-between;align-items:center;padding:0 2px 12px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.weapon-selection.precision-weapons .weapon-inventory-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);margin:0;background:var(--surface)}
+.weapon-selection.precision-weapons .weapon-card{position:relative;display:grid;grid-template-columns:20px 88px minmax(0,1fr) 29px;align-items:center;gap:11px;min-height:88px;margin:0;padding:14px 16px;border:0;border-bottom:1px solid var(--line);background:var(--surface);border-radius:0;clip-path:none;color:var(--ink);text-align:left;box-shadow:none;transition:background-color 100ms ease-out}
+.weapon-selection.precision-weapons .weapon-card:last-child{border-bottom:0}
+.weapon-selection.precision-weapons .weapon-card:before{content:none}
+.weapon-selection.precision-weapons .weapon-card:hover{background:var(--surface-raised);transform:none}
+.weapon-selection.precision-weapons .weapon-card.selected{background:var(--accent-soft,rgba(20,109,115,.07));box-shadow:inset 3px 0 0 var(--accent)}
+.weapon-selection.precision-weapons .weapon-card:focus-visible{position:relative;z-index:1;outline:2px solid var(--accent);outline-offset:3px}
+.weapon-selection.precision-weapons .weapon-row-index{align-self:start;margin-top:4px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.weapon-selection.precision-weapons .weapon-row-art{display:block;min-width:0}
+.weapon-selection.precision-weapons .weapon-card .weapon-silhouette{height:46px;width:100%;margin:0;transition:none;transform:none}
+.weapon-selection.precision-weapons .weapon-row-info{display:grid;gap:4px;min-width:0}
+.weapon-selection.precision-weapons .weapon-row-category{color:var(--muted);font-size:12px;line-height:1.4;word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-row-info>strong{font-size:18px;line-height:1.3;letter-spacing:-.035em;font-weight:650}
+.weapon-selection.precision-weapons .weapon-row-summary{font-size:12px;color:var(--muted);line-height:1.5;word-break:keep-all;font-variant-numeric:tabular-nums}
+.weapon-selection.precision-weapons .weapon-row-marker{display:grid;justify-items:center;gap:3px;font-size:12px;color:var(--muted)}
+.weapon-selection.precision-weapons .selected .weapon-row-marker{color:var(--accent);font-weight:650}
+.weapon-selection.precision-weapons .weapon-inventory-note{font-size:12px;line-height:1.7;color:var(--muted);word-break:keep-all;margin:13px 2px 0}
+.weapon-selection.precision-weapons .weapon-equipment-sheet{min-width:0;background:var(--surface);border:1px solid var(--line);padding:20px 24px 0}
+.weapon-selection.precision-weapons .weapon-sheet-header{display:flex;justify-content:space-between;align-items:center;gap:16px;border:0;padding:0;background:none}
+.weapon-selection.precision-weapons .weapon-sheet-header p{font-size:12px;color:var(--muted);margin:0 0 5px}
+.weapon-selection.precision-weapons .weapon-sheet-header h2{font-size:26px;line-height:1.3;letter-spacing:-.045em;margin:0;font-weight:650;color:var(--ink)}
+.weapon-selection.precision-weapons .weapon-equipped{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);white-space:nowrap}
+.weapon-selection.precision-weapons .weapon-sheet-art{height:128px;position:relative;display:flex;align-items:center;justify-content:center;margin:12px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-raised)}
+.weapon-selection.precision-weapons .weapon-sheet-art .weapon-silhouette{width:min(92%,430px);height:112px;margin:0;transform:none;transition:none}
+.weapon-selection.precision-weapons .weapon-sheet-art>span{position:absolute;bottom:8px;left:10px;font-size:12px;color:var(--muted);letter-spacing:.015em}
+.weapon-selection.precision-weapons .weapon-sheet-purpose{color:var(--muted);font-size:14px;line-height:1.65;margin:12px 0 16px;word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-utility-specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0;padding:0 0 18px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.weapon-selection.precision-weapons .weapon-utility-specs>div{min-width:0}
+.weapon-selection.precision-weapons .weapon-utility-specs dt{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:6px;word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-utility-specs dd{display:flex;align-items:baseline;gap:4px;font-size:25px;line-height:1.3;font-weight:600;letter-spacing:-.035em;margin:0;color:var(--ink);white-space:nowrap}
+.weapon-selection.precision-weapons .weapon-utility-specs dd small{font-size:12px;font-weight:400;letter-spacing:0;color:var(--muted)}
+.weapon-selection.precision-weapons .weapon-utility-specs dd.weapon-zoom-value{font-size:22px}
+.weapon-selection.precision-weapons .weapon-near-damage{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0}
+.weapon-selection.precision-weapons .weapon-near-damage>div{display:grid;gap:5px}
+.weapon-selection.precision-weapons .weapon-near-damage>div>span{font-size:13px;color:var(--ink)}
+.weapon-selection.precision-weapons .weapon-near-damage>div>small{font-size:12px;color:var(--muted)}
+.weapon-selection.precision-weapons .weapon-near-damage dl{display:grid;grid-template-columns:repeat(3,minmax(44px,1fr));gap:23px;margin:0;font-variant-numeric:tabular-nums;text-align:right}
+.weapon-selection.precision-weapons .weapon-near-damage dt{font-size:12px;color:var(--muted);margin:0 0 5px}
+.weapon-selection.precision-weapons .weapon-near-damage dd{font-size:20px;line-height:1.2;color:var(--ink);margin:0;font-weight:600}
+.weapon-selection.precision-weapons .weapon-advanced-details{border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.weapon-selection.precision-weapons .weapon-advanced-details>summary{padding:14px 0;cursor:pointer;color:var(--ink);font-size:13px;line-height:1.4}
+.weapon-selection.precision-weapons .weapon-advanced-details>summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.weapon-selection.precision-weapons .weapon-advanced-content{padding:0 0 18px;line-height:1.75}
+.weapon-selection.precision-weapons .weapon-advanced-content table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}
+.weapon-selection.precision-weapons .weapon-advanced-content caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.weapon-selection.precision-weapons .weapon-advanced-content th,.weapon-selection.precision-weapons .weapon-advanced-content td{text-align:right;border-bottom:1px solid var(--line);padding:9px 3px;font-weight:400;color:var(--ink)}
+.weapon-selection.precision-weapons .weapon-advanced-content thead th{color:var(--muted);font-size:12px}
+.weapon-selection.precision-weapons .weapon-advanced-content th:first-child{text-align:left}
+.weapon-selection.precision-weapons .weapon-advanced-content>p{font-size:13px;line-height:1.8;color:var(--muted);word-break:keep-all;margin:14px 0 8px}
+.weapon-selection.precision-weapons .weapon-advanced-content>small{font-size:12px;color:var(--muted);word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-handling-readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.weapon-selection.precision-weapons .weapon-handling-readouts dt{font-size:12px;line-height:1.5;color:var(--muted);word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-handling-readouts dd{color:var(--ink);margin:4px 0 0;font-variant-numeric:tabular-nums}
+.weapon-selection.precision-weapons .weapon-utility-footer{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:22px 0 0}
+.weapon-selection.precision-weapons .weapon-utility-footer p{font-size:12px;line-height:1.75;color:var(--muted);max-width:600px;word-break:keep-all}
+.weapon-selection.precision-weapons .weapon-utility-footer .primary-button{display:inline-flex;align-items:center;justify-content:center;gap:14px;margin:0;padding:13px 18px;font-size:14px;line-height:1.4;white-space:nowrap;clip-path:none;border-radius:2px;box-shadow:none}
+.weapon-selection.precision-weapons.compact{padding:0;max-width:none}
+.weapon-selection.precision-weapons.compact .weapon-utility-layout{display:block}
+.weapon-selection.precision-weapons.compact .weapon-inventory-caption{padding-top:2px}
+.weapon-selection.precision-weapons.compact .weapon-card{grid-template-columns:20px 100px minmax(0,1fr) 40px;min-height:82px;padding:12px 16px}
+html[data-theme=dark] .weapon-selection.precision-weapons{--weapon-metal:#a6b8bc;--weapon-outline:#1d3037;--weapon-polymer:#70878d;--weapon-light-metal:#b4c6ca;--weapon-dark-metal:#859ca2;--weapon-edge:#c2d0d2;--weapon-detail:#3b535b}
+@media(max-width:1200px){.weapon-selection.precision-weapons{padding-left:28px;padding-right:28px}.weapon-selection.precision-weapons .weapon-utility-layout{grid-template-columns:minmax(265px,.85fr) minmax(0,1.15fr);gap:22px}.weapon-selection.precision-weapons .weapon-card{grid-template-columns:18px 68px minmax(0,1fr) 27px;gap:9px;padding-left:12px;padding-right:12px}.weapon-selection.precision-weapons .weapon-equipment-sheet{padding:18px 18px 0}.weapon-selection.precision-weapons .weapon-utility-specs dd{font-size:22px}.weapon-selection.precision-weapons .weapon-utility-specs dd.weapon-zoom-value{font-size:20px}}
+@media(max-width:950px){.weapon-selection.precision-weapons .weapon-utility-layout{grid-template-columns:minmax(235px,.8fr) minmax(0,1.2fr);gap:18px}.weapon-selection.precision-weapons .weapon-card{grid-template-columns:17px minmax(0,1fr) 29px;min-height:84px;gap:11px}.weapon-selection.precision-weapons .weapon-row-art{display:none}.weapon-selection.precision-weapons .weapon-utility-specs{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:16px}.weapon-selection.precision-weapons .weapon-utility-footer{align-items:flex-start}.weapon-selection.precision-weapons .weapon-near-damage dl{gap:12px}}
+@media(max-width:700px){.weapon-selection.precision-weapons{padding:24px 20px}.weapon-selection.precision-weapons .weapon-utility-heading h1{font-size:28px}.weapon-selection.precision-weapons .weapon-utility-layout{grid-template-columns:1fr;gap:20px}.weapon-selection.precision-weapons .weapon-card{grid-template-columns:20px 90px minmax(0,1fr) 29px;min-height:82px;gap:10px;padding:12px}.weapon-selection.precision-weapons .weapon-row-art{display:block}.weapon-selection.precision-weapons .weapon-row-info>strong{font-size:17px}.weapon-selection.precision-weapons .weapon-sheet-art{height:122px}.weapon-selection.precision-weapons .weapon-utility-specs{grid-template-columns:repeat(2,minmax(0,1fr))}.weapon-selection.precision-weapons .weapon-utility-footer{flex-direction:column;align-items:stretch;gap:16px}.weapon-selection.precision-weapons .weapon-utility-footer .primary-button{width:100%}.weapon-selection.precision-weapons.compact .weapon-card{grid-template-columns:20px 76px minmax(0,1fr) 29px;padding:12px}.weapon-selection.precision-weapons .weapon-near-damage dl{gap:14px}}
+@media(prefers-reduced-motion:reduce){.weapon-selection.precision-weapons .weapon-card{transition:none}}

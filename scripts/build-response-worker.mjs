@@ -1,8 +1,9 @@
 import {readFileSync,writeFileSync,mkdirSync,readdirSync,rmSync} from 'node:fs';
 import {resolve,relative,join,extname} from 'node:path';
 import {createHash} from 'node:crypto';
+import {gzipSync} from 'node:zlib';
 const source=resolve('dist-client'),output=resolve('dist'),assets={};
-const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.ico':'image/x-icon','.zip':'application/zip','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
+const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.ico':'image/x-icon','.zip':'application/zip','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 function collect(dir){for(const d of readdirSync(dir,{withFileTypes:true})){if(d.name.startsWith('.')||['_headers','_redirects'].includes(d.name))continue;const path=join(dir,d.name);if(d.isDirectory()){collect(path);continue;}const key='/'+relative(source,path).replaceAll('\\','/'),bytes=readFileSync(path),type=mime[extname(path)]??'application/octet-stream',text=/^(text\/|application\/(javascript|json|xml))/.test(type)||type==='image/svg+xml',entry={type,etag:'"'+createHash('sha256').update(bytes).digest('hex')+'"',immutable:key.startsWith('/assets/')};if(text){entry.text=bytes.toString('utf8');if(type.startsWith('text/html'))entry.scripts=[...entry.text.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(m=>!(/\bsrc\s*=/.test(m[1]))&&m[2].trim()).map(m=>createHash('sha256').update(m[2]).digest('base64'));}else entry.base64=bytes.toString('base64');assets[key]=entry;}}
 collect(source);
 const rules=[];for(const line of readFileSync('public/_headers','utf8').split(/\r?\n/)){if(!line.trim()||line.trim().startsWith('#'))continue;if(line.startsWith('/'))rules.push({path:line.trim(),headers:{}});else{const m=line.trim().match(/^([^:]+):\s*(.*)$/);if(!m||!rules.length)throw Error('Invalid response header rule');rules.at(-1).headers[m[1]]=m[2];}}
@@ -10,6 +11,9 @@ const aliases={};for(const raw of readFileSync('public/_redirects','utf8').split
 const manifest=JSON.parse(readFileSync('.openai/hosting.json','utf8'));if(manifest.static)throw Error('The response worker must not be published as a static Site');
 rmSync(output,{recursive:true,force:true});mkdirSync(join(output,'server'),{recursive:true});mkdirSync(join(output,'.openai'),{recursive:true});
 const template=readFileSync('worker/index.js','utf8');if(!template.includes('/*__ASSETS__*/{}'))throw Error('Missing worker asset insertion marker');
-writeFileSync(join(output,'server/index.js'),template.replace('/*__ASSETS__*/{}',()=>JSON.stringify({assets,rules,aliases})));
+const workerSource=template.replace('/*__ASSETS__*/{}',()=>JSON.stringify({assets,rules,aliases}));
+const compressedBytes=gzipSync(workerSource).byteLength;
+if(compressedBytes>10*1024*1024)throw Error(`Response Worker exceeds the 10MiB compressed release budget: ${compressedBytes}`);
+writeFileSync(join(output,'server/index.js'),workerSource);
 writeFileSync(join(output,'.openai/hosting.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log(JSON.stringify({responseWorker:true,assets:Object.keys(assets).length,bytes:readFileSync(join(output,'server/index.js')).byteLength}));
+console.log(JSON.stringify({responseWorker:true,assets:Object.keys(assets).length,bytes:readFileSync(join(output,'server/index.js')).byteLength,compressedBytes,compressedBudgetBytes:10*1024*1024}));

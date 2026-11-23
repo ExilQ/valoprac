@@ -1,0 +1,714 @@
+{
+  "frames": [
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "dark",
+      "colors": [
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        },
+        {
+          "text": "rgb(128, 201, 197)",
+          "background": "rgb(51, 66, 71)"
+        },
+        {
+          "text": "rgb(240, 243, 239)",
+          "background": "rgb(41, 53, 57)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    {
+      "theme": "light",
+      "colors": [
+        {
+          "text": "rgb(20, 109, 115)",
+          "background": "rgb(236, 240, 238)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "rgb(28, 41, 51)",
+          "background": "rgb(255, 255, 255)"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "default light remains independent of darkOS",
+    "20rendered frames /60buttoncolorpairs stay above4.5 during actualthemechanges",
+    "system changes followOSandpersist acrossreload"
+  ],
+  "errors": [],
+  "pairs": [
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(128, 201, 197)",
+      "background": "rgb(51, 66, 71)",
+      "ratio": 5.508977531386546
+    },
+    {
+      "theme": "dark",
+      "text": "rgb(240, 243, 239)",
+      "background": "rgb(41, 53, 57)",
+      "ratio": 11.290520779258177
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(20, 109, 115)",
+      "background": "rgb(236, 240, 238)",
+      "ratio": 5.271710634031668
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    },
+    {
+      "theme": "light",
+      "text": "rgb(28, 41, 51)",
+      "background": "rgb(255, 255, 255)",
+      "ratio": 14.847770081901302
+    }
+  ],
+  "passed": true,
+  "completedAt": "2026-11-06T10:17:30.531Z"
+}

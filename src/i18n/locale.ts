@@ -61,4 +61,7 @@ export function message(id:keyof typeof MESSAGES,values:Record<string,string|num
 export function missingTranslations(){return [...missing];}
 export function clearMissingTranslations(){missing.clear();}
 export function localeCatalogInfo(){return{locale,loaded:!!catalog,entries:entries.length,missing:missing.size};}
-if(typeof window!=='undefined'){try{if(localStorage.getItem(LOCALE_STORAGE_KEY)==='en')void setLocale('en');}catch{/* Korean is the stable default. */}}
+// The Korean product interface no longer restores a retired language preference.
+// Explicit localization APIs remain available to compatible analysis/tests.
+export function initializeKoreanInterface(){void setLocale('ko');}
+if(typeof window!=='undefined'){remember('ko');documentLanguage();}

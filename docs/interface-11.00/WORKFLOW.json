@@ -1,0 +1,81 @@
+{
+  "origin": "http://127.0.0.1:5442",
+  "checks": [
+    {
+      "name": "legacy English preference opens Korean light interface"
+    },
+    {
+      "name": "select Vandal, configure targets, return directly to training",
+      "details": {
+        "weapon": "rifleA",
+        "targets": 3
+      }
+    },
+    {
+      "name": "primary start action fits1280x720 without scrolling",
+      "details": {
+        "x": 595,
+        "y": 56.859375,
+        "width": 622,
+        "height": 74.4375
+      }
+    },
+    {
+      "name": "ADS behavior and movement engine remain configurable in their own categories"
+    },
+    {
+      "name": "Sensitivity Explorer remains reachable with measured comparison UI"
+    },
+    {
+      "name": "prepared actual3D, trusted firing and Escape pause preserve normal input",
+      "details": {
+        "shots": 4,
+        "time": 1.9749999999999999
+      }
+    },
+    {
+      "name": "paused theme change retains renderer, settings identity, clock and gameplay checksum",
+      "details": {
+        "before": {
+          "hash": "ba26c72dbec473b7",
+          "time": 1.9749999999999999,
+          "canvas": true
+        },
+        "after": {
+          "hash": "ba26c72dbec473b7",
+          "time": 1.9749999999999999,
+          "canvas": true,
+          "sameSettings": true,
+          "theme": "dark"
+        }
+      }
+    },
+    {
+      "name": "paused cursor can expand HUD details without resuming simulation",
+      "details": {
+        "paused": true,
+        "locked": false,
+        "canvas": true,
+        "time": 1.9749999999999999
+      }
+    },
+    {
+      "name": "Escape returns from HUD inspection to safe pause settings"
+    },
+    {
+      "name": "finish real training, save measured results and return to training"
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "Headless SwiftShader. After real graphics preparation, active draws are suspended for isolated input/state checks; no physical latency or FPS claim."
+  ],
+  "primaryActionAt720": {
+    "x": 595,
+    "y": 56.859375,
+    "width": 622,
+    "height": 74.4375
+  },
+  "passed": true,
+  "completedAt": "2026-11-06T10:21:04.243Z"
+}

@@ -1,0 +1,706 @@
+{
+  "schema": 1,
+  "release": "11.0.0",
+  "patchLabel": "11.00",
+  "generatedAt": "2026-11-06T23:47:02.323Z",
+  "direction": "Precision Utility",
+  "tests": {
+    "application": 1268,
+    "broker": 20,
+    "hosting": 13,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "themes": {
+    "default": "light",
+    "options": [
+      "light",
+      "dark",
+      "system"
+    ],
+    "separatePreferenceStorage": true,
+    "koreanInterface": true,
+    "transitionFrames": 20,
+    "transitionContrastMinimum": 5.271710634031668
+  },
+  "readability": {
+    "method": "Actual computed DOM text color and opaque/alpha ancestor backgrounds; text alpha and ancestor opacity composed. Native SVG chart text listed separately; unknown background images flagged. All rendered document text measured, including below-fold content; closed disclosures are skipped and then explicitly opened in a separate state. Disabled controls/labels excluded. Non-text form-field boundaries require3:1; decorative divider/button borders are candidates only.",
+    "steadyState": true,
+    "textSamples": 5526,
+    "textMinimum": 4.774,
+    "svgTextSamples": 104,
+    "svgTextMinimum": 5.779,
+    "formBoundaries": 216,
+    "boundaryMinimum": 3.326,
+    "failedText": 0,
+    "failedBoundaries": 0,
+    "sourceCaptureDate": "2026-11-06T10:18:17.265Z"
+  },
+  "responsive": {
+    "applicationLayouts": 434,
+    "hudLayouts": 96,
+    "mainLayouts": 18,
+    "staticGuideLayouts": 98,
+    "desktopResolutions": [
+      [
+        1280,
+        720
+      ],
+      [
+        1366,
+        768
+      ],
+      [
+        1600,
+        900
+      ],
+      [
+        1920,
+        1080
+      ],
+      [
+        2560,
+        1440
+      ],
+      [
+        3440,
+        1440
+      ]
+    ],
+    "mobileResolution": [
+      390,
+      844
+    ],
+    "windowAndFullscreen": true,
+    "hudScale": [
+      1,
+      1.25
+    ],
+    "allPassed": true
+  },
+  "workflows": {
+    "checks": [
+      {
+        "name": "legacy English preference opens Korean light interface"
+      },
+      {
+        "name": "select Vandal, configure targets, return directly to training",
+        "details": {
+          "weapon": "rifleA",
+          "targets": 3
+        }
+      },
+      {
+        "name": "primary start action fits1280x720 without scrolling",
+        "details": {
+          "x": 595,
+          "y": 56.859375,
+          "width": 622,
+          "height": 74.4375
+        }
+      },
+      {
+        "name": "ADS behavior and movement engine remain configurable in their own categories"
+      },
+      {
+        "name": "Sensitivity Explorer remains reachable with measured comparison UI"
+      },
+      {
+        "name": "prepared actual3D, trusted firing and Escape pause preserve normal input",
+        "details": {
+          "shots": 4,
+          "time": 1.9749999999999999
+        }
+      },
+      {
+        "name": "paused theme change retains renderer, settings identity, clock and gameplay checksum",
+        "details": {
+          "before": {
+            "hash": "ba26c72dbec473b7",
+            "time": 1.9749999999999999,
+            "canvas": true
+          },
+          "after": {
+            "hash": "ba26c72dbec473b7",
+            "time": 1.9749999999999999,
+            "canvas": true,
+            "sameSettings": true,
+            "theme": "dark"
+          }
+        }
+      },
+      {
+        "name": "paused cursor can expand HUD details without resuming simulation",
+        "details": {
+          "paused": true,
+          "locked": false,
+          "canvas": true,
+          "time": 1.9749999999999999
+        }
+      },
+      {
+        "name": "Escape returns from HUD inspection to safe pause settings"
+      },
+      {
+        "name": "finish real training, save measured results and return to training"
+      }
+    ],
+    "keyboardAndMobile": [
+      "mobile patch notes fit, scroll and close byEscape",
+      "keybinding input passesTab without changingbinding",
+      "tooltabs supportroving focus/Arrow/Home/End onmobile",
+      "reducedmotion removes UI transitions"
+    ],
+    "passed": true,
+    "graphicsDrawIsolationForInput": true
+  },
+  "navigation": {
+    "beforePrimaryItems": 13,
+    "afterPrimaryItems": 6,
+    "settingsCategories": 8,
+    "startAction": [
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 1280,
+        "height": 720,
+        "primaryAction": {
+          "top": 1137.859375,
+          "bottom": 1206.859375,
+          "height": 69
+        },
+        "aboveFold": false,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "38.4px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 1366,
+        "height": 768,
+        "primaryAction": {
+          "top": 1144.265625,
+          "bottom": 1213.265625,
+          "height": 69
+        },
+        "aboveFold": false,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "40.98px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 1600,
+        "height": 900,
+        "primaryAction": {
+          "top": 1159.171875,
+          "bottom": 1228.171875,
+          "height": 69
+        },
+        "aboveFold": false,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "47px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 1920,
+        "height": 1080,
+        "primaryAction": {
+          "top": 1159.171875,
+          "bottom": 1228.171875,
+          "height": 69
+        },
+        "aboveFold": false,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "47px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 2560,
+        "height": 1440,
+        "primaryAction": {
+          "top": 1198.15625,
+          "bottom": 1267.15625,
+          "height": 69
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "48px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "before",
+        "theme": "legacy-dark",
+        "width": 3440,
+        "height": 1440,
+        "primaryAction": {
+          "top": 1198.15625,
+          "bottom": 1267.15625,
+          "height": 69
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 13,
+        "titleFont": "48px",
+        "actionColors": [
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(16, 24, 32)",
+            "background": "rgb(255, 89, 100)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 1280,
+        "height": 720,
+        "primaryAction": {
+          "top": 619.953125,
+          "bottom": 695.84375,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 1366,
+        "height": 768,
+        "primaryAction": {
+          "top": 619.953125,
+          "bottom": 695.84375,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 1600,
+        "height": 900,
+        "primaryAction": {
+          "top": 719.0625,
+          "bottom": 794.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 1920,
+        "height": 1080,
+        "primaryAction": {
+          "top": 719.0625,
+          "bottom": 794.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 2560,
+        "height": 1440,
+        "primaryAction": {
+          "top": 731.0625,
+          "bottom": 806.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "light",
+        "width": 3440,
+        "height": 1440,
+        "primaryAction": {
+          "top": 731.0625,
+          "bottom": 806.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(255, 255, 255)",
+            "background": "rgb(20, 109, 115)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 1280,
+        "height": 720,
+        "primaryAction": {
+          "top": 619.953125,
+          "bottom": 695.84375,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 1366,
+        "height": 768,
+        "primaryAction": {
+          "top": 619.953125,
+          "bottom": 695.84375,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 1600,
+        "height": 900,
+        "primaryAction": {
+          "top": 719.0625,
+          "bottom": 794.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 1920,
+        "height": 1080,
+        "primaryAction": {
+          "top": 719.0625,
+          "bottom": 794.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 2560,
+        "height": 1440,
+        "primaryAction": {
+          "top": 731.0625,
+          "bottom": 806.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      },
+      {
+        "version": "after",
+        "theme": "dark",
+        "width": 3440,
+        "height": 1440,
+        "primaryAction": {
+          "top": 731.0625,
+          "bottom": 806.953125,
+          "height": 75.890625
+        },
+        "aboveFold": true,
+        "overflow": false,
+        "primaryNavigationItems": 6,
+        "titleFont": "30px",
+        "actionColors": [
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          },
+          {
+            "color": "rgb(23, 54, 56)",
+            "background": "rgb(128, 201, 197)",
+            "opacity": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "staticGuides": {
+    "documents": 7,
+    "themes": 2,
+    "textSamples": 716,
+    "chartSamples": 0,
+    "formBoundaries": 0,
+    "layouts": 98,
+    "textFailures": 0,
+    "chartFailures": 0,
+    "boundaryFailures": 0,
+    "layoutFailures": 0,
+    "passed": true
+  },
+  "mainMenuContrast": {
+    "textSamples": 838,
+    "bothThemes": true,
+    "failures": 0,
+    "webGLPreviewTextExcluded": true
+  },
+  "preservation": {
+    "mechanicalCompatibilityVersion": "10.0.0",
+    "simulationVersion": "valoprac-replay-simulation-2",
+    "engineParametersChanged": false,
+    "existingReplayFixtureVerified": true,
+    "existingSettingsRetained": true,
+    "inputHandlingCoreChanged": false
+  },
+  "visualComparison": {
+    "url": "/interface-comparison.html",
+    "baselineSource": "479cebefad88d00670cb5aba98df68232107de8b",
+    "captureResolution": [
+      1366,
+      768
+    ],
+    "originalScreenshots": true,
+    "retouched": false,
+    "sessionFixture": "Fixed input generated actualSimulation results, not human measurements",
+    "hudFixture": "ActualReactHUD and fixedSimulation against bright/dark wall backdrops; noGPU benchmark"
+  },
+  "limits": {
+    "humanUsabilityStudyParticipants": 0,
+    "physicalInputLatencyMeasured": false,
+    "hardwareFPSMeasured": false,
+    "softwareGPUResultsAreNotPhysicalGPUQualification": true,
+    "nativeVALORANTParityVerified": false,
+    "allPossibleUserContentLayoutsGuaranteed": false
+  },
+  "deployment": {
+    "verified": false,
+    "note": "Build evidence; final deployment and actual production verification are recorded separately."
+  }
+}

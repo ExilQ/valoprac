@@ -1,13 +1,25 @@
-/* VALOPRAC / original tactical interface foundations. System font stack supports Korean. */
+/* Precision Utility: original, light-first VALOPRAC foundations. */
 :root {
- --accent:#FF5964; --accent-hover:#ff7881; --accent-soft:rgba(255,89,100,.09);
- --bg:#101820; --surface:#1B2732; --surface-raised:#263540; --surface-deep:#0d141c;
- --ink:#F1F3F2; --muted:#B4C0C9; --subtle:#9eafb9; --line:#43535f;
- --interactive:#58C9D6; --success:#64D8A1; --warning:#F1BC66; --danger:#FF5964;
- --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px;
- --type-small:11px; --type-body:13px; --type-title:32px;
- --font-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- --font-display:"Arial Narrow","Roboto Condensed",var(--font-body);
- --panel-cut:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%);
- --ease-fast:110ms ease-out; --ease-panel:150ms ease-out;
+ color-scheme:light;
+ --bg:#f7f7f3;--surface:#ffffff;--surface-raised:#ecf0ee;--surface-deep:#e5ebe8;
+ --ink:#1c2933;--muted:#53636d;--subtle:#5a6b71;--line:#cbd6d3;--control-border:#798b8b;
+ --on-accent:#ffffff;--accent:#146d73;--accent-hover:#105b61;--accent-soft:#e4efed;--interactive:#146d73;
+ --success:#176b52;--warning:#875b16;--danger:#b74743;--danger-soft:#f8eae7;
+ --plot-bg:#f5f7f4;--plot-grid:#ccd7d2;--plot-ink:#52656c;--plot-comparison:#875b16;
+ --focus:#146d73;--selection:#d7e9e5;--overlay:rgba(25,40,45,.35);
+ --font-body:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+ --font-display:var(--font-body);
+ --type-small:12px;--type-body:14px;--type-title:32px;
+ --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;--space-7:48px;
+ --radius-control:3px;--radius-panel:4px;--panel-cut:none;
+ --ease-fast:100ms ease-out;--ease-panel:140ms ease-out;
+}
+:root[data-theme="dark"] {
+ color-scheme:dark;
+ --bg:#202a2d;--surface:#293539;--surface-raised:#334247;--surface-deep:#253034;
+ --ink:#f0f3ef;--muted:#c1cecd;--subtle:#b4c6c5;--line:#52686b;--control-border:#829b9e;
+ --on-accent:#173638;--accent:#80c9c5;--accent-hover:#a1dbd6;--accent-soft:#344d4f;--interactive:#80c9c5;
+ --success:#8cd0ad;--warning:#e6bf7b;--danger:#f1a5a0;--danger-soft:#503b3d;
+ --plot-bg:#243135;--plot-grid:#50676a;--plot-ink:#c1cecd;--plot-comparison:#e6bf7b;
+ --focus:#a1dbd6;--selection:#3e5c5c;--overlay:rgba(10,20,23,.65);
 }

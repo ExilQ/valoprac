@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -146,7 +146,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "10.00",
+  "patchLabel": "11.00",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -351,7 +351,7 @@
     "onlineAccountsOrRankingsAdded": false,
     "newExternalTrackingDependencies": false,
     "defaultLanguage": "ko",
-    "optionalLanguage": "en",
+    "optionalLanguage": null,
     "replay": {
       "schema": 1,
       "simulationVersion": "valoprac-replay-simulation-2",
@@ -360,6 +360,31 @@
       "localOnly": true
     },
     "walkingSpeedRatioChanged": false,
-    "walkingLandingSilenceChanged": false
+    "walkingLandingSilenceChanged": false,
+    "legacyLanguageAPIOnly": true
+  },
+  "interface": {
+    "direction": "Precision Utility",
+    "defaultTheme": "light",
+    "themes": [
+      "light",
+      "dark",
+      "system"
+    ],
+    "defaultLanguage": "ko",
+    "koreanProductInterface": true,
+    "presentationPreferencesSeparateFromSimulation": true,
+    "primaryNavigation": [
+      "training",
+      "maps",
+      "weapons",
+      "aim",
+      "history",
+      "settings"
+    ],
+    "settingsCategories": 8,
+    "validation": "/interface-validation.json",
+    "gameplayParametersChanged": false,
+    "gameplayCompatibilityVersion": "10.0.0"
   }
 }

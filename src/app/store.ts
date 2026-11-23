@@ -10,7 +10,7 @@ export interface GraphicsObservation {kind:string;renderer:string;reason:string;
 interface AppState {
   graphics:GraphicsObservation|null;graphicsDismissed:boolean;reportGraphics:(observation:GraphicsObservation)=>void;
   screen:Screen;mode:Mode;weapon:WeaponId;settings:Settings;sessionOptions:SimulationOptions;locked:boolean;paused:boolean;
-  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream'|'aim'|'tools';
+  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'maps'|'settings'|'history'|'weapons'|'stream'|'aim'|'tools';
   updateSettings:(patch:Partial<Settings>)=>void;setMode:(mode:Mode)=>void;setWeapon:(weapon:WeaponId)=>void;
   setTab:(tab:AppState['activeTab'])=>void;start:()=>void;startSession:(options:SimulationOptions,weapon?:WeaponId)=>void;finish:(session:SessionData,keepTraining?:boolean)=>Promise<void>;menu:()=>void;refreshHistory:()=>Promise<void>;
 }

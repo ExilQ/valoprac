@@ -1,0 +1,36 @@
+{
+  "release": "11.0.0",
+  "measurementKind": "Validated candidate build, before final evidence archive regeneration; final Worker/transfer metrics belong to the production receipt.",
+  "clientChunks": {
+    "count": 29,
+    "rawBytes": 2110948,
+    "gzipBytes": 597184
+  },
+  "candidateWorker": {
+    "rawBytes": 16414496,
+    "gzipBytes": 10091419,
+    "sha256": "bfcb6c919522308d3e1788b1e8a6136cdf6ebb1a270b49d43a08877185e903bb",
+    "compressedBudgetBytes": 10485760
+  },
+  "comparisonImages": {
+    "count": 27,
+    "initialTrainingRequests": 0,
+    "lossless": true,
+    "retouched": false
+  },
+  "sourceArchive": {
+    "optionalScreenshotCopiesExcluded": true
+  },
+  "baseline10": {
+    "source": "479cebefad88d00670cb5aba98df68232107de8b",
+    "clientChunksRawBytes": 2324388,
+    "clientChunksGzipBytes": 692888,
+    "initialEncodedBytes": 451317,
+    "resources": 18
+  },
+  "limits": {
+    "initial11TransferMeasured": false,
+    "physicalInputLatencyMeasured": false,
+    "hardwareFPSMeasured": false
+  }
+}
