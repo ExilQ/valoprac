@@ -47,7 +47,7 @@ export function deterministicState(s:Simulation){
  const legacy=s.rules===LEGACY_SIMULATION_RULES,serialize=(v:unknown)=>state(v,0,new Set<object>(),legacy),profile={...s.movement.profile};
  if(legacy)delete profile.stepMinLandingWidth;
  return{...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
-  ...(s.characterGeometry===FIELD_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
+  ...(s.characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
   aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:s.settings,
   movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(s.weapons),targets:s.targets.map(t=>serialize(t)),
   rng:serialize(raw.rng),defenders:s.defenders?serialize(s.defenders):null,angles:serialize(s.angles),hearing:serialize(s.hearing),exposure:serialize(s.exposure),
@@ -69,7 +69,7 @@ export function replayCompatibility(rules:SimulationRulesId=CURRENT_SIMULATION_R
  const surfaces=Object.entries(SURFACES).map(([id,s])=>({id,collisionFriction:s.collisionFriction,penetrationResistance:s.penetrationResistance,penetrationRetention:s.penetrationRetention,opaque:!!s.opaque,blocksSight:s.blocksSight,footstepSoundProfile:s.footstepSoundProfile}));
  const maps=['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].map(id=>({id,obstacles:obstaclesFor(id).map(o=>({min:o.box.min.toArray(),max:o.box.max.toArray(),kind:o.kind,ramp:o.ramp,material:o.material,surfaceId:o.surfaceId,groundSurfaceId:o.groundSurfaceId}))}));
  const ground={base:BASE_GROUND_SURFACE,themed:THEMED_FLOOR_SURFACES,rangeMat:RANGE_MAT_SURFACE,complex:PEEK_ZONES.map(z=>({bounds:z.bounds,center:z.center,material:z.material}))};
- const characterIdentity=characterGeometry===FIELD_CHARACTER_GEOMETRY?{characterGeometryVersion:characterGeometry}:{};
+ const characterIdentity=characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:characterGeometry}:{};
  return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:REPLAY_SIMULATION_VERSION,movementVersion:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({weapons:WEAPONS,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
 }
 export function replayRulesFor(header:ReplayHeader):SimulationRulesId {

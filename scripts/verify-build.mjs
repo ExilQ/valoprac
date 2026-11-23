@@ -86,7 +86,7 @@ assert(peeking&&peeking.after.drawCalls.max<peeking.before.drawCalls.max);
 console.log(JSON.stringify({obstacleValidation:true,scenePresets:obstacles.pairs.length}));
 
 const characters=JSON.parse(read(release.characterReview.report.slice(1)));
-assert.equal(characters.release,release.version);
+assert.equal(characters.release,'12.0.6');
 assert.equal(characters.baseline,'12.0.5');
 assert.equal(release.characterReview.geometryVersion,'field-agent-1');
 assert(characters.passed&&characters.alignment.falsePositive===0&&characters.alignment.falseNegative===0);
@@ -100,3 +100,17 @@ for(const {before,after} of characters.pairs){
 }
 for(const pair of characters.pairs.filter(pair=>pair.pose==='lane'))assert(pair.after.triangles<=pair.before.triangles*1.13);
 console.log(JSON.stringify({characterValidation:true,scenePresets:characters.pairs.length}));
+
+const agent=JSON.parse(read(release.agentReview.report.slice(1)));
+assert.equal(agent.release,release.version);
+assert.equal(agent.geometryVersion,release.agentReview.geometryVersion);
+assert.equal(agent.baseline,characters.release);
+assert(agent.passed&&agent.alignment.sampledRays>=12480&&agent.alignment.falsePositive===0&&agent.alignment.falseNegative===0);
+assert.equal(agent.pairs.length,7);
+for(const {before,after} of agent.pairs){
+ assert.deepEqual(after.camera,before.camera);
+ assert.deepEqual(after.viewport,before.viewport);
+ assert.equal(after.drawCalls,before.drawCalls);
+ assert.equal(after.programs,0);
+ assert(after.geometryBytes<96*1024);
+}

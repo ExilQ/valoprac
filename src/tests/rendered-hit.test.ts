@@ -25,6 +25,20 @@ function visibleHead(ray:Ray,matrix:Matrix4){
  try{mesh.matrixAutoUpdate=false;mesh.matrix.copy(matrix);mesh.updateMatrixWorld(true);caster.ray.copy(ray);return caster.intersectObject(mesh).map(h=>h.distance);}
  finally{geometry.dispose();material.dispose();}
 }
+// Sample inside the left contour at brow height. Headwear and a bare face
+// have different edges; the submitted-frame and advanced-tick assertions
+// below must remain identical for either silhouette.
+function rayAtVisibleLeftEdge(matrix:Matrix4){
+ let outside=-.20,inside=0;
+ expect(visibleHead(rayAtHead(matrix,outside),matrix)).toHaveLength(0);
+ expect(visibleHead(rayAtHead(matrix,inside),matrix).length).toBeGreaterThan(0);
+ for(let i=0;i<8;i++){
+  const middle=(outside+inside)/2;
+  if(visibleHead(rayAtHead(matrix,middle),matrix).length)inside=middle;
+  else outside=middle;
+ }
+ return rayAtHead(matrix,inside+.003);
+}
 function simulation(){const s=new Simulation('free','rifleA',{...DEFAULT_SETTINGS,behavior:'stationary',targetCount:1,autoReload:false,analysisWall:false});s.running=true;s.yaw=Math.PI;
  s.weapon.profile={...s.weapon.profile,firstSpread:0,bloomPerShot:0,randomness:0,fireRate:10,adsFireRate:10,recoil:[[0,0]]};return s;}
 function submit(s:Simulation,stamp:number){return s.renderedTargets.capture(s.targets,s.targets.map(t=>matrices(t)),stamp)!;}
@@ -41,7 +55,7 @@ describe('Shot collision follows submitted target poses, independently of the ne
     const dx=t.previous.x+(t.position.x-t.previous.x)*alpha-t.position.x;
     frame(history,t,phase*1000+i*1000/fps,dx);submitted=phase*1000+i*1000/fps;
    }
-   const shown=history.copyForShot(submitted+.1)!,shownHead=shown.targets[0]!.matrices[0],ray=rayAtHead(shownHead);
+   const shown=history.copyForShot(submitted+.1)!,shownHead=shown.targets[0]!.matrices[0],ray=rayAtVisibleLeftEdge(shownHead);
    const visible=visibleHead(ray,shownHead);expect(visible.length).toBeGreaterThan(0);
    t.step(time+dt,dt);leads.push(t.position.x-shown.targets[0]!.position.x);const advanced=castShot(ray,[t],result(),[]);
    expect(advanced.zone).toBe('miss');

@@ -1,0 +1,526 @@
+{
+  "schema": 1,
+  "release": "12.0.7",
+  "baseline": "12.0.6",
+  "baselineCommit": "a0faad52ec0a7541df450d73dee081c6614297f5",
+  "geometryVersion": "field-agent-2",
+  "historicalGeometryVersions": [
+    "classic-1",
+    "field-agent-1"
+  ],
+  "reference": {
+    "url": "https://playvalorant.com/en-us/agents/phoenix/",
+    "reviewed": "Official masthead illustration and third-person ultimate ability clip. Qualitative comparison of shoulder-to-waist taper, segmented clothing values and accent placement.",
+    "officialMeshOrColorParityMeasured": false,
+    "shippedReferenceAssets": 0
+  },
+  "priorReplayFixture": {
+    "checksum": "9b379b08f270d4a8",
+    "fingerprint": "c62cd09ad9c0482e"
+  },
+  "environment": {
+    "browser": "154.0.8037.57",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "method": "Identical cameras, poses, character counts, fixed seed, viewport and graphic settings. Draws and triangles are renderer totals, including shadow passes where enabled. Geometry bytes sum CPU-visible vertex and index arrays of rendered characters only.",
+  "alignment": {
+    "benchmark": "target-visual-alignment",
+    "method": "Independent Three.Mesh.raycast versus shared-surface shooting BVH",
+    "sampledRays": 12480,
+    "visibleSurfaceHits": 4011,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "poses": [
+      "standing",
+      "strafe",
+      "crouch",
+      "rotation90",
+      "rotation45-scale0.5",
+      "rotation-45-scale2"
+    ]
+  },
+  "pairs": [
+    {
+      "quality": "high",
+      "pose": "front",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 0.7,
+            "y": 1.24,
+            "z": -8.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 58,
+        "triangles": 13544,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "fc98b704f79ae945634633654690bfa5574a9128e36782bef87e5812d8b620c6"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 0.7,
+            "y": 1.24,
+            "z": -8.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 58,
+        "triangles": 15542,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "f46c1cb4bc1474159d4d6aa16e7ba8667345c48642fae419616d3bb3073b4a7a"
+      }
+    },
+    {
+      "quality": "high",
+      "pose": "rear",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 2,
+            "y": 1.25,
+            "z": -15.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 52,
+        "triangles": 13040,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "2174926f634093aa6a4234ae813bd20a4cc3b9cfedd967cf0d9ba08abd00f63f"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 2,
+            "y": 1.25,
+            "z": -15.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 52,
+        "triangles": 15038,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "6f5c11a5f801e5e25966b7da0236a88fc00a97acc5b80eed8f70054f381bb998"
+      }
+    },
+    {
+      "quality": "high",
+      "pose": "portrait",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 0.38,
+            "y": 1.65,
+            "z": -10.47
+          },
+          "target": {
+            "x": 0,
+            "y": 1.55,
+            "z": -12
+          },
+          "fov": 35
+        },
+        "drawCalls": 55,
+        "triangles": 13476,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "3b83146a67a33bbc544e7cfeea3c0af0536e63c7b9a3aef9683d375c84c508d4"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 0.38,
+            "y": 1.65,
+            "z": -10.47
+          },
+          "target": {
+            "x": 0,
+            "y": 1.55,
+            "z": -12
+          },
+          "fov": 35
+        },
+        "drawCalls": 55,
+        "triangles": 15474,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "736e3d927b3c9b8f56a27b0e414f76b993436d55ef0c8742c7624602b695e5f3"
+      }
+    },
+    {
+      "quality": "high",
+      "pose": "crouch",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 1.7,
+            "y": 1.14,
+            "z": -9
+          },
+          "target": {
+            "x": 0,
+            "y": 0.74,
+            "z": -12
+          },
+          "fov": 45
+        },
+        "drawCalls": 56,
+        "triangles": 13172,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "6aa9cdd9df149c26e2bbb3b26946e5dc21c7f5748428167e1c1017d76f561b75"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 1.7,
+            "y": 1.14,
+            "z": -9
+          },
+          "target": {
+            "x": 0,
+            "y": 0.74,
+            "z": -12
+          },
+          "fov": 45
+        },
+        "drawCalls": 56,
+        "triangles": 15170,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "5ce8b4d1e539c807fc625bbee25fb197c6775cf8ddb80b76832a447c403854b6"
+      }
+    },
+    {
+      "quality": "high",
+      "pose": "lane",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 3
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -12
+          },
+          "fov": 82
+        },
+        "drawCalls": 60,
+        "triangles": 38520,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "a9dbc0f09245dd7dc010358fed789d2e7b0075ef553089db2a2d9f5510544c10"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 3
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -12
+          },
+          "fov": 82
+        },
+        "drawCalls": 60,
+        "triangles": 54504,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "e0cc7d887f08031937c22c81e08ece45f251b863eaa02b2ee393bf7fb2f8c745"
+      }
+    },
+    {
+      "quality": "low",
+      "pose": "front",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 0.7,
+            "y": 1.24,
+            "z": -8.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 35,
+        "triangles": 7418,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "b998abf629bbc4f33a17a7ff52cb0a9e05c3c15cac06c95cab0a689d176f6fd8"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 0.7,
+            "y": 1.24,
+            "z": -8.4
+          },
+          "target": {
+            "x": 0,
+            "y": 0.95,
+            "z": -12
+          },
+          "fov": 48
+        },
+        "drawCalls": 35,
+        "triangles": 8417,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "6676d1a664a56e8e2dca85f58fd4818aa1de1c063b6fb9d399c37de0aa509ea7"
+      }
+    },
+    {
+      "quality": "low",
+      "pose": "lane",
+      "before": {
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 3
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -12
+          },
+          "fov": 82
+        },
+        "drawCalls": 37,
+        "triangles": 20144,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 59118,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "794816e24fcb8e28948c96a1c6f05f4a0a7111cc335903966799d9a4d9fd77ce"
+      },
+      "after": {
+        "camera": {
+          "position": {
+            "x": 0,
+            "y": 1.64,
+            "z": 3
+          },
+          "target": {
+            "x": 0,
+            "y": 1.64,
+            "z": -12
+          },
+          "fov": 82
+        },
+        "drawCalls": 37,
+        "triangles": 28136,
+        "programs": 0,
+        "viewport": [
+          640,
+          480
+        ],
+        "geometryBytes": 86942,
+        "batching": {
+          "backend": "instanced",
+          "targetCount": 12,
+          "partCount": 11,
+          "batchCount": 11,
+          "instanceCount": 132,
+          "instanceCapacity": 132
+        },
+        "screenshotSHA256": "53f3a141a34c23a8bef85e051901c46a3196ddf17214f26a4078dffa1f116191"
+      }
+    }
+  ],
+  "passed": true,
+  "limits": {
+    "physicalFPSMeasured": false,
+    "physicalInputLatencyMeasured": false,
+    "officialGeometryDimensionsAvailable": false
+  }
+}

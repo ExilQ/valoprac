@@ -31,7 +31,7 @@ export interface ReplayHeader {
   * initial weapon/settings and ordered input stream remain authoritative. */
  simulationRules?:import('../simulation/rules').SimulationRulesId;materialPhysicsVersion?:string;inputVersion?:string;weaponVersion?:string;
  /** Older recordings without this field retain the original target surfaces. */
- characterGeometryVersion?:typeof import('../targets/characterProfile').FIELD_CHARACTER_GEOMETRY;
+ characterGeometryVersion?:Exclude<import('../targets/characterProfile').CharacterGeometryVersion,'classic-1'>;
  createdAt:number;fixedHz:120;map:string;physics:string;seed:number;
  initial:{mode:Mode;weapon:WeaponId;settings:Settings;attached:boolean;options:SimulationOptions};
 }

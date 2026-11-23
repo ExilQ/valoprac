@@ -16,16 +16,29 @@ export class Target {
   difficulty:'easy'|'normal'|'hard'='normal';enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
   direction=1;directionZ=0;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
   constructor(public id:number,public behavior:Behavior,public rng:SeededRandom,readonly characterGeometry:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
+    const tailored=characterGeometry===FIELD_CHARACTER_GEOMETRY;
     this.root.add(this.upper,this.leftHip,this.rightHip);
     this.head=this.part('head',this.upper,0,1.68,0,0.34,0.34,0.34,'sphere');
-    this.part('torso',this.upper,0,1.13,0,0.48,0.58,0.28);
-    this.part('torso',this.upper,0,0.735,0,0.43,0.21,0.27);
+    this.part('torso',this.upper,0,tailored ? 1.208 : 1.13,0,0.48,tailored ? .50 : .58,0.28);
+    this.part('torso',this.upper,0,tailored ? .888 : .735,0,0.43,tailored ? .20 : .21,0.27);
     this.upper.add(this.leftArm,this.rightArm);this.leftArm.position.set(-0.34,1.36,0);this.rightArm.position.set(0.34,1.36,0);
     this.part('arm',this.leftArm,0,-0.2,0,0.17,0.4,0.18);this.part('arm',this.leftArm,0,-0.51,0.025,0.15,0.22,0.16);
     this.part('arm',this.rightArm,0,-0.2,0,0.17,0.4,0.18);this.part('arm',this.rightArm,0,-0.51,0.025,0.15,0.22,0.16);
+    if(tailored){
+      // Pivot each forearm around the elbow in parent space; the normalized
+      // mesh still uses its centre as origin, shared by rendering and hit tests.
+      for(const i of [4,6]){
+        const forearm=this.parts[i].node;
+        const bend=i===4?-.38:-.53;
+        forearm.rotation.x=bend;
+        forearm.position.y=-.4-.11*Math.cos(bend);
+        forearm.position.z=.025-.11*Math.sin(bend);
+      }
+    }
     for(const [hip,knee,x] of [[this.leftHip,this.leftKnee,-0.13],[this.rightHip,this.rightKnee,0.13]] as const){
-      hip.position.set(x,0.63,0);hip.add(knee);knee.position.y=-0.29;
-      this.part('leg',hip,0,-0.145,0,0.18,0.29,0.2);this.part('leg',knee,0,-0.17,0.01,0.16,0.34,0.18);
+      const thigh=tailored ? .37 : .29,shin=tailored ? .42 : .34;
+      hip.position.set(tailored ? x*.86 : x,thigh+shin,0);hip.add(knee);knee.position.y=-thigh;
+      this.part('leg',hip,0,-thigh/2,0,tailored ? .21 : .18,thigh,0.2);this.part('leg',knee,0,-shin/2,0.01,tailored ? .18 : .16,shin,0.18);
     }
   }
   private part(zone:HitZone,parent:Object3D,x:number,y:number,z:number,w:number,h:number,d:number,shape:'sphere'|'box'='box'){
@@ -59,7 +72,7 @@ export class Target {
     this.root.position.copy(this.position);this.root.scale.setScalar(this.scale);this.root.rotation.y=0;
     const stride=Math.sin(time*9+this.phase)*Math.min(0.32,Math.hypot(this.velocity.x,this.velocity.z)*0.13);
     this.upper.position.y=-0.43*this.crouch+Math.abs(stride)*0.025;this.upper.rotation.z=stride*0.04;
-    this.leftHip.position.y=this.rightHip.position.y=0.63-0.2*this.crouch;
+    this.leftHip.position.y=this.rightHip.position.y= (this.characterGeometry===FIELD_CHARACTER_GEOMETRY ? .79 : .63)-0.2*this.crouch;
     this.leftHip.rotation.x=stride-0.7*this.crouch;this.rightHip.rotation.x=-stride-0.7*this.crouch;
     this.leftKnee.rotation.x=Math.max(0,-stride)+1.25*this.crouch;this.rightKnee.rotation.x=Math.max(0,stride)+1.25*this.crouch;
     this.leftArm.rotation.x=-stride*0.6;this.rightArm.rotation.x=stride*0.6;

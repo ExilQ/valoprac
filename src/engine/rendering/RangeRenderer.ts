@@ -10,7 +10,7 @@ import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchite
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
 import {useCharacterFinishes} from './CharacterMaterial';
-import {FIELD_CHARACTER_GEOMETRY} from '../targets/characterProfile';
+import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
 import {obstacleFinishes} from './ObstacleFinishes';
 import {surfaceHeight,type Obstacle} from '../collision/environment';
@@ -248,7 +248,7 @@ export class RangeRenderer {
   private buildTargets(){
     // The canonical animated surface matrices remain the hit-registration input.
     // GPU grouping and visibility compaction never alter those world poses.
-    const version=this.simulation.characterGeometry,field=version===FIELD_CHARACTER_GEOMETRY;
+    const version=this.simulation.characterGeometry,field=version!==LEGACY_CHARACTER_GEOMETRY;
     const familyFor=(part:number):VisualMaterialId=>part===0?'composite':field||part<7?'fabric':'rubber';
     const byFamily=new Map<VisualMaterialId,THREE.MeshStandardMaterial>(),geometries:THREE.BufferGeometry[]=[],perPart:THREE.MeshStandardMaterial[]=[];
     const count=this.simulation.targets.length;

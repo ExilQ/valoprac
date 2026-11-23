@@ -1,5 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {BufferGeometry,FrontSide,Matrix4,Mesh,MeshBasicMaterial,Ray,Raycaster,Vector3,type Intersection} from 'three';
+import {PREVIOUS_FIELD_GEOMETRY} from '../engine/targets/characterProfile';
 import {Target} from '../engine/targets/Target';
 import {SeededRandom} from '../engine/simulation/random';
 import {characterPartGeometry,characterPartSourceGeometry,type CharacterHitRegion} from '../engine/rendering/CharacterGeometry';
@@ -54,7 +55,14 @@ describe('Rendered target surfaces are the authoritative shooting surfaces',()=>
  it('rejects the historical invisible head margin and admits the visible neck and glove tips',()=>{
   const t=new Target(0,'stationary',new SeededRandom(1));t.spawn(0,0,0);
   const front=(x:number,y:number)=>t.intersect(new Ray(new Vector3(x,y,4),new Vector3(0,0,-1)),output)?.zone??'miss';
-  expect(front(.16,1.68)).toBe('miss');expect(front(-.16,1.68)).toBe('miss');expect(front(0,1.68)).toBe('head');expect(front(0,1.48)).toBe('torso');expect(front(-.289,.72)).toBe('arm');expect(front(.289,.72)).toBe('arm');
+  expect(front(.16,1.68)).toBe('miss');expect(front(-.16,1.68)).toBe('miss');expect(front(0,1.68)).toBe('head');expect(front(0,1.48)).toBe('torso');// Each flexed wrist raises the glove to a different height.
+  expect(front(-.289,.755)).toBe('arm');expect(front(.289,.775)).toBe('arm');
+  const previous=new Target(0,'stationary',new SeededRandom(1),PREVIOUS_FIELD_GEOMETRY);previous.spawn(0,0,0);
+  for(const x of [-.289,.289]){
+   const ray=new Ray(new Vector3(x,.72,4),new Vector3(0,0,-1));
+   expect(previous.intersect(ray,output)?.zone).toBe('arm');
+   expect(t.intersect(ray,output)).toBeNull();
+  }
  });
 
  it('keeps repeated exact-surface casting finite with a shared bounded hierarchy',()=>{

@@ -1,4 +1,6 @@
-import {BufferGeometry,Color,Float32BufferAttribute,ShapeUtils,Uint8BufferAttribute,Vector2} from 'three';
+import {BufferGeometry,Float32BufferAttribute,ShapeUtils,Uint8BufferAttribute,Vector2} from 'three';
+import {finish,type Finish,type Ring,type Point} from './CharacterSurfaces';
+import {buildAgentPart} from './AgentSilhouette';
 import type {HitZone} from '../types';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {legacyCharacterPartGeometry} from './LegacyCharacterGeometry';
@@ -6,12 +8,6 @@ import {legacyCharacterPartGeometry} from './LegacyCharacterGeometry';
 /** Each region is a span of triangle corners in draw order. For indexed
  * geometry these offsets address the index buffer, not unique vertices. */
 export interface CharacterHitRegion {start:number;count:number;zone:HitZone;}
-interface Finish {color:Color;roughness:number;metalness:number;}
-type Ring=readonly [y:number,radiusX:number,radiusZ:number,offsetZ?:number,finish?:Finish,offsetX?:number];
-type Point=readonly [x:number,y:number];
-
-function finish(color:number,roughness:number,metalness=0):Finish{return{color:new Color(color),roughness,metalness};}
-
 const TWILL=finish(0x647985,.89);
 const WEAVE_LIGHT=finish(0x7c939b,.86);
 const WEAVE_DARK=finish(0x364c5a,.94);
@@ -35,9 +31,9 @@ const MASK_GRILLE:readonly Point[]=[[-.114,-.295],[.114,-.295],[.144,-.244],[-.1
 const BUCKLE:readonly Point[]=[[-.14,.22],[.14,.22],[.13,.48],[-.13,.48]];
 const HARNESS:readonly Point[]=[[-.32,.11],[-.239,.11],[-.176,.473],[-.253,.483]];
 
-const canonical:BufferGeometry[]=[];
+const canonical=new Map<CharacterGeometryVersion,BufferGeometry[]>();
 
-function buildFieldPart(index:number){
+function buildFieldPart(index:number,version:CharacterGeometryVersion){
   const positions:number[]=[],colors:number[]=[],response:number[]=[],indices:number[]=[],regions:CharacterHitRegion[]=[];
   const zone:HitZone=index===0?'head':index<3?'torso':index<7?'arm':'leg';
 
@@ -50,11 +46,12 @@ function buildFieldPart(index:number){
   function region(start:number,hitZone:HitZone){
     regions.push({start,count:indices.length-start,zone:hitZone});
   }
-  function loft(rings:readonly Ring[],surface:Finish,facets=8,hitZone=zone){
+  function loft(rings:readonly Ring[],surface:Finish,facets=8,hitZone=zone,frontRelief?:(x:number,y:number)=>number){
     const start=indices.length,base=positions.length/3;
     function ringVertex(row:Ring,side:number){
       const [y,radiusX,radiusZ,z=0,mat=surface,x=0]=row,angle=side*Math.PI*2/facets;
-      vertex(x+Math.sin(angle)*radiusX,y,z+Math.cos(angle)*radiusZ,mat);
+      const vx=x+Math.sin(angle)*radiusX,cos=Math.cos(angle);
+      vertex(vx,y,z+cos*radiusZ+(frontRelief&&cos>0?frontRelief(vx,y)*cos:0),mat);
     }
     for(const ring of rings)for(let side=0;side<facets;side++)ringVertex(ring,side);
     for(let row=1;row<rings.length;row++)for(let side=0;side<facets;side++){
@@ -73,11 +70,14 @@ function buildFieldPart(index:number){
     }
     region(start,hitZone);
   }
-  function panel(outline:readonly Point[],baseZ:number,faceZ:number,surface:Finish,edge=surface,x=0,y=0,scale=1){
+  function panel(outline:readonly Point[],baseZ:number,faceZ:number,surface:Finish,edge=surface,x=0,y=0,scale=1,relief?:(x:number,y:number)=>number){
     const start=indices.length,base=positions.length/3,count=outline.length;
     const centerX=outline.reduce((sum,p)=>sum+p[0],0)/count,centerY=outline.reduce((sum,p)=>sum+p[1],0)/count;
     for(const [depth,shrink,material] of [[baseZ,1,edge],[faceZ,.88,surface]] as const){
-      for(const [px,py] of outline)vertex(x+(centerX+(px-centerX)*shrink)*scale,y+(centerY+(py-centerY)*shrink)*scale,depth,material);
+      for(const [px,py] of outline){
+        const vx=x+(centerX+(px-centerX)*shrink)*scale,vy=y+(centerY+(py-centerY)*shrink)*scale;
+        vertex(vx,vy,depth+(relief?.(vx,vy)??0),material);
+      }
     }
     function triangle(a:number,b:number,c:number){if(faceZ>baseZ)indices.push(a,b,c);else indices.push(a,c,b);}
     // The open back is embedded in the parent surface.
@@ -89,7 +89,9 @@ function buildFieldPart(index:number){
     region(start,zone);
   }
 
-  if(index===0){
+  if(version===FIELD_CHARACTER_GEOMETRY){
+    buildAgentPart(index,loft,panel);
+  }else if(index===0){
     loft([[-.69,.176,.186],[-.43,.18,.19],[-.28,.175,.17]],NECK,8,'torso');
     loft([[-.45,.14,.18,.025],[-.38,.23,.265,.03],[-.2,.31,.345,.015],[.04,.345,.38],[.28,.3,.32]],FACE,12);
     // Shell wraps the temples and occiput with the brow open for the visor.
@@ -151,7 +153,9 @@ function buildFieldPart(index:number){
 export function characterPartSourceGeometry(index:number,version:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
   if(!Number.isInteger(index)||index<0||index>=11)throw new RangeError('Invalid character part');
   if(version===LEGACY_CHARACTER_GEOMETRY)return legacyCharacterPartGeometry(index);
-  return canonical[index]??(canonical[index]=buildFieldPart(index));
+  let parts=canonical.get(version);
+  if(!parts){parts=[];canonical.set(version,parts);}
+  return parts[index]??(parts[index]=buildFieldPart(index,version));
 }
 
 export function characterPartGeometry(index:number,version:CharacterGeometryVersion=FIELD_CHARACTER_GEOMETRY){
