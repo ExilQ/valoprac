@@ -13,7 +13,7 @@ with zipfile.ZipFile(sys.argv[1],'w',zipfile.ZIP_DEFLATED) as z:
   for current,dirs,files in os.walk(root):
    # Optional QA screenshots are served separately. Avoid embedding
    # those binary copies twice in the self-contained response Worker.
-   dirs[:]=[d for d in dirs if d not in skip and not (current=='public' and d in {'downloads','interface-comparison','validation','movement-ui','corrections-ui','physics-comparison'})]
+   dirs[:]=[d for d in dirs if d not in skip and not (current=='public' and d in {'downloads','interface-comparison','validation','movement-ui','corrections-ui','physics-comparison','modern-web-comparison'})]
    for f in sorted(files):z.write(os.path.join(current,f))
  for f in extra:
   if not os.path.isfile(f):raise RuntimeError('Required source file missing: '+f)

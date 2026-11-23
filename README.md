@@ -1,4 +1,10 @@
-# VALOPRAC 12.0.0 — versioned physics, original materials and measured performance
+# VALOPRAC 12.0.1 — intent-loaded training and modern browser navigation
+
+Release **12.01** remodels the existing menu around a container-sized training workspace and a collision-derived map plan. The actual 3D preview is opt-in; settings, inventory, results and history are lazy route chunks. Native destination links preserve modified clicks and browser history, a skip link reaches a single main landmark, and SPA transitions update focus and document titles. History deletion uses a named native modal with safe initial focus and an asynchronous storage error path.
+
+The existing light/dark themes, Korean text, collapsible training selector, all modes and settings remain available. Gameplay stays **12.0.0 / simulation 3**; this presentation patch changes no simulation, movement, material physics, hitboxes, audio or replay algorithms. See [the implementation report](docs/modern-web-12.01/IMPLEMENTATION.md), [browser evidence](docs/modern-web-12.01/WORKFLOW.json), and `/modern-web.html` for genuine before/after captures.
+
+## Retained 12.00 mechanics release
 
 Release **12.00** improves swept collision across fast wall contacts, corners, ceilings, stairs and steep supports while preserving the existing 120 Hz fixed simulation and separate VALORANT, CS2-inspired and Source Classic movement rules. Twenty-two physical surface IDs connect collision, sight transmission, penetration, contact audio and impacts to fifteen independently authored PBR finishes. Rendering uses shared procedural maps, conservative static batches, compact actor instances and pooled surface decals.
 

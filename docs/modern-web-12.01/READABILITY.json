@@ -1,0 +1,825 @@
+{
+  "rows": [
+    {
+      "theme": "light",
+      "screen": "home",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 82,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "home",
+      "width": 390,
+      "height": 844,
+      "textSamples": 77,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "maps",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 75,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "maps",
+      "width": 390,
+      "height": 844,
+      "textSamples": 71,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "weapons",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 77,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "weapons",
+      "width": 390,
+      "height": 844,
+      "textSamples": 73,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 55,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings",
+      "width": 390,
+      "height": 844,
+      "textSamples": 51,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-일반",
+      "width": 390,
+      "textSamples": 51,
+      "controls": 1,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-조작",
+      "width": 390,
+      "textSamples": 67,
+      "controls": 11,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-감도",
+      "width": 390,
+      "textSamples": 85,
+      "controls": 6,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-조준점",
+      "width": 390,
+      "textSamples": 59,
+      "controls": 4,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-그래픽",
+      "width": 390,
+      "textSamples": 58,
+      "controls": 5,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-사운드",
+      "width": 390,
+      "textSamples": 42,
+      "controls": 3,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-훈련",
+      "width": 390,
+      "textSamples": 111,
+      "controls": 3,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "settings-고급",
+      "width": 390,
+      "textSamples": 45,
+      "controls": 2,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "history",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 47,
+      "chartSamples": 0,
+      "controls": 2,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "history",
+      "width": 390,
+      "height": 844,
+      "textSamples": 43,
+      "chartSamples": 0,
+      "controls": 2,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "aim",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 67,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "aim",
+      "width": 390,
+      "height": 844,
+      "textSamples": 63,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "tools",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 36,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "tools",
+      "width": 390,
+      "height": 844,
+      "textSamples": 32,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 5.157,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "stream",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 42,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.602,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "light",
+      "screen": "stream",
+      "width": 390,
+      "height": 844,
+      "textSamples": 38,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.602,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "home",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 82,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "home",
+      "width": 390,
+      "height": 844,
+      "textSamples": 77,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "maps",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 75,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "maps",
+      "width": 390,
+      "height": 844,
+      "textSamples": 71,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "weapons",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 77,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "weapons",
+      "width": 390,
+      "height": 844,
+      "textSamples": 73,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 55,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings",
+      "width": 390,
+      "height": 844,
+      "textSamples": 51,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-일반",
+      "width": 390,
+      "textSamples": 51,
+      "controls": 1,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-조작",
+      "width": 390,
+      "textSamples": 67,
+      "controls": 11,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-감도",
+      "width": 390,
+      "textSamples": 85,
+      "controls": 6,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-조준점",
+      "width": 390,
+      "textSamples": 59,
+      "controls": 4,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-그래픽",
+      "width": 390,
+      "textSamples": 58,
+      "controls": 5,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-사운드",
+      "width": 390,
+      "textSamples": 42,
+      "controls": 3,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-훈련",
+      "width": 390,
+      "textSamples": 111,
+      "controls": 3,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "settings-고급",
+      "width": 390,
+      "textSamples": 45,
+      "controls": 2,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "history",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 47,
+      "chartSamples": 0,
+      "controls": 2,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "history",
+      "width": 390,
+      "height": 844,
+      "textSamples": 43,
+      "chartSamples": 0,
+      "controls": 2,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "aim",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 67,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "aim",
+      "width": 390,
+      "height": 844,
+      "textSamples": 63,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "tools",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 36,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "tools",
+      "width": 390,
+      "height": 844,
+      "textSamples": 32,
+      "chartSamples": 0,
+      "controls": 1,
+      "minText": 4.774,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "stream",
+      "width": 1366,
+      "height": 768,
+      "textSamples": 42,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 6.663,
+      "failures": [],
+      "layout": {
+        "width": 1366,
+        "height": 768,
+        "documentWidth": 1366,
+        "failures": [],
+        "scrollableControls": []
+      }
+    },
+    {
+      "theme": "dark",
+      "screen": "stream",
+      "width": 390,
+      "height": 844,
+      "textSamples": 38,
+      "chartSamples": 0,
+      "controls": 0,
+      "minText": 6.663,
+      "failures": [],
+      "layout": {
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "failures": [],
+        "scrollableControls": []
+      }
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "method": "Browser computed foreground/background alpha composition; WCAG 4.5 normal / 3 large text and form boundaries. Visible DOM text only; no claim for images or WebGL pixels.",
+  "passed": true,
+  "completedAt": "2026-11-15T08:24:30.168Z"
+}

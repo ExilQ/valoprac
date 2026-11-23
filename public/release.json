@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.0",
+  "version": "12.0.1",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -146,7 +146,11 @@
     "restart-safe-audio-event-identities",
     "bounded-replay-export-and-seek",
     "transactional-local-history-retention",
-    "authored-boundary-only-material-impacts"
+    "authored-boundary-only-material-impacts",
+    "intent-loaded-training-preview",
+    "container-sized-training-workspace",
+    "native-route-links-and-skip-navigation",
+    "native-history-delete-confirmation"
   ],
   "unreal": {
     "engine": "5.7",
@@ -161,7 +165,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.00",
+  "patchLabel": "12.01",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -408,11 +412,24 @@
       "settings"
     ],
     "settingsCategories": 8,
-    "validation": "/interface-validation.json",
-    "gameplayParametersChanged": true,
+    "validation": "/modern-web-validation.json",
+    "gameplayParametersChanged": false,
     "gameplayCompatibilityVersion": "12.0.0",
-    "captureRelease": "11.0.0",
-    "note": "The retained interface evidence describes release11; release12 changes collision and physical surface rules, versioned separately from appearance."
+    "captureRelease": "12.0.1",
+    "note": "Presentation-only modern web update; gameplay and replay compatibility remain 12.0.0 / simulation 3. Historical interface11 and physics12 captures keep their original release metadata.",
+    "modernWebGuidance": {
+      "repository": "https://github.com/GoogleChrome/modern-web-guidance-src",
+      "guides": [
+        "accessibility",
+        "size-aware-styling",
+        "performance",
+        "dialog"
+      ],
+      "containerSizedTrainingPanel": true,
+      "optInWebGLPreview": true,
+      "nativeRouteLinks": true,
+      "nativeHistoryConfirmation": true
+    }
   },
   "physicsMaterials": {
     "validation": "/physics-materials-validation.json",

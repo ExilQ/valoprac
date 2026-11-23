@@ -1,0 +1,894 @@
+{
+  "schema": 1,
+  "release": "12.0.1",
+  "patchLabel": "12.01",
+  "baselineCommit": "76ad060f3dd55f56cca71978f23336f9751e59f9",
+  "guidance": {
+    "repository": "https://github.com/GoogleChrome/modern-web-guidance-src",
+    "skill": "https://github.com/GoogleChrome/modern-web-guidance/blob/main/skills/modern-web-guidance/SKILL.md",
+    "searchSkillVersion": "2026_11_09-5bcc021b",
+    "guides": [
+      "accessibility",
+      "size-aware-styling",
+      "performance",
+      "dialog"
+    ],
+    "cliTelemetryDisabled": true
+  },
+  "tests": {
+    "application": 1455,
+    "broker": 20,
+    "hosting": 14,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "workflow": {
+    "passed": true,
+    "checks": [
+      "Cold home mounts no WebGL canvas and requests no gameplay runtime or renderer",
+      "First Tab reaches skip link; Enter focuses the unique main landmark",
+      "SPA navigation updates URL and moves keyboard focus into new content",
+      "Ctrl-click opens the actual destination in a new tab without changing current settings page",
+      "Browser Back restores home and the correct selected navigation entry",
+      "Training list still collapses and retains the user preference after reload",
+      "Eight viewport sizes fit navigation and controls; desktop start action stays above the fold",
+      "Available container space drives two columns; without size queries the safe stacked layout remains usable",
+      "Five movement and tactical mode selections update the launch label and real collision-derived plan without starting a game",
+      "Opt-in 3D preview really creates WebGL, then unmounts it and restores the map plan",
+      "Native destructive dialog initially focuses Cancel, prevents focus into the inert page, closes with Escape and restores the invoker without deleting data",
+      "Storage failure keeps confirmation open, reports the error and preserves the stored session",
+      "Cancel preserves real local session; explicit delete clears it and closes only after storage succeeds",
+      "Eight application destinations contain exactly one main and one page heading",
+      "Dark preference survives navigation; forced colors show selection and reduced motion disables navigation transitions"
+    ],
+    "layouts": [
+      {
+        "width": 1280,
+        "height": 720,
+        "overflow": false,
+        "columns": "373.344px 324.641px",
+        "task": {
+          "x": 530,
+          "y": 186.296875,
+          "width": 373.34375,
+          "height": 482.953125,
+          "right": 903.34375,
+          "bottom": 669.25
+        },
+        "preview": {
+          "x": 919.34375,
+          "y": 186.296875,
+          "width": 324.640625,
+          "height": 482.953125,
+          "right": 1243.984375,
+          "bottom": 669.25
+        },
+        "start": {
+          "x": 555,
+          "y": 547.5625,
+          "width": 323.34375,
+          "height": 75.890625,
+          "right": 878.34375,
+          "bottom": 623.453125
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 1366,
+        "height": 768,
+        "overflow": false,
+        "columns": "419.344px 364.641px",
+        "task": {
+          "x": 530,
+          "y": 186.296875,
+          "width": 419.34375,
+          "height": 482.953125,
+          "right": 949.34375,
+          "bottom": 669.25
+        },
+        "preview": {
+          "x": 965.34375,
+          "y": 186.296875,
+          "width": 364.640625,
+          "height": 482.953125,
+          "right": 1329.984375,
+          "bottom": 669.25
+        },
+        "start": {
+          "x": 555,
+          "y": 547.5625,
+          "width": 369.34375,
+          "height": 75.890625,
+          "right": 924.34375,
+          "bottom": 623.453125
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 1600,
+        "height": 900,
+        "overflow": false,
+        "columns": "544.5px 473.484px",
+        "task": {
+          "x": 530,
+          "y": 192.296875,
+          "width": 544.5,
+          "height": 479.765625,
+          "right": 1074.5,
+          "bottom": 672.0625
+        },
+        "preview": {
+          "x": 1090.5,
+          "y": 192.296875,
+          "width": 473.484375,
+          "height": 479.765625,
+          "right": 1563.984375,
+          "bottom": 672.0625
+        },
+        "start": {
+          "x": 555,
+          "y": 546.375,
+          "width": 494.5,
+          "height": 75.890625,
+          "right": 1049.5,
+          "bottom": 622.265625
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "overflow": false,
+        "columns": "677.156px 588.828px",
+        "task": {
+          "x": 566,
+          "y": 192.296875,
+          "width": 677.15625,
+          "height": 479.765625,
+          "right": 1243.15625,
+          "bottom": 672.0625
+        },
+        "preview": {
+          "x": 1259.15625,
+          "y": 192.296875,
+          "width": 588.828125,
+          "height": 479.765625,
+          "right": 1847.984375,
+          "bottom": 672.0625
+        },
+        "start": {
+          "x": 591,
+          "y": 546.375,
+          "width": 627.15625,
+          "height": 75.890625,
+          "right": 1218.15625,
+          "bottom": 622.265625
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 2560,
+        "height": 1440,
+        "overflow": false,
+        "columns": "677.156px 588.828px",
+        "task": {
+          "x": 886,
+          "y": 204.296875,
+          "width": 677.15625,
+          "height": 479.765625,
+          "right": 1563.15625,
+          "bottom": 684.0625
+        },
+        "preview": {
+          "x": 1579.15625,
+          "y": 204.296875,
+          "width": 588.828125,
+          "height": 479.765625,
+          "right": 2167.984375,
+          "bottom": 684.0625
+        },
+        "start": {
+          "x": 911,
+          "y": 558.375,
+          "width": 627.15625,
+          "height": 75.890625,
+          "right": 1538.15625,
+          "bottom": 634.265625
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 3440,
+        "height": 1440,
+        "overflow": false,
+        "columns": "677.156px 588.828px",
+        "task": {
+          "x": 1326,
+          "y": 204.296875,
+          "width": 677.15625,
+          "height": 479.765625,
+          "right": 2003.15625,
+          "bottom": 684.0625
+        },
+        "preview": {
+          "x": 2019.15625,
+          "y": 204.296875,
+          "width": 588.828125,
+          "height": 479.765625,
+          "right": 2607.984375,
+          "bottom": 684.0625
+        },
+        "start": {
+          "x": 1351,
+          "y": 558.375,
+          "width": 627.15625,
+          "height": 75.890625,
+          "right": 1978.15625,
+          "bottom": 634.265625
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 112.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 158.09375
+          },
+          {
+            "x": 16,
+            "y": 163.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 209.09375
+          },
+          {
+            "x": 16,
+            "y": 214.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 260.09375
+          },
+          {
+            "x": 16,
+            "y": 265.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 311.09375
+          },
+          {
+            "x": 16,
+            "y": 316.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 362.09375
+          },
+          {
+            "x": 16,
+            "y": 367.09375,
+            "width": 175,
+            "height": 46,
+            "right": 191,
+            "bottom": 413.09375
+          }
+        ]
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "overflow": false,
+        "columns": "354px",
+        "task": {
+          "x": 18,
+          "y": 696.1875,
+          "width": 354,
+          "height": 514.75,
+          "right": 372,
+          "bottom": 1210.9375
+        },
+        "preview": {
+          "x": 18,
+          "y": 1226.9375,
+          "width": 354,
+          "height": 428.390625,
+          "right": 372,
+          "bottom": 1655.328125
+        },
+        "start": {
+          "x": 43,
+          "y": 1085.25,
+          "width": 304,
+          "height": 75.890625,
+          "right": 347,
+          "bottom": 1161.140625
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 48.25,
+            "bottom": 124.5
+          },
+          {
+            "x": 74.953125,
+            "y": 68,
+            "width": 30,
+            "height": 56.5,
+            "right": 104.953125,
+            "bottom": 124.5
+          },
+          {
+            "x": 131.65625,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 163.90625,
+            "bottom": 124.5
+          },
+          {
+            "x": 190.625,
+            "y": 68,
+            "width": 65.46875,
+            "height": 56.5,
+            "right": 256.09375,
+            "bottom": 124.5
+          },
+          {
+            "x": 282.796875,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 315.046875,
+            "bottom": 124.5
+          },
+          {
+            "x": 341.75,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 374,
+            "bottom": 124.5
+          }
+        ]
+      },
+      {
+        "width": 320,
+        "height": 700,
+        "overflow": false,
+        "columns": "284px",
+        "task": {
+          "x": 18,
+          "y": 696.1875,
+          "width": 284,
+          "height": 539.9375,
+          "right": 302,
+          "bottom": 1236.125
+        },
+        "preview": {
+          "x": 18,
+          "y": 1252.125,
+          "width": 284,
+          "height": 428.390625,
+          "right": 302,
+          "bottom": 1680.515625
+        },
+        "start": {
+          "x": 43,
+          "y": 1110.4375,
+          "width": 234,
+          "height": 75.890625,
+          "right": 277,
+          "bottom": 1186.328125
+        },
+        "nav": [
+          {
+            "x": 16,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 48.25,
+            "bottom": 124.5
+          },
+          {
+            "x": 60.953125,
+            "y": 68,
+            "width": 30,
+            "height": 56.5,
+            "right": 90.953125,
+            "bottom": 124.5
+          },
+          {
+            "x": 103.65625,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 135.90625,
+            "bottom": 124.5
+          },
+          {
+            "x": 148.625,
+            "y": 68,
+            "width": 65.46875,
+            "height": 56.5,
+            "right": 214.09375,
+            "bottom": 124.5
+          },
+          {
+            "x": 226.796875,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 259.046875,
+            "bottom": 124.5
+          },
+          {
+            "x": 271.75,
+            "y": 68,
+            "width": 32.25,
+            "height": 56.5,
+            "right": 304,
+            "bottom": 124.5
+          }
+        ]
+      }
+    ],
+    "captureDate": "2026-11-15T08:24:30.154Z"
+  },
+  "readability": {
+    "passed": true,
+    "screens": 8,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "layoutSamples": 48,
+    "textSamples": 2894,
+    "failed": 0,
+    "minimumMeasuredTextRatio": 4.602,
+    "method": "Browser computed foreground/background alpha composition; WCAG 4.5 normal / 3 large text and form boundaries. Visible DOM text only; no claim for images or WebGL pixels.",
+    "captureDate": "2026-11-15T08:24:30.168Z"
+  },
+  "gameplay": {
+    "passed": true,
+    "checks": [
+      "Real uninterrupted WebGL draws, pointer lock and trusted firing advance state and consume ammunition",
+      "Two trusted right clicks enter/exit persistent rifle ADS",
+      "Escape restores controls and pauses authority",
+      "Actual completed UI flow saves IndexedDB session and its replay reconstructs matching shots and checksum",
+      "Primary training start remains reachable across seven required desktop/mobile viewport sizes",
+      "Actual frozen simulation-2 replay file imports and verifies through the browser UI"
+    ],
+    "legacyReplayVerified": true,
+    "savedReplayVerified": true,
+    "captureDate": "2026-11-15T08:21:50.458Z"
+  },
+  "initialLoad": {
+    "method": "Separate cold browser contexts, same 1366x768 viewport and default settings. Count same-origin JavaScript responses through networkidle + 1s; compare decoded source bytes and identically computed gzip level6 estimates. Local vs public timing and native compressed transfer are not compared.",
+    "rows": [
+      {
+        "name": "before",
+        "url": "https://valoprac.trade/",
+        "canvas": 1,
+        "scripts": [
+          {
+            "path": "/assets/react-Bg9W9dCp.js",
+            "decoded": 223175,
+            "gzipEstimate": 69221
+          },
+          {
+            "path": "/assets/index-DlQyc3Cs.js",
+            "decoded": 256144,
+            "gzipEstimate": 84017
+          },
+          {
+            "path": "/assets/three-CAui7GUu.js",
+            "decoded": 595302,
+            "gzipEstimate": 151145
+          },
+          {
+            "path": "/assets/validation-CgAghRad.js",
+            "decoded": 59136,
+            "gzipEstimate": 21573
+          },
+          {
+            "path": "/assets/GameStage-CYUhQDpk.js",
+            "decoded": 45147,
+            "gzipEstimate": 15822
+          },
+          {
+            "path": "/assets/Runtime-Cu5WnL8P.js",
+            "decoded": 51179,
+            "gzipEstimate": 17578
+          },
+          {
+            "path": "/assets/ExerciseTraining-CFVJ5srW.js",
+            "decoded": 6558,
+            "gzipEstimate": 3091
+          },
+          {
+            "path": "/assets/levels-DjNCvTiD.js",
+            "decoded": 5689,
+            "gzipEstimate": 2825
+          },
+          {
+            "path": "/assets/types-B64zWvIt.js",
+            "decoded": 659,
+            "gzipEstimate": 486
+          },
+          {
+            "path": "/assets/statistics-zktoDNT8.js",
+            "decoded": 2659,
+            "gzipEstimate": 1062
+          },
+          {
+            "path": "/assets/projection-CT4dA78w.js",
+            "decoded": 393,
+            "gzipEstimate": 245
+          },
+          {
+            "path": "/assets/RangeRenderer-DhAFnX-C.js",
+            "decoded": 163085,
+            "gzipEstimate": 56136
+          },
+          {
+            "path": "/assets/Input-CxvuCuPn.js",
+            "decoded": 49661,
+            "gzipEstimate": 18320
+          },
+          {
+            "path": "/assets/LiveRecoil-BEFzzNxL.js",
+            "decoded": 2272,
+            "gzipEstimate": 1211
+          }
+        ],
+        "decoded": 1461059,
+        "gzipEstimate": 442732
+      },
+      {
+        "name": "after",
+        "url": "http://127.0.0.1:5542/",
+        "canvas": 0,
+        "scripts": [
+          {
+            "path": "/assets/index-na6H0VxP.js",
+            "decoded": 124188,
+            "gzipEstimate": 44133
+          },
+          {
+            "path": "/assets/react-Bg9W9dCp.js",
+            "decoded": 223175,
+            "gzipEstimate": 69221
+          },
+          {
+            "path": "/assets/three-CAui7GUu.js",
+            "decoded": 595302,
+            "gzipEstimate": 151145
+          }
+        ],
+        "decoded": 942665,
+        "gzipEstimate": 264499
+      }
+    ],
+    "completedAt": "2026-11-15T08:22:45.283Z"
+  },
+  "sourceSha256": {
+    "src/app/App.tsx": "c3906ee9dfa1bfa5d92ca460bb339fec3aecf01eaf0c0cad21bb225ea27a5353",
+    "src/app/navigation.ts": "e670095e0ed7400ed3ef0339befc2ca20a4087176b59a03b5c43ca99d85cf367",
+    "src/ui/MainMenu.tsx": "a4169e89be48115958a920ec8ff4fb9b25a67f47e4bb8d57230e21546d25ba5e",
+    "src/ui/History.tsx": "35d7c9e97bcba9278898fbf7d510cd1536d9603b32c33b697233fb810ad88552",
+    "src/ui/TrainingMapPlan.tsx": "5344b305f8d898c82e2fd7f0d9a054b5311fb40b557421c1a02bc34a739f8cc1",
+    "src/ui/modernWeb.css": "8aec65bf70adff6eea42736448ccabbd60b5b383d67b4384c0b203a2a9baccb5",
+    "src/ui/homeUtility.css": "80c10c4da7732fd478a74cf2e88db281cda2966f66c2051c04ac55bd3d044e6a",
+    "src/ui/MapLibrary.tsx": "599e3f5610b4f62ab5644a4ce4cd4efa27cf81374982459e65e9cb7c64b2d012",
+    "src/ui/Results.tsx": "79c95265bc6998e1eb99880ccaedc6dc123b1b2603754cadc253e157e27cb72f",
+    "src/ui/TrainingPlatform.tsx": "e41986363d84b39c7ad633cc7f13a9a6221c8070a149df8726509cc390596a37",
+    "src/streaming/StreamingStage.tsx": "48da0b1a7b0b2824bc413f8bdf38ebdb22cab0ea546b2038ece7f83a74dc1b19"
+  },
+  "preserved": {
+    "gameVersion": "12.0.0",
+    "simulationVersion": "valoprac-replay-simulation-3",
+    "gameplayParametersChanged": false,
+    "allTrainingModes": true,
+    "settingsPersistence": true,
+    "koreanInterface": true,
+    "lightDarkSystemThemes": true,
+    "strictSecurityHeaders": true,
+    "trackingAdded": false
+  },
+  "fallbacks": {
+    "containerQueries": "A single stacked column is the default; container size queries enhance it to two columns.",
+    "dialog": "Established showModal/close methods avoid requiring newer invoker attributes, closedby, custom focus traps or a dialog polyfill. Overscroll containment is progressive enhancement.",
+    "reducedMotion": "Navigation motion is removed; existing global near-zero transitions are retained.",
+    "forcedColors": "Selection receives a system-color outline and map silhouettes use system fills."
+  },
+  "comparison": {
+    "url": "/modern-web.html",
+    "viewport": [
+      1366,
+      768
+    ],
+    "fullPage": true,
+    "retouched": false,
+    "format": "WebP quality77 conversion of original screenshots",
+    "images": [
+      {
+        "path": "/modern-web-comparison/before.webp",
+        "sha256": "317d5c6a24b5295cbd64b16a6029e783e7082d01769ab649947a4c481964d2fb"
+      },
+      {
+        "path": "/modern-web-comparison/after.webp",
+        "sha256": "dec740fec8e6add8589721cbc6f857af12b0ceedf3264e9ca860681bbe1f7cb7"
+      }
+    ]
+  },
+  "limits": {
+    "hardwareFPSMeasured": false,
+    "physicalInputLatencyMeasured": false,
+    "humanUsabilityParticipants": 0,
+    "screenReaderHardwareTested": false,
+    "nativeNetworkTransferCompared": false,
+    "initialLoadTimingCompared": false,
+    "browser": "Chromium / SwiftShader; automated workflows, actual WebGL rendering remains enabled."
+  },
+  "passed": true,
+  "deployment": {
+    "verified": false,
+    "note": "Build evidence. Publication and production verification are recorded separately."
+  }
+}

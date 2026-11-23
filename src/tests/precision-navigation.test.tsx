@@ -17,9 +17,9 @@ describe('Precision Utility navigation preserves training routes and real map da
  it('offers six primary destinations and keeps tools within the training section',()=>{
   for(const tab of ['training','maps','weapons','aim','history','settings','tools'] as const){
    state({screen:'menu',activeTab:tab,settings:structuredClone(DEFAULT_SETTINGS)});const html=renderToStaticMarkup(<App/>),nav=html.slice(html.indexOf('<nav aria-label="주 메뉴"'),html.indexOf('</nav>'));
-   expect(nav.match(/<button/g)).toHaveLength(6);expect(nav.match(/aria-current="page"/g)).toHaveLength(1);
+   expect(nav.match(/<a /g)).toHaveLength(6);expect(nav.match(/aria-current="page"/g)).toHaveLength(1);
    for(const label of ['훈련','맵','무기','감도 연구실','기록','설정'])expect(nav).toContain(label);
-   if(tab==='tools')expect(nav.match(/<button class="active"[^>]*>[\s\S]*?<\/button>/)?.[0]).toContain('훈련');
+   if(tab==='tools')expect(nav.match(/<a [^>]*class="active"[^>]*>[\s\S]*?<\/a>/)?.[0]).toContain('훈련');
    expect(html).not.toContain('PRACTICE WITH PURPOSE');
   }
  });

@@ -17,3 +17,8 @@ export function navigate(path: string) {
   try { if (window.location.pathname !== path) window.history.pushState(null, '', path); }
   catch { /* Navigation remains usable when browser history access is denied. */ }
 }
+
+/** Preserve browser link behaviors for modified, auxiliary and external clicks. */
+export function shouldNavigateLocally(event:{button:number;metaKey:boolean;ctrlKey:boolean;shiftKey:boolean;altKey:boolean;defaultPrevented:boolean}){
+ return event.button===0&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey&&!event.defaultPrevented;
+}

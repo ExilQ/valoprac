@@ -14,7 +14,7 @@ export function TrainingPlatform(){
  const [tab,setTab]=useState<keyof typeof TABS>(()=>typeof location!=='undefined'&&(/(?:^|[?&#])scenario=/.test(location.search+location.hash))?'editor':'warmup'),[draft,setDraft]=useState<ScenarioDefinition|undefined>();
  const start=useApp(s=>s.startSession),settings=useApp(s=>s.settings),update=useApp(s=>s.updateSettings),history=useApp(s=>s.history);
  const tools=settings.movementTools;
- return <main className="training-platform"><header className="view-title"><p className="eyebrow">훈련 · 검토 · 직접 구성</p><h1>훈련 도구와 시나리오</h1><p>실제 이동·조준·판정을 사용하고, 호환되는 입력 기록으로 결과를 다시 확인합니다.</p></header>
+ return <section className="training-platform"><header className="view-title"><p className="eyebrow">훈련 · 검토 · 직접 구성</p><h1>훈련 도구와 시나리오</h1><p>실제 이동·조준·판정을 사용하고, 호환되는 입력 기록으로 결과를 다시 확인합니다.</p></header>
   <Tabs items={Object.entries(TABS).map(([id,label])=>({id:id as keyof typeof TABS,label}))} value={tab} onChange={setTab} label="훈련 플랫폼 도구" prefix="platform-tab" panelId="platform-active-panel" className="platform-tabs"/>
   <section id="platform-active-panel" role="tabpanel" aria-labelledby={`platform-tab-${tab}`}>
    {tab==='warmup'&&<ExerciseSetup kind="warmup" onStart={(exercise,weapon)=>start({exercise},weapon)}/>}
@@ -30,5 +30,5 @@ export function TrainingPlatform(){
     <button className="primary-button" onClick={()=>{update({movementTools:{...tools,enabled:true}});start({});}}>현재 맵에서 이동 연습 시작</button>
    </Panel>}
   </section>
- </main>;
+ </section>;
 }

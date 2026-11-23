@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+const json=p=>JSON.parse(readFileSync(p,'utf8'));
+const report=json('public/modern-web-validation.json'),release=json('public/release.json');
+assert.equal(report.release,release.version);assert.equal(report.patchLabel,release.patchLabel);assert.equal(report.passed,true);
+assert.equal(report.tests.passed,true);assert.equal(report.tests.application,json('public/aim-validation.json').tests.application);
+assert(report.tests.application>=1455);assert.equal(report.tests.broker,20);assert.equal(report.tests.hosting,14);
+assert.equal(report.workflow.passed,true);assert.equal(report.workflow.checks.length,15);assert.equal(report.workflow.layouts.length,8);
+assert(report.workflow.layouts.every(row=>!row.overflow));assert.equal(report.readability.passed,true);assert.equal(report.readability.failed,0);assert.equal(report.readability.textSamples,2894);
+assert(report.gameplay.passed&&report.gameplay.legacyReplayVerified&&report.gameplay.savedReplayVerified);
+assert.equal(report.preserved.gameVersion,release.interface.gameplayCompatibilityVersion);assert.equal(report.preserved.gameplayParametersChanged,false);
+assert.deepEqual(report.guidance.guides,['accessibility','size-aware-styling','performance','dialog']);assert.equal(report.guidance.cliTelemetryDisabled,true);
+const [before,after]=report.initialLoad.rows;assert.equal(before.name,'before');assert.equal(after.name,'after');assert.equal(before.canvas,1);assert.equal(after.canvas,0);assert(after.decoded<before.decoded&&after.gzipEstimate<before.gzipEstimate);
+for(const [path,expected]of Object.entries(report.sourceSha256))assert.equal(createHash('sha256').update(readFileSync(path)).digest('hex'),expected,`Captured interface source changed: ${path}`);
+for(const image of report.comparison.images)assert.equal(createHash('sha256').update(readFileSync('public'+image.path)).digest('hex'),image.sha256);
+assert.equal(report.limits.hardwareFPSMeasured,false);assert.equal(report.limits.physicalInputLatencyMeasured,false);assert.equal(report.limits.humanUsabilityParticipants,0);
+console.log(JSON.stringify({modernWebVerified:true,release:report.release,workflowChecks:15,viewports:8,textSamples:2894,gameplayPreserved:true}));

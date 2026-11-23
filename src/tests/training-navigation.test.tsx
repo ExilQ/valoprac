@@ -27,7 +27,7 @@ describe('Named training entry points and visible tactical-map selection',()=>{
  ];
  for(const[mode,settings,label]of cases)it(`highlights the training section and only ${label} for ${mode}/${settings.practiceMap??'range'}`,()=>{
   state(mode,settings);const html=renderToStaticMarkup(<App/>),nav=html.slice(html.indexOf('<nav aria-label="주 메뉴"'),html.indexOf('</nav>'));
-  const active=nav.match(/<button class="active"[^>]*>[\s\S]*?<\/button>/g)??[];expect(active).toHaveLength(1);expect(active[0]).toContain('훈련');expect(nav.match(/<button/g)).toHaveLength(6);
+  const active=nav.match(/<a [^>]*class="active"[^>]*>[\s\S]*?<\/a>/g)??[];expect(active).toHaveLength(1);expect(active[0]).toContain('훈련');expect(nav.match(/<a /g)).toHaveLength(6);
   const menu=renderToStaticMarkup(<MainMenu/>),selected=menu.match(/<button[^>]*aria-pressed="true"[^>]*class="mode-card selected"[^>]*>[\s\S]*?<\/button>/g)??[];expect(selected).toHaveLength(1);expect(selected[0]).toContain(label);
  });
  it('keeps the six authored maps outside the collapsed advanced settings',()=>{

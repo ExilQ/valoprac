@@ -1,0 +1,109 @@
+{
+  "method": "Separate cold browser contexts, same 1366x768 viewport and default settings. Count same-origin JavaScript responses through networkidle + 1s; compare decoded source bytes and identically computed gzip level6 estimates. Local vs public timing and native compressed transfer are not compared.",
+  "rows": [
+    {
+      "name": "before",
+      "url": "https://valoprac.trade/",
+      "canvas": 1,
+      "scripts": [
+        {
+          "path": "/assets/react-Bg9W9dCp.js",
+          "decoded": 223175,
+          "gzipEstimate": 69221
+        },
+        {
+          "path": "/assets/index-DlQyc3Cs.js",
+          "decoded": 256144,
+          "gzipEstimate": 84017
+        },
+        {
+          "path": "/assets/three-CAui7GUu.js",
+          "decoded": 595302,
+          "gzipEstimate": 151145
+        },
+        {
+          "path": "/assets/validation-CgAghRad.js",
+          "decoded": 59136,
+          "gzipEstimate": 21573
+        },
+        {
+          "path": "/assets/GameStage-CYUhQDpk.js",
+          "decoded": 45147,
+          "gzipEstimate": 15822
+        },
+        {
+          "path": "/assets/Runtime-Cu5WnL8P.js",
+          "decoded": 51179,
+          "gzipEstimate": 17578
+        },
+        {
+          "path": "/assets/ExerciseTraining-CFVJ5srW.js",
+          "decoded": 6558,
+          "gzipEstimate": 3091
+        },
+        {
+          "path": "/assets/levels-DjNCvTiD.js",
+          "decoded": 5689,
+          "gzipEstimate": 2825
+        },
+        {
+          "path": "/assets/types-B64zWvIt.js",
+          "decoded": 659,
+          "gzipEstimate": 486
+        },
+        {
+          "path": "/assets/statistics-zktoDNT8.js",
+          "decoded": 2659,
+          "gzipEstimate": 1062
+        },
+        {
+          "path": "/assets/projection-CT4dA78w.js",
+          "decoded": 393,
+          "gzipEstimate": 245
+        },
+        {
+          "path": "/assets/RangeRenderer-DhAFnX-C.js",
+          "decoded": 163085,
+          "gzipEstimate": 56136
+        },
+        {
+          "path": "/assets/Input-CxvuCuPn.js",
+          "decoded": 49661,
+          "gzipEstimate": 18320
+        },
+        {
+          "path": "/assets/LiveRecoil-BEFzzNxL.js",
+          "decoded": 2272,
+          "gzipEstimate": 1211
+        }
+      ],
+      "decoded": 1461059,
+      "gzipEstimate": 442732
+    },
+    {
+      "name": "after",
+      "url": "http://127.0.0.1:5542/",
+      "canvas": 0,
+      "scripts": [
+        {
+          "path": "/assets/index-na6H0VxP.js",
+          "decoded": 124188,
+          "gzipEstimate": 44133
+        },
+        {
+          "path": "/assets/react-Bg9W9dCp.js",
+          "decoded": 223175,
+          "gzipEstimate": 69221
+        },
+        {
+          "path": "/assets/three-CAui7GUu.js",
+          "decoded": 595302,
+          "gzipEstimate": 151145
+        }
+      ],
+      "decoded": 942665,
+      "gzipEstimate": 264499
+    }
+  ],
+  "completedAt": "2026-11-15T08:22:45.283Z"
+}

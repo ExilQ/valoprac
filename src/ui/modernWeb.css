@@ -1,0 +1,68 @@
+/* Modern Web Guidance: content-sized layouts and native browser interactions. */
+.skip-link{position:fixed;z-index:10000;inset-block-start:8px;inset-inline-start:12px;transform:translateY(-180%);padding:12px 18px;background:var(--surface);color:var(--accent);border:2px solid var(--focus);font-weight:650}
+.skip-link:focus{transform:none}
+.utility-content{min-width:0;outline:none;scroll-margin-block-start:16px}
+.utility-content:focus-visible{outline:2px solid var(--focus);outline-offset:-3px}
+.precision-shell .utility-primary-nav a{position:relative;text-decoration:none;text-align:start;transition:background-color var(--ease-fast),color var(--ease-fast)}
+.precision-shell .utility-primary-nav a.active:before{content:"";position:absolute}
+.precision-shell :is(a,button,input,select,summary,textarea):focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.utility-session-container{container:training-session / inline-size;min-width:0}
+.precision-home .utility-session-column{grid-template-columns:minmax(0,1fr);gap:16px}
+.precision-home .home-workspace{grid-template-columns:minmax(230px,264px) minmax(0,1fr);gap:22px}
+.precision-home .utility-task-panel{display:flex;flex-direction:column;padding:24px;min-width:0}
+.precision-home .utility-task-description{min-height:0;line-height:1.8;margin-bottom:2px}
+.precision-home .session-config{grid-template-columns:1fr;gap:16px;padding-block:16px;margin-block-start:20px}
+.precision-home .weapon-quick-select{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;min-height:28px}
+.precision-home .weapon-quick-select .control-label{margin:0}
+.precision-home .utility-preview-panel{display:block;min-width:0}
+.utility-space-preview{background:var(--surface-raised);padding:18px;display:grid;place-items:center;min-height:220px}
+.utility-space-preview .utility-map-plan{height:200px;max-width:500px}
+.utility-space-preview:has(.game-stage){padding:0;display:block}
+.precision-home .utility-space-preview .range-preview{position:relative;inset:auto;width:100%;height:240px!important;min-height:240px;max-height:none}
+.utility-preview-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;padding:10px 16px;border-block:1px solid var(--line);background:var(--surface);color:var(--accent);font-size:12px;font-weight:650;text-align:start}
+.utility-preview-toggle span{font-size:11px;color:var(--muted);font-weight:400}
+.utility-preview-toggle:hover{background:var(--accent-soft)}
+.precision-home .utility-target-rule{margin-inline-start:auto;width:auto}
+.precision-home .utility-task-panel .start-button{margin-block-start:20px}
+.precision-home .utility-recent-strip{padding-block:16px}
+.utility-confirm-dialog{color:var(--ink);background:var(--surface);border:1px solid var(--control-border);border-radius:var(--radius-panel);padding:28px;max-inline-size:min(480px,calc(100dvw - 32px));max-block-size:calc(100dvh - 32px);overflow:auto;margin:auto;word-break:keep-all;overflow-wrap:anywhere}
+.utility-confirm-dialog .eyebrow{font-size:12px;color:var(--muted);margin-bottom:10px}
+.utility-confirm-dialog h2{font-size:22px;line-height:1.4;letter-spacing:-.5px;margin-bottom:12px}
+.utility-confirm-dialog p:not(.eyebrow){font-size:14px;line-height:1.85;color:var(--muted)}
+.utility-dialog-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:24px}
+.utility-dialog-actions button{height:44px;min-height:44px;padding:10px 18px;font-size:14px}
+.utility-danger-button{font-weight:650;line-height:1.4;background:var(--danger);border:1px solid var(--danger);color:var(--surface);border-radius:var(--radius-control)}
+:root[data-theme=dark] .utility-danger-button{color:#202a2d}
+.utility-danger-button:disabled{opacity:.7;cursor:wait}
+.utility-confirm-dialog .utility-delete-error{color:var(--danger);margin-top:14px}
+dialog:modal{overscroll-behavior:contain}
+dialog::backdrop{background:var(--overlay);overflow:hidden;overscroll-behavior:contain}
+@container training-session (min-width:44rem){
+ .precision-home .utility-session-column{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:stretch}
+ .precision-home .utility-task-panel{padding:24px}
+ .precision-home .utility-task-panel .start-button{margin-block-start:auto}
+ .precision-home .utility-quick-targets{padding-bottom:18px}
+ .utility-space-preview{min-height:220px}
+}
+@media(max-width:900px){.precision-home .home-workspace{grid-template-columns:220px minmax(0,1fr);gap:18px}}
+@media(max-width:680px){
+ .precision-home .home-workspace{display:flex;gap:16px}
+ .utility-session-container{width:100%}
+ .precision-home .utility-task-panel{padding:20px}
+ .precision-home .utility-mode-list{max-height:260px;overflow:auto;overscroll-behavior:contain}
+ .utility-space-preview{min-height:180px;padding:12px}
+ .utility-space-preview .utility-map-plan{height:170px}
+ .utility-preview-toggle{flex-wrap:wrap;gap:3px}
+ .utility-preview-toggle span{width:100%}
+ .precision-shell .utility-primary-nav a{min-height:52px}
+}
+@media(forced-colors:active){
+ .precision-shell .utility-primary-nav a[aria-current=page],.precision-home .mode-card[aria-pressed=true]{outline:2px solid Highlight;outline-offset:-2px}
+ .utility-preview-toggle,.utility-danger-button,.utility-plan-wall,.utility-plan-cover{border:1px solid ButtonText}
+ .utility-plan-wall{fill:CanvasText}.utility-plan-cover{fill:GrayText}.utility-plan-start{fill:Highlight}.utility-plan-route{stroke:Highlight}
+}
+@media(prefers-reduced-motion:reduce){.precision-shell .utility-primary-nav a{transition:none}}
+
+/* Empty states use the same tested text tokens as populated history. */
+.precision-shell .history-empty h3{color:var(--ink);font-size:18px;line-height:1.5;font-weight:650}
+.precision-shell .history-empty p{color:var(--muted);font-size:14px;line-height:1.8}
