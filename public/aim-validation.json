@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "release": "3.0.0",
+  "patchLabel": "03.00",
+  "algorithm": "aim-1.0.0",
+  "generatedAt": "2026-10-24T05:10:14.046Z",
+  "tests": {
+    "application": 281,
+    "broker": 20,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "optimizer": {
+    "schema": 1,
+    "benchmark": "synthetic-sensitivity-search",
+    "humanParticipants": 0,
+    "humanEffectivenessVerified": false,
+    "seeds": 24,
+    "cases": [
+      "single-peak",
+      "flat",
+      "two-peaks",
+      "task-tradeoff"
+    ],
+    "budget": 12,
+    "runs": 96,
+    "defaultMethod": "coarse",
+    "methods": [
+      {
+        "method": "grid",
+        "meanRegret": 0.027622124297824693,
+        "regretSD": 0.03525143519095684,
+        "regretInterval": [
+          0.02100621897739377,
+          0.03477439587310676
+        ],
+        "heldoutMean": 0.749978651885502,
+        "meanComputeMs": 0.06913404166668376,
+        "observationsPerRun": [
+          12
+        ]
+      },
+      {
+        "method": "random",
+        "meanRegret": 0.02003925485424322,
+        "regretSD": 0.03410717963556708,
+        "regretInterval": [
+          0.013704712897718777,
+          0.027123381736567365
+        ],
+        "heldoutMean": 0.7438748482493082,
+        "meanComputeMs": 0.06339242708333852,
+        "observationsPerRun": [
+          12
+        ]
+      },
+      {
+        "method": "coarse",
+        "meanRegret": 0.01611377323155248,
+        "regretSD": 0.024083809965216516,
+        "regretInterval": [
+          0.011682690961415781,
+          0.021165192123412137
+        ],
+        "heldoutMean": 0.7442843989026081,
+        "meanComputeMs": 0.1845181874999824,
+        "observationsPerRun": [
+          12
+        ]
+      },
+      {
+        "method": "local",
+        "meanRegret": 0.041053940136497984,
+        "regretSD": 0.09623806220733512,
+        "regretInterval": [
+          0.02418584049755008,
+          0.060996461247085756
+        ],
+        "heldoutMean": 0.7267001638019696,
+        "meanComputeMs": 0.06064339583334899,
+        "observationsPerRun": [
+          12
+        ]
+      },
+      {
+        "method": "bayesian",
+        "meanRegret": 0.019612167439143752,
+        "regretSD": 0.03118825200452326,
+        "regretInterval": [
+          0.014206246015420913,
+          0.02610606660160872
+        ],
+        "heldoutMean": 0.7431010058005967,
+        "meanComputeMs": 3.0582253020833385,
+        "observationsPerRun": [
+          12
+        ]
+      }
+    ],
+    "gpPriorExample": {
+      "mean": 0.5,
+      "sd": 0.3
+    }
+  },
+  "telemetry": {
+    "benchmark": "aim-telemetry-cpu",
+    "events": 200000,
+    "elapsedMs": 17.867473000000018,
+    "bytes": 2883584,
+    "columns": 22,
+    "hardwareInputLatencyMeasured": false,
+    "webglFPSMeasured": false
+  },
+  "humanEvidence": {
+    "participants": 0,
+    "baseline": null,
+    "optimized": null,
+    "pairedDifference": null,
+    "confidenceInterval": null,
+    "effectSize": null,
+    "sessions": 0,
+    "conclusion": "inconclusive",
+    "humanEffectivenessVerified": false
+  },
+  "browserQA": {
+    "menusAndSetupVerifiedInChrome": true,
+    "managedPreviewPointerLock": "denied",
+    "managedWebGL": "disabled",
+    "physicalMouseCalibrationVerified": false,
+    "publicOriginGameplayVerified": false,
+    "highRefreshHardwareVerified": false
+  },
+  "unrealPortImplemented": false
+}

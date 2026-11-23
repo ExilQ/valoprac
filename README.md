@@ -1,3 +1,7 @@
+# VALOPRAC 3.0.0 — aim science
+
+Major patch **03.00** adds neutral angular tasks, shared input telemetry, motion analysis, controlled sensitivity exploration, optional GP-UCB, explainable drills, paired verification and local history. See [methodology](docs/AIM_SCIENCE.md). Human efficacy is unverified. The 2.3 browser game remains intact; Unreal migration remains disabled.
+
 # VALOPRAC 2.3 — persistent footsteps and tactical corner practice
 
 The browser trainer remains the production default. The genuine Unreal Engine 5.7 source project is in `unreal/VALOPRAC`; it has not been built or run with Unreal in this environment. See [migration documentation](docs/migration/README.md), [validation](docs/migration/VALIDATION.md) and [deployment/rollback](docs/migration/DEPLOYMENT.md). No GPU service has been purchased or activated. Release 2.2 adds the portable authoritative analytics journal, browser history/results/recoil adapter, acknowledged input admission, cancellation handling and tested worker teardown. See [protocol and limits](docs/migration/PROTOCOL.md).

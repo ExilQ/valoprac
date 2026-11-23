@@ -17,10 +17,13 @@ assert(Object.keys(manifest).some(k=>k.includes('GameStage')),'3D gameplay must 
 for(const file of readdirSync(join(root,'assets'))){const path=join(root,'assets',file);assert(!file.endsWith('.map'),'Public sourcemaps must not be emitted');assert(statSync(path).size<2_000_000,`Unexpected large asset: ${file}`);if(file.endsWith('.js'))assert(!/sk-(?:proj-)?[A-Za-z0-9_-]{30,}/.test(readFileSync(path,'utf8')),'Potential API key in browser output');}
 assert(read('guide.html').includes('자체 제작 대체음'));
 assert(read('footsteps.html').includes('누적'));
+assert(read('aim-methodology.html').includes('사람의 향상 효과는 아직 미검증'));
+const aim=JSON.parse(read('aim-validation.json'));assert.equal(aim.release,release.version);assert(aim.tests.passed);assert.equal(aim.humanEvidence.participants,0);assert.equal(aim.humanEvidence.humanEffectivenessVerified,false);assert(Object.keys(manifest).some(k=>k.includes('AimDashboard')),'Aim science must be a lazy connected module');
+assert(readdirSync(join(root,'assets')).some(f=>f.includes('analysis.worker')),'Completed trajectory analysis needs its worker chunk');
 assert.equal(JSON.parse(read('footstep-calibration.json')).actualValorantMeasured,false);
 assert(read('_headers').includes('immutable'));
 assert(read('_redirects').includes('/index.html 200'));
-for(const route of ['training','settings','statistics','results','weapons','unreal'])assert.equal(read(`${route}/index.html`),html);
+for(const route of ['training','settings','statistics','results','weapons','unreal','aim'])assert.equal(read(`${route}/index.html`),html);
 assert(existsSync(join(root,'downloads/valoprac-unreal-source.zip')));
 assert(Object.keys(manifest).some(k=>k.includes('EpicSession')),'Official streaming client must remain lazy loaded');
 assert.equal(JSON.parse(read('streaming-config.json')).enabled,release.unreal.productionEnabled,'Release metadata must match the actual streaming configuration');

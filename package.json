@@ -1,6 +1,6 @@
 {
   "name": "valoprac",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.25.0",
@@ -9,7 +9,7 @@
     "build": "tsc -b && node scripts/package-unreal.mjs && vite build && node scripts/export-routes.mjs && node scripts/verify-build.mjs",
     "test": "vitest run --reporter=verbose",
     "typecheck": "tsc -b",
-    "prebuild": "npm test && npm run test:broker && npm run verify:migration",
+    "prebuild": "node scripts/validate-release.mjs",
     "verify:build": "node scripts/verify-build.mjs",
     "test:broker": "node --test infrastructure/pixel-streaming/*.test.mjs",
     "test:core": "node scripts/test-unreal-core.mjs",

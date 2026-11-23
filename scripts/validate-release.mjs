@@ -1,0 +1,11 @@
+import {spawnSync} from 'node:child_process';
+import {readFileSync,writeFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+function run(args){const result=spawnSync('npm',args,{encoding:'utf8',maxBuffer:12*1024*1024});process.stdout.write(result.stdout??'');process.stderr.write(result.stderr??'');if(result.status!==0)process.exit(result.status??1);return (result.stdout??'').replace(/\u001b\[[0-9;?]*[a-zA-Z]/g,'');}
+const app=run(['test']),broker=run(['run','test:broker']);run(['run','verify:migration']);
+const summary=[...app.matchAll(/Tests\s+(\d+)\s+passed\s+\((\d+)\)/g)].at(-1);assert(summary&&summary[1]===summary[2],'Test summary must show all passing');
+const brokerPass=broker.match(/(?:#|ℹ)?\s*pass\s+(\d+)/);assert(brokerPass&&/(?:#|ℹ)?\s*fail\s+0/.test(broker),'Broker tests must pass');
+function jsonLine(name){for(const line of app.split('\n')){try{const value=JSON.parse(line.trim());if(value.benchmark===name)return value;}catch{}}throw new Error(`Missing executed benchmark: ${name}`);}
+const optimizer=jsonLine('synthetic-sensitivity-search'),telemetry=jsonLine('aim-telemetry-cpu');assert.equal(optimizer.humanParticipants,0);assert(optimizer.methods.every(m=>m.observationsPerRun.length===1&&m.observationsPerRun[0]===optimizer.budget));
+const report={schema:1,release:JSON.parse(readFileSync('package.json','utf8')).version,patchLabel:'03.00',algorithm:'aim-1.0.0',generatedAt:new Date().toISOString(),tests:{application:+summary[1],broker:+brokerPass[1],passed:true,renderSchedules:[60,144,240],neutralRuntimeUsesDOMAdapter:true},optimizer,telemetry,humanEvidence:{participants:0,baseline:null,optimized:null,pairedDifference:null,confidenceInterval:null,effectSize:null,sessions:0,conclusion:'inconclusive',humanEffectivenessVerified:false},browserQA:{menusAndSetupVerifiedInChrome:true,managedPreviewPointerLock:'denied',managedWebGL:'disabled',physicalMouseCalibrationVerified:false,publicOriginGameplayVerified:false,highRefreshHardwareVerified:false},unrealPortImplemented:false};
+writeFileSync('public/aim-validation.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({validationReport:'public/aim-validation.json',applicationTests:report.tests.application,brokerTests:report.tests.broker,humanParticipants:0}));

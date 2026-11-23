@@ -6,7 +6,7 @@ import { loadHistory, saveSession } from '../storage/history';
 export type Screen='menu'|'training'|'results';
 interface AppState {
   screen:Screen;mode:Mode;weapon:WeaponId;settings:Settings;locked:boolean;paused:boolean;
-  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream';
+  history:SessionData[];result:SessionData|null;notice:string;activeTab:'training'|'settings'|'history'|'weapons'|'stream'|'aim';
   updateSettings:(patch:Partial<Settings>)=>void;setMode:(mode:Mode)=>void;setWeapon:(weapon:WeaponId)=>void;
   setTab:(tab:AppState['activeTab'])=>void;start:()=>void;finish:(session:SessionData)=>Promise<void>;menu:()=>void;refreshHistory:()=>Promise<void>;
 }

@@ -1,5 +1,6 @@
 import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {footstepProfile} from '../../config/footsteps';
+import {angularGain} from '../input/sensitivity';
 import {TacticalHearing} from '../tactical/Hearing';
 import {obstaclesFor} from '../tactical/map';
 import { Ray, Vector3, MathUtils } from 'three';
@@ -58,7 +59,7 @@ export class Simulation {
     t.spawn(x,z,this.time);
   }
   look(deltaX:number,deltaY:number){
-    const degrees=this.settings.degreesPerCount*this.settings.sensitivity*(this.ads?this.settings.adsSensitivity/this.weapon.profile.adsZoom:1);
+    const degrees=angularGain(this.settings,this.ads,this.weapon.profile.adsZoom);
     const [pitch,yaw]=this.weapon.recoil.compensate(-deltaY*degrees,-deltaX*degrees,this.weapon.profile.cameraScale);
     this.yaw+=yaw*DEG;this.pitch=MathUtils.clamp(this.pitch+pitch*DEG,-1.48,1.48);
   }

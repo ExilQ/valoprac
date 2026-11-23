@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "calibration": "weapons-2.0-11.08-PC",
   "features": [
     "free-practice",
@@ -24,7 +24,14 @@
     "event-based-bot-hearing",
     "corner-peeking-map",
     "footstep-calibration-comparison",
-    "korean-patchnotes"
+    "korean-patchnotes",
+    "aim-motion-telemetry",
+    "isolated-angular-aim-tasks",
+    "sensitivity-experiments",
+    "optional-gp-ucb",
+    "explainable-aim-coaching",
+    "paired-heldout-verification",
+    "local-aim-history"
   ],
   "unreal": {
     "engine": "5.7",
@@ -38,5 +45,15 @@
     "actualValorantMeasured": false,
     "browserImplemented": true,
     "unrealPortImplemented": false
+  },
+  "patchLabel": "03.00",
+  "aimScience": {
+    "algorithm": "aim-1.0.0",
+    "browserImplemented": true,
+    "humanEffectivenessVerified": false,
+    "directionalGain": false,
+    "autoAim": false,
+    "unrealPortImplemented": false,
+    "defaultOptimizer": "coarse"
   }
 }

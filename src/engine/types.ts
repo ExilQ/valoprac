@@ -10,6 +10,7 @@ export const BINDING_ACTIONS = ['forward','backward','left','right','walk','crou
 export type Bindings = Record<typeof BINDING_ACTIONS[number],string>;
 export interface WeaponTotals { shots:number; hits:number; heads:number; recoilSquared:number; spreadSum:number }
 export interface Settings {
+  aimTelemetry:boolean;
   practiceMap:'range'|'tactical';footstepHud:boolean;soundMinimap:boolean;footstepVolume:number;
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
 

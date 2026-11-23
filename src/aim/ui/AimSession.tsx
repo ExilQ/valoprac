@@ -1,0 +1,14 @@
+import {useEffect,useRef,useState} from 'react';
+import {AimRuntime,type AimHud} from '../AimRuntime';
+import {TASK_LABELS,PHASE_LABELS,type AimPlan,type AimRecord} from '../types';
+import {useApp} from '../../app/store';
+const STATUS={ready:'블록 시작 준비',warmup:'워밍업 · 분석 제외',measuring:'측정 중',paused:'일시정지 · 현재 시도 재시작',break:'블록 완료 · 휴식',finished:'측정 완료'};
+export function AimSession({plan,onRecord,onClose}:{plan:AimPlan;onRecord:(r:AimRecord)=>void;onClose:()=>void}){
+ const dialog=useRef<HTMLDialogElement>(null),host=useRef<HTMLDivElement>(null),runtime=useRef<AimRuntime|null>(null),callback=useRef(onRecord);callback.current=onRecord;const settings=useApp(s=>s.settings),[hud,setHud]=useState<AimHud>({status:'ready',block:0,trial:0,remaining:0,events:0,error:'',lastHit:null,processing:0}),[error,setError]=useState('');
+ useEffect(()=>{if(!host.current)return;let r:AimRuntime;try{r=new AimRuntime(host.current,plan,settings,setHud,r=>callback.current(r));runtime.current=r;}catch(e){setError(e instanceof Error?e.message:'측정 화면을 시작하지 못했습니다.');return;}return()=>{runtime.current=null;r.dispose();};},[plan]);
+ useEffect(()=>{dialog.current?.showModal();return()=>dialog.current?.close();},[]);
+ const b=plan.blocks[hud.block],active=hud.status==='measuring'||hud.status==='warmup';
+ return <dialog ref={dialog} onCancel={e=>e.preventDefault()} className="aim-session" aria-modal="true" aria-labelledby="aim-session-title"><header><div><small>{PHASE_LABELS[plan.kind]} · 중립 각도 측정</small><h2 id="aim-session-title">{TASK_LABELS[b.task]}</h2></div><div>블록 {hud.block+1} / {plan.blocks.length} · 감도 {b.sensitivity.toFixed(4)}</div><button disabled={hud.processing>0} onClick={onClose}>측정 종료</button></header><div ref={host} className="aim-stage"/><div className="aim-session-status" aria-live="polite"><strong>{STATUS[hud.status]}</strong><span>{b.trials>1?`${Math.min(hud.trial+1,b.trials)} / ${b.trials}회`:`${hud.remaining.toFixed(1)}초`}</span><span>{hud.events}개 표본 · {hud.processing}개 분석 중</span></div>
+ {!active&&<section className="aim-session-pause"><h3>{STATUS[hud.status]}</h3><p>{hud.status==='finished'?'결과는 이 브라우저에 저장됩니다. 탐색 결과와 보류 과제 검증을 구분해 확인하세요.':'빨간 표적을 조준하세요. 클릭 과제는 명중 여부와 관계없이 한 번 클릭하면 다음 표적으로 넘어갑니다. 트래킹 과제는 표적을 8초간 따라갑니다.'}</p><p>반동·산포·이동·정조준은 중립 측정에서 비활성입니다. 실제 무기 설정과 감도는 바뀌지 않습니다. 블록 사이에는 충분히 쉬세요.</p>{hud.status==='break'?<button className="primary-button" disabled={!!hud.processing} onClick={()=>runtime.current?.next()}>다음 블록 준비</button>:hud.status==='finished'?<button className="primary-button" disabled={!!hud.processing} onClick={onClose}>분석 화면으로</button>:<button className="primary-button" disabled={!!hud.processing||!!error} onClick={()=>void runtime.current?.resume()}>클릭하여 마우스 잠금·측정 시작</button>}</section>}
+ {(hud.error||error)&&<p role="alert" className="aim-error">{hud.error||error}</p>}<footer>기존 마우스 입력 경로 사용 · 브라우저 전달 델타 기록 · 가속 제거는 지원 시 요청 · ESC로 일시정지</footer></dialog>;
+}

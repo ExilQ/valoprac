@@ -1,3 +1,4 @@
+import {sensitivityUnits} from '../engine/input/sensitivity';
 import {FootstepSettings} from './FootstepSettings';
 import { useState } from 'react';
 import { MousePointer2, Crosshair as CrossIcon, Monitor, RotateCcw, Maximize, Volume2, SlidersHorizontal } from 'lucide-react';
@@ -17,7 +18,7 @@ export function SettingsPanel({initialTab='general'}:{initialTab?:Tab}){
  const [tab,select]=useState<Tab>(initialTab),[reset,setReset]=useState(false),[message,setMessage]=useState('');
  const number=(key:NumericKeys,label:string,min:number,max:number,step:number,suffix='')=><label className="range-field"><span>{label}<b>{Number(s[key].toFixed(3))}{suffix}</b></span><input aria-label={label} type="range" min={min} max={max} step={step} value={s[key]} onChange={e=>update({[key]:+e.target.value})}/></label>;
  const toggle=(key:BooleanKeys,label:string)=><label className="toggle-field"><span>{label}</span><input type="checkbox" checked={s[key]} onChange={e=>update({[key]:e.target.checked})}/><i/></label>;
- const cm=360/(s.sensitivity*s.degreesPerCount*s.dpi)*2.54;
+ const cm=sensitivityUnits(s.sensitivity,s.dpi,s.degreesPerCount).cm360??0;
  return <div className="settings-view"><header className="view-title"><p className="eyebrow">나에게 맞는 훈련 환경</p><h1>설정</h1><p>변경한 설정은 자동 저장되며 훈련에 바로 적용됩니다.</p></header>
  <div className="settings-tabs" role="tablist" aria-label="설정 분류">{Object.entries(TABS).map(([id,label])=><button key={id} role="tab" id={`settings-tab-${id}`} aria-controls={`settings-panel-${id}`} aria-selected={tab===id} tabIndex={tab===id?0:-1} onClick={()=>select(id as Tab)} onKeyDown={e=>{const keys=Object.keys(TABS) as Tab[],i=keys.indexOf(tab);if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const next=keys[(i+(e.key==='ArrowRight'?1:4))%5];select(next);requestAnimationFrame(()=>document.getElementById(`settings-tab-${next}`)?.focus());}}}>{label}</button>)}</div>
  <div role="tabpanel" id={`settings-panel-${tab}`} aria-labelledby={`settings-tab-${tab}`} className="settings-tab-content">

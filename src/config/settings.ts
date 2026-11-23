@@ -1,5 +1,6 @@
 import type { Settings, Quality } from '../engine/types';
 export const DEFAULT_SETTINGS: Settings = {
+  aimTelemetry:true,
   practiceMap:'range',footstepHud:true,soundMinimap:true,footstepVolume:.7,
   stepPerMeter:.625,stepWalkingGain:0,stepWalkingDecay:.02,stepStationaryDecay:1.4,stepStationaryVelocity:.035,stepStationaryDelay:.12,stepAudibleVelocity:2.7,stepThreshold:1,stepGraceDistance:.2,stepHearingRadius:20,
 
@@ -23,7 +24,7 @@ export function sanitizeSettings(raw: unknown): Settings {
   const ranges:Partial<Record<keyof Settings,[number,number]>>={footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[1,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,2.5],targetDistance:[5,32],spawnInterval:[0.1,10]};
   for(const [k,range] of Object.entries(ranges)){const v=o[k];if(typeof v==='number'&&Number.isFinite(v))(s as unknown as Record<string,unknown>)[k]=Math.min(range[1],Math.max(range[0],v));}
   if(o.practiceMap==='range'||o.practiceMap==='tactical')s.practiceMap=o.practiceMap;
-  for(const k of ['footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
+  for(const k of ['aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
   if(typeof o.crosshairColor==='string'&&/^#[0-9a-f]{6}$/i.test(o.crosshairColor))s.crosshairColor=o.crosshairColor;
   if(['stationary','strafe','random','stopGo','crouch','peek','appearing'].includes(String(o.behavior)))s.behavior=o.behavior as Settings['behavior'];
   for(const key of ['graphicsPreset','textureQuality','effectsQuality'] as const)if(['low','medium','high','ultra'].includes(String(o[key])))s[key]=o[key] as Quality;

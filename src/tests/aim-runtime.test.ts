@@ -1,0 +1,18 @@
+import {describe,it,expect,vi} from 'vitest';
+import {indexedDB as fakeIndexedDB} from 'fake-indexeddb';
+import {AimRuntime,type AimHud} from '../aim/AimRuntime';
+import {DEFAULT_SETTINGS} from '../config/settings';
+import {makePlan} from '../aim/experiments';
+import {clearAimData,loadAimRecords} from '../aim/storage';
+import type {AimRecord} from '../aim/types';
+class Surface extends EventTarget {style={};clientWidth=1280;clientHeight=720;width=0;height=0;className='';removed=false;setAttribute(){}remove(){this.removed=true;}getContext(){return {setTransform(){},fillRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},arc(){},fill(){}};}requestPointerLock:()=>Promise<void>=async()=>{};}
+function event(type:string,props:Record<string,number>={}){const e=new Event(type);for(const [k,v] of Object.entries(props))Object.defineProperty(e,k,{value:v});return e;}
+describe('Neutral measurement controller with a DOM/canvas adapter (not human evidence)',()=>{
+ for(const fps of [60,144,240])it(`runs warmup, eight real input-path clicks, analysis and exit under ${fps} FPS scheduling`,async()=>{
+  let now=0,frameID=0;const frames=new Map<number,FrameRequestCallback>(),surface=new Surface(),doc=Object.assign(new EventTarget(),{pointerLockElement:null as unknown,hidden:false,createElement:()=>surface,exitPointerLock(){this.pointerLockElement=null;doc.dispatchEvent(new Event('pointerlockchange'));}}),win=new EventTarget();surface.requestPointerLock=async()=>{doc.pointerLockElement=surface;doc.dispatchEvent(new Event('pointerlockchange'));};vi.stubGlobal('document',doc);vi.stubGlobal('window',win);vi.stubGlobal('devicePixelRatio',1);vi.stubGlobal('indexedDB',fakeIndexedDB);vi.stubGlobal('Worker',undefined);vi.stubGlobal('performance',{now:()=>now,timeOrigin:0});vi.stubGlobal('requestAnimationFrame',(fn:FrameRequestCallback)=>{frames.set(++frameID,fn);return frameID;});vi.stubGlobal('cancelAnimationFrame',(id:number)=>frames.delete(id));
+  let runtime:AimRuntime|null=null;
+  try{await clearAimData();let hud:AimHud|null=null;const saved:AimRecord[]=[],settings=structuredClone(DEFAULT_SETTINGS),plan=makePlan({base:.35,alternative:.42,dpi:800,range:.2,rounds:2,goal:'balanced',schedule:'mixed',mousepad:0},'baseline',103,.07,7,['small']);runtime=new AimRuntime({appendChild:()=>{}} as unknown as HTMLElement,plan,settings,h=>{hud=h;},r=>saved.push(r));const advance=(seconds:number)=>{const count=Math.ceil(seconds*fps);for(let i=0;i<count;i++){now+=1000/fps;const entry=[...frames.entries()][0];expect(entry).toBeDefined();frames.delete(entry[0]);entry[1](now);}};
+   await runtime.resume();advance(2.1);expect(hud!.status).toBe('measuring');for(let i=0;i<8;i++){advance(.35);doc.dispatchEvent(event('mousemove',{movementX:20,movementY:0,timeStamp:now}));doc.dispatchEvent(event('mousedown',{button:0,timeStamp:now}));doc.dispatchEvent(event('mouseup',{button:0,timeStamp:now}));}expect(hud!.status).toBe('break');await vi.waitFor(()=>expect(saved).toHaveLength(8),{timeout:5000,interval:5});const records=await loadAimRecords();expect(records).toHaveLength(8);expect(records.every(r=>r.meta.valid&&r.metrics.valid&&r.metrics.inputEvents===1)).toBe(true);expect(records.every(r=>r.meta.appearanceKnown&&r.meta.ads===false)).toBe(true);expect(settings).toEqual(DEFAULT_SETTINGS);expect(records.every(r=>r.meta.sensitivity===.35)).toBe(true);expect(frames.size).toBe(1);runtime.dispose();runtime=null;expect(frames.size).toBe(0);expect(surface.removed).toBe(true);const previous=saved.length;doc.dispatchEvent(event('mousedown',{button:0,timeStamp:now}));expect(saved).toHaveLength(previous);
+  }finally{runtime?.dispose();vi.unstubAllGlobals();}
+ });
+});
