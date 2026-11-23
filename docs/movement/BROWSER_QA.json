@@ -1,0 +1,1538 @@
+{
+  "schema": 1,
+  "startedAt": "2026-10-28T08:24:03.751Z",
+  "passed": true,
+  "transport": "Local development Vite over loopback; actual Chromium WebGL and React UI",
+  "limits": {
+    "softwareGpu": true,
+    "physicalMouse": false,
+    "physicalInputLatency": false,
+    "nativeGameParity": false,
+    "fullscreen": "Document fullscreen API entered via actual trusted Playwright buttonclick; viewport sizes recorded from browser"
+  },
+  "errors": [],
+  "screenshots": [
+    {
+      "name": "09-main-menu",
+      "path": "screenshots/09-main-menu.png"
+    },
+    {
+      "name": "09-movement-settings",
+      "path": "screenshots/09-movement-settings.png"
+    },
+    {
+      "name": "09-bunny-map",
+      "path": "screenshots/09-bunny-map.png"
+    },
+    {
+      "name": "09-wallbang-map",
+      "path": "screenshots/09-wallbang-map.png"
+    },
+    {
+      "name": "09-valorant-air-diagnostics",
+      "path": "screenshots/09-valorant-air-diagnostics.png"
+    },
+    {
+      "name": "09-counterStrike-air-diagnostics",
+      "path": "screenshots/09-counterStrike-air-diagnostics.png"
+    },
+    {
+      "name": "09-hud-1366x768-windowed",
+      "path": "screenshots/09-hud-1366x768-windowed.png"
+    },
+    {
+      "name": "09-hud-1366-maxoptions",
+      "path": "screenshots/09-hud-1366-maxoptions.png"
+    },
+    {
+      "name": "09-hud-1366x768-fullscreen",
+      "path": "screenshots/09-hud-1366x768-fullscreen.png"
+    },
+    {
+      "name": "09-hud-1920x1080-windowed",
+      "path": "screenshots/09-hud-1920x1080-windowed.png"
+    },
+    {
+      "name": "09-hud-1920x1080-fullscreen",
+      "path": "screenshots/09-hud-1920x1080-fullscreen.png"
+    },
+    {
+      "name": "09-hud-2560x1440-windowed",
+      "path": "screenshots/09-hud-2560x1440-windowed.png"
+    },
+    {
+      "name": "09-hud-2560x1440-fullscreen",
+      "path": "screenshots/09-hud-2560x1440-fullscreen.png"
+    },
+    {
+      "name": "09-hud-3440x1440-windowed",
+      "path": "screenshots/09-hud-3440x1440-windowed.png"
+    },
+    {
+      "name": "09-hud-3440x1440-fullscreen",
+      "path": "screenshots/09-hud-3440x1440-fullscreen.png"
+    }
+  ],
+  "layouts": [
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1366,
+        768
+      ],
+      "viewport": [
+        1366,
+        768
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        1920,
+        1080
+      ],
+      "viewport": [
+        1920,
+        1080
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        2560,
+        1440
+      ],
+      "viewport": [
+        2560,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": false,
+      "fullscreenEntered": false,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": false,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    },
+    {
+      "requested": [
+        3440,
+        1440
+      ],
+      "viewport": [
+        3440,
+        1440
+      ],
+      "resolutionMatches": true,
+      "fullscreen": true,
+      "fullscreenEntered": true,
+      "options": true,
+      "scale": 1.25,
+      "overlaps": [],
+      "outside": [],
+      "clipped": [],
+      "criticalAmmoVisible": true,
+      "passed": true,
+      "displayedPanels": [
+        ".hearing-map",
+        ".footstep-gauge",
+        ".braking-hud",
+        ".game-top",
+        ".movement-profile-status",
+        ".drill-hud",
+        ".peeking-hud",
+        ".combat-diagnostics",
+        ".movement-physics-diagnostics",
+        ".live-recoil",
+        ".input-diagnostics",
+        ".ammo-hud",
+        ".game-bottom-center",
+        ".performance-hud",
+        ".game-stage>.patch-button"
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "name": "training navigation collapse/reopen",
+      "passed": true
+    },
+    {
+      "name": "버니합 훈련 navigation",
+      "passed": true,
+      "selected": "bunny"
+    },
+    {
+      "name": "월샷 훈련 navigation",
+      "passed": true,
+      "selected": "wallbang"
+    },
+    {
+      "name": "settings actual Korean profile/preset/wheel controls",
+      "passed": true
+    },
+    {
+      "name": "persist movement preferences",
+      "passed": true
+    },
+    {
+      "name": "actual rendered valorant air steering",
+      "passed": true,
+      "outcome": {
+        "profile": "valorant",
+        "actual": "valorant",
+        "x": -0.2928302210988475,
+        "y": 0.7187499999999997,
+        "physics": {
+          "profile": "valorant",
+          "label": "발로란트 물리엔진",
+          "preset": null,
+          "horizontalSpeed": 2.382974925257136,
+          "verticalSpeed": 0.6999999999999994,
+          "velocity": {
+            "x": -2.276542898769506,
+            "y": 0.6999999999999994,
+            "z": 0.704217242380779
+          },
+          "velocityDirection": {
+            "x": -0.9553364891256061,
+            "y": 0,
+            "z": 0.29552020666133955
+          },
+          "acceleration": {
+            "x": -8.364626499151875,
+            "y": -18.000000000000004,
+            "z": 5.480239367918736
+          },
+          "airAcceleration": {
+            "x": -8.364626499151875,
+            "y": 0,
+            "z": 5.480239367918736
+          },
+          "wishDirection": {
+            "x": -0.8364626499151869,
+            "y": 0,
+            "z": 0.5480239367918736
+          },
+          "groundNormal": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "supportHeight": 0,
+          "grounded": false,
+          "lastJumpAt": 0.008333333333333333,
+          "lastLandingAt": null,
+          "jumpTimingMs": null,
+          "chainedJumps": 0,
+          "landingRetention": null,
+          "effectiveJumpBufferMs": 80,
+          "landingWindowMs": 80,
+          "jumpSpamBlockedUntil": null
+        }
+      }
+    },
+    {
+      "name": "actual rendered counterStrike air steering",
+      "passed": true,
+      "outcome": {
+        "profile": "counterStrike",
+        "actual": "counterStrike",
+        "x": -0.20018971825418105,
+        "y": 1.1938333333333335,
+        "physics": {
+          "profile": "counterStrike",
+          "label": "카운터 스트라이크 물리엔진",
+          "preset": "cs2",
+          "horizontalSpeed": 0.9135254071465525,
+          "verticalSpeed": 2.3200000000000003,
+          "velocity": {
+            "x": -0.9108782933223019,
+            "y": 2.3200000000000003,
+            "z": 0.06949391524820948
+          },
+          "velocityDirection": {
+            "x": -0.9971023095761299,
+            "y": 0,
+            "z": 0.0760722303994561
+          },
+          "acceleration": {
+            "x": -0.8694758770173427,
+            "y": -20.32,
+            "z": 0.5696531615810002
+          },
+          "airAcceleration": {
+            "x": -0.8694758770173427,
+            "y": 0,
+            "z": 0.5696531615810002
+          },
+          "wishDirection": {
+            "x": -0.8364626499151869,
+            "y": 0,
+            "z": 0.5480239367918736
+          },
+          "groundNormal": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "supportHeight": 0,
+          "grounded": false,
+          "lastJumpAt": 0.2583333333333333,
+          "lastLandingAt": null,
+          "jumpTimingMs": null,
+          "chainedJumps": 0,
+          "landingRetention": null,
+          "effectiveJumpBufferMs": 40,
+          "landingWindowMs": 80,
+          "jumpSpamBlockedUntil": null
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "map": "bunny",
+      "shot": null,
+      "position": {
+        "x": 0,
+        "y": 0.7083333333333329,
+        "z": -4.3644444444444375
+      },
+      "finite": true,
+      "hop": {
+        "jumps": 3,
+        "chainedJumps": 0,
+        "missedInputs": 0,
+        "landings": 2,
+        "peakSpeed": 5.4,
+        "lastLandingInterval": 0.8333333333333333,
+        "lastInputTimingMs": null,
+        "timingMeanMs": null,
+        "timingDeviationMs": null,
+        "groundContactSeconds": 0,
+        "speedPreservation": null,
+        "events": [
+          {
+            "kind": "jump",
+            "time": 0.008333333333333333,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "land",
+            "time": 0.575,
+            "speed": 5.4,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 3.3305555555555544
+            }
+          },
+          {
+            "kind": "jump",
+            "time": 0.8416666666666667,
+            "speed": 5.4,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0.26666666666666666,
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 1.9355555555555566
+            }
+          },
+          {
+            "kind": "land",
+            "time": 1.4083333333333332,
+            "speed": 5.4,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": -1.1694444444444425
+            }
+          },
+          {
+            "kind": "jump",
+            "time": 1.675,
+            "speed": 5.4,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0.26666666666666666,
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": -2.5644444444444403
+            }
+          }
+        ]
+      },
+      "targets": 0,
+      "materials": [
+        "reinforced",
+        "concrete"
+      ]
+    },
+    {
+      "map": "wallbang",
+      "shot": {
+        "hit": "head",
+        "damage": 144.0771694048476,
+        "penetratedLayers": 1,
+        "materials": [
+          "thinWood"
+        ]
+      },
+      "position": {
+        "x": -10,
+        "y": 0,
+        "z": -3
+      },
+      "finite": true,
+      "hop": {
+        "jumps": 3,
+        "chainedJumps": 0,
+        "missedInputs": 0,
+        "landings": 3,
+        "peakSpeed": 0,
+        "lastLandingInterval": 0.6000000000000001,
+        "lastInputTimingMs": null,
+        "timingMeanMs": null,
+        "timingDeviationMs": null,
+        "groundContactSeconds": 0.008333333333333333,
+        "speedPreservation": null,
+        "events": [
+          {
+            "kind": "jump",
+            "time": 0.008333333333333333,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": -13,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "land",
+            "time": 0.575,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": -13,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "jump",
+            "time": 0.8416666666666667,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0.26666666666666666,
+            "position": {
+              "x": -13,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "land",
+            "time": 1.4083333333333332,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": -13,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "jump",
+            "time": 1.675,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0.26666666666666666,
+            "position": {
+              "x": -13,
+              "y": 0,
+              "z": 5
+            }
+          },
+          {
+            "kind": "land",
+            "time": 2.0083333333333333,
+            "speed": 0,
+            "inputTimingMs": null,
+            "groundContactSeconds": 0,
+            "position": {
+              "x": -10,
+              "y": 0,
+              "z": -3
+            }
+          }
+        ]
+      },
+      "targets": 3,
+      "materials": [
+        "reinforced",
+        "thinWood",
+        "thinMetal"
+      ]
+    }
+  ],
+  "interactionCaptureStartedAt": "2026-10-28T08:16:55.331Z",
+  "completedAt": "2026-10-28T08:26:28.303Z",
+  "publicScreenshots": [
+    "/movement-ui/09-movement-settings.png",
+    "/movement-ui/09-hud-1366-maxoptions.png"
+  ]
+}

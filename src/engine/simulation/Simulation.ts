@@ -8,6 +8,7 @@ import {AngleTraining} from '../tactical/AngleTraining';
 import {Exposure} from '../tactical/Exposure';
 import {spreadDirection} from '../weapons/trajectory';
 import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
+import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
 import {TacticalHearing} from '../tactical/Hearing';
@@ -15,6 +16,7 @@ import {obstaclesFor} from '../tactical/map';
 import { Ray, Vector3, MathUtils } from 'three';
 import type { Mode, Settings, PracticeMap, WeaponId, InputState, ShotEvent, KillEvent, DirectionResponse, SessionData } from '../types';
 import { Movement } from '../movement/Movement';
+import {MOVEMENT_PHYSICS_VERSION} from '../../config/movement';
 import { Braking } from '../movement/Braking';
 import { Weapon } from '../weapons/Weapon';
 import { Target } from '../targets/Target';
@@ -37,6 +39,7 @@ export class Simulation {
  get scopeLevel(){return this.weaponId==='operator'?this.weapon.scopeLevel:0;}
  readonly practiceMap:PracticeMap;level:TacticalLevel|null=null;angles:AngleTraining|null=null;exposure:Exposure;tap:TapDrill;adsChangedAt=0;stoppedAt:number|null=null;readonly obstacles;footsteps:Footsteps;hearing:TacticalHearing|null=null;
   onFootstep:((event:FootstepEvent)=>void)|null=null;
+  landings=new Landings();onLanding:((event:LandingSoundEvent)=>void)|null=null;
 
   operatorStats={scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,holdingSeconds:0,scopeTransitions:0,recoverySamples:0,recoverySum:0,highGroundShots:0,highGroundHits:0,missedRecoverySeconds:0};private operatorLastShot:number|null=null;
   private emptySummary=summarize([],[],[],{samples:0,onHead:0,errorSquared:0});
@@ -48,10 +51,13 @@ export class Simulation {
   onShot:((shot:ShotEvent)=>void)|null=null;onKill:(()=>void)|null=null;onFinish:(()=>void)|null=null;
   private currentInput!:InputState;
   private pendingBrakeShot:ShotEvent|null=null;
+  private physicsTransitions:{time:number;profile:string;preset:string|null}[]=[];
   constructor(public mode:Mode,public weaponId:WeaponId,public settings:Settings){
     this.settings={...settings,bindings:{...settings.bindings}};
-    this.practiceMap=mode==='free'?settings.practiceMap:'range';this.settings.practiceMap=this.practiceMap;this.obstacles=obstaclesFor(this.practiceMap);this.movement.obstacles=this.obstacles;this.movement.profile.jumpBufferSeconds=this.settings.jumpBufferMs/1000;
+    this.practiceMap=mode==='free'?settings.practiceMap:'range';this.settings.practiceMap=this.practiceMap;this.obstacles=obstaclesFor(this.practiceMap);this.movement.obstacles=this.obstacles;this.movement.configurePhysics(this.settings,0);
+    this.physicsTransitions.push({time:0,profile:this.movement.profile.id,preset:this.movement.profile.preset});
     this.footsteps=new Footsteps(footstepProfile(this.settings));this.footsteps.onStep=e=>{e.material=this.practiceMap==='complex'?zoneAt(e.position)?.material:undefined;this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onFootstep?.(e);};
+    this.landings.resetEncounter(this.movement);this.landings.onLanding=e=>{this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onLanding?.(e);};
     if(this.practiceMap==='tactical'){this.movement.position.set(-7,0,13);this.movement.previous.copy(this.movement.position);}
 
     this.level=levelFor(this.practiceMap);this.exposureLabels=this.level?.angles.map(a=>a.label)??[];if(this.level){this.movement.position.set(this.level.spawn.x,this.level.spawn.y,this.level.spawn.z);this.movement.previous.copy(this.movement.position);}
@@ -101,9 +107,11 @@ export class Simulation {
     const wasAds=this.ads;this.ads=(this.weaponId==='operator'?this.weapon.ads:input.ads&&this.weapon.profile.adsZoom>1)&&this.weapon.reloadingUntil===null&&this.time>=this.weapon.equipUntil;
     if(wasAds!==this.ads){this.adsChangedAt=this.time;if(this.weaponId==='operator'&&this.ads)this.operatorStats.scopeTransitions++;}if(this.weaponId==='operator'&&this.ads&&this.movement.speed<.1&&this.movement.grounded)this.operatorStats.holdingSeconds+=dt;
     this.previousAdsAmount=this.adsAmount;this.adsAmount+=(Number(this.ads)-this.adsAmount)*(1-Math.exp(-Math.log(10)/Math.max(.04,this.weapon.profile.adsTransition)*dt));
-    this.movement.speedModifier=(this.weapon.profile.movementSpeed??this.movement.profile.maxSpeed)/this.movement.profile.maxSpeed*(this.ads?this.weapon.profile.adsMoveModifier:1);
-    this.braking.update(input,this.yaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
-    this.movement.step(input,this.yaw,dt,this.time);
+    this.movement.speedModifier=(this.weapon.profile.movementSpeed??this.movement.weaponSpeedReference)/this.movement.weaponSpeedReference*(this.ads?this.weapon.profile.adsMoveModifier:1);
+    const movementYaw=input.movementYaw??this.yaw;
+    this.braking.update(input,movementYaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
+    this.movement.step(input,movementYaw,dt,this.time);
+    this.landings.step(this.movement,this.time,dt,p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined,this.settings.stepHearingRadius);
     this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
     this.footsteps.step(this.movement,input.walk,dt,this.time);
     const pending=this.pendingBrakeShot,b=this.braking;
@@ -149,7 +157,7 @@ export class Simulation {
       adsTransition:this.ads?this.time-this.adsChangedAt:undefined,targetElevation:targetPosition?targetPosition.y-m.position.y:undefined,stoppedFor:this.stoppedAt===null?0:this.time-this.stoppedAt,position:{x:m.position.x,y:m.position.y,z:m.position.z},velocity:{x:m.velocity.x,y:m.velocity.y,z:m.velocity.z},direction:{x:this.direction.x,y:this.direction.y,z:this.direction.z},aim:{yaw:this.yaw,pitch:this.pitch},
       recoil:{pitch:w.recoil.pitch,yaw:w.recoil.yaw},spread:{...spread},hit:this.hit.zone,impact:{x:this.hit.point.x,y:this.hit.point.y,z:this.hit.point.z},targetId:t?.id??null,targetPosition:targetPosition?{x:targetPosition.x,y:targetPosition.y,z:targetPosition.z}:null,targetState:t?.behavior??null,targetGeneration:t?.generation??null,
       playerCompensation:{pitch:compensationPitch,yaw:compensationYaw},accurate:this.weaponId==='operator'?this.ads&&w.scopeAmount>.98&&m.grounded&&m.speed<=5.13*.72*.15&&this.time-m.landedAt>=.225:m.accurate,releaseTime:episode?b.releaseTime:null,thresholdDelta:episode&&b.thresholdTime!==null?this.time-b.thresholdTime:null,brakingKind:episode?b.kind:null,initialSpeed:episode?b.initialSpeed:null,brakingDuration:episode?b.duration:null,decelerationDuration:episode?b.fullDuration:null,
-      movementDirection:{x:this.currentInput.strafe*Math.cos(this.yaw)-this.currentInput.forward*Math.sin(this.yaw),z:-this.currentInput.forward*Math.cos(this.yaw)-this.currentInput.strafe*Math.sin(this.yaw)},angularError};
+      movementDirection:{x:m.desiredDirection.x,z:m.desiredDirection.z},angularError};
     if(episode){b.shotRecorded=true;if(s.thresholdDelta===null||s.decelerationDuration===null)this.pendingBrakeShot=s;else this.stats.settleBrake(s);}
     if(this.weaponId==='operator'){const o=this.operatorStats,hit=Number(['head','torso','arm','leg'].includes(s.hit));if(s.ads){o.scopedShots++;o.scopedHits+=hit;}else{o.unscopedShots++;o.unscopedHits+=hit;}if(this.operatorLastShot!==null){o.recoverySamples++;o.recoverySum+=this.time-this.operatorLastShot;}this.operatorLastShot=this.time;if(!hit)o.missedRecoverySeconds+=1/w.profile.fireRate;if((s.targetElevation??0)>.4){o.highGroundShots++;o.highGroundHits+=hit;}}
     this.defenders?.shot(s);this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
@@ -172,7 +180,19 @@ export class Simulation {
   }
   configureAmmo(){for(const id of WEAPON_ORDER){this.weapons[id].infiniteReserve=this.settings.infiniteReserve;this.weapons[id].autoReload=this.settings.autoReload;}}
   switchWeapon(id:WeaponId){this.clearFireView();if(id===this.weaponId)return;const old=this.weapon;old.reloadingUntil=null;this.weaponId=id;this.weapon=this.weapons[id];this.ads=false;this.weapon.equip(this.time);}
-  configure(patch:Partial<Settings>){const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);Object.assign(this.settings,patch);this.tap.drill=this.settings.drill;this.movement.profile.jumpBufferSeconds=this.settings.jumpBufferMs/1000;this.settings.practiceMap=this.practiceMap;this.footsteps.configure(footstepProfile(this.settings));this.configureAmmo();this.weapon.configureScope(this.settings);if(this.mode==='free'&&targetChange)this.resetTargets();}
+  configure(patch:Partial<Settings>){
+    const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);
+    const bufferChanged=patch.jumpBufferMs!==undefined&&patch.jumpBufferMs!==this.settings.jumpBufferMs;
+    Object.assign(this.settings,patch);this.tap.drill=this.settings.drill;
+    if(this.movement.configurePhysics(this.settings,this.time)){
+      if(this.pendingBrakeShot)this.stats.settleBrake(this.pendingBrakeShot);
+      this.pendingBrakeShot=null;this.braking=new Braking();this.stoppedAt=null;
+      this.clearFireView();this.renderedTargets.clear();this.footsteps.resetEncounter();this.landings.resetEncounter(this.movement);
+      if(this.currentInput){Object.assign(this.currentInput,emptyInput());delete this.currentInput.movementYaw;delete this.currentInput.jumpRequestedAt;}
+      this.physicsTransitions.push({time:this.time,profile:this.movement.profile.id,preset:this.movement.profile.preset});if(this.physicsTransitions.length>32)this.physicsTransitions.shift();
+    }else if(bufferChanged)this.movement.clearJumpInput();
+    this.settings.practiceMap=this.practiceMap;this.footsteps.configure(footstepProfile(this.settings));this.configureAmmo();this.weapon.configureScope(this.settings);if(this.mode==='free'&&targetChange)this.resetTargets();
+  }
   resetTargets(){this.clearFireView();this.renderedTargets.clear();if(this.practiceMap==='complex'){const sectors=activeAngles(this.settings.peekScenario).slice(0,this.settings.targetCount);for(const t of this.targets){const a=sectors[t.id];t.enabled=!!a;t.active=!!a;if(!a)continue;const base=this.settings.randomDefenders&&a.alternatives?.length?a.alternatives[Math.floor(this.rng.next()*a.alternatives.length)]:a.position;const jitter=this.settings.randomDefenders?this.rng.range(-a.jitter,a.jitter):0;t.scale=1;t.spawn(base.x+jitter,base.z,this.time,base.y);}this.defenders?.setSectors(sectors);this.defenders?.retry();this.exposure?.reset();return;}this.exposure?.reset();this.angles?.reset();for(const t of this.targets){if(this.mode==='free'){t.behavior=this.settings.behavior;t.enabled=t.id<Math.min(this.settings.targetCount,this.hearing?5:this.settings.behavior==='peek'?1:12)&&!(this.settings.analysisWall&&!this.hearing);}if(this.angles)t.enabled=t.id<this.level!.angles.length;if(t.enabled)this.spawn(t);else t.active=false;}this.defenders?.retry();}
   retryTactical(){
     const signature=`${this.ticks}:${this.settings.peekScenario}:${this.weaponId}`;
@@ -187,10 +207,10 @@ export class Simulation {
     this.weapon.equip(this.time);this.ads=false;this.adsAmount=0;this.previousAdsAmount=0;
     this.adsChangedAt=this.time;this.stoppedAt=null;this.operatorLastShot=null;
     this.lastHitAt=-100;this.lastHit='miss';this.lastEarlyAt=-100;this.lastShotAt=-100;
-    this.footsteps.resetEncounter();this.exposure.reset();this.exposure.max=0;this.resetTargets();
+    this.footsteps.resetEncounter();this.landings.resetEncounter(this.movement);this.exposure.reset();this.exposure.max=0;this.resetTargets();
   }
   resetStatistics(){this.tap=new TapDrill(this.settings.drill);this.stats=new LifetimeStats();for(const key of Object.keys(this.operatorStats) as (keyof typeof this.operatorStats)[])this.operatorStats[key]=0;this.operatorLastShot=null;this.shots.length=0;this.kills.length=0;this.reactions.length=0;this.tracking={samples:0,onHead:0,errorSquared:0};this.pendingBrakeShot=null;}
   hudSummary(){return this.stats.apply(this.emptySummary,this.pendingBrakeShot);}
   summary(){return this.stats.apply(summarize(this.shots,this.kills,this.reactions,this.tracking),this.pendingBrakeShot);}
-  snapshot():SessionData{return {movement:this.movement.hopSnapshot(),operator:{...this.operatorStats},peeking:this.defenders?.snapshot(),tactical:this.level?{clears:this.defenders?.report.clears??this.angles?.clears??0,deaths:this.exposure.deaths,maxExposure:this.exposure.max,lastDeath:this.exposure.death}:undefined,drill:{...this.tap.stats},footsteps:{events:this.footsteps.totalEvents,botHeardEvents:this.defenders?.report.heardEvents??this.hearing?.heardEvents??this.angles?.heardEvents??0,finalAccumulation:this.footsteps.footstepAccumulation,recent:this.footsteps.historyRecent()},id:globalThis.crypto?.randomUUID?.()??`session-${Date.now()}-${this.settings.seed}`,createdAt:Date.now(),mode:this.mode,weapon:this.weaponId,duration:this.time,seed:this.settings.seed,settings:{...this.settings},shots:this.shots.slice(),kills:this.kills.slice(),reactions:this.reactions.slice(),tracking:{...this.tracking},summary:this.summary(),weaponTotals:structuredClone(this.stats.weapons),detailLimit:DETAIL_LIMIT};}
+  snapshot():SessionData{return {landings:{events:this.landings.totalEvents,recent:this.landings.historyRecent()},physics:{version:MOVEMENT_PHYSICS_VERSION,current:this.movement.physicsSnapshot(),transitions:this.physicsTransitions.map(t=>({...t}))},movement:this.movement.hopSnapshot(),operator:{...this.operatorStats},peeking:this.defenders?.snapshot(),tactical:this.level?{clears:this.defenders?.report.clears??this.angles?.clears??0,deaths:this.exposure.deaths,maxExposure:this.exposure.max,lastDeath:this.exposure.death}:undefined,drill:{...this.tap.stats},footsteps:{events:this.footsteps.totalEvents,botHeardEvents:this.defenders?.report.heardEvents??this.hearing?.heardEvents??this.angles?.heardEvents??0,finalAccumulation:this.footsteps.footstepAccumulation,recent:this.footsteps.historyRecent()},id:globalThis.crypto?.randomUUID?.()??`session-${Date.now()}-${this.settings.seed}`,createdAt:Date.now(),mode:this.mode,weapon:this.weaponId,duration:this.time,seed:this.settings.seed,settings:{...this.settings},shots:this.shots.slice(),kills:this.kills.slice(),reactions:this.reactions.slice(),tracking:{...this.tracking},summary:this.summary(),weaponTotals:structuredClone(this.stats.weapons),detailLimit:DETAIL_LIMIT};}
 }

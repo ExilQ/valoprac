@@ -1,6 +1,6 @@
-# VALOPRAC 8.0.0 — physical combat, movement and material training
+# VALOPRAC 9.0.0 — dual movement physics and real air control
 
-Patch **08.00** extends the existing browser engine with staged perception, finite bot aim motors, real shared weapon recoil/spread/ammunition/reloading, four difficulty profiles, independent combat/exposure learning modes, full encounter reset, velocity-aware footstep recovery, buffered manual hops and bounded air control, shared multi-material bullet traversal, and original movement/material training environments. All existing weapons, maps, aim experiments, Korean settings and local history remain available.
+Patch **09.00** applies selectable VALORANT and CS2-inspired movement physics across every existing browser mode/map. It adds real camera-relative air steering, timestamped input, distinct ground and landing rules, optional Source Classic, separate landing sounds and physics-compatible analytics. Existing combat, weapons, maps, sensitivity tools and Korean preferences remain available.
 
 Calibration and software evidence are in [combat documentation](docs/combat/README.md) and the generated `/combat-validation.json`. These independent training models are not verified native VALORANT formulas or measured human skill profiles. The runtime remains Three.js/WebGL; the included Unreal staging source remains disabled.
 
@@ -67,3 +67,12 @@ Three.js' MIT-licensed procedural `RoomEnvironment` is used to generate an origi
 Read `docs/UPGRADE_VALIDATION.md` for per-feature status and manual desktop QA. Tests cover mechanics, 30/60/144/240 Hz replay, storage, input contracts, audio lifecycle and one hour of simulated unlimited firing. They do not prove real GPU FPS, actual Pointer Lock, acoustic fidelity or browser soak stability.
 
 The authoritative production repository is the existing Sites source identified by `.openai/hosting.json`; keep its project ID and public audience. Use the existing source helper to open the latest source, validate/build, push the exact source state, package `dist`, save a version and deploy it. Do not replace the Site or move its custom-domain DNS. Previous saved versions remain rollback candidates. `public/release.json` identifies the release for public HTTP verification.
+
+## 09.00 dual movement
+
+The existing browser trainer now selects a VALORANT or CS2-inspired movement
+profile in Settings → Controls. Source Classic is explicitly separate. All
+existing modes/maps keep their weapons, AI, sound and analytics. See
+[implementation and independent calibration](docs/movement/IMPLEMENTATION.md),
+[official references](docs/movement/REFERENCES.md) and
+[release/rollback](docs/movement/RELEASE.md).

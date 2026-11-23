@@ -5,7 +5,7 @@ export type Drill='none'|'tapAD'|'tapDA'|'release'|'wide'|'repeat'|'stopMoving'|
 export type Behavior = 'stationary' | 'strafe' | 'random' | 'stopGo' | 'crouch' | 'peek' | 'appearing'|'short'|'long'|'reactive'|'wide'|'mixed';
 export type HitZone = 'head' | 'torso' | 'arm' | 'leg' | 'wall' | 'miss';
 export interface Vec3 { x: number; y: number; z: number }
-export interface InputState { forward: number; strafe: number; walk: boolean; crouch: boolean; jump: boolean; jumpHeld?:boolean;jumpPresses?:number;fire: boolean; ads: boolean; reload: boolean; firePresses?: number; scopePresses?:number; zoomPresses?:number; scopeHeld?:boolean }
+export interface InputState { forward: number; strafe: number; movementYaw?:number; walk: boolean; crouch: boolean; jump: boolean; jumpHeld?:boolean;jumpPresses?:number;jumpRequestedAt?:number;fire: boolean; ads: boolean; reload: boolean; firePresses?: number; scopePresses?:number; zoomPresses?:number; scopeHeld?:boolean }
 export const emptyInput = (): InputState => ({forward:0, strafe:0, walk:false, crouch:false, jump:false,jumpHeld:false,jumpPresses:0, fire:false, ads:false, reload:false, firePresses:0,scopePresses:0,zoomPresses:0,scopeHeld:false});
 export type Quality = 'low' | 'medium' | 'high' | 'ultra';
 export const BINDING_ACTIONS = ['forward','backward','left','right','walk','crouch','jump','reload','weapons'] as const;
@@ -13,6 +13,7 @@ export type Bindings = Record<typeof BINDING_ACTIONS[number],string>;
 export interface WeaponTotals { shots:number; hits:number; heads:number; recoilSquared:number; spreadSum:number }
 export type PeekScenario='free'|'wide'|'shoulder'|'jiggle'|'crouch'|'jump'|'vertical'|'slicing'|'operator'|'mixed';
 export interface Settings {
+  movementPhysics:'valorant'|'counterStrike';csMovementPreset:'cs2'|'sourceClassic';physicsDiagnostics:boolean;wheelJump:'off'|'up'|'down';
   combatMode:'learning'|'gunfight'|'exposure';defenderSkill:'beginner'|'normal'|'advanced'|'expert';defenderAimSpeed:number;defenderAimAcceleration:number;defenderStability:number;defenderFirstShotError:number;defenderRecoilControl:number;defenderTactics:number;botDiagnostics:boolean;jumpBufferMs:number;penetrationDiagnostics:boolean;
   peekingTimed:boolean;operatorScopeMode:'hold'|'toggle';operatorAutoRescope:boolean;operatorZoomBinding:string;peekScenario:PeekScenario;defenderWeapon:WeaponId|'mixed';defenderReaction:number;defenderAccuracy:number;defenderReposition:number;randomDefenders:boolean;
   gameplayRevision:number;aimTelemetry:boolean;
@@ -46,6 +47,8 @@ export interface ShotEvent {
 export interface KillEvent {timestamp:number;targetId:number;generation:number;elapsed:number;firstShot:boolean}
 export interface DirectionResponse {targetId:number;changeTime:number;latency:number}
 export interface SessionData {
+  landings?:{events:number;recent:import('./footsteps/Landings').LandingSoundEvent[]};
+  physics?:{version:string;current:ReturnType<import('./movement/Movement').Movement['physicsSnapshot']>;transitions:{time:number;profile:string;preset:string|null}[]};
   movement?:ReturnType<import('./movement/Movement').Movement['hopSnapshot']>;
   footsteps?:{events:number;botHeardEvents:number;finalAccumulation:number;recent:import('./footsteps/Footsteps').FootstepEvent[]};
 

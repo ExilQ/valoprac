@@ -1,0 +1,305 @@
+{
+  "benchmark": "dual-movement-trajectories",
+  "schema": 1,
+  "fixedHz": 120,
+  "rows": [
+    {
+      "profile": "valorant",
+      "scenario": "A",
+      "airDuration": 0.18,
+      "displacement": [
+        -0.17365535018093534,
+        0.609583333333333,
+        -0.9820669925783054
+      ],
+      "velocity": [
+        -1.7784691588859642,
+        1.7499999999999991,
+        -5.204521827304738
+      ],
+      "headingRadians": -0.3292760211546487
+    },
+    {
+      "profile": "valorant",
+      "scenario": "B",
+      "airDuration": 0.18,
+      "displacement": [
+        0.17365535018093534,
+        0.609583333333333,
+        -0.9820669925783054
+      ],
+      "velocity": [
+        1.7784691588859642,
+        1.7499999999999991,
+        -5.204521827304738
+      ],
+      "headingRadians": 0.3292760211546487
+    },
+    {
+      "profile": "valorant",
+      "scenario": "C",
+      "side": -1,
+      "yawChangeRadians": 0.65,
+      "airDuration": 0.2,
+      "position": [
+        -0.20018107395227935,
+        0.677083333333333,
+        -4.495957133241713
+      ],
+      "velocity": [
+        -1.8535016851893535,
+        1.4499999999999993,
+        -4.747387786521798
+      ],
+      "headingRadians": -0.37222542572135153,
+      "positionDifferenceFromFixedYaw": 0.0362874437884053
+    },
+    {
+      "profile": "valorant",
+      "scenario": "C",
+      "side": 1,
+      "yawChangeRadians": -0.65,
+      "airDuration": 0.2,
+      "position": [
+        0.20018107395227935,
+        0.677083333333333,
+        -4.495957133241713
+      ],
+      "velocity": [
+        1.8535016851893535,
+        1.4499999999999993,
+        -4.747387786521798
+      ],
+      "headingRadians": 0.37222542572135153,
+      "positionDifferenceFromFixedYaw": 0.0362874437884053
+    },
+    {
+      "profile": "valorant",
+      "scenario": "D",
+      "beforeLateralVelocity": -1.1615829747088773,
+      "afterLateralVelocity": 0.3384170252911227,
+      "position": [
+        -0.12834929817207516,
+        0.7287499999999996,
+        -4.8998783517937605
+      ],
+      "velocity": [
+        0.3384170252911227,
+        0.24999999999999936,
+        -5.375939452120577
+      ]
+    },
+    {
+      "profile": "valorant",
+      "scenario": "E",
+      "apexHeight": 0.7295833333333329,
+      "horizontalVelocity": [
+        0,
+        0,
+        -5.4
+      ],
+      "landingTime": 1.275,
+      "landingImpactSpeed": 5.150000000000002,
+      "position": [
+        0,
+        0,
+        -6.523749999999992
+      ]
+    },
+    {
+      "profile": "valorant",
+      "scenario": "F",
+      "jumps": 4,
+      "chains": 3,
+      "landings": 3,
+      "speed": 5.4,
+      "heldSpaceJumps": 1,
+      "lastInputTimingMs": -8.333333333333304
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "A",
+      "airDuration": 0.18,
+      "displacement": [
+        -0.1445,
+        0.9686111111111113,
+        -0.9899999999999984
+      ],
+      "velocity": [
+        -0.8,
+        3.5053333333333336,
+        -5.4
+      ],
+      "headingRadians": -0.1470783553884025
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "B",
+      "airDuration": 0.18,
+      "displacement": [
+        0.1445,
+        0.9686111111111113,
+        -0.9899999999999984
+      ],
+      "velocity": [
+        0.8,
+        3.5053333333333336,
+        -5.4
+      ],
+      "headingRadians": 0.1470783553884025
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "C",
+      "side": -1,
+      "yawChangeRadians": 0.65,
+      "airDuration": 0.2,
+      "position": [
+        -0.5158225259214293,
+        1.0830555555555557,
+        -3.907279263549706
+      ],
+      "velocity": [
+        -4.169757264754967,
+        3.166666666666667,
+        -4.163140775261498
+      ],
+      "headingRadians": -0.7861921834455997,
+      "positionDifferenceFromFixedYaw": 0.36997559796936547
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "C",
+      "side": 1,
+      "yawChangeRadians": -0.65,
+      "airDuration": 0.2,
+      "position": [
+        0.5158225259214293,
+        1.0830555555555557,
+        -3.907279263549706
+      ],
+      "velocity": [
+        4.169757264754967,
+        3.166666666666667,
+        -4.163140775261498
+      ],
+      "headingRadians": 0.7861921834455997,
+      "positionDifferenceFromFixedYaw": 0.36997559796936547
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "D",
+      "beforeLateralVelocity": -0.8,
+      "afterLateralVelocity": 0.8,
+      "position": [
+        0.015666666666666686,
+        1.2433666666666667,
+        -4.3606906176931535
+      ],
+      "velocity": [
+        0.8,
+        1.8120000000000003,
+        -5.4
+      ]
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "E",
+      "apexHeight": 1.3167555555555557,
+      "horizontalVelocity": [
+        0,
+        0,
+        -5.4
+      ],
+      "landingTime": 1.4199899981814876,
+      "landingImpactSpeed": 7.332,
+      "position": [
+        0,
+        0,
+        -6.79069061769315
+      ]
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "F",
+      "jumps": 4,
+      "chains": 3,
+      "landings": 3,
+      "speed": 5.4,
+      "heldSpaceJumps": 1,
+      "lastInputTimingMs": -3.323331514820893
+    },
+    {
+      "profile": "valorant",
+      "scenario": "G",
+      "position": [
+        -0.9980297856220586,
+        0,
+        -6.858270827770435
+      ],
+      "landingHeadingRadians": -0.3292760211546487,
+      "airTime": 0.5666666666666671,
+      "landingSpeed": 5.5,
+      "afterLanding": 3.1354245282083943,
+      "stopSeconds": 0.125
+    },
+    {
+      "profile": "counterStrike",
+      "scenario": "G",
+      "position": [
+        -0.6742929354285441,
+        0,
+        -7.486792931835822
+      ],
+      "landingHeadingRadians": -0.1470783553884025,
+      "airTime": 0.7166666666666666,
+      "landingSpeed": 5.458937625582473,
+      "afterLanding": 3.2989056974966364,
+      "stopSeconds": 0.2833333333333333
+    }
+  ],
+  "renderEquality": [
+    {
+      "profile": "valorant",
+      "renderHz": 60,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    },
+    {
+      "profile": "valorant",
+      "renderHz": 144,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    },
+    {
+      "profile": "valorant",
+      "renderHz": 240,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    },
+    {
+      "profile": "counterStrike",
+      "renderHz": 60,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    },
+    {
+      "profile": "counterStrike",
+      "renderHz": 144,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    },
+    {
+      "profile": "counterStrike",
+      "renderHz": 240,
+      "fixedHz": 120,
+      "samples": 300,
+      "equal": true
+    }
+  ]
+}

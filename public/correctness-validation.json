@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "8.0.0",
-  "patchLabel": "08.00",
-  "generatedAt": "2026-10-27T16:53:00.064Z",
+  "release": "9.0.0",
+  "patchLabel": "09.00",
+  "generatedAt": "2026-10-28T08:28:28.046Z",
   "tests": {
-    "application": 722,
+    "application": 861,
     "broker": 20,
     "hosting": 12,
     "passed": true,
@@ -36,8 +36,8 @@
     "casts": 20000,
     "triangles": 1568,
     "bvhNodes": 469,
-    "elapsedMilliseconds": 809.253033,
-    "meanMicroseconds": 40.46265165,
+    "elapsedMilliseconds": 1044.9947860000002,
+    "meanMicroseconds": 52.24973930000001,
     "gpuTested": false,
     "inputLatencyMeasured": false
   },

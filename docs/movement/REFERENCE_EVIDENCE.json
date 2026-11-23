@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "researchDateKST": "2026-10-28",
+  "retrievals": [
+    {
+      "id": "cs2-news",
+      "url": "https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=730&count=100&maxlength=0&feeds=steam_community_announcements&format=json",
+      "retrievedAt": "2026-10-27T18:40:22.992449+00:00",
+      "status": "200",
+      "exitCode": 0,
+      "bytes": 169541,
+      "sha256": "638c8186f18cc8a09218f850de553698ef7476598539fd29ab3b7bb97108d1bd",
+      "error": ""
+    },
+    {
+      "id": "cs2-official-updates",
+      "url": "https://www.counter-strike.net/news/updates",
+      "retrievedAt": "2026-10-27T18:40:23.043649+00:00",
+      "status": "200",
+      "exitCode": 0,
+      "bytes": 5841,
+      "sha256": "6c996307a680684aa23d219856301bb67f9bd6fd8e81ebc414d55f84ea601b38",
+      "error": ""
+    },
+    {
+      "id": "riot-netcode",
+      "url": "https://technology.riotgames.com/news/peeking-valorants-netcode",
+      "retrievedAt": "2026-10-27T18:40:23.519132+00:00",
+      "status": "200",
+      "exitCode": 0,
+      "bytes": 3012607,
+      "sha256": "7ba26e7537b9b9d23abf1634e2e43ebfed126eb3e2d09b3e0d26fcf9ac563965",
+      "error": ""
+    },
+    {
+      "id": "riot-patch-2-02",
+      "url": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-2-02/",
+      "retrievedAt": "2026-10-27T18:40:23.116746+00:00",
+      "status": "200",
+      "exitCode": 0,
+      "bytes": 191879,
+      "sha256": "b1d73c139c2c6c6098c87cf8f0b7db73bf0541ff606b7b3f61e00e27a3c15a91",
+      "error": ""
+    }
+  ],
+  "steamFeed": {
+    "records": 100,
+    "newestAt": "2026-10-22T22:56:10+00:00",
+    "oldestAt": "2025-09-10T21:49:34+00:00",
+    "selected": [
+      {
+        "gid": "1826362059919569",
+        "publishedAt": "2026-03-04T22:51:40+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1826362059919569",
+        "findings": [
+          "The scripting input-edge API was corrected for a short jump press whose duration did not cross a tick boundary."
+        ]
+      },
+      {
+        "gid": "1822556746160428",
+        "publishedAt": "2026-01-22T22:54:54+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1822556746160428",
+        "findings": [
+          "The following update adds vertical impact velocity as an input to the landing-speed penalty."
+        ]
+      },
+      {
+        "gid": "1822556746157780",
+        "publishedAt": "2026-01-21T22:58:08+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1822556746157780",
+        "findings": [
+          "The landing instant is evaluated at subtick precision.",
+          "The documented bunnyhop admission rule uses a window centered on contact, with a separate spam restriction.",
+          "Landing-time-based speed penalties replace jump/landing stamina, with a private-server legacy option."
+        ]
+      },
+      {
+        "gid": "1815580768210747",
+        "publishedAt": "2025-11-04T23:59:11+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1815580768210747",
+        "findings": [
+          "Surfing air-acceleration clamping was corrected.",
+          "A ramp-ascent state was previously confused with a jump apex and was corrected."
+        ]
+      },
+      {
+        "gid": "1811772772259703",
+        "publishedAt": "2025-09-26T00:24:42+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1811772772259703",
+        "findings": [
+          "Movement view-angle updates accompany other subtick events rather than every rendered-frame change."
+        ]
+      },
+      {
+        "gid": "1811138915373173",
+        "publishedAt": "2025-09-17T23:15:55+00:00",
+        "title": "Counter-Strike 2 Update",
+        "feed": "steam_community_announcements",
+        "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/1811138915373173",
+        "findings": [
+          "The announcement reports improved timestep independence for movement acceleration with subtick input."
+        ]
+      }
+    ]
+  },
+  "sourceSDK": {
+    "repository": "ValveSoftware/source-sdk-2013",
+    "movementFileCommit": "7191ecc418e28974de8be3a863eebb16b974a7ef",
+    "commitDate": "2025-12-16T00:02:08Z",
+    "license": "Source 1 SDK license, restricted; no SDK source included",
+    "usage": "Historical algorithm research only; independent implementation"
+  },
+  "limits": {
+    "numericNativeCS2ConstantsVerified": false,
+    "numericNativeValorantConstantsVerified": false,
+    "nativeTrajectoryRecordings": 0,
+    "nativeParityVerified": false,
+    "physicalInputLatencyMeasured": false
+  }
+}

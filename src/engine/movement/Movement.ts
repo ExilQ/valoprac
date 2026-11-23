@@ -1,88 +1,104 @@
 import {Vector3} from 'three';
-import {MOVEMENT,type MovementProfile} from '../../config/movement';
+import {MOVEMENT,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3} from '../types';
-import {ENVIRONMENT,surfaceHeight,type Obstacle} from '../collision/environment';
+import {ENVIRONMENT,type Obstacle} from '../collision/environment';
+import {CollisionController} from './CollisionController';
+import {JumpController} from './JumpController';
+import {wishMovement,solveGroundMovement,solveAirMovement,limitContactSpeed,landingRetention} from './MovementSolvers';
 
 export interface HopEvent {kind:'jump'|'chain'|'land'|'missed';time:number;speed:number;inputTimingMs:number|null;groundContactSeconds:number;position:Vec3;}
 export interface HopSnapshot {jumps:number;chainedJumps:number;missedInputs:number;landings:number;peakSpeed:number;lastLandingInterval:number|null;lastInputTimingMs:number|null;timingMeanMs:number|null;timingDeviationMs:number|null;groundContactSeconds:number;speedPreservation:number|null;events:HopEvent[];}
 const EPS=1e-9;
+const plain=(v:Vec3):Vec3=>({x:v.x,y:v.y,z:v.z});
+/** Shared contact/command integration with distinct tactical and Source-inspired
+ * solvers. Gameplay, weapon and sound systems consume the resolved real velocity. */
 export class Movement {
  position=new Vector3(0,0,5);previous=new Vector3(0,0,5);velocity=new Vector3();
  previousVelocity=new Vector3();acceleration=new Vector3();desiredDirection=new Vector3();previousSpeed=0;braking=false;deceleration=0;opposedInput=false;
+ airAcceleration=new Vector3();groundNormal=new Vector3(0,1,0);supportHeight=0;
  speedModifier=1;grounded=true;crouch=0;eyeHeight=1.64;previousEyeHeight=1.64;speed=0;landedAt=-100;
- private jumpUntil=-Infinity;private jumpAt=-Infinity;private nextJumpAt=-Infinity;private jumpSignalLast=false;private lastTakeoff=-Infinity;private lastLanding=-Infinity;private landingSpeed=0;private groundContact=0;
+ landingSerial=0;lastLandingImpactSpeed=0;lastLandingTime=-Infinity;
+ readonly weaponSpeedReference=5.4;profile:MovementPhysicsProfile;
+ private baseSpeed:number;private jumps=new JumpController();private collision:CollisionController;
+ private lastTakeoff=-Infinity;private lastLanding=-Infinity;private landingSpeed=0;private groundContact=0;private landingPenaltyPending=false;private landingImpact=0;private lastTime=0;
  private hops={jumps:0,chainedJumps:0,missedInputs:0,landings:0,peakSpeed:0,lastLandingInterval:null as number|null,lastInputTimingMs:null as number|null,timingMean:0,timingM2:0,timingCount:0,speedPreservation:null as number|null,events:[] as HopEvent[]};
- constructor(public profile:MovementProfile={...MOVEMENT},public obstacles:Obstacle[]=ENVIRONMENT){}
+ constructor(profile:MovementProfile={...MOVEMENT},public obstacles:Obstacle[]=ENVIRONMENT){this.profile={...VALORANT_PHYSICS,...profile};this.baseSpeed=profile.maxSpeed;this.collision=new CollisionController(obstacles);}
+ get profileBaseMaxSpeed(){return this.baseSpeed;}
  get accurate(){return this.grounded&&this.speed<=this.profile.accuracyVelocityThreshold;}
  private get buffer(){return Math.max(0,Math.min(.14,this.profile.jumpBufferSeconds??.08));}
  private bodyHeight(){return this.crouch>.5?1.35:1.85;}
- private support(x:number,z:number,maxY:number){let y=0;for(const o of this.obstacles){const b=o.box;if(x>=b.min.x&&x<=b.max.x&&z>=b.min.z&&z<=b.max.z){const h=surfaceHeight(o,x,z);if(h<=maxY+1e-6&&h>y)y=h;}}return y;}
- private canStand(){for(const o of this.obstacles){if(o.ramp)continue;const b=o.box;if(this.position.x+this.profile.radius>b.min.x&&this.position.x-this.profile.radius<b.max.x&&this.position.z+this.profile.radius>b.min.z&&this.position.z-this.profile.radius<b.max.z&&this.position.y+1.35<=b.min.y+EPS&&this.position.y+1.85>b.min.y)return false;}return true;}
- private hopEvent(kind:HopEvent['kind'],time:number,timing:number|null=null){const events=this.hops.events;events.push({kind,time,speed:Math.hypot(this.velocity.x,this.velocity.z),inputTimingMs:timing,groundContactSeconds:this.groundContact,position:{x:this.position.x,y:this.position.y,z:this.position.z}});if(events.length>64)events.shift();}
+ /** Profile changes are controlled horizontal resets at the current position.
+  * Air/contact state, vertical momentum and crouch headroom are not invented. */
+ configurePhysics(settings:MovementPhysicsSettings,time=this.lastTime){
+  const next=resolveMovementPhysics(settings),changed=next.id!==this.profile.id||next.preset!==this.profile.preset;
+  this.profile=next;this.baseSpeed=next.maxSpeed;
+  if(changed){this.velocity.x=this.velocity.z=0;this.previous.copy(this.position);this.previousVelocity.copy(this.velocity);this.speed=0;this.previousSpeed=0;this.acceleration.set(0,0,0);this.airAcceleration.set(0,0,0);this.desiredDirection.set(0,0,0);this.braking=false;this.deceleration=0;this.opposedInput=false;this.jumps.reset(time);this.lastTakeoff=this.lastLanding=-Infinity;this.landingPenaltyPending=false;this.groundContact=0;this.landingSpeed=0;}
+  return changed;
+ }
+ private hopEvent(kind:HopEvent['kind'],time:number,timing:number|null=null){const events=this.hops.events;events.push({kind,time,speed:Math.hypot(this.velocity.x,this.velocity.z),inputTimingMs:timing,groundContactSeconds:this.groundContact,position:plain(this.position)});if(events.length>64)events.shift();}
  private launch(time:number){
-  if(!this.grounded||this.jumpUntil<time-EPS||time<this.nextJumpAt-EPS)return false;
-  const chain=Number.isFinite(this.lastTakeoff)&&time-this.lastLanding<=this.buffer+1e-7,timing=Number.isFinite(this.lastLanding)?(this.jumpAt-this.lastLanding)*1000:null;
-  this.velocity.y=this.profile.jumpImpulse;this.grounded=false;this.nextJumpAt=time+Math.max(0,this.profile.jumpCooldown??.08);this.lastTakeoff=time;this.jumpUntil=-Infinity;
+  if(!this.grounded||!this.jumps.canLaunch(time))return false;
+  const p=this.profile,window=p.preset==='cs2'?p.landingWindow/2:this.buffer;
+  const timing=Number.isFinite(this.lastLanding)?(this.jumps.requestedAt-this.lastLanding)*1000:null;
+  const chain=Number.isFinite(this.lastTakeoff)&&time-this.lastLanding<=window+EPS&&timing!==null&&Math.abs(timing)<=window*1000+1e-6;
+  if(p.jumpSpeedLimit!==null)limitContactSpeed(this.velocity,p.jumpSpeedLimit*Math.min(1,this.speedModifier));
+  this.velocity.y=p.jumpImpulse;this.grounded=false;this.jumps.consume(time,p);this.lastTakeoff=time;this.landingPenaltyPending=false;
   this.hops.jumps++;if(chain){this.hops.chainedJumps++;this.hops.lastInputTimingMs=timing;this.hops.speedPreservation=this.landingSpeed>1e-6?Math.hypot(this.velocity.x,this.velocity.z)/this.landingSpeed:null;if(timing!==null){const h=this.hops;h.timingCount++;const delta=timing-h.timingMean;h.timingMean+=delta/h.timingCount;h.timingM2+=delta*(timing-h.timingMean);}}
   this.hopEvent(chain?'chain':'jump',time,chain?timing:null);this.groundContact=0;return true;
  }
  step(input:InputState,yaw:number,dt:number,time:number){
   if(!(dt>0)||!Number.isFinite(dt)||!Number.isFinite(time))return;
-  const p=this.profile;this.previous.copy(this.position);this.previousEyeHeight=this.eyeHeight;this.previousVelocity.copy(this.velocity);this.previousSpeed=Math.hypot(this.velocity.x,this.velocity.z);const wasGrounded=this.grounded;
-  const jumpInput=input as InputState&{jumpHeld?:boolean;jumpPresses?:number};
-  // BrowserInput supplies a press counter, while the boolean edge supports
-  // deterministic callers. Holding a key is never a new landing request.
-  const pressed=(jumpInput.jumpPresses??0)>0||input.jump&&!this.jumpSignalLast;this.jumpSignalLast=!!input.jump;
-  if(pressed){this.jumpAt=time;this.jumpUntil=time+this.buffer;}
-  if(this.jumpUntil<time-EPS&&Number.isFinite(this.jumpUntil)){this.hops.missedInputs++;this.hopEvent('missed',time);this.jumpUntil=-Infinity;}
-  let crouchTarget=input.crouch?1:0;if(!crouchTarget&&this.crouch>.5&&!this.canStand())crouchTarget=1;
+  const p=this.profile;this.lastTime=time;this.collision.obstacles=this.obstacles;
+  this.previous.copy(this.position);this.previousEyeHeight=this.eyeHeight;this.previousVelocity.copy(this.velocity);this.previousSpeed=Math.hypot(this.velocity.x,this.velocity.z);const wasGrounded=this.grounded;
+  this.jumps.update(input,time,p);
+  let crouchTarget=input.crouch?1:0;if(!crouchTarget&&this.crouch>.5&&!this.collision.canStand(this.position,1.35,1.85,p.radius))crouchTarget=1;
   this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*8);this.eyeHeight=p.standingEyeHeight+(p.crouchingEyeHeight-p.standingEyeHeight)*this.crouch;
-  let forward=input.forward,side=input.strafe;const len=Math.hypot(forward,side);if(len>1){forward/=len;side/=len;}
-  const sin=Math.sin(yaw),cos=Math.cos(yaw),dx=side*cos-forward*sin,dz=-forward*cos-side*sin;this.desiredDirection.set(dx,0,dz);this.opposedInput=len>0&&dx*this.previousVelocity.x+dz*this.previousVelocity.z<-.05;
-  const modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(forward<0?p.backwardModifier:1)*(Math.abs(side)>0?p.lateralModifier:1),targetSpeed=p.maxSpeed*modifier*this.speedModifier;
-  const supportBefore=this.support(this.position.x,this.position.z,this.position.y+.01);if(this.grounded&&this.position.y-supportBefore>.08)this.grounded=false;
-  // A buffered jump consumes ground contact before ground friction, preserving
-  // actual incoming momentum rather than applying an automatic speed impulse.
-  this.launch(time);
+  const forward=input.forward,side=input.strafe,modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(forward<0?p.backwardModifier:1)*(Math.abs(side)>0?p.lateralModifier:1)*this.speedModifier;
+  const wish=wishMovement(forward,side,yaw,p.maxSpeed,modifier);this.desiredDirection.set(wish.x*wish.amount,0,wish.z*wish.amount);this.opposedInput=wish.amount>0&&wish.x*this.previousVelocity.x+wish.z*this.previousVelocity.z<-.05;
+  const supportBefore=this.collision.support(this.position,this.position.y+.01,p.maxSlopeCos);
+  if(this.grounded&&(this.position.y-supportBefore.height>.08||!supportBefore.walkable))this.grounded=false;
+  // Manual timing is evaluated before ground friction. Merely holding Space
+  // cannot issue a fresh request after a real contact transition.
+  // A fresh grounded edge occurs at its own point inside this tick. A zero
+  // early-landing buffer must not discard ordinary ground jumps merely because
+  // the input arrived between fixed boundaries. Stale edges retain their age.
+  const requestTime=this.jumps.requestedAt;
+  this.launch(requestTime>=time-dt-EPS&&requestTime<=time?requestTime:time);
   if(this.grounded){
-   if(len>0){const dot=dx*this.velocity.x+dz*this.velocity.z,acceleration=dot<0?p.reverseAcceleration:p.groundAcceleration,tx=dx*targetSpeed-this.velocity.x,tz=dz*targetSpeed-this.velocity.z,delta=Math.hypot(tx,tz),amount=Math.min(delta,acceleration*dt);if(delta>1e-9){this.velocity.x+=tx/delta*amount;this.velocity.z+=tz/delta*amount;}}
-   else{const speed=Math.hypot(this.velocity.x,this.velocity.z),next=Math.max(0,speed-(p.groundDeceleration+p.friction*speed)*dt);if(speed>0){this.velocity.x*=next/speed;this.velocity.z*=next/speed;}}
-  }else if(len>0){
-   // Acceleration is bounded along the requested air direction. Turning the
-   // camera cannot instantly rotate the existing horizontal velocity vector.
-   const along=this.velocity.x*dx+this.velocity.z*dz,add=Math.min(p.airAcceleration*dt,Math.max(0,p.airMaxSpeed-along));this.velocity.x+=dx*add;this.velocity.z+=dz*add;
-  }
-  if(!this.grounded){const speed=Math.hypot(this.velocity.x,this.velocity.z),cap=Math.max(.1,p.hopSpeedCap??p.airMaxSpeed);if(speed>cap){this.velocity.x*=cap/speed;this.velocity.z*=cap/speed;}}
-  if(!this.grounded)this.velocity.y-=p.gravity*dt;
-  // Fixed-step displacement is subdivided for edited high-speed profiles.
-  const steps=Math.max(1,Math.ceil(Math.max(Math.abs(this.velocity.x),Math.abs(this.velocity.z))*dt/(p.radius*.5)));
-  for(let i=0;i<steps;i++){this.position.x+=this.velocity.x*dt/steps;this.resolve('x');this.position.z+=this.velocity.z*dt/steps;this.resolve('z');}
-  const oldY=this.position.y;this.position.y+=this.velocity.y*dt;const floor=this.support(this.position.x,this.position.z,this.grounded?oldY+.3:oldY+.01);
-  if(this.velocity.y<=0&&this.position.y<=floor+1e-6){
-   const landed=!this.grounded;this.position.y=floor;this.velocity.y=0;this.grounded=true;
-   if(landed){this.landedAt=time;this.hops.landings++;this.hops.lastLandingInterval=Number.isFinite(this.lastLanding)?time-this.lastLanding:null;this.lastLanding=time;this.landingSpeed=Math.hypot(this.velocity.x,this.velocity.z);this.groundContact=0;this.hopEvent('land',time);this.launch(time);}
-  }else if(this.grounded){if(floor>=oldY-.3&&floor<=oldY+.3)this.position.y=floor;else this.grounded=false;}
-  if(this.velocity.y>0){const height=this.bodyHeight();for(const o of this.obstacles){if(o.ramp)continue;const b=o.box,top=this.position.y+height;if(this.position.x+p.radius>b.min.x&&this.position.x-p.radius<b.max.x&&this.position.z+p.radius>b.min.z&&this.position.z-p.radius<b.max.z&&oldY+height<=b.min.y+EPS&&top>=b.min.y){this.position.y=b.min.y-height;this.velocity.y=0;}}}
+   if(this.landingPenaltyPending&&time-this.lastLanding>=p.landingWindow/2-EPS){const retention=landingRetention(p,this.landingImpact);this.velocity.x*=retention;this.velocity.z*=retention;this.landingPenaltyPending=false;}
+   solveGroundMovement(this.velocity,wish,p,dt);this.airAcceleration.set(0,0,0);
+  }else solveAirMovement(this.velocity,wish,p,dt,this.airAcceleration);
+  if(!this.grounded)this.velocity.y=Math.max(-55,this.velocity.y-p.gravity*dt);
+  this.collision.moveHorizontal(this.position,this.velocity,dt,{radius:p.radius,bodyHeight:this.bodyHeight(),grounded:this.grounded,stepHeight:p.stepHeight,maxSlopeCos:p.maxSlopeCos});
+  const oldY=this.position.y;this.position.y+=this.velocity.y*dt;const contact=this.collision.support(this.position,this.grounded?oldY+p.stepHeight:oldY+.01,p.maxSlopeCos);this.supportHeight=contact.height;this.groundNormal.copy(contact.normal);
+  if(this.velocity.y<=0&&this.position.y<=contact.height+1e-6){
+   const landed=!this.grounded,impact=Math.max(0,-this.velocity.y),dy=oldY-this.position.y;
+   const fraction=dy>EPS?Math.min(1,Math.max(0,(oldY-contact.height)/dy)):1;
+   const contactTime=p.preset==='cs2'?time-dt+fraction*dt:time;
+   this.position.y=contact.height;
+   if(contact.walkable){this.velocity.y=0;this.grounded=true;
+    if(landed){this.landedAt=contactTime;this.hops.landings++;this.hops.lastLandingInterval=Number.isFinite(this.lastLanding)?contactTime-this.lastLanding:null;this.lastLanding=contactTime;this.landingSpeed=Math.hypot(this.velocity.x,this.velocity.z);this.groundContact=0;this.landingImpact=impact;this.landingPenaltyPending=p.preset==='cs2';this.landingSerial++;this.lastLandingImpactSpeed=impact;this.lastLandingTime=contactTime;this.hopEvent('land',contactTime);
+     const launchTime=Math.max(contactTime,this.jumps.requestedAt);if(this.launch(launchTime)&&time>launchTime){const remainder=time-launchTime;this.velocity.y-=p.gravity*remainder;this.position.y+=this.velocity.y*remainder;}
+    }
+   }else{this.grounded=false;const normalSpeed=this.velocity.dot(contact.normal);if(normalSpeed<0)this.velocity.addScaledVector(contact.normal,-normalSpeed);}
+  }else if(this.grounded){if(contact.walkable&&contact.height>=oldY-p.stepHeight&&contact.height<=oldY+p.stepHeight)this.position.y=contact.height;else this.grounded=false;}
+  this.collision.resolveCeiling(this.position,this.velocity,oldY,this.bodyHeight(),p.radius);
+  if(this.jumps.expire(time)){this.hops.missedInputs++;this.hopEvent('missed',time);}
   this.speed=Math.hypot(this.velocity.x,this.velocity.z);this.hops.peakSpeed=Math.max(this.hops.peakSpeed,this.speed);if(this.grounded)this.groundContact+=dt;
   this.acceleration.copy(this.velocity).sub(this.previousVelocity).multiplyScalar(1/dt);this.deceleration=Math.max(0,(this.previousSpeed-this.speed)/dt);
   const brakingPower=this.previousVelocity.x*this.acceleration.x+this.previousVelocity.z*this.acceleration.z;
   this.braking=wasGrounded&&this.grounded&&this.previousSpeed>.08&&this.previousSpeed-this.speed>.0001&&this.deceleration>.1&&brakingPower<-.01;
  }
- private resolve(axis:'x'|'z'){
-  const other=axis==='x'?'z':'x',p=this.profile,bodyTop=this.position.y+this.bodyHeight();
-  for(const o of this.obstacles){const {box}=o,stepTop=surfaceHeight(o,this.position.x,this.position.z);if(this.grounded&&stepTop<=this.position.y+.3)continue;if(o.ramp&&this.position.y>=stepTop-.3)continue;if(bodyTop<=box.min.y||this.position.y>=box.max.y)continue;
-   if(this.position[other]+p.radius>box.min[other]&&this.position[other]-p.radius<box.max[other]&&this.position[axis]+p.radius>box.min[axis]&&this.position[axis]-p.radius<box.max[axis]){if(this.velocity[axis]>0)this.position[axis]=box.min[axis]-p.radius;else if(this.velocity[axis]<0)this.position[axis]=box.max[axis]+p.radius;this.velocity[axis]=0;}
-  }
- }
  reset(position:Vec3={x:0,y:0,z:5},time=0,preserveHopStats=false){
-  this.position.set(position.x,position.y,position.z);this.previous.copy(this.position);this.velocity.set(0,0,0);this.previousVelocity.set(0,0,0);this.acceleration.set(0,0,0);this.desiredDirection.set(0,0,0);this.previousSpeed=0;this.speed=0;this.braking=false;this.deceleration=0;this.opposedInput=false;this.grounded=true;this.crouch=0;this.eyeHeight=this.previousEyeHeight=this.profile.standingEyeHeight;this.landedAt=-100;this.jumpUntil=this.jumpAt=this.lastTakeoff=this.lastLanding=-Infinity;this.nextJumpAt=time;this.jumpSignalLast=false;this.groundContact=0;this.landingSpeed=0;
+  this.position.set(position.x,position.y,position.z);this.previous.copy(this.position);this.velocity.set(0,0,0);this.previousVelocity.set(0,0,0);this.acceleration.set(0,0,0);this.airAcceleration.set(0,0,0);this.desiredDirection.set(0,0,0);this.previousSpeed=0;this.speed=0;this.braking=false;this.deceleration=0;this.opposedInput=false;this.grounded=true;this.crouch=0;this.eyeHeight=this.previousEyeHeight=this.profile.standingEyeHeight;this.landedAt=-100;this.jumps.reset(time);this.lastTakeoff=this.lastLanding=-Infinity;this.groundContact=0;this.landingSpeed=0;this.landingPenaltyPending=false;this.lastLandingImpactSpeed=0;this.lastLandingTime=-Infinity;this.lastTime=time;this.groundNormal.set(0,1,0);this.supportHeight=position.y;
   if(!preserveHopStats)this.hops={jumps:0,chainedJumps:0,missedInputs:0,landings:0,peakSpeed:0,lastLandingInterval:null,lastInputTimingMs:null,timingMean:0,timingM2:0,timingCount:0,speedPreservation:null,events:[]};
  }
- clearJumpInput(){this.jumpUntil=this.jumpAt=-Infinity;this.jumpSignalLast=false;}
- hopSnapshot():HopSnapshot{const h=this.hops;return{jumps:h.jumps,chainedJumps:h.chainedJumps,missedInputs:h.missedInputs,landings:h.landings,peakSpeed:h.peakSpeed,lastLandingInterval:h.lastLandingInterval,lastInputTimingMs:h.lastInputTimingMs,timingMeanMs:h.timingCount?h.timingMean:null,timingDeviationMs:h.timingCount>1?Math.sqrt(h.timingM2/(h.timingCount-1)):null,groundContactSeconds:this.groundContact,speedPreservation:h.speedPreservation,events:h.events.map(e=>({...e,position:{...e.position}}))};}
+ clearJumpInput(){this.jumps.clear();}
+ hopSnapshot():HopSnapshot{const h=this.hops;return{jumps:h.jumps,chainedJumps:h.chainedJumps,missedInputs:h.missedInputs,landings:h.landings,peakSpeed:h.peakSpeed,lastLandingInterval:h.lastLandingInterval,lastInputTimingMs:h.lastInputTimingMs,timingMeanMs:h.timingCount?h.timingMean:null,timingDeviationMs:h.timingCount>1?Math.sqrt(h.timingM2/(h.timingCount-1)):null,groundContactSeconds:this.groundContact,speedPreservation:h.speedPreservation,events:h.events.map(e=>({...e,position:plain(e.position)}))};}
+ physicsSnapshot(){const speed=Math.hypot(this.velocity.x,this.velocity.z),p=this.profile;return{profile:p.id,label:p.label,preset:p.preset,horizontalSpeed:speed,verticalSpeed:this.velocity.y,velocity:plain(this.velocity),velocityDirection:{x:speed>EPS?this.velocity.x/speed:0,y:0,z:speed>EPS?this.velocity.z/speed:0},acceleration:plain(this.acceleration),airAcceleration:plain(this.airAcceleration),wishDirection:plain(this.desiredDirection),groundNormal:plain(this.groundNormal),supportHeight:this.supportHeight,grounded:this.grounded,lastJumpAt:Number.isFinite(this.lastTakeoff)?this.lastTakeoff:null,lastLandingAt:Number.isFinite(this.lastLanding)?this.lastLanding:null,jumpTimingMs:this.hops.lastInputTimingMs,chainedJumps:this.hops.chainedJumps,landingRetention:this.hops.speedPreservation,effectiveJumpBufferMs:this.buffer*1000,landingWindowMs:p.landingWindow*1000,jumpSpamBlockedUntil:Number.isFinite(this.jumps.blockedUntil)?this.jumps.blockedUntil:null};}
  estimateReadyTime(input:InputState,yaw:number,dt=1/120,threshold=this.profile.accuracyVelocityThreshold){
-  if(!this.grounded)return null;let x=this.velocity.x,z=this.velocity.z;const length=Math.hypot(input.forward,input.strafe);let dx=0,dz=0;
-  if(length){const forward=input.forward/Math.max(1,length),side=input.strafe/Math.max(1,length);dx=side*Math.cos(yaw)-forward*Math.sin(yaw);dz=-forward*Math.cos(yaw)-side*Math.sin(yaw);}if(length&&dx*x+dz*z>=0&&this.speed>threshold)return null;
-  for(let n=0;n<240;n++){const speed=Math.hypot(x,z);if(speed<=threshold)return n*dt;if(!length){const next=Math.max(0,speed-(this.profile.groundDeceleration+this.profile.friction*speed)*dt);x*=next/speed;z*=next/speed;}else{x+=dx*this.profile.reverseAcceleration*dt;z+=dz*this.profile.reverseAcceleration*dt;}}return null;
+  if(!this.grounded)return null;const v=this.velocity.clone(),p=this.profile,modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(input.forward<0?p.backwardModifier:1)*(Math.abs(input.strafe)>0?p.lateralModifier:1)*this.speedModifier,wish=wishMovement(input.forward,input.strafe,yaw,p.maxSpeed,modifier);
+  if(wish.amount&&wish.x*v.x+wish.z*v.z>=0&&this.speed>threshold)return null;
+  for(let n=0;n<240;n++){if(Math.hypot(v.x,v.z)<=threshold)return n*dt;solveGroundMovement(v,wish,p,dt);}return null;
  }
 }

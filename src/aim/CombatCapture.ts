@@ -8,6 +8,7 @@ import {MouseTelemetry} from './Telemetry';
 import {aimAnalysis} from './AnalysisService';
 import {saveAimRecord,aimDataEpoch} from './storage';
 import {calibrationFromSettings,calibrationFingerprint,type RawRequest} from './precision/calibration';
+import {movementModelIdentity} from './statistics';
 import {AIM_VERSION,GAME_VERSION,COLS,type AimMeta,type AimRecord} from './types';
 
 export interface CombatAssessmentContext {
@@ -36,12 +37,14 @@ export function combatMissAttribution(shot:ShotEvent,aimHit:boolean|null){
 }
 export class CombatCapture implements InputObserver {
  private telemetry=new MouseTelemetry(8192);private point=new Vector3();private target:Target|null=null;private generation=0;private began=0;private lastShot=-100;private count=0;private disposed=false;private issues=new Set<string>();private pending=new Set<Promise<unknown>>();
+ private movementModel='';
+ private syncMovementModel(now:number){const model=movementModelIdentity(this.simulation.settings);if(model!==this.movementModel){this.movementModel=model;this.telemetry.clear();this.issues.clear();this.began=now;}}
  private session=globalThis.crypto?.randomUUID?.()??`combat-${Date.now()}`;
  constructor(private simulation:Simulation,private rawMode:()=>string,private assessment?:CombatAssessmentContext,private rawRequest:()=>RawRequest=()=> 'unverified'){}
  frame(now:number){
   if(this.disposed||!this.simulation.settings.aimTelemetry||!this.simulation.running){this.telemetry.clear();this.target=null;return;}
   if(this.assessment&&this.simulation.time<this.assessment.warmupSeconds){this.telemetry.clear();this.target=null;return;}
-  this.choose(now);this.capture(2,0,0,now,now,this.simulation.viewYaw,this.simulation.viewPitch);
+  this.syncMovementModel(now);this.choose(now);this.capture(2,0,0,now,now,this.simulation.viewYaw,this.simulation.viewPitch);
  }
  private choose(now:number){
   const s=this.simulation,m=s.movement;let best:Target|null=null,error=Infinity;
@@ -50,7 +53,7 @@ export class CombatCapture implements InputObserver {
  }
  sample(kind:0|1,dx:number,dy:number,stamp:number,received:number,beforeYaw:number,beforePitch:number){
   if(this.disposed||!this.simulation.settings.aimTelemetry||!this.simulation.running||this.assessment&&this.simulation.time<this.assessment.warmupSeconds)return;
-  if(!this.target)this.choose(stamp);this.capture(kind,dx,dy,stamp,received,beforeYaw,beforePitch);
+  this.syncMovementModel(stamp);if(!this.target)this.choose(stamp);this.capture(kind,dx,dy,stamp,received,beforeYaw,beforePitch);
  }
  private capture(kind:number,dx:number,dy:number,stamp:number,received:number,beforeYaw:number,beforePitch:number){
   const s=this.simulation,t=this.target;if(!t)return;const m=s.movement;
@@ -64,7 +67,7 @@ export class CombatCapture implements InputObserver {
  shot(shot:ShotEvent){
   const context=this.assessment,limit=context?.expectedTrials??50;
   if(this.disposed||!this.simulation.settings.aimTelemetry||this.count>=limit||!context&&shot.timestamp-this.lastShot<.5||context&&this.simulation.time<context.warmupSeconds)return;
-  const s=this.simulation,now=performance.now();if(!this.target)this.choose(shot.inputTime??now);const t=this.target;if(!t)return;
+  const s=this.simulation,now=performance.now();this.syncMovementModel(now);if(!this.target)this.choose(shot.inputTime??now);const t=this.target;if(!t)return;
   if(!context&&this.telemetry.count<6)return;
   this.lastShot=shot.timestamp;this.count++;const stamp=shot.inputTime??now;
   this.capture(4,0,0,stamp,now,s.viewYaw,s.viewPitch);
@@ -78,7 +81,7 @@ export class CombatCapture implements InputObserver {
   const calibration=calibrationFromSettings(s.settings,{viewport,inputMode:this.rawMode(),rawRequest:this.rawRequest(),ads:shot.ads,weapon:shot.weapon,scopeZoom:calibrationZoom,fov:adsFov(s.settings.fov,calibrationZoom)});
   let preShotRecoil=shot.firstShot?0:shot.recoil.pitch;for(let i=this.telemetry.count-1;i>=0;i--)if(this.telemetry.data[i*COLS+8]===1){preShotRecoil=this.telemetry.data[i*COLS+20];break;}
   const issues=[...this.issues,...(this.telemetry.overflow?['buffer-overflow']:[]),...(this.telemetry.reordered?['timestamp-reordered']:[]),'intended-target-estimated','angular-head-radius-approximation'];
-  const meta:AimMeta={schema:1,algorithm:AIM_VERSION,game:GAME_VERSION,id:`${context?.blockId??this.session}-${this.count}`,experiment:context?.experiment??this.session,session:context?.session??this.session,createdAt:Date.now(),task:context?'tactical':s.mode==='tracking'?'reactive':'small',phase:context?'transfer':'combat',sensitivity:s.settings.sensitivity,dpi:s.settings.dpi,dpiSource:'user-declared',coefficient:s.settings.degreesPerCount,fov:calibration.fov,ads:!!shot.ads,adsMultiplier:s.settings.adsSensitivity,scopeZoom:context&&Math.abs(zoom-context.expectedZoom)<.04?context.expectedZoom:zoom,rawMode:this.rawMode(),renderer:'browser-webgl',seed:s.settings.seed,round:context?.round??0,pair:context?.pair??`shot-${this.count}`,order:context?.order??this.count,radius,amplitude:0,duration:Math.max(0,(now-this.began)/1000),warmup:context?.warmupSeconds??0,condition:context?.condition??`combat-${s.mode}-${s.practiceMap}`,valid:!this.telemetry.overflow&&!this.telemetry.reordered&&this.telemetry.count>=6&&!this.issues.size,issues,appearanceKnown:false,monotonicStartMs:this.began,timeOriginMs:performance.timeOrigin,targetState:t.behavior,gameMode:s.mode,weapon:shot.weapon,moving:['airborne','landing','running','walking','braking','crouchMoving'].includes(shot.accuracyState??''),recoil:preShotRecoil,spread:shot.spread.total,hit:context?shot.hit==='head':['head','torso','arm','leg'].includes(shot.hit),shotTime:shot.timestamp,targetId:t.id,distance,targetDiameter:.2822*t.scale,movementState:shot.accuracyState,weaponState:s.weapon.reloadingUntil===null?'ready':'reload',viewport,renderScale:s.settings.renderScale,calibration,inputFingerprint:calibrationFingerprint(calibration),blockId:context?.blockId,expectedTrials:context?.expectedTrials,trialIndex:this.count-1,evaluationMode:context?.expectedZoom===1?'hip':context?.expectedZoom===1.25?'rifle-ads':context?.expectedZoom===2.5?'operator-2.5':context?.expectedZoom===5?'operator-5':undefined};
+  const meta:AimMeta={schema:1,movementModel:this.movementModel,algorithm:AIM_VERSION,game:GAME_VERSION,id:`${context?.blockId??this.session}-${this.count}`,experiment:context?.experiment??this.session,session:context?.session??this.session,createdAt:Date.now(),task:context?'tactical':s.mode==='tracking'?'reactive':'small',phase:context?'transfer':'combat',sensitivity:s.settings.sensitivity,dpi:s.settings.dpi,dpiSource:'user-declared',coefficient:s.settings.degreesPerCount,fov:calibration.fov,ads:!!shot.ads,adsMultiplier:s.settings.adsSensitivity,scopeZoom:context&&Math.abs(zoom-context.expectedZoom)<.04?context.expectedZoom:zoom,rawMode:this.rawMode(),renderer:'browser-webgl',seed:s.settings.seed,round:context?.round??0,pair:context?.pair??`shot-${this.count}`,order:context?.order??this.count,radius,amplitude:0,duration:Math.max(0,(now-this.began)/1000),warmup:context?.warmupSeconds??0,condition:context?.condition??`combat-${s.mode}-${s.practiceMap}`,valid:!this.telemetry.overflow&&!this.telemetry.reordered&&this.telemetry.count>=6&&!this.issues.size,issues,appearanceKnown:false,monotonicStartMs:this.began,timeOriginMs:performance.timeOrigin,targetState:t.behavior,gameMode:s.mode,weapon:shot.weapon,moving:['airborne','landing','running','walking','braking','crouchMoving'].includes(shot.accuracyState??''),recoil:preShotRecoil,spread:shot.spread.total,hit:context?shot.hit==='head':['head','torso','arm','leg'].includes(shot.hit),shotTime:shot.timestamp,targetId:t.id,distance,targetDiameter:.2822*t.scale,movementState:shot.accuracyState,weaponState:s.weapon.reloadingUntil===null?'ready':'reload',viewport,renderScale:s.settings.renderScale,calibration,inputFingerprint:calibrationFingerprint(calibration),blockId:context?.blockId,expectedTrials:context?.expectedTrials,trialIndex:this.count-1,evaluationMode:context?.expectedZoom===1?'hip':context?.expectedZoom===1.25?'rifle-ads':context?.expectedZoom===2.5?'operator-2.5':context?.expectedZoom===5?'operator-5':undefined};
   Object.assign(meta,{headshot:shot.hit==='head',targetPoseSource:shot.targetPoseSource,renderedFrameTime:shot.renderedFrameTime,actualScopeZoom:zoom,assessmentFactor:context?.assessmentFactor,assessmentValue:context?.assessmentValue});
   const epoch=aimDataEpoch(),buffer=this.telemetry.snapshot();
   const job=aimAnalysis.run(buffer,meta).then(async record=>{

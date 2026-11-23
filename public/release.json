@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
@@ -91,7 +91,18 @@
     "original-material-impact-audio",
     "bunny-hop-training-map",
     "wallbang-material-training-map",
-    "persisted-hop-and-combat-analysis"
+    "persisted-hop-and-combat-analysis",
+    "selectable-dual-movement-profiles",
+    "projection-based-air-strafing",
+    "timestamped-short-movement-commands",
+    "movement-yaw-tick-replay",
+    "cs2-inspired-landing-and-jump-spam-policy",
+    "separate-source-classic-preset",
+    "discrete-optional-wheel-jump",
+    "swept-shared-contact-controller",
+    "separate-impact-based-landing-sounds",
+    "movement-compatible-tactical-analytics",
+    "optional-physics-vector-diagnostics"
   ],
   "unreal": {
     "engine": "5.7",
@@ -106,7 +117,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "08.00",
+  "patchLabel": "09.00",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -188,11 +199,35 @@
     "softwareGPUPerformanceImprovementVerified": false
   },
   "movement": {
-    "calibration": "movement-4.0-provisional",
+    "calibration": "dual-movement-1.0.0-provisional",
     "simulationHz": 120,
+    "defaultProfile": "valorant",
+    "profiles": [
+      "valorant",
+      "counterStrike/cs2",
+      "counterStrike/sourceClassic"
+    ],
     "manualJumpBufferDefaultMs": 80,
-    "airSpeedCapMetersPerSecond": 5.5,
-    "nativeParityVerified": false
+    "cs2EffectiveEarlyBufferDefaultMs": 40,
+    "airSpeedCapsMetersPerSecond": {
+      "valorant": 5.5,
+      "counterStrike/cs2": null,
+      "counterStrike/sourceClassic": null
+    },
+    "contactSpeedCapsMetersPerSecond": {
+      "valorant": 5.5,
+      "counterStrike/cs2": 5.94,
+      "counterStrike/sourceClassic": 20
+    },
+    "manualEdgesOnly": true,
+    "allExistingMaps": true,
+    "newMapsOrModes": 0,
+    "separateLandingAudio": true,
+    "validation": "/movement-validation.json",
+    "nativeParityVerified": false,
+    "nativeCS2SubtickImplemented": false,
+    "hardwareFPSVerified": false,
+    "physicalInputLatencyVerified": false
   },
   "penetration": {
     "model": "resistance-metres-1.0.0",

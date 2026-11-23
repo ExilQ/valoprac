@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "startedAt": "2026-10-28T08:26:09.059Z",
+  "passed": true,
+  "checks": [
+    {
+      "profile": "valorant",
+      "passed": true,
+      "start": {
+        "time": 0.8,
+        "yaw": 0,
+        "x": 0
+      },
+      "end": {
+        "time": 1.0083333333333333,
+        "yaw": 0.025656340004316644,
+        "x": -0.15570143868995265,
+        "v": [
+          -1.6925235087798487,
+          -3.6499999999999995,
+          -5.233102728996207
+        ],
+        "physics": {
+          "profile": "valorant",
+          "label": "발로란트 물리엔진",
+          "preset": null,
+          "horizontalSpeed": 5.5,
+          "verticalSpeed": -3.6499999999999995,
+          "velocity": {
+            "x": -1.6925235087798487,
+            "y": -3.6499999999999995,
+            "z": -5.233102728996207
+          },
+          "velocityDirection": {
+            "x": -0.30773154705088157,
+            "y": 0,
+            "z": -0.9514732234538559
+          },
+          "acceleration": {
+            "x": -9.146590731204851,
+            "y": -17.99999999999999,
+            "z": 2.885010370410619
+          },
+          "airAcceleration": {
+            "x": -9.146590731204851,
+            "y": 0,
+            "z": 2.885010370410619
+          },
+          "wishDirection": {
+            "x": -0.9996708941621513,
+            "y": 0,
+            "z": 0.025653525392135057
+          },
+          "groundNormal": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "supportHeight": 0,
+          "grounded": false,
+          "lastJumpAt": 0.5212000000001424,
+          "lastLandingAt": null,
+          "jumpTimingMs": null,
+          "chainedJumps": 0,
+          "landingRetention": null,
+          "effectiveJumpBufferMs": 80,
+          "landingWindowMs": 80,
+          "jumpSpamBlockedUntil": null
+        },
+        "running": true,
+        "pointerLocked": true
+      }
+    },
+    {
+      "profile": "counterStrike",
+      "passed": true,
+      "start": {
+        "time": 2.216666666666667,
+        "yaw": -0.025656340004316644,
+        "x": 0.03151188433390424
+      },
+      "end": {
+        "time": 2.725,
+        "yaw": -7.047067252040351e-06,
+        "x": -0.22339638668828396,
+        "v": [
+          -0.7999959564461747,
+          -5.808,
+          -0.5737952463195868
+        ],
+        "physics": {
+          "profile": "counterStrike",
+          "label": "카운터 스트라이크 물리엔진",
+          "preset": "cs2",
+          "horizontalSpeed": 0.9844970873645006,
+          "verticalSpeed": -5.808,
+          "velocity": {
+            "x": -0.7999959564461747,
+            "y": -5.808,
+            "z": -0.5737952463195868
+          },
+          "velocityDirection": {
+            "x": -0.8125935228389192,
+            "y": 0,
+            "z": -0.5828308216285708
+          },
+          "acceleration": {
+            "x": 0,
+            "y": -20.32,
+            "z": 0
+          },
+          "airAcceleration": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "wishDirection": {
+            "x": -0.9999999999751694,
+            "y": 0,
+            "z": -7.0470672519820235e-06
+          },
+          "groundNormal": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "supportHeight": 0,
+          "grounded": false,
+          "lastJumpAt": 2.081133333333426,
+          "lastLandingAt": null,
+          "jumpTimingMs": null,
+          "chainedJumps": 0,
+          "landingRetention": null,
+          "effectiveJumpBufferMs": 40,
+          "landingWindowMs": 80,
+          "jumpSpamBlockedUntil": null
+        },
+        "running": true,
+        "pointerLocked": true
+      }
+    }
+  ],
+  "errors": [],
+  "limits": {
+    "softwareGPU": true,
+    "physicalDevice": false,
+    "physicalLatency": false,
+    "webglDrawingSuspendedDuringCommands": true,
+    "commandTest": "Actual trusted keyboard/mouse and PointerLock through normal Runtime; WebGL drawing suspended after scene initialization to isolate input from software-GPU safety pauses. Visual scene and32 HUD layouts tested separately."
+  },
+  "completedAt": "2026-10-28T08:26:48.602Z"
+}
