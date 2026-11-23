@@ -1,3 +1,5 @@
+import {surfaceHeight} from '../collision/environment';
+import {VIEWMODEL_HFOV,poseViewmodel} from './viewmodel';
 import * as THREE from 'three';
 import type { Simulation } from '../simulation/Simulation';
 import type { Settings, ShotEvent, WeaponId } from '../types';
@@ -16,6 +18,7 @@ const DEG=Math.PI/180;
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
 export class RangeRenderer {
   renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.05,180);
+  private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
   private size=new THREE.Vector3();private color=new THREE.Color();private position=new THREE.Vector3();
   private geometries=new Set<THREE.BufferGeometry>();private materials=new Set<THREE.Material>();private textures=new Set<THREE.Texture>();
   private targetBatches:THREE.InstancedMesh[]=[];private targetMeshes:THREE.Mesh[][]=[];private targetRings:THREE.Mesh[]=[];private impacts:Impact[]=[];private impactIndex=0;
@@ -42,7 +45,7 @@ export class RangeRenderer {
   private material(color:number,roughness=0.8){const m=new THREE.MeshStandardMaterial({color,roughness,metalness:0.12});this.materials.add(m);return m;}
   private box(w:number,h:number,d:number,x:number,y:number,z:number,material:THREE.Material){const g=new THREE.BoxGeometry(w,h,d);this.geometries.add(g);const m=new THREE.Mesh(g,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;m.userData.staticRange=true;this.scene.add(m);return m;}
   private buildEnvironment(){
-    if(this.simulation.practiceMap==='tactical'){this.buildTactical();return;}
+    if(this.simulation.practiceMap!=='range'){this.buildTactical();return;}
 
     const floor=this.material(0x64716f),trim=this.material(0x2c3940),metal=this.material(0x707d7d),accent=this.material(0x6cf1bd);
     this.box(24,0.15,40,0,-0.09,-10,floor);
@@ -76,7 +79,7 @@ export class RangeRenderer {
     }
   }
   private buildWeapon(){
-    this.camera.add(this.weapon);
+    this.weaponCamera.add(this.weapon);this.weaponScene.add(this.weaponCamera);this.weaponScene.environment=this.scene.environment;this.weaponScene.environmentIntensity=.8;this.weaponScene.add(new THREE.HemisphereLight(0xddefff,0x506565,2.4));const light=new THREE.DirectionalLight(0xffead4,3);light.position.set(-3,5,4);this.weaponScene.add(light);
     for(const id of WEAPON_ORDER){const v=createWeaponView(id,g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;});this.visuals[id]=v;this.weapon.add(v.root);}
   }
   private buildShells(){
@@ -93,15 +96,15 @@ export class RangeRenderer {
     const t=new THREE.DataTexture(data,n,n);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(kind==='rubber'?12:5,kind==='rubber'?20:5);t.colorSpace=kind.endsWith('normal')?THREE.NoColorSpace:THREE.SRGBColorSpace;t.needsUpdate=true;t.anisotropy=Math.min(8,this.renderer.capabilities.getMaxAnisotropy());this.textures.add(t);this.surfaceTextures.set(key,t);return t;
   }
   private buildTactical(){
-    const wall=this.material(0x52636a,.8),trim=this.material(0x293e48,.6),floor=this.material(0x384e55,.93),light=new THREE.MeshBasicMaterial({color:0x91c9c5});this.materials.add(light);
-    this.box(48,.15,48,0,-.09,0,floor);
-    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,wall);this.box(this.size.x,.08,this.size.z,this.position.x,3.5,this.position.z,trim);}
+    const trim=this.material(0x293e48,.6),floor=this.material(0x384e55,.93),light=new THREE.MeshBasicMaterial({color:0x91c9c5});this.materials.add(light);
+    const b=this.simulation.level?.bounds??[-24,-24,48,48];this.box(b[2],.15,b[3],b[0]+b[2]/2,-.09,b[1]+b[3]/2,floor);
+    for(const o of this.simulation.obstacles){o.box.getSize(this.size);o.box.getCenter(this.position);this.box(this.size.x,this.size.y,this.size.z,this.position.x,this.position.y,this.position.z,this.material(o.color));if(o.ramp){const mesh=this.scene.children[this.scene.children.length-1] as THREE.Mesh,b=o.box;this.geometries.delete(mesh.geometry);mesh.geometry.dispose();const pts=[new THREE.Vector3(b.min.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.min.z),new THREE.Vector3(b.max.x,b.min.y,b.max.z),new THREE.Vector3(b.min.x,b.min.y,b.max.z)];for(let i=0;i<4;i++)pts.push(new THREE.Vector3(pts[i].x,surfaceHeight(o,pts[i].x,pts[i].z),pts[i].z));const faces=[4,6,5,4,7,6,0,1,2,0,2,3,0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0],positions=faces.flatMap(i=>pts[i].toArray());const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.computeVertexNormals();this.geometries.add(g);mesh.geometry=g;mesh.position.set(0,0,0);continue;}this.box(this.size.x,.08,this.size.z,this.position.x,o.box.max.y-.08,this.position.z,trim);}
     for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
-    this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
+    if(this.simulation.level){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
     this.sun.shadow.camera.left=-30;this.sun.shadow.camera.right=30;this.sun.shadow.camera.top=36;this.sun.shadow.camera.bottom=-30;this.sun.shadow.camera.updateProjectionMatrix();
   }
   private buildPolish(){
-    if(this.simulation.practiceMap!=='tactical')this.buildRangePolish();
+    if(this.simulation.practiceMap==='range')this.buildRangePolish();
     this.buildContactShadows();
   }
   private buildRangePolish(){
@@ -138,6 +141,7 @@ export class RangeRenderer {
       if(settings.postProcessing||settings.antialias||settings.ambientOcclusion){this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));
         if(settings.ambientOcclusion){this.ao=new SSAOPass(this.scene,this.camera,Math.max(1,this.host.clientWidth),Math.max(1,this.host.clientHeight));this.ao.kernelRadius=3;this.ao.minDistance=0.001;this.ao.maxDistance=0.08;this.composer.addPass(this.ao);}
         if(settings.postProcessing){this.bloom=new UnrealBloomPass(new THREE.Vector2(1,1),0.12,0.3,1.4);this.composer.addPass(this.bloom);}
+        const weaponPass=new RenderPass(this.weaponScene,this.weaponCamera);weaponPass.clear=false;weaponPass.clearDepth=true;this.composer.addPass(weaponPass);
         if(settings.antialias){this.fxaa=new ShaderPass(FXAAShader);this.composer.addPass(this.fxaa);}
         this.composer.addPass(new OutputPass());
       }
@@ -162,24 +166,21 @@ export class RangeRenderer {
     const tracer=this.tracers[this.tracerIndex++%this.tracers.length];const a=tracer.geometry.getAttribute('position') as THREE.BufferAttribute;
     a.setXYZ(0,shot.position.x+0.2,shot.position.y+this.simulation.movement.eyeHeight-0.16,shot.position.z-0.35);a.setXYZ(1,shot.impact.x,shot.impact.y,shot.impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+0.045;
   }
-  resize(){if(!this.mounted)return;const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.updateFov();this.composer?.setPixelRatio(this.renderer.getPixelRatio());this.composer?.setSize(w,h);if(this.ao)this.ao.setSize(Math.ceil(w*this.renderer.getPixelRatio()*0.5),Math.ceil(h*this.renderer.getPixelRatio()*0.5));if(this.fxaa)this.fxaa.uniforms.resolution.value.set(1/(w*this.renderer.getPixelRatio()),1/(h*this.renderer.getPixelRatio()));}
+  resize(){if(!this.mounted)return;const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.renderer.setSize(w,h);this.camera.aspect=w/h;this.weaponCamera.aspect=w/h;this.weaponCamera.fov=2*Math.atan(Math.tan(VIEWMODEL_HFOV*DEG/2)/this.weaponCamera.aspect)/DEG;this.weaponCamera.updateProjectionMatrix();this.updateFov();this.composer?.setPixelRatio(this.renderer.getPixelRatio());this.composer?.setSize(w,h);if(this.ao)this.ao.setSize(Math.ceil(w*this.renderer.getPixelRatio()*0.5),Math.ceil(h*this.renderer.getPixelRatio()*0.5));if(this.fxaa)this.fxaa.uniforms.resolution.value.set(1/(w*this.renderer.getPixelRatio()),1/(h*this.renderer.getPixelRatio()));}
   private updateFov(){const horizontal=this.settings.fov*DEG;this.camera.fov=2*Math.atan(Math.tan(horizontal/2)/this.camera.aspect)/DEG;this.camera.updateProjectionMatrix();}
-  render(alpha:number,elapsed:number,preview:boolean,ads:boolean){
+  render(alpha:number,elapsed:number,preview:boolean,_ads:boolean){
     this.renderer.info.reset();const s=this.simulation,m=s.movement;
-    if(preview){if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
+    if(preview){if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);this.camera.lookAt(s.level.angles[1].position.x,1.5,-8);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
     else{
       this.camera.position.lerpVectors(m.previous,m.position,alpha);this.camera.position.y+=m.previousEyeHeight+(m.eyeHeight-m.previousEyeHeight)*alpha;
       // Mouse rotation is applied directly at render cadence; no extra look smoothing.
       this.camera.rotation.set(s.viewPitch,s.viewYaw,0,'YXZ');
       const swayX=THREE.MathUtils.clamp((s.viewYaw-this.previousViewYaw)*2,-0.04,0.04),swayY=THREE.MathUtils.clamp((s.viewPitch-this.previousViewPitch)*2,-0.04,0.04);
-      this.adsBlend+=(Number(ads)-this.adsBlend)*(1-Math.exp(-18*elapsed));
+      this.adsBlend=s.previousAdsAmount+(s.adsAmount-s.previousAdsAmount)*alpha;
       this.gunSlide*=Math.exp(-(s.weaponId==='sheriff'?13:22)*elapsed);
       const w=s.weapon,reload=w.reloadingUntil===null?0:THREE.MathUtils.clamp((s.time-w.reloadStarted)/w.profile.reloadTime,0,1),reloadPose=Math.sin(reload*Math.PI),equip=THREE.MathUtils.clamp((w.equipUntil-s.time)/w.profile.equipTime,0,1);
-      const bob=Math.sin(s.time*10)*Math.min(0.007,m.speed*0.002)*(1-this.adsBlend);
-      this.weapon.position.set(0.24*(1-this.adsBlend)-swayX*(1-this.adsBlend),-0.22+0.12*this.adsBlend-swayY*(1-this.adsBlend)+bob-equip*0.35,-0.43+this.gunSlide*(s.weaponId==='sheriff'?0.075:0.038));
-      this.weapon.rotation.set(this.gunSlide*(s.weaponId==='sheriff'?0.35:0.065)-reloadPose*0.2+equip*0.7,0,-reloadPose*0.55);
-      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;}
-      this.weapon.visible=true;
+      poseViewmodel(s.weaponId,this.adsBlend,this.gunSlide,equip,reloadPose,s.time,m.speed,swayX,swayY,this.weapon);
+      for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=this.adsBlend>.1;v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;}
       this.weapon.visible=true;this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
     const zoom=preview?1:1+(s.weapon.profile.adsZoom-1)*this.adsBlend;const vf=2*Math.atan(Math.tan(this.settings.fov*DEG/2)/zoom/this.camera.aspect)/DEG;if(Math.abs(this.camera.fov-vf)>0.001){this.camera.fov=vf;this.camera.updateProjectionMatrix();}
@@ -192,14 +193,15 @@ export class RangeRenderer {
         if(!t.active){mesh.matrix.elements[13]-=death*0.85;mesh.matrix.scale(this.size.setScalar(1-death*0.45));}
         if(!mesh.visible)mesh.matrix.scale(this.size.setScalar(0));const batch=mesh.userData.batch as THREE.InstancedMesh;batch.setMatrixAt(mesh.userData.slot,mesh.matrix);
       }
-      this.targetRings[i].position.set(t.position.x+dx,0.016,t.position.z+dz);this.targetRings[i].visible=t.active&&t.enabled;const contact=this.targetRings[i].userData.contactShadow as THREE.Mesh;contact.position.copy(this.targetRings[i].position);contact.visible=t.active&&t.enabled;contact.scale.setScalar(t.scale);
+      this.targetRings[i].position.set(t.position.x+dx,t.previous.y+(t.position.y-t.previous.y)*alpha+.016,t.position.z+dz);this.targetRings[i].visible=t.active&&t.enabled;const contact=this.targetRings[i].userData.contactShadow as THREE.Mesh;contact.position.copy(this.targetRings[i].position);contact.visible=t.active&&t.enabled;contact.scale.setScalar(t.scale);
     }
     for(const batch of this.targetBatches){batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';}
     for(const tracer of this.tracers)if(tracer.visible&&s.time>tracer.userData.expire)tracer.visible=false;
     for(const shell of this.shells){if(!shell.mesh.visible)continue;if(s.time>=shell.until){shell.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;shell.velocity.y-=9.8*dt;shell.mesh.position.addScaledVector(shell.velocity,dt);shell.mesh.rotation.x+=dt*12;shell.mesh.rotation.z+=dt*8;}
     for(const p of this.sparks){if(!p.mesh.visible)continue;if(s.time>=p.until){p.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;p.velocity.y-=5*dt;p.mesh.position.addScaledVector(p.velocity,dt);}
     if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
+    if(!preview&&!this.composer){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();}
+  dispose(){this.mounted=false;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();for(const batch of this.targetBatches)batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)m.dispose();for(const t of this.textures)t.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();}
 }

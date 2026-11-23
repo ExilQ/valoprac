@@ -1,4 +1,6 @@
-# VALOPRAC 3.0.0 — aim science
+# VALOPRAC 4.0.0 — tactical movement and visual upgrade
+
+Major patch **04.00** extends 3.0 in place with real velocity-cone spread, tap-braking drills, compact toggle ADS, faster persistent-footstep recovery, optional fullscreen keyboard capture, bounded input diagnostics, faster bots, six original elevated tactical sections and exposure retry. See [implementation and calibration](docs/TACTICAL_OVERHAUL.md) and the actual release-generated tactical validation report. GPU visuals and physical input remain unverified.
 
 Major patch **03.00** adds neutral angular tasks, shared input telemetry, motion analysis, controlled sensitivity exploration, optional GP-UCB, explainable drills, paired verification and local history. See [methodology](docs/AIM_SCIENCE.md). Human efficacy is unverified. The 2.3 browser game remains intact; Unreal migration remains disabled.
 

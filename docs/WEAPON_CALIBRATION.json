@@ -1,0 +1,105 @@
+{
+  "version": "weapons-3.0-movement-provisional",
+  "reviewedAt": "2026-10-24",
+  "angles": "degrees",
+  "distance": "meters",
+  "sources": {
+    "rifleSwitching": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-11-08/",
+    "phantomFalloff": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-9-10/",
+    "vandalFireRate": "https://playvalorant.com/en-gb/news/game-updates/valorant-patch-notes-1-07/",
+    "latestPatchReviewed": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-08/"
+  },
+  "verifiedPublishedValues": {
+    "vandalFireRate": 9.75,
+    "rifleYawSwitchTime": 0.6,
+    "rifleYawSwitchChance": 0.1,
+    "vandalProtectedBullets": 6,
+    "phantomProtectedBullets": 8,
+    "phantomBodyDamage": [
+      39,
+      35
+    ],
+    "phantomFalloffDistance": 20,
+    "historicalRifleWalkingInaccuracy910": 3,
+    "historicalRifleRunningInaccuracy910": 6
+  },
+  "requestedReferenceValuesNotIndependentlyMeasured": {
+    "vandal": {
+      "magazine": 25,
+      "reload": 2.5,
+      "adsZoom": 1.25,
+      "adsFireRate": 8.775,
+      "firstSpread": 0.25,
+      "damage": [
+        160,
+        40,
+        34
+      ]
+    },
+    "phantom": {
+      "fireRate": 11,
+      "magazine": 30,
+      "reload": 2.5,
+      "adsZoom": 1.25,
+      "adsFireRate": 9.9,
+      "firstSpread": 0.2,
+      "damage": [
+        [
+          156,
+          39,
+          33.15
+        ],
+        [
+          140,
+          35,
+          29.75
+        ]
+      ]
+    },
+    "sheriff": {
+      "fireRate": 4,
+      "magazine": 6,
+      "reload": 2.25,
+      "adsZoom": 1,
+      "firstSpread": 0.25,
+      "damage": [
+        [
+          159.5,
+          55,
+          46.75
+        ],
+        [
+          145,
+          50,
+          42.5
+        ]
+      ],
+      "falloffDistance": 30
+    }
+  },
+  "provisional": [
+    "recoil curves",
+    "switch-opportunity interpretation",
+    "spread distribution",
+    "movement error curve",
+    "bloom accumulation and recovery",
+    "camera recovery",
+    "equip time",
+    "reserve ammunition",
+    "ADS movement modifier",
+    "crouch modifiers",
+    "landing recovery",
+    "movement physics",
+    "half-cone interpretation of historical movement error",
+    "linear velocity interpolation through walk speed",
+    "ADS transition Vandal.14s Phantom.12s 90-percent response"
+  ],
+  "notes": [
+    "No 1:1 native game parity is asserted.",
+    "Official switch time/probability are used in a stateful opportunity model. Native hidden update frequency was not measured.",
+    "Actual shooting uses pre-kick aim and independent seeded disk spread. Current-shot camera recoil changes subsequent aim.",
+    "Damage is recorded at ray distance. Default head-only training always eliminates on a head hit, including beyond Sheriff falloff.",
+    "rifleA and rifleB identifiers remain for backward compatibility with saved history.",
+    "Rifle movement cone now6degrees at5.4m/s and3degrees at nominal walk speed; current native equivalence is unverified. Air penalties are8.5/8degrees. Independent tangent-disc projection preserves center at steep angles."
+  ]
+}

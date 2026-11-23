@@ -1,7 +1,7 @@
 {
   "application": "VALOPRAC",
-  "version": "3.0.0",
-  "calibration": "weapons-2.0-11.08-PC",
+  "version": "4.0.0",
+  "calibration": "weapons-3.0-movement-provisional",
   "features": [
     "free-practice",
     "vandal",
@@ -31,7 +31,17 @@
     "optional-gp-ucb",
     "explainable-aim-coaching",
     "paired-heldout-verification",
-    "local-aim-history"
+    "local-aim-history",
+    "velocity-cone-movement-spread",
+    "tap-braking-drills",
+    "compact-toggle-ads",
+    "fullscreen-keyboard-capture",
+    "bounded-input-diagnostics",
+    "faster-stationary-footstep-recovery",
+    "original-six-tactical-sections",
+    "walkable-elevation-and-ramps",
+    "sequential-angle-validation",
+    "visual-exposure-elimination"
   ],
   "unreal": {
     "engine": "5.7",
@@ -41,12 +51,12 @@
     "productionEnabled": false
   },
   "footsteps": {
-    "calibration": "provisional-v1",
+    "calibration": "provisional-v2",
     "actualValorantMeasured": false,
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "03.00",
+  "patchLabel": "04.00",
   "aimScience": {
     "algorithm": "aim-1.0.0",
     "browserImplemented": true,
@@ -55,5 +65,12 @@
     "autoAim": false,
     "unrealPortImplemented": false,
     "defaultOptimizer": "coarse"
+  },
+  "tactical": {
+    "sections": 6,
+    "exposureDefaultSeconds": 2,
+    "exactValorantParity": false,
+    "gpuVisualQA": false,
+    "keyboardShortcutCaptureHardwareVerified": false
   }
 }

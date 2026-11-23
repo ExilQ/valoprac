@@ -1,3 +1,4 @@
+import {approachVelocity} from '../targets/locomotion';
 import type {Target} from '../targets/Target';
 import type {FootstepEvent} from '../footsteps/Footsteps';
 import {SeededRandom} from '../simulation/random';
@@ -17,7 +18,8 @@ export class TacticalHearing {
  }
  step(t:Target,time:number,dt:number){const m=this.memories[t.id];t.previous.copy(t.position);if(!t.active)return;
   if(time>m.alertUntil){m.goalX=t.anchor.x;m.goalZ=t.anchor.z;}
-  const dx=m.goalX-t.position.x,dz=m.goalZ-t.position.z,d=Math.hypot(dx,dz),amount=time<m.reactAt?0:Math.min(d,1.5*t.speedMultiplier*dt),x=t.position.x+(d?dx/d*amount:0),z=t.position.z+(d?dz/d*amount:0);
-  t.velocity.set(d?dx/d*amount/dt:0,0,d?dz/d*amount/dt:0);if(canOccupy(x,z))t.position.set(x,0,z);else t.velocity.set(0,0,0);t.updatePose(time);
+  const dx=m.goalX-t.position.x,dz=m.goalZ-t.position.z,d=Math.hypot(dx,dz),speed=time<m.reactAt?0:Math.min(5.4*Math.min(1,t.speedMultiplier),Math.sqrt(2*20*d));
+  t.velocity.x=approachVelocity(t.velocity.x,d>.03?dx/d*speed:0,dt);t.velocity.z=approachVelocity(t.velocity.z,d>.03?dz/d*speed:0,dt);
+  const x=t.position.x+t.velocity.x*dt,z=t.position.z+t.velocity.z*dt;if(canOccupy(x,z))t.position.set(x,0,z);else t.velocity.set(0,0,0);t.updatePose(time);
  }
 }

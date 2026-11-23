@@ -1,6 +1,6 @@
 {
   "benchmark": "footstep-comparison",
-  "calibration": "provisional-v1",
+  "calibration": "provisional-v2",
   "actualValorantMeasured": false,
   "data": [
     {
@@ -40,10 +40,10 @@
       "exactGameParityVerified": false
     }
   ],
-  "release": "2.3.0",
+  "release": "4.0.0",
   "date": "2026-10-24",
   "fixedTimestep": 0.008333333333333333,
-  "applicationTests": 233,
+  "applicationTests": 346,
   "brokerTests": 20,
   "requiredScenarios": [
     "A",
@@ -56,7 +56,31 @@
   ],
   "tolerance": {
     "simulationTrace": "identical under the tested fixed-step schedules",
-    "eventTimingSeconds": 1e-09
+    "eventTimingSeconds": 1e-9
   },
-  "hardwareGameplayVerified": false
+  "hardwareGameplayVerified": false,
+  "stationaryRecovery": {
+    "benchmark": "stationary-footstep-recovery",
+    "initial": 0.85,
+    "selectedMultiplier": 2.5,
+    "results": [
+      {
+        "multiplier": 1,
+        "seconds": 0.7333333333333333
+      },
+      {
+        "multiplier": 2,
+        "seconds": 0.425
+      },
+      {
+        "multiplier": 2.5,
+        "seconds": 0.36666666666666664
+      },
+      {
+        "multiplier": 3,
+        "seconds": 0.325
+      }
+    ],
+    "valorantMeasured": false
+  }
 }

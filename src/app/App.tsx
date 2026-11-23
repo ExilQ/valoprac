@@ -21,10 +21,12 @@ export function App(){
   if(screen==='training')return <GameStage/>;
   const selectTraining=(next:typeof mode)=>{setMode(next);setTab('training');};
   return <div className="app-shell tactical-shell"><aside className="sidebar"><button className="brand-button" aria-label="훈련장 홈" onClick={()=>selectTraining('free')}><Brand/></button><nav aria-label="주 메뉴"><span className="nav-section-label">개인 훈련</span>
-    <button className={tab==='training'&&mode==='free'&&practiceMap==='range'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'range'});selectTraining('free');}}><Infinity size={19}/> 자유 훈련장<span>01</span></button>
+    <button className={tab==='training'&&mode==='free'&&practiceMap==='range'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'none'});selectTraining('free');}}><Infinity size={19}/> 자유 훈련장<span>01</span></button>
     <button className={tab==='training'&&['precision','braking','tracking'].includes(mode)&&screen==='menu'?'active':''} onClick={()=>selectTraining('precision')}><Timer size={19}/> 시간제 훈련</button>
     <button className={tab==='training'&&mode==='spray'&&screen==='menu'?'active':''} onClick={()=>selectTraining('spray')}><Activity size={19}/> 반동 연습</button>
     <button className={tab==='training'&&mode==='free'&&practiceMap==='tactical'&&screen==='menu'?'active':''} onClick={()=>{useApp.getState().updateSettings({practiceMap:'tactical'});selectTraining('free');}}>코너 피킹 훈련장</button>
+    <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'range',drill:'tapAD',analysisWall:false});selectTraining('braking');}}>톡브레이킹 훈련</button>
+    <button onClick={()=>{useApp.getState().updateSettings({practiceMap:'mid',drill:'vertical',analysisWall:false});selectTraining('free');}}>수직 각체크 훈련</button>
     <button className={tab==='aim'?'active':''} onClick={()=>setTab('aim')}>에임 분석 · 감도 탐색</button>
     <span className="nav-section-label nav-separator">훈련 환경</span>
     <button className={tab==='weapons'?'active':''} onClick={()=>setTab('weapons')}><Crosshair size={19}/> 무기 선택</button>

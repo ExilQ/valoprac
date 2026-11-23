@@ -1,12 +1,13 @@
 import { Vector3 } from 'three';
 import { MOVEMENT, type MovementProfile } from '../../config/movement';
 import type { InputState } from '../types';
-import { ENVIRONMENT,type Obstacle } from '../collision/environment';
+import { ENVIRONMENT,surfaceHeight,type Obstacle } from '../collision/environment';
 export class Movement {
   position=new Vector3(0,0,5);previous=new Vector3(0,0,5);velocity=new Vector3();
   speedModifier=1;grounded=true;crouch=0;eyeHeight=1.64;previousEyeHeight=1.64;speed=0;landedAt=-100;
   constructor(public profile:MovementProfile={...MOVEMENT},public obstacles:Obstacle[]=ENVIRONMENT){}
   get accurate(){return this.grounded&&this.speed<=this.profile.accuracyVelocityThreshold;}
+  private support(x:number,z:number,maxY:number){let y=0;for(const o of this.obstacles){const b=o.box;if(x>=b.min.x&&x<=b.max.x&&z>=b.min.z&&z<=b.max.z){const h=surfaceHeight(o,x,z);if(h<=maxY+1e-6&&h>y)y=h;}}return y;}
   step(input:InputState,yaw:number,dt:number,time:number){
     const p=this.profile;this.previous.copy(this.position);this.previousEyeHeight=this.eyeHeight;
     const crouchTarget=input.crouch?1:0;this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*8);
@@ -32,6 +33,7 @@ export class Movement {
       this.velocity.x+=dx*add;this.velocity.z+=dz*add;
       const s=Math.hypot(this.velocity.x,this.velocity.z);if(s>p.airMaxSpeed){this.velocity.x*=p.airMaxSpeed/s;this.velocity.z*=p.airMaxSpeed/s;}
     }
+    const supportBefore=this.support(this.position.x,this.position.z,this.position.y+.01);if(this.grounded&&this.position.y-supportBefore>.08)this.grounded=false;
     if(!this.grounded)this.velocity.y-=p.gravity*dt;
     // Axis-separated circle/AABB resolution is sufficient for this flat, box-only arena.
     // Fixed-step displacement is < 5 cm; split further for edited high-speed profiles.
@@ -40,13 +42,18 @@ export class Movement {
       this.position.x+=this.velocity.x*dt/steps;this.resolve('x');
       this.position.z+=this.velocity.z*dt/steps;this.resolve('z');
     }
-    this.position.y+=this.velocity.y*dt;
-    if(this.position.y<=0){if(!this.grounded)this.landedAt=time;this.position.y=0;this.velocity.y=0;this.grounded=true;}
+    const oldY=this.position.y;this.position.y+=this.velocity.y*dt;
+    const floor=this.support(this.position.x,this.position.z,this.grounded?oldY+.3:oldY+.01);
+    if(this.velocity.y<=0&&this.position.y<=floor+1e-6){if(!this.grounded)this.landedAt=time;this.position.y=floor;this.velocity.y=0;this.grounded=true;}
+    else if(this.grounded){if(floor>=oldY-.3&&floor<=oldY+.3)this.position.y=floor;else this.grounded=false;}
+    if(this.velocity.y>0){for(const o of this.obstacles){if(o.ramp)continue;const b=o.box,top=this.position.y+(this.crouch>.5?1.35:1.85);if(this.position.x+p.radius>b.min.x&&this.position.x-p.radius<b.max.x&&this.position.z+p.radius>b.min.z&&this.position.z-p.radius<b.max.z&&oldY+1.85<=b.min.y&&top>=b.min.y){this.position.y=b.min.y-1.85;this.velocity.y=0;}}}
     this.speed=Math.hypot(this.velocity.x,this.velocity.z);
   }
   private resolve(axis:'x'|'z'){
     const other=axis==='x'?'z':'x',p=this.profile,bodyTop=this.position.y+(this.crouch>0.5?1.35:1.85);
-    for(const {box} of this.obstacles){
+    for(const o of this.obstacles){const {box}=o;
+      const stepTop=surfaceHeight(o,this.position.x,this.position.z);if(this.grounded&&stepTop<=this.position.y+.3)continue;
+      if(o.ramp&&this.position.y>=stepTop-.3)continue;
       if(bodyTop<=box.min.y||this.position.y>=box.max.y)continue;
       if(this.position[other]+p.radius>box.min[other]&&this.position[other]-p.radius<box.max[other]&&this.position[axis]+p.radius>box.min[axis]&&this.position[axis]-p.radius<box.max[axis]){
         if(this.velocity[axis]>0)this.position[axis]=box.min[axis]-p.radius;

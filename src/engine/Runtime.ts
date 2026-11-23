@@ -31,7 +31,7 @@ export class Runtime {
   private probeMouse=(e:MouseEvent)=>{if(this.input.locked)this.latency.mark('look',e.timeStamp,performance.now());};
   private probeClick=(e:MouseEvent)=>{if(this.input.locked&&e.button===0)this.latency.mark('click',e.timeStamp,performance.now());};
   private handleLock=(locked:boolean)=>{if(this.preview)return;this.simulation.running=locked&&!this.simulation.completed;this.previousTime=0;if(!locked){this.audio.stop();this.latency.clearPending();}else this.audio.sync(this.simulation.time);this.onLock(locked);};
-  async resume(){if(this.disposed||this.preview)return;void this.audio.unlock().then(()=>{this.audio.levels(this.simulation.settings);this.audio.sync(this.simulation.time);}).catch(()=>this.onError('소리를 활성화하지 못했습니다. 소리 없이 훈련을 진행합니다.'));this.audio.levels(this.simulation.settings);await this.input.lock();}
+  async resume(capture=false){if(this.disposed||this.preview)return;void this.audio.unlock().then(()=>{this.audio.levels(this.simulation.settings);this.audio.sync(this.simulation.time);}).catch(()=>this.onError('소리를 활성화하지 못했습니다. 소리 없이 훈련을 진행합니다.'));this.audio.levels(this.simulation.settings);if(capture)await this.input.captureKeyboard(this.renderer.canvas.closest('.game-stage') as HTMLElement??this.renderer.canvas);await this.input.lock();}
   finish(){if(this.simulation.completed)return;this.simulation.completed=true;this.simulation.running=false;if(this.input.locked)document.exitPointerLock();this.onFinish(this.simulation.snapshot());}
   private contextLost=(event:Event)=>{event.preventDefault();this.simulation.running=false;this.input.reset();this.audio.stop();if(this.input.locked)document.exitPointerLock();this.onError('그래픽 연결이 중단되었습니다. 결과를 저장한 뒤 새로고침하세요.');};
   private animate=(now:number)=>{
@@ -41,6 +41,7 @@ export class Runtime {
     if(this.disposed)return;
     const elapsed=this.previousTime?(now-this.previousTime)/1000:0;this.previousTime=now;
 
+    if(this.simulation.exposure.death&&this.input.locked){this.input.reset();document.exitPointerLock();this.audio.stop();this.onLock(false);}
     if(this.simulation.running&&elapsed>0.5){this.audio.stop();this.simulation.running=false;this.input.reset();if(this.input.locked)document.exitPointerLock();this.onLock(false);this.onError('긴 화면 정지를 감지해 일시정지했습니다. 클릭하면 이어서 훈련합니다.');}
     let alpha=1;if(this.simulation.running)alpha=this.clock.advance(elapsed,this.step);
     if(this.cadence.shouldDraw(now,this.preview?30:this.simulation.settings.frameLimit)){
@@ -60,7 +61,8 @@ export class Runtime {
   }
   switchWeapon(id:WeaponId){this.input.reset();this.audio.selectWeapon(id);this.simulation.switchWeapon(id);this.publishTelemetry();}
   configure(settings:Settings){const s=this.simulation;const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall'].some(k=>(settings as unknown as Record<string,unknown>)[k]!== (s.settings as unknown as Record<string,unknown>)[k]);
-    Object.assign(s.settings,settings);s.settings.practiceMap=s.practiceMap;s.footsteps.configure(footstepProfile(settings));s.configureAmmo();if(targetChange&&s.mode==='free')s.resetTargets();this.renderer.applySettings(settings);this.audio.levels(settings);this.publishTelemetry();}
+    Object.assign(s.settings,settings);s.tap.drill=s.settings.drill;s.settings.practiceMap=s.practiceMap;s.footsteps.configure(footstepProfile(settings));s.configureAmmo();if(targetChange&&s.mode==='free')s.resetTargets();this.renderer.applySettings(settings);this.audio.levels(settings);this.publishTelemetry();}
+  retryTactical(){this.input.reset();this.audio.stop();this.simulation.retryTactical();this.clock=new FixedClock();this.publishTelemetry();}
   resetTargets(){this.simulation.resetTargets();this.publishTelemetry();}
   resetStatistics(){this.simulation.resetStatistics();this.renderer.clearImpacts();this.publishTelemetry();}
   dispose(){this.disposed=true;this.aimCapture?.dispose();cancelAnimationFrame(this.frame);this.renderer.canvas.removeEventListener('webglcontextlost',this.contextLost);this.renderer.canvas.removeEventListener('mousemove',this.probeMouse);this.renderer.canvas.removeEventListener('mousedown',this.probeClick);this.input.dispose();this.audio.dispose();this.renderer.dispose();this.simulation.onFootstep=null;this.simulation.footsteps.onStep=null;this.simulation.onShot=null;this.simulation.onFinish=null;this.simulation.onKill=null;for(const w of Object.values(this.simulation.weapons))w.onAction=null;}

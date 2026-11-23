@@ -1,6 +1,8 @@
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
 export type WeaponId = 'rifleA' | 'rifleB' | 'sheriff';
-export type Behavior = 'stationary' | 'strafe' | 'random' | 'stopGo' | 'crouch' | 'peek' | 'appearing';
+export type PracticeMap='range'|'tactical'|'long'|'garage'|'site'|'mid'|'tower'|'multi';
+export type Drill='none'|'tapAD'|'tapDA'|'release'|'wide'|'repeat'|'stopMoving'|'corner'|'vertical'|'mixed'|'moving';
+export type Behavior = 'stationary' | 'strafe' | 'random' | 'stopGo' | 'crouch' | 'peek' | 'appearing'|'short'|'long'|'reactive'|'wide'|'mixed';
 export type HitZone = 'head' | 'torso' | 'arm' | 'leg' | 'wall' | 'miss';
 export interface Vec3 { x: number; y: number; z: number }
 export interface InputState { forward: number; strafe: number; walk: boolean; crouch: boolean; jump: boolean; fire: boolean; ads: boolean; reload: boolean; firePresses?: number }
@@ -10,8 +12,8 @@ export const BINDING_ACTIONS = ['forward','backward','left','right','walk','crou
 export type Bindings = Record<typeof BINDING_ACTIONS[number],string>;
 export interface WeaponTotals { shots:number; hits:number; heads:number; recoilSquared:number; spreadSum:number }
 export interface Settings {
-  aimTelemetry:boolean;
-  practiceMap:'range'|'tactical';footstepHud:boolean;soundMinimap:boolean;footstepVolume:number;
+  gameplayRevision:number;aimTelemetry:boolean;
+  practiceMap:PracticeMap;drill:Drill;crouchMode:'hold'|'toggle';inputDiagnostics:boolean;adsDotSize:number;botDifficulty:'easy'|'normal'|'hard';exposureEnabled:boolean;exposureLimit:number;exposureMode:'continuous'|'persistent';footstepHud:boolean;soundMinimap:boolean;footstepVolume:number;
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
 
   frameLimit:number; hudScale:number; showHeadshotConfirmation:boolean; showControlHints:boolean; interfaceVolume:number;
@@ -32,7 +34,7 @@ export interface ShotEvent {
   recoil: {pitch:number;yaw:number}; spread: {base:number;movement:number;bloom:number;air:number;total:number;x:number;y:number};
   hit: HitZone; impact: Vec3; targetId: number | null; targetPosition: Vec3 | null; targetState: Behavior | null;
   targetGeneration: number | null; playerCompensation: {pitch:number;yaw:number};
-  accurate: boolean; releaseTime: number | null; thresholdDelta: number | null;
+  adsTransition?:number; targetElevation?:number; stoppedFor?:number; accurate: boolean; releaseTime: number | null; thresholdDelta: number | null;
   brakingKind: 'neutral' | 'opposite' | null; initialSpeed: number | null; brakingDuration: number | null; decelerationDuration: number | null;
   movementDirection: {x:number;z:number}; angularError: number | null;
 }
@@ -41,6 +43,8 @@ export interface DirectionResponse {targetId:number;changeTime:number;latency:nu
 export interface SessionData {
   footsteps?:{events:number;botHeardEvents:number;finalAccumulation:number;recent:import('./footsteps/Footsteps').FootstepEvent[]};
 
+  tactical?:{clears:number;deaths:number;maxExposure:number;lastDeath:import('./tactical/Exposure').ExposureDeath|null};
+  drill?:import('../training/modes/TapDrill').DrillStats;
   runtime?:'browser'|'unreal';streamEvidence?:{schema:1;session:string;epoch:number;processedThrough:number;lastSequence:number;lostEvents:number;detailsComplete:boolean;endedNormally:boolean;};
   id: string; createdAt: number; mode: Mode; weapon: WeaponId; duration: number; seed: number; settings: Settings;
   shots: ShotEvent[]; kills: KillEvent[]; reactions: DirectionResponse[];

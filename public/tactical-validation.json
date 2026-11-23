@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "release": "4.0.0",
+  "patchLabel": "04.00",
+  "generatedAt": "2026-10-24T06:32:07.981Z",
+  "tests": {
+    "application": 346,
+    "broker": 20,
+    "passed": true,
+    "renderSchedules": [
+      60,
+      144,
+      240
+    ],
+    "neutralRuntimeUsesDOMAdapter": true
+  },
+  "ads": [
+    {
+      "benchmark": "ads-geometry-occlusion",
+      "weapon": "rifleA",
+      "headSamples": 243,
+      "blocked": 0,
+      "maxCoverage": 0.05625,
+      "aspectRatios": [
+        "16:9",
+        "16:10",
+        "21:9"
+      ],
+      "distances": [
+        5,
+        20,
+        35
+      ],
+      "gpuScreenshots": false
+    },
+    {
+      "benchmark": "ads-geometry-occlusion",
+      "weapon": "rifleB",
+      "headSamples": 243,
+      "blocked": 0,
+      "maxCoverage": 0.05625,
+      "aspectRatios": [
+        "16:9",
+        "16:10",
+        "21:9"
+      ],
+      "distances": [
+        5,
+        20,
+        35
+      ],
+      "gpuScreenshots": false
+    }
+  ],
+  "input": [
+    {
+      "benchmark": "input-delivery-cpu",
+      "syntheticHz": 125,
+      "events": 125,
+      "elapsedMs": 1.8237570000000005,
+      "dropped": 0,
+      "callbackP95": 0.005359999999996035,
+      "physicalDeviceTest": false
+    },
+    {
+      "benchmark": "input-delivery-cpu",
+      "syntheticHz": 500,
+      "events": 500,
+      "elapsedMs": 4.115948000000003,
+      "dropped": 0,
+      "callbackP95": 0.0029649999999605825,
+      "physicalDeviceTest": false
+    },
+    {
+      "benchmark": "input-delivery-cpu",
+      "syntheticHz": 1000,
+      "events": 1000,
+      "elapsedMs": 7.7419230000000425,
+      "dropped": 0,
+      "callbackP95": 0.0017090000000052896,
+      "physicalDeviceTest": false
+    },
+    {
+      "benchmark": "input-delivery-cpu",
+      "syntheticHz": 4000,
+      "events": 4000,
+      "elapsedMs": 21.728230999999994,
+      "dropped": 0,
+      "callbackP95": 0.0006309999999984939,
+      "physicalDeviceTest": false
+    }
+  ],
+  "recovery": {
+    "benchmark": "stationary-footstep-recovery",
+    "initial": 0.85,
+    "selectedMultiplier": 2.5,
+    "results": [
+      {
+        "multiplier": 1,
+        "seconds": 0.7333333333333333
+      },
+      {
+        "multiplier": 2,
+        "seconds": 0.425
+      },
+      {
+        "multiplier": 2.5,
+        "seconds": 0.36666666666666664
+      },
+      {
+        "multiplier": 3,
+        "seconds": 0.325
+      }
+    ],
+    "valorantMeasured": false
+  },
+  "braking": {
+    "benchmark": "braking-comparison",
+    "neutralSeconds": 0.15833333333333333,
+    "oppositeSeconds": 0.10833333333333334,
+    "provisional": true
+  },
+  "magazines": {
+    "benchmark": "full-magazine-movement",
+    "weapon": "rifleA",
+    "data": [
+      {
+        "condition": "stationary",
+        "shots": 25,
+        "wallHits": 25,
+        "averageMovementConeDegrees": 0,
+        "averageSpeed": 0,
+        "physicalRecoil": true
+      },
+      {
+        "condition": "walking",
+        "shots": 25,
+        "wallHits": 20,
+        "averageMovementConeDegrees": 2.88,
+        "averageSpeed": 2.500986666666666,
+        "physicalRecoil": true
+      },
+      {
+        "condition": "running",
+        "shots": 25,
+        "wallHits": 18,
+        "averageMovementConeDegrees": 5.718689458689458,
+        "averageSpeed": 5.158000000000002,
+        "physicalRecoil": true
+      },
+      {
+        "condition": "counter",
+        "shots": 25,
+        "wallHits": 25,
+        "averageMovementConeDegrees": 0,
+        "averageSpeed": 0.13033333333333197,
+        "physicalRecoil": true
+      }
+    ]
+  },
+  "browserQA": {
+    "menuAndPreferenceQA": true,
+    "webgl": "disabled-in-managed-chrome",
+    "gpuScreenshots": false,
+    "physicalRawInput": false,
+    "physicalCtrlW": false,
+    "inputToPhoton": false,
+    "hardwareFPS": false
+  },
+  "unrealPortImplemented": false,
+  "calibration": "provisional"
+}

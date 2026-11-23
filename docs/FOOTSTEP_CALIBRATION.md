@@ -21,7 +21,7 @@ Below the audible-speed threshold, walking/crouching preserves most progress and
 | Accumulation per eligible meter | 0.625 | Provisional |
 | Walking distance multiplier | 0 | Provisional |
 | Walking decay / second | 0.02 | Provisional; 0 and 0.08 comparison presets included |
-| Stationary decay / second | 1.4 | Provisional |
+| Stationary decay / second | 3.5 | Provisional |
 | Stationary velocity | 0.035 m/s | Provisional |
 | Stationary recovery delay | 0.12 s | Provisional |
 | Audible accumulation velocity | 2.7 m/s | Provisional; default walk speed is 2.592 m/s |
@@ -74,3 +74,8 @@ Riot's official Patch Notes 1.0 describes the minimap white circle as audio-dist
 No local VALORANT executable, controlled gameplay recording or movement/audio timestamp dataset was available. **Exact equivalence is not verified.** To calibrate, record authorized gameplay with visible input timestamps, matching weapon/surface, known movement distances and audio waveforms; use at least 30 trials per treatment. Measure first audible onset, coast distance, stationary dwell and walking duration separately. Fit per-meter gain/grace/decay on training trials, then evaluate held-out trials and report median/p95 error and uncertainty. Preserve the original clips/dataset and game patch/build. Include A–G trajectories, wall sliding, crouch/ADS transition and packet-loss-free local capture. Do not tune only to a single anecdotal run.
 
 No paid infrastructure or production Unreal replacement was performed. The existing unbuilt UE staging source remains included; footsteps/tactical hearing are **not ported to UE** in this release, and streaming remains disabled behind its false migration gates.
+
+
+## 4.0 recovery revision
+
+Stationary decay increased2.5times; walking retention, actual velocity gating and event hearing remain unchanged. The former default migrates once through gameplayRevision1. Current custom values remain configurable. The release-generated tactical report contains1x/2x/2.5x/3x recovery comparisons;85%stationary phase reaches zero in.367s at the selected profile versus.733s previously. These are simulation measurements, not native game observations.

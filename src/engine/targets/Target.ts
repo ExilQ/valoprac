@@ -1,15 +1,18 @@
+import {approachVelocity,BOT_DIFFICULTY} from './locomotion';
+import {MOVEMENT} from '../../config/movement';
 import { Box3, Matrix4, Object3D, Ray, Sphere, Vector3 } from 'three';
 import type { Behavior, HitZone } from '../types';
 import { SeededRandom } from '../simulation/random';
 export interface HitPart {zone:HitZone;node:Object3D;shape:'sphere'|'box';size:Vector3;inverse:Matrix4;box:Box3;sphere:Sphere}
+const MIXED_PATTERNS=['short','long','reactive','stopGo','wide','crouch'] as const;
 const localRay=new Ray(),localHit=new Vector3(),worldHit=new Vector3();
 export class Target {
   root=new Object3D();parts:HitPart[]=[];head!:HitPart;previous=new Vector3();anchor=new Vector3();
   upper=new Object3D();leftHip=new Object3D();rightHip=new Object3D();leftKnee=new Object3D();rightKnee=new Object3D();
   leftArm=new Object3D();rightArm=new Object3D();
   private hitResult:{zone:HitZone;distance:number}={zone:'miss',distance:Infinity};
-  enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
-  direction=1;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
+  difficulty:'easy'|'normal'|'hard'='normal';enabled=true;scale=1;speedMultiplier=1;health=150;position=new Vector3();velocity=new Vector3();active=true;deadAt=-100;spawnAt=0;generation=0;shotsReceived=0;
+  direction=1;directionZ=0;nextChange=0;changeAt=-100;reactionRecorded=true;crouch=0;phase=0;
   constructor(public id:number,public behavior:Behavior,public rng:SeededRandom){
     this.root.add(this.upper,this.leftHip,this.rightHip);
     this.head=this.part('head',this.upper,0,1.68,0,0.34,0.34,0.34,'sphere');
@@ -28,23 +31,26 @@ export class Target {
     const p:HitPart={zone,node,shape,size,inverse:new Matrix4(),box:new Box3(new Vector3(-w/2,-h/2,-d/2),new Vector3(w/2,h/2,d/2)),sphere:new Sphere(new Vector3(),w/2)};
     this.parts.push(p);return p;
   }
-  spawn(x:number,z:number,time:number){this.position.set(x,0,z);this.previous.copy(this.position);this.anchor.copy(this.position);this.active=true;this.spawnAt=time;this.generation++;this.shotsReceived=0;this.health=150;this.phase=this.rng.range(0,6.28);this.nextChange=time+this.rng.range(0.65,1.5);this.direction=this.rng.next()>0.5?1:-1;this.velocity.set(0,0,0);this.crouch=0;this.changeAt=this.behavior==='appearing'?time:-100;this.reactionRecorded=this.behavior!=='appearing';this.updatePose(time);}
+  spawn(x:number,z:number,time:number,y=0){this.position.set(x,y,z);this.previous.copy(this.position);this.anchor.copy(this.position);this.active=true;this.spawnAt=time;this.generation++;this.shotsReceived=0;this.health=150;this.phase=this.rng.range(0,6.28);this.nextChange=time+this.rng.range(0.65,1.5);this.direction=this.rng.next()>0.5?1:-1;this.directionZ=0;this.velocity.set(0,0,0);this.crouch=0;this.changeAt=this.behavior==='appearing'?time:-100;this.reactionRecorded=this.behavior!=='appearing';this.updatePose(time);}
   eliminate(time:number){this.active=false;this.deadAt=time;}
   step(time:number,dt:number){
     this.previous.copy(this.position);if(!this.active)return;
-    let desired=0;
-    if(this.behavior==='strafe')desired=this.direction*2.1;
-    if(this.behavior==='random'||this.behavior==='crouch')desired=this.direction*2.3;
-    if(this.behavior==='stopGo')desired=Math.sin((time-this.spawnAt)*2.3)>0.15?this.direction*2.4:0;
-    if(this.behavior==='peek')desired=this.direction*1.8;
-    if(this.behavior!=='stationary'&&(time>=this.nextChange||Math.abs(this.position.x-this.anchor.x)>2.4)){
-      this.direction*=-1;this.nextChange=time+this.rng.range(0.65,1.8);this.changeAt=time;this.reactionRecorded=false;
+    let pattern=this.behavior;
+    if(pattern==='mixed')pattern=MIXED_PATTERNS[Math.floor(this.phase)%6];
+    const moving=pattern!=='stationary'&&pattern!=='appearing';
+    const span=this.behavior==='mixed'?2.4:pattern==='short'?.85:pattern==='long'||pattern==='wide'?3.1:pattern==='peek'?1.25:2.4;
+    if(moving&&(time>=this.nextChange||Math.abs(this.position.x-this.anchor.x)>span&&this.velocity.x*this.direction>0)){
+      this.direction*=-1;const complexity=BOT_DIFFICULTY[this.difficulty].complexity;this.nextChange=time+this.rng.range((pattern==='short'?.28:.55)*(1.3-complexity*.3),(pattern==='reactive'?.8:1.4)*(1.4-complexity*.4));this.changeAt=time;this.reactionRecorded=false;
+      if(['random','reactive','mixed'].includes(this.behavior))this.directionZ=this.rng.range(-.6,.6);
+      if(this.behavior==='mixed')this.phase=this.rng.range(0,6);
     }
-    desired*=this.speedMultiplier;
-    this.velocity.x+=Math.sign(desired-this.velocity.x)*Math.min(Math.abs(desired-this.velocity.x),dt*12);
-    this.position.x+=this.velocity.x*dt;
-    const targetCrouch=this.behavior==='crouch'&&Math.sin(time*1.4+this.phase)>0.15?1:0;
-    this.crouch+=Math.sign(targetCrouch-this.crouch)*Math.min(Math.abs(targetCrouch-this.crouch),dt*4);
+    let desired=moving?this.direction*MOVEMENT.maxSpeed*Math.min(1,Math.max(0,this.speedMultiplier)):0;
+    // Explicit stop windows, not a sinusoidal position path.
+    if(pattern==='stopGo'&&this.nextChange-time<.24)desired=0;
+    const targetCrouch=pattern==='crouch'&&this.nextChange-time<.35?1:0;
+    this.crouch+=Math.sign(targetCrouch-this.crouch)*Math.min(Math.abs(targetCrouch-this.crouch),dt*8);
+    desired*=1+(MOVEMENT.crouchModifier-1)*this.crouch;
+    this.velocity.x=approachVelocity(this.velocity.x,desired,dt);let desiredZ=moving?this.directionZ*MOVEMENT.maxSpeed:0;if(Math.abs(this.position.z-this.anchor.z)>1&&desiredZ*(this.position.z-this.anchor.z)>0){this.directionZ*=-1;desiredZ*=-1;}this.velocity.z=approachVelocity(this.velocity.z,desiredZ,dt);const speed=Math.hypot(this.velocity.x,this.velocity.z),cap=MOVEMENT.maxSpeed*Math.min(1,Math.max(0,this.speedMultiplier));if(speed>cap&&speed>0)this.velocity.multiplyScalar(cap/speed);this.position.x+=this.velocity.x*dt;this.position.z+=this.velocity.z*dt;
     this.updatePose(time);
   }
   updatePose(time:number){

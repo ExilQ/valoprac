@@ -8,7 +8,7 @@ export class Weapon {
   infiniteReserve=true;autoReload=true;ads=false;private wasFire=false;private lastInterval=0;
   recoil=new Recoil();rng:SeededRandom;recoilRng:SeededRandom;
   onAction:((action:'reload'|'equip')=>void)|null=null;
-  spread={base:0,movement:0,bloom:0,air:0,total:0,x:0,y:0};
+  spread={base:0,movement:0,bloom:0,air:0,landing:0,total:0,x:0,y:0};
   constructor(public profile:WeaponProfile,seed:number){this.ammo=profile.magazine;this.reserve=profile.reserve;this.rng=new SeededRandom(seed);this.recoilRng=new SeededRandom(seed^0xA91E);}
   requestReload(time:number){if(this.reloadingUntil===null&&time>=this.equipUntil&&this.ammo<this.profile.magazine&&(this.infiniteReserve||this.reserve>0)){this.reloadStarted=time;this.reloadingUntil=time+this.profile.reloadTime;this.onAction?.('reload');}}
   equip(time:number){this.reloadingUntil=null;this.equipUntil=time+this.profile.equipTime;this.wasFire=true;this.ads=false;this.onAction?.('equip');}
@@ -34,9 +34,10 @@ export class Weapon {
   calculateSpread(m:Movement,ads:boolean,landingPenalty:boolean){
     const p=this.profile,s=this.spread;const crouch=1+(p.crouchSpread-1)*m.crouch,aim=ads&&p.adsZoom>1?p.adsSpread:1;
     s.base=p.firstSpread*crouch*aim;
-    const f=Math.max(0,(m.speed-m.profile.accuracyVelocityThreshold)/(m.profile.maxSpeed-m.profile.accuracyVelocityThreshold));
-    s.movement=p.movementSpread*Math.min(1.5,f)**1.3*crouch*aim;s.bloom=this.bloom*crouch*aim;s.air=m.grounded?(landingPenalty?0.35:0):p.airSpread;
-    s.total=s.base+s.movement+s.bloom+s.air;
+    const threshold=m.profile.accuracyVelocityThreshold,walk=m.profile.maxSpeed*m.profile.walkModifier;
+    const f=m.speed<=threshold?0:m.speed<=walk?.5*(m.speed-threshold)/(walk-threshold):.5+.5*(m.speed-walk)/(m.profile.maxSpeed-walk);
+    s.movement=p.movementSpread*Math.min(1.5,f)*crouch*aim;s.bloom=this.bloom*crouch*aim;s.air=m.grounded?0:p.airSpread;s.landing=m.grounded&&landingPenalty?0.35:0;
+    s.total=s.base+s.movement+s.bloom+s.air+s.landing;
     const theta=this.rng.next()*Math.PI*2,r=Math.sqrt(this.rng.next())*s.total;
     s.x=Math.cos(theta)*r;s.y=Math.sin(theta)*r;return s;
   }

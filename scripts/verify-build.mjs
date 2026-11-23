@@ -15,6 +15,7 @@ const manifest=JSON.parse(read('.vite/manifest.json'));
 for(const value of Object.values(manifest)){assert(existsSync(join(root,value.file)),value.file);for(const css of value.css??[])assert(existsSync(join(root,css)),css);}
 assert(Object.keys(manifest).some(k=>k.includes('GameStage')),'3D gameplay must be emitted as a real dynamic chunk');
 for(const file of readdirSync(join(root,'assets'))){const path=join(root,'assets',file);assert(!file.endsWith('.map'),'Public sourcemaps must not be emitted');assert(statSync(path).size<2_000_000,`Unexpected large asset: ${file}`);if(file.endsWith('.js'))assert(!/sk-(?:proj-)?[A-Za-z0-9_-]{30,}/.test(readFileSync(path,'utf8')),'Potential API key in browser output');}
+const tactical=JSON.parse(read('tactical-validation.json'));assert.equal(tactical.release,release.version);assert.equal(tactical.ads.length,2);assert(tactical.ads.every(x=>x.blocked===0));assert(read('tactical-guide.html').includes('실기기에서 남은 검증'));
 assert(read('guide.html').includes('자체 제작 대체음'));
 assert(read('footsteps.html').includes('누적'));
 assert(read('aim-methodology.html').includes('사람의 향상 효과는 아직 미검증'));

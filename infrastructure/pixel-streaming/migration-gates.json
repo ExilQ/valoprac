@@ -15,7 +15,8 @@
     "visualComparisonReviewed": false,
     "rollbackExercised": false,
     "footstepAndTacticalParityVerified": false,
-    "aimScienceParityVerified": false
+    "aimScienceParityVerified": false,
+    "tacticalOverhaulParity": false
   },
   "blockers": [
     "No licensed UE 5.7 installation or UnrealBuildTool in this execution environment",
@@ -23,11 +24,12 @@
     "No measured WebRTC or input-to-photon session",
     "UE-dependent gameplay/history/recoil integration requires actual UBT, GPU and WebRTC validation",
     "Browser footstep accumulation and tactical hearing added in 2.3 have not been ported or tested in UE",
-    "Browser aim-science measurement, coaching and verification added in 3.0 are not ported or validated in UE"
+    "Browser aim-science measurement, coaching and verification added in 3.0 are not ported or validated in UE",
+    "Browser 4.0 ADS, velocity-cone spread, elevated maps, exposure and input capture are not ported or validated in UE"
   ],
   "rollback": {
-    "siteVersionNumber": 6,
-    "sourceCommit": "005366579019842e99bc82ee267cf375b0dc1a63",
-    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_782657c63e448191bde5cb3cedbea271"
+    "siteVersionNumber": 7,
+    "sourceCommit": "b79b2936a5d6f8e1651429c59460c474ae94f46b",
+    "versionId": "appgprj_6ad3456a37e08191ae5aef8440d1d28f~appgver_b238459cdfbc81918faa3691b78d25fa"
   }
 }
