@@ -14960,6 +14960,11 @@
       "id": "msg_77fa0447488c",
       "source": "산악 관측소의 두 경사로가 서로 다른 고도의 전망대로 이어집니다.",
       "en": "Two mountain-station ramps lead toward lookout decks above a sheltered pass."
+    },
+    {
+      "id": "msg_438c1e70eee5",
+      "source": "W로 달리다 점프하세요. 공중에서는 W를 유지한 채 A 또는 D와 마우스를 같은 방향으로 움직이세요. 착지에 맞춰 점프를 다시 입력하세요.",
+      "en": "Run with W and jump. In the air, keep holding W, press A or D, and turn the mouse in the same direction. Press jump again as you land."
     }
   ]
 }

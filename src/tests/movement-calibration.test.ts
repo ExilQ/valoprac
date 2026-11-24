@@ -1,3 +1,4 @@
+import {AIR_STEERING_SIMULATION_RULES} from '../engine/simulation/rules';
 import {describe,it,expect} from 'vitest';
 import {MOVEMENT} from '../config/movement';
 import {Movement} from '../engine/movement/Movement';
@@ -9,7 +10,7 @@ const rounded=(value:number)=>Number(value.toFixed(6));
 /** Software-only comparison from the same initial speed; this is deliberately
  * separate from any future capture-based comparison with a native game. */
 function travel(mode:'run'|'single'|'chain'|'air-turn',cap=5.5){
- const m=new Movement({...MOVEMENT,hopSpeedCap:cap},[]);m.reset({x:0,y:0,z:0});m.velocity.z=-5.4;m.speed=5.4;
+ const m=new Movement({...MOVEMENT,hopSpeedCap:cap},[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.reset({x:0,y:0,z:0});m.velocity.z=-5.4;m.speed=5.4;
  let distance=0,lastRequest=-1,airborneTicks=0,contactTicks=0,largestTurn=0;const landings:number[]=[];
  for(let tick=0;tick<720;tick++){
   const i=emptyInput(),time=tick*dt,canChain=(mode==='chain'||mode==='air-turn')&&!m.grounded&&m.velocity.y<0&&m.position.y<.25&&time-lastRequest>.2;

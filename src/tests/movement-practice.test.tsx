@@ -26,7 +26,7 @@ describe('A3 validated position tools on the existing movement authority',()=>{
  it('records actual takeoff, apex and landing, then returns to the pre-jump ground pose',()=>{
   const m=new Movement(),p=new MovementPractice();for(let n=1;n<=60;n++)tick(m,p,n,{...emptyInput(),forward:1});const takeoff=m.position.clone();
   tick(m,p,61,{...emptyInput(),forward:1,jump:true,jumpHeld:true});for(let n=62;n<=145;n++)tick(m,p,n,{...emptyInput(),forward:1});
-  const s=p.snapshot();expect(s.last).not.toBeNull();expect(s.last!.peakHeight).toBeCloseTo(1.15,2);expect(s.last!.landing).not.toBeNull();expect(s.last!.distance).toBeGreaterThan(3);expect(s.last!.duration).toBeGreaterThan(.6);expect(s.last!.samples.length).toBeLessThanOrEqual(600);
+  const s=p.snapshot();expect(s.last).not.toBeNull();expect(s.last!.peakHeight).toBeCloseTo(1.165,2);expect(s.last!.landing).not.toBeNull();expect(s.last!.distance).toBeGreaterThan(3);expect(s.last!.duration).toBeGreaterThan(.6);expect(s.last!.samples.length).toBeLessThanOrEqual(600);
   expect(p.action({kind:'movement-takeoff'},context(m,145)).ok).toBe(true);expect(m.position.toArray()).toEqual(takeoff.toArray());expect(m.grounded).toBe(true);expect(m.velocity.y).toBe(0);
  });
  it('resets the current physical attempt without overwriting the separately saved position',()=>{

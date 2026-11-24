@@ -1,3 +1,4 @@
+import {AIR_STEERING_SIMULATION_RULES} from '../engine/simulation/rules';
 import {afterAll,describe,expect,it} from 'vitest';
 import {createHash} from 'node:crypto';
 import {Box3,Vector3} from 'three';
@@ -21,7 +22,7 @@ const cases=[
  {label:'Operator scope',weapon:'operator',run:5.13,modifier:5.13/5.4*.72,walk:false,crouch:false}
 ] as const;
 function settled(row:typeof cases[number]){
- const m=new Movement(undefined,[]);m.reset({x:0,y:0,z:0});m.speedModifier=row.modifier;m.setWeaponContext(row.weapon,row.run,row.label.includes('ADS')||row.label.includes('scope'));
+ const m=new Movement(undefined,[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.reset({x:0,y:0,z:0});m.speedModifier=row.modifier;m.setWeaponContext(row.weapon,row.run,row.label.includes('ADS')||row.label.includes('scope'));
  const input={...emptyInput(),forward:1,walk:row.walk,crouch:row.crouch};for(let n=1;n<=120;n++)m.step(input,0,dt,n*dt);return{m,input,time:1};
 }
 const box=(min:[number,number,number],max:[number,number,number]):Obstacle=>({box:new Box3(new Vector3(...min),new Vector3(...max)),kind:'wall',color:0});
@@ -45,7 +46,7 @@ describe('F1 — frozen takeoff budget and continuous tactical air steering',()=
   }
  });
  it('a stationary jump cannot manufacture running speed while retaining directional control',()=>{
-  const m=new Movement(undefined,[]);m.reset({x:0,y:0,z:0});m.step({...emptyInput(),jump:true,jumpPresses:1},0,dt,dt);
+  const m=new Movement(undefined,[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.reset({x:0,y:0,z:0});m.step({...emptyInput(),jump:true,jumpPresses:1},0,dt,dt);
   expect(m.physicsSnapshot().takeoff!.speedCap).toBe(.75);for(let n=2;n<=32;n++)m.step({...emptyInput(),strafe:1},-.01*n,dt,n*dt);
   expect(m.speed).toBeLessThanOrEqual(.75+1e-9);expect(m.position.x).toBeGreaterThan(.1);expect(m.velocity.z).not.toBe(0);
  });
@@ -56,7 +57,7 @@ describe('F1 — frozen takeoff budget and continuous tactical air steering',()=
   expect(delta.length()).toBeCloseTo(10*dt*(angle>=150?.5:1),11);expect(v.z).toBeLessThan(-5.3);expect(v.length()).toBeGreaterThan(5.3);expect(out.clone().multiplyScalar(dt).distanceTo(delta)).toBeLessThan(1e-12);
  });
  it('captures real weapon identity through the production Simulation integration',()=>{
-  const s=new Simulation('free','operator',{...DEFAULT_SETTINGS,targetCount:1});s.running=true;for(let n=0;n<120;n++)s.step(dt,{...emptyInput(),forward:1});s.step(dt,{...emptyInput(),forward:1,jump:true,jumpPresses:1});
+  const s=new Simulation('free','operator',{...DEFAULT_SETTINGS,targetCount:1},{},AIR_STEERING_SIMULATION_RULES);s.running=true;for(let n=0;n<120;n++)s.step(dt,{...emptyInput(),forward:1});s.step(dt,{...emptyInput(),forward:1,jump:true,jumpPresses:1});
   const t=s.movement.physicsSnapshot().takeoff!;expect(t.weapon).toBe('operator');expect(t.weaponRunSpeed).toBe(5.13);expect(t.speedCap).toBeCloseTo(5.13*1.05,12);
  });
  it('copies takeoff metadata rather than exposing mutable simulation vectors',()=>{
@@ -65,7 +66,7 @@ describe('F1 — frozen takeoff budget and continuous tactical air steering',()=
 });
 describe('F2 — report-derived ballistic jump and physical contacts',()=>{
  for(const hz of[60,120,240])it(`${hz}Hz integration reaches 1.15±.02m with a .61–.68s ballistic flight`,()=>{
-  const step=1/hz,m=new Movement(undefined,[]);m.reset({x:0,y:0,z:0});let peak=0,n=0;m.step({...emptyInput(),jump:true,jumpPresses:1},0,step,++n*step);
+  const step=1/hz,m=new Movement(undefined,[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.reset({x:0,y:0,z:0});let peak=0,n=0;m.step({...emptyInput(),jump:true,jumpPresses:1},0,step,++n*step);
   while(!m.grounded&&n<hz*2){peak=Math.max(peak,m.position.y);m.step(emptyInput(),0,step,++n*step);}
   expect(peak).toBeGreaterThanOrEqual(1.13);expect(peak).toBeLessThanOrEqual(1.17);expect(n*step).toBeGreaterThanOrEqual(.61);expect(n*step).toBeLessThanOrEqual(.68);expect(m.position.y).toBe(0);expect(m.landingSerial).toBe(1);expect(m.hopSnapshot().jumps).toBe(1);
   expect(VALORANT_PHYSICS.jumpImpulse**2/(2*VALORANT_PHYSICS.gravity)).toBeCloseTo(1.15,12);
@@ -81,7 +82,7 @@ describe('F2 — report-derived ballistic jump and physical contacts',()=>{
   const elevation=m.position.y;m.step({...emptyInput(),crouch:input.crouch,jump:true,jumpPresses:1},0,dt,1001*dt);let peak=0;for(let n=1002;n<=1120&&!m.grounded;n++){peak=Math.max(peak,m.position.y-elevation);m.step({...emptyInput(),crouch:input.crouch},0,dt,n*dt);}expect(m.grounded).toBe(true);expect(m.position.y).toBeCloseTo(elevation,12);expect(peak).toBeLessThanOrEqual(1.17);
  });
  it('integrates a terminal-speed transition without inventing an extra gravity displacement',()=>{
-  const m=new Movement(undefined,[]);m.reset({x:0,y:100,z:0});m.grounded=false;m.velocity.y=-54.9;const accelerationTime=.1/22;
+  const m=new Movement(undefined,[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.reset({x:0,y:100,z:0});m.grounded=false;m.velocity.y=-54.9;const accelerationTime=.1/22;
   const expected=-54.9*accelerationTime-.5*22*accelerationTime**2-55*(dt-accelerationTime);m.step(emptyInput(),0,dt,dt);expect(m.velocity.y).toBe(-55);expect(m.position.y-100).toBeCloseTo(expected,12);
   m.step(emptyInput(),0,dt,2*dt);expect(m.position.y-100-expected).toBeCloseTo(-55*dt,12);
  });
@@ -91,7 +92,7 @@ describe('F2 — report-derived ballistic jump and physical contacts',()=>{
 });
 describe('F1/F2 — unchanged Counter-Strike trajectory fixtures from immutable09.01',()=>{
  for(const[preset,expected]of[['cs2','63483b858c8d3b210c78ca576d62fd8d14e7b540bcdf7725b4223a937d38f058'],['sourceClassic','d25ad9af42b2d0c7425c57026128797351eaf683a109052de5e27abc9f76ae7c']]as const)it(`${preset}: all600 resolved movement samples retain their original SHA256`,()=>{
-  const m=new Movement(undefined,[]);m.configurePhysics({movementPhysics:'counterStrike',csMovementPreset:preset,jumpBufferMs:80});m.reset({x:0,y:0,z:0});const frames=[];
+  const m=new Movement(undefined,[]);m.setSimulationRules(AIR_STEERING_SIMULATION_RULES);m.configurePhysics({movementPhysics:'counterStrike',csMovementPreset:preset,jumpBufferMs:80});m.reset({x:0,y:0,z:0});const frames=[];
   for(let n=0;n<600;n++){m.step({...emptyInput(),forward:n<100?1:0,strafe:n>=100&&n<220?-1:n>=220&&n<340?1:0,jump:n===90||n===260,jumpPresses:n===90||n===260?1:0},n>=100?(n-100)*.008:0,dt,(n+1)*dt);frames.push([...m.position.toArray(),...m.velocity.toArray(),+m.grounded,m.landingSerial,m.hopSnapshot().jumps]);}
   const actual=createHash('sha256').update(JSON.stringify(frames)).digest('hex');csHashes.push({preset,sha256:actual,unchangedFrom0901:actual===expected});expect(actual).toBe(expected);expect(m.profile.airModel).toBe('projection');expect(m.profile.jumpImpulse).toBe(CS2_PHYSICS.jumpImpulse);
  });

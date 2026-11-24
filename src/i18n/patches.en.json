@@ -1,4 +1,13 @@
 {
+  "12.19": {
+    "title": "Bunny-hop trajectory and flight calibration",
+    "description": "Public measurements inform jump height, flight time, and diagonal air-strafe acceleration in the VALORANT profile.",
+    "changes": [
+      "Hold W and pair A or D with a matching mouse turn to build a small amount of horizontal speed.",
+      "A chained jump starts after actual contact. Running, walking, and crouching use their respective speed limits.",
+      "The calibration is based on public jump measurements and a timed route comparison."
+    ]
+  },
   "12.18": {
     "title": "Improved VALORANT air steering",
     "description": "Use A or D and turn the mouse to carve tighter airborne turns after a running jump.",

@@ -5,7 +5,7 @@ import {ReplayPlayer} from '../engine/replay/playback';
 import {ReplayRecorder} from '../engine/replay/recording';
 import {FIXED_DT as dt} from '../engine/simulation/FixedClock';
 import {Simulation} from '../engine/simulation/Simulation';
-import {CURRENT_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,type SimulationRulesId} from '../engine/simulation/rules';
+import {CURRENT_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,type SimulationRulesId} from '../engine/simulation/rules';
 import {emptyInput,type InputState} from '../engine/types';
 
 function flight(rules:SimulationRulesId, side:number, turnDegrees:number){
@@ -28,7 +28,7 @@ function flight(rules:SimulationRulesId, side:number, turnDegrees:number){
 
 describe('VALORANT air steering',()=>{
  for(const side of [-1,1])it('curves the movement trajectory with synchronized mouse and strafe input, side '+side,()=>{
-  const before=flight(MATERIALS_SIMULATION_RULES,side,65),after=flight(CURRENT_SIMULATION_RULES,side,65);
+  const before=flight(MATERIALS_SIMULATION_RULES,side,65),after=flight(AIR_STEERING_SIMULATION_RULES,side,65);
   expect(side*after.heading).toBeGreaterThan(75);
   expect(side*(after.heading-before.heading)).toBeGreaterThan(20);
   expect(side*after.sideTravel).toBeGreaterThan(1.7);
@@ -44,7 +44,7 @@ describe('VALORANT air steering',()=>{
   expect(neutral.heading).toBe(0);
  });
  it('rebuilds a chain of alternating hops and round-trips playback under both rule versions',async()=>{
-  for(const rules of [MATERIALS_SIMULATION_RULES,CURRENT_SIMULATION_RULES]){
+  for(const rules of [MATERIALS_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,CURRENT_SIMULATION_RULES]){
    const simulation=new Simulation('free','rifleA',{...DEFAULT_SETTINGS,targetCount:1}, {},rules);
    const recorder=new ReplayRecorder(simulation);
    simulation.running=true;

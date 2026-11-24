@@ -23,10 +23,19 @@ export const MOVEMENT: MovementProfile = {
 export type MovementPhysicsId='valorant'|'counterStrike';
 export const LEGACY_MOVEMENT_PHYSICS_VERSION='dual-movement-1.1.0';
 export const MATERIALS_MOVEMENT_PHYSICS_VERSION='dual-movement-1.2.0';
-export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.3.0';
+export const AIR_STEERING_MOVEMENT_PHYSICS_VERSION='dual-movement-1.3.0';
+export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.4.0';
 /** Provisional gameplay calibration. A play video without input telemetry
  * cannot establish a native game's acceleration or per-tick turn-rate constants. */
 export const VALORANT_AIR_STEERING=Object.freeze({maxTurnRate:3.6});
+/** The updated 240 Hz study reports 2045 and 690.2 game units. See the
+ * public calibration note for the conversion, route data and fit assumptions. */
+export const VALORANT_BUNNY_HOP=Object.freeze({
+ vertical:Object.freeze({gravity:20.45,jumpImpulse:6.902}),
+ runningSpeedCap:1.10,
+ runningTakeoffThreshold:.96,
+ diagonalAcceleration:.12
+});
 export type CounterStrikePreset='cs2'|'sourceClassic';
 export interface MovementPhysicsSettings {movementPhysics:MovementPhysicsId;csMovementPreset:CounterStrikePreset;jumpBufferMs:number;}
 /** Independent SI calibration. Source projection/ground-friction principles

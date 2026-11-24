@@ -1,4 +1,4 @@
-import {VALORANT_AIR_STEERING} from '../../config/movement';
+import {VALORANT_AIR_STEERING,VALORANT_BUNNY_HOP} from '../../config/movement';
 import type {Vector3} from 'three';
 import type {MovementPhysicsProfile} from '../../config/movement';
 
@@ -33,9 +33,10 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
 /** Steer the existing horizontal momentum with a bounded lateral acceleration
  * expressed as a turn rate. Only the component along the velocity adds speed
  * or brakes. Thus a sideways input can curve a run at its speed cap. */
-export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null){
+export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null,diagonalStrafe=0,runSpeed=0){
  const beforeX=v.x,beforeZ=v.z,speed=Math.hypot(beforeX,beforeZ);
- const cap=Math.min(takeoffCap??Infinity,p.airSpeedLimit??Infinity,p.hopSpeedCap??Infinity);
+ const standardCap=Math.min(takeoffCap??Infinity,p.airSpeedLimit??Infinity,p.hopSpeedCap??Infinity);
+ const cap=runSpeed>0?(takeoffCap??standardCap):standardCap;
  if(w.amount>0){
   const wishSpeed=Math.min(p.airMaxSpeed*w.amount,w.speed),impulse=p.airAcceleration*w.amount*dt;
   if(speed<1e-9){
@@ -46,7 +47,12 @@ export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfi
    const response=reverse?(p.reverseAirSteeringMultiplier??.5):1;
    const projection=dot*speed;
    const throttle=Math.min(impulse*response,Math.max(0,wishSpeed-projection))*dot;
-   const next=Math.min(cap,Math.max(0,speed+throttle));
+   // The small extra speed requires a forward diagonal cut into the
+   // current heading. Steeper turns and straight travel receive no bonus.
+   const gain=runSpeed*VALORANT_BUNNY_HOP.diagonalAcceleration*dt*Math.max(0,2*diagonalStrafe*cross*Math.max(0,dot));
+   const ordinaryLimit=Math.min(standardCap,runSpeed*(p.airWeaponRunFactor??1.05));
+   const ordinary=runSpeed>0?Math.min(throttle,Math.max(0,ordinaryLimit-speed)):throttle;
+   const next=Math.min(cap,Math.max(0,speed+ordinary+gain));
    const angle=Math.atan2(cross,dot),limit=VALORANT_AIR_STEERING.maxTurnRate*w.amount*response*dt*Math.abs(cross);
    const turn=Math.sign(angle)*Math.min(limit,Math.abs(angle)),cos=Math.cos(turn),sin=Math.sin(turn);
    v.x=(beforeX*cos-beforeZ*sin)*(next/speed);v.z=(beforeX*sin+beforeZ*cos)*(next/speed);

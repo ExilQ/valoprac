@@ -32,7 +32,7 @@ export function trainingDescription(mode:Mode,s:TrainingSettings,options?:Simula
    ?'코너를 직접 피킹하고 발소리에 반응하는 표적을 확인하세요. 이 기존 코너 맵은 노출 사망을 지원하지 않습니다.'
    :'엄폐에서 직접 이동해 한 번에 한 각을 확인하세요. 수비수의 사격과 소리를 관찰하고 제동 후 발사하세요.';
   case 'vertical':return '계단과 경사로를 직접 이동하며 상·하단 수비각을 차례로 확인하세요. 적이 선 지면을 기준으로 머리 높이를 조정하세요.';
-  case 'bunny':return '착지 직전에 점프를 다시 입력하고 A·D와 마우스로 공중 방향을 조절하세요. 입력 시점과 속도 보존, 착지 위치를 비교합니다.';
+  case 'bunny':return 'W로 달리다 점프하세요. 공중에서는 W를 유지한 채 A 또는 D와 마우스를 같은 방향으로 움직이세요. 착지에 맞춰 점프를 다시 입력하세요.';
   case 'wallbang':return '엄폐물에 사격해 통과 구간과 피해를 확인하세요. 재질·두께·입사각과 무기별 관통 결과를 비교합니다.';
   default:return MODES[mode].description;
  }
