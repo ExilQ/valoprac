@@ -1,3 +1,4 @@
+import {motionPose,type RecordedMotion} from '../../training/scenarios/recordedMotion';
 import type {DefenderPolicy} from '../../training/scenarios/defenderPolicy';
 import {Box3,Matrix4,Ray,Sphere,Vector3} from 'three';
 import {emptyInput,type Settings,type Vec3,type WeaponId,type ShotEvent} from '../types';
@@ -24,7 +25,7 @@ export type DefenderState='holding'|'listening'|'alert'|'tracking'|'firing'|'rec
 export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch:number;grounded:boolean;yaw:number;pitch:number;scoped?:boolean;}
 /** These samples and hit volumes form the explicit human body proxy used by defender
  * perception and bullets. Sample fraction is not projected screen-space body area. */
-export interface DefenderSector {facingYaw?:number;navigation?:Vec3[];alternatives?:Vec3[];weapon?:WeaponId;}
+export interface DefenderSector {facingYaw?:number;navigation?:Vec3[];alternatives?:Vec3[];weapon?:WeaponId;motion?:RecordedMotion;}
 export type PerceptionPhase='unaware'|'detected'|'recognized'|'reacting'|'aiming'|'tracking'|'lost';
 export interface DefenderFootstep extends FootstepEvent {bot:number;encounterGeneration:number;kind:'bot-step';}
 export interface FirstShotTiming {preaimed:boolean;contactAngleDegrees:number;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firedAt:number;}
@@ -192,7 +193,7 @@ export class DefenderAI {
    m.face={x:-Math.sin(m.motor.yaw),y:0,z:-Math.cos(m.motor.yaw)};
    const feedbackAt=time-m.profile.compensationDelay;let feedback:RecoilObservation|undefined;for(const sample of m.recoilHistory){if(sample.time>feedbackAt)break;feedback=sample;}m.motor.compensate(dt,feedback?.pitch??0,feedback?.yaw??0,m.profile);
    const recovering=time<m.nextShot||m.gun.reloadingUntil!==null;
-   if(recovering){m.state='recovering';if(time>=m.decision&&!m.destination){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}}
+   if(recovering){m.state='recovering';if(time>=m.decision&&!m.destination&&!this.sectors[t.id]?.motion){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}}
    else if(seen)m.state='tracking';else if(m.destination)m.state=time-m.lastSeen<3?'repositioning':'returning';else m.state=m.alertUntil>time?'alert':'holding';
    this.move(t,m,dt,time);
    this.controlWeapon(t,m,p,time,dt,look,yaw,pitch);
@@ -283,12 +284,17 @@ export class DefenderAI {
   const hidden=routes.filter(({p})=>!visibleBetween(this.obstacles,{x:p.x,y:p.y+1.5,z:p.z},{x:m.known!.x,y:m.known!.y+1.4,z:m.known!.z},this.rules));const list=hidden.length?hidden:routes,selected=list[Math.floor(this.rng.next()*list.length)];m.path=selected.path;m.pathIndex=0;m.destination=vec(selected.p);
  }
  private move(t:Target,m:Memory,dt:number,time:number){
-  const posture=m.posture;
-  if(posture){
+  const motion=this.sectors[t.id]?.motion,posture=m.posture;
+  if(posture&&!motion){
    const crouch=time>=posture.crouchAt&&time<posture.crouchUntil?1:0;
    t.crouch+=clamp(crouch-t.crouch,-dt*7,dt*7);
   }
-  if(m.destination){let goal=m.path[m.pathIndex]??m.destination,d=distance2(t.position,goal);if(d<.008){m.pathIndex++;goal=m.path[m.pathIndex]??m.destination;d=distance2(t.position,goal);}
+  if(motion){
+   const pose=motionPose(t.anchor,motion,time-t.spawnAt);
+   const y=this.ground(pose.x,pose.z,pose.y)??pose.y;
+   t.velocity.set((pose.x-t.position.x)/dt,(y-t.position.y)/dt,(pose.z-t.position.z)/dt);
+   t.position.set(pose.x,y,pose.z);t.crouch=pose.crouch;
+  }else if(m.destination){let goal=m.path[m.pathIndex]??m.destination,d=distance2(t.position,goal);if(d<.008){m.pathIndex++;goal=m.path[m.pathIndex]??m.destination;d=distance2(t.position,goal);}
    if(d<.008&&m.pathIndex>=m.path.length){m.destination=null;m.path=[];m.state='re-peeking';t.velocity.set(0,0,0);}else{
     // Braking distance keeps turns at validated waypoints. Interpolating velocity
     // across a corner would cut through cover; each segment instead slows before
@@ -298,7 +304,7 @@ export class DefenderAI {
     const nx=t.position.x+dx*n,nz=t.position.z+dz*n,ny=this.ground(nx,nz,t.position.y);if(ny!==null){t.velocity.set((nx-t.position.x)/dt,(ny-t.position.y)/dt,(nz-t.position.z)/dt);t.position.set(nx,ny,nz);}else{m.destination=null;m.path=[];t.velocity.set(0,0,0);}
    }
   }else t.velocity.set(0,0,0);
-  const ground=this.ground(t.position.x,t.position.z,t.position.y),grounded=ground!==null&&Math.abs(ground-t.position.y)<.02;
+  const ground=motion?t.position.y:this.ground(t.position.x,t.position.z,t.position.y),grounded=ground!==null&&Math.abs(ground-t.position.y)<.02;
   m.footsteps.step({previous:t.previous,position:t.position,velocity:t.velocity,grounded,crouch:t.crouch},false,dt,time);
   t.updatePose(time);const aim=['tracking','firing'].includes(m.state)?1:m.state==='recovering'?.8:m.destination?.25:m.state==='alert'||m.state==='listening'?.6:.35;m.pose+=(aim-m.pose)*(1-Math.exp(-dt*9));t.leftArm.rotation.set(-m.pose,.0,.4*m.pose);t.rightArm.rotation.set(-1.18*m.pose,0,-.4*m.pose);t.root.rotation.y=Math.atan2(m.face.x,m.face.z);t.root.updateMatrixWorld(true);for(const part of t.parts)part.inverse.copy(part.node.matrixWorld).invert();
  }
@@ -329,7 +335,7 @@ export class DefenderAI {
   if(m.burstRemaining<=0){let pause=m.weapon==='operator'?interval+profile.adsTransition:m.weapon==='sheriff'?Math.max(.650001,profile.resetTime+.1):profile.resetTime+m.rng.range(.05,.18);if(this.policy?.playerTempo&&profile.fireMode==='auto')pause=Math.max(pause,this.policy.playerTempo.burstPauseMs/1000);
    m.pauseUntil=time+pause;m.nextShot=Math.max(m.nextShot,m.pauseUntil);}
   if(information!=='visual')m.speculativeShots++;
-  else if(m.burst===1&&profile.fireMode==='auto'&&m.known&&distance2(t.position,m.known)<22)this.queueCrouch(m,time);
+  else if(!this.sectors[t.id]?.motion&&m.burst===1&&profile.fireMode==='auto'&&m.known&&distance2(t.position,m.known)<22)this.queueCrouch(m,time);
   m.decision=time+.25;
   const distance=origin.distanceTo(new Vector3(p.position.x,p.position.y+p.eyeHeight,p.position.z)),playerEye={x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z},observed=distance<=(m.weapon==='operator'?80:35)||visibleBetween(this.obstacles,playerEye,vec(origin),this.rules);
   const damage=detail?damageAt(profile,detail,trace.distance)*trace.damageScale:0;
@@ -378,7 +384,7 @@ export class DefenderAI {
   this.lastPlayerShotAt=s.timestamp;this.lastPlayerShotVelocity=Math.hypot(s.velocity.x,s.velocity.z);
   // A physical impact on this defender can cause caution without revealing the
   // shooter's hidden coordinates. The dated visual/sound memories stay intact.
-  if(s.targetId!==null){const memory=this.memories[s.targetId];if(memory){memory.pressureUntil=s.timestamp+.8;if(memory.visible>0)this.queueCrouch(memory,s.timestamp,true);}}
+  if(s.targetId!==null){const memory=this.memories[s.targetId];if(memory){memory.pressureUntil=s.timestamp+.8;if(memory.visible>0&&!this.sectors[s.targetId]?.motion)this.queueCrouch(memory,s.timestamp,true);}}
   const hit=['head','torso','arm','leg'].includes(s.hit);if(this.current){this.current.shots++;this.current.hits+=Number(hit);this.current.shotVelocity=Math.hypot(s.velocity.x,s.velocity.z);}
   if(hit&&s.targetId!==null){const m=this.memories[s.targetId],enemyShot=m?.lastShot,id=enemyShot?.id??0,t=this.targets[s.targetId];if(enemyShot&&m.weapon==='operator'&&enemyShot.observed&&s.timestamp>=enemyShot.time&&s.timestamp<enemyShot.recoveryUntil&&(s.targetGeneration===null||s.targetGeneration===undefined||s.targetGeneration===t?.generation)&&!this.usedRecoveries.has(id)){this.usedRecoveries.add(id);this.report.recoveryExploits++;}}
   if(s.weapon==='operator'){const o=this.report.operator;if(s.ads){o.scopedShots++;o.scopedHits+=Number(hit);o.scopeTransitionSum+=s.adsTransition??0;}else{o.unscopedShots++;o.unscopedHits+=Number(hit);}if(this.current?this.current.shots===1:s.firstShot){o.firstShots++;o.firstHits+=Number(hit);}}

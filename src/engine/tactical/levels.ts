@@ -1,3 +1,4 @@
+import type {RecordedMotion} from '../../training/scenarios/recordedMotion';
 import {COMPLEX_LEVEL} from './complex';
 import {MECHANICS_LEVELS} from './mechanics';
 import {LEVEL_IDS,LEVEL_SPECS as specs} from '../../config/tactical';
@@ -11,7 +12,7 @@ export interface AngleSector {
  id:string;label:string;position:Vec3;jitter:number;radius:number;
  zoneId?:string;weapon?:WeaponId;facingYaw?:number;
  /** Grounded, collision-validated local choices. AI must still recheck each move. */
- alternatives?:Vec3[];navigation?:Vec3[];
+ alternatives?:Vec3[];navigation?:Vec3[];motion?:RecordedMotion;
 }
 export interface TacticalLevel {id:PracticeMap;title:string;family:string;description:string;obstacles:Obstacle[];spawn:Vec3;route:Vec3[];angles:AngleSector[];bounds:readonly number[];}
 

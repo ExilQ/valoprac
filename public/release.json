@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.14",
+  "version": "12.0.15",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -178,7 +178,10 @@
     "player-replay-calibrated-defender-tempo",
     "editable-2d-and-articulated-3d-placements",
     "third-version-original-field-agent",
-    "review-lab-training-record-transfer"
+    "review-lab-training-record-transfer",
+    "replay-derived-defender-trajectories",
+    "scrubbable-scenario-motion-previews",
+    "paired-moving-and-stationary-defender-results"
   ],
   "unreal": {
     "engine": "5.7",
@@ -193,7 +196,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.14",
+  "patchLabel": "12.15",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,

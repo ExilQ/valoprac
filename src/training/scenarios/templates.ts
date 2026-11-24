@@ -1,5 +1,6 @@
 import {LEVELS} from '../../engine/tactical/levels';
 import {COMPLEX_LEVEL,PEEK_ZONES} from '../../engine/tactical/complex';
+import type {MotionPoint} from './recordedMotion';
 import type {Vec3} from '../../engine/types';
 import type {ScenarioBot,ScenarioDefinition,ScenarioRoute,ScenarioRouteId} from './types';
 const p=(x:number,z:number,y=0):Vec3=>({x,y,z});
@@ -38,5 +39,23 @@ export function createHeadlineScenario():ScenarioDefinition {
  scenario.bots[0].weapon='rifleB';
  scenario.rules.difficulty='normal';
  scenario.rules.defenderPolicy={style:'crouch-counter'};
+ return scenario;
+}
+
+/** An authored sample so the route can be tried before any local replay exists. */
+export function createMotionScenario():ScenarioDefinition {
+ const scenario=createScenario('close-corner');
+ scenario.id='garage-motion-rehearsal';
+ scenario.title='이동 재현 · 차고 문틀';
+ scenario.player.weapon='rifleA';
+ scenario.bots[0].weapon='rifleB';
+ scenario.rules.startOnEntry=true;
+ scenario.bots[0].motion={source:'authored',turns:0,mirror:false,points:Array.from({length:31},(_,index):MotionPoint=>{
+  const t=index/10;
+  // Move into the door's sight line, hold a low stance, then step out.
+  const x=t<.8?-Math.round(75*t/.8):t<1.9?-75:Math.round(-75+105*(t-1.9)/1.1);
+  const crouch=Math.round(100*Math.max(0,Math.min(1,(t-.65)/.2,(2.15-t)/.2)));
+  return [x||0,0,0,crouch];
+ })};
  return scenario;
 }

@@ -2,7 +2,7 @@ import {SeededRandom} from '../../engine/simulation/random';
 import type {AngleSector} from '../../engine/tactical/levels';
 import {scenarioEntryGate} from './entryGate';
 import {scenarioRoute} from './templates';
-import {validateScenarioWithGeometry,scenarioApproach} from './validation';
+import {validateScenario,validateScenarioWithGeometry,scenarioApproach} from './validation';
 import type {CompiledScenario,ScenarioDefinition} from './types';
 import type {Vec3} from '../../engine/types';
 
@@ -14,7 +14,7 @@ export function selectScenarioPlacements(def:ScenarioDefinition,attempt:number):
  const rng=new SeededRandom(def.seed^Math.imul(attempt+1,0x45d9f3b));
  return def.bots.map((bot,index)=>{
   const anchors=distinct([bot.position,...bot.alternatives]),selected=copy(anchors[def.rules.randomSpawns?Math.floor(rng.next()*anchors.length):0]),navigation=bot.movement==='reposition'?distinct([selected,...anchors]):[copy(selected)];
-  return{id:bot.id,label:`${def.title} · 수비수 ${index+1}`,position:selected,jitter:0,radius:.7,zoneId:def.routeId,weapon:bot.weapon,facingYaw:Math.atan2(def.player.position.x-selected.x,def.player.position.z-selected.z),navigation,alternatives:navigation.map(copy)};
+  return{id:bot.id,label:`${def.title} · 수비수 ${index+1}`,position:selected,jitter:0,radius:.7,zoneId:def.routeId,weapon:bot.weapon,facingYaw:Math.atan2(def.player.position.x-selected.x,def.player.position.z-selected.z),navigation,alternatives:navigation.map(copy),...(bot.motion?{motion:bot.motion}:{})};
  });
 }
 export function compileScenario(raw:ScenarioDefinition):CompiledScenario{
@@ -25,10 +25,14 @@ export function compileScenario(raw:ScenarioDefinition):CompiledScenario{
 /** Find a replayable first layout that differs from the current starting layout. */
 export function scenarioWithDifferentPlacement(definition: ScenarioDefinition): ScenarioDefinition | null {
  if (!definition.bots.some(bot => bot.alternatives.some(p => p.x !== bot.position.x || p.y !== bot.position.y || p.z !== bot.position.z))) return null;
+ const variant={...definition,rules:{...definition.rules,randomSpawns:true}};
+ if(!definition.rules.randomSpawns&&definition.bots.some(bot=>bot.motion)){
+  try{validateScenario(variant);}catch{return null;}
+ }
  const initial = selectScenarioPlacements(definition, 0);
  for (let offset = 1; offset <= 64; offset++) {
   const seed = (definition.seed - 1 + offset) % 2147483647 + 1;
-  const candidate = { ...definition, seed, rules: { ...definition.rules, randomSpawns:true } };
+  const candidate = {...variant,seed};
   if (selectScenarioPlacements(candidate, 0).some(({position:p}, i) => {
    const previous = initial[i].position;
    return p.x !== previous.x || p.y !== previous.y || p.z !== previous.z;

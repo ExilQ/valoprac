@@ -1,4 +1,5 @@
 import type {Settings,Vec3,WeaponId} from '../../engine/types';
+import type {RecordedMotion} from './recordedMotion';
 import type {DefenderPolicy} from './defenderPolicy';
 import type {AngleSector} from '../../engine/tactical/levels';
 
@@ -11,7 +12,7 @@ export type ScenarioRouteId=typeof SCENARIO_ROUTE_IDS[number];
 export const SCENARIO_ROUTE_TITLES:Record<ScenarioRouteId,string>={'long-lane':'깊은 회랑','close-corner':'좁은 코너 진입','off-angle':'엄폐 옆 오프앵글',vertical:'계단 위 수비각',sequential:'세 개의 분리 사선','sniper-jamb':'저격수 문틀 피킹','ramp-approach':'경사로 상단 진입'};
 export type ScenarioTemplate='long'|'garage'|'site'|'tower'|'complex';
 export interface ScenarioBot {
- id:string;position:Vec3;weapon:WeaponId;movement:'hold'|'reposition';alternatives:Vec3[];
+ id:string;position:Vec3;weapon:WeaponId;movement:'hold'|'reposition';alternatives:Vec3[];motion?:RecordedMotion;
 }
 export interface ScenarioDefinition {
  schema:1;id:string;title:string;template:ScenarioTemplate;routeId:ScenarioRouteId;seed:number;

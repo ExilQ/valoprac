@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "release": "12.0.14",
-  "patchLabel": "12.14",
+  "release": "12.0.15",
+  "patchLabel": "12.15",
   "algorithm": "aim-2.0.0",
-  "generatedAt": "2026-11-22T08:45:00.595Z",
+  "generatedAt": "2026-11-23T00:44:04.118Z",
   "tests": {
-    "application": 1498,
+    "application": 1502,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -41,7 +41,7 @@
           0.03477439587310676
         ],
         "heldoutMean": 0.749978651885502,
-        "meanComputeMs": 0.8048038124999929,
+        "meanComputeMs": 0.05140927083333106,
         "observationsPerRun": [
           12
         ]
@@ -55,7 +55,7 @@
           0.027123381736567365
         ],
         "heldoutMean": 0.7438748482493082,
-        "meanComputeMs": 0.5597307708333782,
+        "meanComputeMs": 0.03533926041667831,
         "observationsPerRun": [
           12
         ]
@@ -69,7 +69,7 @@
           0.021165192123412137
         ],
         "heldoutMean": 0.7442843989026081,
-        "meanComputeMs": 0.94580089583332,
+        "meanComputeMs": 0.252700520833321,
         "observationsPerRun": [
           12
         ]
@@ -83,7 +83,7 @@
           0.060996461247085756
         ],
         "heldoutMean": 0.7267001638019696,
-        "meanComputeMs": 0.2797440208333673,
+        "meanComputeMs": 0.030303583333336565,
         "observationsPerRun": [
           12
         ]
@@ -97,7 +97,7 @@
           0.02610606660160872
         ],
         "heldoutMean": 0.7431010058005967,
-        "meanComputeMs": 15.168584604166606,
+        "meanComputeMs": 2.1258274062500058,
         "observationsPerRun": [
           12
         ]
@@ -111,7 +111,7 @@
   "telemetry": {
     "benchmark": "aim-telemetry-cpu",
     "events": 200000,
-    "elapsedMs": 162.727535,
+    "elapsedMs": 9.004881000000012,
     "bytes": 2883584,
     "columns": 22,
     "hardwareInputLatencyMeasured": false,

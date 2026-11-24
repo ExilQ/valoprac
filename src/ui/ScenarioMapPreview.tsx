@@ -8,6 +8,7 @@ import { useCharacterFinishes } from '../engine/rendering/CharacterMaterial';
 import { SeededRandom } from '../engine/simulation/random';
 import { Target } from '../engine/targets/Target';
 import { MAX_SCENARIO_BOTS } from '../training/scenarios/types';
+import {motionPoint,motionPose} from '../training/scenarios/recordedMotion';
 import type {ScenarioSelection} from './ScenarioPlan';
 import { architecturalBox } from '../engine/rendering/ArchitecturalBox';
 import { createOrbitPreview, disposePreviewGeometry } from '../engine/rendering/OrbitPreview';
@@ -24,14 +25,15 @@ interface Props {
   definition:ScenarioDefinition;
   selected:Selection;
   detailed:boolean;
+  motionTime?:number;
   onPlace:(point:Vec3,selection?:Selection)=>void;
   onSelect:(selection:Selection)=>void;
 }
-export default function ScenarioMapPreview({definition,selected,detailed,onPlace,onSelect}:Props) {
+export default function ScenarioMapPreview({definition,selected,detailed,motionTime=0,onPlace,onSelect}:Props) {
   const host=useRef<HTMLDivElement>(null);
   const level=scenarioLevel(definition);
   const preview=useRef<ReturnType<typeof createOrbitPreview>|null>(null);
-  const markers=useRef<((scenario:ScenarioDefinition,selection:Selection,crouched:boolean)=>void)|null>(null);
+  const markers=useRef<((scenario:ScenarioDefinition,selection:Selection,crouched:boolean,seconds:number)=>void)|null>(null);
   const actions=useRef({onPlace,onSelect});
   const [crouched,setCrouched]=useState(false);
   const [failed,setFailed]=useState(false);
@@ -145,6 +147,13 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
     });
     const pathMaterial=new LineBasicMaterial({color:0x7ee8d8,transparent:true,opacity:.88,depthTest:false});
     const path=new Line(new BufferGeometry(),pathMaterial);
+    const motionMaterial=new LineBasicMaterial({color:0xc6a3ff,depthTest:false});
+    const motionPath=new Line(new BufferGeometry(),motionMaterial);
+    motionPath.renderOrder=3;
+    const motionMarkMaterial=new MeshBasicMaterial({color:0xc6a3ff,depthTest:false});
+    const motionMark=new Mesh(dotGeometry,motionMarkMaterial);
+    motionMark.renderOrder=4;
+    motionMark.scale.setScalar(.45);
     const gateMaterial=new LineBasicMaterial({color:0xc17cf4,depthTest:false});
     const gateLine=new Line(new BufferGeometry(),gateMaterial);
     const guideMaterial=new LineBasicMaterial({color:0xffd098,depthTest:false});
@@ -160,9 +169,9 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
       headGuide.frustumCulled=false;
     };
     gateLine.renderOrder=2;headGuide.renderOrder=3;
-    path.renderOrder=1;overlay.add(path,gateLine,headGuide,player,...dots);
+    path.renderOrder=1;overlay.add(path,gateLine,headGuide,player,motionPath,motionMark,...dots);
     for(const dot of dots)dot.renderOrder=2;
-    markers.current=(scenario,selection,ducked)=>{
+    markers.current=(scenario,selection,ducked,seconds)=>{
       const spawn=scenario.player.position;
       player.position.set(spawn.x,spawn.y+.32,spawn.z);
       player.material=selection==='player'?selectedMaterial:playerMaterial;
@@ -187,6 +196,18 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
       const selectedActor=selection==='player'?undefined:actors[selection];
       headGuide.visible=!!selectedActor;
       if(selectedActor)updateHeadGuide(selectedActor.target);
+      const activeBot=selection==='player'?undefined:scenario.bots[selection];
+      const motion=activeBot?.motion;
+      motionPath.visible=motionMark.visible=!!motion;
+      if(activeBot&&motion){
+        const pose=motionPose(activeBot.position,motion,seconds);
+        motionMark.position.set(pose.x,pose.y+1.68-.43*pose.crouch,pose.z);
+        motionPath.geometry.dispose();
+        motionPath.geometry=new BufferGeometry().setFromPoints(motion.points.map(point=>{
+          const p=motionPoint(activeBot.position,motion,point);
+          return new Vector3(p.x,p.y+.06,p.z);
+        }));
+      }
       path.geometry.dispose();
       path.geometry=new BufferGeometry().setFromPoints(scenarioApproach(scenario).map(p=>new Vector3(p.x,p.y+.08,p.z)));
       const gate=scenario.rules.startOnEntry?scenarioEntryGate(scenario):null;
@@ -200,11 +221,11 @@ export default function ScenarioMapPreview({definition,selected,detailed,onPlace
       orbit.dispose();
       scene.remove(overlay);
       disposePreviewGeometry(scene);
-      path.geometry.dispose();gateLine.geometry.dispose();headGuide.geometry.dispose();dotGeometry.dispose();ringGeometry.dispose();partGeometry.forEach(geometry=>geometry.dispose());surfaces.dispose();
-      for(const material of [blocked,cover,ground,playerMaterial,defenderMaterial,selectedMaterial,alternateMaterial,pathMaterial,gateMaterial,guideMaterial,uniform])material.dispose();
+      path.geometry.dispose();gateLine.geometry.dispose();headGuide.geometry.dispose();motionPath.geometry.dispose();dotGeometry.dispose();ringGeometry.dispose();partGeometry.forEach(geometry=>geometry.dispose());surfaces.dispose();
+      for(const material of [blocked,cover,ground,playerMaterial,defenderMaterial,selectedMaterial,alternateMaterial,pathMaterial,gateMaterial,guideMaterial,motionMaterial,motionMarkMaterial,uniform])material.dispose();
     };
   },[level,detailed]);
-  useEffect(()=>{markers.current?.(definition,selected,crouched);},[definition,selected,level,detailed,crouched]);
+  useEffect(()=>{markers.current?.(definition,selected,crouched,motionTime);},[definition,selected,level,detailed,crouched,motionTime]);
 
   return <div className="orbit-preview">
     <div ref={host} className="orbit-preview-viewport" />

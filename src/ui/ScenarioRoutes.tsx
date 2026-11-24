@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import type {SessionData} from '../engine/types';
 import {WEAPONS} from '../config/weapons';
-import {createHeadlineScenario,createScenario,SCENARIO_ROUTES} from '../training/scenarios/templates';
+import {createMotionScenario,createHeadlineScenario,createScenario,SCENARIO_ROUTES} from '../training/scenarios/templates';
 import type {ScenarioDefinition,ScenarioRouteId} from '../training/scenarios/types';
 import {saveDrill} from '../training/scenarios/library';
 import {ScenarioPlan} from './ScenarioPlan';
@@ -15,6 +15,13 @@ export function ScenarioRoutes({onStart,onEdit,history=[]}:ScenarioRoutesProps){
  const[message,setMessage]=useState('');
  const[selected,select]=useState<ScenarioRouteId>('long-lane'),route=SCENARIO_ROUTES.find(r=>r.id===selected)!,definition=createScenario(selected),comparisons=routeComparisons(history);
  return <section className="scenario-routes" aria-label="전술 경로 훈련"><header className="view-title"><p className="eyebrow">TACTICAL ROUTES / 실전 각체크</p><h2>전술 진입 경로 {SCENARIO_ROUTES.length}종</h2><p>연습할 사선을 고르고 평면도에서 시작 위치와 엄폐물을 확인하세요.</p></header>
+ <section className="scenario-motion-entry">
+  <div><h3>리플레이 경로 재현</h3><p>내가 움직인 구간을 수비수에게 연결하고, 같은 위치를 지키는 고정 수비수와 결과를 비교하세요.</p></div>
+  <div className="scenario-route-actions">
+   <button type="button" className="primary-button" onClick={()=>onStart(createMotionScenario())}>재현 수비수 훈련</button>
+   {onEdit&&<button type="button" className="secondary-button" onClick={()=>onEdit(createMotionScenario())}>내 리플레이로 편집</button>}
+  </div>
+ </section>
  <section className="scenario-headline-drill">
   <div><h3>헤드라인·앉기 교전</h3><p>머리를 겨누는 수비수의 첫 탄을 앉아서 피하고, 수비수가 낮아지면 조준 높이를 바꿔보세요.</p></div>
   <div className="scenario-route-actions">

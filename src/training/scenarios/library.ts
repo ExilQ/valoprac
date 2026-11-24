@@ -1,4 +1,5 @@
 import type { SessionData } from '../../engine/types';
+import {withoutRecordedMotion} from './recordedMotion';
 import { encodeScenario } from './codec';
 import type { ScenarioDefinition } from './types';
 
@@ -55,14 +56,15 @@ function scenarioLayoutKey(scenario: ScenarioDefinition) {
   return [
     scenario.schema, scenario.routeId, scenario.template, scenario.seed,
     point(player.position), player.yaw, player.pitch, player.weapon,
-    scenario.bots.map(bot => [bot.id, point(bot.position), bot.weapon, bot.movement, bot.alternatives.map(point)]),
+    scenario.bots.map(bot => [bot.id, point(bot.position), bot.weapon, bot.movement, bot.alternatives.map(point), bot.motion??null]),
     rules.difficulty, rules.combatMode, rules.duration, rules.exposureLimit, rules.randomSpawns,
-    rules.infiniteReserve, rules.autoReload, rules.exposurePolicy, rules.arrival ?? null, rules.startOnEntry ?? false,
+    rules.infiniteReserve, rules.autoReload, rules.exposurePolicy, rules.arrival ?? null, rules.startOnEntry ?? false, rules.defenderPolicy??null,
   ];
 }
 
-export function scenarioComparisonKey(session: SessionData) {
-  const scenario = sessionScenario(session);
+export function scenarioComparisonKey(session:SessionData, ignoreMotion=false) {
+  const original=sessionScenario(session);
+  const scenario=original&&ignoreMotion?withoutRecordedMotion(original):original;
   if (!scenario) return null;
   const { movementPhysics, csMovementPreset, jumpBufferMs, gameplayRevision, sensitivity,
     adsSensitivity, scopeSensitivity25, scopeSensitivity5, degreesPerCount, fov, defenderAimSpeed,
@@ -70,7 +72,7 @@ export function scenarioComparisonKey(session: SessionData) {
     defenderTactics, defenderReaction, defenderAccuracy } = session.settings;
   return JSON.stringify([
     scenarioLayoutKey(scenario), session.runtime ?? 'browser', session.mode,
-    session.weapon, session.seed, session.physics?.rules ?? null, session.physics?.version ?? null,
+    session.weapon, session.seed, session.replay?.header.characterGeometryVersion??null, session.physics?.rules ?? null, session.physics?.version ?? null,
     session.physics?.materialPhysicsVersion ?? null, gameplayRevision, movementPhysics,
     movementPhysics === 'counterStrike' ? csMovementPreset : null, jumpBufferMs,
     sensitivity, adsSensitivity, scopeSensitivity25, scopeSensitivity5, degreesPerCount, fov,

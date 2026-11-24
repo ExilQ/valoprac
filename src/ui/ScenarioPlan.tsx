@@ -1,4 +1,5 @@
 import {useRef,useState,type KeyboardEvent,type PointerEvent} from 'react';
+import {motionPoint,motionPose} from '../training/scenarios/recordedMotion';
 import type {ScenarioDefinition} from '../training/scenarios/types';
 import {gateEndpoints,scenarioEntryGate} from '../training/scenarios/entryGate';
 import {scenarioLevel,scenarioApproach} from '../training/scenarios/validation';
@@ -9,6 +10,7 @@ type Drag={id:number;selection:ScenarioSelection|null;clientX:number;clientY:num
 interface Props {
  definition:ScenarioDefinition;
  selected?:ScenarioSelection;
+ motionTime?:number;
  onSelect?:(selection:ScenarioSelection)=>void;
  onPlace?:(x:number,z:number,selection:ScenarioSelection)=>void;
 }
@@ -20,12 +22,12 @@ function pointerOnPlan(event:PointerEvent<SVGSVGElement>):Point|null {
  return {x:local.x,z:local.y};
 }
 const round=(value:number)=>Math.round(value*100)/100;
-export function ScenarioPlan({definition,selected=0,onSelect,onPlace}:Props){
+export function ScenarioPlan({definition,selected=0,motionTime=0,onSelect,onPlace}:Props){
  const drag=useRef<Drag|null>(null);
  const [preview,setPreview]=useState<{selection:ScenarioSelection;point:Point}|null>(null);
  const level=scenarioLevel(definition);
  const route=scenarioApproach(definition),entry=definition.rules.startOnEntry?scenarioEntryGate(definition):null;
- const points=[...route,...definition.bots.flatMap(bot=>[bot.position,...bot.alternatives])];
+ const points=[...route,...definition.bots.flatMap(bot=>[bot.position,...bot.alternatives,...(bot.motion?.points.map(point=>motionPoint(bot.position,bot.motion!,point))??[])])];
  const padding=4,[left,top,width,height]=level.bounds;
  const x=Math.max(left,Math.min(...points.map(point=>point.x))-padding);
  const z=Math.max(top,Math.min(...points.map(point=>point.z))-padding);
@@ -96,6 +98,16 @@ export function ScenarioPlan({definition,selected=0,onSelect,onPlace}:Props){
   {level.obstacles.map((o,i)=><rect key={i} x={o.box.min.x} y={o.box.min.z} width={o.box.max.x-o.box.min.x} height={o.box.max.z-o.box.min.z} fill="var(--control-border,#798b8b)" stroke="var(--muted,#53636d)" strokeWidth=".04" opacity={o.box.max.y<.5?.45:.85}/>)}
   <polyline points={route.map(p=>`${p.x},${p.z}`).join(' ')} fill="none" stroke="var(--accent,#146d73)" strokeWidth=".12" strokeDasharray=".5 .35"/>
   {entry&&<polyline points={gateEndpoints(entry).map(p=>`${p.x},${p.z}`).join(' ')} fill="none" stroke="#9a64ce" strokeWidth=".22"/>}
+  {definition.bots.map((bot,index)=>{
+    if(!bot.motion)return null;
+    const motion=bot.motion,anchor=preview?.selection===index?{...bot.position,...preview.point}:bot.position;
+    const path=motion.points.map(point=>{const p=motionPoint(anchor,motion,point);return `${p.x},${p.z}`;}).join(' ');
+    const pose=motionPose(anchor,motion,motionTime);
+    return <g key={bot.id} className="scenario-motion-path" pointerEvents="none">
+     <polyline points={path} fill="none" stroke="var(--scenario-motion,#8970d8)" strokeWidth=".13"/>
+     {onPlace&&selected===index&&<circle cx={pose.x} cy={pose.z} r={pose.crouch>.5?.44:.57} fill="var(--scenario-motion,#8970d8)" fillOpacity=".3" stroke="var(--scenario-motion,#8970d8)" strokeWidth=".12"/>}
+    </g>;
+  })}
   {marker('player')}
   {definition.bots.map((bot,i)=><g key={bot.id}>{bot.alternatives.map((p,j)=><circle key={j} cx={p.x} cy={p.z} r=".22" fill="none" stroke="var(--danger,#b74743)" strokeWidth=".08"/>)}{marker(i)}</g>)}
  </svg>;
