@@ -1,3 +1,5 @@
+import {courseFor} from '../../config/mapCourses';
+import {buildCourse} from './courseLevel';
 import type {RecordedMotion} from '../../training/scenarios/recordedMotion';
 import {COMPLEX_LEVEL} from './complex';
 import {MECHANICS_LEVELS} from './mechanics';
@@ -14,7 +16,7 @@ export interface AngleSector {
  /** Grounded, collision-validated local choices. AI must still recheck each move. */
  alternatives?:Vec3[];navigation?:Vec3[];motion?:RecordedMotion;
 }
-export interface TacticalLevel {id:PracticeMap;title:string;family:string;description:string;obstacles:Obstacle[];spawn:Vec3;route:Vec3[];angles:AngleSector[];bounds:readonly number[];}
+export interface TacticalLevel {id:PracticeMap;title:string;family:string;description:string;obstacles:Obstacle[];spawn:Vec3;route:Vec3[];angles:AngleSector[];bounds:readonly number[];landmark?:Vec3;entryYaw?:number;transfer?:{entry:Vec3;exit:Vec3};}
 
 export function makeLevel(id:typeof LEVEL_IDS[number]):TacticalLevel{
  const s=specs[id],obstacles:Obstacle[]=[];const add=(x1:number,y1:number,z1:number,x2:number,y2:number,z2:number,kind:'wall'|'cover'='wall',color=0x596e75)=>{const o:Obstacle={box:new Box3(new Vector3(x1,y1,z1),new Vector3(x2,y2,z2)),kind,color,surfaceId:kind==='cover'?'paintedMetal':'plasteredConcrete'};obstacles.push(o);return o;};
@@ -44,8 +46,15 @@ export function makeLevel(id:typeof LEVEL_IDS[number]):TacticalLevel{
  return {id,title:s.title,family:s.family,description:s.description,obstacles,angles,route,spawn:route[0],bounds:[-width/2-.5,-s.depth-1,last+width+1,s.depth+9]};
 }
 export const LEVELS=Object.fromEntries(LEVEL_IDS.map(id=>[id,makeLevel(id)])) as Record<typeof LEVEL_IDS[number],TacticalLevel>;
+const courseLevels=new Map<string,TacticalLevel>();
+function courseLevel(id:string){
+ const course=courseFor(id);if(!course)return undefined;
+ let level=courseLevels.get(id);
+ if(!level){level=buildCourse(course);registerStaticObstacles(level.obstacles);courseLevels.set(id,level);}
+ return level;
+}
 for(const level of [...Object.values(LEVELS),...Object.values(MECHANICS_LEVELS),COMPLEX_LEVEL])registerStaticObstacles(level.obstacles);
-export const levelFor=(id:string):TacticalLevel|null=>LEVELS[id as typeof LEVEL_IDS[number]]??MECHANICS_LEVELS[id as keyof typeof MECHANICS_LEVELS]??(id==='complex'?COMPLEX_LEVEL:null);
+export const levelFor=(id:string):TacticalLevel|null=>courseLevel(id)??LEVELS[id as typeof LEVEL_IDS[number]]??MECHANICS_LEVELS[id as keyof typeof MECHANICS_LEVELS]??(id==='complex'?COMPLEX_LEVEL:null);
 const ray=new Ray(),from=new Vector3(),to=new Vector3();
 export function visibleBetween(obstacles:Obstacle[],a:Vec3,b:Vec3,rules:SimulationRulesId=LEGACY_SIMULATION_RULES){from.set(a.x,a.y,a.z);to.set(b.x,b.y,b.z).sub(from);const d=to.length();if(d<1e-6)return true;ray.set(from,to.multiplyScalar(1/d));return !Number.isNaN(d)&&!environmentOccluded(ray,d-1e-5,obstacles,rules);}
 const standingCandidates:number[]=[];

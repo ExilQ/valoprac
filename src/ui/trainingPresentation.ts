@@ -1,3 +1,4 @@
+import {courseFor} from '../config/mapCourses';
 import {SCENARIO_ROUTE_TITLES} from '../training/scenarios/types';
 import type {SimulationOptions} from '../training/platform/SessionOptions';
 import {selectedTraining} from '../app/trainingNavigation';
@@ -42,7 +43,7 @@ export function trainingMapTitle(s:Pick<Settings,'practiceMap'>){
  if(s.practiceMap==='tactical')return '기존 코너 피킹';
  if(s.practiceMap==='bunny')return '관성 이동 코스';
  if(s.practiceMap==='wallbang')return '재질 관통 사격장';
- return LEVEL_SPECS[s.practiceMap].title;
+ return courseFor(s.practiceMap)?.title??LEVEL_SPECS[s.practiceMap as keyof typeof LEVEL_SPECS].title;
 }
 export function trainingTimed(mode:Mode,s:Pick<Settings,'practiceMap'|'peekingTimed'>,options?:SimulationOptions){if(options?.exercise)return true;if(options?.scenario)return options.scenario.rules.duration!==null;return mode!=='free'||s.practiceMap==='complex'&&s.peekingTimed;}
 

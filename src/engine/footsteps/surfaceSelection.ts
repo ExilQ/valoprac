@@ -1,3 +1,4 @@
+import {courseFor} from '../../config/mapCourses';
 import {SURFACES,surfaceForObstacle,type SurfaceId,type SurfaceSemantics,type FootstepSoundProfile} from '../../config/surfaces';
 import type {Obstacle} from '../collision/environment';
 import {PEEK_ZONES,zoneAt} from '../tactical/complex';
@@ -18,7 +19,7 @@ const contactPosition=new Vector3();
 export function baseGroundSurface(map:string,position:Vec3):SurfaceId {
  if(map==='range'){const[x,z,w,d]=RANGE_MAT_SURFACE.bounds;if(position.x>=x&&position.x<=x+w&&position.z>=z&&position.z<=z+d)return RANGE_MAT_SURFACE.surfaceId;}
  if(map==='complex'){const zone=PEEK_ZONES.find(q=>{const b=q.bounds;return b&&position.x>=b[0]&&position.x<=b[0]+b[2]&&position.z>=b[1]&&position.z<=b[1]+b[3];});if(zone)return THEMED_FLOOR_SURFACES[zone.material];}
- return BASE_GROUND_SURFACE;
+ return courseFor(map)?.floor??BASE_GROUND_SURFACE;
 }
 /** Resolve the actual occupied support plane at the foot/contact position.
  * The footprint and source-order ties use CollisionController directly.

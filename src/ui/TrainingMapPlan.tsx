@@ -10,8 +10,9 @@ export function TrainingMapPlan({map}:{map:string}){
   <rect x={bounds[0]} y={bounds[1]} width={bounds[2]} height={bounds[3]} className="utility-plan-floor"/>
   {obstacles.map((o,i)=><rect key={i} x={o.box.min.x} y={o.box.min.z} width={Math.max(.12,o.box.max.x-o.box.min.x)} height={Math.max(.12,o.box.max.z-o.box.min.z)} className={o.kind==='wall'?'utility-plan-wall':'utility-plan-cover'}/>)}
   {route.length>1&&<polyline points={route.map(p=>`${p.x},${p.z}`).join(' ')} className="utility-plan-route" fill="none" strokeWidth=".35"/>}
+  {level?.transfer&&<g><title>전이문 입구 · 전이문 출구</title>{[level.transfer.entry,level.transfer.exit].map((p,i)=><path key={i} d={`M${p.x} ${p.z-1}l1 1-1 1-1-1z`} fill="none" stroke="currentColor" strokeWidth=".35"/>)}</g>}
   {angles.map(angle=><circle key={angle.id} cx={angle.position.x} cy={angle.position.z} r=".7" className="utility-plan-defender"/>)}
-  <circle cx={spawn.x} cy={spawn.z} r=".85" className="utility-plan-start"/><path d={`M${spawn.x-1.5} ${spawn.z+2.3}h3l-1.5-1.4z`} className="utility-plan-start"/>
+  <circle cx={spawn.x} cy={spawn.z} r=".85" className="utility-plan-start"/><path transform={level?.entryYaw?`rotate(${-level.entryYaw*180/Math.PI} ${spawn.x} ${spawn.z})`:undefined} d={`M${spawn.x-1.5} ${spawn.z+2.3}h3l-1.5-1.4z`} className="utility-plan-start"/>
  </svg>;
 }
 

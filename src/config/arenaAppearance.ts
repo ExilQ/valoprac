@@ -1,3 +1,5 @@
+import {MAP_COURSES} from './mapCourses';
+import {SURFACES} from './surfaces';
 import type { VisualMaterialId } from './materials';
 
 export interface ArenaPalette {
@@ -38,6 +40,10 @@ const maps:Record<string,ArenaPalette>={
  range:observatory,tactical:utility,long:terrace,garage:utility,site:foundry,mid:observatory,
  tower:terrace,multi:laboratory,complex:observatory,bunny:utility,wallbang:laboratory,
 };
+for(const course of MAP_COURSES){
+ const base=BAY_APPEARANCE[course.style], [wall,skirt,accent]=course.palette;
+ maps[course.id]={...base,wall,skirt,coverPanel:skirt,accent,wallFamily:SURFACES[course.wall].visualMaterialId,floorFamily:SURFACES[course.floor].visualMaterialId};
+}
 export function arenaPalette(map:string,theme?:BayTheme) {
  return theme&&map==='complex'?BAY_APPEARANCE[theme]:Object.hasOwn(maps,map)?maps[map]:utility;
 }

@@ -1,3 +1,4 @@
+import {courseFor} from '../../config/mapCourses';
 import {GAME_VERSION} from '../../aim/types';
 import {MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS} from '../../config/movement';
 import {WEAPONS} from '../../config/weapons';
@@ -64,16 +65,17 @@ export function replayOutcome(s:Simulation):ReplayOutcome{return{checksum:simula
  * Legacy playback still executes the real engine with explicit retained rules. */
 const LEGACY_COMPATIBILITY=Object.freeze({gameVersion:'10.0.0',simulationVersion:LEGACY_REPLAY_SIMULATION_VERSION,movementVersion:'dual-movement-1.1.0',projectionVersion:'horizontal-angular-division-1',calibrationFingerprint:'b9c4ab53c0512d05'});
 export function replayCompatibility(rules:SimulationRulesId=CURRENT_SIMULATION_RULES,
- characterGeometry:CharacterGeometryVersion=rules===LEGACY_SIMULATION_RULES?LEGACY_CHARACTER_GEOMETRY:FIELD_CHARACTER_GEOMETRY){
+ characterGeometry:CharacterGeometryVersion=rules===LEGACY_SIMULATION_RULES?LEGACY_CHARACTER_GEOMETRY:FIELD_CHARACTER_GEOMETRY,mapId?:string){
  if(rules===LEGACY_SIMULATION_RULES)return{...LEGACY_COMPATIBILITY};
  const surfaces=Object.entries(SURFACES).map(([id,s])=>({id,collisionFriction:s.collisionFriction,penetrationResistance:s.penetrationResistance,penetrationRetention:s.penetrationRetention,opaque:!!s.opaque,blocksSight:s.blocksSight,footstepSoundProfile:s.footstepSoundProfile}));
  const maps=['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].map(id=>({id,obstacles:obstaclesFor(id).map(o=>({min:o.box.min.toArray(),max:o.box.max.toArray(),kind:o.kind,ramp:o.ramp,material:o.material,surfaceId:o.surfaceId,groundSurfaceId:o.groundSurfaceId}))}));
+ const course=mapId?courseFor(mapId):undefined;
  const ground={base:BASE_GROUND_SURFACE,themed:THEMED_FLOOR_SURFACES,rangeMat:RANGE_MAT_SURFACE,complex:PEEK_ZONES.map(z=>({bounds:z.bounds,center:z.center,material:z.material}))};
  const characterIdentity=characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:characterGeometry}:{};
- return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:REPLAY_SIMULATION_VERSION,movementVersion:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({weapons:WEAPONS,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
+ return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:REPLAY_SIMULATION_VERSION,movementVersion:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({...(course?{courseRules:1,entryYaw:course.entryYaw,coursePlan:course.rows,cell:course.cell,height:course.height,wall:course.wall,floor:course.floor}:{}),weapons:WEAPONS,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
 }
 export function replayRulesFor(header:ReplayHeader):SimulationRulesId {
- const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header));
+ const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header),header.map);
  for(const key of Object.keys(expected) as (keyof typeof expected)[])if(header[key]!==expected[key])throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');
  // A simulation-2 file cannot opt into new mechanics through optional metadata.
  if(rules===LEGACY_SIMULATION_RULES&&(header.simulationRules!==undefined&&header.simulationRules!==rules||header.materialPhysicsVersion!==undefined||header.inputVersion!==undefined||header.weaponVersion!==undefined||header.characterGeometryVersion!==undefined))throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');

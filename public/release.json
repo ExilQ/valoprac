@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.16",
+  "version": "12.0.17",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -197,7 +197,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.16",
+  "patchLabel": "12.17",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -539,5 +539,20 @@
       "review-lab",
       "guides"
     ]
-  }
+  },
+  "mapCourses": [
+    "split",
+    "bind",
+    "haven",
+    "ascent",
+    "icebox",
+    "breeze",
+    "fracture",
+    "pearl",
+    "lotus",
+    "sunset",
+    "abyss",
+    "corrode",
+    "summit"
+  ]
 }

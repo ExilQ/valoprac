@@ -1,3 +1,4 @@
+import {courseFor} from './mapCourses';
 import {defaultMovementTools,sanitizeMovementTools} from '../training/movementTools/types';
 import type { Settings, Quality } from '../engine/types';
 import {defaultCrosshairAdvanced,sanitizeCrosshairAdvanced} from './crosshair';
@@ -38,7 +39,7 @@ export function sanitizeSettings(raw: unknown): Settings {
   // were absent; explicit new per-zoom values always win.
   if(typeof o.scopeSensitivity25!=='number'||!Number.isFinite(o.scopeSensitivity25))s.scopeSensitivity25=s.adsSensitivity;
   if(typeof o.scopeSensitivity5!=='number'||!Number.isFinite(o.scopeSensitivity5))s.scopeSensitivity5=s.adsSensitivity;
-  if(['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].includes(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
+  if(['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].includes(String(o.practiceMap))||courseFor(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
   for(const k of ['autoGraphics','physicsDiagnostics','botDiagnostics','penetrationDiagnostics','peekingTimed','operatorAutoRescope','randomDefenders','inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
   if(o.movementPhysics==='valorant'||o.movementPhysics==='counterStrike')s.movementPhysics=o.movementPhysics;
   if(o.csMovementPreset==='cs2'||o.csMovementPreset==='sourceClassic')s.csMovementPreset=o.csMovementPreset;

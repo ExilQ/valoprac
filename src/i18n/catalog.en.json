@@ -14810,6 +14810,156 @@
       "id": "msg_8f6591365dc8",
       "source": "내 리플레이로 편집",
       "en": "Edit with my replays"
+    },
+    {
+      "id": "msg_192aef5231e0",
+      "source": "맵별 전술 훈련",
+      "en": "Map training courses"
+    },
+    {
+      "id": "msg_badc8f49cd14",
+      "source": "맵의 특징을 살려 직접 설계한 VALOPRAC 훈련 코스입니다.",
+      "en": "Original VALOPRAC courses inspired by each map’s spatial character."
+    },
+    {
+      "id": "msg_257de72d92a2",
+      "source": "전이문 입구",
+      "en": "Transfer entrance"
+    },
+    {
+      "id": "msg_a46846219071",
+      "source": "전이문 출구",
+      "en": "Transfer exit"
+    },
+    {
+      "id": "msg_1d55537ceb5a",
+      "source": "스플릿",
+      "en": "Split"
+    },
+    {
+      "id": "msg_fa4acd7fbe42",
+      "source": "중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
+      "en": "A central ramp links a raised balcony with two city alleys."
+    },
+    {
+      "id": "msg_136f36dc7be0",
+      "source": "바인드",
+      "en": "Bind"
+    },
+    {
+      "id": "msg_310a6162a440",
+      "source": "사암 작업장의 두 마당을 단방향 전이문으로 연결합니다.",
+      "en": "Two sandstone yards connect through a one-way transfer gate."
+    },
+    {
+      "id": "msg_1d967564c344",
+      "source": "헤이븐",
+      "en": "Haven"
+    },
+    {
+      "id": "msg_0407fef49117",
+      "source": "목조 회랑을 따라 서쪽 뜰, 중앙 전각, 동쪽 정원으로 갈라집니다.",
+      "en": "Timber galleries branch toward a west court, central hall and east garden."
+    },
+    {
+      "id": "msg_d0719d30a8bd",
+      "source": "어센트",
+      "en": "Ascent"
+    },
+    {
+      "id": "msg_111f06ece8f2",
+      "source": "벽돌 아케이드 사이의 열린 광장을 장악하고 양쪽 회랑으로 진입합니다.",
+      "en": "Cross an open piazza between brick arcades, then enter the side galleries."
+    },
+    {
+      "id": "msg_3636b28158e5",
+      "source": "아이스박스",
+      "en": "Icebox"
+    },
+    {
+      "id": "msg_fbe8bde4de55",
+      "source": "냉동 화물 적재장 위의 통로와 컨테이너 사이 하단 통로를 오갑니다.",
+      "en": "Move between a raised freight deck and tight container aisles."
+    },
+    {
+      "id": "msg_5b23b6604151",
+      "source": "브리즈",
+      "en": "Breeze"
+    },
+    {
+      "id": "msg_d8c2a17475a0",
+      "source": "해안 성채의 넓은 뜰과 돌탑 사이로 긴 시야가 열립니다.",
+      "en": "Long views open across a coastal fort courtyard between stone towers."
+    },
+    {
+      "id": "msg_5cce5b049df2",
+      "source": "프랙처",
+      "en": "Fracture"
+    },
+    {
+      "id": "msg_3b4d3e9f4ed9",
+      "source": "끊어진 연구동을 돌아 두 방향으로 진입하는 순환 통로입니다.",
+      "en": "Loop around a divided research block to enter from opposite sides."
+    },
+    {
+      "id": "msg_fa5d4e7e0156",
+      "source": "펄",
+      "en": "Pearl"
+    },
+    {
+      "id": "msg_c4e7c272f171",
+      "source": "돔 아래 타일 광장과 굽은 골목이 긴 해저 회랑에 이어집니다.",
+      "en": "Tiled courts and winding alleys meet a long gallery beneath a dome."
+    },
+    {
+      "id": "msg_731b54f868fd",
+      "source": "로터스",
+      "en": "Lotus"
+    },
+    {
+      "id": "msg_40e5f698688e",
+      "source": "돌기둥 뜰과 세 개의 정원이 나선형 참배로로 이어집니다.",
+      "en": "A winding processional path joins a pillared court and three gardens."
+    },
+    {
+      "id": "msg_173753e63312",
+      "source": "선셋",
+      "en": "Sunset"
+    },
+    {
+      "id": "msg_702cb3bcbf2b",
+      "source": "상가와 차고 사이의 교차로를 지나 낮은 시장 가판대를 돌아갑니다.",
+      "en": "Cross the market junction between storefronts and garages, using low stalls for cover."
+    },
+    {
+      "id": "msg_690c3714546c",
+      "source": "어비스",
+      "en": "Abyss"
+    },
+    {
+      "id": "msg_3a3504708848",
+      "source": "연구 시설의 높은 잔교와 낮은 정비 통로가 나란히 뻗습니다.",
+      "en": "An elevated research causeway runs beside a lower maintenance passage."
+    },
+    {
+      "id": "msg_572cc091a1fa",
+      "source": "코로드",
+      "en": "Corrode"
+    },
+    {
+      "id": "msg_ec1e87a3fad7",
+      "source": "부식된 성벽의 꺾인 성문과 제련소 안마당이 맞닿아 있습니다.",
+      "en": "An offset gate in a weathered wall opens into a foundry yard."
+    },
+    {
+      "id": "msg_ef0605a04822",
+      "source": "서밋",
+      "en": "Summit"
+    },
+    {
+      "id": "msg_77fa0447488c",
+      "source": "산악 관측소의 두 경사로가 서로 다른 고도의 전망대로 이어집니다.",
+      "en": "Two mountain-station ramps lead toward lookout decks above a sheltered pass."
     }
   ]
 }

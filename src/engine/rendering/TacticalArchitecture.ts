@@ -1,3 +1,5 @@
+import {courseFor} from '../../config/mapCourses';
+import {levelFor} from '../tactical/levels';
 import {arenaPattern,loadArenaPatterns,type ArenaPatternPreferences,type ArenaPatternSpec} from '../../config/arenaPatterns';
 import {arenaPalette,BAY_APPEARANCE} from '../../config/arenaAppearance';
 import {LEVEL_SPECS} from '../../config/tactical';
@@ -27,7 +29,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   if(!surfaceLibrary)for(const map of [value.map,value.normalMap,value.roughnessMap])if(map&&!registered.has(map)){registered.add(map);texture(map);}
   return m(value);
  };
- const style=arenaPalette(map);
+ const style=arenaPalette(map),course=courseFor(map);
  const materials=Object.fromEntries(Object.entries(BAY_APPEARANCE).map(([key,zone])=>{
   const colors=map==='complex'?zone:style;
   return [key,surface(colors.wallFamily,colors.coverPanel)];
@@ -45,7 +47,7 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   const shape=new T.Shape();pts.forEach(([px,py],i)=>i?shape.lineTo(px,py):shape.moveTo(px,py));shape.closePath();
   const geo=new T.ExtrudeGeometry(shape,{depth:Math.max(.004,depth-bevel*2),bevelEnabled:bevel>0,bevelThickness:bevel,bevelSize:bevel,bevelSegments:1,steps:1,curveSegments:1});geo.translate(0,0,-Math.max(.004,depth-bevel*2)/2);return mesh(geo,mat,x,y,z);
  };
- const themeAt=(x:number,z:number):Theme=>map==='complex'?(PEEK_ZONES.find(q=>Math.abs(q.center.x-x)<12.1&&Math.sign(q.center.z)===Math.sign(z))?.theme??'facility'):(OLD_THEMES[map]??'facility');
+ const themeAt=(x:number,z:number):Theme=>map==='complex'?(PEEK_ZONES.find(q=>Math.abs(q.center.x-x)<12.1&&Math.sign(q.center.z)===Math.sign(z))?.theme??'facility'):(course?.style??OLD_THEMES[map]??'facility');
  const doorway=(x:number,z:number,w:number,theme:Theme,openingHeight=3.2)=>{
   const color=materials[theme],post=theme==='courtyard'?.22:.15;
   for(const side of [-1,1]){
@@ -111,6 +113,85 @@ export function tacticalArchitecture(map:string,obstacles:Obstacle[],g:(a:T.Buff
   // Railing parts sit at the existing solid platform edge; no invisible new blocker.
   if(zone.vertical){const height=zone.vertical;for(let px=x+2;px<x+10;px+=1.8)block(.045,.85,.045,px,height+.45,sign*36.85,metal);block(8,.05,.045,x+6,height+.88,sign*36.85,metal);}
   for(const p of [10,12,14])block(.7,.008,.045,frontDoorX,.045,sign*p,warm);
+ }else if(course){
+  const p=levelFor(map)!.landmark!,x=p.x,z=p.z,cap=materials[course.style],radius=course.cell*.44;
+  // All silhouette details sit on the six-metre solid landmark plinth. Their
+  // footprint stays over the masonry, keeping traversal and head-height sightlines clear.
+  const drum=(bottom:number,top:number,h:number,y:number,mat:T.Material,sides=12,dx=0,dz=0)=>
+   mesh(new T.CylinderGeometry(top,bottom,h,sides),mat,x+dx,y+h/2,z+dz);
+  const tier=(w:number,h:number,y:number,mat:T.Material)=>block(w,h,w,x,y+h/2,z,mat);
+  const dish=(r:number,y:number,mat:T.Material)=>mesh(new T.SphereGeometry(r,20,8,0,Math.PI*2,0,Math.PI/2),mat,x,y,z);
+  // Give the districts a readable roofline. Roofs sit on real building solids;
+  // open lanes, cover tops, and playable balconies remain completely clear.
+  for(const solid of obstacles){
+   const {min,max}=solid.box;
+   if(solid.kind!=='wall'||max.y!==4.8)continue;
+   const cx=(min.x+max.x)/2,cz=(min.z+max.z)/2,w=max.x-min.x,d=max.z-min.z;
+   chunk='course-roofs';
+   switch(course.style){
+    case 'courtyard': {
+     const ridge=profile([[-d*.49,0],[-d*.49,.13],[0,1.05],[d*.49,.13],[d*.49,0]],w-.04,cx,4.8,cz,warm,.01);
+     ridge.rotation.y=Math.PI/2;block(w,.1,.19,cx,5.86,cz,metal);break;
+    }
+    case 'urban':
+     block(w,.27,.19,cx,4.935,min.z+.1,cap);block(w,.27,.19,cx,4.935,max.z-.1,cap);
+     block(Math.min(2.2,w*.52),.84,d*.55,cx,5.22,cz,metal);
+     block(Math.min(2.4,w*.6),.12,d*.59,cx,5.7,cz,warm);break;
+    case 'facility':
+     block(w,.14,d,cx,4.87,cz,metal);
+     for(const dx of [-w*.21,w*.21]){
+      mesh(new T.CylinderGeometry(.51,.61,.57,10),cap,cx+dx,5.21,cz);
+      mesh(new T.CylinderGeometry(.62,.63,.12,10),shadow,cx+dx,5.55,cz);
+     }break;
+    case 'research':
+     profile([[-w*.48,0],[-w*.42,.44],[w*.34,.44],[w*.48,0]],d*.82,cx,4.8,cz,metal);
+     block(w*.48,.21,d*.33,cx,5.34,cz,glass);break;
+   }
+  }
+  chunk='course-landmark';tier(course.cell,.16,6,metal);
+  switch(course.landmark){
+   case 'antenna':
+    tier(radius*1.3,1.8,6.16,cap);drum(.16,.07,3.9,7.96,metal);
+    for(const y of [8.7,9.6,10.5])block(2.3,.08,.08,x,y,z,metal);break;
+   case 'cistern':
+    drum(radius,radius,2.1,6.16,cap);for(const y of [6.4,7.8])drum(radius+.06,radius+.06,.12,y,metal);
+    drum(radius,.3,.64,8.26,warm);break;
+   case 'pagoda':
+    for(let i=0;i<3;i++){const w=radius*(1-i*.19),y=6.16+i*1.14;tier(w*1.05,.55,y,warm);drum(w*1.37,w*.42,.59,y+.55,cap,4).rotation.y=Math.PI/4;}
+    drum(.1,.015,.85,9.58,metal);break;
+   case 'campanile':
+    tier(radius*1.24,2.4,6.16,cap);
+    for(const dx of [-.75,.75])for(const dz of [-.75,.75])block(.22,1.1,.22,x+dx,9.11,z+dz,metal);
+    drum(radius,0,1.45,9.66,warm,4).rotation.y=Math.PI/4;break;
+   case 'gantry':
+    for(const dx of [-radius*.8,radius*.8])block(.35,3.4,.5,x+dx,7.86,z,metal);
+    block(radius*2,.46,.62,x,9.79,z,warm);block(.16,1.65,.16,x+.6,8.75,z,metal);break;
+   case 'windmill':
+    drum(radius*.62,radius*.35,2.8,6.16,cap,8);
+    for(let i=0;i<4;i++){const a=.38+i*Math.PI/2;block(.28,radius*.82,.12,x-Math.sin(a)*radius*.48,8.65+Math.cos(a)*radius*.48,z+radius*.37,warm).rotation.z=a;}
+    break;
+   case 'reactor':
+    drum(radius*.85,radius*.66,2.6,6.16,cap);for(const y of [6.45,7.35,8.25])drum(radius*.84,radius*.84,.13,y,metal);
+    drum(radius*.5,radius*.35,.62,8.76,light);break;
+   case 'dome':
+    drum(radius,radius,.43,6.16,metal);dish(radius,6.59,cap);drum(.09,.03,.5,6.59+radius,metal);break;
+   case 'lotus':
+    drum(radius*.7,radius*.89,.55,6.16,cap,8);
+    for(let i=0;i<8;i++){const a=i*Math.PI/4,petal=mesh(new T.SphereGeometry(.58,8,6),warm,x+Math.sin(a)*radius*.43,7.2,z+Math.cos(a)*radius*.43);petal.scale.set(.55,1.7,.65);petal.rotation.set(.48*Math.cos(a),0,-.48*Math.sin(a));}
+    break;
+   case 'marquee':
+    for(const dx of [-1.15,1.15])block(.16,2.4,.16,x+dx,7.36,z,metal);
+    profile([[-1.85,0],[1.52,0],[1.85,.9],[-1.42,1.25]],.3,x,7.85,z,cap);
+    block(2.5,.09,.34,x,8.28,z,warm);break;
+   case 'beacon':
+    drum(radius*.62,radius*.4,2.8,6.16,metal,6);drum(radius*.45,radius*.45,.9,8.96,light,6);
+    drum(radius*.62,.12,.45,9.86,cap,6);break;
+   case 'chimneys':
+    for(const [dx,h] of [[-1,3.8],[.4,2.85],[1.25,2.2]]){drum(.4,.3,h,6.16,cap,10,dx);drum(.38,.38,.16,6.16+h,metal,10,dx);}break;
+   case 'radar':
+    drum(radius*.52,.38,1.65,6.16,metal);dish(radius*.87,7.81,cap);
+    for(const y of [7.81,7.99])drum(radius*.91,radius*.91,.07,y,metal);break;
+  }
  }else if(map==='bunny'){
   chunk='movement-gallery';detail=0;
   const lane=surface('painted-concrete',0x668c92,.9),landing=surface('painted-concrete',0xb09b72,.91);

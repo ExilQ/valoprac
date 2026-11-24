@@ -82,7 +82,7 @@ export class Simulation {
     this.landings.resetEncounter(this.movement);this.landings.onLanding=e=>{if(this.rules!=='legacy-v2'){e.surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,e.position,this.rules,this.movement.profile);e.material=SURFACES[e.surfaceId].footstepSoundProfile;}this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onLanding?.(e);};
     if(this.practiceMap==='tactical'){this.movement.position.set(-7,0,13);this.movement.previous.copy(this.movement.position);}
 
-    this.level=levelFor(this.practiceMap);this.exposureLabels=this.level?.angles.map(a=>a.label)??[];if(this.level){this.movement.position.set(this.level.spawn.x,this.level.spawn.y,this.level.spawn.z);this.movement.previous.copy(this.movement.position);}
+    this.level=levelFor(this.practiceMap);this.exposureLabels=this.level?.angles.map(a=>a.label)??[];if(this.level){this.yaw=this.level.entryYaw??0;this.movement.position.set(this.level.spawn.x,this.level.spawn.y,this.level.spawn.z);this.movement.previous.copy(this.movement.position);}
     this.tap=new TapDrill(settings.drill);
     this.weapons=Object.fromEntries(WEAPON_ORDER.map((id,i)=>[id,new Weapon(WEAPONS[id],settings.seed+i*907)])) as Record<WeaponId,Weapon>;this.weapon=this.weapons[weaponId];this.configureAmmo();this.rng=new SeededRandom(settings.seed^0xF91);
     for(let i=0;i<(mode==='free'?12:mode==='tracking'&&settings.behavior==='peek'?1:MODES[mode].count);i++){
@@ -177,6 +177,11 @@ export class Simulation {
     this.braking.update(input,movementYaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
     if(this.settings.movementTools?.enabled)this.movementPractice.beforeStep(this.movementContext());
     this.movement.step(input,movementYaw,dt,this.time);
+    const transfer=this.level?.transfer,position=this.movement.position;
+    if(transfer&&position.y<1.2&&Math.hypot(position.x-transfer.entry.x,position.z-transfer.entry.z)<.86){
+      this.movement.reset(transfer.exit,this.time,true);this.footsteps.resetEncounter();this.landings.resetEncounter(this.movement);
+      this.braking=new Braking();this.pendingBrakeShot=null;this.stoppedAt=this.time;this.clearFireView();this.renderedTargets.clear();
+    }
     const gate=this.scenario?.entryGate;
     if(gate&&!this.targets[0].enabled&&crossesEntryGate(gate,this.movement.previous,this.movement.position)){
       const count=this.options.scenario?.rules.arrival==='after-clear'?1:this.scenarioSectors.length;
@@ -278,7 +283,7 @@ export class Simulation {
     this.currentInput=emptyInput();this.pendingBrakeShot=null;this.braking=new Braking();
     const zone=this.practiceMap==='complex'?zoneForScenario(this.settings.peekScenario):undefined;
     this.movement.reset(this.scenario?.spawn??zone?.entry??this.level.spawn,this.time,true);
-    this.yaw=this.scenario?.yaw??(zone&&zone.center.z>0?Math.PI:0);this.pitch=this.scenario?.pitch??0;
+    this.yaw=this.scenario?.yaw??this.level.entryYaw??(zone&&zone.center.z>0?Math.PI:0);this.pitch=this.scenario?.pitch??0;
     for(const weapon of Object.values(this.weapons))weapon.resetForEncounter(this.time,true);
     this.weapon.equip(this.time);this.ads=false;this.adsAmount=0;this.previousAdsAmount=0;
     this.adsChangedAt=this.time;this.stoppedAt=null;this.operatorLastShot=null;

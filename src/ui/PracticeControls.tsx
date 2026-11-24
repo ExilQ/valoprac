@@ -1,3 +1,4 @@
+import {courseFor} from '../config/mapCourses';
 import {LEVEL_IDS} from '../config/tactical';
 import {TacticalControls} from './TacticalControls';
 import { useApp } from '../app/store';
@@ -6,7 +7,7 @@ import type { Behavior, Settings } from '../engine/types';
 export const BEHAVIORS:Record<Behavior,string>={stationary:'정지',strafe:'수평 스트레이핑',random:'무작위 방향',stopGo:'이동과 정지',crouch:'이동과 앉기',peek:'엄폐물 피킹',appearing:'무작위 등장',short:'짧은 스트레이프',long:'긴 스트레이프',reactive:'반응형 방향 전환',wide:'와이드 스윙',mixed:'혼합 이동'};
 export function PracticeControls({free=false,onResetTargets,onResetStats,includeTactical=true}:{free?:boolean;includeTactical?:boolean;onResetTargets?:()=>void;onResetStats?:()=>void}){
   const s=useApp(x=>x.settings),update=useApp(x=>x.updateSettings),weapon=useApp(x=>x.weapon),choose=useApp(x=>x.setWeapon);
-  const sequential=(LEVEL_IDS as readonly string[]).includes(s.practiceMap)||s.practiceMap==='wallbang';
+  const sequential=!!courseFor(s.practiceMap)||(LEVEL_IDS as readonly string[]).includes(s.practiceMap)||s.practiceMap==='wallbang';
   const numeric=(key:'targetCount'|'targetSize'|'targetSpeed'|'targetDistance'|'spawnInterval',label:string,min:number,max:number,step:number,suffix='')=><label className="range-field"><span>{label}<b>{s[key]}{suffix}</b></span><input aria-label={label} type="range" min={min} max={max} step={step} value={s[key]} onChange={e=>update({[key]:+e.target.value})}/></label>;
   const check=(key:'infiniteReserve'|'autoReload'|'practiceHud'|'recoilAnalysis'|'analysisWall',label:string)=><label className="practice-toggle"><span>{label}</span><input type="checkbox" checked={s[key]} onChange={e=>update({[key]:e.target.checked})}/></label>;
   return <div className="practice-controls"><h3>무기 선택</h3><div className="weapon-options">{WEAPON_ORDER.map((id,i)=><button key={id} className={weapon===id?'active':''} onClick={()=>choose(id)}><span>0{i+1}</span><strong>{WEAPONS[id].name}</strong><small>{WEAPONS[id].fireMode==='semi'?'단발':id==='operator'?'볼트 액션':'자동'} · {WEAPONS[id].magazine}발</small></button>)}</div><p className="field-note">{WEAPONS[weapon].fireRate}발/초 · 재장전 {WEAPONS[weapon].reloadTime}초 · {weapon==='operator'?'스코프 2.5 / 5배':weapon==='sheriff'?'정조준 없음':'정조준 1.25배'}<br/>무기 교체에는 장착 시간이 적용됩니다.</p>

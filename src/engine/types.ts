@@ -1,6 +1,6 @@
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
 export type WeaponId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
-export type PracticeMap='range'|'tactical'|'long'|'garage'|'site'|'mid'|'tower'|'multi'|'complex'|'bunny'|'wallbang';
+export type PracticeMap=import('../config/mapCourses').CourseId|'range'|'tactical'|'long'|'garage'|'site'|'mid'|'tower'|'multi'|'complex'|'bunny'|'wallbang';
 export type Drill='none'|'tapAD'|'tapDA'|'release'|'wide'|'repeat'|'stopMoving'|'corner'|'vertical'|'mixed'|'moving'|'bunny'|'wallbang';
 export type Behavior = 'stationary' | 'strafe' | 'random' | 'stopGo' | 'crouch' | 'peek' | 'appearing'|'short'|'long'|'reactive'|'wide'|'mixed';
 export type HitZone = 'head' | 'torso' | 'arm' | 'leg' | 'wall' | 'miss';

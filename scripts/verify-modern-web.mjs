@@ -14,6 +14,7 @@ assert.equal(report.preserved.gameVersion,release.interface.gameplayCompatibilit
 assert.deepEqual(report.guidance.guides,['accessibility','size-aware-styling','performance','dialog']);assert.equal(report.guidance.cliTelemetryDisabled,true);
 const [before,after]=report.initialLoad.rows;assert.equal(before.name,'before');assert.equal(after.name,'after');assert.equal(before.canvas,1);assert.equal(after.canvas,0);assert(after.decoded<before.decoded&&after.gzipEstimate<before.gzipEstimate);
 const archivedSources={
+ 'src/ui/TrainingMapPlan.tsx':'docs/modern-web-baseline/TrainingMapPlan.tsx.txt',
  'src/app/App.tsx':'docs/modern-web-baseline/App.tsx.txt',
  'src/ui/History.tsx':'docs/modern-web-baseline/History.tsx.txt',
  'src/ui/MainMenu.tsx':'docs/modern-web-baseline/MainMenu.tsx.txt',

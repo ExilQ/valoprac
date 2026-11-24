@@ -359,8 +359,16 @@ export class RangeRenderer {
       this.geometries.add(geometry);
       this.scene.add(mesh);
     }
-    for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
-    if(this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
+    const course=this.simulation.level?.landmark?this.simulation.level:null;
+    if(course){
+      this.addSign(course.title,course.spawn.x,0.03,course.spawn.z-1.3,3,true);
+      for(const sector of course.angles)this.addSign(sector.label,sector.position.x,sector.position.y+.025,sector.position.z+.9,1.8,true);
+      if(course.transfer)for(const [label,p] of [['전이문 입구',course.transfer.entry],['전이문 출구',course.transfer.exit]] as const){
+        this.box(2,.025,2,p.x,.013,p.z,trim);this.addSign(label,p.x,.033,p.z,1.85,true);
+        for(const dx of [-1,1])this.box(.08,.035,2,p.x+dx,.019,p.z,light);
+      }
+    }else for(const x of [-17,-7,7,17])for(const z of [-17,-3,12,19])this.box(1.5,.015,.06,x,.015,z,light);
+    if(!course&&this.simulation.level&&this.simulation.practiceMap!=='complex'){const l=this.simulation.level;this.addSign(l.title,l.spawn.x+2,.025,l.spawn.z,3,true);for(let i=0;i<l.angles.length;i++){const a=l.angles[i];this.addSign(a.label,l.route[i*3+2].x,3,-.38,3);const x=l.route[i*3+2].x;this.addSign(`${i+1} →`,x,.025,5,1.5,true);this.box(2.9,.08,.08,x,4.8,-.5,light);this.box(.06,4.6,.09,x-1.5,2.3,-.5,trim);this.box(.06,4.6,.09,x+1.5,2.3,-.5,trim);for(let z=-4;z>l.angles[i].position.z;z-=5)this.box(2,.04,.15,x,5.2,z,light);}}else if(!course&&this.simulation.practiceMap!=='complex')this.addSign('코너 피킹 · 발소리 훈련장',-7,.025,16,4,true);
     if(this.simulation.practiceMap==='complex'){for(const zone of PEEK_ZONES){this.addSign(`${zone.id} / ${zone.name}`,zone.center.x-6,4.1,Math.sign(zone.center.z)*7.93,3.6,false,zone.center.z>0);this.addSign(`${zone.id} →`,zone.center.x-6,.045,zone.entry.z,2,true);}this.scene.fog=new THREE.Fog(arenaLight('complex').horizon,65,160);}
     this.sun.shadow.camera.left=-30;this.sun.shadow.camera.right=30;this.sun.shadow.camera.top=36;this.sun.shadow.camera.bottom=-30;this.sun.shadow.camera.updateProjectionMatrix();
     const centerX=b[0]+b[2]/2,centerZ=b[1]+b[3]/2,span=Math.max(b[2],b[3])*.64;
@@ -412,7 +420,7 @@ export class RangeRenderer {
       this.addSign('VALOPRAC  /  전술 훈련 시설',0,4.6,-29.8,8);
     }else{
       const level=this.simulation.level;
-      if(level&&this.simulation.practiceMap!=='complex'){for(let i=0;i<level.angles.length;i++){
+      if(level&&!level.landmark&&this.simulation.practiceMap!=='complex'){for(let i=0;i<level.angles.length;i++){
         const x=level.route[i*3+2].x;
         // Threshold construction remains within the pre-existing doorway wall.
         this.box(3.1,.17,.65,x,5.63,0,frame);this.box(2.55,.07,.72,x,5.5,0,warm);
@@ -553,6 +561,8 @@ export class RangeRenderer {
       // Preview the selected real bay, including rear-facing zones. The old
       // fixed camera pointed into a gallery wall for half of the complex.
       this.camera.position.set(zone.entry.x+2,3.1,sign*10.4);this.camera.lookAt(zone.center.x+2,1.5+zone.vertical*.45,zone.center.z);
+    }else if(s.level?.entryYaw!==undefined){
+      this.camera.position.set(s.level.spawn.x,2.6,s.level.spawn.z);this.camera.rotation.set(-.035,s.level.entryYaw,0,'YXZ');
     }else if(s.level){this.camera.position.set(s.level.spawn.x,3.8,8);const focus=s.level.angles[1]?.position??s.level.route[Math.min(3,s.level.route.length-1)]??s.level.spawn;this.camera.lookAt(focus.x,focus.y+1.5,focus.z);}else if(s.practiceMap==='tactical'){this.camera.position.set(-7,3.8,18);this.camera.lookAt(-7,1.05,0);}else{this.camera.position.set(3.6,2.3,6.5);this.camera.lookAt(0,1.05,-16);}this.weapon.visible=false;}
     else{
       this.camera.position.lerpVectors(m.previous,m.position,alpha);this.camera.position.y+=m.previousEyeHeight+(m.eyeHeight-m.previousEyeHeight)*alpha;

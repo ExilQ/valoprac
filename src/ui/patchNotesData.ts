@@ -10,6 +10,12 @@ export type PatchSize='major'|'minor';
 
 export const entries:PatchEntry[]=[
  {
+  version:"12.17",date:"2026-11-23",
+  title:"13개 맵별 전술 훈련 코스",
+  description:"맵 메뉴에서 각기 다른 평면과 지형을 가진 자체 제작 코스를 골라 훈련하세요.",
+  changes:["각 코스의 평면도에서 시작점, 이동 경로와 세 수비 위치를 확인할 수 있습니다.","바인드 코스에는 단방향 전이문을, 고저차 코스에는 직접 오를 수 있는 경사로와 상단 발판을 추가했습니다."],
+ },
+ {
   version:"12.16",date:"2026-11-23",
   title:"한국어와 영어 화면 선택",
   description:"Language 메뉴에서 한국어와 영어를 선택하면 훈련 화면과 패치노트, 복기 연구실과 안내 페이지에 적용됩니다.",

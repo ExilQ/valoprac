@@ -1,4 +1,12 @@
 {
+  "12.17": {
+    "title": "Thirteen map training courses",
+    "description": "Choose an original course with its own floor plan and terrain in Maps.",
+    "changes": [
+      "Inspect the starting point, route and three defender positions on each course plan.",
+      "Bind includes a one-way transfer gate. Elevated courses include traversable ramps and upper decks."
+    ]
+  },
   "12.16": {
     "title": "Korean and English language selection",
     "description": "Choose Korean or English from the Language menu across training, patch notes, the Review Lab, and guides.",

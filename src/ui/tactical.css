@@ -31,3 +31,5 @@ button{transition:background var(--ease-fast),border-color var(--ease-fast),colo
 @media(max-height:900px){.game-hud .hud-right-dock{gap:8px}.game-hud .practice-stat-hud{padding:8px;line-height:1.4}.game-hud .ammo-hud{padding:10px 14px}.game-hud .ammo-hud>strong{font-size:36px;line-height:1}.game-hud .ammo-hud>span{font-size:10px}.game-hud .ammo-hud p{margin:4px 0 0;font-size:10px}.game-hud .live-recoil svg{height:60px}}
 .game-hud .input-diagnostics{padding:8px;line-height:1.3;gap:3px}
 .legal-notice{margin:24px 0 0;padding:18px 0;border-top:1px solid var(--line,#33434d);font-size:11px;line-height:1.8;color:var(--muted,#9cabb5)}.legal-notice a{color:inherit;text-decoration:underline}.main-shell>.legal-notice{margin:0 50px 24px}.pause-card>.legal-notice{margin-top:20px}.target-speed-options{display:flex;gap:8px;flex-wrap:wrap}.target-speed-options button{border:1px solid #40515b;padding:9px 12px;background:#15212a;color:#e6eeee}.target-speed-options button[aria-pressed=true]{border-color:#ff626a;background:#38262e}
+
+.tactical-map-selection > .tactical-map-grid + header { margin-top: 1.5rem; }
