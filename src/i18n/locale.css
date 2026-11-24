@@ -3,3 +3,8 @@ html:lang(en) button,html:lang(en) label,html:lang(en) p,html:lang(en) h1,html:l
 .locale-selector{display:grid;grid-template-columns:minmax(0,1fr) minmax(140px,180px);align-items:center;gap:12px;padding:10px 0}
 .locale-selector select{min-width:0;width:100%;background:var(--surface,#1b252f);color:var(--ink,#ecedeb);border:1px solid var(--line,#38424c);padding:8px}
 @media(max-width:480px){.locale-selector{grid-template-columns:1fr}}
+.app-language{display:inline-flex;align-items:center;gap:7px;color:var(--ink,#1b252f);font-size:12px;font-weight:650;position:relative}
+.app-language select{min-width:80px;max-width:110px;min-height:36px;border:1px solid var(--line,#38424c);border-radius:5px;padding:4px 7px;background:var(--surface,#fff);color:inherit;font:inherit}
+.app-language small{position:absolute;top:100%;min-width:12rem;padding:6px;background:var(--surface,#fff);z-index:3}
+.training-brief-language{display:flex;justify-content:flex-end;margin-bottom:8px}
+@media(max-width:590px){.utility-topbar .app-language>span{display:none}.utility-topbar .app-language select{min-width:62px}}

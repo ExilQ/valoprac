@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 function run(args){const result=spawnSync('npm',args,{encoding:'utf8',maxBuffer:12*1024*1024});process.stdout.write(result.stdout??'');process.stderr.write(result.stderr??'');if(result.status!==0)process.exit(result.status??1);return (result.stdout??'').replace(/\u001b\[[0-9;?]*[a-zA-Z]/g,'');}
 const packageRelease=JSON.parse(readFileSync('package.json','utf8')),publicRelease=JSON.parse(readFileSync('public/release.json','utf8'));
 assert.equal(publicRelease.version,packageRelease.version,'Public and package releases must match before testing');
-assert.equal(publicRelease.patchLabel,'12.15');assert.equal(publicRelease.roadmap.replay.simulationVersion,'valoprac-replay-simulation-3');
+assert.equal(publicRelease.patchLabel,'12.16');assert.equal(publicRelease.roadmap.replay.simulationVersion,'valoprac-replay-simulation-3');
 assert.deepEqual(publicRelease.roadmap.replay.acceptedLegacyVersions,[{gameVersion:'10.0.0',simulationVersion:'valoprac-replay-simulation-2',rules:'legacy-v2'}]);
 const app=run(['test']),broker=run(['run','test:broker']),hosting=run(['run','test:hosting']);run(['run','verify:migration']);
 const summary=[...app.matchAll(/Tests\s+(\d+)\s+passed\s+\((\d+)\)/g)].at(-1);assert(summary&&summary[1]===summary[2],'Test summary must show all passing');

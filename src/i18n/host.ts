@@ -18,6 +18,6 @@ export function localizedHostProps(type:unknown,props:unknown):unknown{
  const raw=props as Record<string,unknown>,next={...raw};
  if(raw['data-locale']==='literal'||type==='code'||type==='pre')return props;
  if('children'in raw)next.children=children(raw.children);
- for(const key of ['title','aria-label','aria-description','aria-valuetext','placeholder','alt'])if(typeof raw[key]==='string')next[key]=translateText(raw[key] as string);
+ for(const key of ['title','aria-label','aria-description','aria-valuetext','placeholder','alt','label'])if(typeof raw[key]==='string')next[key]=translateText(raw[key] as string);
  return next;
 }

@@ -10,6 +10,16 @@ export type PatchSize='major'|'minor';
 
 export const entries:PatchEntry[]=[
  {
+  version:"12.16",date:"2026-11-23",
+  title:"한국어와 영어 화면 선택",
+  description:"Language 메뉴에서 한국어와 영어를 선택하면 훈련 화면과 패치노트, 복기 연구실과 안내 페이지에 적용됩니다.",
+  changes:[
+   "Language 메뉴에서 English와 한국어를 선택하고 브라우저에 저장합니다.",
+   "복기 연구실, 패치노트와 안내 문서에서 영어 화면을 제공합니다.",
+   "언어를 바꿔도 개인 설정과 기록의 제목·태그는 저장된 값으로 유지합니다.",
+  ],
+ },
+ {
   version:"12.15",date:"2026-11-23",
   title:"내 리플레이로 움직이는 수비수",
   description:"플레이에서 움직인 구간을 수비수에게 붙이고 같은 배치의 고정 수비수와 결과를 비교할 수 있습니다.",
@@ -478,9 +488,9 @@ export function patchSize(version:string):PatchSize {
  return version.endsWith('.00')?'major':'minor';
 }
 
-export function filterPatchEntries(size:PatchSize|'all',query=''){
+export function filterPatchEntries(size:PatchSize|'all',query='',catalog:readonly PatchEntry[]=entries){
  const search=query.trim().toLocaleLowerCase();
- const candidates=size==='all'?entries:entries.filter(entry=>patchSize(entry.version)===size);
+ const candidates=size==='all'?catalog:catalog.filter(entry=>patchSize(entry.version)===size);
  if(!search)return candidates;
 
  const versionMatches=candidates.filter(entry=>entry.version===search||entry.previousVersions?.includes(search));

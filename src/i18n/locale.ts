@@ -6,6 +6,8 @@ export interface LocaleState {locale:Locale;loading:boolean;error:string|null;re
 type Entry={id:string;source:string;en:string};
 type Trie={next:Map<string,Trie>;text?:string};
 let locale:Locale='ko',loading=false,error:string|null=null;
+let patchTranslations:Record<string,{title:string;description:string;changes:string[]}>={};
+export function englishPatch(version:string){return locale==='en'?patchTranslations[version]:undefined;}
 let catalog:Map<string,string>|null=null,entries:Entry[]=[],trie:Trie={next:new Map()};
 let request:Promise<void>|null=null,epoch=0,revision=0;
 const listeners=new Set<()=>void>(),missing=new Set<string>();
@@ -20,8 +22,8 @@ export function useLocaleState(){return useSyncExternalStore(subscribeLocale,get
 function remember(next:Locale){try{localStorage.setItem(LOCALE_STORAGE_KEY,next);}catch{/* Selection still works without writable storage. */}}
 function documentLanguage(){if(typeof document!=='undefined')document.documentElement.lang=locale;}
 async function loadEnglish(){
- if(catalog)return;if(!request)request=import('./catalog.en.json').then(module=>{
-  entries=module.default.entries;catalog=new Map();trie={next:new Map()};
+ if(catalog)return;if(!request)request=Promise.all([import('./catalog.en.json'),import('./patches.en.json')]).then(([module,patches])=>{
+  patchTranslations=patches.default;entries=module.default.entries;catalog=new Map();trie={next:new Map()};
   for(const entry of entries){catalog.set(entry.source,entry.en);let node=trie;for(const c of entry.source){let child=node.next.get(c);if(!child){child={next:new Map()};node.next.set(c,child);}node=child;}node.text=entry.en;}
  }).finally(()=>{request=null;});await request;
 }
@@ -61,7 +63,18 @@ export function message(id:keyof typeof MESSAGES,values:Record<string,string|num
 export function missingTranslations(){return [...missing];}
 export function clearMissingTranslations(){missing.clear();}
 export function localeCatalogInfo(){return{locale,loaded:!!catalog,entries:entries.length,missing:missing.size};}
-// The Korean product interface no longer restores a retired language preference.
-// Explicit localization APIs remain available to compatible analysis/tests.
 export function initializeKoreanInterface(){void setLocale('ko');}
-if(typeof window!=='undefined'){remember('ko');documentLanguage();}
+
+/** Reuse the same presentation preference on training, reviews and guides. */
+export async function initializeLocale(){
+ let saved:Locale='ko';
+ try{if(localStorage.getItem(LOCALE_STORAGE_KEY)==='en')saved='en';}catch{/* Korean remains the default. */}
+ await setLocale(saved);
+}
+
+if(typeof window!=='undefined'){
+ documentLanguage();
+ window.addEventListener('storage',event=>{
+  if(event.key===LOCALE_STORAGE_KEY&&(event.newValue==='ko'||event.newValue==='en')&&event.newValue!==locale)void setLocale(event.newValue);
+ });
+}

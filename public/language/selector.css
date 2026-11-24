@@ -1,0 +1,5 @@
+.site-language{display:inline-flex;align-items:center;gap:8px;color:var(--ink,#1c3028);font-weight:650;font-size:13px;position:relative}
+.site-language select{appearance:auto;width:auto;min-height:36px;padding:4px 7px;border:1px solid var(--border,var(--line,#bccbc1));border-radius:5px;background:var(--surface,#fff);color:inherit;font:inherit}
+.site-language small:not(:empty){position:absolute;top:100%;right:0;min-width:10rem;padding:6px;background:var(--surface,#fff);z-index:2}
+.guide-language{display:flex;justify-content:flex-end;margin:8px auto;padding:0 14px;max-width:1090px}
+@media(max-width:520px){.top-actions{justify-content:flex-end}.top-actions .site-language>span{display:none}.top-actions .site-language select{min-height:34px;font-size:12px}}

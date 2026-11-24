@@ -759,7 +759,7 @@
     {
       "id": "msg_55022668b6de",
       "source": "감도 탐색",
-      "en": "Sensitivity search"
+      "en": "Sensitivity Explorer"
     },
     {
       "id": "msg_112f355c734d",
@@ -1389,7 +1389,7 @@
     {
       "id": "msg_0ef6c01e0a84",
       "source": "회",
-      "en": "attempts"
+      "en": "times"
     },
     {
       "id": "msg_edf41c6ab146",
@@ -3374,7 +3374,7 @@
     {
       "id": "msg_9802a50e60e6",
       "source": "각체크·피킹",
-      "en": "Angle Clearing & Peeking"
+      "en": "Angle clearing and peeking"
     },
     {
       "id": "msg_fa8e2387706a",
@@ -3474,7 +3474,7 @@
     {
       "id": "msg_7b58c5c45260",
       "source": "계정 없이 바로 훈련",
-      "en": "Train immediately, without an account"
+      "en": "Practice without an account"
     },
     {
       "id": "msg_9b679df05d68",
@@ -3524,7 +3524,7 @@
     {
       "id": "msg_dff0608abbd2",
       "source": "전술 사격 훈련장",
-      "en": "Tactical shooting range"
+      "en": "Tactical practice range"
     },
     {
       "id": "msg_a21df7e2b179",
@@ -3684,12 +3684,12 @@
     {
       "id": "msg_6eb52b81c4b0",
       "source": "마우스가 잠깁니다.",
-      "en": "The mouse will be locked."
+      "en": "Pointer lock starts when you enter."
     },
     {
       "id": "msg_4a7309a536c0",
       "source": "로 해제할 수 있습니다.",
-      "en": "unlocks it."
+      "en": "releases it."
     },
     {
       "id": "msg_e97ae72e360a",
@@ -4679,7 +4679,7 @@
     {
       "id": "msg_e8d5d481bc8f",
       "source": "이동 중 사격",
-      "en": "Moving Fire"
+      "en": "Firing while moving"
     },
     {
       "id": "msg_befd839166fa",
@@ -12534,7 +12534,7 @@
     {
       "id": "msg_e9dbbe23f3d8",
       "source": "훈련장",
-      "en": "Training area"
+      "en": "Practice range"
     },
     {
       "id": "msg_d09b8055f6ba",
@@ -12560,6 +12560,2256 @@
       "id": "msg_8a833d2019bd",
       "source": "복기 연구실용 파일 저장",
       "en": "Download records for the Review Lab"
+    },
+    {
+      "id": "msg_948af4c7de89",
+      "source": "감도 연구실",
+      "en": "Sensitivity Lab"
+    },
+    {
+      "id": "msg_366e0bfa41c1",
+      "source": "구역",
+      "en": "area"
+    },
+    {
+      "id": "msg_343ba43756e9",
+      "source": "내 드릴",
+      "en": "my drill"
+    },
+    {
+      "id": "msg_d13c7cb935db",
+      "source": "실제 각도 궤적 · 단계별 조준 경로 / 점선 표적 / 원형 클릭",
+      "en": "Real angle trajectory / step-by-step aiming path / dotted line target / circular click"
+    },
+    {
+      "id": "msg_f6ff49a164dd",
+      "source": "실제 궤적 비교 · 시작점 정렬 · 실선 기준 / 점선 비교",
+      "en": "Comparison of actual trajectories · Alignment of starting points · Based on solid lines / Comparison of dotted lines"
+    },
+    {
+      "id": "msg_08a1c9d76e82",
+      "source": "/ 비교 감도",
+      "en": "/ Comparative Sensitivity"
+    },
+    {
+      "id": "msg_6a08b85e4fc3",
+      "source": "측정 개요",
+      "en": "Measurement Overview"
+    },
+    {
+      "id": "msg_cc2ebb4ade85",
+      "source": "현재 감도를 먼저 측정하세요",
+      "en": "Measure your current sensitivity first"
+    },
+    {
+      "id": "msg_058fcb9c82ad",
+      "source": "현재 입력 설정",
+      "en": "Current input settings"
+    },
+    {
+      "id": "msg_77ecca9888e2",
+      "source": "일반 훈련 감도",
+      "en": "General training sensitivity"
+    },
+    {
+      "id": "msg_a8c548955b10",
+      "source": "계정 없이 사용 · 조준 궤적은 이 브라우저에 보관",
+      "en": "Use without an account · Aim trajectory is stored in this browser"
+    },
+    {
+      "id": "msg_37f3874e0f1b",
+      "source": "실제 움직임 분석",
+      "en": "Real movement analysis"
+    },
+    {
+      "id": "msg_977791be6221",
+      "source": "실험 설정",
+      "en": "Experimental setup"
+    },
+    {
+      "id": "msg_ccc25e555430",
+      "source": "측정 근거",
+      "en": "basis for measurement"
+    },
+    {
+      "id": "msg_81c5469e58f0",
+      "source": "관측 결과",
+      "en": "Observation results"
+    },
+    {
+      "id": "msg_84a435721830",
+      "source": "장기 관찰",
+      "en": "long term observation"
+    },
+    {
+      "id": "msg_325754c6de2d",
+      "source": "입력 환경",
+      "en": "input environment"
+    },
+    {
+      "id": "msg_03ab43d60963",
+      "source": "통제된 비교",
+      "en": "controlled comparison"
+    },
+    {
+      "id": "msg_0d1184287564",
+      "source": "맵",
+      "en": "Map"
+    },
+    {
+      "id": "msg_5d9f61b2fc1e",
+      "source": "훈련 중",
+      "en": "In training"
+    },
+    {
+      "id": "msg_6914418689c6",
+      "source": "발로란트 에임 연습 · 자유 훈련장",
+      "en": "VALORANT aim practice · Free practice"
+    },
+    {
+      "id": "msg_d26cd376da70",
+      "source": "본문으로 바로가기",
+      "en": "Skip to content"
+    },
+    {
+      "id": "msg_bf7f32e70a9c",
+      "source": "기록은 이 브라우저에 저장됩니다.",
+      "en": "Your history is saved in this browser."
+    },
+    {
+      "id": "msg_3e962ee767de",
+      "source": "화면을 준비합니다…",
+      "en": "Prepare the screen…"
+    },
+    {
+      "id": "msg_4bc0b6ee10aa",
+      "source": "맵을 준비합니다…",
+      "en": "Prepare the map…"
+    },
+    {
+      "id": "msg_a5eba76f8e8d",
+      "source": "감도 연구실을 준비합니다…",
+      "en": "Preparing for a sensitivity lab…"
+    },
+    {
+      "id": "msg_b43d4f312fcf",
+      "source": "3D 훈련장 미리보기",
+      "en": "3D Training Ground Preview"
+    },
+    {
+      "id": "msg_15bd36b7a9ce",
+      "source": "훈련 정보 검토",
+      "en": "Review training information"
+    },
+    {
+      "id": "msg_5f6d985afca8",
+      "source": "훈련 일시정지 · 정보를 펼쳐 확인하세요",
+      "en": "Pause training · Expand and check information"
+    },
+    {
+      "id": "msg_2bcff1a78f76",
+      "source": "설정으로 돌아가기",
+      "en": "Go back to settings"
+    },
+    {
+      "id": "msg_e512c088efec",
+      "source": "환경 설정 · 조작·감도·화면·사운드",
+      "en": "Environment settings, operation, sensitivity, screen, sound"
+    },
+    {
+      "id": "msg_ee61c903ee9e",
+      "source": "Ctrl+W 차단은 브라우저·운영체제에 따라 제한됩니다.",
+      "en": "Ctrl+W blocking is limited depending on the browser and operating system."
+    },
+    {
+      "id": "msg_a29565325f62",
+      "source": "훈련 정보 살펴보기",
+      "en": "Explore training information"
+    },
+    {
+      "id": "msg_26a4d3156599",
+      "source": "맵 기본",
+      "en": "map basics"
+    },
+    {
+      "id": "msg_91d86bbd6e15",
+      "source": "단색",
+      "en": "solid color"
+    },
+    {
+      "id": "msg_121435ff9db5",
+      "source": "정사각 타일",
+      "en": "square tile"
+    },
+    {
+      "id": "msg_c7696ad8dbaf",
+      "source": "산업용 패널",
+      "en": "industrial panels"
+    },
+    {
+      "id": "msg_8700fedbf088",
+      "source": "도장 콘크리트",
+      "en": "stamped concrete"
+    },
+    {
+      "id": "msg_ecca0ab293e2",
+      "source": "노출 콘크리트",
+      "en": "exposed concrete"
+    },
+    {
+      "id": "msg_d4390ddd1220",
+      "source": "미장",
+      "en": "plasterer"
+    },
+    {
+      "id": "msg_cb4ff3d5b0d7",
+      "source": "벽돌",
+      "en": "brick"
+    },
+    {
+      "id": "msg_7799171f423e",
+      "source": "도장 금속",
+      "en": "painted metal"
+    },
+    {
+      "id": "msg_0e19679523a9",
+      "source": "헤어라인 금속",
+      "en": "hairline metal"
+    },
+    {
+      "id": "msg_d3bc1c0131cc",
+      "source": "강철",
+      "en": "steel"
+    },
+    {
+      "id": "msg_afe9916b14bb",
+      "source": "알루미늄",
+      "en": "aluminum"
+    },
+    {
+      "id": "msg_eaca0220aaa0",
+      "source": "목재",
+      "en": "wood"
+    },
+    {
+      "id": "msg_ac8961e27de9",
+      "source": "고무",
+      "en": "rubber"
+    },
+    {
+      "id": "msg_0cf440d958d6",
+      "source": "폴리머",
+      "en": "polymer"
+    },
+    {
+      "id": "msg_b0ff39813b9b",
+      "source": "직물",
+      "en": "fabric"
+    },
+    {
+      "id": "msg_8fbb213a1534",
+      "source": "복합재",
+      "en": "composite"
+    },
+    {
+      "id": "msg_4e55732e06a0",
+      "source": "석고",
+      "en": "plaster"
+    },
+    {
+      "id": "msg_ce7ad1dd9077",
+      "source": "미장 콘크리트",
+      "en": "plastering concrete"
+    },
+    {
+      "id": "msg_279509d758e8",
+      "source": "브러시 금속",
+      "en": "brush metal"
+    },
+    {
+      "id": "msg_71a3109318af",
+      "source": "플라스틱",
+      "en": "plastic"
+    },
+    {
+      "id": "msg_2be5b1e21cf2",
+      "source": "설정 파일은 2MB 이하여야 합니다.",
+      "en": "The configuration file must be less than 2MB."
+    },
+    {
+      "id": "msg_3d7a6baa1648",
+      "source": "기본 감도",
+      "en": "default sensitivity"
+    },
+    {
+      "id": "msg_316a1429ec25",
+      "source": "소총 정조준 배율",
+      "en": "Rifle Aiming Multiplier"
+    },
+    {
+      "id": "msg_9e6a696f9c8d",
+      "source": "2.5배 조준 배율",
+      "en": "2.5x aiming magnification"
+    },
+    {
+      "id": "msg_6674eb8f2fca",
+      "source": "5배 조준 배율",
+      "en": "5x aiming multiplier"
+    },
+    {
+      "id": "msg_d43d2b662a76",
+      "source": ": 지원 범위를 벗어납니다.",
+      "en": ": Out of support range."
+    },
+    {
+      "id": "msg_1436c3dfc69a",
+      "source": "활성 조준선",
+      "en": "active reticle"
+    },
+    {
+      "id": "msg_f9d1fb13f6ff",
+      "source": "활성 조준선 프로필을 읽지 못했습니다.",
+      "en": "Failed to read active reticle profile."
+    },
+    {
+      "id": "msg_8fd7cedcdd6b",
+      "source": "기본 마감",
+      "en": "basic finish"
+    },
+    {
+      "id": "msg_26ed58d6c246",
+      "source": "극야 슬레이트",
+      "en": "polar night slate"
+    },
+    {
+      "id": "msg_b8681af74e16",
+      "source": "청록 세라믹",
+      "en": "teal ceramic"
+    },
+    {
+      "id": "msg_ef9c7a3bd8c0",
+      "source": "사막 브론즈",
+      "en": "desert bronze"
+    },
+    {
+      "id": "msg_c424446149ab",
+      "source": "인디고 카본",
+      "en": "indigo carbon"
+    },
+    {
+      "id": "msg_64135db9d669",
+      "source": "VALOPRAC / 전술 훈련 시설",
+      "en": "VALOPRAC / Tactical Training Facility"
+    },
+    {
+      "id": "msg_fcf116078157",
+      "source": "훈련 구역 0",
+      "en": "Training Area 0"
+    },
+    {
+      "id": "msg_786a6d144887",
+      "source": "VALOPRAC / 전술 훈련 단지",
+      "en": "VALOPRAC / Tactical Training Complex"
+    },
+    {
+      "id": "msg_1f366611cff2",
+      "source": "회피 신호",
+      "en": "avoidance signal"
+    },
+    {
+      "id": "msg_dd533a3fd354",
+      "source": "회피 미완료",
+      "en": "Evasion incomplete"
+    },
+    {
+      "id": "msg_931a2937235a",
+      "source": "GPU 세션은 로그인한 승인 테스터만 사용할 수 있습니다.",
+      "en": "GPU sessions are only available to logged in acceptance testers."
+    },
+    {
+      "id": "msg_d6c332161aa2",
+      "source": "GPU 세션 이용 승인이 필요합니다.",
+      "en": "GPU session usage authorization is required."
+    },
+    {
+      "id": "msg_ef20da6d278a",
+      "source": "GPU 입장 검증이 아직 설정되지 않았습니다.",
+      "en": "GPU admission verification is not yet set up."
+    },
+    {
+      "id": "msg_3c135dcd1d76",
+      "source": "GPU 입장 응답이 올바르지 않습니다.",
+      "en": "GPU admission response is incorrect."
+    },
+    {
+      "id": "msg_e333821a4d2e",
+      "source": "헤드라인 조준",
+      "en": "Headline Aim"
+    },
+    {
+      "id": "msg_aee5774b93db",
+      "source": "헤드라인 조준 · 앉아서 교전",
+      "en": "Aim for the headline · Sit back and engage"
+    },
+    {
+      "id": "msg_560255f86b73",
+      "source": "보관함이 가득 찼습니다. 드릴을 하나 삭제한 뒤 저장하세요.",
+      "en": "The storage bin is full. Delete one drill and save it."
+    },
+    {
+      "id": "msg_fd07571d9a9b",
+      "source": "저격수 문틀 피킹",
+      "en": "Sniper door frame picking"
+    },
+    {
+      "id": "msg_4056e802835c",
+      "source": "문틀에서 짧게 노출하고 엄폐로 돌아온 뒤 저격수의 다음 사격 전에 다시 진입하세요.",
+      "en": "Take a short exposure at the door frame, return to cover, and re-enter before the sniper's next shot."
+    },
+    {
+      "id": "msg_c8ae265fd79a",
+      "source": "경사로 상단 진입",
+      "en": "Enter the top of the ramp"
+    },
+    {
+      "id": "msg_9b466303e565",
+      "source": "경사로를 오르며 조준 높이를 바꾸고 2.4m 상단의 수비각을 확인하세요.",
+      "en": "Change your aiming height as you climb the ramp and check the defense angle at the top of 2.4m."
+    },
+    {
+      "id": "msg_f6cfd68a684d",
+      "source": "헤드라인·앉기 교전",
+      "en": "Headline Sitting Engagement"
+    },
+    {
+      "id": "msg_148870588621",
+      "source": "수비수 행동",
+      "en": "defender action"
+    },
+    {
+      "id": "msg_b8419d1f7cc4",
+      "source": "플레이 기록은 앉아서 교전하는 수비수에 적용할 수 있습니다.",
+      "en": "Play history can be applied to defenders who sit and engage."
+    },
+    {
+      "id": "msg_afe878effa29",
+      "source": "플레이 기록",
+      "en": "play record"
+    },
+    {
+      "id": "msg_4585c9ab68cc",
+      "source": "사격 시작 표본",
+      "en": "start shooting specimen"
+    },
+    {
+      "id": "msg_5d4b6507a121",
+      "source": "앉아서 사격하는 비율",
+      "en": "Percentage of sitting and shooting"
+    },
+    {
+      "id": "msg_1016fcf66412",
+      "source": "앉기 지속 시간",
+      "en": "sitting duration"
+    },
+    {
+      "id": "msg_a7e2bdf8331d",
+      "source": "사격 간격",
+      "en": "shooting interval"
+    },
+    {
+      "id": "msg_9b3a7b4b15b2",
+      "source": "플레이 기록의 집계값은 정수여야 합니다.",
+      "en": "The aggregate value of play history must be an integer."
+    },
+    {
+      "id": "msg_3591decb0010",
+      "source": "진입선 설정이 올바르지 않습니다.",
+      "en": "Entry line settings are incorrect."
+    },
+    {
+      "id": "msg_f1eab98ef623",
+      "source": "수비수 등장",
+      "en": "Defender appears"
+    },
+    {
+      "id": "msg_dac04faf6d77",
+      "source": "진입선을 만들 공간이 부족합니다. 시작 위치를 경로 시작점 쪽으로 옮기세요.",
+      "en": "There is not enough space to create an entry line. Move the starting location closer to the starting point of the route."
+    },
+    {
+      "id": "msg_a54099a88395",
+      "source": "무기 강조색 표시",
+      "en": "Weapon highlighting"
+    },
+    {
+      "id": "msg_89e184880c14",
+      "source": "정조준 감도와 스코프",
+      "en": "Aiming sensitivity and scope"
+    },
+    {
+      "id": "msg_763bdcd300f6",
+      "source": "키 지정과 자세",
+      "en": "Height designation and posture"
+    },
+    {
+      "id": "msg_09187a8b5b95",
+      "source": "입력칸을 선택한 뒤 사용할 키를 누르세요. 숫자 1·2·3·4는 무기 전환, 탈출 키는 마우스 잠금 해제입니다.",
+      "en": "Select the input box and press the key you want to use. Numbers 1, 2, 3, and 4 switch weapons, and the escape key unlocks the mouse."
+    },
+    {
+      "id": "msg_ddde70d90e24",
+      "source": "정조준 감도는 기본 감도 × 해당 배율의 설정값 ÷ 줌 배율로 적용됩니다. 2.5배와 5배는 독립적으로 저장됩니다.",
+      "en": "Aiming sensitivity is applied as basic sensitivity × the setting value of the corresponding magnification ÷ zoom magnification. 2.5x and 5x are stored independently."
+    },
+    {
+      "id": "msg_d49e6aed01bf",
+      "source": "다음 훈련부터 적용됩니다.",
+      "en": "This will apply from the next training."
+    },
+    {
+      "id": "msg_e580c1c505b0",
+      "source": "브라우저에서 재질 설정을 저장할 수 없습니다.",
+      "en": "Your browser cannot save material settings."
+    },
+    {
+      "id": "msg_33f5a4f7341e",
+      "source": "훈련장 표면 재질",
+      "en": "Training ground surface material"
+    },
+    {
+      "id": "msg_18c3f3f4b810",
+      "source": "바닥",
+      "en": "floor"
+    },
+    {
+      "id": "msg_a30f11b63eee",
+      "source": "벽",
+      "en": "wall"
+    },
+    {
+      "id": "msg_15e62f04a0d5",
+      "source": "패턴",
+      "en": "pattern"
+    },
+    {
+      "id": "msg_7166bb8a35b0",
+      "source": "패턴 반복 간격 ·",
+      "en": "Pattern repeat interval ·"
+    },
+    {
+      "id": "msg_6bf28a15b8cc",
+      "source": "표면 무늬는 실제 훈련장과 편집기의 3D 재질 보기에 적용됩니다.",
+      "en": "Surface patterns are applied to the actual training ground and the 3D material view in the editor."
+    },
+    {
+      "id": "msg_4481b7ebb18e",
+      "source": "보관함을 저장하지 못했습니다. 브라우저 저장 공간을 확인하세요.",
+      "en": "Failed to save library. Check your browser storage space."
+    },
+    {
+      "id": "msg_9d7b185f9e22",
+      "source": "드릴을 열 수 없습니다.",
+      "en": "The drill cannot be opened."
+    },
+    {
+      "id": "msg_180b265e7938",
+      "source": "전술 경로나 시나리오 편집에서 드릴을 저장하면 여기에 표시됩니다.",
+      "en": "If you save a drill from Tactical Path or Scenario Edit, it will appear here."
+    },
+    {
+      "id": "msg_9886fc2d1617",
+      "source": "보관함에서 삭제할까요?",
+      "en": "Should I delete it from my archive?"
+    },
+    {
+      "id": "msg_e856b9bd3615",
+      "source": "삭제 확인",
+      "en": "Confirm deletion"
+    },
+    {
+      "id": "msg_063c9db5e3a8",
+      "source": "즐겨찾기",
+      "en": "Favorites"
+    },
+    {
+      "id": "msg_87b0acef85a7",
+      "source": "편집",
+      "en": "edit"
+    },
+    {
+      "id": "msg_bf0add69d35a",
+      "source": "60초 · 독자적인 훈련 과제",
+      "en": "60 seconds · Unique training task"
+    },
+    {
+      "id": "msg_02924c6d050b",
+      "source": "청취",
+      "en": "listening"
+    },
+    {
+      "id": "msg_744928385cd0",
+      "source": "발소리 발생 위치 표시",
+      "en": "Displays the location of footsteps"
+    },
+    {
+      "id": "msg_53140365c330",
+      "source": "지도 표시 기준",
+      "en": "Map display criteria"
+    },
+    {
+      "id": "msg_b0a4eb015aab",
+      "source": "실제 시야에 보이는 표적만 표시합니다. 학습·개발 진단에서는 별도 표시가 적용됩니다.",
+      "en": "Only targets visible in the actual field of view are displayed. Separate indications apply to learning and development diagnosis."
+    },
+    {
+      "id": "msg_61fd8f5b9342",
+      "source": "발소리 임박",
+      "en": "Footsteps imminent"
+    },
+    {
+      "id": "msg_5788962c475d",
+      "source": "누적 기준과 이동 여유",
+      "en": "Cumulative basis and movement margin"
+    },
+    {
+      "id": "msg_eec5160ef927",
+      "source": "· 재장전",
+      "en": "· Reload"
+    },
+    {
+      "id": "msg_846a9b99e7d6",
+      "source": "제동 중",
+      "en": "Braking"
+    },
+    {
+      "id": "msg_46b37b5c8e23",
+      "source": "이동 중",
+      "en": "On the move"
+    },
+    {
+      "id": "msg_1c0becac6d23",
+      "source": "제동 시점",
+      "en": "When to brake"
+    },
+    {
+      "id": "msg_07949fc9f5f7",
+      "source": "선택한 상세 진단",
+      "en": "Selected detailed diagnosis"
+    },
+    {
+      "id": "msg_55f3ac7a6ccb",
+      "source": "내 훈련의 측정 기록",
+      "en": "Metrics of my training"
+    },
+    {
+      "id": "msg_191b1db0c63b",
+      "source": "기록과 리플레이 관리",
+      "en": "Record and replay management"
+    },
+    {
+      "id": "msg_9b7c7c89e43c",
+      "source": "기록 관리",
+      "en": "records management"
+    },
+    {
+      "id": "msg_4a8b322871e1",
+      "source": "기록을 내보내거나 저장한 훈련을 다시 확인합니다.",
+      "en": "Export your recordings or revisit your saved training."
+    },
+    {
+      "id": "msg_a2cdaec578fb",
+      "source": "로컬 기록 관리",
+      "en": "Local record management"
+    },
+    {
+      "id": "msg_be73ee70fa9f",
+      "source": "훈련 기록을 모두 지울까요?",
+      "en": "Should I erase all my training records?"
+    },
+    {
+      "id": "msg_ec00e5b7067b",
+      "source": "이 브라우저의 훈련 결과와 연결된 리플레이를 삭제합니다. 감도와 조작 설정은 유지됩니다. 필요한 기록은 먼저 내보내세요.",
+      "en": "Deletes replays associated with training results in this browser. Sensitivity and operating settings are retained. Export the necessary records first."
+    },
+    {
+      "id": "msg_1702ed00e32b",
+      "source": "기록을 삭제하지 못했습니다. 다시 시도하세요.",
+      "en": "Failed to delete history. Please try again."
+    },
+    {
+      "id": "msg_069e15f08097",
+      "source": "삭제 중…",
+      "en": "Deleting…"
+    },
+    {
+      "id": "msg_724616b1dd99",
+      "source": "서비스 개선을 위해 페이지 조회, 유입 유형, 훈련 시작을 익명 집계합니다. 브라우저의 추적 방지 신호를 따르며 훈련 성적은 브라우저에 저장됩니다.",
+      "en": "To improve our services, we anonymously aggregate page views, traffic types, and training starts. We follow your browser's Do Not Track signals and your training records are stored in your browser."
+    },
+    {
+      "id": "msg_6e921d0b50d3",
+      "source": "시간 제한 없는 기본기 연습",
+      "en": "Basic practice without time limit"
+    },
+    {
+      "id": "msg_4806409492cd",
+      "source": "기본기",
+      "en": "basics"
+    },
+    {
+      "id": "msg_a006d91d030e",
+      "source": "첫 발 정밀도와 표적 추적",
+      "en": "First shot precision and target tracking"
+    },
+    {
+      "id": "msg_f04a03ac7012",
+      "source": "연사 탄착군과 보정 궤적",
+      "en": "Continuous shot group and correction trajectory"
+    },
+    {
+      "id": "msg_7fc6086e6051",
+      "source": "이동 · 제동 · 발사 타이밍",
+      "en": "Movement, braking, firing timing"
+    },
+    {
+      "id": "msg_56952932ba69",
+      "source": "이동과 전술",
+      "en": "movement and tactics"
+    },
+    {
+      "id": "msg_90b041c5c60d",
+      "source": "엄폐와 노출을 이용한 각 분리",
+      "en": "Each separation using cover and exposure"
+    },
+    {
+      "id": "msg_855c8f2577c9",
+      "source": "계단과 고저차의 머리 높이",
+      "en": "Head height for stairs and elevation differences"
+    },
+    {
+      "id": "msg_f1a6496c345d",
+      "source": "착지 입력과 공중 관성",
+      "en": "Landing input and air inertia"
+    },
+    {
+      "id": "msg_ffb8e77c657c",
+      "source": "재질과 두께에 따른 관통",
+      "en": "Penetration depending on material and thickness"
+    },
+    {
+      "id": "msg_b9c893865541",
+      "source": "훈련 종류",
+      "en": "Training modes"
+    },
+    {
+      "id": "msg_75022e258289",
+      "source": "훈련 종류 선택",
+      "en": "Select training type"
+    },
+    {
+      "id": "msg_649e13317ac0",
+      "source": "측정과 분석",
+      "en": "Measurement and Analysis"
+    },
+    {
+      "id": "msg_3947d850b7a3",
+      "source": "같은 조건에서 후보 감도 비교",
+      "en": "Comparison of candidate sensitivities under the same conditions"
+    },
+    {
+      "id": "msg_9994574811ee",
+      "source": "플릭·추적·클릭 타이밍",
+      "en": "Flick/tracking/click timing"
+    },
+    {
+      "id": "msg_6b8777a5d28a",
+      "source": "빠른 표적 수",
+      "en": "fast target count"
+    },
+    {
+      "id": "msg_2da28a2c2571",
+      "source": "체력 150 · 피해량 누적",
+      "en": "Stamina 150 · Accumulated damage"
+    },
+    {
+      "id": "msg_3310c2421912",
+      "source": "훈련 구역",
+      "en": "training area"
+    },
+    {
+      "id": "msg_06e5590a2954",
+      "source": "빠른 피킹 구역",
+      "en": "Fast picking area"
+    },
+    {
+      "id": "msg_e340d7e23da5",
+      "source": "전체 전술 맵 · 자유 탐색",
+      "en": "Full tactical map · Free navigation"
+    },
+    {
+      "id": "msg_fe4cfcca541c",
+      "source": "를 누르면 일시정지합니다.",
+      "en": "Press to pause."
+    },
+    {
+      "id": "msg_a3c413f9a92e",
+      "source": "맵 변경",
+      "en": "map change"
+    },
+    {
+      "id": "msg_2e9d4ab1a67a",
+      "source": "3D 미리보기 끄기",
+      "en": "Turn off 3D preview"
+    },
+    {
+      "id": "msg_6e21769e8d8c",
+      "source": "3D 미리보기 켜기",
+      "en": "Turn on 3D preview"
+    },
+    {
+      "id": "msg_dec5d6b60c63",
+      "source": "최근 기록",
+      "en": "Recent records"
+    },
+    {
+      "id": "msg_dc09379b9be9",
+      "source": "아직 훈련 기록이 없습니다",
+      "en": "No training records yet"
+    },
+    {
+      "id": "msg_6bd1e75630db",
+      "source": "훈련을 마치면 이 브라우저에 저장됩니다.",
+      "en": "When you complete your training, it will be saved in this browser."
+    },
+    {
+      "id": "msg_d2276a8437a9",
+      "source": "기록 보기",
+      "en": "View history"
+    },
+    {
+      "id": "msg_c91390fe7f34",
+      "source": "표적 · 과제 · 봇 · 탄약",
+      "en": "Targets, Tasks, Bots, Ammunition"
+    },
+    {
+      "id": "msg_d81fecab3316",
+      "source": "훈련 소개와 사용 방법",
+      "en": "Introduction to training and how to use it"
+    },
+    {
+      "id": "msg_1b43af87c31d",
+      "source": "이동·반동·판정은 공개한 보정 모델을 사용합니다.",
+      "en": "Movement, recoil, and judgment use a publicly available correction model."
+    },
+    {
+      "id": "msg_223e5a80afb5",
+      "source": "공간과 훈련 목적",
+      "en": "Space and Training Purpose"
+    },
+    {
+      "id": "msg_deeaa4c074b4",
+      "source": "사격장부터 연결형 전술 공간까지. 연습할 각도와 이동 경로를 고르세요.",
+      "en": "From shooting ranges to connected tactical spaces. Choose the angle and path you want to practice on."
+    },
+    {
+      "id": "msg_c1d4e72092a6",
+      "source": "경로·시나리오 편집",
+      "en": "Path/Scenario Editing"
+    },
+    {
+      "id": "msg_695d3eafec91",
+      "source": "실제 엄폐물",
+      "en": "real cover"
+    },
+    {
+      "id": "msg_7abea25750be",
+      "source": "설계된 수비각",
+      "en": "designed defensive angle"
+    },
+    {
+      "id": "msg_8acd3faab4cb",
+      "source": "선택한 맵",
+      "en": "selected map"
+    },
+    {
+      "id": "msg_a4143ae90082",
+      "source": "발소리 정보와 엄폐물 피킹을 연습하는 기존 훈련 공간입니다.",
+      "en": "This is an existing training space where we practice footfall information and cover picking."
+    },
+    {
+      "id": "msg_01d1760d80d3",
+      "source": "표적 수·행동·거리와 사격 상태를 자유롭게 조정하는 기본 공간입니다.",
+      "en": "This is a basic space where you can freely adjust the number of targets, actions, distance, and shooting status."
+    },
+    {
+      "id": "msg_27c970d343c4",
+      "source": "훈련 형태",
+      "en": "training form"
+    },
+    {
+      "id": "msg_cf1d58d839f6",
+      "source": "개별 사격 훈련",
+      "en": "individual shooting training"
+    },
+    {
+      "id": "msg_aa518ad8fe73",
+      "source": "사선",
+      "en": "diagonal"
+    },
+    {
+      "id": "msg_f6d35ff4f156",
+      "source": "사용자 표적 설정",
+      "en": "User targeting"
+    },
+    {
+      "id": "msg_d6b36641795f",
+      "source": "기하 기준",
+      "en": "geometric criteria"
+    },
+    {
+      "id": "msg_74d2578d4f75",
+      "source": "원본 이동·충돌 정보",
+      "en": "Original movement/conflict information"
+    },
+    {
+      "id": "msg_b8fe515feb2d",
+      "source": "현재 맵에서 훈련",
+      "en": "Train on current map"
+    },
+    {
+      "id": "msg_b177152062b1",
+      "source": "훈련 설정으로 돌아가기",
+      "en": "Return to training settings"
+    },
+    {
+      "id": "msg_222cecfc5da3",
+      "source": "이동과 재질 훈련",
+      "en": "Movement and material training"
+    },
+    {
+      "id": "msg_f64266a10109",
+      "source": "기존 물리와 충돌을 그대로 사용합니다.",
+      "en": "Existing physics and collisions are used as is."
+    },
+    {
+      "id": "msg_1014c798a1e8",
+      "source": "수동 점프 · 경사로 · 착지 입력",
+      "en": "Manual jump/ramp/landing input"
+    },
+    {
+      "id": "msg_fb8099c92440",
+      "source": "엄폐물의 재질 · 두께 · 입사각",
+      "en": "Material/thickness/angle of incidence of cover"
+    },
+    {
+      "id": "msg_52c6326bc5da",
+      "source": "피킹 훈련 구역",
+      "en": "picking training area"
+    },
+    {
+      "id": "msg_ec61586f015e",
+      "source": "하나의 시설 안에서 이어지는 여덟 구역입니다. 이동과 피킹은 직접 수행합니다.",
+      "en": "There are eight zones within one facility. We do the moving and picking ourselves."
+    },
+    {
+      "id": "msg_3699820802cb",
+      "source": "저격 사격을 유도하고 볼트 회복 중 재진입",
+      "en": "Guide sniper fire and re-enter while recovering from the bolt"
+    },
+    {
+      "id": "msg_0b0af8603641",
+      "source": "숄더 구역 · 엄폐 복귀와 소리로 판단",
+      "en": "Shoulder area, return to cover and judge by sound"
+    },
+    {
+      "id": "msg_117309681fd2",
+      "source": "모든 맵은 자체 제작했습니다. 평면도는 기존 충돌·경로 정의에서 그리며, 맵 선택은 실제 게임의 판정이나 물리 규칙을 바꾸지 않습니다.",
+      "en": "All maps were created in-house. The floor plan is drawn from existing collision/path definitions, and map selection does not change the actual game decisions or physics rules."
+    },
+    {
+      "id": "msg_3cded61b7b8f",
+      "source": "큰 패치",
+      "en": "Major update"
+    },
+    {
+      "id": "msg_344285cc4caa",
+      "source": "작은 패치",
+      "en": "Minor update"
+    },
+    {
+      "id": "msg_dabe40819def",
+      "source": "최신 패치",
+      "en": "Latest patch"
+    },
+    {
+      "id": "msg_3a070a50e866",
+      "source": "패치 규모",
+      "en": "Update size"
+    },
+    {
+      "id": "msg_35392e80c050",
+      "source": "패치노트 검색",
+      "en": "Patch Note Search"
+    },
+    {
+      "id": "msg_6c1e15142490",
+      "source": "버전 또는 내용 검색",
+      "en": "Search for version or content"
+    },
+    {
+      "id": "msg_456a71ba4e33",
+      "source": "업데이트 목록",
+      "en": "Update list"
+    },
+    {
+      "id": "msg_7b003a42adfb",
+      "source": "검색 결과",
+      "en": "Search results"
+    },
+    {
+      "id": "msg_fdb02cbcbae4",
+      "source": "개의 업데이트 · 최신순",
+      "en": "updates · newest first"
+    },
+    {
+      "id": "msg_7e16966c79b5",
+      "source": "검색 결과가 없어요",
+      "en": "There are no search results"
+    },
+    {
+      "id": "msg_59423d4b6a44",
+      "source": "다른 단어나 버전 번호로 찾아보세요.",
+      "en": "Try searching by another word or version number."
+    },
+    {
+      "id": "msg_e36cdb8b44aa",
+      "source": "모든 업데이트 보기",
+      "en": "See all updates"
+    },
+    {
+      "id": "msg_0a788bbf12ea",
+      "source": "최신 업데이트",
+      "en": "latest update"
+    },
+    {
+      "id": "msg_e79d57410736",
+      "source": "업데이트 검증 자료",
+      "en": "Update verification data"
+    },
+    {
+      "id": "msg_d7838d5d4d5b",
+      "source": "12.01 웹 화면 개선과 전후 비교",
+      "en": "12.01 Web screen improvement and before and after comparison"
+    },
+    {
+      "id": "msg_611f24c8cf98",
+      "source": "12.00 물리·재질 개선과 검증",
+      "en": "12.00 Physics/material improvement and verification"
+    },
+    {
+      "id": "msg_5460ae689e8c",
+      "source": "11.00 변경 전후 화면과 검증",
+      "en": "11.00 Screen and verification before and after change"
+    },
+    {
+      "id": "msg_6f98aa566537",
+      "source": "3인칭 검토",
+      "en": "3rd person review"
+    },
+    {
+      "id": "msg_513f654bf73a",
+      "source": "완료된 훈련이 쌓이면 실제 명중률 추이를 표시합니다.",
+      "en": "As completed training accumulates, the actual accuracy trend is displayed."
+    },
+    {
+      "id": "msg_f9d5ac5e0a01",
+      "source": "이번 훈련의 핵심 측정값",
+      "en": "Key Measures of This Exercise"
+    },
+    {
+      "id": "msg_47b414e11f82",
+      "source": "사격·이동 세부 분석",
+      "en": "Detailed analysis of shooting and movement"
+    },
+    {
+      "id": "msg_507f95af908b",
+      "source": "탄착 · 제동 · 추적 · 발소리",
+      "en": "Impact, braking, tracking, footsteps"
+    },
+    {
+      "id": "msg_ff3e5887f892",
+      "source": "다른 배치로 훈련",
+      "en": "training with different batches"
+    },
+    {
+      "id": "msg_dff8dbd0ba25",
+      "source": "최근 기록과 비교",
+      "en": "Compare with recent records"
+    },
+    {
+      "id": "msg_230971c9936a",
+      "source": "같은 조건",
+      "en": "same conditions"
+    },
+    {
+      "id": "msg_a3edeb24ccaf",
+      "source": "같은 모드",
+      "en": "same mode"
+    },
+    {
+      "id": "msg_1294a7885225",
+      "source": "· 최근 14회",
+      "en": "· Last 14 times"
+    },
+    {
+      "id": "msg_5ec573fb2291",
+      "source": "개인 최고 ·",
+      "en": "Personal best ·"
+    },
+    {
+      "id": "msg_4cd1ebfbdb88",
+      "source": "각 클리어",
+      "en": "clear each"
+    },
+    {
+      "id": "msg_b153620b44c4",
+      "source": "공유 주소의 배치와 규칙을 검증했습니다. 시작 버튼을 눌러 훈련하세요.",
+      "en": "Verified the placement and rules of shared addresses. Press the start button to train."
+    },
+    {
+      "id": "msg_01ca215deb73",
+      "source": "공유 주소 또는 저장한 배치를 불러오지 못했습니다.",
+      "en": "Failed to load shared address or saved batch."
+    },
+    {
+      "id": "msg_c99b1f397e41",
+      "source": "지원하지 않는 자료입니다.",
+      "en": "This material is not supported."
+    },
+    {
+      "id": "msg_3a8f031d2a84",
+      "source": "사격을 새로 시작한 기록이 8회 이상 필요합니다.",
+      "en": "You need to record at least 8 new shots."
+    },
+    {
+      "id": "msg_b9a5fc5fb5ee",
+      "source": "에서 앉기와 사격 간격을 반영했습니다.",
+      "en": "Reflected sitting and shooting intervals."
+    },
+    {
+      "id": "msg_5d8bc5f6e3f4",
+      "source": "최근 전술 훈련 리플레이",
+      "en": "Recent tactical training replays"
+    },
+    {
+      "id": "msg_09805909c711",
+      "source": "가져온 플레이 리플레이",
+      "en": "Imported play replays"
+    },
+    {
+      "id": "msg_8c33d24c51ca",
+      "source": "플레이 리플레이를 읽지 못했습니다.",
+      "en": "Failed to read replay of play."
+    },
+    {
+      "id": "msg_80f9132e048f",
+      "source": "지원하지 않는 형식입니다.",
+      "en": "This format is not supported."
+    },
+    {
+      "id": "msg_7339f0b92123",
+      "source": "편집기 보기",
+      "en": "Editor view"
+    },
+    {
+      "id": "msg_7a8614d73988",
+      "source": "평면도",
+      "en": "floor plan"
+    },
+    {
+      "id": "msg_5fc23f8170e9",
+      "source": "3D 구조",
+      "en": "3D structure"
+    },
+    {
+      "id": "msg_6e818bf659fe",
+      "source": "3D 재질",
+      "en": "3D material"
+    },
+    {
+      "id": "msg_12561d0d0989",
+      "source": "시작점이나 수비수를 잡아 옮기세요. 표식을 선택한 뒤 방향키로 0.25m, Shift와 방향키로 1m 이동할 수 있습니다.",
+      "en": "Grab and move the starting point or defender. After selecting the marker, you can move it 0.25m with the arrow keys or 1m with the Shift and arrow keys."
+    },
+    {
+      "id": "msg_3e61cdb6d3fc",
+      "source": "3D 편집기를 불러오는 중입니다.",
+      "en": "Loading the 3D editor."
+    },
+    {
+      "id": "msg_dca559537049",
+      "source": "조준과 자세",
+      "en": "Aim and Posture"
+    },
+    {
+      "id": "msg_e0c492dbe852",
+      "source": "수비수 조준과 자세",
+      "en": "Defender aim and posture"
+    },
+    {
+      "id": "msg_0d589dfdc3cb",
+      "source": "기본 판단",
+      "en": "basic judgment"
+    },
+    {
+      "id": "msg_2227752d11f9",
+      "source": "헤드라인 수비수는 보이는 머리 높이에 조준합니다. 조준이 따라오기 전에 앉거나, 몸을 낮춘 수비수의 머리를 다시 잡는 연습을 할 수 있습니다.",
+      "en": "Headline defenders aim at visible head height. You can practice sitting down or grabbing the head of a lowered defender again before the aim follows."
+    },
+    {
+      "id": "msg_aa7aac63b296",
+      "source": "최근 플레이 기록 반영",
+      "en": "Reflects recent play history"
+    },
+    {
+      "id": "msg_3a4a932dce46",
+      "source": "리플레이를 읽는 중…",
+      "en": "Reading the replay..."
+    },
+    {
+      "id": "msg_72babf8cfea7",
+      "source": "플레이 리플레이 파일 반영",
+      "en": "Play replay file reflection"
+    },
+    {
+      "id": "msg_391c400bca20",
+      "source": "기본 교전 타이밍으로 복원",
+      "en": "Restore to default engagement timing"
+    },
+    {
+      "id": "msg_25952db11e3d",
+      "source": "최근 전술 기록이나 호환 리플레이 파일을 최대 12개까지 이 브라우저에서 분석합니다. 공유 코드에는 집계된 값만 저장됩니다.",
+      "en": "Analyze up to 12 recent tactical records or compatible replay files in this browser. Only aggregated values ​​are stored in shared code."
+    },
+    {
+      "id": "msg_3ed69dcaf96a",
+      "source": "사격 시작",
+      "en": "start shooting"
+    },
+    {
+      "id": "msg_6844f50c9b00",
+      "source": "회 · 앉아서 시작",
+      "en": "Sashimi · Sit down and start"
+    },
+    {
+      "id": "msg_619496ce95fa",
+      "source": "% · 앉기",
+      "en": "% · Sit"
+    },
+    {
+      "id": "msg_3e4bab951942",
+      "source": "ms · 사격 간격",
+      "en": "ms · shooting interval"
+    },
+    {
+      "id": "msg_8d358451097e",
+      "source": "보라색 진입선을 넘으면 수비수 등장",
+      "en": "When you cross the purple entry line, a defender appears."
+    },
+    {
+      "id": "msg_d4a3192b689b",
+      "source": "훈련 시작과 동시에",
+      "en": "As soon as training begins"
+    },
+    {
+      "id": "msg_c43bd260df71",
+      "source": "앞 수비수 제거 후 차례대로",
+      "en": "After eliminating the front defender,"
+    },
+    {
+      "id": "msg_5b00e792f7d3",
+      "source": "내 드릴에 저장했습니다.",
+      "en": "I saved it to my drill."
+    },
+    {
+      "id": "msg_a224b014ec6f",
+      "source": "배치를 저장하지 못했습니다.",
+      "en": "Failed to save batch."
+    },
+    {
+      "id": "msg_a2f80619cd57",
+      "source": "내 드릴에 저장",
+      "en": "Save to My Drill"
+    },
+    {
+      "id": "msg_dcfc0c269915",
+      "source": "전술 시나리오 3D 배치",
+      "en": "Tactical Scenario 3D Deployment"
+    },
+    {
+      "id": "msg_076ced65ad68",
+      "source": "3D 보기를 열 수 없습니다. 평면도나 좌표 입력을 사용하세요.",
+      "en": "Can't open 3D view. Use floor plan or coordinate input."
+    },
+    {
+      "id": "msg_38d233d00998",
+      "source": "3D 카메라 조작",
+      "en": "3D camera operation"
+    },
+    {
+      "id": "msg_b79901140359",
+      "source": "왼쪽 회전",
+      "en": "turn left"
+    },
+    {
+      "id": "msg_3adf324f85b4",
+      "source": "오른쪽 회전",
+      "en": "turn right"
+    },
+    {
+      "id": "msg_11c2e8e755e4",
+      "source": "확대",
+      "en": "zoom in"
+    },
+    {
+      "id": "msg_69d1c5307298",
+      "source": "축소",
+      "en": "zoom out"
+    },
+    {
+      "id": "msg_566c89839761",
+      "source": "선택 위치 보기",
+      "en": "View selected locations"
+    },
+    {
+      "id": "msg_e078b14a70bc",
+      "source": "전체 보기",
+      "en": "See all"
+    },
+    {
+      "id": "msg_e64f717f9859",
+      "source": "앉은 자세 보기",
+      "en": "View sitting posture"
+    },
+    {
+      "id": "msg_608ba763ad5f",
+      "source": "캐릭터를 잡아 배치하고 빈 곳을 드래그해 회전하세요. 주황색 선은 선택한 수비수의 머리 높이입니다.",
+      "en": "Grab and place your character and drag in an empty space to rotate it. The orange line is the height of the selected defender's head."
+    },
+    {
+      "id": "msg_2565ecb0192b",
+      "source": "전술 진입 경로",
+      "en": "Tactical Entry Path"
+    },
+    {
+      "id": "msg_62003983e167",
+      "source": "종",
+      "en": "bell"
+    },
+    {
+      "id": "msg_c9a09098ba57",
+      "source": "연습할 사선을 고르고 평면도에서 시작 위치와 엄폐물을 확인하세요.",
+      "en": "Pick a firing line to practice on and check your starting location and cover on the floor plan."
+    },
+    {
+      "id": "msg_38885c367c2a",
+      "source": "머리를 겨누는 수비수의 첫 탄을 앉아서 피하고, 수비수가 낮아지면 조준 높이를 바꿔보세요.",
+      "en": "Sit and dodge the defender's first shot aimed at your head, and change your aiming height when the defender gets lower."
+    },
+    {
+      "id": "msg_371b9096dc2f",
+      "source": "헤드라인 훈련 시작",
+      "en": "Headline training begins"
+    },
+    {
+      "id": "msg_6e043dcafa60",
+      "source": "배치와 봇 행동 편집",
+      "en": "Edit placement and bot behavior"
+    },
+    {
+      "id": "msg_35148ac120b7",
+      "source": "진입선 · 연속 교전 시작",
+      "en": "Entry line · Start of continuous fighting"
+    },
+    {
+      "id": "msg_62ae18421c4c",
+      "source": "드릴을 저장하지 못했습니다.",
+      "en": "Failed to save drill."
+    },
+    {
+      "id": "msg_c8d1a3edecee",
+      "source": "다른 게임 감도 변환",
+      "en": "Different game sensitivity conversion"
+    },
+    {
+      "id": "msg_252ac990d27e",
+      "source": "게임",
+      "en": "game"
+    },
+    {
+      "id": "msg_fc72d639910e",
+      "source": "게임 감도",
+      "en": "game sensitivity"
+    },
+    {
+      "id": "msg_8cab4731305e",
+      "source": "게임에서 사용한 DPI",
+      "en": "DPI used by the game"
+    },
+    {
+      "id": "msg_a199b3f2b0b9",
+      "source": "DPI를 비워 두면 현재 VALOPRAC과 같은 DPI로 계산합니다. 변환값은 비조준 360° 회전 거리 기준입니다.",
+      "en": "If DPI is left blank, it will calculate the same DPI as the current VALOPRAC. The conversion value is based on an unaimed 360° rotation distance."
+    },
+    {
+      "id": "msg_acbfa65033da",
+      "source": "변환 감도",
+      "en": "conversion sensitivity"
+    },
+    {
+      "id": "msg_e1063b3b0964",
+      "source": "변환 감도가 적용 범위 0.01–5를 벗어납니다.",
+      "en": "Conversion sensitivity is outside coverage 0.01–5."
+    },
+    {
+      "id": "msg_ee6fafe9f5b1",
+      "source": "변환 감도 적용",
+      "en": "Apply conversion sensitivity"
+    },
+    {
+      "id": "msg_8f5f2dc53340",
+      "source": "사운드",
+      "en": "sound"
+    },
+    {
+      "id": "msg_3fff9bc4ce5d",
+      "source": "화면 테마와 훈련 중 표시할 정보를 정합니다.",
+      "en": "Determine the screen theme and information to display during training."
+    },
+    {
+      "id": "msg_d9ac158582e2",
+      "source": "이동 규칙과 키를 정합니다. 감도는 별도 탭에서 조절할 수 있습니다.",
+      "en": "Set movement rules and keys. Sensitivity can be adjusted in a separate tab."
+    },
+    {
+      "id": "msg_f95f840d491e",
+      "source": "기본 감도와 정조준 배율을 따로 조절하고 회전 거리를 확인합니다.",
+      "en": "Adjust the basic sensitivity and aiming magnification separately and check the rotation distance."
+    },
+    {
+      "id": "msg_9eafc5a3306b",
+      "source": "표적을 가리지 않는 조준선을 만들고 프로필로 보관합니다.",
+      "en": "Create an unobstructed crosshair on your target and save it as a profile."
+    },
+    {
+      "id": "msg_07ea4b132660",
+      "source": "화면의 선명함과 장치에 맞는 렌더링 품질을 정합니다.",
+      "en": "Determines screen sharpness and rendering quality for your device."
+    },
+    {
+      "id": "msg_e2e8f7459356",
+      "source": "발사·발소리·확인음의 균형을 맞춥니다.",
+      "en": "Balance firing, footsteps, and confirmation sounds."
+    },
+    {
+      "id": "msg_4a189e05f39c",
+      "source": "표적, 수비수, 탄약과 발소리 훈련 조건을 정합니다.",
+      "en": "Set target, defender, ammunition and footfall training conditions."
+    },
+    {
+      "id": "msg_d3bf6536e800",
+      "source": "입력 진단과 재현 가능한 훈련을 위한 세부 정보입니다.",
+      "en": "Details for input diagnostics and reproducible training."
+    },
+    {
+      "id": "msg_b19ddf94b4c9",
+      "source": "값",
+      "en": "value"
+    },
+    {
+      "id": "msg_2e857e49c7fd",
+      "source": "자동 저장",
+      "en": "auto save"
+    },
+    {
+      "id": "msg_eabd1acb208a",
+      "source": "화면 테마",
+      "en": "screen theme"
+    },
+    {
+      "id": "msg_e2dd28b59aa3",
+      "source": "상세 진단은 필요할 때만 켜세요. 기본 조준선과 표적 판정은 표시 설정의 영향을 받지 않습니다.",
+      "en": "Turn on detailed diagnostics only when necessary. Primary crosshairs and targeting are not affected by display settings."
+    },
+    {
+      "id": "msg_3c6f0af90ed1",
+      "source": "데이터 보관",
+      "en": "data storage"
+    },
+    {
+      "id": "msg_e266ec0daedf",
+      "source": "설정과 훈련 기록은 이 브라우저에 저장됩니다. 계정이나 서버 업로드 없이 사용할 수 있습니다.",
+      "en": "Your settings and training records are saved in this browser. You can use it without an account or server upload."
+    },
+    {
+      "id": "msg_eb3cca51731a",
+      "source": "자유 훈련은 시간 제한이 없습니다. 경과 시간은 훈련을 종료하지 않습니다.",
+      "en": "Free training has no time limit. Elapsed time does not end training."
+    },
+    {
+      "id": "msg_7da997ef7500",
+      "source": "마우스 입력",
+      "en": "mouse input"
+    },
+    {
+      "id": "msg_ee872bb592e0",
+      "source": "훈련 시작 시 원시 마우스 입력을 요청합니다. 브라우저가 수락해도 운영체제의 전체 센서 경로를 검증한 것은 아닙니다.",
+      "en": "Request raw mouse input at the start of training. Even if the browser accepts it, it does not mean that the entire sensor path has been verified by the operating system."
+    },
+    {
+      "id": "msg_ac5d3de4a600",
+      "source": "기본 앉기 키",
+      "en": "default sit height"
+    },
+    {
+      "id": "msg_e8810f872112",
+      "source": "Esc로 마우스 잠금을 풀고 설정을 열 수 있습니다. Ctrl+W는 브라우저 탭을 닫을 수 있어 기본 앉기 키 C를 권장합니다.",
+      "en": "Esc unlocks your mouse and opens Settings. Ctrl+W can close browser tabs, so the default sit key C is recommended."
+    },
+    {
+      "id": "msg_c6c2a475f044",
+      "source": "발로란트 게임 감도를 그대로 입력하세요. 기본 계수는 0.07입니다. 실제 이동감은 브라우저와 마우스 환경에 따라 달라질 수 있습니다.",
+      "en": "Enter the VALORANT game sensitivity as is. The default coefficient is 0.07. The actual feeling of movement may vary depending on the browser and mouse environment."
+    },
+    {
+      "id": "msg_3eb9f666d95d",
+      "source": "다른 입력 보정이 필요한 경우에만 변경하세요.",
+      "en": "Change only if you need different input compensation."
+    },
+    {
+      "id": "msg_cd34cffada9a",
+      "source": "해상도는 브라우저 창 크기를 따릅니다. 렌더링 배율은 입체 화면의 선명함과 그래픽 부하를 조절합니다.",
+      "en": "Resolution follows browser window size. The rendering scale controls the sharpness and graphics load of the stereoscopic screen."
+    },
+    {
+      "id": "msg_18cb34a33ff2",
+      "source": "프레임 제한과 관계없이 시뮬레이션은 초당 120회 연산합니다. 프레임 설정은 실측 성능을 보장하지 않습니다.",
+      "en": "Regardless of the frame limit, the simulation runs at 120 operations per second. Frame settings do not guarantee ground truth performance."
+    },
+    {
+      "id": "msg_58019ecf5d5c",
+      "source": "장치에 맞는 품질",
+      "en": "Quality suited to your device"
+    },
+    {
+      "id": "msg_99111c3fba94",
+      "source": "사운드 균형",
+      "en": "sound balance"
+    },
+    {
+      "id": "msg_104f51d8e67c",
+      "source": "버튼을 누른 이후 소리가 활성화됩니다. 음량은 듣는 소리만 조절하며 봇의 청각 판정에는 영향을 주지 않습니다.",
+      "en": "The sound is activated after pressing the button. Volume only adjusts the sound heard and does not affect the bot's hearing judgment."
+    },
+    {
+      "id": "msg_5a2ccfa189f0",
+      "source": "표적과 탄약",
+      "en": "targets and ammunition"
+    },
+    {
+      "id": "msg_0547efdc5aca",
+      "source": "수비수와 교전",
+      "en": "engage the defender"
+    },
+    {
+      "id": "msg_59a7ce80f1f8",
+      "source": "발소리 누적과 잠입 훈련",
+      "en": "Footstep accumulation and infiltration training"
+    },
+    {
+      "id": "msg_4c4ad45be691",
+      "source": "선택형 진단",
+      "en": "optional diagnosis"
+    },
+    {
+      "id": "msg_429798e16ad0",
+      "source": "진단에는 실제 속도와 처리 시간이 표시됩니다. 운영체제 가속, 센서 주파수나 입력부터 화면까지의 지연을 직접 측정한 값은 아닙니다.",
+      "en": "Diagnostics displays actual speed and processing time. It is not a direct measure of operating system acceleration, sensor frequency, or delay from input to screen."
+    },
+    {
+      "id": "msg_1c25b9ea5bd8",
+      "source": "재현 가능한 훈련",
+      "en": "Reproducible Training"
+    },
+    {
+      "id": "msg_c515c337408f",
+      "source": "현재 이동 모델의 보정 수치",
+      "en": "Calibration values for the current movement model"
+    },
+    {
+      "id": "msg_9d1446de8834",
+      "source": "독립 보정 모델이며 실제 게임의 비공개 상수와 동일함을 뜻하지 않습니다. 무기·걷기·앉기 조건은 최종 속도에, 연사·착지 오차는 사격에 별도로 적용됩니다.",
+      "en": "It is an independent calibration model and is not meant to be identical to the private constants of the actual game. Weapon, walking, and crouching conditions apply separately to final speed, and firing and landing errors apply separately to shooting."
+    },
+    {
+      "id": "msg_ba074eac1547",
+      "source": "테마를 제외한 훈련 설정을 기본값으로 되돌릴까요?",
+      "en": "Should I revert the training settings, excluding themes, to default?"
+    },
+    {
+      "id": "msg_e31b12a67912",
+      "source": "엄폐물",
+      "en": "cover"
+    },
+    {
+      "id": "msg_3603b4581160",
+      "source": "기본",
+      "en": "basic"
+    },
+    {
+      "id": "msg_8aa69e05b052",
+      "source": "연사",
+      "en": "speaker"
+    },
+    {
+      "id": "msg_209485254369",
+      "source": "공중·착지",
+      "en": "midair/landing"
+    },
+    {
+      "id": "msg_98dbce17ae35",
+      "source": "발사별 사격 오차",
+      "en": "Shooting error per shot"
+    },
+    {
+      "id": "msg_b93dabba8f31",
+      "source": "최근 상세 기록",
+      "en": "Recent detailed records"
+    },
+    {
+      "id": "msg_ec8594cd6f74",
+      "source": "시간순 발사 선택",
+      "en": "Chronological launch selection"
+    },
+    {
+      "id": "msg_6b41619d0a7c",
+      "source": "이동 정확도 기준",
+      "en": "Movement accuracy criteria"
+    },
+    {
+      "id": "msg_d9f427c3257e",
+      "source": "전",
+      "en": "Before"
+    },
+    {
+      "id": "msg_084a4bd8972f",
+      "source": "후",
+      "en": "After"
+    },
+    {
+      "id": "msg_bae140c99c57",
+      "source": "실제 탄도와 표적 머리 사이",
+      "en": "Between actual trajectory and target head"
+    },
+    {
+      "id": "msg_a870d858656c",
+      "source": "이 발 리플레이",
+      "en": "hair replay"
+    },
+    {
+      "id": "msg_169e38f96ec3",
+      "source": "이전 발소리 시제품입니다. 노출 사망은 지원하지 않습니다.",
+      "en": "This is the previous footsteps sound prototype. Exposure deaths are not supported."
+    },
+    {
+      "id": "msg_2f6f0bfe1773",
+      "source": "실제 엄폐물과 이동 경로 평면도",
+      "en": "Physical cover and movement path plan"
+    },
+    {
+      "id": "msg_1b50b863153e",
+      "source": "현재 맵",
+      "en": "current map"
+    },
+    {
+      "id": "msg_6317296bd180",
+      "source": "훈련 · 검토 · 직접 구성",
+      "en": "Training · Review · Direct configuration"
+    },
+    {
+      "id": "msg_8778ef9c81a7",
+      "source": "2MB 이하의 RiotUserSettings.ini 파일을 선택하세요.",
+      "en": "Select a RiotUserSettings.ini file that is no larger than 2 MB."
+    },
+    {
+      "id": "msg_801b2663c480",
+      "source": "이 파일에서 가져올 수 있는 설정을 찾지 못했습니다.",
+      "en": "We couldn't find any settings to import from this file."
+    },
+    {
+      "id": "msg_d33c1805e418",
+      "source": "설정 파일을 읽지 못했습니다.",
+      "en": "Failed to read configuration file."
+    },
+    {
+      "id": "msg_c0d7fa4e9ff4",
+      "source": "발로란트 설정 가져오기",
+      "en": "Import VALORANT Settings"
+    },
+    {
+      "id": "msg_fe524a6b2e16",
+      "source": "직접 고른 RiotUserSettings.ini의 감도와 활성 조준선을 브라우저에서 읽습니다.",
+      "en": "Sensitivity and active crosshairs are read by the browser from hand-picked RiotUserSettings.ini."
+    },
+    {
+      "id": "msg_845f5c6c8e36",
+      "source": "설정 파일",
+      "en": "config file"
+    },
+    {
+      "id": "msg_0342497f6a58",
+      "source": "선택한 설정을 적용했습니다.",
+      "en": "The selected settings have been applied."
+    },
+    {
+      "id": "msg_109543218f71",
+      "source": "가져온 설정 적용",
+      "en": "Apply imported settings"
+    },
+    {
+      "id": "msg_0a6dfbe1c013",
+      "source": "가져오기 전 설정을 복원했습니다.",
+      "en": "Restored settings before import."
+    },
+    {
+      "id": "msg_64485f820fa0",
+      "source": "가져오기 되돌리기",
+      "en": "Import Revert"
+    },
+    {
+      "id": "msg_ce052493bbe8",
+      "source": "장착 무기 3D 보기",
+      "en": "Equipped Weapon 3D View"
+    },
+    {
+      "id": "msg_7afaea5380f9",
+      "source": "3D 보기를 열 수 없습니다. 무기 도식에서 스킨을 계속 미리 볼 수 있습니다.",
+      "en": "Can't open 3D view. You can still preview skins in the weapon schematic."
+    },
+    {
+      "id": "msg_aa288af5dc27",
+      "source": "무기 카메라 조작",
+      "en": "weapon camera controls"
+    },
+    {
+      "id": "msg_4713cda71e90",
+      "source": "소음 소총",
+      "en": "silenced rifle"
+    },
+    {
+      "id": "msg_bdc46f8d3e78",
+      "source": "거리에 흔들리지 않는 첫 발을 연습하세요.",
+      "en": "Practice your first step without being swayed by the distance."
+    },
+    {
+      "id": "msg_e1194aeda589",
+      "source": "짧은 연사와 이동 뒤 멈추는 타이밍을 익히세요.",
+      "en": "Learn the timing of short bursts and pauses after movement."
+    },
+    {
+      "id": "msg_3898d19ab047",
+      "source": "한 번의 조준과 한 발의 정확도에 집중하세요.",
+      "en": "Focus on one aim and one shot accuracy."
+    },
+    {
+      "id": "msg_15cd42a1671c",
+      "source": "스코프 조준과 볼트 회복 사이의 판단을 연습하세요.",
+      "en": "Practice your judgment between scope aiming and bolt recovery."
+    },
+    {
+      "id": "msg_6c74506b63ed",
+      "source": "미터 이상",
+      "en": "more than a meter"
+    },
+    {
+      "id": "msg_57c911c23463",
+      "source": "훈련 장비",
+      "en": "training equipment"
+    },
+    {
+      "id": "msg_b49d01fca926",
+      "source": "조준 방식과 훈련 목적에 맞춰 선택하세요. 장착은 바로 적용됩니다.",
+      "en": "Choose according to your aiming method and training purpose. Installation takes effect immediately."
+    },
+    {
+      "id": "msg_258d9e4c30fd",
+      "source": "사용할 무기",
+      "en": "weapon to use"
+    },
+    {
+      "id": "msg_b8e877cb3ede",
+      "source": "4종",
+      "en": "4 types"
+    },
+    {
+      "id": "msg_8d1a750c9351",
+      "source": "선택",
+      "en": "selection"
+    },
+    {
+      "id": "msg_07b38d45fa78",
+      "source": "무기를 바꿔도 감도와 훈련 설정은 유지됩니다.",
+      "en": "Sensitivity and training settings are maintained even if you change weapons."
+    },
+    {
+      "id": "msg_db203334ea81",
+      "source": "선택한 무기 정보",
+      "en": "Selected weapon information"
+    },
+    {
+      "id": "msg_9c216c88bdac",
+      "source": "현재 장착",
+      "en": "Currently equipped"
+    },
+    {
+      "id": "msg_b7abd5c72d2d",
+      "source": "3D 무기 보기 닫기",
+      "en": "Close 3D weapon view"
+    },
+    {
+      "id": "msg_e4a44b00d051",
+      "source": "무기 3D로 보기",
+      "en": "View Weapons in 3D"
+    },
+    {
+      "id": "msg_ac6a8f5485c1",
+      "source": "3D 무기를 불러오는 중입니다.",
+      "en": "Loading 3D weapons."
+    },
+    {
+      "id": "msg_0957ed84de05",
+      "source": "무기 스킨",
+      "en": "weapon skin"
+    },
+    {
+      "id": "msg_cd56b46dc748",
+      "source": "무기 스킨을 저장하지 못했습니다.",
+      "en": "Failed to save weapon skin."
+    },
+    {
+      "id": "msg_a790611120d4",
+      "source": "비조준 초탄 산포",
+      "en": "Non-aimed first shot dispersion"
+    },
+    {
+      "id": "msg_a330d53cb3cc",
+      "source": "근거리 피해",
+      "en": "close range damage"
+    },
+    {
+      "id": "msg_ed037b5dd952",
+      "source": "거리별 피해와 사격 특성",
+      "en": "Damage and shooting characteristics by distance"
+    },
+    {
+      "id": "msg_3507206ef228",
+      "source": "거리별 피해",
+      "en": "Damage by Distance"
+    },
+    {
+      "id": "msg_51e49276d394",
+      "source": "거리",
+      "en": "distance"
+    },
+    {
+      "id": "msg_cd22564f1288",
+      "source": "장착 시간",
+      "en": "mounting time"
+    },
+    {
+      "id": "msg_f7eaced9b85f",
+      "source": "정조준 초탄 산포",
+      "en": "Aiming first shot dispersion"
+    },
+    {
+      "id": "msg_32ec07f42866",
+      "source": "한 번 클릭하면 한 발을 발사합니다. 사격 뒤",
+      "en": "Click once to fire one shot. After shooting"
+    },
+    {
+      "id": "msg_653d7e3ba810",
+      "source": "초의 볼트 회복이 필요하며, 이동·비조준·착지 직후에는 오차가 커집니다.",
+      "en": "A second bolt recovery is required, and the error increases immediately after moving, not aiming, or landing."
+    },
+    {
+      "id": "msg_bc19e88574c0",
+      "source": "클릭마다 한 발을 발사합니다. 연속 발사 중에는 정확도가 회복될 시간을 확보하세요.",
+      "en": "Fires one shot per click. Allow time for accuracy to recover during continuous firing."
+    },
+    {
+      "id": "msg_f0093112b71d",
+      "source": "이동 속도와 연사 횟수에 따라 산포가 커집니다. 멈춘 뒤 짧게 사격하는 연습부터 시작하세요.",
+      "en": "The spread increases depending on movement speed and number of shots. Start by practicing stopping and shooting briefly."
+    },
+    {
+      "id": "msg_fe6241950d7b",
+      "source": "반동·회복·산포는 보정 가능한 훈련 모델이며, 실제 게임과 완전한 일치는 검증하지 않았습니다.",
+      "en": "Recoil, recovery, and dispersion are calibrated training models, and full consistency with actual games has not been verified."
+    },
+    {
+      "id": "msg_d6b37b02a0c9",
+      "source": "이 무기로 훈련 준비",
+      "en": "Get ready to train with this weapon"
+    },
+    {
+      "id": "msg_252ae48548df",
+      "source": "밝은 테마",
+      "en": "bright theme"
+    },
+    {
+      "id": "msg_ad4de2e0bb84",
+      "source": "어두운 테마",
+      "en": "dark theme"
+    },
+    {
+      "id": "msg_d87ab725df97",
+      "source": "시스템 설정",
+      "en": "system settings"
+    },
+    {
+      "id": "msg_20060bf56966",
+      "source": "시스템 설정을 따릅니다. 현재",
+      "en": "Follow your system settings. present"
+    },
+    {
+      "id": "msg_e0a1b6e9baba",
+      "source": "테마입니다.",
+      "en": "It's a theme."
+    },
+    {
+      "id": "msg_437e6a7b7181",
+      "source": "어두운",
+      "en": "dark"
+    },
+    {
+      "id": "msg_123e1f17f568",
+      "source": "밝은",
+      "en": "bright"
+    },
+    {
+      "id": "msg_2680aaf2c5fa",
+      "source": "시스템 설정을 확인할 수 없어 밝은 테마를 사용합니다.",
+      "en": "Unable to check system settings, use light theme."
+    },
+    {
+      "id": "msg_6bcb8ce39670",
+      "source": "화면의 색만 바뀝니다. 진행 중인 훈련과 설정은 유지됩니다.",
+      "en": "Only the color of the screen changes. Ongoing training and settings are maintained."
+    },
+    {
+      "id": "msg_6061718ca95b",
+      "source": "엄폐에서 머리 높이에 조준한 채 진입하세요. 첫 탄이 나오기 전에 앉아서 피하고, 수비수가 자세를 낮추면 머리 높이를 다시 맞추세요.",
+      "en": "Enter from cover, aiming at head height. Sit down and dodge before the first shot is fired, and when the defender lowers his stance, re-adjust his head height."
+    },
+    {
+      "id": "msg_f154144b66ff",
+      "source": "발로란트 대기샷 연습",
+      "en": "VALORANT angle-holding practice"
+    },
+    {
+      "id": "msg_d509ffc2ded7",
+      "source": "훈련 목록에서 각체크·피킹을 선택하고 훈련을 시작하세요. 엄폐물 옆에서 상대가 나올 각을 정한 뒤, 예상 머리 높이에 조준선을 미리 두세요. 표적이 시야에 들어오면 첫발을 한 발씩 끊어 쏘고, 빗나가면 엄폐 뒤에서 각을 다시 잡으세요.",
+      "en": "Choose Angle Clearing and Peeking from the training list. Hold the angle beside cover and pre-aim at the expected head height. Tap once when the target appears. If you miss, return to cover and reset your angle."
+    },
+    {
+      "id": "msg_ff6b6b97924d",
+      "source": "대기샷",
+      "en": "holding an angle"
+    },
+    {
+      "id": "msg_be3e316662f5",
+      "source": "현재 버전",
+      "en": "Current version"
+    },
+    {
+      "id": "msg_c0e531a442e4",
+      "source": "개 항목",
+      "en": "items"
+    },
+    {
+      "id": "msg_64ff6a0546e9",
+      "source": "리플레이 안에서 1–4초 구간을 선택하세요.",
+      "en": "Select a 1–4 second section within the replay."
+    },
+    {
+      "id": "msg_f7265d53fb5d",
+      "source": "일반 훈련이나 전술 시나리오에서 기록한 이동 구간을 선택하세요.",
+      "en": "Select a movement segment recorded during general training or tactical scenarios."
+    },
+    {
+      "id": "msg_bbde7f251e91",
+      "source": "점프·낙하·위치 복원·재시작이 없는 지면 이동 구간을 선택하세요.",
+      "en": "Select a ground movement section that does not involve jumping, falling, restoring position, or restarting."
+    },
+    {
+      "id": "msg_847e333f301e",
+      "source": "위치나 앉기 자세가 바뀌는 구간을 선택하세요.",
+      "en": "Select a section where your position or sitting posture changes."
+    },
+    {
+      "id": "msg_d5661506bb29",
+      "source": "이동 재현 · 차고 문틀",
+      "en": "Reproduction of movement · Garage door frame"
+    },
+    {
+      "id": "msg_13831422bc0c",
+      "source": "이동 재현",
+      "en": "movement reproduction"
+    },
+    {
+      "id": "msg_8b3cbee4c65a",
+      "source": "이동 재현 길이는 1–4초입니다.",
+      "en": "Movement reproduction length is 1–4 seconds."
+    },
+    {
+      "id": "msg_6d1fa3ae6562",
+      "source": "이동 재현에는 정수 좌표와 앉기 비율이 필요합니다.",
+      "en": "Movement reproduction requires integer coordinates and a crouching ratio."
+    },
+    {
+      "id": "msg_7e2b3f194b50",
+      "source": "이동 X",
+      "en": "move"
+    },
+    {
+      "id": "msg_1984560a59d2",
+      "source": "이동 높이",
+      "en": "moving height"
+    },
+    {
+      "id": "msg_500b83eebe17",
+      "source": "이동 Z",
+      "en": "Go Z"
+    },
+    {
+      "id": "msg_e775a4b34bec",
+      "source": "앉기 비율",
+      "en": "sitting ratio"
+    },
+    {
+      "id": "msg_098cc9c1741e",
+      "source": "이동 재현은 배치 지점에서 시작해야 합니다.",
+      "en": "Movement reproduction must start from the deployment point."
+    },
+    {
+      "id": "msg_c16b695c2c1d",
+      "source": "이동 재현의 한 구간이 너무 큽니다. 순간이동이나 끊긴 구간을 제외하세요.",
+      "en": "One section of the movement reproduction is too large. Exclude teleportation or disconnected sections."
+    },
+    {
+      "id": "msg_ca56cf03e0b3",
+      "source": "이동 경로 회전",
+      "en": "Movement path rotation"
+    },
+    {
+      "id": "msg_0014a52c3dfd",
+      "source": "이동 경로는 90도 단위로 회전합니다.",
+      "en": "The path rotates in 90 degree increments."
+    },
+    {
+      "id": "msg_7ed11c1233f9",
+      "source": "경로 출처",
+      "en": "path source"
+    },
+    {
+      "id": "msg_6ab85eebffc4",
+      "source": "좌우 반전",
+      "en": "Mirror horizontally"
+    },
+    {
+      "id": "msg_880e95e53e75",
+      "source": "수비수 이동 경로가 너무 복잡합니다.",
+      "en": "The defender's movement path is too complicated."
+    },
+    {
+      "id": "msg_0ed205b5532e",
+      "source": "초: 벽·천장·경계 또는 바닥을 확인하세요.",
+      "en": "SECOND: Check the walls, ceiling, perimeter or floor."
+    },
+    {
+      "id": "msg_7d8d211f6ea7",
+      "source": "이동 경로가 다른 수비수의 시작 위치와 겹칩니다.",
+      "en": "Your path overlaps with another defender's starting location."
+    },
+    {
+      "id": "msg_a2876d52e33c",
+      "source": "이동 재현이 연결된 수비수는 각 고정을 선택하세요.",
+      "en": "Defenders with movement reproduction connected select each fixation."
+    },
+    {
+      "id": "msg_ff70e9d00355",
+      "source": "이동 재현 대조",
+      "en": "movement reproduction contrast"
+    },
+    {
+      "id": "msg_ec2d24eb7b44",
+      "source": "같은 배치에서 이동과 고정 비교",
+      "en": "Compare moving and fixing in the same batch"
+    },
+    {
+      "id": "msg_8f58fbd8cce3",
+      "source": "같은 초기 배치·시드·무기·측정 설정과 일치하는 최근 기록을 조건별로 최대 5회 보여줍니다.",
+      "en": "Shows up to 5 recent records matching the same initial batch, seed, weapon, and measurement settings for each condition."
+    },
+    {
+      "id": "msg_67a39ccacf77",
+      "source": "평균 각 클리어",
+      "en": "average angle clear"
+    },
+    {
+      "id": "msg_28af2ee72dc1",
+      "source": "평균 사망",
+      "en": "average death"
+    },
+    {
+      "id": "msg_62f3e93b22eb",
+      "source": "사격한 훈련의 첫 발 헤드샷",
+      "en": "First headshot in shooting training"
+    },
+    {
+      "id": "msg_8a98dfb08e97",
+      "source": "고정",
+      "en": "fixed"
+    },
+    {
+      "id": "msg_59c3473328b2",
+      "source": "경로 재현",
+      "en": "Path reproduction"
+    },
+    {
+      "id": "msg_be6032808e4f",
+      "source": "같은 배치에서 고정 수비수와 훈련",
+      "en": "Training with stationary defenders in the same batch"
+    },
+    {
+      "id": "msg_7d0bb57ebe21",
+      "source": "같은 배치에서 경로 재현 수비수와 훈련",
+      "en": "Train with route replay defenders in the same batch"
+    },
+    {
+      "id": "msg_d009a2c78a02",
+      "source": "고정판을 실행하려면 진입로에서 확인할 수 있는 위치에 수비수를 배치하세요.",
+      "en": "To execute a lockboard, place a defender in a position visible from the ramp."
+    },
+    {
+      "id": "msg_ab1d6fa532eb",
+      "source": "빈 원은 대체 배치입니다.",
+      "en": "The empty circles are alternate placements."
+    },
+    {
+      "id": "msg_d17610e18d64",
+      "source": "보라색 선은 수비수가 재현할 이동 경로입니다.",
+      "en": "The purple line is the movement path the defender will recreate."
+    },
+    {
+      "id": "msg_ee9a33617f8d",
+      "source": "각 고정 수비수는 선택된 위치에서 대기합니다.",
+      "en": "Each stationary defender waits at a selected location."
+    },
+    {
+      "id": "msg_c4c0d5d29e29",
+      "source": "이동 구간을 연결했습니다. 평면도와 배치 검증 결과를 확인하세요.",
+      "en": "The travel sections have been connected. Check the floor plan and layout verification results."
+    },
+    {
+      "id": "msg_602d32798075",
+      "source": "이동 구간을 읽을 수 없습니다.",
+      "en": "The travel segment cannot be read."
+    },
+    {
+      "id": "msg_f5fae726a2d4",
+      "source": "수비수 이동 재현",
+      "en": "Defender movement reproduction"
+    },
+    {
+      "id": "msg_d0cdfa4d5433",
+      "source": "리플레이 경로 재현",
+      "en": "Reproduce the replay path"
+    },
+    {
+      "id": "msg_71190178d33a",
+      "source": "같은 맵에서 기록한 지면 이동과 앉기 자세를 1–4초 구간으로 잘라 이 수비수에게 연결합니다.",
+      "en": "Ground movements and sit positions recorded from the same map are cut into 1–4 second segments and stitched to this defender."
+    },
+    {
+      "id": "msg_7551a3bab7b6",
+      "source": "이동을 가져올 리플레이",
+      "en": "Replay to get the move"
+    },
+    {
+      "id": "msg_af61c94d35ff",
+      "source": "시작 시점 ·",
+      "en": "When to start ·"
+    },
+    {
+      "id": "msg_b7bb6c71667d",
+      "source": "길이 · 초",
+      "en": "Length · Seconds"
+    },
+    {
+      "id": "msg_ea9ed203156b",
+      "source": "리플레이 확인 중…",
+      "en": "Checking replay..."
+    },
+    {
+      "id": "msg_974d71cfc07b",
+      "source": "선택한 구간 연결",
+      "en": "Connect selected section"
+    },
+    {
+      "id": "msg_2f57b5b1c41f",
+      "source": "이 맵에서 이동하고 훈련을 기록으로 저장하면 여기에서 구간을 고를 수 있습니다.",
+      "en": "As you move through this map and save your training as a record, you can pick a section here."
+    },
+    {
+      "id": "msg_3a796cd281d9",
+      "source": "플레이 리플레이에서 재현",
+      "en": "Reproduced in play replay"
+    },
+    {
+      "id": "msg_60dadc4f08b2",
+      "source": "예제 경로",
+      "en": "example path"
+    },
+    {
+      "id": "msg_643b0b686c29",
+      "source": "미리보기 시점 ·",
+      "en": "Preview time ·"
+    },
+    {
+      "id": "msg_bfb2310a5ea2",
+      "source": "경로 회전",
+      "en": "path rotation"
+    },
+    {
+      "id": "msg_cb1c92a8c341",
+      "source": "경로 연결 해제",
+      "en": "Disconnect path"
+    },
+    {
+      "id": "msg_8d0af4cb7bc9",
+      "source": "내가 움직인 구간을 수비수에게 연결하고, 같은 위치를 지키는 고정 수비수와 결과를 비교하세요.",
+      "en": "Connect the section you moved to the defender and compare the results with the fixed defender guarding the same position."
+    },
+    {
+      "id": "msg_4c83dfde1a70",
+      "source": "재현 수비수 훈련",
+      "en": "Jaehyun defender training"
+    },
+    {
+      "id": "msg_8f6591365dc8",
+      "source": "내 리플레이로 편집",
+      "en": "Edit with my replays"
     }
   ]
 }

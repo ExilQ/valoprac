@@ -12,14 +12,14 @@ import {ReplayRecorder} from '../engine/replay/recording';
 import {ReplayPlayer} from '../engine/replay/playback';
 import {simulationChecksum} from '../engine/replay/integrity';
 import {emptyInput} from '../engine/types';
-import {getLocale,setLocale,initializeKoreanInterface,LOCALE_STORAGE_KEY,subscribeLocale,translateText,message,localeCatalogInfo,clearMissingTranslations} from '../i18n/locale';
+import {getLocale,setLocale,initializeKoreanInterface,initializeLocale,LOCALE_STORAGE_KEY,subscribeLocale,translateText,message,localeCatalogInfo,clearMissingTranslations} from '../i18n/locale';
 import {localizedHostProps} from '../i18n/host';
 import english from '../i18n/catalog.en.json';
 
 const initialServerSnapshot={...useApp.getInitialState()},initialLiveSnapshot=useApp.getState();
 function presentState(patch:Partial<ReturnType<typeof useApp.getState>>){Object.assign(useApp.getInitialState(),patch);useApp.setState(patch);}
 afterEach(async()=>{Object.assign(useApp.getInitialState(),initialServerSnapshot);useApp.setState(initialLiveSnapshot);await setLocale('ko');clearMissingTranslations();vi.unstubAllGlobals();});
-describe('Korean product presentation retains compatible localization utilities and canonical data',()=>{
+describe('Korean and English presentation preserve canonical data',()=>{
  it('defaults to Korean and validates the structured English catalog',()=>{
   expect(getLocale()).toBe('ko');const ids=new Set<string>();for(const e of english.entries){expect(e.id).toMatch(/^msg_[a-f0-9]{12}$/);expect(ids.has(e.id)).toBe(false);ids.add(e.id);expect(e.source.trim()).not.toBe('');expect(e.en.trim()).not.toBe('');expect(e.en).not.toMatch(/[가-힣]/);}
  });
@@ -32,17 +32,20 @@ describe('Korean product presentation retains compatible localization utilities 
   const original={children:'훈련 기록',value:'훈련 기록',href:'/훈련',onClick:click,'aria-label':'훈련 기록'},localized=localizedHostProps('button',original) as typeof original;
   expect(localized.children).not.toBe(original.children);expect(localized.value).toBe(original.value);expect(localized.href).toBe(original.href);expect(localized.onClick).toBe(click);
   expect(localizedHostProps('option',{'data-locale':'literal',children:'훈련 기록'})).toEqual({'data-locale':'literal',children:'훈련 기록'});expect(localizedHostProps('code',{children:'훈련 기록'})).toEqual({children:'훈련 기록'});
+  expect(localizedHostProps('optgroup',{label:'기본기'})).toEqual({label:translateText('기본기')});
   expect(renderToStaticMarkup(<p><>훈련 기록</></p>)).not.toMatch(/[가-힣]/);
  });
- it('normalizes the retired English preference and renders the Korean application, eight settings tabs and inventory without changing settings',async()=>{
+ it('restores the saved English preference and renders the Korean application after switching back',async()=>{
   const values=new Map<string,string>([[LOCALE_STORAGE_KEY,'en']]);vi.stubGlobal('localStorage',{getItem:(key:string)=>values.get(key)??null,setItem:(key:string,value:string)=>{values.set(key,value);}});
   await setLocale('en');const settings=structuredClone(DEFAULT_SETTINGS);presentState({settings,mode:'free',activeTab:'training',screen:'menu',history:[],notice:''});const before=JSON.stringify(settings);
-  initializeKoreanInterface();expect(getLocale()).toBe('ko');expect(values.get(LOCALE_STORAGE_KEY)).toBe('ko');
+  await initializeLocale();expect(getLocale()).toBe('en');expect(values.get(LOCALE_STORAGE_KEY)).toBe('en');
+  await setLocale('ko');expect(values.get(LOCALE_STORAGE_KEY)).toBe('ko');
   const screens=[renderToStaticMarkup(<App/>),...(['general','controls','sensitivity','crosshair','graphics','audio','training','advanced'] as const).map(tab=>renderToStaticMarkup(<SettingsPanel initialTab={tab}/>)),renderToStaticMarkup(<WeaponSelection/>),renderToStaticMarkup(<History/>)];
   const labels=['훈련','일반','조작','감도','조준점','그래픽','사운드','훈련','고급','밴달','훈련 기록'];
-  for(let index=0;index<screens.length;index++){const visible=screens[index].replace(/<[^>]*>/g,' ');expect(visible).toContain(labels[index]);expect(screens[index]).not.toContain('aria-label="인터페이스 언어"');expect(screens[index]).not.toContain('>English<');}
+  for(let index=0;index<screens.length;index++){const visible=screens[index].replace(/<[^>]*>/g,' ');expect(visible).toContain(labels[index]);}
+  expect(screens[0]).toContain('aria-label="Language"');expect(screens[0]).toContain('>English<');
   expect(useApp.getState().settings).toBe(settings);expect(JSON.stringify(settings)).toBe(before);
-  console.log(JSON.stringify({benchmark:'korean-primary-coverage',screens:screens.length,settingsTabs:8,retiredEnglishPreferenceNormalized:true,settingsUnchanged:true}));
+  console.log(JSON.stringify({benchmark:'korean-primary-coverage',screens:screens.length,settingsTabs:8,savedLanguageRetained:true,settingsUnchanged:true}));
  });
  it('keeps a real replay and canonical state identical across language changes',async()=>{
   const s=new Simulation('free','rifleA',structuredClone(DEFAULT_SETTINGS)),r=new ReplayRecorder(s);s.running=true;for(let n=0;n<120;n++)s.step(1/120,{...emptyInput(),fire:n%30===0,firePresses:n%30===0?1:0});

@@ -2,6 +2,7 @@ import {describe,expect,it} from 'vitest';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {PatchNotes} from '../ui/PatchNotes';
 import {entries,filterPatchEntries} from '../ui/patchNotesData';
+import englishPatches from '../i18n/patches.en.json';
 
 describe('Readable, searchable patch history',()=>{
  it('starts small patch numbering at .01 after each large patch and searches old versions and descriptions',()=>{
@@ -28,6 +29,19 @@ describe('Readable, searchable patch history',()=>{
   expect(filterPatchEntries('major',word).every(entry=>major.includes(entry))).toBe(true);
   expect(filterPatchEntries('minor','쌓아 둔 기록').map(entry=>entry.version)).toEqual(['12.14']);
   expect(filterPatchEntries('all','no-such-update-123456789')).toEqual([]);
+ });
+ it('provides searchable English text for every patch and preserves version aliases',()=>{
+  expect(Object.keys(englishPatches)).toHaveLength(entries.length);
+  const english=entries.map(entry=>{
+   const copy=englishPatches[entry.version as keyof typeof englishPatches];
+   expect(copy?.title).toBeTruthy();
+   expect(copy?.description).toBeTruthy();
+   expect(copy?.changes.length).toBe(entry.changes.length);
+   expect(JSON.stringify(copy)).not.toMatch(/[가-힣]/);
+   return {...entry,...copy};
+  });
+  expect(filterPatchEntries('all','review lab',english).map(entry=>entry.version)).toContain('12.14');
+  expect(filterPatchEntries('minor','06.01',english).map(entry=>entry.version)).toEqual(['6.01']);
  });
  it('provides a labeled native dialog, search, filter states and initially expanded latest release without losing history',()=>{
   const html=renderToStaticMarkup(<PatchNotes/>);

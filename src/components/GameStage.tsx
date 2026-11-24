@@ -1,3 +1,4 @@
+import {LanguageSelect} from '../i18n/LanguageSelect';
 import {ExerciseHUD,ExerciseResults} from '../ui/ExerciseTraining';
 import {MovementPracticePanel} from '../ui/MovementPracticePanel';
 import {navigate} from '../app/navigation';
@@ -67,6 +68,7 @@ export function GameStage({preview=false}:{preview?:boolean}){
       {inspectHud&&!locked&&<aside className="hud-inspection-controls" role="toolbar" aria-label="훈련 정보 검토"><span>훈련 일시정지 · 정보를 펼쳐 확인하세요</span><button className="secondary-button" onClick={()=>setInspectHud(false)}>설정으로 돌아가기</button><button className="primary-button" disabled={telemetry.graphicsReady===false} onClick={()=>resume()}>훈련 계속하기</button></aside>}
       {!locked&&!inspectHud&&<div className="pause-overlay">{exerciseResult?<div className="pause-card"><ExerciseResults session={exerciseResult} onRetry={retryExercise} onDetails={()=>{navigate('/results.html');useApp.setState({screen:'results'});}} onExit={menu}/></div>:<div className="pause-card"><div className="pause-intro">
         <header className="training-brief">
+          <div className="training-brief-language"><LanguageSelect/></div>
           <p className="training-brief-state">
             {started?<Pause size={15} aria-hidden="true"/>:<CrosshairIcon size={17} aria-hidden="true"/>}
             {death?'훈련 실패':started?'훈련 일시정지':'훈련 준비 완료'}

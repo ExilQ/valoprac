@@ -1,3 +1,4 @@
+import {subscribeLocale,translateText} from '../../i18n/locale';
 import { ACESFilmicToneMapping, PerspectiveCamera, Raycaster, SRGBColorSpace, Vector2, Vector3, WebGLRenderer, type Scene, type Object3D } from 'three';
 
 interface ObjectDrag {
@@ -11,7 +12,9 @@ export function createOrbitPreview(host: HTMLElement, scene: Scene, label: strin
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   const canvas = renderer.domElement;
-  canvas.setAttribute('aria-label', label);
+  const setLabel=()=>canvas.setAttribute('aria-label',translateText(label));
+  setLabel();
+  const unsubscribeLocale=subscribeLocale(setLabel);
   const camera = new PerspectiveCamera(45, 1, .02, distance * 20);
   const orbit = { target:target.clone(), dist:distance, yaw:.7, pitch:.8 };
   const minimumDistance=Math.min(distance*.18,6);
@@ -101,6 +104,7 @@ export function createOrbitPreview(host: HTMLElement, scene: Scene, label: strin
     focus(point:Vector3, nextDistance:number) { orbit.target.copy(point); orbit.dist=Math.max(minimumDistance,nextDistance); draw(); },
     reset() { orbit.target.copy(target); orbit.dist=distance; orbit.yaw=.7; orbit.pitch=.8; draw(); },
     dispose() {
+      unsubscribeLocale();
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       renderer.dispose();

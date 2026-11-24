@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.15",
+  "version": "12.0.16",
   "calibration": "dual-movement-1.2.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -181,7 +181,8 @@
     "review-lab-training-record-transfer",
     "replay-derived-defender-trajectories",
     "scrubbable-scenario-motion-previews",
-    "paired-moving-and-stationary-defender-results"
+    "paired-moving-and-stationary-defender-results",
+    "korean-english-interface-and-guides"
   ],
   "unreal": {
     "engine": "5.7",
@@ -196,7 +197,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.15",
+  "patchLabel": "12.16",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -494,7 +495,7 @@
       "formalProofOfAllCode": false
     }
   },
-  "releaseDate": "2026-11-22",
+  "releaseDate": "2026-11-23",
   "graphicsReview": {
     "report": "/graphics-validation.json",
     "baseline": "12.03",
@@ -525,5 +526,18 @@
     "url": "https://valoprac.trade/review/",
     "storage": "browser-local",
     "supportsLegacyBackup": true
+  },
+  "localization": {
+    "default": "ko",
+    "languages": [
+      "ko",
+      "en"
+    ],
+    "sections": [
+      "training",
+      "patch-notes",
+      "review-lab",
+      "guides"
+    ]
   }
 }

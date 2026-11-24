@@ -1,3 +1,4 @@
+import {englishPatch,useLocale} from '../i18n/locale';
 import {useId,useRef,useState} from 'react';
 import {ArrowUpRight,ChevronDown,History,Search,X} from 'lucide-react';
 import {entries,filterPatchEntries,patchSize,type PatchSize} from './patchNotesData';
@@ -10,7 +11,9 @@ export function PatchNotes(){
  const dialog=useRef<HTMLDialogElement>(null),content=useRef<HTMLDivElement>(null),id=useId();
  const [unread,setUnread]=useState(()=>{try{return localStorage.getItem('valoprac-patch-seen')!==latest.version;}catch{return true;}});
  const [size,setSize]=useState<PatchSize|'all'>('all'),[query,setQuery]=useState('');
- const visible=filterPatchEntries(size,query);
+ const locale=useLocale();
+ const localized=locale==='en'?entries.map(entry=>({...entry,...englishPatch(entry.version)})):entries;
+ const visible=filterPatchEntries(size,query,localized);
  const resetScroll=()=>content.current?.scrollTo({top:0});
  const open=()=>{
   if(document.pointerLockElement)document.exitPointerLock();
@@ -41,10 +44,10 @@ export function PatchNotes(){
    <div ref={content} className="patch-notes-content" role="region" aria-label="업데이트 목록" tabIndex={0}>
     <p className="patch-notes-count" role="status">{query.trim()?`검색 결과 ${visible.length}개`:`${visible.length}개의 업데이트 · 최신순`}</p>
     {visible.length===0?<div className="patch-notes-empty"><Search size={26} aria-hidden="true"/><h3>검색 결과가 없어요</h3><p>다른 단어나 버전 번호로 찾아보세요.</p><button onClick={()=>{setQuery('');setSize('all');}}>모든 업데이트 보기</button></div>:
-     visible.map(entry=><details className={`patch-note${entry===latest?' patch-note-latest':''}`} key={entry.version} open={entry===latest||Boolean(query.trim())}>
+     visible.map(entry=><details className={`patch-note${entry.version===latest.version?' patch-note-latest':''}`} key={entry.version} open={entry.version===latest.version||Boolean(query.trim())}>
       <summary>
        <span className="patch-note-heading">
-        <span className="patch-note-meta"><strong>{entry.version}</strong><span>{sizeLabels[patchSize(entry.version)]}</span>{entry===latest&&<span className="patch-note-badge">최신 업데이트</span>}<time dateTime={entry.date}>{entry.date.replaceAll('-','. ')}</time></span>
+        <span className="patch-note-meta"><strong>{entry.version}</strong><span>{sizeLabels[patchSize(entry.version)]}</span>{entry.version===latest.version&&<span className="patch-note-badge">최신 업데이트</span>}<time dateTime={entry.date}>{entry.date.replaceAll('-','. ')}</time></span>
         <span className="patch-note-title">{entry.title}</span>
         <span className="patch-note-description">{entry.description}</span>
        </span>

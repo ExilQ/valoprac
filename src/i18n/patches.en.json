@@ -1,0 +1,422 @@
+{
+  "12.16": {
+    "title": "Korean and English language selection",
+    "description": "Choose Korean or English from the Language menu across training, patch notes, the Review Lab, and guides.",
+    "changes": [
+      "Choose English or Korean. Your browser remembers the selected language.",
+      "The Review Lab, patch notes, and guides are available in English.",
+      "Language changes preserve saved settings, record titles, and custom tags."
+    ]
+  },
+  "12.15": {
+    "title": "Turn your replays into defender movement",
+    "description": "Capture movement from your replay, assign it to a defender, and compare your results with a stationary defender in the same setup.",
+    "changes": [
+      "Extract one to four seconds of grounded movement and crouch posture from a recent replay on the same map.",
+      "Scrub the path in the floor plan or 3D preview, rotate it in 90-degree steps, or mirror it.",
+      "Validate the entire path against walls, floors, ceilings, and map boundaries before using or sharing it.",
+      "Start the stationary version from Results and compare angles cleared, deaths, and first-shot headshots."
+    ]
+  },
+  "12.14": {
+    "title": "The Review Lab moves to valoprac.trade",
+    "description": "Open the Review Lab directly from training. An exported backup can restore your records and goals from the previous address.",
+    "changes": [
+      "Open the valoprac.trade Review Lab directly from the training history and results screen.",
+      "You can import session history, play profiles, and weekly goals as JSON exported from the previous lab."
+    ]
+  },
+  "12.13": {
+    "title": "Connect training records to the Review Lab",
+    "description": "Send the session you just completed or export several training records for a single import.",
+    "changes": [
+      "You can go to the Reconstruction Lab to import selected records from your training results and saved individual records.",
+      "You can import multiple sessions at once by saving a JSON file for your lab from the Training History screen."
+    ]
+  },
+  "12.12": {
+    "title": "Head-height holds, crouch fights, and defender placement",
+    "description": "Practice against defenders who aim at head height, then drag defenders and the starting point to change a scenario.",
+    "changes": [
+      "Original character's headset, chest plate, shin guards and actual hit surfaces",
+      "Sit-down engagement with defenders aiming at head height Training new tactical routes",
+      "Directly drag the character and starting point on the floor plan/3D Compare the standing/sitting posture of the selected defender",
+      "Sit/shoot intervals from recent tactical training or compatible replays are analyzed in the browser and applied to defender movements"
+    ]
+  },
+  "12.11": {
+    "title": "Tactical training HUD and start briefing",
+    "description": "Review the drill and its settings before starting or after pausing. The HUD displays ammunition, health, and reload status during a fight.",
+    "changes": [
+      "Design applied to the training selection and pause screens to quickly check tasks, maps, weapons, and time",
+      "Real-time magazine gauge, ammunition shortage and reload display, actual engagement stamina and time limit display",
+      "Connect the changed control keys so that they are reflected in the training guide and adjust the HUD placement on the narrow screen."
+    ]
+  },
+  "12.10": {
+    "title": "Training arena materials and environment design",
+    "description": "Each arena has distinct surfaces, cover, and lighting. The editor offers surface patterns with adjustable repeat spacing.",
+    "changes": [
+      "Newly configured stone, plaster, and painted metal, color area at the bottom of walls, and cover borders for each map.",
+      "Summary of sky and shadow tones and diagonal floor guidance at the actual training site.",
+      "In the scenario editor, you can decorate floors and walls with solid colors, tiles, and industrial panels, and adjust the spacing between repeating patterns."
+    ]
+  },
+  "12.09": {
+    "title": "3D scenario editing and weapon inspection",
+    "description": "Switch between the overhead plan and 3D views to place defenders and inspect a weapon. Convert mouse sensitivity from supported games.",
+    "changes": [
+      "View floor plans, 3D structures, and 3D materials and place defenders by clicking on surfaces",
+      "Desert Bronze/Indigo Carbon Finishing and Installed Weapon 3D Inspection",
+      "Expression of fine irregularities and roughness of painted metal",
+      "Defender appears after crossing the entry line · Applies to continuous engagements and shared codes",
+      "CS2·Apex·Overwatch 2·Call of Duty·Destiny 2 Sensitivity Conversion"
+    ]
+  },
+  "12.08": {
+    "title": "Saved drills and shot-by-shot review",
+    "description": "Save drills to compare attempts under the same conditions. Inspect braking timing and bullet spread for each shot and seek to that moment in the replay.",
+    "changes": [
+      "Save your favorites and recent drills and compare records under the same conditions",
+      "Check fire dispersion and braking timing for each shot and move on replays",
+      "Sniper picks the door frame and enters the top of the ramp. Defenders appear one after another.",
+      "Polar Slate/Cyan Ceramic Weapon Finishes Import Sensitivity and Active Reticle Files"
+    ]
+  },
+  "12.07": {
+    "title": "Target proportions and colors",
+    "description": "A revised silhouette and outfit colors make the target easier to read at a distance. Hit detection follows the visible glove position in the bent-arm pose.",
+    "changes": [
+      "Model facial contours and hair, adjust leg proportions by increasing waistline and knee position",
+      "A turquoise jacket, dark pants and coral armbands differentiate the silhouette by street level.",
+      "Match glove judgment to bent elbow posture and maintain model from previous replays"
+    ]
+  },
+  "12.06": {
+    "title": "Improved enemy character models and materials",
+    "description": "We've redesigned enemy characters' equipment and outfits and made their fabrics, shields, and lenses react differently to light. The shape of the target shown on the screen is also used to determine accuracy.",
+    "changes": [
+      "3D curved redesign of helmet, visor, chin protector, shoulders, waist, gloves, and combat boots",
+      "Different surface reactions and training colors applied to fabric, protective plates, rubber, and lenses",
+      "The visible model's triangle is shared for head, torso, and limb shooting decisions.",
+      "Reduce vertex and material data size with indexed mesh and maintain existing instancing",
+      "Previous replays are played with the target model at the time of recording"
+    ]
+  },
+  "12.05": {
+    "title": "Improved wall and cover finishes",
+    "description": "Made wall seams and metal cover finishes more visible. Wall finishes were grouped together to reduce throughput, while glass and penetrating practice surfaces retained their individual characteristics.",
+    "changes": [
+      "Joints at the top of the wall, vents, and the metal top and sides of the cover are represented as thin surfaces.",
+      "Reduce unnecessary face and shadow calculations by rendering wall finishes at once",
+      "Maintains the unique material of the Wall Shot specimen and the transparent expression of glass",
+      "Maintain existing cover position, collision and bullet detection"
+    ]
+  },
+  "12.04": {
+    "title": "Improved map surface and graphics memory",
+    "description": "We tweaked the surface expressions to make concrete, stone, wood, and metal look different. Low and medium graphics settings reduce memory usage by not creating unused textures.",
+    "changes": [
+      "Improved differences in concrete particles, stone grains, wood grains, and metal reflections",
+      "Picking lab floor color reflects the actual assigned visual material",
+      "Omit creation of unused texture channels at low and medium quality",
+      "Save roughness texture as two channels and display with existing shader",
+      "Reduce repetitive vertex data on the map while maintaining the location of walls and cover"
+    ]
+  },
+  "12.03": {
+    "title": "Improved settings/training tool keyboard navigation",
+    "description": "You can move the Settings and Training Tools tabs with the keyboard, and on narrow screens you can scroll the tab list horizontally.",
+    "changes": [
+      "Navigate the wide settings screen with the up and down arrow keys, and narrow screens with the left and right arrow keys.",
+      "Apply single-line horizontal scrolling to mobile settings and training tools tabs",
+      "Training tool opens a panel and calls up a replay when selected with Enter or Space",
+      "Opening batch edits on a tactical path keeps keyboard focus on the edit tab"
+    ]
+  },
+  "12.02": {
+    "title": "Improved sensitivity lab navigation and touch operation",
+    "description": "You can directly open the desired tab of the Sensitivity Lab via a link. When you refresh the screen or go back, the selected tab is restored, and the touch area has also been expanded.",
+    "changes": [
+      "Provides address directly connected to sensitivity search and aim analysis",
+      "Refresh the Sensitivity Lab selection tab and restore it from your browser history.",
+      "Move tabs with arrow keys and Home/End and select with Enter or Space",
+      "On narrow screens, scroll tabs horizontally and display current tab",
+      "Enlarged touch area in training settings and organized 3D preview text"
+    ]
+  },
+  "12.01": {
+    "title": "Preview and responsive training screen that runs when needed",
+    "description": "Lay out your training setup and map plan to fit the screen width. The 3D preview only runs when opened directly, and the menu and history deletion confirmation window have become easier to use with the keyboard.",
+    "changes": [
+      "Switch training settings and real-world map floor plan placement based on available panel widths",
+      "3D preview runs only when selected, graphics resources are released when turned off",
+      "Provide menus as links to real addresses Open new tabs and maintain browser navigation",
+      "Shortcut to main text and connection of keyboard focus after screen transition · One main text area",
+      "Changed deleting history to a confirmation window with Cancel as the default selection Supports Esc and keyboard navigation",
+      "Classification of selection states in bright, dark, high contrast, and reduced motion environments",
+      "Collapse training ground types and maintain saved settings · No changes to physics, shooting, and replay rules"
+    ]
+  },
+  "12.00": {
+    "title": "Physics/material upgrades/training stability checks",
+    "description": "We have improved the detection of contact with walls, corners, and stairs, and made the sound and bullet marks different depending on the surface material. Changed physics rules are used for new training, and previous replays are played using the rules at the time of recording.",
+    "changes": [
+      "Maintains 120Hz fixed operation and three movement rules, complements high-speed wall, corner, and ceiling contact and multiple stair movements",
+      "22 types of physical surface systems connecting impact surface, field of view, penetration, footsteps, landing, and bullet marks",
+      "15 types of self-produced PBR finishes including concrete, wood, metal, rubber, and fabric, and surface patterns based on actual size",
+      "Apply shared materials to existing maps, weapons, and targets · Adjust pattern, surface details, and memory for each graphic stage",
+      "Improved cost of static collision candidate search and field of view/trajectory queries Verification of decision order and results",
+      "Excluding invisible target and defender weapon instances · Batch rendering of cumulative bullet marks",
+      "Shader preparation with realistic target and hit effects and low settings for software renderer",
+      "New physics rules recorded as Replay Simulation 3 · Existing 10.00 records reorganized with previous rules",
+      "Automatic shooting, correct aiming, recoil, footsteps accumulation, AI, sensitivity laboratory, existing training and Korean screen maintenance",
+      "Movement correction values and walking landing sounds that require actual measurement of the original work are not changed. Actual device FPS and input delay have not been verified.",
+      "When restarting training, previous duplicate determination records of shooting, footsteps, and landings are reset to correct missing sounds.",
+      "Unification of existing 10.00 replay loading inspection, supplementation of record limit, search cancellation, and abnormal search value processing",
+      "Simultaneous storage/deletion of training records and storage limits are processed in one save operation",
+      "Complemented judgment of low ceiling contact and steep inside position restoration of continuous jumps immediately after landing",
+      "Removal of bullet marks and impact sounds that indicated the calculated boundaries of overlapping objects as actual surfaces",
+      "Block abnormal mouse/time values and supplement application of actual frame limits for software graphics",
+      "TypeScript maintained after comparative experiment with WebAssembly at the core of computation. No complete replacement of runtime or engine."
+    ]
+  },
+  "11.00": {
+    "title": "Precision Utility interface redesign",
+    "description": "Six menu sections, responsive HUD, and light and dark themes put key training information up front.",
+    "changes": [
+      "Unique screen system centered on warm, bright neutral colors and cyan colors · Basic bright theme",
+      "Save light, dark, and system themes separately · Maintain ongoing training and game settings",
+      "Six main navigations - Training, Maps, Weapons, Sensitivity Labs, Records and Settings - and a collapsible training list.",
+      "A training screen that prioritizes the selected task, number of targets, and starting movements, and an original map selection screen",
+      "Concise list of four types of weapons, self-made schematics, sorted values and detailed characteristics to unfold",
+      "Eight setting categories: General, Operation, Sensitivity, Aiming Point, Graphics, Sound, Training, and Advanced",
+      "Simple HUD at the edges of the battle screen with independent contrasting colors and optional details",
+      "View training information while paused · Expand diagnostics and safely return without locking input",
+      "Summary of results, sensitivity analysis, charts, and replay controls centered on actual records",
+      "Unified Korean screen, easy-to-read letters and numbers, keyboard focus, and reduced motion settings reflected",
+      "Maintain existing weapons, recoil, movement, AI, footsteps, judgment and training data"
+    ]
+  },
+  "10.00": {
+    "title": "Calibrated mechanics, deterministic replay, and training tools",
+    "description": "Review training from first- or third-person views. This release adds a warmup, flash avoidance, and position saving, with calibrated movement and spatial audio.",
+    "changes": [
+      "Takeoff velocity, stance and weapon air-speed budget with continuous reverse steering",
+      "Calibrate the VALORANT-profile ballistic jump to a provisional 1.15m target; retain separate CS2 and Classic rules",
+      "Reduce first-shot delay only for expert pre-aim situations; preserve beginner and normal reaction profiles",
+      "Retain zoom FOV, rifle ADS spread, independent zoom sensitivity and rotation-count diagnostics",
+      "Essential jump diagnostics, mode-specific instructions and preserved timing for delayed gunfire",
+      "Spatial audio using actual map cover, bot movement footsteps and visible graphics preparation",
+      "Ground-contact and static-material batching with optional environment diagnostics; preserve cover and collision",
+      "Crosshair outlines, center dot, inner/outer lines, ADS settings, code import and local profiles",
+      "Shared deterministic replay of inputs, seed, submitted target poses and integrity checkpoints",
+      "Playback, pause, speed, seeking, inspection cameras, highlights and local replay files",
+      "One-minute 3D warm-up and camera-turn flash avoidance with immediate same-settings retry",
+      "Position save/restore, last takeoff, jump trajectories, shared-replay ghost and third-person review",
+      "Five routes in original maps with validated scenario editing, codes and share links",
+      "Korean default with optional English; settings and history stay in this browser",
+      "Proposed air-speed and jump values remain provisional; walking ratio and silent landing await direct game measurements",
+      "Physical GPU performance, input latency, listening effectiveness and native-game parity remain unverified; no online rankings"
+    ]
+  },
+  "9.01": {
+    "title": "Air speed, zoom, engagement response, audio, and graphics modifications",
+    "description": "The speed when moving in the air and the field of view for each aiming magnification have been corrected. Fixed an issue where defenders who were already aiming would have to wait twice before firing their first shot.",
+    "changes": [
+      "Apply walking, crouching, weapon and ADS wish speeds to VALORANT air acceleration while preserving existing momentum",
+      "Use base FOV ÷ zoom consistently for horizontal FOV · 82.4/41.2/20.6° from 103°",
+      "Independent rifle and Operator 2.5x/5x sensitivity settings, plus delivered counts per 360°",
+      "Remove duplicate first-shot waits for pre-aimed defenders while retaining actual recognition, aim error and weapon recovery",
+      "Calibrate Vandal/Phantom ADS first-shot base spread to 0.1575/0.11°",
+      "Pin jump, landing and chained-jump diagnostics without scrolling; correct selected-training start labels",
+      "Add spatial audio to enemy gunfire and actual bot footsteps; improve original footstep frequency balance",
+      "Discard stale gunfire and coalesce delayed sounds per emitter while preserving valid future shot intervals",
+      "Guidance for inferred software/integrated graphics and automatic Low quality, preserving manual choices",
+      "Prepare shaders, postprocessing and GPU work before starting, with cancellation handling; enable play after the first actual frame",
+      "Optimize architectural meshes and material batching in the peeking complex and existing maps while preserving collision and tactical layouts",
+      "Separate comparisons from records using the previous aiming projection; native silent jumping remains unmeasured"
+    ]
+  },
+  "9.00": {
+    "title": "Dual movement physics and realistic mid-air steering",
+    "description": "You can choose how you move in VALORANT and Counter-Strike in the settings. You can practice your sense of changing direction in the air and compare records with the same movement rules.",
+    "changes": [
+      "Choose VALORANT or Counter-Strike movement physics in Settings → Controls · VALORANT by default",
+      "Actual air acceleration, momentum and direction changes from A/D/W/S input and view rotation",
+      "CS 2-calibrated projection acceleration, ground friction, landing input windows and jump-spam limits, with separate Classic Source rules",
+      "Timestamped brief direction inputs, manual jumps and optional wheel jumping ·120 Hz fixed simulation",
+      "Validated ramps, stairs, platform edges, ceiling contact and crouched movement",
+      "Dedicated material impact sounds and hearing events for actual landings; no airborne walking footsteps",
+      "Current physics indicator and optional speed, acceleration, direction, jump and landing diagnostics",
+      "Preserve position, vertical momentum, weapon recovery and sensitivity when switching physics; safely reset pending horizontal state",
+      "Keep averages and paired comparisons separate for tactical/combat aim records with different movement models; retain existing records",
+      "Compare trajectories against the 08.00 baseline and verify determinism across 60/144/240 Hz render schedules",
+      "Preserve existing maps, modes, four weapons, AI, footstep accumulation and sensitivity laboratory",
+      "Independent calibrations informed by public patch notes; full equivalence to actual VALORANT/CS 2 engines remains unverified"
+    ]
+  },
+  "8.00": {
+    "title": "Combat AI, Movement Mechanics, Wall Shot Training",
+    "description": "The defender's reaction, aiming, and shooting are implemented step by step, and the difficulty level can be selected. In the training area, you can practice jumping, moving up ramps, and piercing through wooden and metal surfaces.",
+    "changes": [
+      "Separate defender visual detection, reaction, aiming and firing stages, with continuous angular speed and acceleration limits",
+      "Actual weapon recoil, spread, ammunition and reloading, delayed imperfect recoil compensation, and distance-based tap/burst/automatic fire",
+      "Separate angle learning, ballistic gunfights and exposure limits; beginner, normal, advanced and expert defender settings",
+      "Reset magazines, reserves, reloads, bolts, scopes, recoil, input and hearing knowledge after death; prevent duplicate retries",
+      "Recover footstep accumulation during actual slowing, prevent silent fast A/D repetition, and retain residual accumulation when walking",
+      "Fresh-input jump buffers, chained jumps, airborne momentum and speed limits, with ramps, stairs and low-ceiling practice",
+      "Shared weapon hit detection for materials, traversed thickness, incidence angles, penetration budgets, multiple surfaces and attenuated damage",
+      "Wood, steel and reinforced-wall penetration training; limited bot wallbangs use prior observations and actual sound without normal line of sight",
+      "Material-specific entry/exit impacts, debris and original synthesized impact sounds, with optional penetration/aim developer diagnostics",
+      "Landing input timing, speed preservation, bot reaction, aiming and burst analysis, with a restrained Korean interface color hierarchy",
+      "Preserve the sensitivity laboratory, four weapons, every peeking zone, settings, statistics and collapsible training menu",
+      "Physics, AI and penetration calibrations are independent training models; equivalence to actual VALORANT or human performance is unverified"
+    ]
+  },
+  "7.00": {
+    "title": "Precision Sensitivity Lab",
+    "description": "Multiple sensitivity candidates can be repeatedly compared in the same task. Aiming movements such as flicks and tracking are shown separately, and candidates can be checked again with new tasks.",
+    "changes": [
+      "Collapse or expand the training-mode menu, show the current selection and retain its collapsed state",
+      "Baseline, range, refinement, holdout and delayed-retention stages, with quick, precision and long-term protocols",
+      "Seven neutral tasks covering small heads, large angles, micro-adjustments, moving clicks, tracking and target switching",
+      "Compare initial flick, deceleration, correction, stabilization and click causes against actual trajectories",
+      "Fingerprints for reported DPI, FOV, display, input and ADS conditions, plus local input profiles",
+      "Task-normalized baselines, completed repeats, paired-comparison intervals and equivalent/uncertain candidate ranges",
+      "Fresh-seed holdout validation, order-effect warnings, mousepad distance limits and resume after interruption",
+      "Actual tactical shooting and independent evaluations of Vandal/Phantom ADS and Operator 2.5x/5x",
+      "Distinguish long-term stability using compatible sessions on different dates and retention measurements",
+      "Publish equal-budget comparisons of four search methods across nine synthetic conditions, including uncertainty failures",
+      "Keep ordinary sensitivity unchanged until user approval; no directional correction or automatic aiming",
+      "No human-participant experiment was conducted; no guarantee of optimal sensitivity or actual-game improvement"
+    ]
+  },
+  "6.01": {
+    "title": "Target judgment matching / setting transfer",
+    "description": "When clicking on a moving target, a hit is judged based on the position and posture shown on the screen. We have modified several basic operations and menu displays while maintaining the operation settings that we previously changed.",
+    "changes": [
+      "Share visible head/body meshes with actual shooting hit detection; add neck and hand coverage",
+      "Judge moving targets using the displayed pose submitted at click time, removing the next-physics-tick lead",
+      "Migrate legacy Ctrl crouch/hold ADS defaults once to C/toggle while preserving separate user preferences",
+      "Calibrate crouch-moving base spread to 0.8° for rifles and 0.5° for Sheriff",
+      "Connect angle/peeking training to the tactical complex with exposure enabled; directly select the six existing maps",
+      "Fix sidebar selection indicators for tap braking and vertical angle training",
+      "Prevent Korean title breaks inside words; add guide pages to the sitemap",
+      "Prevent Cloudflare script injection through HTML no-transform while preserving strict CSP",
+      "Return actual 404 responses for unknown addresses while preserving valid routes"
+    ]
+  },
+  "6.00": {
+    "title": "Tactical Picking Lab · Operator",
+    "description": "You can practice picking at different heights and angles in the connected training area. We added operators and made it possible to view the movement path and firing line of failed engagements again.",
+    "changes": [
+      "Eight connected zones, eleven defensive angles, rear alternate routes, stairs and ramps",
+      "Wide, shoulder, jiggle, crouch, jump, angle-slicing, vertical and mixed peeking",
+      "Five-round Operator, actual bolt recovery, 2.5x/5x scope and independent toggle/hold controls",
+      "Actual-velocity, landing and unscoped inaccuracy, with versioned penetration calibration",
+      "Defenders use visual and footstep observations, with weapon-specific reactions, firing and repositioning",
+      "Improve cover, alternate routes and architectural finishes across the six existing tactical maps",
+      "Analyze exposure, shot baiting and recovery-window use; record death paths and sightlines",
+      "Immediate same-map retries, unlimited/timed peeking and original material-specific footsteps",
+      "Publish PC reference values separately from provisional calibrations; no guarantee of exact equivalence to the actual game"
+    ]
+  },
+  "5.00": {
+    "title": "Tactical training visual redesign",
+    "description": "Reworked the appearance of weapons, hands and arms, targets, and training grounds. We've organized the Armory and Settings screen to make it easier to find weapons and options to use in your training.",
+    "changes": [
+      "Distinct weapon profiles with slim receiver, barrel and stock geometry",
+      "Joint-connected first-person gloves and arms, with support-hand reload motion",
+      "Human-proportioned tactical target visuals connected to the existing hit rig",
+      "Architectural finishes, materials and readability-focused lighting for tactical zones",
+      "Seven training entry points and an armory focused on the selected weapon",
+      "Six settings tabs, shared design tokens and compact analysis screens",
+      "Preserve rifle 1.25x toggle/hold ADS and existing shooting/movement mechanics",
+      "Use original geometry without Riot models, textures or audio"
+    ]
+  },
+  "4.01": {
+    "title": "Training information placement and input stability",
+    "description": "We fixed an issue where the footsteps and braking status display overlapped and an error where the input was displayed incorrectly after locking. Target speed selection and sensitivity guidance were also refined.",
+    "changes": [
+      "Shared non-overlapping layout for footstep and braking information",
+      "Fix the erroneous warning after fallback Pointer Lock",
+      "Separate total walking/running spread references by weapon",
+      "Improve live-target speed selection and sensitivity guidance",
+      "Clarify instructions, audio labeling and the unofficial-service notice",
+      "Actual response security headers, long-lived asset caching and route restoration",
+      "Export complete source that builds without missing files"
+    ]
+  },
+  "4.00": {
+    "title": "Movement accuracy · Aiming · Tactical map",
+    "description": "The spread of bullets varies depending on the speed at which you move, and you can see exactly when to fire in the two-way braking challenge. We also added a tactical area with stairs and ramps.",
+    "changes": [
+      "Rifle spread based on actual velocity and conical shot trajectories",
+      "Bidirectional tap-braking tasks and accuracy-window measurement",
+      "Toggle ADS by default · separate weapon camera · compact reticle",
+      "2.5× footstep accumulation recovery after actually stopping · residual accumulation retained while walking",
+      "Safe C crouch · optional fullscreen keyboard lock · raw-input request diagnostics",
+      "Fast strafing and six original tactical zones",
+      "Stairs, ramps, elevation and sequential angle clearing",
+      "Exposure-based elimination and immediate retry on the same map",
+      "Existing aim science, weapons, timed modes and audio retained",
+      "At this point, verification of the actual device graphics remained."
+    ]
+  },
+  "3.00": {
+    "title": "Aim Science and Sensitivity Comparison",
+    "description": "Aiming behavior can be measured with tasks without recoil and bullet spread. It was possible to compare multiple sensitivity candidates by looking at the aiming trajectory in each direction.",
+    "changes": [
+      "Shared input measurement and six neutral tasks without recoil or spread",
+      "Initial flick, correction, click timing, tracking and eight-direction analysis",
+      "Interleaved sensitivity comparisons and optional Gaussian-process search",
+      "Evidence-based personalized training and held-out task validation",
+      "Local trajectory playback, record export and deletion",
+      "No directional sensitivity, aim assistance or input guidance",
+      "At this point, the effectiveness of the training had not been tested in humans."
+    ]
+  },
+  "2.00": {
+    "title": "Footstep accumulation and corner peeking",
+    "description": "We connected the corner peeking map to 3D training. Footstep sounds build up based on movement speed and distance, and zoned bots respond to actual footfall sounds during training.",
+    "changes": [
+      "Footstep accumulation based on traveled distance and actual velocity",
+      "Residual accumulation retained when walking, recovery after actually stopping",
+      "Zone-specific bots listen only to actual footstep events",
+      "Separate accumulation gauge and hearing radius at the emitted sound position",
+      "We tied the initial corner peeking map to weapon and headshot decisions from existing 3D training."
+    ]
+  },
+  "1.03": {
+    "title": "Unreal integration records and session stability",
+    "description": "We've connected shooting history, statistics, and recoil to the Unreal integration code. We have improved reconnection when connection is lost, input confirmation, and server session termination processing.",
+    "changes": [
+      "Shooting records, statistics, and recoil are connected to the Unreal integration code. At this point, Unreal's implementation was unverified.",
+      "Reconnection, input acknowledgements and server-process cleanup"
+    ]
+  },
+  "1.02": {
+    "title": "Footstep simulation",
+    "description": "You can now see on the screen where the footsteps are coming from and the range they reach.",
+    "changes": [
+      "Footstep training information and hearing-radius display"
+    ]
+  },
+  "1.01": {
+    "title": "Patch notes screen",
+    "description": "We've added an information button in the top right so you can check the patch history and version on the training screen.",
+    "changes": [
+      "Information button and version display"
+    ]
+  },
+  "1.00": {
+    "title": "Corner-peeking practice prototype",
+    "description": "Defenders start at varied positions and investigate audible footsteps.",
+    "changes": [
+      "Added random bot placement and footstep detection behavior per zone to the initial map. This map was created separately at the time and linked to site training in 2.00.",
+      "Top-right information button and major/minor patch history"
+    ]
+  }
+}

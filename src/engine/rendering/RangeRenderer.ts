@@ -87,7 +87,7 @@ export class RangeRenderer {
     this.textures.add(sky);
     this.scene.background=sky;
     this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
-    if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label','전술 사격 훈련장');host.appendChild(this.renderer.domElement);
+    if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));host.appendChild(this.renderer.domElement);
     this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=.31;
     this.scene.fog=new THREE.Fog(light.horizon,45,140);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
     this.scene.add(new THREE.HemisphereLight(light.ambient,light.ground,1.42));
@@ -97,7 +97,10 @@ export class RangeRenderer {
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
     // initialization succeeds so failed attempts do not retain the renderer.
-    this.unsubscribeLocale=subscribeLocale(()=>{for(const paint of this.localizedSigns)paint();});
+    this.unsubscribeLocale=subscribeLocale(()=>{
+      this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));
+      for(const paint of this.localizedSigns)paint();
+    });
   }
   get canvas(){return this.renderer.domElement;}
   /** Render pacing follows the effective hardware policy, independently of

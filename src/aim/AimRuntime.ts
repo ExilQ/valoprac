@@ -1,3 +1,4 @@
+import {subscribeLocale,translateText} from '../i18n/locale';
 import {BrowserInput,type InputObserver} from '../engine/input/Input';
 import {angularGain,adsFov,DEG} from '../engine/input/sensitivity';
 import type {Settings} from '../engine/types';
@@ -14,6 +15,7 @@ interface DrawnTarget {at:number;x:number;y:number;visible:boolean;}
 /** A controlled assessment, using the exact ordinary BrowserInput gain path.
  * Model fitting/segmentation/storage happen after a trial, never in look(). */
 export class AimRuntime implements InputObserver {
+ private unsubscribeLocale:()=>void;
  private appearanceAt:number|null=null;
  private projected={x:0,y:0,radius:0,visible:false};
  readonly canvas:HTMLCanvasElement;readonly input:BrowserInput;readonly telemetry=new MouseTelemetry();readonly settings:Settings;
@@ -26,9 +28,10 @@ export class AimRuntime implements InputObserver {
   if(!plan.blocks.length)throw new Error('측정할 과제가 없습니다.');
   this.blockIndex=Math.min(plan.blocks.length-1,Math.max(0,Math.floor(plan.resumeBlock??0)));
   this.settings={...settings,bindings:{...settings.bindings},sensitivity:this.block.sensitivity,degreesPerCount:plan.coefficient,fov:plan.fov,adsSensitivity:plan.adsMultiplier??settings.adsSensitivity,...(plan.adsMultiplier!==undefined&&this.scopeZoom>=1.75?this.scopeZoom>=3.75?{scopeSensitivity5:plan.adsMultiplier}:{scopeSensitivity25:plan.adsMultiplier}:{})};
-  this.path=new AimTargetPath(this.block);this.canvas=document.createElement('canvas');this.canvas.className='aim-canvas';this.canvas.setAttribute('aria-label','중립 각도 측정 훈련 화면');host.appendChild(this.canvas);
+  this.path=new AimTargetPath(this.block);this.canvas=document.createElement('canvas');this.canvas.className='aim-canvas';this.canvas.setAttribute('aria-label',translateText('중립 각도 측정 훈련 화면'));host.appendChild(this.canvas);
   const ctx=this.canvas.getContext('2d',{alpha:false});if(!ctx){this.canvas.remove();throw new Error('이 브라우저에서 측정 화면을 시작하지 못했습니다.');}this.ctx=ctx;
   this.input=new BrowserInput(this.canvas,this,this.lockChange,message=>{if(message&&this.input?.locked)return;this.inputError=message;this.emit();});this.input.observer=this;
+  this.unsubscribeLocale=subscribeLocale(()=>this.canvas.setAttribute('aria-label',translateText('중립 각도 측정 훈련 화면')));
   document.addEventListener('visibilitychange',this.visibilityChanged);document.addEventListener('fullscreenchange',this.fullscreenChanged);window.addEventListener('blur',this.focusLost);
   this.raf=requestAnimationFrame(this.animate);this.emit();
  }
@@ -116,5 +119,5 @@ export class AimRuntime implements InputObserver {
   }
   ctx.strokeStyle=this.settings.crosshairColor;ctx.lineWidth=this.settings.crosshairThickness;const gap=this.settings.crosshairGap,length=this.settings.crosshairLength;ctx.beginPath();ctx.moveTo(w/2-gap-length,h/2);ctx.lineTo(w/2-gap,h/2);ctx.moveTo(w/2+gap,h/2);ctx.lineTo(w/2+gap+length,h/2);ctx.moveTo(w/2,h/2-gap-length);ctx.lineTo(w/2,h/2-gap);ctx.moveTo(w/2,h/2+gap);ctx.lineTo(w/2,h/2+gap+length);ctx.stroke();
  }
- dispose(){if(this.disposed)return;if(this.running&&this.phase==='measuring')this.complete('interrupted',false);this.disposed=true;this.running=false;cancelAnimationFrame(this.raf);document.removeEventListener('visibilitychange',this.visibilityChanged);document.removeEventListener('fullscreenchange',this.fullscreenChanged);window.removeEventListener('blur',this.focusLost);this.input.dispose();this.canvas.remove();}
+ dispose(){if(this.disposed)return;this.unsubscribeLocale();if(this.running&&this.phase==='measuring')this.complete('interrupted',false);this.disposed=true;this.running=false;cancelAnimationFrame(this.raf);document.removeEventListener('visibilitychange',this.visibilityChanged);document.removeEventListener('fullscreenchange',this.fullscreenChanged);window.removeEventListener('blur',this.focusLost);this.input.dispose();this.canvas.remove();}
 }
