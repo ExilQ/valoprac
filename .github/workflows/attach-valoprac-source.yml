@@ -1,0 +1,21 @@
+name: Attach VALOPRAC release source archives
+on:
+  push:
+    branches: [codex/valoprac-12.15-12.19-release-assets]
+permissions:
+  contents: write
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sha256sum --check SHA256SUMS
+          for version in 15 16 17 18 19; do
+            tag="v12.0.${version}"
+            gh release upload "$tag" "valoprac-${tag}-unreal-source.zip" --repo "$GITHUB_REPOSITORY"
+          done
