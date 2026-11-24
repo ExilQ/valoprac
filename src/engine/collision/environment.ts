@@ -27,7 +27,7 @@ export function nearestEnvironmentHit(ray:Ray,max:number,out:Vector3,obstacles:O
  * Exact ramp/box/floor tests stop after the first proven obstruction. */
 export function environmentOccluded(ray:Ray,max:number,obstacles:Obstacle[]=ENVIRONMENT,rules:SimulationRulesId=LEGACY_SIMULATION_RULES){
  for(const o of obstacles){
-  if(rules==='materials-v3'&&SURFACES[surfaceForObstacle(o,rules)].blocksSight===false)continue;
+  if(rules!=='legacy-v2'&&SURFACES[surfaceForObstacle(o,rules)].blocksSight===false)continue;
   if(o.ramp){
    const r=o.ramp,axis=r.axis,slope=(r.high-r.low)/(o.box.max[axis]-o.box.min[axis])*r.ascending,intercept=r.ascending===1?r.low-slope*o.box.min[axis]:r.high-slope*o.box.min[axis],denom=ray.direction.y-slope*ray.direction[axis];
    if(Math.abs(denom)>1e-9){const d=(slope*ray.origin[axis]+intercept-ray.origin.y)/denom;if(d>0&&d<max){tempHit.copy(ray.direction).multiplyScalar(d).add(ray.origin);if(tempHit.x>=o.box.min.x&&tempHit.x<=o.box.max.x&&tempHit.z>=o.box.min.z&&tempHit.z<=o.box.max.z)return true;}}

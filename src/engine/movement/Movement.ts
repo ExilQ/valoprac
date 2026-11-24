@@ -1,11 +1,11 @@
 import {Vector3} from 'three';
-import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
+import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,MATERIALS_MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
 import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
 import {JumpController} from './JumpController';
-import {wishMovement,solveGroundMovement,solveAirMovement,limitContactSpeed,landingRetention} from './MovementSolvers';
+import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
 
 export interface HopEvent {kind:'jump'|'chain'|'land'|'missed';time:number;speed:number;inputTimingMs:number|null;groundContactSeconds:number;position:Vec3;}
 export interface HopSnapshot {jumps:number;chainedJumps:number;missedInputs:number;landings:number;peakSpeed:number;lastLandingInterval:number|null;lastInputTimingMs:number|null;timingMeanMs:number|null;timingDeviationMs:number|null;groundContactSeconds:number;speedPreservation:number|null;events:HopEvent[];}
@@ -34,7 +34,7 @@ export class Movement {
  readonly weaponSpeedReference=5.4;profile:MovementPhysicsProfile;
  private rules:SimulationRulesId=CURRENT_SIMULATION_RULES;
  setSimulationRules(rules:SimulationRulesId){this.rules=rules;this.collision.setSimulationRules(rules);}
- private get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
+ private get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:this.rules==='materials-v3'?MATERIALS_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
  private supportContact(maxY:number){return this.rules==='legacy-v2'?this.collision.support(this.position,maxY,this.profile.maxSlopeCos):this.collision.supportFootprint(this.position,maxY,this.profile.radius,this.profile.maxSlopeCos,this.profile.stepMinLandingWidth??.1);}
  private takeoff:TakeoffState|null=null;
  private weaponContext:{id:WeaponId;runSpeed:number;ads:boolean}|null=null;
@@ -97,7 +97,11 @@ export class Movement {
   if(this.grounded){
    if(this.landingPenaltyPending&&time-this.lastLanding>=p.landingWindow/2-EPS){const retention=landingRetention(p,this.landingImpact);this.velocity.x*=retention;this.velocity.z*=retention;this.landingPenaltyPending=false;}
    solveGroundMovement(this.velocity,wish,p,dt);this.airAcceleration.set(0,0,0);
-  }else{if(!this.takeoff)this.recordTakeoff(time,'fall');solveAirMovement(this.velocity,wish,p,dt,this.airAcceleration,this.takeoff?.speedCap);}
+  }else{
+   if(!this.takeoff)this.recordTakeoff(time,'fall');
+   const solve=this.rules==='air-steering-v4'&&p.airModel==='tactical'?steerTacticalAir:solveAirMovement;
+   solve(this.velocity,wish,p,dt,this.airAcceleration,this.takeoff?.speedCap??null);
+  }
   const beforeVertical=this.velocity.y;
   if(!this.grounded)this.velocity.y=Math.max(-55,this.velocity.y-p.gravity*dt);
   const gravityTime=!this.grounded&&p.verticalIntegration==='ballistic'?(p.gravity>0?Math.min(dt,Math.max(0,(beforeVertical+55)/p.gravity)):dt):0;

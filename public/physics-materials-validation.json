@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.17",
-  "patchLabel": "12.17",
-  "generatedAt": "2026-11-23T12:57:43.486Z",
+  "release": "12.0.18",
+  "patchLabel": "12.18",
+  "generatedAt": "2026-11-23T19:03:07.274Z",
   "tests": {
-    "application": 1519,
+    "application": 1523,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -17,10 +17,10 @@
   },
   "simulation": {
     "gameVersion": "12.0.0",
-    "version": "valoprac-replay-simulation-3",
-    "rules": "materials-v3",
+    "version": "valoprac-replay-simulation-4",
+    "rules": "air-steering-v4",
     "fixedHz": 120,
-    "movementVersion": "dual-movement-1.2.0",
+    "movementVersion": "dual-movement-1.3.0",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "weaponVersion": "weapons-10.0.0",
     "acceptedLegacy": [
@@ -28,6 +28,11 @@
         "gameVersion": "10.0.0",
         "simulationVersion": "valoprac-replay-simulation-2",
         "rules": "legacy-v2"
+      },
+      {
+        "gameVersion": "12.0.0",
+        "simulationVersion": "valoprac-replay-simulation-3",
+        "rules": "materials-v3"
       }
     ]
   },

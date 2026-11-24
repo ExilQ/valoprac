@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "release": "12.0.17",
-  "patchLabel": "12.17",
-  "generatedAt": "2026-11-23T12:57:43.486Z",
-  "calibration": "dual-movement-1.2.0-provisional",
+  "release": "12.0.18",
+  "patchLabel": "12.18",
+  "generatedAt": "2026-11-23T19:03:07.274Z",
+  "calibration": "dual-movement-1.3.0-provisional",
   "historicalBrowserCaptureRelease": "9.0.0",
   "tests": {
-    "application": 1519,
+    "application": 1523,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -27,32 +27,32 @@
         "scenario": "A",
         "airDuration": 0.18,
         "displacement": [
-          -0.175590807821289,
+          -0.33121767426008075,
           0.9007840778771071,
-          -0.989690079074454
+          -0.9446636735067253
         ],
         "velocity": [
-          -1.8228966845819055,
+          -3.290782481390623,
           2.896701030844827,
-          -5.3689801338187415
+          -4.617320723122078
         ],
-        "headingRadians": -0.32731161396403
+        "headingRadians": -0.619201283787183
       },
       {
         "profile": "valorant",
         "scenario": "B",
         "airDuration": 0.18,
         "displacement": [
-          0.175590807821289,
+          0.33121767426008075,
           0.9007840778771071,
-          -0.989690079074454
+          -0.9446636735067253
         ],
         "velocity": [
-          1.8228966845819055,
+          3.290782481390623,
           2.896701030844827,
-          -5.3689801338187415
+          -4.617320723122078
         ],
-        "headingRadians": 0.32731161396403
+        "headingRadians": 0.619201283787183
       },
       {
         "profile": "valorant",
@@ -61,17 +61,17 @@
         "yawChangeRadians": 0.65,
         "airDuration": 0.2,
         "position": [
-          -0.20018107395227935,
+          -0.38685700106697846,
           1.0045210480926723,
-          -4.495957133241713
+          -4.446207993127052
         ],
         "velocity": [
-          -1.8535016851893535,
+          -3.568470359434215,
           2.5300343641781606,
-          -4.747387786521798
+          -4.069958921459372
         ],
-        "headingRadians": -0.37222542572135153,
-        "positionDifferenceFromFixedYaw": 0.04694038069164966
+        "headingRadians": -0.719838888236229,
+        "positionDifferenceFromFixedYaw": 0.03715923420939434
       },
       {
         "profile": "valorant",
@@ -80,32 +80,32 @@
         "yawChangeRadians": -0.65,
         "airDuration": 0.2,
         "position": [
-          0.20018107395227935,
+          0.38685700106697846,
           1.0045210480926723,
-          -4.495957133241713
+          -4.446207993127052
         ],
         "velocity": [
-          1.8535016851893535,
+          3.568470359434215,
           2.5300343641781606,
-          -4.747387786521798
+          -4.069958921459372
         ],
-        "headingRadians": 0.37222542572135153,
-        "positionDifferenceFromFixedYaw": 0.04694038069164966
+        "headingRadians": 0.719838888236229,
+        "positionDifferenceFromFixedYaw": 0.03715923420939434
       },
       {
         "profile": "valorant",
         "scenario": "D",
-        "beforeLateralVelocity": -1.1666666666666665,
-        "afterLateralVelocity": 0.3333333333333335,
+        "beforeLateralVelocity": -2.237510200200247,
+        "afterLateralVelocity": 0.6291986867229121,
         "position": [
-          -0.12916666666666662,
+          -0.2506917838547307,
           1.1243011168156607,
-          -4.903749999999994
+          -4.880186167802436
         ],
         "velocity": [
-          0.3333333333333335,
+          0.6291986867229121,
           1.0633676975114943,
-          -5.4
+          -5.342208199763093
         ]
       },
       {
@@ -252,14 +252,14 @@
         "profile": "valorant",
         "scenario": "G",
         "position": [
-          -1.1602782740604172,
+          -2.1088237728129706,
           0,
-          -7.353641439345613
+          -6.902585659291702
         ],
-        "landingHeadingRadians": -0.32731161396403,
+        "landingHeadingRadians": -0.619201283787183,
         "airTime": 0.6416666666666668,
         "landingSpeed": 5.670000000000001,
-        "afterLanding": 3.2695793713748653,
+        "afterLanding": 3.2695793713748666,
         "stopSeconds": 0.125
       },
       {

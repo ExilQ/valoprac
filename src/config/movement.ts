@@ -22,7 +22,11 @@ export const MOVEMENT: MovementProfile = {
 
 export type MovementPhysicsId='valorant'|'counterStrike';
 export const LEGACY_MOVEMENT_PHYSICS_VERSION='dual-movement-1.1.0';
-export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.2.0';
+export const MATERIALS_MOVEMENT_PHYSICS_VERSION='dual-movement-1.2.0';
+export const MOVEMENT_PHYSICS_VERSION='dual-movement-1.3.0';
+/** Provisional gameplay calibration. A play video without input telemetry
+ * cannot establish a native game's acceleration or per-tick turn-rate constants. */
+export const VALORANT_AIR_STEERING=Object.freeze({maxTurnRate:3.6});
 export type CounterStrikePreset='cs2'|'sourceClassic';
 export interface MovementPhysicsSettings {movementPhysics:MovementPhysicsId;csMovementPreset:CounterStrikePreset;jumpBufferMs:number;}
 /** Independent SI calibration. Source projection/ground-friction principles

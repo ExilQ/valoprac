@@ -1,3 +1,4 @@
+import {VALORANT_AIR_STEERING} from '../../config/movement';
 import type {Vector3} from 'three';
 import type {MovementPhysicsProfile} from '../../config/movement';
 
@@ -29,6 +30,32 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
  const dot=w.x*v.x+w.z*v.z,acceleration=dot<0?p.reverseAcceleration:p.groundAcceleration,tx=w.x*w.speed-v.x,tz=w.z*w.speed-v.z,length=Math.hypot(tx,tz),amount=Math.min(length,acceleration*dt*w.amount);
  if(length>1e-12){v.x+=tx/length*amount;v.z+=tz/length*amount;}
 }
+/** Steer the existing horizontal momentum with a bounded lateral acceleration
+ * expressed as a turn rate. Only the component along the velocity adds speed
+ * or brakes. Thus a sideways input can curve a run at its speed cap. */
+export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null){
+ const beforeX=v.x,beforeZ=v.z,speed=Math.hypot(beforeX,beforeZ);
+ const cap=Math.min(takeoffCap??Infinity,p.airSpeedLimit??Infinity,p.hopSpeedCap??Infinity);
+ if(w.amount>0){
+  const wishSpeed=Math.min(p.airMaxSpeed*w.amount,w.speed),impulse=p.airAcceleration*w.amount*dt;
+  if(speed<1e-9){
+   const next=Math.min(impulse,wishSpeed,cap);v.x=w.x*next;v.z=w.z*next;
+  }else{
+   const dot=(beforeX*w.x+beforeZ*w.z)/speed,cross=(beforeX*w.z-beforeZ*w.x)/speed;
+   const reverse=dot<=Math.cos((p.reverseAirThresholdDegrees??150)*Math.PI/180)+1e-12;
+   const response=reverse?(p.reverseAirSteeringMultiplier??.5):1;
+   const projection=dot*speed;
+   const throttle=Math.min(impulse*response,Math.max(0,wishSpeed-projection))*dot;
+   const next=Math.min(cap,Math.max(0,speed+throttle));
+   const angle=Math.atan2(cross,dot),limit=VALORANT_AIR_STEERING.maxTurnRate*w.amount*response*dt*Math.abs(cross);
+   const turn=Math.sign(angle)*Math.min(limit,Math.abs(angle)),cos=Math.cos(turn),sin=Math.sin(turn);
+   v.x=(beforeX*cos-beforeZ*sin)*(next/speed);v.z=(beforeX*sin+beforeZ*cos)*(next/speed);
+  }
+ }
+ limitContactSpeed(v,cap);
+ out.set((v.x-beforeX)/dt,0,(v.z-beforeZ)/dt);
+}
+
 /** A takeoff budget restricts tactical air steering only. Callers without a
  * takeoff (unit probes / ledge fallback) retain the profile's explicit cap. */
 export function solveAirMovement(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,airSpeedCap:number|null=null){

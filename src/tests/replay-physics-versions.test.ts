@@ -56,7 +56,7 @@ describe('Simulation rules are selected before replay reconstruction',()=>{
  });
  it('requires the complete versioned calibration identity and rejects mixed rules',()=>{
   const s=new Simulation('free','rifleA',structuredClone(DEFAULT_SETTINGS)),recorder=new ReplayRecorder(s),record=recorder.finish()!;
-  expect(record.header).toMatchObject({gameVersion:'12.0.0',simulationVersion:'valoprac-replay-simulation-3',simulationRules:'materials-v3',materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:'ordered-fixed-input-1',weaponVersion:'weapons-10.0.0',physics:'valorant',seed:DEFAULT_SETTINGS.seed});
+  expect(record.header).toMatchObject({gameVersion:'12.0.0',simulationVersion:'valoprac-replay-simulation-4',simulationRules:'air-steering-v4',materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:'ordered-fixed-input-1',weaponVersion:'weapons-10.0.0',physics:'valorant',seed:DEFAULT_SETTINGS.seed});
   for(const mutate of [
    (r:ReplayRecording)=>{delete r.header.materialPhysicsVersion;},
    (r:ReplayRecording)=>{r.header.materialPhysicsVersion='unregistered';},

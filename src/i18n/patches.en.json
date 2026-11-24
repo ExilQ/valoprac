@@ -1,4 +1,13 @@
 {
+  "12.18": {
+    "title": "Improved VALORANT air steering",
+    "description": "Use A or D and turn the mouse to carve tighter airborne turns after a running jump.",
+    "changes": [
+      "Air input turns horizontal velocity smoothly relative to your view.",
+      "Time repeated jumps to your landings and alternate left and right turns.",
+      "Older replays play back under their recorded physics rules."
+    ]
+  },
   "12.17": {
     "title": "Thirteen map training courses",
     "description": "Choose an original course with its own floor plan and terrain in Maps.",

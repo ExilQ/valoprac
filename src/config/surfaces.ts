@@ -3,7 +3,7 @@ import type {Obstacle} from '../engine/collision/environment';
 
 /** Physical calibration is independent from visual PBR values and quality tiers. */
 export const SURFACE_CALIBRATION_VERSION='physical-surfaces-1.0.0';
-export type SurfaceSemantics='legacy-v2'|'materials-v3';
+export type SurfaceSemantics=import('../engine/simulation/rules').SimulationRulesId;
 export type FootstepSoundProfile='concrete'|'steel'|'tile'|'wood'|'rubber'|'glass'|'plastic'|'fabric';
 export type BulletImpactProfile='wood'|'metal'|'masonry'|'glass';
 export type ParticleProfile='wood-chips'|'metal-sparks'|'masonry-dust'|'glass-shards';

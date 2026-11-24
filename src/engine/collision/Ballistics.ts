@@ -55,7 +55,7 @@ export function traceBallisticRay(ray:Ray,profile:WeaponProfile,target:Ballistic
  const inRange=!!target&&target.distance<=maxDistance,requestedLimit=Math.min(maxDistance,target?.distance??maxDistance),floorFirst=floor>EPS&&floor<requestedLimit;
  const config=PENETRATION_WEAPONS[profile.penetration??'medium'],limit=floorFirst?floor:requestedLimit,trace:BallisticTrace={zone:floorFirst?'wall':inRange?target!.zone:'miss',point:new Vector3().copy(ray.origin).addScaledVector(ray.direction,limit),distance:limit,damageScale:1,penetrationScale:1,penetratedLayers:0,segments:[],stopReason:floorFirst?'floor':inRange?'target':'range',remainingPower:config.power};
  const index=staticBroadphaseFor(obstacles);if(index)index.queryRay(ray,limit,candidates);
- const intervals:Interval[]=[];for(let j=0,n=index?candidates.length:obstacles.length;j<n;j++){const i=index?candidates[j]:j,hit=obstacleRayInterval(ray,obstacles[i],i,rules);if(hit&&hit.start<limit-EPS){if(rules==='materials-v3')hit.physicalEnd=hit.end;hit.end=Math.min(hit.end,limit);intervals.push(hit);}}
+ const intervals:Interval[]=[];for(let j=0,n=index?candidates.length:obstacles.length;j<n;j++){const i=index?candidates[j]:j,hit=obstacleRayInterval(ray,obstacles[i],i,rules);if(hit&&hit.start<limit-EPS){if(rules!=='legacy-v2')hit.physicalEnd=hit.end;hit.end=Math.min(hit.end,limit);intervals.push(hit);}}
  const boundaries=[...new Set(intervals.flatMap(i=>[i.start,i.end]))].sort((a,b)=>a-b);let lastMaterial:SurfaceMaterial|null=null,lastEnd=-Infinity;
  for(let k=0;k<boundaries.length-1;k++){
   const a=boundaries[k],b=boundaries[k+1];if(b-a<EPS||a>=limit)continue;
@@ -67,7 +67,7 @@ export function traceBallisticRay(ray:Ray,profile:WeaponProfile,target:Ballistic
   const newLayer=lastMaterial!==material.material||Math.abs(a-lastEnd)>EPS,thickness=b-a,cost=definition.resistance*thickness,blocked=definition.opaque?'material':newLayer&&trace.penetratedLayers>=config.maxLayers?'layers':cost>trace.remainingPower+EPS?'capacity':null;
   const before=trace.damageScale,after=blocked?before:before*(newLayer?definition.retention:1)*Math.exp(-cost/config.power*config.loss);
   const segment:PenetrationSegment={obstacle:material.index,material:material.material,entry:point(ray,a),exit:point(ray,b),entryNormal:{x:material.normalIn.x,y:material.normalIn.y,z:material.normalIn.z},exitNormal:{x:material.normalOut.x,y:material.normalOut.y,z:material.normalOut.z},thickness,resistance:definition.resistance,cost,damageBefore:before,damageAfter:after,penetrated:!blocked,inside:material.inside&&a===0};
-  if(rules==='materials-v3'){
+  if(rules!=='legacy-v2'){
    // Boundary partitions account for resistance, not extra holes in a wall.
    // Keep their exact charge arithmetic while emitting only authored faces.
    if(material.inside||Math.abs(a-material.start)>EPS||sameMaterialContinues(intervals,material,a,true))segment.entrySurface=false;
