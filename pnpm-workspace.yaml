@@ -1,4 +1,5 @@
 allowBuilds:
   esbuild: true
+  workerd: true
 patchedDependencies:
   '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7@0.3.1': patches/@epicgames-ps__lib-pixelstreamingfrontend-ue5.7@0.3.1.patch
