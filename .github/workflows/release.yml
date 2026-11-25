@@ -1,10 +1,15 @@
 name: Publish VALOPRAC release
-# Push a tag such as v12.21 on a commit whose package.json says 12.0.21 and
-# which contains docs/releases/v12.21.md (Korean patch notes, first line
-# "# <release title>"). The job validates that exact commit, packages the
-# browser + Unreal staging source archive, and publishes the GitHub Release.
+# Every version that has Korean patch notes in docs/releases/v12.N.md (first
+# line "# <release title>") and no GitHub Release yet is released when a
+# branch push to production or a claude/ branch carries those notes. The tag
+# v12.N is created on the last commit whose package.json says 12.0.N and that
+# contains the notes; that exact commit is validated, its browser + Unreal
+# staging source archive is packaged, and the release is published. Pushing a
+# v* tag yourself (re)publishes that one version from the tagged commit.
 on:
   push:
+    branches: [production, 'claude/**']
+    paths: ['docs/releases/v*.md', '.github/workflows/release.yml']
     tags: ['v*']
 permissions:
   contents: write
@@ -12,13 +17,60 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  release:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    env:
-      TAG: ${{ github.ref_name }}
+    timeout-minutes: 5
+    outputs:
+      versions: ${{ steps.plan.outputs.versions }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Find versions to release
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          package_of(){ local tag=$1 core=${1#v} a b c; IFS=. read -r a b c <<<"$core"; if [ -n "${c:-}" ]; then echo "$a.$b.$c"; else echo "$a.0.$b"; fi; }
+          released=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName --jq '.[].tagName')
+          entries=()
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            entries+=("$GITHUB_REF_NAME $GITHUB_SHA")
+          else
+            for notes in $(ls docs/releases/v*.md 2>/dev/null | sort -V); do
+              tag=$(basename "$notes" .md)
+              if grep -qxF "$tag" <<<"$released"; then continue; fi
+              want=$(package_of "$tag") sha=""
+              for c in $(git rev-list -n 400 HEAD); do
+                git cat-file -e "$c:$notes" 2>/dev/null || continue
+                [ "$(git show "$c:package.json" | jq -r .version)" = "$want" ] && { sha=$c; break; }
+              done
+              if [ -z "$sha" ]; then echo "::warning::No commit with package $want and $notes; skipping $tag"; continue; fi
+              entries+=("$tag $sha")
+            done
+          fi
+          newest=$( { printf '%s\n' $released; for e in "${entries[@]}"; do echo "${e%% *}"; done; } | grep -E '^v[0-9]' | sort -V | tail -n1 )
+          json=$(for e in "${entries[@]}"; do tag=${e%% *} sha=${e##* }; jq -nc --arg tag "$tag" --arg sha "$sha" --argjson latest "$([ "$tag" = "$newest" ] && echo true || echo false)" '{tag:$tag,sha:$sha,latest:$latest}'; done | jq -sc .)
+          echo "Planned: $json"
+          echo "versions=$json" >> "$GITHUB_OUTPUT"
+  release:
+    needs: plan
+    if: needs.plan.outputs.versions != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.versions) }}
+    env:
+      TAG: ${{ matrix.tag }}
+      TARGET: ${{ matrix.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ matrix.sha }}
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: '24.22.1'
@@ -27,8 +79,7 @@ jobs:
         run: |
           set -euo pipefail
           version=$(node -p "require('./package.json').version")
-          core=${TAG#v}
-          IFS=. read -r major minor patch <<<"$core"
+          IFS=. read -r major minor patch <<<"${TAG#v}"
           if [ -n "${patch:-}" ]; then expected="$major.$minor.$patch"; else expected="$major.0.$minor"; fi
           [ "$version" = "$expected" ] || { echo "::error::$TAG expects package $expected but package.json is $version"; exit 1; }
           notes="docs/releases/$TAG.md"
@@ -74,7 +125,7 @@ jobs:
             echo "- \`$asset\` · 이 버전의 브라우저 + Unreal Engine 5.7 스테이징 소스"
             echo "- SHA-256 \`$sha\`"
             echo
-            echo "릴리스 자동 검증: 커밋 \`${GITHUB_SHA::7}\`에서 테스트·타입 검사·broker/hosting 테스트·번들 빌드를 실행했습니다."
+            echo "릴리스 자동 검증: 커밋 \`${TARGET::7}\`에서 테스트·타입 검사·broker/hosting 테스트·번들 빌드를 실행했습니다."
           } >> release-notes.md
           echo "file=$asset" >> "$GITHUB_OUTPUT"
       - name: Publish GitHub Release
@@ -82,11 +133,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TITLE: ${{ steps.meta.outputs.title }}
           ASSET: ${{ steps.asset.outputs.file }}
+          LATEST: ${{ matrix.latest }}
         run: |
           set -euo pipefail
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TITLE" --notes-file release-notes.md
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TITLE" --notes-file release-notes.md --latest="$LATEST"
             gh release upload "$TAG" "$ASSET" --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" --verify-tag --latest --title "$TITLE" --notes-file release-notes.md
+            verify=""; [ "$GITHUB_REF_TYPE" = tag ] && verify="--verify-tag"
+            gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" $verify --target "$TARGET" --latest="$LATEST" --title "$TITLE" --notes-file release-notes.md
           fi
