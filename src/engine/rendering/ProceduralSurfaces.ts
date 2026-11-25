@@ -32,14 +32,14 @@ function sample(id:VisualMaterialId,u:number,v:number){
       const aggregate=smooth(clamp((fine-.19)/.72));
       const expansion=1-smooth(clamp(Math.min(u,1-u,v,1-v)/.018));
       height=middle*.18+fine*.10-aggregate*.07-expansion*.15;
-      shade=broad*.023+middle*.027-aggregate*.025-expansion*.085;
+      shade=broad*.012+middle*.018-aggregate*.02-expansion*.06;
       rough=broad*.035+middle*.04+fine*.035+expansion*.025;
       break;
     }
     case 'plaster': {
       const brush=1-smooth(clamp((Math.min(u,1-u)+.012)/.034));
       height=middle*.072+fine*.025-brush*.048;
-      shade=broad*.027+middle*.01-brush*.037;
+      shade=broad*.012+middle*.008-brush*.028;
       rough=broad*.018+middle*.03;
       break;
     }
@@ -71,7 +71,7 @@ function sample(id:VisualMaterialId,u:number,v:number){
       const coat=coated?smooth(clamp((fine+.24)*.85)):0;
       const panel=coated?1-smooth(clamp(Math.min(u,1-u)/.028)):0;
       height=middle*.09+fine*.05+coat*.105-panel*.14;
-      shade=broad*.021+middle*.011+fine*.004-coat*.025-panel*.066;
+      shade=broad*.01+middle*.008+fine*.004-coat*.02-panel*.05;
       rough=middle*.035+fine*.025-coat*.086+panel*.023;
       break;
     }
@@ -100,10 +100,13 @@ function surfaceJoint(u:number,v:number,pattern:SurfacePatternStyle){
  const joint=pattern==='industrial'
   ? Math.min(x,Math.min(v,1-v)*1.7)
   : Math.min(x,y);
- const width=pattern==='squares'?.016:pattern==='industrial-grid'?.025:.032;
- const bevel=1-smooth(clamp(joint/width));
- const inset=pattern==='squares'?0:1-smooth(clamp(Math.abs(joint-width*2.0)/(width*.75)));
- return {height:-bevel*.32+inset*.08,shade:-bevel*.18+inset*.035,rough:bevel*.06};
+ // 12.21: thinner grooves with less darkening. Wide dark bands read as noise
+ // and blur under magnification; the bevel in the normal map carries the edge.
+ const width=pattern==='squares'?.011:pattern==='industrial-grid'?.016:.02;
+ const groove=1-smooth(clamp(joint/width));
+ const lip=1-smooth(clamp(Math.abs(joint-width*1.6)/(width*.6)));
+ const inset=pattern==='squares'?0:1-smooth(clamp(Math.abs(joint-width*2.6)/(width*.75)));
+ return {height:-groove*.32+lip*.05+inset*.05,shade:-groove*.17+lip*.02+inset*.015,rough:groove*.05};
 }
 
 /**

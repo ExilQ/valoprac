@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.20",
-  "patchLabel": "12.20",
-  "generatedAt": "2026-11-25T15:14:51.977Z",
+  "release": "12.0.21",
+  "patchLabel": "12.21",
+  "generatedAt": "2026-11-25T15:33:31.376Z",
   "tests": {
-    "application": 1526,
+    "application": 1529,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -18245,7 +18245,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2958
+        "replayGzipBytes": 2959
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18261,7 +18261,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 790,
-        "replayGzipBytes": 2958
+        "replayGzipBytes": 2960
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18277,7 +18277,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 3004
+        "replayGzipBytes": 3003
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 3002
+        "replayGzipBytes": 3003
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18309,7 +18309,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 769,
-        "replayGzipBytes": 3380
+        "replayGzipBytes": 3382
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18373,7 +18373,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 836,
-        "replayGzipBytes": 5469
+        "replayGzipBytes": 5471
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18389,7 +18389,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 5468
+        "replayGzipBytes": 5470
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18405,7 +18405,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 868,
-        "replayGzipBytes": 5330
+        "replayGzipBytes": 5329
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18421,7 +18421,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 866,
-        "replayGzipBytes": 5328
+        "replayGzipBytes": 5327
       }
     ],
     "browser": {

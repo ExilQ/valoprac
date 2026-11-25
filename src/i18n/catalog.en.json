@@ -14965,6 +14965,41 @@
       "id": "msg_438c1e70eee5",
       "source": "W로 달리다 점프하세요. 공중에서는 W를 유지한 채 A 또는 D와 마우스를 같은 방향으로 움직이세요. 착지에 맞춰 점프를 다시 입력하세요.",
       "en": "Run with W and jump. In the air, keep holding W, press A or D, and turn the mouse in the same direction. Press jump again as you land."
+    },
+    {
+      "id": "msg_0e0c686224a9",
+      "source": "적 강조 색",
+      "en": "Enemy highlight colour"
+    },
+    {
+      "id": "msg_e318f874f8d6",
+      "source": "적 윤곽 강조",
+      "en": "Enemy outline highlight"
+    },
+    {
+      "id": "msg_4944982c7dca",
+      "source": "적 윤곽 강조 색",
+      "en": "Enemy outline highlight colour"
+    },
+    {
+      "id": "msg_91515f986224",
+      "source": "빨강",
+      "en": "Red"
+    },
+    {
+      "id": "msg_c45380d30981",
+      "source": "노랑 (색각 보조)",
+      "en": "Yellow (colour-vision friendly)"
+    },
+    {
+      "id": "msg_e8624a7db07b",
+      "source": "보라 (색각 보조)",
+      "en": "Purple (colour-vision friendly)"
+    },
+    {
+      "id": "msg_e82c4ba19f35",
+      "source": "표적 가장자리에 옅은 윤곽 빛을 더해 밝은 벽 앞에서도 잘 보이게 합니다. 판정과 표적 크기는 바뀌지 않습니다.",
+      "en": "Adds a soft rim light to target edges so they stay visible against bright walls. Hit detection and target size do not change."
     }
   ]
 }

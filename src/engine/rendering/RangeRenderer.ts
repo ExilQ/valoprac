@@ -12,7 +12,8 @@ import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
-import {useCharacterFinishes} from './CharacterMaterial';
+import {createEnemyRim,setEnemyRim,useCharacterFinishes,useEnemyRim,type EnemyHighlight} from './CharacterMaterial';
+import {ENEMY_HIGHLIGHT_CHANGED,loadEnemyHighlight} from '../../config/enemyHighlight';
 import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
 import {architecturalBox,type BoxFinish} from './ArchitecturalBox';
 import {obstacleFinishes} from './ObstacleFinishes';
@@ -66,7 +67,7 @@ export class RangeRenderer {
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
   private entryMarker:THREE.Mesh|null=null;
-  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private fxaa:ShaderPass|null=null;private adsBlend=0;private settingsKey='';
+  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private fxaa:ShaderPass|null=null;private adsBlend=0;private settingsKey='';
   private materialLibrary!:SurfaceMaterialLibrary;
   private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
@@ -86,13 +87,14 @@ export class RangeRenderer {
     const light=arenaLight(simulation.practiceMap),sky=arenaSky(light.zenith,light.horizon);
     this.textures.add(sky);
     this.scene.background=sky;
-    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
+    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.NeutralToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
     if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));host.appendChild(this.renderer.domElement);
-    this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=.31;
-    this.scene.fog=new THREE.Fog(light.horizon,45,140);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
-    this.scene.add(new THREE.HemisphereLight(light.ambient,light.ground,1.42));
-    const sun=this.sun=new THREE.DirectionalLight(light.sun,2.85);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
-    const fill=new THREE.DirectionalLight(light.fill,.49);fill.position.set(4,5,-18);this.scene.add(fill);
+    this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=light.environmentIntensity;
+    this.scene.fog=new THREE.Fog(light.horizon,light.fogNear,light.fogFar);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
+    this.scene.add(new THREE.HemisphereLight(light.ambient,light.ground,light.ambientIntensity));
+    const sun=this.sun=new THREE.DirectionalLight(light.sun,light.sunIntensity);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
+    const fill=new THREE.DirectionalLight(light.fill,light.fillIntensity);fill.position.set(4,5,-18);this.scene.add(fill);
+    if(typeof window!=='undefined')window.addEventListener(ENEMY_HIGHLIGHT_CHANGED,this.onEnemyHighlight);
     this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildGroundPaint();this.buildEntryMarker();this.batchStaticArchitecture();this.applySettings(settings);
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
@@ -285,6 +287,7 @@ export class RangeRenderer {
         const options=field?{tint:0xffffff,vertexColors:true,roughness:1,normalStrength:.12}:{tint:0xffffff,vertexColors:true};
         material=this.materialLibrary.material(family,options);
         if(field)useCharacterFinishes(material);
+        useEnemyRim(material,this.enemyRim);
         byFamily.set(family,material);
         this.materials.add(material);
       }
@@ -591,5 +594,5 @@ export class RangeRenderer {
     if(this.canvasWarmHidden){this.canvas.style.visibility=this.canvasVisibility;this.canvasWarmHidden=false;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.unsubscribeLocale?.();this.localizedSigns.length=0;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();this.groundContacts.dispose();this.characterBatches?.dispose();this.characterBatches=null;this.decalBatch?.dispose();this.decalBatch=null;for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)if(!m.userData.surfaceMaterialManaged)m.dispose();this.materialLibrary.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();this.geometries.clear();this.materials.clear();this.textures.clear();this.archMaterials.clear();this.targetMeshes.length=this.targetMatrices.length=this.renderedTargetPositions.length=0;this.targetBatches.length=this.surfaceImpacts.length=this.impacts.length=this.sparks.length=this.shells.length=this.tracers.length=this.surfaceMaterials.length=0;this.defenderWeapons.clear();}
+  dispose(){if(typeof window!=='undefined')window.removeEventListener(ENEMY_HIGHLIGHT_CHANGED,this.onEnemyHighlight);this.mounted=false;this.unsubscribeLocale?.();this.localizedSigns.length=0;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();this.groundContacts.dispose();this.characterBatches?.dispose();this.characterBatches=null;this.decalBatch?.dispose();this.decalBatch=null;for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)if(!m.userData.surfaceMaterialManaged)m.dispose();this.materialLibrary.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();this.geometries.clear();this.materials.clear();this.textures.clear();this.archMaterials.clear();this.targetMeshes.length=this.targetMatrices.length=this.renderedTargetPositions.length=0;this.targetBatches.length=this.surfaceImpacts.length=this.impacts.length=this.sparks.length=this.shells.length=this.tracers.length=this.surfaceMaterials.length=0;this.defenderWeapons.clear();}
 }
