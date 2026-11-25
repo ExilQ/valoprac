@@ -153,3 +153,11 @@
  .game-stage .precision-hud :is(.hud-round-progress,.ammo-segments,.health-hud-meter) i{background:CanvasText;forced-color-adjust:none}
 }
 @media(prefers-reduced-motion:reduce){.game-stage .precision-hud *{animation:none!important;transition:none!important}}
+
+/* Number-row loadout (1 primary, 2 sidearm, 3 knife) above the ammo readout. */
+.game-stage .precision-hud .weapon-slots-hud{display:flex;justify-content:flex-end;gap:4px;margin:auto 0 6px;padding:0;list-style:none;font-size:11px;color:var(--hud-muted)}
+.game-stage .precision-hud .weapon-slots-hud li{display:flex;align-items:center;gap:5px;padding:3px 7px;border-bottom:2px solid transparent;opacity:.72}
+.game-stage .precision-hud .weapon-slots-hud li[data-active]{color:var(--hud-ink);border-bottom-color:var(--hud-accent);opacity:1}
+.game-stage .precision-hud .weapon-slots-hud kbd{all:unset;font:inherit;font-weight:700;color:inherit;min-width:1.4em;text-align:center;padding:0 3px;border:1px solid currentColor;border-radius:3px;line-height:1.4}
+.game-stage .precision-hud .weapon-slots-hud+.ammo-hud{margin-top:0}
+.game-stage .precision-hud .knife-hud>strong{font-size:28px}

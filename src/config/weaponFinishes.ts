@@ -1,4 +1,4 @@
-import type { WeaponId } from '../engine/types';
+import type { KnifeSkinId, WeaponId } from '../engine/types';
 
 export const WEAPON_FINISHES = {
   original: { title: '기본 마감', steel: 0x58717a, edge: 0x8d999b, polymer: 0x344e58, dark: 0x1c282f },
@@ -32,4 +32,23 @@ export function equipWeaponFinish(weapon: WeaponId, finish: FinishId): EquippedF
   const next = { ...loadWeaponFinishes(), [weapon]: finish };
   localStorage.setItem(KEY, JSON.stringify(next));
   return next;
+}
+
+const KNIFE_KEY = 'valoprac-knife-skin-v1';
+export const KNIFE_SKIN_EVENT = 'valoprac:knife-skin';
+const KNIFE_IDS: readonly KnifeSkinId[] = ['field', 'tanto', 'karambit', 'kunai', 'aether', 'obsidian'];
+
+export function loadKnifeSkin(): KnifeSkinId {
+  try {
+    const stored = localStorage.getItem(KNIFE_KEY);
+    return stored && (KNIFE_IDS as readonly string[]).includes(stored) ? stored as KnifeSkinId : 'field';
+  } catch {
+    return 'field';
+  }
+}
+
+export function equipKnifeSkin(skin: KnifeSkinId): KnifeSkinId {
+  try { localStorage.setItem(KNIFE_KEY, skin); } catch { /* Storage may be unavailable; the choice still applies to this page. */ }
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent(KNIFE_SKIN_EVENT, { detail: skin }));
+  return skin;
 }

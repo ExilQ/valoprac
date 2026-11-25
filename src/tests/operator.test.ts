@@ -122,6 +122,6 @@ describe('Operator input and persisted controls',()=>{
   const mouse=(type:string,button:number)=>doc.dispatchEvent(Object.assign(new Event(type),{button}));const key=(code:string)=>doc.dispatchEvent(Object.assign(new Event('keydown'),{code,repeat:false}));
   mouse('mousedown',2);mouse('mousedown',2);expect(input.state.scopePresses).toBe(1);expect(input.state.scopeHeld).toBe(true);expect(input.state.ads).toBe(false);mouse('mouseup',2);mouse('mousedown',2);expect(input.state.scopePresses).toBe(2);
   key('KeyV');expect(input.state.zoomPresses).toBe(1);input.reset();expect(input.state.scopeHeld).toBe(false);expect(input.state.scopePresses).toBe(0);expect(input.state.zoomPresses).toBe(0);
-  target.weaponId='rifleA';key('KeyV');expect(input.state.zoomPresses).toBe(0);mouse('mousedown',2);expect(input.state.ads).toBe(true);key('Digit4');expect(choose).toHaveBeenCalledWith('operator');input.dispose();
+  target.weaponId='rifleA';key('KeyV');expect(input.state.zoomPresses).toBe(0);mouse('mousedown',2);expect(input.state.ads).toBe(true);key('Digit1');expect(choose).toHaveBeenCalledWith(1);input.dispose();
  });
 });

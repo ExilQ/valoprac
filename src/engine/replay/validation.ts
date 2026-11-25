@@ -5,7 +5,7 @@ import {isMovementAction} from '../../training/movementTools/types';
 import {FIELD_CHARACTER_GEOMETRY,PREVIOUS_FIELD_GEOMETRY,TAILORED_FIELD_GEOMETRY} from '../targets/characterProfile';
 import {integrityHash} from './integrity';
 import {MAX_REPLAY_COMMANDS,MAX_REPLAY_SECONDS,ReplayError,type ReplayRecording} from './types';
-const MODES=['free','precision','braking','spray','tracking'],WEAPONS=['rifleA','rifleB','sheriff','operator'];
+const MODES=['free','precision','braking','spray','tracking'],WEAPONS=['rifleA','rifleB','sheriff','operator','knife'];
 function fail():never{throw new ReplayError('리플레이 파일의 형식·값 또는 기록 한도가 올바르지 않습니다.');}
 function obj(v:unknown):v is Record<string,unknown>{return!!v&&typeof v==='object'&&!Array.isArray(v)&&(Object.getPrototypeOf(v)===Object.prototype||Object.getPrototypeOf(v)===null);}
 function num(v:unknown,min=-1e12,max=1e12):v is number{return typeof v==='number'&&Number.isFinite(v)&&v>=min&&v<=max;}

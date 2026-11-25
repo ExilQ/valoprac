@@ -4,6 +4,7 @@ import type {PenetrationSegment} from '../collision/Ballistics';
 import {synthesizeFootstep} from './footstepSynthesis';
 import {synthesizeLanding} from './landingSynthesis';
 import {synthesizeTrainingCue} from './trainingCue';
+import {synthesizeKnife,type KnifeSound} from './knifeSynthesis';
 import type {LandingSoundEvent} from '../footsteps/Landings';
 import type {FootstepEvent,FootstepMaterial} from '../footsteps/Footsteps';
 import { AUDIO_PROFILES, AUDIO_ACTIONS, type AudioAction } from '../../config/audio';
@@ -13,7 +14,7 @@ import { synthesize } from './synthesis';
 import {listenerForward,spatialCue,type ListenerPose} from './spatial';
 import {FiringTimeline} from './FiringTimeline';
 import {AUDIBLE_OCCLUSION,type AudibleOcclusionResolver} from './occlusion';
-import type { Settings, ShotEvent, WeaponId, Vec3 } from '../types';
+import type { Settings, ShotEvent, WeaponId, Vec3, MeleeEvent } from '../types';
 type Channel='firing'|'handling'|'feedback'|'footsteps';
 interface Voice {source:AudioBufferSourceNode;gain:GainNode;channel:Channel;spatial:AudioNode|null;filter:BiquadFilterNode|null;spatialMode:'hrtf'|'stereo'|'mono'|'none';occluded:boolean;startsAt:number;timestamp?:number;emitter?:string;position?:Vec3;baseGain:number}
 function smooth(param:AudioParam,value:number,time:number){if(typeof param.setTargetAtTime==='function')param.setTargetAtTime(value,time,AUDIBLE_OCCLUSION.smoothingSeconds);else param.value=value;}
@@ -85,7 +86,16 @@ export class TrainingAudio {
     const buffer=this.buffers.get(`impact:${SURFACES[surface].bulletImpactProfile}:false`);if(buffer)this.playBuffer(buffer,'feedback',time,.38*scale,point,emitter);
   }
   impacts(segments:PenetrationSegment[],time?:number,scale=1){for(const segment of segments.slice(0,4)){const profile=SURFACES[segment.material].bulletImpactProfile,entry=this.buffers.get(`impact:${profile}:false`);if(entry&&segment.entrySurface!==false)this.playBuffer(entry,'feedback',time,.38*scale,segment.entry);if(segment.penetrated&&segment.exitSurface!==false){const exit=this.buffers.get(`impact:${profile}:true`);if(exit)this.playBuffer(exit,'feedback',time,.22*scale,segment.exit);}}}
-  action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){this.play(id,action,'handling');}
+  action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){if(id==='knife'){if(action==='equip')this.knifeSound('equip','handling',undefined,.7);return;}this.play(id,action,'handling');}
+  private lastMelee=0;
+  /** Attack swish, plus a body or surface impact when the blade connects. */
+  melee(e:MeleeEvent){if(e.serial<=this.lastMelee)return;this.lastMelee=e.serial;this.events++;this.knifeSound(e.kind,'firing',e.timestamp,.8);
+    if(e.hit==='wall')this.knifeSound('wall','feedback',e.timestamp,.55,e.impact??undefined);else if(e.hit!=='miss')this.knifeSound('hit','feedback',e.timestamp,e.killed?.95:.75);}
+  private knifeSound(sound:KnifeSound,channel:Channel,time?:number,scale=1,position?:Vec3){
+    const c=this.context;if(!c||this.disposed)return;const key=`knife:${sound}`;let buffer=this.buffers.get(key);
+    if(!buffer){const values=synthesizeKnife(sound,c.sampleRate);buffer=c.createBuffer(1,values.length,c.sampleRate);buffer.getChannelData(0).set(values);this.buffers.set(key,buffer);}
+    this.playBuffer(buffer,channel,time,scale,position,`knife:${sound}`);
+  }
   trainingCue(source:Vec3,time:number){
     const c=this.context;if(!c||this.disposed||!Number.isFinite(time))return;
     let buffer=this.buffers.get('training:cue');
@@ -93,7 +103,7 @@ export class TrainingAudio {
     this.playBuffer(buffer,'feedback',time,.55,source);
   }
   private play(id:WeaponId,action:AudioAction,channel:Channel,time?:number,scale=1,position?:Vec3,emitter?:string){
-    const b=this.buffers.get(`${id}:${action}`);if(b)this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale,position,emitter);
+    const b=this.buffers.get(`${id}:${action}`);if(b&&id!=='knife')this.playBuffer(b,channel,time,AUDIO_PROFILES[id].gain*scale,position,emitter);
   }
   private release(v:Voice,stop=false){
     v.source.onended=null;if(stop){try{v.source.stop();}catch{/* Voice may already have finished. */}}
@@ -134,6 +144,6 @@ export class TrainingAudio {
   /** A fresh Simulation restarts event IDs and timestamps. Pauses and weapon
    * changes retain those identities, so only an authority replacement resets
    * them. Synthesized/imported buffers and the existing context stay reusable. */
-  resetSession(time=0){this.stop();this.lastShot='';this.lastFootstep=0;this.lastLanding=0;this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
+  resetSession(time=0){this.stop();this.lastShot='';this.lastMelee=0;this.lastFootstep=0;this.lastLanding=0;this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
   dispose(){this.disposed=true;this.stop();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.buffers.clear();this.stepBuffers.clear();this.landingBuffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
 }

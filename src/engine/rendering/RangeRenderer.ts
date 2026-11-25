@@ -34,8 +34,9 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import {colorBatchSignature,mergeStaticArchitecture} from './StaticGeometry';
 import {GroundContacts} from './GroundContacts';
 import {createCharacterBatches,useMultiDrawCharacters,type CharacterBatches,type CharacterBatchObject} from './CharacterBatches';
-import { loadWeaponFinishes, WEAPON_FINISHES } from '../../config/weaponFinishes';
+import { loadWeaponFinishes, loadKnifeSkin, KNIFE_SKIN_EVENT, WEAPON_FINISHES } from '../../config/weaponFinishes';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
+import { createKnifeView, KNIFE_SWING_SECONDS, type KnifeVisual } from './KnifeView';
 import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
 import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
 import {cameraVerticalFov} from './projection';
@@ -71,6 +72,8 @@ export class RangeRenderer {
   private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
   private shells:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private shellIndex=0;
+  private knife:KnifeVisual|null=null;private meleeSwing:{kind:'slash'|'stab';start:number}|null=null;
+  private onKnifeSkin=()=>this.refreshKnifeSkin();
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
   private viewport={ width:0, height:0, ratio:0, composer:null as EffectComposer|null };
   private materialRevision=0;private preparedRevision=-1;private shaderKey='';private preparationPromise:Promise<ShaderPreparationReport>|null=null;
@@ -176,18 +179,18 @@ export class RangeRenderer {
     try{
       if(!this.canvasWarmHidden){this.canvasVisibility=this.canvas.style.visibility;this.canvas.style.visibility='hidden';this.canvasWarmHidden=true;}
       this.updateCharacters(1);
-      this.weapon.visible=true;for(const id of WEAPON_ORDER)this.visuals[id].root.visible=true;for(const mesh of representatives){mesh.visible=true;mesh.frustumCulled=false;}this.decalsDirty=true;this.updateSurfaceDecals();
+      this.weapon.visible=true;for(const id of WEAPON_ORDER)this.visuals[id].root.visible=true;if(this.knife){this.knife.root.visible=true;this.knife.showAll(true);}for(const mesh of representatives){mesh.visible=true;mesh.frustumCulled=false;}this.decalsDirty=true;this.updateSurfaceDecals();
       this.scene.updateMatrixWorld(true);this.weaponScene.updateMatrixWorld(true);this.renderer.setRenderTarget(probe);
       this.renderer.render(this.scene,this.camera);this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);
       // Regular offscreen targets use linear output in Three. Also warm the
       // actual default framebuffer's sRGB variant while the canvas is hidden;
       // otherwise the first visible frame can compile a second shader set.
-      this.renderer.setRenderTarget(null);for(const id of WEAPON_ORDER)this.visuals[id].root.visible=id===this.simulation.weaponId;
+      this.renderer.setRenderTarget(null);for(const id of WEAPON_ORDER)this.visuals[id].root.visible=id===this.simulation.weaponId;if(this.knife){this.knife.showAll(false);this.knife.root.visible=this.simulation.weaponId==='knife';}
       this.renderer.render(this.scene,this.camera);this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);
       if(this.composer){this.composer.renderToScreen=true;this.composer.render(0);}
     }finally{
       if(this.composer&&composerScreen!==undefined)this.composer.renderToScreen=composerScreen;
-      this.weapon.visible=weaponVisible;WEAPON_ORDER.forEach((id,i)=>{this.visuals[id].root.visible=weaponVisibility[i];});representatives.forEach((mesh,i)=>{mesh.visible=effectVisibility[i];mesh.frustumCulled=effectCulling[i];});this.decalsDirty=true;this.updateSurfaceDecals();
+      this.weapon.visible=weaponVisible;WEAPON_ORDER.forEach((id,i)=>{this.visuals[id].root.visible=weaponVisibility[i];});if(this.knife){this.knife.showAll(false);this.knife.root.visible=this.simulation.weaponId==='knife';}representatives.forEach((mesh,i)=>{mesh.visible=effectVisibility[i];mesh.frustumCulled=effectCulling[i];});this.decalsDirty=true;this.updateSurfaceDecals();
       this.renderer.autoClear=previousClear;this.renderer.setRenderTarget(previousTarget);probe.dispose();
     }
   }
@@ -329,6 +332,15 @@ export class RangeRenderer {
       this.visuals[id]=visual;
       this.weapon.add(visual.root);
     }
+    this.knife=createKnifeView(g=>{this.geometries.add(g);return g;},m=>{this.materials.add(m);return m;},this.materialLibrary,loadKnifeSkin());
+    this.knife.root.visible=this.simulation.weaponId==='knife';this.weapon.add(this.knife.root);
+    if(typeof window!=='undefined')window.addEventListener(KNIFE_SKIN_EVENT,this.onKnifeSkin);
+  }
+  refreshKnifeSkin(){const skin=loadKnifeSkin();if(this.knife&&this.knife.skin!==skin)this.knife.setSkin(skin);}
+  /** Start the viewmodel swing; wall contact throws a few sparks. */
+  addMelee(e:import('../types').MeleeEvent){
+    this.meleeSwing={kind:e.kind,start:e.timestamp};
+    if(e.hit==='wall'&&e.impact&&this.settings.effectsQuality!=='low'){for(let i=0;i<3;i++){const p=this.sparks[this.sparkIndex++%this.sparks.length];p.mesh.position.set(e.impact.x,e.impact.y,e.impact.z);(p.mesh.material as THREE.MeshBasicMaterial).color.setHex(0xffd7a4);p.mesh.geometry=this.debrisGeometries['metal-sparks'];p.mesh.scale.setScalar(.8);p.velocity.set((i-1)*.35,.5+i*.15,.3);p.until=this.simulation.time+.16;p.mesh.visible=true;}}
   }
   private buildShells(){
     const g=new THREE.CylinderGeometry(0.008,0.008,0.03,6);this.geometries.add(g);const m=this.material(0xa58e52,0.28,'brushed-metal');
@@ -337,7 +349,7 @@ export class RangeRenderer {
     const particleGeometry=this.debrisGeometries['metal-sparks'];this.geometries.add(particleGeometry);const particleMaterial=new THREE.MeshBasicMaterial({color:0xffd7a4});this.materials.add(particleMaterial);
     for(let i=0;i<32;i++){const pm=particleMaterial.clone();this.materials.add(pm);const mesh=new THREE.Mesh(particleGeometry,pm);mesh.visible=false;this.scene.add(mesh);this.sparks.push({mesh,velocity:new THREE.Vector3(),until:0});}
   }
-  clearImpacts(){this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
+  clearImpacts(){this.meleeSwing=null;this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
   private tacticalSurface(obstacle:Obstacle){
     const {family,tint,glass}=tacticalSurfaceStyle(obstacle,this.simulation.practiceMap);
     const pattern=obstacle.material||glass||obstacle.ramp||obstacle.kind==='cover'?{}:arenaPattern(this.simulation.practiceMap,false,this.patterns);
@@ -574,6 +586,7 @@ export class RangeRenderer {
       const w=s.weapon,reload=w.reloadingUntil===null?0:THREE.MathUtils.clamp((s.time-w.reloadStarted)/w.profile.reloadTime,0,1),reloadPose=Math.sin(reload*Math.PI),equip=THREE.MathUtils.clamp((w.equipUntil-s.time)/w.profile.equipTime,0,1);
       poseViewmodel(s.weaponId,this.adsBlend,this.gunSlide,equip,reloadPose,s.time,m.speed,swayX,swayY,this.weapon);
       for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=id==='operator'||this.adsBlend>.1;v.animateBolt?.(s.weapon.boltProgress);v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
+      if(this.knife){const knife=s.weaponId==='knife';this.knife.root.visible=knife;if(knife){const swing=this.meleeSwing,phase=swing?(s.time-swing.start)/KNIFE_SWING_SECONDS[swing.kind]:2;if(phase>=1)this.meleeSwing=null;this.knife.animate(s.time,m.speed,swing&&phase<1&&phase>=0?{kind:swing.kind,phase}:null);}}
       this.weapon.visible=!(s.weaponId==='operator'&&s.weapon.scopeAmount>.75);this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
     const inspection=this.inspectionCamera;
@@ -591,5 +604,5 @@ export class RangeRenderer {
     if(this.canvasWarmHidden){this.canvas.style.visibility=this.canvasVisibility;this.canvasWarmHidden=false;}
   }
   get calls(){return this.renderer.info.render.calls;}
-  dispose(){this.mounted=false;this.unsubscribeLocale?.();this.localizedSigns.length=0;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();this.groundContacts.dispose();this.characterBatches?.dispose();this.characterBatches=null;this.decalBatch?.dispose();this.decalBatch=null;for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)if(!m.userData.surfaceMaterialManaged)m.dispose();this.materialLibrary.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();this.geometries.clear();this.materials.clear();this.textures.clear();this.archMaterials.clear();this.targetMeshes.length=this.targetMatrices.length=this.renderedTargetPositions.length=0;this.targetBatches.length=this.surfaceImpacts.length=this.impacts.length=this.sparks.length=this.shells.length=this.tracers.length=this.surfaceMaterials.length=0;this.defenderWeapons.clear();}
+  dispose(){if(typeof window!=='undefined')window.removeEventListener(KNIFE_SKIN_EVENT,this.onKnifeSkin);this.knife?.dispose();this.knife=null;this.mounted=false;this.unsubscribeLocale?.();this.localizedSigns.length=0;this.observer.disconnect();this.disposeComposer();this.environmentTarget?.dispose();this.groundContacts.dispose();this.characterBatches?.dispose();this.characterBatches=null;this.decalBatch?.dispose();this.decalBatch=null;for(const batch of this.defenderWeapons.values())batch.dispose();this.sun.shadow.map?.dispose();for(const g of this.geometries)g.dispose();for(const m of this.materials)if(!m.userData.surfaceMaterialManaged)m.dispose();this.materialLibrary.dispose();for(const t of this.textures)t.dispose();const skeletons=new Set<THREE.Skeleton>();this.weaponScene.traverse(node=>{if(node instanceof THREE.SkinnedMesh)skeletons.add(node.skeleton);});for(const skeleton of skeletons)skeleton.dispose();this.renderer.renderLists.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();this.scene.clear();this.weaponScene.clear();this.geometries.clear();this.materials.clear();this.textures.clear();this.archMaterials.clear();this.targetMeshes.length=this.targetMatrices.length=this.renderedTargetPositions.length=0;this.targetBatches.length=this.surfaceImpacts.length=this.impacts.length=this.sparks.length=this.shells.length=this.tracers.length=this.surfaceMaterials.length=0;this.defenderWeapons.clear();}
 }

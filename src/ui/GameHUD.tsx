@@ -1,10 +1,13 @@
+import {useState} from 'react';
 import {MovementProfileStatus,MovementPhysicsDiagnostics,MovementPhysicsDetails} from './MovementPhysicsFeedback';
 import {HopFeedback,WallbangFeedback,CombatDiagnostics} from './MechanicsFeedback';
 import {COMBAT_MODE_LABELS} from './CombatControls';
 import {PeekingFeedback} from './PeekingFeedback';
 import type {Runtime,Telemetry} from '../engine/Runtime';
 import type {Mode,WeaponId,Settings} from '../engine/types';
-import {WEAPONS} from '../config/weapons';
+import {WEAPONS,KNIFE_SKINS,SIDEARM,slotOf} from '../config/weapons';
+import {loadKnifeSkin} from '../config/weaponFinishes';
+import {useApp} from '../app/store';
 import {trainingTitle,trainingTimed,scenarioTitleIsLiteral,trainingKeyLabel} from './trainingPresentation';
 import {FootstepHUD} from './FootstepHUD';
 import {GameplayDiagnostics} from './GameplayDiagnostics';
@@ -13,7 +16,24 @@ import './precisionHud.css';
 
 export type HudRuntime=Pick<Runtime,'simulation'|'input'>;
 
+/** Number-row loadout: 1 primary, 2 sidearm, 3 knife. */
+function WeaponSlots({weapon}:{weapon:WeaponId}){
+ const primary=useApp(s=>s.primaryWeapon),active=slotOf(weapon);
+ const items:[1|2|3,string][]=[[1,WEAPONS[primary].name],[2,WEAPONS[SIDEARM].name],[3,'칼']];
+ return <ol className="weapon-slots-hud" aria-label="무기 슬롯">{items.map(([slot,name])=><li key={slot} data-active={slot===active?'true':undefined}><kbd>{slot}</kbd><span>{name}</span></li>)}</ol>;
+}
+
+function KnifeReadout(){
+ const [id]=useState(loadKnifeSkin),skin=KNIFE_SKINS.find(k=>k.id===id)??KNIFE_SKINS[0];
+ return <div className="ammo-hud knife-hud" data-ammo-state="ready">
+  <span>{skin.name}</span><small className="reserve-count">근접</small>
+  <strong aria-label="근접 무기">칼</strong>
+  <p>좌클릭 베기 · 우클릭 찌르기</p>
+ </div>;
+}
+
 function Magazine({weapon,settings,telemetry}:{weapon:WeaponId;settings:Settings;telemetry:Telemetry}) {
+ if(weapon==='knife')return <KnifeReadout/>;
  const profile=WEAPONS[weapon];
  const current=telemetry.weapon===weapon;
  const ammo=Math.max(0,Math.min(profile.magazine,current?telemetry.ammo:profile.magazine));
@@ -118,6 +138,7 @@ export function GameHUD({runtime,settings,telemetry,mode,weapon}:{runtime:HudRun
      </div>
     </details>}
    </div>
+   <WeaponSlots weapon={weapon}/>
    <Magazine weapon={weapon} settings={settings} telemetry={telemetry}/>
    {settings.combatMode==='gunfight'&&typeof health==='number'&&Number.isFinite(health)&&<HealthGauge health={health}/>}
   </div>
@@ -126,7 +147,7 @@ export function GameHUD({runtime,settings,telemetry,mode,weapon}:{runtime:HudRun
     <span><kbd>{keys}</kbd> 이동</span><span><kbd>{trainingKeyLabel(binding.walk)}</kbd> 걷기</span>
     <span><kbd>{trainingKeyLabel(binding.crouch)}</kbd> 앉기</span><span><kbd>{trainingKeyLabel(binding.reload)}</kbd> 재장전</span>
     {weapon==='operator'&&<span><kbd>{trainingKeyLabel(settings.operatorZoomBinding)}</kbd> 배율 전환</span>}
-    <span><kbd>Esc</kbd> 설정</span><span><kbd>{trainingKeyLabel(binding.weapons)}</kbd> 무기 선택</span>
+    <span><kbd>1·2·3</kbd> 주무기·보조·칼</span><span><kbd>Esc</kbd> 설정</span><span><kbd>{trainingKeyLabel(binding.weapons)}</kbd> 무기 선택</span>
    </div>}
    {settings.showPerformance&&<div className="performance-hud">{Math.round(telemetry.fps)} 프레임/초 <span>·</span> 지연 상위 5% {telemetry.p95.toFixed(1)} 밀리초 <span>·</span> 120회/초 연산 {telemetry.debt>0&&`· 대기 ${telemetry.debt}회`}</div>}
   </div>

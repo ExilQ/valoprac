@@ -1,4 +1,14 @@
 {
+  "12.21": {
+    "title": "Knife slot and weapon switching fix",
+    "description": "Number keys now hold a fixed loadout: 1 primary, 2 sidearm, 3 knife. Switching weapons no longer stops you while you keep moving.",
+    "changes": [
+      "Fixed a bug where switching weapons with a number key stopped the player even though a movement key was still held.",
+      "1 draws your primary (Vandal, Phantom or Operator, whichever you picked last), 2 the Sheriff and 3 the knife.",
+      "The knife slashes with left click and stabs with right click, and you run faster with it out.",
+      "Six original knife designs, from real field knives to fantasy blades, can be chosen on the Weapons page."
+    ]
+  },
   "12.20": {
     "title": "Interface design refresh",
     "description": "One accent color, a calmer dark theme, and consistent page layout make the training screens easier to read.",

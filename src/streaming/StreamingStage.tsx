@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {ArrowRight,Monitor,PlugZap,Download,RefreshCw} from 'lucide-react';
 import {useApp} from '../app/store';
-import {WEAPONS,WEAPON_ORDER} from '../config/weapons';
+import {WEAPONS,WEAPON_ORDER,isGun} from '../config/weapons';
 import {validateStreamingConfig,type StreamingConfig} from './config';
 import {EMPTY_METRICS,type StreamMetrics} from './diagnostics';
 import type {EngineState} from './protocol';
@@ -20,13 +20,14 @@ export function StreamingStage(){
   return()=>{controller.abort();abort.current?.abort();capture.current?.dispose();session.current?.dispose();session.current=null;};
  },[]);
  useEffect(()=>{session.current?.configure(settings,mode);},[settings,mode]);
- useEffect(()=>{session.current?.selectWeapon(weapon);},[weapon]);
+ // The streamed Unreal staging build has no knife: stream the primary instead.
+ useEffect(()=>{session.current?.selectWeapon(isGun(weapon)?weapon:useApp.getState().primaryWeapon);},[weapon]);
  useEffect(()=>{const pause=()=>{capture.current?.cancel();session.current?.pause();setMenuOpen(true);setCapturing(false);};const unlock=()=>{if(document.pointerLockElement!==host.current)pause();};const blur=()=>{pause();if(document.pointerLockElement===host.current)document.exitPointerLock();};const fail=()=>{pause();setError('마우스 잠금을 허용하지 않았습니다. 다시 시작하거나 브라우저 훈련을 선택하세요.');};document.addEventListener('pointerlockchange',unlock);document.addEventListener('pointerlockerror',fail);window.addEventListener('blur',blur);return()=>{document.removeEventListener('pointerlockchange',unlock);document.removeEventListener('pointerlockerror',fail);window.removeEventListener('blur',blur);};},[]);
  const close=()=>{capture.current?.dispose();abort.current?.abort();session.current?.dispose();session.current=null;host.current?.replaceChildren();setConnected(false);setReady(false);setState(null);setBusy(false);setCapturing(false);setSaving(false);setMenuOpen(true);setRecent([]);setStatus('연결 종료');};
  const save=(data:SessionData)=>{setSaving(false);capture.current?.dispose();void finish(data);};
  const connect=async()=>{if(!config||!host.current||busy)return;abort.current?.abort();session.current?.dispose();session.current=null;host.current.replaceChildren();const controller=new AbortController();abort.current=controller;setBusy(true);setConnected(false);setReady(false);setSaving(false);setMenuOpen(true);setError('');setState(null);setRecent([]);setMetrics({...EMPTY_METRICS});setStatus('독립 GPU 세션 준비 중…');
   try{const {EpicSession}=await import('./EpicSession');if(controller.signal.aborted)return;
-   const current=useApp.getState();const s=await EpicSession.connect(config,host.current,{settings:current.settings,mode:current.mode,weapon:current.weapon},{
+   const current=useApp.getState();const s=await EpicSession.connect(config,host.current,{settings:current.settings,mode:current.mode,weapon:isGun(current.weapon)?current.weapon:current.primaryWeapon},{
     state:state=>{if(controller.signal.aborted)return;setState(state);setRecent(session.current?.controller.recorder.recentShots()??[]);if(state.paused||state.finished){capture.current?.dispose();setMenuOpen(true);}},
     status:text=>{if(!controller.signal.aborted)setStatus(text);},ready:value=>{if(controller.signal.aborted)return;setReady(value);if(!value){setMenuOpen(true);capture.current?.dispose();}},
     metrics:value=>{if(!controller.signal.aborted)setMetrics(value);},error:text=>{if(!controller.signal.aborted){setError(text);setSaving(false);}},finished:data=>{if(!controller.signal.aborted)save(data);}

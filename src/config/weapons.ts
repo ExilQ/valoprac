@@ -1,6 +1,6 @@
-import type { WeaponId, HitZone } from '../engine/types';
+import type { WeaponId, GunId, HitZone, KnifeSkinId } from '../engine/types';
 export interface WeaponProfile {
-  id:WeaponId; name:string; kind:'vandal'|'phantom'|'sheriff'|'operator'; fireMode:'auto'|'semi'|'bolt'; fireRate:number; adsFireRate:number; adsZoom:number; equipTime:number; reserve:number;adsTransition:number;
+  id:WeaponId; name:string; kind:'vandal'|'phantom'|'sheriff'|'operator'|'knife'; fireMode:'auto'|'semi'|'bolt'|'melee'; fireRate:number; adsFireRate:number; adsZoom:number; equipTime:number; reserve:number;adsTransition:number;
   movementSpeed?:number;penetration?:'high'|'medium'|'low';
   magazine:number; reloadTime:number; firstSpread:number; movementSpread:number;walkingSpread?:number;
   /** Total no-bloom hip-fire half-cone at full crouch movement speed, in degrees. */
@@ -35,8 +35,45 @@ export const WEAPONS:Record<WeaponId,WeaponProfile> = {
     recoilRecovery:5.7,recoveryDelay:0.25,cameraScale:1,randomness:0.025,crouchSpread:0.75,crouchRecoil:0.9,adsSpread:1,adsMoveModifier:1,
     yawSwitchTime:0.6,yawSwitchChance:0,protectedBullets:6,
     damage:[{maxDistance:30,head:159.5,body:55,leg:46.75},{maxDistance:Infinity,head:145,body:50,leg:42.5}],
-    recoil:[[1.8,0.08],[1.95,-0.04],[2.05,0.06],[2.1,0.1],[2.15,-0.06],[2.2,0.08]]}
+    recoil:[[1.8,0.08],[1.95,-0.04],[2.05,0.06],[2.1,0.1],[2.15,-0.06],[2.2,0.08]]},
+  // Melee slot. Gun fields are inert (no magazine, spread or recoil); the
+  // simulation routes attacks through KNIFE_ATTACKS instead of a bullet.
+  knife:{id:'knife',name:'전술 나이프',kind:'knife',fireMode:'melee',fireRate:2,adsFireRate:2,adsZoom:1,equipTime:.6,reserve:0,adsTransition:0,movementSpeed:6.75,
+    magazine:0,reloadTime:0,firstSpread:0,movementSpread:0,airSpread:0,bloomPerShot:0,maxBloom:0,bloomRecovery:1,resetTime:1,
+    recoilRecovery:10,recoveryDelay:0,cameraScale:1,randomness:0,crouchSpread:1,crouchRecoil:1,adsSpread:1,adsMoveModifier:1,
+    yawSwitchTime:1,yawSwitchChance:0,protectedBullets:0,
+    damage:[{maxDistance:Infinity,head:50,body:50,leg:50}],
+    recoil:[[0,0]]}
 };
-export const WEAPON_ORDER:WeaponId[]=['rifleA','rifleB','sheriff','operator'];
+export const WEAPON_ORDER:GunId[]=['rifleA','rifleB','sheriff','operator'];
+/** Every equippable item, in weapon-RNG seed order. The knife is appended so
+ * the firearms keep the seeds recorded by earlier replays. */
+export const EQUIP_ORDER:WeaponId[]=[...WEAPON_ORDER,'knife'];
+export const PRIMARY_WEAPONS:GunId[]=['rifleA','rifleB','operator'];
+export const SIDEARM:GunId='sheriff';
+export const isGun=(id:WeaponId):id is GunId=>id!=='knife';
+export const isPrimary=(id:WeaponId):id is GunId=>(PRIMARY_WEAPONS as WeaponId[]).includes(id);
+/** Number-row slots: 1 primary, 2 sidearm, 3 knife. */
+export function weaponForSlot(slot:number,primary:GunId):WeaponId|null{return slot===1?primary:slot===2?SIDEARM:slot===3?'knife':null;}
+export function slotOf(id:WeaponId):1|2|3{return id==='knife'?3:id===SIDEARM?2:1;}
+
+/** Melee attacks. Damage ignores hit zone; elimination follows target health
+ * (150) unless the free-practice rule eliminates on any hit. */
+export const KNIFE_ATTACKS={
+  slash:{damage:50,range:2.2,recovery:.5,cone:16},
+  stab:{damage:75,range:1.9,recovery:.95,cone:12}
+} as const;
+export type KnifeAttack=keyof typeof KNIFE_ATTACKS;
+
+export interface KnifeSkin {id:KnifeSkinId;name:string;style:'real'|'fantasy';description:string;}
+export const KNIFE_SKINS:readonly KnifeSkin[]=[
+  {id:'field',name:'필드 나이프',style:'real',description:'검은 코팅 날 · 파라코드 손잡이'},
+  {id:'tanto',name:'탄토',style:'real',description:'각진 끝 · 청록 실 감기'},
+  {id:'karambit',name:'카람빗',style:'real',description:'손가락 고리 · 갈고리형 곡도'},
+  {id:'kunai',name:'쿠나이',style:'real',description:'고리 손잡이 · 가벼운 단검'},
+  {id:'aether',name:'에테르 블레이드',style:'fantasy',description:'떠 있는 청록 에너지 날'},
+  {id:'obsidian',name:'흑요석 송곳니',style:'fantasy',description:'용암 균열이 빛나는 흑요석'}
+];
+export const KNIFE_SKIN_IDS=KNIFE_SKINS.map(s=>s.id);
 export function damageAt(profile:WeaponProfile,zone:HitZone,distance:number){const d=profile.damage.find(d=>distance<=d.maxDistance)??profile.damage[profile.damage.length-1];return zone==='head'?d.head:zone==='leg'?d.leg:zone==='torso'||zone==='arm'?d.body:0;}
 export {horizontalFov as adsFov} from '../engine/rendering/projection';

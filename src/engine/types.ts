@@ -1,5 +1,12 @@
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
-export type WeaponId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
+/** Firearms carried by the player and by defenders. */
+export type GunId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
+/** Everything the player can equip: slot 1 primary, slot 2 sidearm, slot 3 knife. */
+export type WeaponId = GunId | 'knife';
+/** One knife attack, emitted for audio and the viewmodel. Not a ShotEvent: it
+ * never enters accuracy, recoil or braking statistics. */
+export interface MeleeEvent {serial:number;timestamp:number;kind:'slash'|'stab';hit:HitZone;targetId:number|null;damage:number;killed:boolean;impact:{x:number;y:number;z:number}|null;lifeGeneration:number;}
+export type KnifeSkinId = 'field'|'tanto'|'karambit'|'kunai'|'aether'|'obsidian';
 export type PracticeMap=import('../config/mapCourses').CourseId|'range'|'tactical'|'long'|'garage'|'site'|'mid'|'tower'|'multi'|'complex'|'bunny'|'wallbang';
 export type Drill='none'|'tapAD'|'tapDA'|'release'|'wide'|'repeat'|'stopMoving'|'corner'|'vertical'|'mixed'|'moving'|'bunny'|'wallbang';
 export type Behavior = 'stationary' | 'strafe' | 'random' | 'stopGo' | 'crouch' | 'peek' | 'appearing'|'short'|'long'|'reactive'|'wide'|'mixed';
@@ -16,7 +23,7 @@ export interface Settings {
   movementTools:import('../training/movementTools/types').MovementToolsSettings;
   movementPhysics:'valorant'|'counterStrike';csMovementPreset:'cs2'|'sourceClassic';physicsDiagnostics:boolean;wheelJump:'off'|'up'|'down';
   combatMode:'learning'|'gunfight'|'exposure';defenderSkill:'beginner'|'normal'|'advanced'|'expert';defenderAimSpeed:number;defenderAimAcceleration:number;defenderStability:number;defenderFirstShotError:number;defenderRecoilControl:number;defenderTactics:number;botDiagnostics:boolean;jumpBufferMs:number;penetrationDiagnostics:boolean;
-  peekingTimed:boolean;operatorScopeMode:'hold'|'toggle';operatorAutoRescope:boolean;operatorZoomBinding:string;peekScenario:PeekScenario;defenderWeapon:WeaponId|'mixed';defenderReaction:number;defenderAccuracy:number;defenderReposition:number;randomDefenders:boolean;
+  peekingTimed:boolean;operatorScopeMode:'hold'|'toggle';operatorAutoRescope:boolean;operatorZoomBinding:string;peekScenario:PeekScenario;defenderWeapon:GunId|'mixed';defenderReaction:number;defenderAccuracy:number;defenderReposition:number;randomDefenders:boolean;
   gameplayRevision:number;aimTelemetry:boolean;
   practiceMap:PracticeMap;drill:Drill;crouchMode:'hold'|'toggle';inputDiagnostics:boolean;adsDotSize:number;botDifficulty:'easy'|'normal'|'hard';exposureEnabled:boolean;exposureLimit:number;exposureMode:'continuous'|'persistent';footstepHud:boolean;soundMinimap:boolean;footstepVolume:number;
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
@@ -37,7 +44,7 @@ export interface Settings {
 export interface ShotEvent {
   targetPoseSource?:'rendered-frame'|'simulation';renderedFrameTime?:number;inputTime?:number;
   penetrationSegments?:import('./collision/Ballistics').PenetrationSegment[];penetrationStop?:string;lifeGeneration?:number;
-  timestamp: number; weapon: WeaponId; damage?:number; ads?:boolean; scopeZoom?:number; recoveryUntil?:number;penetratedLayers?:number; accuracyState?:string; horizontalDirection?:number; shotIndex: number; magazineShot: number; firstShot: boolean;
+  timestamp: number; weapon: GunId; damage?:number; ads?:boolean; scopeZoom?:number; recoveryUntil?:number;penetratedLayers?:number; accuracyState?:string; horizontalDirection?:number; shotIndex: number; magazineShot: number; firstShot: boolean;
   position: Vec3; velocity: Vec3; direction: Vec3; aim: {yaw:number;pitch:number};
   recoil: {pitch:number;yaw:number}; spread: {base:number;movement:number;bloom:number;air:number;landing?:number;total:number;x:number;y:number};
   hit: HitZone; impact: Vec3; targetId: number | null; targetPosition: Vec3 | null; targetState: Behavior | null;
