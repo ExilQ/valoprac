@@ -1,0 +1,92 @@
+name: Publish VALOPRAC release
+# Push a tag such as v12.21 on a commit whose package.json says 12.0.21 and
+# which contains docs/releases/v12.21.md (Korean patch notes, first line
+# "# <release title>"). The job validates that exact commit, packages the
+# browser + Unreal staging source archive, and publishes the GitHub Release.
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24.22.1'
+      - name: Check tag, package version and patch notes
+        id: meta
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          core=${TAG#v}
+          IFS=. read -r major minor patch <<<"$core"
+          if [ -n "${patch:-}" ]; then expected="$major.$minor.$patch"; else expected="$major.0.$minor"; fi
+          [ "$version" = "$expected" ] || { echo "::error::$TAG expects package $expected but package.json is $version"; exit 1; }
+          notes="docs/releases/$TAG.md"
+          [ -f "$notes" ] || { echo "::error::Missing $notes"; exit 1; }
+          title=$(head -n1 "$notes" | sed 's/^# *//')
+          [ -n "$title" ] || { echo "::error::$notes must start with '# <title>'"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+      - name: Install locked dependencies
+        run: corepack enable && corepack prepare pnpm@11.25.0 --activate && pnpm install --frozen-lockfile
+      - name: Application tests
+        run: pnpm test
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Broker and hosting tests
+        run: pnpm test:broker && pnpm test:hosting
+      # The full `pnpm build` chain also runs verify-build, verify-modern-web
+      # and verify-search, which read QA comparison images and
+      # deployment/search-discovery.json that are not tracked in Git. Run the
+      # build stages that only need tracked sources.
+      - name: Build browser bundle and package source
+        run: |
+          set -euo pipefail
+          node scripts/sync-interface-tokens.mjs
+          node scripts/validate-release.mjs
+          node scripts/package-unreal.mjs
+          pnpm exec vite build
+          node --test scripts/interface-palette.test.mjs
+          node scripts/verify-interface-palette.mjs
+          node scripts/export-routes.mjs
+      - name: Prepare release asset and notes
+        id: asset
+        run: |
+          set -euo pipefail
+          asset="valoprac-v${{ steps.meta.outputs.version }}-unreal-source.zip"
+          cp public/downloads/valoprac-unreal-source.zip "$asset"
+          sha=$(sha256sum "$asset" | cut -d' ' -f1)
+          tail -n +2 "docs/releases/$TAG.md" > release-notes.md
+          {
+            echo
+            echo "## 내려받기"
+            echo
+            echo "- \`$asset\` · 이 버전의 브라우저 + Unreal Engine 5.7 스테이징 소스"
+            echo "- SHA-256 \`$sha\`"
+            echo
+            echo "릴리스 자동 검증: 커밋 \`${GITHUB_SHA::7}\`에서 테스트·타입 검사·broker/hosting 테스트·번들 빌드를 실행했습니다."
+          } >> release-notes.md
+          echo "file=$asset" >> "$GITHUB_OUTPUT"
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.meta.outputs.title }}
+          ASSET: ${{ steps.asset.outputs.file }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TITLE" --notes-file release-notes.md
+            gh release upload "$TAG" "$ASSET" --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" --verify-tag --latest --title "$TITLE" --notes-file release-notes.md
+          fi
