@@ -17,7 +17,7 @@ describe('Measured software-renderer fallback',()=>{
   try{
    const values=[metal.color.getHex(),metal.roughness,metal.metalness,cloth.roughness];
    expect(library.stats()).toMatchObject({textureCount:0,estimatedTextureBytes:0,scalarLowFallback:true});expect(metal.map).toBeNull();expect(cloth.map).toBeNull();
-   library.setQuality('high');expect(library.material('steel')).toBe(metal);expect(metal.map!.image.width).toBe(128);expect(metal.normalMap).not.toBeNull();
+   library.setQuality('high');expect(library.material('steel')).toBe(metal);expect(metal.map!.image.width).toBe(256);expect(metal.normalMap).not.toBeNull();
    const oldMap=metal.map!,dispose=vi.fn();oldMap.addEventListener('dispose',dispose);library.setQuality('low');expect(dispose).toHaveBeenCalledTimes(1);
    expect(metal.map).toBeNull();expect([metal.color.getHex(),metal.roughness,metal.metalness,cloth.roughness]).toEqual(values);expect(library.stats().textureCount).toBe(0);
   }finally{library.dispose();}

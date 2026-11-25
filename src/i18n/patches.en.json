@@ -1,4 +1,13 @@
 {
+  "12.21": {
+    "title": "Training-range materials, lighting and color",
+    "description": "One clear key light, a cleaner sky and sharper materials give the range more depth and make targets easier to read.",
+    "changes": [
+      "Targets get a soft rim light along their edges. Choose red, yellow or purple, or turn it off, in Settings → Graphics.",
+      "A stronger sun, weaker sky fill and a color-preserving tone mapper remove the hazy, washed-out look.",
+      "High quality doubles material resolution, and wall and floor joints are thinner and cleaner."
+    ]
+  },
   "12.20": {
     "title": "Interface design refresh",
     "description": "One accent color, a calmer dark theme, and consistent page layout make the training screens easier to read.",
