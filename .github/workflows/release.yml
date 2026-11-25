@@ -136,10 +136,21 @@ jobs:
           LATEST: ${{ matrix.latest }}
         run: |
           set -euo pipefail
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TITLE" --notes-file release-notes.md --latest="$LATEST"
-            gh release upload "$TAG" "$ASSET" --clobber --repo "$GITHUB_REPOSITORY"
+          retry(){ for attempt in 1 2 3; do "$@" && return 0; echo "::warning::Attempt $attempt failed: $1 $2"; sleep $((attempt*20)); done; return 1; }
+          # Create the tag with git first so the release call only references
+          # an existing tag (the API answered HTTP 500 when asked to do both).
+          remote=$(git ls-remote --tags origin "refs/tags/$TAG" | cut -f1)
+          if [ -z "$remote" ]; then
+            git tag "$TAG" "$TARGET"
+            retry git push origin "refs/tags/$TAG"
           else
-            verify=""; [ "$GITHUB_REF_TYPE" = tag ] && verify="--verify-tag"
-            gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" $verify --target "$TARGET" --latest="$LATEST" --title "$TITLE" --notes-file release-notes.md
+            peeled=$(git ls-remote --tags origin "refs/tags/$TAG^{}" | cut -f1)
+            [ "${peeled:-$remote}" = "$TARGET" ] || { echo "::error::$TAG already points to ${peeled:-$remote}, not $TARGET"; exit 1; }
           fi
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            retry gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TITLE" --notes-file release-notes.md --latest="$LATEST"
+            retry gh release upload "$TAG" "$ASSET" --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            retry gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" --verify-tag --latest="$LATEST" --title "$TITLE" --notes-file release-notes.md
+          fi
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,assets --jq '"Published \(.url) with \(.assets|length) asset(s)"'
