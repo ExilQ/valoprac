@@ -1,4 +1,13 @@
 {
+  "12.22": {
+    "title": "Graphics options and performance",
+    "description": "The main causes of low frame rates at high quality are reduced, and the graphics options now prioritise clarity and frame rate like competitive shooters.",
+    "changes": [
+      "Ultra no longer renders at 1.25× scale, and the rendering resolution never exceeds 4K.",
+      "Medium and High use native anti-aliasing only, with no full-screen post-processing. Ambient occlusion and bloom remain on Ultra only.",
+      "Ambient occlusion uses half as many samples, and a per-frame crosshair style write that caused hitches is fixed."
+    ]
+  },
   "12.21": {
     "title": "Training-range materials, lighting and color",
     "description": "One clear key light, a cleaner sky and sharper materials give the range more depth and make targets easier to read.",
