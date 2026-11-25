@@ -2,7 +2,7 @@ import type {SimulationOptions} from '../training/platform/SessionOptions';
 import { navigate,TAB_PATHS } from './navigation';
 import {automaticGraphicsPatch} from '../config/graphicsPolicy';
 import { create } from 'zustand';
-import { loadSettings, persistSettings, sanitizeSettings } from '../config/settings';
+import { loadSettings,loadSettingsForApplication, persistSettings, sanitizeSettings } from '../config/settings';
 import type { Settings, Mode, WeaponId, SessionData } from '../engine/types';
 import { loadHistory, saveSession } from '../storage/history';
 export type Screen='menu'|'training'|'results';
@@ -16,7 +16,7 @@ interface AppState {
 }
 export const useApp=create<AppState>((set,get)=>({
   graphics:null,graphicsDismissed:false,reportGraphics:graphics=>{set({graphics});const settings={...get().settings,...automaticGraphicsPatch(get().settings,graphics.recommendLow,graphics.kind)};persistSettings(settings);set({settings});},
-  screen:'menu',mode:'free',weapon:'rifleA',settings:loadSettings(),sessionOptions:{},locked:false,paused:true,history:[],result:null,notice:'',activeTab:'training',
+  screen:'menu',mode:'free',weapon:'rifleA',settings:loadSettingsForApplication(),sessionOptions:{},locked:false,paused:true,history:[],result:null,notice:'',activeTab:'training',
   updateSettings:patch=>{const settings=sanitizeSettings({...get().settings,...patch});Object.assign(settings,automaticGraphicsPatch(settings,get().graphics?.recommendLow??false,get().graphics?.kind));const saved=persistSettings(settings);set({settings,...(!saved?{notice:'설정을 저장할 수 없습니다. 브라우저 저장 공간을 확인하세요.'}:{})});},
   setMode:mode=>set({mode}),setWeapon:weapon=>set({weapon}),setTab:(activeTab,fragment)=>{navigate(TAB_PATHS[activeTab]+(fragment?'#'+encodeURIComponent(fragment):''));set({activeTab,screen:'menu',locked:false,paused:true});},
   start:()=>{navigate('/training.html');set({screen:'training',paused:true,result:null,notice:'',sessionOptions:{}});},

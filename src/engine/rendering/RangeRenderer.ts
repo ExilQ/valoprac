@@ -27,8 +27,6 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { WEAPON_ORDER } from '../../config/weapons';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -38,7 +36,7 @@ import {createCharacterBatches,useMultiDrawCharacters,type CharacterBatches,type
 import { loadWeaponFinishes, WEAPON_FINISHES } from '../../config/weaponFinishes';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
 import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
-import {automaticGraphicsPatch} from '../../config/graphicsPolicy';
+import {automaticGraphicsPatch,renderPixelRatio} from '../../config/graphicsPolicy';
 import {cameraVerticalFov} from './projection';
 import {subscribeLocale,translateText} from '../../i18n/locale';
 const DEG=Math.PI/180;
@@ -67,7 +65,7 @@ export class RangeRenderer {
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
   private entryMarker:THREE.Mesh|null=null;
-  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private fxaa:ShaderPass|null=null;private adsBlend=0;private settingsKey='';
+  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private adsBlend=0;private settingsKey='';
   private materialLibrary!:SurfaceMaterialLibrary;
   private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
@@ -80,14 +78,16 @@ export class RangeRenderer {
   private preparationReport:ShaderPreparationReport={revision:-1,milliseconds:0,programs:0,method:'synchronous',disposed:false};
   constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings,options:{recordFrames?:boolean}={}){
     this.recordFrames=options.recordFrames??true;
-    this.renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance',alpha:false});
+    // 12.22: native canvas MSAA when no full-screen pass is needed; with a composer,
+    // the composer's own multisampled target antialiases instead (no FXAA blur).
+    this.renderer=new THREE.WebGLRenderer({antialias:settings.antialias&&!settings.ambientOcclusion&&!settings.postProcessing,powerPreference:'high-performance',alpha:false});
     this.capabilities=detectGraphicsCapabilities(this.renderer.getContext());
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};this.settings=settings;
     this.materialLibrary=new SurfaceMaterialLibrary({quality:settings.textureQuality,anisotropy:this.renderer.capabilities.getMaxAnisotropy(),scalarLow:this.capabilities.kind==='software'});
     const light=arenaLight(simulation.practiceMap),sky=arenaSky(light.zenith,light.horizon);
     this.textures.add(sky);
     this.scene.background=sky;
-    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.NeutralToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2)*settings.renderScale);
+    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.NeutralToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(renderPixelRatio(window.devicePixelRatio,settings.renderScale,host.clientWidth,host.clientHeight));
     if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));host.appendChild(this.renderer.domElement);
     this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=light.environmentIntensity;
     this.scene.fog=new THREE.Fog(light.horizon,light.fogNear,light.fogFar);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
@@ -446,19 +446,23 @@ export class RangeRenderer {
     const shaderKey=[settings.graphicsPreset,settings.shadowQuality,settings.textureQuality,settings.postProcessing,settings.ambientOcclusion,settings.antialias,settings.effectsQuality,settings.renderScale].join(':');
     if(shaderKey!==this.shaderKey){this.shaderKey=shaderKey;this.materialRevision++;}
     this.settings={...settings};this.materialLibrary.setQuality(settings.textureQuality);this.ensureEnvironment(settings.graphicsPreset);
-    const pixelRatio=Math.min(window.devicePixelRatio||1,2)*settings.renderScale;
-    if(this.renderer.getPixelRatio()!==pixelRatio)this.renderer.setPixelRatio(pixelRatio);
+    this.syncPixelRatio();
     const shadows=settings.shadowQuality!=='off';this.renderer.shadowMap.enabled=shadows;this.sun.castShadow=shadows;
     for(const batch of [...this.targetBatches,...this.defenderWeapons.values()])batch.castShadow=shadows;
     const resolution={off:256,low:512,medium:1024,high:2048,ultra:2048}[settings.shadowQuality];
     if(this.sun.shadow.mapSize.x!==resolution){this.sun.shadow.map?.dispose();this.sun.shadow.map=null;this.sun.shadow.mapSize.set(resolution,resolution);}
     const key=[settings.postProcessing,settings.ambientOcclusion,settings.antialias,settings.effectsQuality].join(':');
     if(key!==this.settingsKey){this.settingsKey=key;this.disposeComposer();
-      if(settings.postProcessing||settings.antialias||settings.ambientOcclusion){this.composer=new EffectComposer(this.renderer);this.composer.addPass(new RenderPass(this.scene,this.camera));
-        if(settings.ambientOcclusion){this.ao=new SSAOPass(this.scene,this.camera,Math.max(1,this.host.clientWidth),Math.max(1,this.host.clientHeight));this.ao.kernelRadius=3;this.ao.minDistance=0.001;this.ao.maxDistance=0.08;this.composer.addPass(this.ao);}
+      // A composer is only built for real full-screen effects, or when MSAA was
+      // requested after the context was created without it.
+      const nativeMSAA=!!this.renderer.getContext().getContextAttributes()?.antialias;
+      if(settings.postProcessing||settings.ambientOcclusion||(settings.antialias&&!nativeMSAA)){
+        const target=new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:settings.antialias?4:0});
+        this.composer=new EffectComposer(this.renderer,target);this.composer.addPass(new RenderPass(this.scene,this.camera));
+        // Half-resolution SSAO with 16 samples (was full resolution, 32 samples).
+        if(settings.ambientOcclusion){this.ao=new SSAOPass(this.scene,this.camera,1,1,16);this.ao.kernelRadius=3;this.ao.minDistance=0.001;this.ao.maxDistance=0.08;const fullSize=this.ao.setSize.bind(this.ao);this.ao.setSize=(width:number,height:number)=>fullSize(Math.max(1,Math.ceil(width/2)),Math.max(1,Math.ceil(height/2)));this.composer.addPass(this.ao);}
         if(settings.postProcessing){this.bloom=new UnrealBloomPass(new THREE.Vector2(1,1),0.12,0.3,1.4);this.composer.addPass(this.bloom);}
         const weaponPass=new RenderPass(this.weaponScene,this.weaponCamera);weaponPass.clear=false;weaponPass.clearDepth=true;this.composer.addPass(weaponPass);
-        if(settings.antialias){this.fxaa=new ShaderPass(FXAAShader);this.composer.addPass(this.fxaa);}
         this.composer.addPass(new OutputPass());
       }
     }
@@ -471,7 +475,7 @@ export class RangeRenderer {
     // main SSAO material. Release both when changing presets or leaving a map.
     this.ao?.noiseTexture.dispose();this.ao?.ssaoMaterial.dispose();
     for(const pass of this.composer.passes)pass.dispose();this.composer.dispose();
-  }this.composer=null;this.ao=null;this.bloom=null;this.fxaa=null;}
+  }this.composer=null;this.ao=null;this.bloom=null;}
   private buildImpacts(){
     const geo=new THREE.SphereGeometry(0.022,6,4);this.geometries.add(geo);const mat=new THREE.MeshBasicMaterial({color:0xc0ff98});this.materials.add(mat);
     const decal=new THREE.CircleGeometry(.025,8);this.geometries.add(decal);for(let i=0;i<96;i++){const material=new THREE.MeshBasicMaterial({color:0x303530,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});this.materials.add(material);const mesh=new THREE.Mesh(decal,material);mesh.visible=false;this.surfaceImpacts.push(mesh);}
@@ -516,8 +520,14 @@ export class RangeRenderer {
     const tracer=this.tracers[this.tracerIndex++%this.tracers.length];const a=tracer.geometry.getAttribute('position') as THREE.BufferAttribute;
     a.setXYZ(0,shot.position.x+0.2,shot.position.y+this.simulation.movement.eyeHeight-0.16,shot.position.z-0.35);a.setXYZ(1,shot.impact.x,shot.impact.y,shot.impact.z);a.needsUpdate=true;tracer.visible=true;tracer.userData.expire=this.simulation.time+0.045;
   }
+  /** Recompute the capped drawing-buffer ratio for the current size and scale. */
+  private syncPixelRatio(){
+    const ratio=renderPixelRatio(window.devicePixelRatio,this.settings.renderScale,this.host.clientWidth,this.host.clientHeight);
+    if(Math.abs(this.renderer.getPixelRatio()-ratio)>1e-6)this.renderer.setPixelRatio(ratio);
+  }
   resize(){
     if(!this.mounted)return;
+    this.syncPixelRatio();
     const width=this.host.clientWidth,height=this.host.clientHeight,ratio=this.renderer.getPixelRatio();
     if(!width||!height)return;
     const sizeChanged=width!==this.viewport.width||height!==this.viewport.height;
@@ -532,8 +542,6 @@ export class RangeRenderer {
     if(this.composer&&(sizeChanged||ratioChanged||this.composer!==this.viewport.composer)){
       if(ratioChanged||this.composer!==this.viewport.composer)this.composer.setPixelRatio(ratio);
       this.composer.setSize(width,height);
-      this.ao?.setSize(Math.ceil(width*ratio*.5),Math.ceil(height*ratio*.5));
-      this.fxaa?.uniforms.resolution.value.set(1/(width*ratio),1/(height*ratio));
     }
     this.updateFov();
     this.viewport={width,height,ratio,composer:this.composer};
