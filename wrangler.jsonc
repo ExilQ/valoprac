@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers Builds deploys this repository's `production` branch.
+  "name": "valoprac",
+  "main": "worker/cloudflare.js",
+  "compatibility_date": "2026-11-01",
+  "build": { "command": "npm run build:cloudflare" },
+  "assets": {
+    "directory": "./dist-client",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application"
+  },
+  "observability": { "enabled": true }
+}

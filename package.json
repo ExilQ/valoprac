@@ -17,7 +17,8 @@
     "package:unreal": "node scripts/package-unreal.mjs",
     "verify:migration": "node scripts/verify-migration.mjs",
     "test:hosting": "node --test worker/*.test.mjs",
-    "verify:search": "node scripts/verify-search.mjs"
+    "verify:search": "node scripts/verify-search.mjs",
+    "build:cloudflare": "tsc -b && node scripts/package-unreal.mjs && vite build && node scripts/export-routes.mjs"
   },
   "dependencies": {
     "@epicgames-ps/lib-pixelstreamingfrontend-ue5.7": "0.3.1",
