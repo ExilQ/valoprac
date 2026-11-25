@@ -1,4 +1,13 @@
 {
+  "12.20": {
+    "title": "Interface design refresh",
+    "description": "One accent color, a calmer dark theme, and consistent page layout make the training screens easier to read.",
+    "changes": [
+      "Start Training and other primary buttons share the same teal accent.",
+      "The dark theme uses neutral graphite surfaces; raised areas are slightly lighter.",
+      "Every menu page shares the same spacing and title size, and Korean text no longer breaks inside words."
+    ]
+  },
   "12.19": {
     "title": "Bunny-hop trajectory and flight calibration",
     "description": "Public measurements inform jump height, flight time, and diagonal air-strafe acceleration in the VALORANT profile.",

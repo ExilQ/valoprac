@@ -44,7 +44,7 @@ describe('Independent Precision Utility presentation themes',()=>{
   const e=environment(),values=new Map<string,string>();
   Object.assign(document,{querySelector:()=>({setAttribute:(key:string,value:string)=>values.set(key,value)})});
   initializeTheme();expect(values.get('content')).toBe('#ffffff');
-  setThemePreference('dark');expect(values.get('content')).toBe('#202a2d');
+  setThemePreference('dark');expect(values.get('content')).toBe('#111417');
   setThemePreference('light');expect(values.get('content')).toBe('#ffffff');
   expect(e.storage.writes.every(write=>write.key===THEME_STORAGE_KEY)).toBe(true);
  });

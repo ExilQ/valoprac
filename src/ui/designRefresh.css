@@ -1,0 +1,80 @@
+/*
+ * VALOPRAC 12.20 design refresh — final cascade layer.
+ * Loaded last from main.tsx. Uses only theme tokens (tokens.css) so light and
+ * dark stay consistent. See docs/DESIGN_REFRESH_12.20.md for the audit and
+ * reference analysis behind each rule.
+ */
+
+/* 1. Korean reading: keep words whole, uniform digits for measurements. */
+:root[data-theme] :is(.utility-content,.utility-sidebar,.utility-topbar){word-break:keep-all;overflow-wrap:break-word}
+:root[data-theme] .utility-content{font-variant-numeric:tabular-nums}
+html:lang(en) :is(.utility-content,.utility-sidebar,.utility-topbar){word-break:normal}
+
+/* 2. Page titles: route focus no longer draws a link-like underline. */
+:root[data-theme] .utility-content:focus-visible h1:first-of-type{text-decoration:none}
+
+/* 3. Navigation recedes so the work area leads. */
+:root[data-theme] .utility-primary-nav a{color:var(--muted);transition:background var(--ease-fast),color var(--ease-fast)}
+:root[data-theme] .utility-primary-nav a:hover{color:var(--ink);background:var(--surface-raised)}
+:root[data-theme] .utility-primary-nav a.active{color:var(--ink);background:var(--accent-soft);box-shadow:inset 2px 0 0 var(--accent)}
+:root[data-theme] .utility-primary-nav a.active svg{color:var(--accent)}
+
+/* 4. Top bar: language is an icon + select; the text label stays for screen readers. */
+.app-language .app-language-icon{color:var(--muted)}
+.app-language .app-language-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-theme] .app-language select{border-color:var(--control-border);background:var(--surface);border-radius:6px}
+
+/* 5. Training brief: one themed surface instead of a fixed dark slab. */
+:root[data-theme] .training-brief{
+ --brief-ink:var(--ink);--brief-muted:var(--muted);--brief-accent:var(--accent);
+ background:
+  repeating-linear-gradient(132deg,transparent 0 30px,color-mix(in srgb,var(--accent) 9%,transparent) 31px 32px,transparent 33px 64px) right center/34% 100% no-repeat,
+  linear-gradient(110deg,var(--surface-raised) 50%,var(--accent-soft));
+ border-left:3px solid var(--accent);
+}
+:root[data-theme] .training-brief .training-brief-title{color:var(--ink)}
+:root[data-theme] .training-brief .training-brief-description{color:var(--muted)}
+
+/* 6. One primary action colour: the brand accent. The cut corner stays as signature. */
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button,
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch{
+ --launch-fill:var(--accent);--launch-ink:var(--on-accent);
+ color:var(--on-accent);background:var(--accent);border-left:0;
+ transition:background var(--ease-fast),transform var(--ease-fast);
+}
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button:is(:hover,:focus-visible),
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch:enabled:is(:hover,:focus-visible){background:var(--accent-hover)}
+:root[data-theme] .training-home.precision-home .utility-task-panel .start-button:active,
+:root[data-theme] .game-stage .pause-card .pause-intro > .training-launch:enabled:active{transform:translateY(1px)}
+
+/* 7. Map preview: a framed card with inner padding (content was flush to the edge). */
+:root[data-theme] .precision-home .range-card{border:1px solid var(--line);border-radius:8px;padding:0 16px 8px;background:var(--surface)}
+:root[data-theme] .precision-home .range-card .utility-space-preview{border-radius:6px;background:var(--surface-raised)}
+:root[data-theme] .precision-home .utility-preview-toggle{background:transparent;padding-inline:0;border-bottom:0}
+
+/* 8. Panels and controls share one radius scale. */
+:root[data-theme] .utility-content :is(.aim-card,.utility-card,.weapon-detail,.history-trend,.empty-state){border-radius:8px}
+:root[data-theme] .utility-content :is(input[type=number],input[type=text],select){border-radius:6px}
+
+/* 10. Button hierarchy: .primary-button was visually identical to .secondary-button. */
+:root[data-theme] :is(button,a).primary-button{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+:root[data-theme] :is(button,a).primary-button:not(:disabled):is(:hover,:focus-visible){background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+:root[data-theme] :is(button,a):is(.primary-button,.secondary-button){border-radius:6px}
+
+/* 11. Same page frame and title scale on every desktop route. */
+@media (min-width:901px){
+ :root[data-theme] main.utility-content>:is(.training-home,.aim-dashboard,.history-view,.weapon-selection,.settings-view,.utility-map-library,.training-platform):first-child{padding-top:32px;padding-inline:36px}
+}
+:root[data-theme] main.utility-content h1:first-of-type{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+
+/* 12. Chart panel content no longer touches the card edge. */
+:root[data-theme] .history-view .history-trend{padding:20px 24px;border:1px solid var(--line);background:var(--surface)}
+
+/* 9. Calmer motion for people who ask for it. */
+@media (prefers-reduced-motion: reduce){
+ :root[data-theme] :is(.utility-primary-nav a,.start-button,.training-launch){transition:none}
+}
+@media (forced-colors: active){
+ :root[data-theme] .utility-primary-nav a.active{box-shadow:none;outline:2px solid Highlight}
+}
+:root[data-theme=dark] .utility-danger-button{color:var(--bg)}

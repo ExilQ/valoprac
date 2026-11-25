@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.19",
-  "patchLabel": "12.19",
-  "generatedAt": "2026-11-23T19:19:34.545Z",
+  "release": "12.0.20",
+  "patchLabel": "12.20",
+  "generatedAt": "2026-11-25T15:14:51.977Z",
   "tests": {
     "application": 1526,
     "broker": 28,
