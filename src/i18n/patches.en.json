@@ -1,12 +1,24 @@
 {
-  "12.21": {
-    "title": "Knife slot and weapon switching fix",
-    "description": "Number keys now hold a fixed loadout: 1 primary, 2 sidearm, 3 knife. Switching weapons no longer stops you while you keep moving.",
+  "12.22": {
+    "title": "Graphics options, performance and a knife slot",
+    "description": "The main causes of low frame rates at high quality are reduced, graphics options prioritise clarity and frame rate, number keys hold a fixed loadout with a new knife, and switching weapons no longer stops you.",
     "changes": [
+      "Ultra no longer renders at 1.25× scale, and the rendering resolution never exceeds 4K.",
+      "Medium and High use native anti-aliasing only, with no full-screen post-processing. Ambient occlusion and bloom remain on Ultra only.",
+      "Ambient occlusion uses half as many samples, and a per-frame crosshair style write that caused hitches is fixed.",
       "Fixed a bug where switching weapons with a number key stopped the player even though a movement key was still held.",
       "1 draws your primary (Vandal, Phantom or Operator, whichever you picked last), 2 the Sheriff and 3 the knife.",
       "The knife slashes with left click and stabs with right click, and you run faster with it out.",
       "Six original knife designs, from real field knives to fantasy blades, can be chosen on the Weapons page."
+    ]
+  },
+  "12.21": {
+    "title": "Training-range materials, lighting and color",
+    "description": "One clear key light, a cleaner sky and sharper materials give the range more depth and make targets easier to read.",
+    "changes": [
+      "Targets get a soft rim light along their edges. Choose red, yellow or purple, or turn it off, in Settings → Graphics.",
+      "A stronger sun, weaker sky fill and a color-preserving tone mapper remove the hazy, washed-out look.",
+      "High quality doubles material resolution, and wall and floor joints are thinner and cleaner."
     ]
   },
   "12.20": {

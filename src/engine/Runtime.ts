@@ -31,7 +31,9 @@ export class Runtime {
   /** Weapon that number key 1 returns to: the last primary the player held. */
   private primary:GunId='rifleA';
   simulation:Simulation;renderer:RangeRenderer;input!:BrowserInput;audio=new TrainingAudio();clock=new FixedClock();
-  private cadence=new RenderCadence();private lastDraw=0;private frame=0;private previousTime=0;private hudAt=0;private frameTimes=new Float64Array(180);private sampleIndex=0;private sampleCount=0;private preview:boolean;private disposed=false;
+  private cadence=new RenderCadence();
+  /** Last written crosshair gap: writing a custom property every frame forces style recalculation of the whole HUD subtree. */
+  private movementGap=Number.NaN;private lastDraw=0;private frame=0;private previousTime=0;private hudAt=0;private frameTimes=new Float64Array(180);private sampleIndex=0;private sampleCount=0;private preview:boolean;private disposed=false;
   constructor(host:HTMLElement,mode:Mode,weapon:WeaponId,settings:Settings,preview:boolean,
     private onTelemetry:(t:Telemetry)=>void,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onFinish:(data:SessionData)=>void,private onWeapon:(id:WeaponId)=>void=()=>{},private assessment?:CombatAssessmentContext,options:SimulationOptions={}){
     this.preview=preview;if(isPrimary(weapon))this.primary=weapon;this.simulation=new Simulation(mode,weapon,settings,options);this.renderer=new RangeRenderer(host,this.simulation,settings);
@@ -132,7 +134,7 @@ export class Runtime {
       this.renderer.render(alpha,drawElapsed,this.preview,this.simulation.ads);if(!this.graphicsReady){this.graphicsReady=true;this.publishTelemetry();}this.aimCapture?.frame(performance.now());this.latency.submitted(performance.now());
     }
     const root=this.renderer.canvas.parentElement;
-    if(root){const w=this.simulation.weapon,m=this.simulation.movement;const error=(m.accurate?0:Math.min(22,m.speed*3))+(this.simulation.settings.dynamicCrosshair?w.bloom*10:0);root.style.setProperty('--movement-gap',`${this.simulation.settings.dynamicCrosshair?error:0}px`);}
+    if(root){const w=this.simulation.weapon,m=this.simulation.movement;const error=(m.accurate?0:Math.min(22,m.speed*3))+(this.simulation.settings.dynamicCrosshair?w.bloom*10:0);const gap=this.simulation.settings.dynamicCrosshair?Math.round(error*4)/4:0;if(gap!==this.movementGap){this.movementGap=gap;root.style.setProperty('--movement-gap',`${gap}px`);}}
     if(!this.preview&&now-this.hudAt>=90){this.hudAt=now;this.publishTelemetry();}
     this.frame=requestAnimationFrame(this.animate);
   };

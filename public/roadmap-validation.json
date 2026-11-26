@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.21",
-  "patchLabel": "12.21",
-  "generatedAt": "2026-11-25T15:54:54.273Z",
+  "release": "12.0.22",
+  "patchLabel": "12.22",
+  "generatedAt": "2026-11-26T03:56:41.054Z",
   "tests": {
-    "application": 1533,
+    "application": 1540,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -17331,7 +17331,7 @@
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7800,
+      "gzipBytes": 7803,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3110
+        "replayGzipBytes": 3112
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18229,7 +18229,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3111
+        "replayGzipBytes": 3110
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18277,7 +18277,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 3003
+        "replayGzipBytes": 3002
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 3001
+        "replayGzipBytes": 3002
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18341,7 +18341,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1436,
-        "replayGzipBytes": 4513
+        "replayGzipBytes": 4515
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18373,7 +18373,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 836,
-        "replayGzipBytes": 5472
+        "replayGzipBytes": 5469
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18389,7 +18389,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 5470
+        "replayGzipBytes": 5467
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18405,7 +18405,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 868,
-        "replayGzipBytes": 5329
+        "replayGzipBytes": 5330
       },
       {
         "benchmark": "scenario-common-replay",

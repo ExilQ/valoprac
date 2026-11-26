@@ -22,8 +22,8 @@ transmission, refraction or additional scene-render passes.
 | --- | --- | --- | --- |
 | Low | 32 | Base | 80 KiB |
 | Medium | 64 | Base, roughness | 640 KiB |
-| High | 128 | Base, roughness, normal | 3.75 MiB |
-| Ultra | 256 | Base, roughness, normal | 15 MiB |
+| High | 256 | Base, roughness, normal | 15 MiB |
+| Ultra | 256 (16× anisotropy) | Base, roughness, normal | 15 MiB |
 
 The estimates include the full mip chain and exclude small material objects and
 GPU-driver overhead. Families are allocated on demand, with at most 256 cached

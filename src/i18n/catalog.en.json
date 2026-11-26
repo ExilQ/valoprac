@@ -14965,6 +14965,56 @@
       "id": "msg_438c1e70eee5",
       "source": "W로 달리다 점프하세요. 공중에서는 W를 유지한 채 A 또는 D와 마우스를 같은 방향으로 움직이세요. 착지에 맞춰 점프를 다시 입력하세요.",
       "en": "Run with W and jump. In the air, keep holding W, press A or D, and turn the mouse in the same direction. Press jump again as you land."
+    },
+    {
+      "id": "msg_0e0c686224a9",
+      "source": "적 강조 색",
+      "en": "Enemy highlight colour"
+    },
+    {
+      "id": "msg_e318f874f8d6",
+      "source": "적 윤곽 강조",
+      "en": "Enemy outline highlight"
+    },
+    {
+      "id": "msg_4944982c7dca",
+      "source": "적 윤곽 강조 색",
+      "en": "Enemy outline highlight colour"
+    },
+    {
+      "id": "msg_91515f986224",
+      "source": "빨강",
+      "en": "Red"
+    },
+    {
+      "id": "msg_c45380d30981",
+      "source": "노랑 (색각 보조)",
+      "en": "Yellow (colour-vision friendly)"
+    },
+    {
+      "id": "msg_e8624a7db07b",
+      "source": "보라 (색각 보조)",
+      "en": "Purple (colour-vision friendly)"
+    },
+    {
+      "id": "msg_e82c4ba19f35",
+      "source": "표적 가장자리에 옅은 윤곽 빛을 더해 밝은 벽 앞에서도 잘 보이게 합니다. 판정과 표적 크기는 바뀌지 않습니다.",
+      "en": "Adds a soft rim light to target edges so they stay visible against bright walls. Hit detection and target size do not change."
+    },
+    {
+      "id": "msg_59ff35974783",
+      "source": "빛 번짐 (블룸)",
+      "en": "Bloom"
+    },
+    {
+      "id": "msg_9a00be1dd902",
+      "source": "주변광 차폐 (부하 큼)",
+      "en": "Ambient occlusion (heavy)"
+    },
+    {
+      "id": "msg_b8f185b975f6",
+      "source": "높음까지는 화면 전체 후처리 없이 기본 안티에일리어싱만 사용해 프레임을 우선합니다. 최고는 주변광 차폐와 빛 번짐을 더하므로 부하가 큽니다. 화면 해상도는 4K 크기를 넘지 않도록 자동으로 제한합니다.",
+      "en": "Up to High, only native anti-aliasing is used, with no full-screen post-processing, to prioritise frame rate. Ultra adds ambient occlusion and bloom, so it is much heavier. Rendering resolution is automatically limited to 4K."
     }
   ]
 }

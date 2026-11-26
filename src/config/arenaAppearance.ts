@@ -48,9 +48,21 @@ export function arenaPalette(map:string,theme?:BayTheme) {
  return theme&&map==='complex'?BAY_APPEARANCE[theme]:Object.hasOwn(maps,map)?maps[map]:utility;
 }
 
-export function arenaLight(map:string) {
- const warm=['long','site','tower'].includes(map);
+/**
+ * 12.21 lighting: a stronger single key light over a dimmer sky fill gives
+ * readable form (VALORANT-style "one styled directional light"), while a
+ * saturated zenith and clearer horizon stop the scene reading as flat pastel.
+ */
+export interface ArenaLight {
+ zenith:number;horizon:number;sun:number;ambient:number;ground:number;fill:number;exposure:number;
+ /** Hemisphere (sky/ground bounce), key sun, cool fill and reflection-probe strengths. */
+ ambientIntensity:number;sunIntensity:number;fillIntensity:number;environmentIntensity:number;
+ fogNear:number;fogFar:number;
+}
+export function arenaLight(map:string):ArenaLight {
+ const style=MAP_COURSES.find(course=>course.id===map)?.style;
+ const warm=['long','site','tower'].includes(map)||style==='courtyard'||style==='urban';
  return warm
-  ? {zenith:0x639bc7,horizon:0xe1cdb1,sun:0xffd5a2,ambient:0xc8dbed,ground:0xa58573,fill:0xabc3e8,exposure:1.12}
-  : {zenith:0x70a9cf,horizon:0xc4dedb,sun:0xffe4ba,ambient:0xd4e8f4,ground:0x8e9b93,fill:0xa0c6dd,exposure:1.10};
+  ? {zenith:0x4d8bc9,horizon:0xdfe2dc,sun:0xfff4e4,ambient:0xc6d8ee,ground:0x86827c,fill:0xa9c0e6,exposure:.94,ambientIntensity:1.04,sunIntensity:3.3,fillIntensity:.4,environmentIntensity:.34,fogNear:70,fogFar:190}
+  : {zenith:0x4f90d2,horizon:0xd2e5ee,sun:0xfff0d8,ambient:0xbfd6ec,ground:0x7f8c86,fill:0x9fc4e2,exposure:1,ambientIntensity:1.06,sunIntensity:3.35,fillIntensity:.42,environmentIntensity:.36,fogNear:70,fogFar:190};
 }

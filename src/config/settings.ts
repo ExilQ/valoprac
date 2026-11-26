@@ -108,9 +108,49 @@ export function loadSettings(storage?:Pick<Storage,'getItem'>&Partial<Pick<Stora
 }
 export function persistSettings(settings:Settings,storage?:Pick<Storage,'setItem'>):boolean{try{(storage??localStorage).setItem(SETTINGS_KEY,JSON.stringify(sanitizeSettings(settings)));return true;}catch{return false;}}
 
+/**
+ * 12.22 presets follow competitive-shooter practice: clarity and frame rate
+ * first. Native MSAA replaces FXAA, bloom and ambient occlusion are Ultra-only
+ * (both cost a full-screen pass, AO also re-renders the scene), and no preset
+ * supersamples — a 1.25x render scale on a HiDPI display multiplied pixel work
+ * by up to 6x. See docs/GRAPHICS_PERFORMANCE_12.22.md.
+ */
 export const GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={
   low:{graphicsPreset:'low',shadowQuality:'off',textureQuality:'low',postProcessing:false,ambientOcclusion:false,antialias:false,effectsQuality:'low',renderScale:0.8},
+  medium:{graphicsPreset:'medium',shadowQuality:'medium',textureQuality:'medium',postProcessing:false,ambientOcclusion:false,antialias:true,effectsQuality:'medium',renderScale:1},
+  high:{graphicsPreset:'high',shadowQuality:'high',textureQuality:'high',postProcessing:false,ambientOcclusion:false,antialias:true,effectsQuality:'high',renderScale:1},
+  ultra:{graphicsPreset:'ultra',shadowQuality:'ultra',textureQuality:'ultra',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'ultra',renderScale:1}
+};
+/** Preset bundles shipped up to 12.21, used once to upgrade untouched profiles. */
+export const LEGACY_GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={
+  low:GRAPHICS_PRESETS.low,
   medium:{graphicsPreset:'medium',shadowQuality:'medium',textureQuality:'medium',postProcessing:true,ambientOcclusion:false,antialias:true,effectsQuality:'medium',renderScale:1},
   high:{graphicsPreset:'high',shadowQuality:'high',textureQuality:'high',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'high',renderScale:1},
   ultra:{graphicsPreset:'ultra',shadowQuality:'ultra',textureQuality:'ultra',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'ultra',renderScale:1.25}
 };
+const GRAPHICS_MIGRATION_KEY='valoprac-graphics-presets-v2';
+/**
+ * Application start-up only (store initialisation). loadSettings stays a pure
+ * round-trip of the stored profile. New profiles and untouched old preset
+ * bundles move to the 12.22 bundles once; customised profiles are kept.
+ */
+export function loadSettingsForApplication(storage?:Pick<Storage,'getItem'|'setItem'>):Settings{
+  const settings=loadSettings(storage);
+  try{
+    const target=storage??localStorage;if(target.getItem(GRAPHICS_MIGRATION_KEY)==='1')return settings;
+    const upgraded=upgradeGraphicsPreset(settings);target.setItem(GRAPHICS_MIGRATION_KEY,'1');
+    if(upgraded!==settings&&target.getItem(SETTINGS_KEY)!==null)target.setItem(SETTINGS_KEY,JSON.stringify(upgraded));
+    return upgraded;
+  }catch{return upgradeGraphicsPreset(settings);}
+}
+/**
+ * One-time, load-only upgrade (never inside sanitizeSettings, so replay
+ * headers validate unchanged). A profile that still matches its old preset
+ * bundle exactly moves to the new bundle; any customised field is kept.
+ */
+export function upgradeGraphicsPreset(settings:Settings):Settings{
+  const legacy=LEGACY_GRAPHICS_PRESETS[settings.graphicsPreset];
+  if(!legacy)return settings;
+  const untouched=Object.entries(legacy).every(([key,value])=>settings[key as keyof Settings]===value);
+  return untouched?{...settings,...GRAPHICS_PRESETS[settings.graphicsPreset]}:settings;
+}
