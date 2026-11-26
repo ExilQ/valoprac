@@ -77,6 +77,10 @@ export class TrainingAudio {
     const cached=this.buffers.get(key);if(cached)return cached;
     const c=this.context;if(!c||this.disposed)return undefined;
     let pcm=this.pending.get(key);this.pending.delete(key);
+    // A ConvolverNode only accepts a buffer at the context's own sample rate
+    // (worker responses are 48 kHz; many devices run at 44.1 kHz). Sources
+    // resample by themselves, so only impulse responses are re-rendered.
+    if(pcm&&key.startsWith('ir:')&&pcm.rate!==c.sampleRate)pcm=undefined;
     if(!pcm){const rendered=renderSound(key,c.sampleRate);if(!rendered)return undefined;pcm={rate:c.sampleRate,channels:rendered};}
     const b=c.createBuffer(pcm.channels.length,pcm.channels[0].length,pcm.rate);
     pcm.channels.forEach((data,ch)=>b.copyToChannel(data,ch));

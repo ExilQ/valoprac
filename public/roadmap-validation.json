@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.29",
-  "patchLabel": "12.29",
-  "generatedAt": "2026-11-26T12:43:03.811Z",
+  "release": "12.0.30",
+  "patchLabel": "12.30",
+  "generatedAt": "2026-11-26T15:26:13.372Z",
   "tests": {
-    "application": 1575,
+    "application": 1576,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3107
+        "replayGzipBytes": 3106
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18245,7 +18245,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2956
+        "replayGzipBytes": 2954
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 3000
+        "replayGzipBytes": 2999
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4504
+        "replayGzipBytes": 4503
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18373,7 +18373,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 836,
-        "replayGzipBytes": 5464
+        "replayGzipBytes": 5467
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18405,7 +18405,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 868,
-        "replayGzipBytes": 5325
+        "replayGzipBytes": 5324
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18421,7 +18421,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 866,
-        "replayGzipBytes": 5321
+        "replayGzipBytes": 5322
       }
     ],
     "browser": {

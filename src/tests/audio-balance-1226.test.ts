@@ -36,7 +36,7 @@ describe('12.26 mix balance',()=>{
 class Node {gain={value:1};frequency={value:0};Q={value:0};type='';buffer:unknown=null;positionX={value:0};positionY={value:0};positionZ={value:0};pan={value:0};panningModel='';distanceModel='';refDistance=0;maxDistance=0;rolloffFactor=0;onended:(()=>void)|null=null;connected:Node[]=[];constructor(readonly all:Node[]){all.push(this);}connect(n:Node){this.connected.push(n);return n;}disconnect(){}start(){}stop(){}}
 class Context {nodes:Node[]=[];sampleRate=8000;currentTime=0;state='running';destination=new Node(this.nodes);listener={setPosition(){},setOrientation(){}};
  createGain(){return new Node(this.nodes);}createDynamicsCompressor(){return new Node(this.nodes);}createBiquadFilter(){return new Node(this.nodes);}createPanner(){return new Node(this.nodes);}createConvolver(){return new Node(this.nodes);}createBufferSource(){return new Node(this.nodes);}
- createBuffer(channels:number,length:number,rate:number){return {channels,duration:length/rate,copyToChannel(){}};}resume(){return Promise.resolve();}close(){return Promise.resolve();}static last:Context;constructor(){Context.last=this;}}
+ createBuffer(channels:number,length:number,rate:number){return {channels,sampleRate:rate,duration:length/rate,copyToChannel(){}};}resume(){return Promise.resolve();}close(){return Promise.resolve();}static last:Context;constructor(){Context.last=this;}}
 afterEach(()=>vi.unstubAllGlobals());
 describe('12.27 room reverb follows channel volume',()=>{
  it('sends every voice to the room through its channel volume bus',async()=>{
@@ -50,6 +50,14 @@ describe('12.27 room reverb follows channel volume',()=>{
   const direct=c.nodes.filter(n=>n.connected.includes(internals.reverbIn));
   expect(direct.every(n=>Object.values(internals.sends).includes(n))).toBe(true);
   expect(c.nodes.some(n=>n.connected.includes(internals.sends.firing))).toBe(true);
+  audio.dispose();
+ });
+ it('renders the room response at the context sample rate when the worker made it at 48 kHz',async()=>{
+  vi.stubGlobal('AudioContext',Context);vi.stubGlobal('indexedDB',indexedDB);
+  const audio=new TrainingAudio(),internals=audio as unknown as {pending:Map<string,{rate:number;channels:Float32Array[]}>;convolver:Node};
+  internals.pending.set('ir:range',{rate:48000,channels:[new Float32Array(480),new Float32Array(480)]});
+  audio.setSpace('range');await audio.unlock();
+  const ir=internals.convolver.buffer as {sampleRate:number}|null;expect(ir).toBeTruthy();expect(ir!.sampleRate).toBe(Context.last.sampleRate);
   audio.dispose();
  });
 });

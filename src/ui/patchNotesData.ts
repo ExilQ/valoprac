@@ -10,6 +10,12 @@ export type PatchSize='major'|'minor';
 
 export const entries:PatchEntry[]=[
  {
+  version:"12.30",date:"2026-11-26",
+  title:"44.1kHz 오디오 장치에서 맵 잔향이 사라지던 문제 수정",
+  description:"오디오 장치가 48kHz가 아닌 컴퓨터에서 맵별 공간 잔향이 적용되지 않던 문제를 고쳤습니다.",
+  changes:["공간 잔향 응답을 48kHz로만 미리 만들어 두어, 44.1kHz 등으로 동작하는 장치에서는 잔향 장치가 이를 거부해 잔향 없이 들렸습니다. 이제 장치의 샘플레이트에 맞춰 다시 만듭니다."]
+ },
+ {
   version:"12.29",date:"2026-11-26",
   title:"Cloudflare 배포 보안 수정",
   description:"Cloudflare로 옮길 때 쓸 배포 설정에서 보안 문제 하나를 고쳤습니다. 현재 사이트에는 영향이 없습니다.",

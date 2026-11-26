@@ -1,4 +1,11 @@
 {
+  "12.30": {
+    "title": "Map reverb restored on 44.1 kHz audio devices",
+    "description": "Map room reverb was missing on computers whose audio device does not run at 48 kHz.",
+    "changes": [
+      "Room responses were prepared only at 48 kHz, which the reverb rejects on devices running at 44.1 kHz or other rates, so those sessions had no reverb. Responses are now rendered at the device's sample rate."
+    ]
+  },
   "12.29": {
     "title": "Cloudflare deployment security fix",
     "description": "Fixed a security problem in the deployment settings for the move to Cloudflare. The current site is not affected.",
