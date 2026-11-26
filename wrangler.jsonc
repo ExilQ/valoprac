@@ -1,5 +1,8 @@
 {
   // Cloudflare Workers Builds deploys this repository's `production` branch.
+  // run_worker_first: worker/cloudflare.js sets every response header (CSP
+  // with inline-script hashes, caching, robots) and returns real 404 pages;
+  // Cloudflare does not apply public/_headers when the Worker runs first.
   "name": "valoprac",
   "main": "worker/cloudflare.js",
   "compatibility_date": "2026-11-01",
@@ -8,7 +11,8 @@
     "directory": "./dist-client",
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "none",
+    "run_worker_first": true
   },
   "observability": { "enabled": true }
 }

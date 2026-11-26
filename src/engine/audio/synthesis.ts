@@ -1,6 +1,6 @@
 import type { GunId } from '../types';
 import type { AudioAction } from '../../config/audio';
-import {Rng,unit,band,biquad,envelope,fadeEdges,glideTone,mixInto,modal,noise,normalize,samplesFor,saturate,scale,sweepLowpass,toMono,type Mode} from './dsp';
+import {Rng,unit,band,biquad,envelope,fadeEdges,glideTone,matchLoudness,mixInto,modal,noise,normalize,samplesFor,saturate,scale,sweepLowpass,toMono,windowRms,type Mode} from './dsp';
 import type {Pcm} from './dsp';
 
 /* Independently synthesized weapon audio (12.24). Each shot is built the way
@@ -50,7 +50,17 @@ export const GUN_RECIPES:Readonly<Record<GunId,GunRecipe>>={
 
 /** One gunshot. First person: stereo, with the mechanism up close. Third
  * person (other shooters): mono for the 3D panner, no mechanism, darker. */
+/** Loudness of variant 0 per unit level, by weapon, rate and perspective. */
+const SHOT_REFERENCE=new Map<string,number>();
+const SHOT_WINDOW=.25;
 export function synthesizeShot(weapon:GunId,rate:number,variant=0,perspective:Perspective='first'):Pcm[]{
+  const {channels,level}=renderShot(weapon,rate,variant,perspective),key=`${weapon}:${rate}:${perspective}`;
+  if(variant===0){SHOT_REFERENCE.set(key,windowRms(channels,rate,SHOT_WINDOW)/level);return channels;}
+  if(!SHOT_REFERENCE.has(key))synthesizeShot(weapon,rate,0,perspective);
+  // Keep only the designed ±0.7 dB level jitter between round-robin variants.
+  return matchLoudness(channels,rate,SHOT_WINDOW,SHOT_REFERENCE.get(key)!*level,.96);
+}
+function renderShot(weapon:GunId,rate:number,variant:number,perspective:Perspective):{channels:Pcm[];level:number}{
   const r=GUN_RECIPES[weapon],rng=new Rng(r.seed+variant*7919+(perspective==='third'?31:0)),length=samplesFor(r.seconds,rate);
   const pitch=1+rng.range(-.025,.025),level=1+rng.range(-.08,.08),mechDelay=rng.range(0,.0015);
   // Common layers (identical in both ears): the transient must stay centred.
@@ -86,7 +96,7 @@ export function synthesizeShot(weapon:GunId,rate:number,variant=0,perspective:Pe
   }
   for(const ch of out){saturate(ch,r.drive);fadeEdges(ch,rate,.0002,.04);}
   normalize(out,.89*level);
-  return out;
+  return {channels:out,level};
 }
 
 /* ---------- handling foley ---------- */

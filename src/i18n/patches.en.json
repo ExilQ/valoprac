@@ -1,4 +1,16 @@
 {
+  "12.26": {
+    "title": "Full audit and quality fixes",
+    "description": "The site, gameplay, design, sound and interface were checked end to end, and the confirmed problems are fixed.",
+    "changes": [
+      "The English interface no longer mixes Korean into the knife, graphics settings, benchmark and fundamentals map text.",
+      "Knife swings were as loud as a rifle shot; they are now quieter, and drawing the knife matches the other weapons.",
+      "Footstep variants on the same floor differed by up to 4 dB and are now matched; gunshot variants are closer in loudness too.",
+      "Guide tables on phones can be scrolled with the keyboard, and some guide pages have a corrected page structure.",
+      "Fixed the Cloudflare deployment settings, where the security policy blocked the theme script and unknown addresses showed the home screen instead of a 404.",
+      "Restored missing validation images and baseline files so the full build verification passes end to end."
+    ]
+  },
   "12.25": {
     "title": "Fundamentals training maps",
     "description": "Four original maps each train one aiming fundamental: pre-aiming, checking angles, flicking and micro-adjusting. Targets do not shoot back and only fall to headshots.",

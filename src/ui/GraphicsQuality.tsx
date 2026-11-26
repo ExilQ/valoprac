@@ -51,7 +51,7 @@ export function GraphicsDiagnostics(){
     <dl className="graphics-facts">
       <div><dt>그래픽 장치</dt><dd>{gpu?.renderer||'브라우저가 이름을 알려 주지 않음'}</dd></div>
       <div><dt>하드웨어 가속</dt><dd>{gpu?.kind==='software'?'꺼짐 (CPU 렌더링)':gpu?.kind==='unknown'||!gpu?'확인 불가':'켜짐'}</dd></div>
-      <div><dt>렌더링 해상도</dt><dd>{pixels} <small>창 {size.w}×{size.h} · 배율 {Math.round(settings.renderScale*100)}%</small></dd></div>
+      <div><dt>렌더링 해상도</dt><dd>{pixels} <small>창 크기 {size.w}×{size.h} · 배율 {Math.round(settings.renderScale*100)}%</small></dd></div>
     </dl>
   </section>;
 }
@@ -65,7 +65,7 @@ export function GraphicsBenchmark(){
     abort.current?.abort();const controller=abort.current=new AbortController();setError('');setRunning('측정 준비 중');
     try{
       const {runGraphicsBenchmark}=await import('../engine/rendering/graphicsBenchmark');
-      const measured=await runGraphicsBenchmark(settings,{signal:controller.signal,onProgress:p=>setRunning(`${QUALITY_LABELS[p]} 측정 중`)});
+      const measured=await runGraphicsBenchmark(settings,{signal:controller.signal,onProgress:p=>setRunning(`${QUALITY_LABELS[p]} 품질 측정 중`)});
       setResult(measured);try{localStorage.setItem(BENCHMARK_KEY,JSON.stringify(measured));}catch{/* Result still shown for this page. */}
     }catch(e){if(!(e instanceof DOMException&&e.name==='AbortError'))setError('측정하지 못했습니다. 다른 탭을 닫고 다시 시도하세요.');}
     finally{if(abort.current===controller){abort.current=null;setRunning(null);}}
@@ -79,7 +79,7 @@ export function GraphicsBenchmark(){
     </div>
     {error&&<p className="inline-notice" role="status">{error}</p>}
     {result&&!running&&<>
-      <table className="graphics-benchmark-table"><caption>{result.width}×{result.height} · 모니터 {result.refreshHz}Hz 기준 (프레임 예산 {result.targetMs}밀리초)</caption>
+      <table className="graphics-benchmark-table"><caption>{result.width}×{result.height} · 모니터 {result.refreshHz}Hz · 프레임 예산 {result.targetMs}밀리초</caption>
         <thead><tr><th scope="col">품질</th><th scope="col">예상 프레임</th><th scope="col">상위 10% 프레임 시간</th></tr></thead>
         <tbody>{result.results.map(r=><tr key={r.preset} data-recommended={r.preset===result.recommended?'true':undefined}><th scope="row">{QUALITY_LABELS[r.preset]}{r.preset===result.recommended&&<small> 추천</small>}</th><td>{r.completed?`약 ${r.fps}프레임/초`:r.fps>0?`약 ${r.fps}프레임/초 · 매우 느림`:'측정 생략 (아래 단계가 이미 느림)'}</td><td>{r.completed&&Number.isFinite(r.p90Ms)?`${r.p90Ms}밀리초`:'—'}</td></tr>)}</tbody>
       </table>

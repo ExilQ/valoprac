@@ -14,7 +14,7 @@ const DRILL_LABEL={preaim:'프리에임',angles:'각 체크',flick:'플릭',micr
 function FundamentalsHud({drill,title}:{drill:import('../engine/tactical/FundamentalsDrill').FundamentalsSnapshot;title:string}){
  const rounds=drill.kind==='preaim'||drill.kind==='angles';
  return <aside className="drill-hud fundamentals-hud" data-drill={drill.kind}>
-  <b>{title} · {DRILL_LABEL[drill.kind]}{rounds?` · ${drill.round}라운드 ${drill.cleared}/${drill.total}`:` · ${drill.kills}명 처치`}</b>
+  <b>{title} · {DRILL_LABEL[drill.kind]}{rounds?` · 라운드 ${drill.round} · ${drill.cleared}/${drill.total}`:` · ${drill.kills}명 처치`}</b>
   <span>{drill.kind==='preaim'?'모서리를 돌기 전에 머리 높이에 조준점을 두세요':drill.kind==='angles'?'각을 하나씩 확인하고 어깨를 내미는 순간을 노리세요':drill.kind==='flick'?'멀리 나타나는 표적을 한 번에 끊어 치세요':'작게 움직이는 머리를 미세하게 따라가세요'}</span>
   <small>{[drill.preaimErrorDeg!==null&&`첫 노출 조준 오차 ${drill.preaimErrorDeg}°`,drill.flickDeg!==null&&`평균 플릭 ${drill.flickDeg}°`,drill.reactionMs!==null&&`평균 처치 ${drill.reactionMs}밀리초`,drill.roundSeconds!==null&&`라운드 ${drill.roundSeconds}초`,drill.kind==='flick'&&drill.misses>0&&`놓침 ${drill.misses}`].filter(Boolean).join(' · ')||'기록 대기 중'}</small>
  </aside>;

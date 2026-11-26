@@ -27,6 +27,9 @@ export const AUDIO_MIX={
   /** Air absorption: open low-pass cutoff falls with distance (Hz). */
   airCutoff:(distance:number)=>Math.max(2800,20000*Math.exp(-distance/55)),
   playerFireGain:.95,remoteFireGain:.8,killStreakSeconds:2.5,
+  /** A knife swing sits about 8 dB under a rifle shot and the knife draw
+   * matches gun equips (12.26: the swing was as loud as a Vandal shot). */
+  knifeSlashGain:.3,knifeStabGain:.45,knifeEquipGain:.5,
 };
 
 export class TrainingAudio {
@@ -156,10 +159,10 @@ export class TrainingAudio {
     const buffer=this.buffer(`impact:${SURFACES[surface].bulletImpactProfile}:false`);if(buffer)this.playBuffer(buffer,'feedback',time,.38*scale,point,emitter);
   }
   impacts(segments:PenetrationSegment[],time?:number,scale=1){for(const segment of segments.slice(0,4)){const profile=SURFACES[segment.material].bulletImpactProfile,entry=this.buffer(`impact:${profile}:false`);if(entry&&segment.entrySurface!==false)this.playBuffer(entry,'feedback',time,.38*scale,segment.entry);if(segment.penetrated&&segment.exitSurface!==false){const exit=this.buffer(`impact:${profile}:true`);if(exit)this.playBuffer(exit,'feedback',time,.22*scale,segment.exit);}}}
-  action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){if(id==='knife'){if(action==='equip')this.knifeSound('equip','handling',undefined,.7);return;}this.playKey(`${id}:${action}`,'handling',undefined,AUDIO_PROFILES[id].gain);}
+  action(id:WeaponId,action:'reload'|'equip'|'bolt'|'scope'){if(id==='knife'){if(action==='equip')this.knifeSound('equip','handling',undefined,AUDIO_MIX.knifeEquipGain);return;}this.playKey(`${id}:${action}`,'handling',undefined,AUDIO_PROFILES[id].gain);}
   private lastMelee=0;
   /** Attack swish, plus a body or surface impact when the blade connects. */
-  melee(e:MeleeEvent){if(e.serial<=this.lastMelee)return;this.lastMelee=e.serial;this.events++;this.knifeSound(e.kind,'firing',e.timestamp,.8);
+  melee(e:MeleeEvent){if(e.serial<=this.lastMelee)return;this.lastMelee=e.serial;this.events++;this.knifeSound(e.kind,'firing',e.timestamp,e.kind==='slash'?AUDIO_MIX.knifeSlashGain:AUDIO_MIX.knifeStabGain);
     if(e.hit==='wall')this.knifeSound('wall','feedback',e.timestamp,.55,e.impact??undefined);else if(e.hit!=='miss')this.knifeSound('hit','feedback',e.timestamp,e.killed?.95:.75);}
   private knifeSound(sound:KnifeSound,channel:Channel,time?:number,scale=1,position?:Vec3){this.playKey(`knife:${sound}`,channel,time,scale,position,`knife:${sound}`);}
   trainingCue(source:Vec3,time:number){if(!Number.isFinite(time))return;this.playKey('training:cue','feedback',time,.55,source);}

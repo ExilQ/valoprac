@@ -1,5 +1,5 @@
 import type {FootstepMaterial} from '../footsteps/Footsteps';
-import {Rng,band,biquad,envelope,fadeEdges,glideTone,mixInto,modal,noise,normalize,samplesFor,scale,type Mode} from './dsp';
+import {Rng,band,biquad,envelope,fadeEdges,glideTone,matchLoudness,mixInto,modal,noise,normalize,samplesFor,scale,windowRms,type Mode} from './dsp';
 import type {Pcm} from './dsp';
 
 /* Original footsteps (12.24). A step is two contacts, heel then toe, about
@@ -33,6 +33,8 @@ function contact(rate:number,rng:Rng,floor:Floor,strength:number,pitch:number){
   return scale(out,strength);
 }
 
+/** Loudness of variant 0 per floor and sample rate. */
+const STEP_REFERENCE=new Map<string,number>();
 export function synthesizeFootstep(sampleRate:number,side:number,material:FootstepMaterial='concrete'){
   const rate=sampleRate,floor=FLOORS[material]??FLOORS.concrete,variant=((side%4)+4)%4;
   const rng=new Rng(0x71914+variant*907+material.length*131),out=new Float32Array(Math.round(rate*.14));
@@ -41,5 +43,11 @@ export function synthesizeFootstep(sampleRate:number,side:number,material:Footst
   mixInto(out,contact(rate,rng,floor,.62,pitch*1.08),1,gap,rate);        // toe
   biquad(out,rate,'highpass',110,.7);biquad(out,rate,'peaking',2200,.8,2.5);
   scale(out,floor.damp);fadeEdges(out,rate,.0003,.012);
-  return normalize([out],.52*floor.damp)[0];
+  normalize([out],.52*floor.damp);
+  // Steps carry distance information, so the four variants of one floor are
+  // loudness-matched to variant 0 (peak normalisation left them up to 4 dB apart).
+  const key=`${material}:${rate}`;
+  if(variant===0){STEP_REFERENCE.set(key,windowRms([out],rate,.1));return out;}
+  if(!STEP_REFERENCE.has(key))synthesizeFootstep(rate,0,material);
+  return matchLoudness([out],rate,.1,STEP_REFERENCE.get(key)!,.62)[0];
 }

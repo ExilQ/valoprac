@@ -89,6 +89,12 @@ export function scale(x:Pcm,g:number){for(let i=0;i<x.length;i++)x[i]*=g;return 
 export function peakOf(channels:readonly Pcm[]){let p=0;for(const c of channels)for(let i=0;i<c.length;i++){const a=Math.abs(c[i]);if(a>p)p=a;}return p;}
 /** Scale a single signal to unit peak. */
 export function unit(x:Pcm){const p=peakOf([x]);return p>1e-9?scale(x,1/p):x;}
+/** RMS of the first `seconds` across channels: a loudness proxy for short, transient-led sounds. */
+export function windowRms(channels:Pcm[],rate:number,seconds:number){const n=Math.min(channels[0]?.length??0,Math.round(seconds*rate));let sum=0;for(const c of channels)for(let i=0;i<n;i++)sum+=c[i]*c[i];return n?Math.sqrt(sum/(n*channels.length)):0;}
+/** Match a round-robin variant to its reference loudness (variant 0) instead of
+ * its peak: peak normalisation of noisy transients left variants up to 4 dB
+ * apart. The peak guard keeps the result below `ceiling`. */
+export function matchLoudness(channels:Pcm[],rate:number,seconds:number,target:number,ceiling:number){const rms=windowRms(channels,rate,seconds);if(rms<1e-9||!(target>0))return channels;let g=target/rms;const p=peakOf(channels)*g;if(p>ceiling)g*=ceiling/p;for(const c of channels)scale(c,g);return channels;}
 export function normalize(channels:Pcm[],peak:number){const p=peakOf(channels);if(p>1e-9)for(const c of channels)scale(c,peak/p);return channels;}
 /** Short raised-cosine fades so no buffer starts or ends with a click. */
 export function fadeEdges(x:Pcm,rate:number,inSeconds=.0004,outSeconds=.01){

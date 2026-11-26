@@ -20,7 +20,8 @@ const archivedSources={
  'src/ui/MainMenu.tsx':'docs/modern-web-baseline/MainMenu.tsx.txt',
  'src/ui/Results.tsx':'docs/modern-web-baseline/Results.tsx.txt',
  'src/app/navigation.ts':'docs/modern-web-baseline/navigation.ts.txt',
- 'src/ui/TrainingPlatform.tsx':'docs/modern-web-baseline/TrainingPlatform.tsx.txt'
+ 'src/ui/TrainingPlatform.tsx':'docs/modern-web-baseline/TrainingPlatform.tsx.txt',
+ 'src/streaming/StreamingStage.tsx':'docs/modern-web-baseline/StreamingStage.tsx.txt'
 };
 for(const [path,expected]of Object.entries(report.sourceSha256)){
  const capturedSource=archivedSources[path]??path;
