@@ -8,6 +8,7 @@ import { FixedClock } from './simulation/FixedClock';
 import { RangeRenderer } from './rendering/RangeRenderer';
 import { BrowserInput } from './input/Input';
 import { TrainingAudio } from './audio/Audio';
+import {spaceForMap} from './audio/soundBank';
 import {ReplayRecorder} from './replay/recording';
 import type {ReplayRecording} from './replay/types';
 import {MovementReview} from './rendering/MovementReview';
@@ -15,9 +16,10 @@ import {buildMovementGhost,sampleMovementGhost,type MovementGhost} from '../trai
 import type {SimulationOptions} from '../training/platform/SessionOptions';
 import type {MovementAction,MovementActionResult,MovementPracticeSnapshot} from '../training/movementTools/types';
 import type {ExerciseReport} from '../training/exercises/types';
-import type { Mode, Settings, WeaponId, SessionData, SessionSummary } from './types';
+import type { Mode, Settings, WeaponId, GunId, SessionData, SessionSummary } from './types';
+import {isPrimary,weaponForSlot} from '../config/weapons';
 export interface Telemetry {ghostStatus?:'idle'|'preparing'|'ready'|'failed';ghostError?:string;exercise?:ExerciseReport;movementPractice?:MovementPracticeSnapshot;replayStatus?:'recording'|'complete'|'unavailable'|'preview';replayIssue?:string;graphicsPreparation?:RangeRenderer['preparationStatus'];graphicsReady?:boolean;scopeZoom?:number;scopeLevel?:number;scopeAmount?:number;operatorState?:string;peeking?:import('./tactical/DefenderAI').PeekReport;health?:number;weapon:WeaponId;reserve:number;ads:boolean;summary:SessionSummary|null;time:number;ammo:number;reloading:number|null;score:number;shots:number;speed:number;accurate:boolean;release:number|null;ready:number|null;thresholdDelta:number|null;early:boolean;hit:string;hitAge:number;fps:number;p95:number;calls:number;debt:number;spread:number;recoil:number;grounded:boolean}
-export const INITIAL_TELEMETRY:Telemetry={graphicsReady:false,weapon:'rifleA',reserve:75,ads:false,summary:null,time:0,ammo:25,reloading:null,score:0,shots:0,speed:0,accurate:true,release:null,ready:0,thresholdDelta:null,early:false,hit:'miss',hitAge:100,fps:0,p95:0,calls:0,debt:0,spread:0,recoil:0,grounded:true};
+export const INITIAL_TELEMETRY:Telemetry={graphicsReady:false,weapon:'rifleA',reserve:50,ads:false,summary:null,time:0,ammo:25,reloading:null,score:0,shots:0,speed:0,accurate:true,release:null,ready:0,thresholdDelta:null,early:false,hit:'miss',hitAge:100,fps:0,p95:0,calls:0,debt:0,spread:0,recoil:0,grounded:true};
 export class Runtime {
   graphicsReady=false;private preparationEpoch=0;
   private aimCapture:CombatCapture|null=null;
@@ -27,14 +29,18 @@ export class Runtime {
   private movementGhost:MovementGhost|null=null;private ghostState:'idle'|'preparing'|'ready'|'failed'='idle';private ghostError:string|undefined;private ghostAbort:AbortController|null=null;private ghostStartTime=0;
   private ghostCandidate:{recording:ReplayRecording;startTick:number;endTick:number}|null=null;private ghostCandidateId=-1;
   readonly latency=new InputLatencyProbe();
+  /** Weapon that number key 1 returns to: the last primary the player held. */
+  private primary:GunId='rifleA';
   simulation:Simulation;renderer:RangeRenderer;input!:BrowserInput;audio=new TrainingAudio();clock=new FixedClock();
   private cadence=new RenderCadence();
   /** Last written crosshair gap: writing a custom property every frame forces style recalculation of the whole HUD subtree. */
   private movementGap=Number.NaN;private lastDraw=0;private frame=0;private previousTime=0;private hudAt=0;private frameTimes=new Float64Array(180);private sampleIndex=0;private sampleCount=0;private preview:boolean;private disposed=false;
   constructor(host:HTMLElement,mode:Mode,weapon:WeaponId,settings:Settings,preview:boolean,
     private onTelemetry:(t:Telemetry)=>void,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onFinish:(data:SessionData)=>void,private onWeapon:(id:WeaponId)=>void=()=>{},private assessment?:CombatAssessmentContext,options:SimulationOptions={}){
-    this.preview=preview;this.simulation=new Simulation(mode,weapon,settings,options);this.renderer=new RangeRenderer(host,this.simulation,settings);
+    this.preview=preview;if(isPrimary(weapon))this.primary=weapon;this.simulation=new Simulation(mode,weapon,settings,options);this.renderer=new RangeRenderer(host,this.simulation,settings);
     this.audio.setOcclusionResolver((source,listener)=>!visibleBetween(this.simulation.obstacles,listener,source));
+    // Sounds render in a worker while the briefing is open; the map picks the room.
+    if(!preview)this.audio.prefetch(weapon,spaceForMap(this.simulation.practiceMap));this.audio.setSpace(spaceForMap(this.simulation.practiceMap));
     if(!preview){this.movementReview=new MovementReview();this.renderer.scene.add(this.movementReview.root);}
     this.bindSimulation();
     this.renderer.canvas.addEventListener('webglcontextlost',this.contextLost);
@@ -46,7 +52,7 @@ export class Runtime {
     // The renderer attaches displayed-target history before recording begins.
     // Preview navigation never creates a training recording.
     if(!this.preview){try{this.replayRecorder=new ReplayRecorder(this.simulation);this.replayState='recording';}catch(error){this.recordingUnavailable(error);}}
-    this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,this.onError,()=>this.publishTelemetry(),id=>{this.switchWeapon(id);this.onWeapon(id);},action=>{this.performMovementAction(action);});
+    this.input=new BrowserInput(this.renderer.canvas,this.simulation,this.handleLock,this.onError,()=>this.publishTelemetry(),slot=>{const id=weaponForSlot(slot,this.primary);if(!id||this.disposed||this.preview||id===this.simulation.weaponId)return;this.switchWeapon(id);this.onWeapon(id);},action=>{this.performMovementAction(action);});
     if(!this.preview){this.aimCapture=new CombatCapture(this.simulation,()=>this.input.rawMode,this.assessment,()=>this.input.rawConfirmation);this.input.observer=this.aimCapture;}
     if(this.simulation.defenders){this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,e.origin,e.time,e.bot);this.audio.impacts(e.penetration??[],e.time,.55);const floor=floorImpactSurfaceAt(this.simulation.practiceMap,e.impact,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,e.impact,e.time,.55,`enemy-floor:${e.bot}`);}this.renderer.addDefenderShot({...e,segments:e.penetration});};this.simulation.defenders.onFootstep=event=>this.audio.botFootstep(event.bot,event);}
     this.simulation.onFootstep=e=>this.audio.footstep(e);
@@ -54,10 +60,12 @@ export class Runtime {
     this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);const floor=floorImpactSurface(this.simulation.practiceMap,s,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,s.impact,s.timestamp);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>this.deliverSession();
+    this.simulation.onKill=()=>this.audio.kill(this.simulation.time);
+    this.simulation.onMelee=e=>{if(e.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addMelee(e);this.audio.melee(e);};
   }
   private unbindSimulation(){
     this.input?.dispose();this.aimCapture?.dispose();this.aimCapture=null;this.replayRecorder?.dispose();this.replayRecorder=null;
-    const s=this.simulation;if(s.defenders){s.defenders.onShot=null;s.defenders.onFootstep=null;}s.onFootstep=null;s.onLanding=null;s.landings.onLanding=null;s.footsteps.onStep=null;s.onShot=null;s.onFinish=null;s.onKill=null;for(const w of Object.values(s.weapons))w.onAction=null;
+    const s=this.simulation;if(s.defenders){s.defenders.onShot=null;s.defenders.onFootstep=null;}s.onFootstep=null;s.onLanding=null;s.landings.onLanding=null;s.footsteps.onStep=null;s.onShot=null;s.onMelee=null;s.onFinish=null;s.onKill=null;for(const w of Object.values(s.weapons))w.onAction=null;
   }
   private probeMouse=(e:MouseEvent)=>{if(this.input.locked)this.latency.mark('look',e.timeStamp,performance.now());};
   private probeClick=(e:MouseEvent)=>{if(this.input.locked&&e.button===0)this.latency.mark('click',e.timeStamp,performance.now());};
@@ -142,7 +150,10 @@ export class Runtime {
     const movementReady=s.movement.estimateReadyTime(this.input.state,this.input.state.movementYaw??s.yaw,1/120,s.weaponId==='operator'?5.13*.72*.15:s.movement.profile.accuracyVelocityThreshold);const ready=s.weaponId==='operator'?(!s.ads||movementReady===null?null:Math.max(movementReady,w.scopeReadyAt-s.time,.225-(s.time-s.movement.landedAt),0)):movementReady;
     const last=s.shots[s.shots.length-1];this.movementVisual=s.settings.movementTools?.enabled?s.movementPractice.snapshot():null;this.onTelemetry({ghostStatus:this.ghostState,ghostError:this.ghostError,exercise:s.exercise?.snapshot(),movementPractice:this.movementVisual??undefined,replayStatus:this.replayState,replayIssue:this.replayIssue,graphicsPreparation:this.renderer.preparationStatus,graphicsReady:this.graphicsReady,scopeZoom:s.scopeZoom,scopeLevel:s.scopeLevel,scopeAmount:s.weaponId==='operator'?w.scopeAmount:0,operatorState:s.weaponId==='operator'?w.operatorState:undefined,peeking:s.defenders?.snapshot(),health:s.defenders?.health,weapon:s.weaponId,reserve:w.reserve,ads:s.ads,summary:s.hudSummary(),time:s.time,ammo:w.ammo,reloading:w.reloadingUntil===null?null:Math.max(0,w.reloadingUntil-s.time),score:s.stats.eliminations,shots:s.stats.shots,speed:s.movement.speed,accurate:s.weaponId==='operator'?s.ads&&w.scopeAmount>.98&&s.time>=w.scopeReadyAt&&s.movement.grounded&&s.movement.speed<=5.13*.72*.15&&s.time-s.movement.landedAt>=.225:s.movement.accurate,release:b.releaseTime===null?null:s.time-b.releaseTime,ready,thresholdDelta:last?.thresholdDelta??null,early:s.time-s.lastEarlyAt<0.3,hit:s.lastHit,hitAge:s.time-s.lastHitAt,fps:average?1000/average:0,p95:times[Math.floor(times.length*0.95)]??0,calls:this.renderer.calls,debt:this.clock.deferredTicks,spread:w.spread.total,recoil:w.recoil.pitch,grounded:s.movement.grounded});
   }
-  switchWeapon(id:WeaponId){this.input.reset();this.audio.selectWeapon(id);this.simulation.switchWeapon(id);this.publishTelemetry();}
+  /** Weapon swaps keep held movement keys; only trigger/aim intent is released. */
+  switchWeapon(id:WeaponId){if(isPrimary(id))this.primary=id;if(id===this.simulation.weaponId){this.publishTelemetry();return;}this.input.releaseCombat();this.audio.selectWeapon(id);this.simulation.switchWeapon(id);this.renderer.refreshKnifeSkin();this.publishTelemetry();}
+  setPrimary(id:GunId){if(isPrimary(id))this.primary=id;}
+  get primaryWeapon(){return this.primary;}
   configure(settings:Settings){
     const before=this.simulation.settings;
     const movementChanged=before.movementPhysics!==settings.movementPhysics||before.csMovementPreset!==settings.csMovementPreset||before.jumpBufferMs!==settings.jumpBufferMs||before.wheelJump!==settings.wheelJump;

@@ -5,13 +5,13 @@ import {DefenderAI,intersectPlayerBody,playerVisibilitySamples,type PlayerBody,t
 import {Target} from '../engine/targets/Target';
 import {SeededRandom} from '../engine/simulation/random';
 import type {Obstacle} from '../engine/collision/environment';
-import type {Settings,WeaponId} from '../engine/types';
+import type {Settings,GunId,WeaponId} from '../engine/types';
 import {standingSpace} from '../engine/tactical/levels';
 
 const dt=1/120;
 const player=(overrides:Partial<PlayerBody>={}):PlayerBody=>({position:{x:0,y:0,z:0},velocity:{x:0,y:0,z:0},eyeHeight:1.64,crouch:0,grounded:true,yaw:0,pitch:0,...overrides});
 const wall=(x:number,z:number,w:number,d:number,h=3):Obstacle=>({box:new Box3(new Vector3(x-w/2,0,z-d/2),new Vector3(x+w/2,h,z+d/2)),kind:'wall',color:0});
-function setup(weapon:WeaponId='operator',obstacles:Obstacle[]=[],settings:Partial<Settings>={},sectors:DefenderSector[]=[{facingYaw:0}]){
+function setup(weapon:GunId='operator',obstacles:Obstacle[]=[],settings:Partial<Settings>={},sectors:DefenderSector[]=[{facingYaw:0}]){
  const target=new Target(0,'stationary',new SeededRandom(2));target.spawn(0,-10,0);
  const ai=new DefenderAI([target],obstacles,{...DEFAULT_SETTINGS,exposureEnabled:false,defenderReposition:0,defenderReaction:.15,defenderAccuracy:.98,defenderWeapon:weapon,...settings},{x:0,y:0,z:0},73,sectors);
  return{ai,target};

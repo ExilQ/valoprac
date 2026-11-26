@@ -1,0 +1,26 @@
+/* 12.23 graphics settings: preset table, diagnostics and benchmark. */
+.graphics-quality .quality-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.graphics-preset-table-wrap{overflow-x:auto;margin:12px 0 6px}
+.graphics-preset-table,.graphics-benchmark-table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.graphics-preset-table caption,.graphics-benchmark-table caption{text-align:left;font-size:12px;color:var(--muted);padding:0 0 6px}
+.graphics-preset-table th,.graphics-preset-table td,.graphics-benchmark-table th,.graphics-benchmark-table td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.graphics-preset-table th,.graphics-benchmark-table th{font-size:12px}
+.graphics-preset-table thead th,.graphics-benchmark-table thead th{font-weight:600;color:var(--muted)}
+.graphics-preset-table tbody th,.graphics-benchmark-table tbody th{font-weight:500}
+.graphics-preset-table [data-current]{background:var(--accent-soft,rgba(20,109,115,.08));color:var(--ink)}
+.graphics-preset-table thead th[data-current]{color:var(--accent);box-shadow:inset 0 -2px 0 var(--accent)}
+.graphics-quality .practice-toggle small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.graphics-facts{display:grid;gap:8px;margin:10px 0 0}
+.graphics-facts div{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px;align-items:baseline}
+.graphics-facts dt{font-size:12px;color:var(--muted)}
+.graphics-facts dd{margin:0;font-size:13px;word-break:break-word}
+.graphics-facts dd small{display:block;color:var(--muted);font-size:11px}
+.graphics-warning{display:flex;gap:10px;align-items:flex-start;margin:8px 0 4px;padding:10px 12px;border:1px solid var(--danger,#c2410c);border-left-width:3px;border-radius:var(--radius,6px);background:color-mix(in srgb,var(--danger,#c2410c) 8%,transparent)}
+.graphics-warning.soft{border-color:var(--warning,#b45309);background:color-mix(in srgb,var(--warning,#b45309) 7%,transparent)}
+.graphics-warning svg{flex:none;margin-top:2px;color:var(--danger,#c2410c)}
+.graphics-warning.soft svg{color:var(--warning,#b45309)}
+.graphics-warning strong{font-size:13px}
+.graphics-warning p{margin:4px 0 0;font-size:12px;line-height:1.6;color:var(--muted);word-break:keep-all}
+.graphics-benchmark-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.graphics-benchmark-table tr[data-recommended] th,.graphics-benchmark-table tr[data-recommended] td{background:var(--accent-soft,rgba(20,109,115,.08))}
+.graphics-benchmark-table tr[data-recommended] small{color:var(--accent);font-weight:600}

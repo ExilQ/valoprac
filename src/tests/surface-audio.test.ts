@@ -17,8 +17,9 @@ describe('Original environment footstep timbres',()=>{
   class Context {sampleRate=8000;currentTime=0;state='running';destination=new Node();createGain(){return new Node();}createDynamicsCompressor(){return new Node();}createBufferSource(){const n=new Node();sources.push(n);return n;}createBuffer(_c:number,n:number,r:number){return{id:++bufferId,duration:n/r,copyToChannel(){}};}resume(){return Promise.resolve();}close(){return Promise.resolve();}}
   vi.stubGlobal('AudioContext',Context);vi.stubGlobal('indexedDB',indexedDB);const audio=new TrainingAudio();await audio.unlock();
   const event={id:1,timestamp:0,position:{x:0,y:0,z:0},radius:20,speed:5};audio.footstep(event);const fallback=sources.at(-1)!.buffer;
-  audio.footstep({...event,id:3,material:'concrete'});expect(sources.at(-1)!.buffer).toBe(fallback);
-  const distinct=new Set([fallback]);for(const [i,material]of FOOTSTEP_MATERIALS.entries()){audio.footstep({...event,id:5+i*2,material});distinct.add(sources.at(-1)!.buffer);}expect(distinct.size).toBe(4);
-  const n=sources.length;audio.footstep({...event,id:11,material:'wood'});expect(sources.length).toBe(n);expect(audio.footstepEvents).toBe(6);audio.dispose();expect(audio.activeVoiceCount).toBe(0);
+  // IDs 1 and 5 select the same round-robin variant (id % 4).
+  audio.footstep({...event,id:5,material:'concrete'});expect(sources.at(-1)!.buffer).toBe(fallback);
+  const distinct=new Set([fallback]);for(const [i,material]of FOOTSTEP_MATERIALS.entries()){audio.footstep({...event,id:9+i*4,material});distinct.add(sources.at(-1)!.buffer);}expect(distinct.size).toBe(4);
+  const n=sources.length;audio.footstep({...event,id:13,material:'wood'});expect(sources.length).toBe(n);expect(audio.footstepEvents).toBe(6);audio.dispose();expect(audio.activeVoiceCount).toBe(0);
  });
 });

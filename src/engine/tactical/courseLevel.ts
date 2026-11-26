@@ -5,8 +5,10 @@ import type {Obstacle} from '../collision/environment';
 import type {Vec3} from '../types';
 import type {AngleSector,TacticalLevel} from './levels';
 
-const raised=(tile:string)=>'Habc'.includes(tile);
-const walkable=(tile:string)=>'.SABCabcH^pt'.includes(tile);
+/** Target positions: A-G and I-R on the ground, a-g and i-o on the deck height. */
+export const SECTOR=/^[A-GI-Ra-gi-o]$/;
+const raised=(tile:string)=>tile==='H'||/^[a-gi-o]$/.test(tile);
+const walkable=(tile:string)=>'.SH^pt'.includes(tile)||SECTOR.test(tile);
 export function buildCourse(spec:MapCourse & {id:CourseId}):TacticalLevel {
  const {rows,cell,height}=spec, width=rows[0].length, depth=rows.length, tiles=rows.join('');
  const point=(i:number):Vec3=>({x:(i%width-(width-1)/2)*cell,y:raised(tiles[i])?height:tiles[i]==='^'?height/2:0,z:5+(Math.floor(i/width)-depth+1)*cell});
@@ -31,7 +33,7 @@ export function buildCourse(spec:MapCourse & {id:CourseId}):TacticalLevel {
   if(tile==='+')add(p.x,p.z,cell*.56,cell*.42,1.28,'cover',spec.style==='courtyard'?'thickWood':'paintedMetal');
   if(raised(tile))add(p.x,p.z,cell,cell,height,'cover',spec.floor);
   if(tile==='^')add(p.x,p.z,cell,cell,height,'cover',spec.floor).ramp={axis:'z',low:0,high:height,ascending:-1};
-  if(/[ABCabc]/.test(tile)){
+  if(SECTOR.test(tile)){
    const label=tile.toUpperCase();
    destinations.push(i);angles.push({id:spec.id+'-'+label,label,position:p,jitter:.14,radius:.65,
     alternatives:[{...p,x:p.x-.45},{...p,x:p.x+.45}],navigation:[{...p,x:p.x-.65},p,{...p,x:p.x+.65}]});

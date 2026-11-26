@@ -16,7 +16,7 @@ vi.mock('../engine/rendering/RangeRenderer',async()=>{
  }};
 });
 vi.mock('../engine/audio/Audio',()=>({TrainingAudio:class{
- stop=vi.fn();resetSession=vi.fn();dispose=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
+ stop=vi.fn();resetSession=vi.fn();dispose=vi.fn();prefetch=vi.fn();setSpace=vi.fn();kill=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
  constructor(){tracked.audios.push(this);}unlock(){return Promise.resolve();}
 }}));
 vi.mock('../aim/CombatCapture',()=>({CombatCapture:class{sample(){}shot(){}frame(){}dispose(){}flush(){return Promise.resolve([]);}}}));

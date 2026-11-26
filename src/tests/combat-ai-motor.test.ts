@@ -9,11 +9,11 @@ import {DefenderAI,intersectPlayerBody,type PlayerBody,type DefenderSector} from
 import {spreadDirection} from '../engine/weapons/trajectory';
 import {Target} from '../engine/targets/Target';
 import type {Obstacle} from '../engine/collision/environment';
-import type {Settings,WeaponId} from '../engine/types';
+import type {Settings,GunId,WeaponId} from '../engine/types';
 
 const dt=1/120;
 const body=(x=0,vx=0):PlayerBody=>({position:{x,y:0,z:0},velocity:{x:vx,y:0,z:0},eyeHeight:1.64,crouch:0,grounded:true,yaw:0,pitch:0});
-function fixture(weapon:WeaponId='rifleA',settings:Partial<Settings>={},seed=1974,sectors:DefenderSector[]=[{facingYaw:0}]){
+function fixture(weapon:GunId='rifleA',settings:Partial<Settings>={},seed=1974,sectors:DefenderSector[]=[{facingYaw:0}]){
  const target=new Target(0,'stationary',new SeededRandom(seed));target.spawn(0,-20,0);
  const obstacles:Obstacle[]=[];const ai=new DefenderAI([target],obstacles,{...DEFAULT_SETTINGS,defenderWeapon:weapon,defenderReposition:0,exposureEnabled:false,...settings},{x:0,y:0,z:0},seed,sectors);
  return{target,obstacles,ai};

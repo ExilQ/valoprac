@@ -32,7 +32,7 @@ export function GameStage({preview=false}:{preview?:boolean}){
     try{r=new Runtime(host.current,mode,weapon,settings,preview,setTelemetry,locked=>{
       useApp.setState({locked,paused:!locked});
       if(locked&&!preview)window.dispatchEvent(new Event('valoprac:training-started'));
-    },setError,data=>{void finish(data,!preview&&!!options.exercise);},id=>useApp.getState().setWeapon(id),undefined,preview?{}:options);runtime.current=r;useApp.getState().reportGraphics(r.renderer.capabilities);}
+    },setError,data=>{void finish(data,!preview&&!!options.exercise);},id=>useApp.getState().setWeapon(id),undefined,preview?{}:options);runtime.current=r;r.setPrimary(useApp.getState().primaryWeapon);useApp.getState().reportGraphics(r.renderer.capabilities);}
     catch(error){console.error(error);setError('입체 그래픽을 시작하지 못했습니다. 하드웨어 가속과 그래픽 지원을 확인하세요.');return;}
     return ()=>{runtime.current=null;r.dispose();};
   },[mode,preview,finish,preview?settings.practiceMap:null,preview?null:options]);

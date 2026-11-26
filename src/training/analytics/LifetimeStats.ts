@@ -1,4 +1,4 @@
-import type { ShotEvent, KillEvent, SessionSummary, WeaponId, WeaponTotals } from '../../engine/types';
+import type { ShotEvent, KillEvent, SessionSummary, GunId, WeaponTotals } from '../../engine/types';
 const rate=(n:number,d:number)=>d?n/d*100:0;
 class Moments {n=0;sum=0;squares=0;add(v:number){this.n++;this.sum+=v;this.squares+=v*v;}get mean(){return this.n?this.sum/this.n:0;}get sd(){return this.n?Math.sqrt(Math.max(0,this.squares/this.n-this.mean*this.mean)):0;}}
 const totals=():WeaponTotals=>({shots:0,hits:0,heads:0,recoilSquared:0,spreadSum:0});
@@ -6,7 +6,7 @@ export class LifetimeStats {
   shots=0;heads=0;bodies=0;limbs=0;first=0;firstHits=0;firstHeads=0;eliminations=0;early=0;brakes=0;
   elimination=new Moments();brake=new Moments();deceleration=new Moments();speed=new Moments();timing=new Moments();angular=new Moments();
   comparison={neutral:{duration:new Moments(),timing:new Moments(),heads:0},opposite:{duration:new Moments(),timing:new Moments(),heads:0}};
-  weapons:Record<WeaponId,WeaponTotals>={rifleA:totals(),rifleB:totals(),sheriff:totals(),operator:totals()};
+  weapons:Record<GunId,WeaponTotals>={rifleA:totals(),rifleB:totals(),sheriff:totals(),operator:totals()};
   shot(s:ShotEvent){this.shots++;const hit=s.hit==='head'||s.hit==='torso'||s.hit==='arm'||s.hit==='leg';if(s.hit==='head')this.heads++;if(s.hit==='torso')this.bodies++;if(s.hit==='arm'||s.hit==='leg')this.limbs++;
     if(s.firstShot){this.first++;if(hit)this.firstHits++;if(s.hit==='head')this.firstHeads++;}
     if(s.releaseTime!==null){this.brakes++;if(!s.accurate)this.early++;this.speed.add(Math.hypot(s.velocity.x,s.velocity.z));}

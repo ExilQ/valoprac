@@ -6,6 +6,11 @@ export function poseViewmodel(id:WeaponId,ads:number,kick:number,equip:number,re
  const b=id==='sheriff'?0:ads,lower=equip*equip*(3-2*equip);
  // Small pace-coupled motion, damped toward zero at the sight plane. Cosmetic only.
  const pace=time*(5+Math.min(speed,5)*1.25),bob=Math.sin(pace)*Math.min(.0035,speed*.0008)*(1-b);
+ if(id==='knife'){
+  // Held low and to the right so the blade never crosses the crosshair at rest.
+  out.position.set(.19-swayX*.6,-.165-swayY*.6+bob-lower*.32,-.5);
+  out.rotation.set(lower*.7,0,0);return;
+ }
  if(id==='operator'){
   // The long precision rifle is shouldered farther from the projection plane.
   // Its stock stays outside the camera near field without scaling the mesh or

@@ -3,7 +3,7 @@ import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,type SimulationRulesId} from '../simulation/rules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
 
@@ -40,14 +40,14 @@ export class Movement {
    const standardPair=v.gravity===MOVEMENT.gravity&&v.jumpImpulse===MOVEMENT.jumpImpulse;
    const calibratedPair=v.gravity===calibrated.gravity&&v.jumpImpulse===calibrated.jumpImpulse;
    if(standardPair||calibratedPair){
-    v.gravity=this.rules==='bunny-hop-v5'?calibrated.gravity:MOVEMENT.gravity;
-    v.jumpImpulse=this.rules==='bunny-hop-v5'?calibrated.jumpImpulse:MOVEMENT.jumpImpulse;
+    v.gravity=usesBunnyHopCalibration(this.rules)?calibrated.gravity:MOVEMENT.gravity;
+    v.jumpImpulse=usesBunnyHopCalibration(this.rules)?calibrated.jumpImpulse:MOVEMENT.jumpImpulse;
    }
    const calibratedCap=MOVEMENT.maxSpeed*VALORANT_BUNNY_HOP.runningSpeedCap;
    if(v.hopSpeedCap===VALORANT_PHYSICS.hopSpeedCap||v.hopSpeedCap===calibratedCap)
-    v.hopSpeedCap=this.rules==='bunny-hop-v5'?calibratedCap:VALORANT_PHYSICS.hopSpeedCap;
+    v.hopSpeedCap=usesBunnyHopCalibration(this.rules)?calibratedCap:VALORANT_PHYSICS.hopSpeedCap;
    if(v.airSpeedLimit===VALORANT_PHYSICS.airSpeedLimit||v.airSpeedLimit===calibratedCap)
-    v.airSpeedLimit=this.rules==='bunny-hop-v5'?calibratedCap:VALORANT_PHYSICS.airSpeedLimit;
+    v.airSpeedLimit=usesBunnyHopCalibration(this.rules)?calibratedCap:VALORANT_PHYSICS.airSpeedLimit;
   }
  }
  get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:this.rules==='materials-v3'?MATERIALS_MOVEMENT_PHYSICS_VERSION:this.rules==='air-steering-v4'?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
@@ -65,7 +65,7 @@ export class Movement {
   if(Number.isFinite(runSpeed)&&runSpeed>0){const context=this.weaponContext;if(context){context.id=id;context.runSpeed=runSpeed;context.ads=ads;}else this.weaponContext={id,runSpeed,ads};}
  }
  private hopRunningSpeed(takeoff:Pick<TakeoffState,'kind'|'movementState'|'ads'|'horizontalSpeed'|'weaponRunSpeed'>){
-  return this.rules==='bunny-hop-v5'&&takeoff.kind==='jump'&&takeoff.movementState==='running'&&!takeoff.ads&&takeoff.horizontalSpeed>=takeoff.weaponRunSpeed*VALORANT_BUNNY_HOP.runningTakeoffThreshold?takeoff.weaponRunSpeed:0;
+  return usesBunnyHopCalibration(this.rules)&&takeoff.kind==='jump'&&takeoff.movementState==='running'&&!takeoff.ads&&takeoff.horizontalSpeed>=takeoff.weaponRunSpeed*VALORANT_BUNNY_HOP.runningTakeoffThreshold?takeoff.weaponRunSpeed:0;
  }
  private airSpeedBudget(takeoff:Pick<TakeoffState,'kind'|'movementState'|'ads'|'horizontalSpeed'|'weaponRunSpeed'>){
   const p=this.profile;
@@ -100,7 +100,7 @@ export class Movement {
   const chain=Number.isFinite(this.lastTakeoff)&&time-this.lastLanding<=window+EPS&&timing!==null&&Math.abs(timing)<=window*1000+1e-6;
   if(p.jumpSpeedLimit!==null){
    const run=this.weaponContext?.runSpeed??p.maxSpeed*Math.min(1,this.speedModifier);
-   const max=chain&&this.rules==='bunny-hop-v5'&&p.airModel==='tactical'&&!this.activeInput.walk&&!this.activeInput.crouch&&!this.weaponContext?.ads
+   const max=chain&&usesBunnyHopCalibration(this.rules)&&p.airModel==='tactical'&&!this.activeInput.walk&&!this.activeInput.crouch&&!this.weaponContext?.ads
     ?Math.min(run*VALORANT_BUNNY_HOP.runningSpeedCap,p.hopSpeedCap??Infinity,p.airSpeedLimit??Infinity):p.jumpSpeedLimit*Math.min(1,this.speedModifier);
    limitContactSpeed(this.velocity,max);
   }
@@ -132,7 +132,7 @@ export class Movement {
   }else{
    if(!this.takeoff)this.recordTakeoff(time,'fall');
    const takeoff=this.takeoff!;
-   if(p.airModel==='tactical'&&(this.rules==='air-steering-v4'||this.rules==='bunny-hop-v5')){
+   if(p.airModel==='tactical'&&(this.rules==='air-steering-v4'||usesBunnyHopCalibration(this.rules))){
     const run=this.hopRunningSpeed(takeoff),diagonal=run>0&&!input.walk&&!input.crouch&&!this.weaponContext?.ads
      ?Math.sign(side)*Math.max(0,Math.min(forward,Math.abs(side))):0;
     steerTacticalAir(this.velocity,wish,p,dt,this.airAcceleration,takeoff.speedCap,diagonal,run);

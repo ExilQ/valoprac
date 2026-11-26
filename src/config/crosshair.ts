@@ -1,9 +1,9 @@
-import type {Settings,WeaponId} from '../engine/types';
+import type {Settings,GunId} from '../engine/types';
 export interface CrosshairLine {enabled:boolean;opacity:number;length:number;thickness:number;gap:number;}
 export interface CrosshairDesign {color:string;outline:boolean;outlineThickness:number;outlineOpacity:number;centerDot:boolean;centerSize:number;centerOpacity:number;inner:CrosshairLine;outer:CrosshairLine;}
 export interface CrosshairExtras {outline:boolean;outlineThickness:number;outlineOpacity:number;centerDot:boolean;centerSize:number;centerOpacity:number;innerEnabled:boolean;innerOpacity:number;outer:CrosshairLine;}
-export interface CrosshairAdvanced {version:1;primary:CrosshairExtras;adsMode:'dot'|'primary'|'custom';ads:CrosshairDesign;weaponVisibility:Record<WeaponId,boolean>;}
-export interface CrosshairConfiguration {version:1;primary:CrosshairDesign;adsMode:CrosshairAdvanced['adsMode'];ads:CrosshairDesign;weaponVisibility:Record<WeaponId,boolean>;}
+export interface CrosshairAdvanced {version:1;primary:CrosshairExtras;adsMode:'dot'|'primary'|'custom';ads:CrosshairDesign;weaponVisibility:Record<GunId,boolean>;}
+export interface CrosshairConfiguration {version:1;primary:CrosshairDesign;adsMode:CrosshairAdvanced['adsMode'];ads:CrosshairDesign;weaponVisibility:Record<GunId,boolean>;}
 const line=(enabled=true):CrosshairLine=>({enabled,opacity:1,length:7,thickness:2,gap:5});
 export const DEFAULT_CROSSHAIR_DESIGN:CrosshairDesign={color:'#e8fcf3',outline:true,outlineThickness:1,outlineOpacity:.75,centerDot:true,centerSize:1,centerOpacity:1,inner:line(),outer:{...line(false),length:3,thickness:2,gap:12,opacity:.5}};
 export function defaultCrosshairAdvanced():CrosshairAdvanced{return{version:1,primary:{outline:true,outlineThickness:1,outlineOpacity:.75,centerDot:true,centerSize:1,centerOpacity:1,innerEnabled:true,innerOpacity:1,outer:{...DEFAULT_CROSSHAIR_DESIGN.outer}},adsMode:'dot',ads:{...DEFAULT_CROSSHAIR_DESIGN,centerSize:2,inner:line(false),outer:line(false)},weaponVisibility:{rifleA:true,rifleB:true,sheriff:true,operator:true}};}

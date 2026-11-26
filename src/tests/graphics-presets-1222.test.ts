@@ -9,10 +9,11 @@ function memory(initial:Record<string,string>={}){
 }
 
 describe('12.22 graphics presets and pixel budget',()=>{
- it('never supersamples and keeps full-screen effects for Ultra only',()=>{
+ it('never supersamples and keeps full-screen effects out of every preset',()=>{
   for(const preset of Object.values(GRAPHICS_PRESETS))expect(preset.renderScale).toBeLessThanOrEqual(1);
-  for(const q of ['low','medium','high'] as const){expect(GRAPHICS_PRESETS[q].ambientOcclusion).toBe(false);expect(GRAPHICS_PRESETS[q].postProcessing).toBe(false);}
-  expect(GRAPHICS_PRESETS.ultra).toMatchObject({ambientOcclusion:true,postProcessing:true,antialias:true});
+  // 12.23: no preset enables full-screen effects; they are optional toggles.
+  for(const q of ['low','medium','high','ultra'] as const){expect(GRAPHICS_PRESETS[q].ambientOcclusion).toBe(false);expect(GRAPHICS_PRESETS[q].postProcessing).toBe(false);}
+  expect(GRAPHICS_PRESETS.ultra).toMatchObject({antialias:true});
  });
  it('caps the drawing buffer at 3840×2160 while keeping native sharpness below it',()=>{
   expect(renderPixelRatio(1,1,1920,1080)).toBe(1);

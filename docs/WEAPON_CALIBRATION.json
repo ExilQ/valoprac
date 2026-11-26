@@ -1,13 +1,17 @@
 {
-  "version": "weapons-3.2-ads-cones-horizontal-zoom",
-  "reviewedAt": "2026-10-29",
+  "version": "weapons-3.3-official-wiki-reserve-airborne",
+  "reviewedAt": "2026-11-26",
   "angles": "degrees",
   "distance": "meters",
   "sources": {
     "rifleSwitching": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-11-08/",
     "phantomFalloff": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-9-10/",
     "vandalFireRate": "https://playvalorant.com/en-gb/news/game-updates/valorant-patch-notes-1-07/",
-    "latestPatchReviewed": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-08/"
+    "latestPatchReviewed": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-13-10/",
+    "officialWikiVandal": "https://wiki.playvalorant.com/en-us/Vandal",
+    "officialWikiPhantom": "https://wiki.playvalorant.com/en-us/Phantom",
+    "officialWikiSheriff": "https://wiki.playvalorant.com/en-us/Sheriff",
+    "reserveAmmo611": "https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-6-11/"
   },
   "verifiedPublishedValues": {
     "vandalFireRate": 9.75,
@@ -21,7 +25,15 @@
     ],
     "phantomFalloffDistance": 20,
     "historicalRifleWalkingInaccuracy910": 3,
-    "historicalRifleRunningInaccuracy910": 6
+    "historicalRifleRunningInaccuracy910": 6,
+    "vandalReserve": 50,
+    "phantomReserve": 60,
+    "vandalAirborneError": 10,
+    "phantomAirborneError": 10,
+    "sheriffAirborneError": 7,
+    "phantomRunningError": 6,
+    "phantomWalkingError": 3,
+    "noRifleChangesSince": "11.08 (patches 11.09-13.10 reviewed)"
   },
   "requestedReferenceValuesNotIndependentlyMeasured": {
     "vandal": {
@@ -89,7 +101,6 @@
     "bloom accumulation and recovery",
     "camera recovery",
     "equip time",
-    "reserve ammunition",
     "ADS movement modifier",
     "crouch modifiers",
     "landing recovery",
@@ -106,7 +117,8 @@
     "rifleA and rifleB identifiers remain for backward compatibility with saved history.",
     "Rifle movement cone now6degrees at5.4m/s and3degrees at nominal walk speed; current native equivalence is unverified. Air penalties are8.5/8degrees. Independent tangent-disc projection preserves center at steep angles.",
     "4.0.1 endpoints are TOTAL no-bloom standing hip-fire radii, including first-shot error. Sheriff1.2/3.0 is the requested calibration reference;9.10 primary patch confirms the rifle3/6 changes, not those exact Sheriff values. Intermediate velocity curves and distribution remain provisional.",
-    "09.01 calibrates standing first-shot ADS cones to0.1575/0.11degrees. Moving/crouch/bloom modifiers remain separately modeled; no current native-game parity measurement is asserted."
+    "09.01 calibrates standing first-shot ADS cones to0.1575/0.11degrees. Moving/crouch/bloom modifiers remain separately modeled; no current native-game parity measurement is asserted.",
+    "12.27 (rules weapons-v6): reserve 50/60 (patch 6.11) and airborne error +10/+10/+7 from the official wiki. Rules v2-v5 replays keep reserve 75/90 and airborne 8.5/8/8 so they play back exactly. Operator hip-fire movement error (wiki: walk 10, run 15, air 15) is unchanged because the scoped model is calibrated against the current values."
   ],
   "totalMovementHipCone": {
     "rifleA": {

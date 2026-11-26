@@ -1,7 +1,13 @@
-import {courseFor} from '../../config/mapCourses';
+import {courseFor,HISTORICAL_COURSE_TITLES} from '../../config/mapCourses';
 import {GAME_VERSION} from '../../aim/types';
 import {MOVEMENT_PHYSICS_VERSION,MATERIALS_MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,VALORANT_AIR_STEERING,VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS} from '../../config/movement';
-import {WEAPONS} from '../../config/weapons';
+import {WEAPONS,LEGACY_WEAPONS,WEAPON_ORDER} from '../../config/weapons';
+/** Firearm profiles in their original key order. The knife (12.21) is excluded
+ * so recordings made before it keep their calibration fingerprint; its attacks
+ * are covered by the melee state in each checksum instead. */
+const {knife:_knife,...FIREARM_PROFILES}=WEAPONS;void _knife;
+const {knife:_legacyKnife,...LEGACY_FIREARM_PROFILES}=LEGACY_WEAPONS;void _legacyKnife;
+const firearms=(weapons:Record<string,unknown>)=>Object.fromEntries(WEAPON_ORDER.filter(id=>id in weapons).map(id=>[id,weapons[id]]));
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
 import {PENETRATION_WEAPONS} from '../../config/penetration';
 import {FOOTSTEP_BASELINE} from '../../config/footsteps';
@@ -13,8 +19,8 @@ import {PROJECTION_CALIBRATION} from '../rendering/projection';
 import {HELD_ANGLE_TIMING_CALIBRATION} from '../tactical/BotAimMotor';
 import type {Simulation} from '../simulation/Simulation';
 import type {ReplayHeader,ReplayOutcome} from './types';
-import {CURRENT_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,LEGACY_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
-import {LEGACY_REPLAY_SIMULATION_VERSION,MATERIALS_REPLAY_SIMULATION_VERSION,AIR_STEERING_REPLAY_SIMULATION_VERSION,REPLAY_INPUT_VERSION,REPLAY_SIMULATION_VERSION,REPLAY_WEAPON_VERSION,ReplayError} from './types';
+import {CURRENT_SIMULATION_RULES,BUNNY_HOP_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from '../simulation/rules';
+import {LEGACY_REPLAY_SIMULATION_VERSION,MATERIALS_REPLAY_SIMULATION_VERSION,AIR_STEERING_REPLAY_SIMULATION_VERSION,BUNNY_HOP_REPLAY_SIMULATION_VERSION,REPLAY_INPUT_VERSION,REPLAY_SIMULATION_VERSION,REPLAY_WEAPON_VERSION,ReplayError} from './types';
 
 /** Non-cryptographic reproducibility checksum. It never authenticates an online
  * score: verification always re-executes the complete compatible simulation. */
@@ -35,7 +41,7 @@ function state(value:unknown,depth=0,parents=new Set<object>(),legacy=false):unk
  const result:Record<string,unknown>={};for(const key of Object.keys(o).sort()){
   // Only the new engine selector is absent from historical state. Scenario
   // definitions already had a rules object, which remains checksum-bearing.
-  const rulesSelector=key==='rules'&&(o[key]===LEGACY_SIMULATION_RULES||o[key]===CURRENT_SIMULATION_RULES||o[key]===MATERIALS_SIMULATION_RULES||o[key]===AIR_STEERING_SIMULATION_RULES);
+  const rulesSelector=key==='rules'&&(o[key]===LEGACY_SIMULATION_RULES||o[key]===CURRENT_SIMULATION_RULES||o[key]===MATERIALS_SIMULATION_RULES||o[key]===AIR_STEERING_SIMULATION_RULES||o[key]===BUNNY_HOP_SIMULATION_RULES);
   if(commonOmit.has(key)||legacy&&(rulesSelector||key==='stepMinLandingWidth'))continue;
   const v=state(o[key],depth+1,next,legacy);if(v!==undefined)result[key]=v;
  }return result;
@@ -47,17 +53,24 @@ export function deterministicState(s:Simulation){
  const raw=s as unknown as Record<string,unknown>,frame=s.renderedTargets.latest;
  const legacy=s.rules===LEGACY_SIMULATION_RULES,serialize=(v:unknown)=>state(v,0,new Set<object>(),legacy),profile={...s.movement.profile};
  if(legacy)delete profile.stepMinLandingWidth;
- return{...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
+ const result={...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
   ...(s.characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
   aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:s.settings,
-  movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(s.weapons),targets:s.targets.map(t=>serialize(t)),
-  rng:serialize(raw.rng),defenders:s.defenders?serialize(s.defenders):null,angles:serialize(s.angles),hearing:serialize(s.hearing),exposure:serialize(s.exposure),
+  movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(firearms(s.weapons)),targets:s.targets.map(t=>serialize(t)),
+  rng:serialize(raw.rng),defenders:s.defenders?serialize(s.defenders):null,
+  ...(s.drill?{drill:serialize(s.drill)}:{}),angles:serialize(s.angles),hearing:serialize(s.hearing),exposure:serialize(s.exposure),
   shots:s.shots,kills:s.kills,reactions:s.reactions,tracking:s.tracking,stats:serialize(s.stats),operator:s.operatorStats,tap:serialize(s.tap),
   footsteps:serialize(s.footsteps),landings:serialize(s.landings),pendingBrake:raw.pendingBrakeShot??null,stoppedAt:s.stoppedAt,
   physicsTransitions:raw.physicsTransitions,operatorLastShot:raw.operatorLastShot,retrySignature:raw.retrySignature,
   platform:serialize(s.trainingState()),
+  ...(s.meleeSerial>0||s.weaponId==='knife'?{melee:{knife:serialize(s.weapons.knife),serial:s.meleeSerial,readyAt:s.meleeReadyAt,last:s.lastMelee}}:{}),
   rendered:{attached:s.renderedTargets.isAttached,size:s.renderedTargets.size,latest:frame?{id:frame.id,stamp:frame.submittedAt,targets:frame.targets.map(p=>p?{generation:p.generation,active:p.active,position:p.position.toArray(),matrices:p.active?p.matrices.map(m=>m.toArray()):[]}:null)}:null},
  };
+ // 12.27 renamed the tactical courses. Rules v2-v5 replays keep the title they
+ // were recorded with inside the checksum state.
+ const historical=!usesCurrentWeapons(s.rules)?HISTORICAL_COURSE_TITLES[s.practiceMap]:undefined;
+ if(historical)for(const key of ['angles','drill'] as const){const level=(result as Record<string,unknown>)[key] as {level?:{title?:unknown}}|undefined;if(level?.level&&typeof level.level.title==='string')level.level.title=historical;}
+ return result;
 }
 export function simulationChecksum(s:Simulation){return integrityHash(deterministicState(s));}
 export function replayOutcome(s:Simulation):ReplayOutcome{return{checksum:simulationChecksum(s),score:s.exercise?.snapshot().score??s.stats.eliminations,shots:s.stats.shots,hits:s.stats.heads+s.stats.bodies+s.stats.limbs,deaths:s.exposure.deaths,tick:s.ticks,time:s.time};}
@@ -69,14 +82,14 @@ export function replayCompatibility(rules:SimulationRulesId=CURRENT_SIMULATION_R
  if(rules===LEGACY_SIMULATION_RULES)return{...LEGACY_COMPATIBILITY};
  const surfaces=Object.entries(SURFACES).map(([id,s])=>({id,collisionFriction:s.collisionFriction,penetrationResistance:s.penetrationResistance,penetrationRetention:s.penetrationRetention,opaque:!!s.opaque,blocksSight:s.blocksSight,footstepSoundProfile:s.footstepSoundProfile}));
  const maps=['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].map(id=>({id,obstacles:obstaclesFor(id).map(o=>({min:o.box.min.toArray(),max:o.box.max.toArray(),kind:o.kind,ramp:o.ramp,material:o.material,surfaceId:o.surfaceId,groundSurfaceId:o.groundSurfaceId}))}));
- const materials=rules===MATERIALS_SIMULATION_RULES,steering=rules===AIR_STEERING_SIMULATION_RULES;
+ const materials=rules===MATERIALS_SIMULATION_RULES,steering=rules===AIR_STEERING_SIMULATION_RULES,bunnyHop=rules===BUNNY_HOP_SIMULATION_RULES;
  const course=mapId?courseFor(mapId):undefined;
  const ground={base:BASE_GROUND_SURFACE,themed:THEMED_FLOOR_SURFACES,rangeMat:RANGE_MAT_SURFACE,complex:PEEK_ZONES.map(z=>({bounds:z.bounds,center:z.center,material:z.material}))};
  const characterIdentity=characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:characterGeometry}:{};
- return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:materials?MATERIALS_REPLAY_SIMULATION_VERSION:steering?AIR_STEERING_REPLAY_SIMULATION_VERSION:REPLAY_SIMULATION_VERSION,movementVersion:materials?MATERIALS_MOVEMENT_PHYSICS_VERSION:steering?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({...(!materials&&!steering?{tacticalBunnyHop:VALORANT_BUNNY_HOP}:{}),...(materials?{}:{tacticalAirSteering:VALORANT_AIR_STEERING}),...(course?{courseRules:1,entryYaw:course.entryYaw,coursePlan:course.rows,cell:course.cell,height:course.height,wall:course.wall,floor:course.floor}:{}),weapons:WEAPONS,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
+ return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:materials?MATERIALS_REPLAY_SIMULATION_VERSION:steering?AIR_STEERING_REPLAY_SIMULATION_VERSION:bunnyHop?BUNNY_HOP_REPLAY_SIMULATION_VERSION:REPLAY_SIMULATION_VERSION,movementVersion:materials?MATERIALS_MOVEMENT_PHYSICS_VERSION:steering?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({...(!materials&&!steering?{tacticalBunnyHop:VALORANT_BUNNY_HOP}:{}),...(materials?{}:{tacticalAirSteering:VALORANT_AIR_STEERING}),...(course?{courseRules:1,entryYaw:course.entryYaw,coursePlan:course.rows,cell:course.cell,height:course.height,wall:course.wall,floor:course.floor,...('drill' in course?{drill:course.drill,drillVersion:1}:{})}:{}),weapons:usesCurrentWeapons(rules)?FIREARM_PROFILES:LEGACY_FIREARM_PROFILES,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
 }
 export function replayRulesFor(header:ReplayHeader):SimulationRulesId {
- const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:header.simulationVersion===MATERIALS_REPLAY_SIMULATION_VERSION?MATERIALS_SIMULATION_RULES:header.simulationVersion===AIR_STEERING_REPLAY_SIMULATION_VERSION?AIR_STEERING_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header),header.map);
+ const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:header.simulationVersion===MATERIALS_REPLAY_SIMULATION_VERSION?MATERIALS_SIMULATION_RULES:header.simulationVersion===AIR_STEERING_REPLAY_SIMULATION_VERSION?AIR_STEERING_SIMULATION_RULES:header.simulationVersion===BUNNY_HOP_REPLAY_SIMULATION_VERSION?BUNNY_HOP_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header),header.map);
  for(const key of Object.keys(expected) as (keyof typeof expected)[])if(header[key]!==expected[key])throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');
  // A simulation-2 file cannot opt into new mechanics through optional metadata.
  if(rules===LEGACY_SIMULATION_RULES&&(header.simulationRules!==undefined&&header.simulationRules!==rules||header.materialPhysicsVersion!==undefined||header.inputVersion!==undefined||header.weaponVersion!==undefined||header.characterGeometryVersion!==undefined))throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');

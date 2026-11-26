@@ -33,3 +33,6 @@ button{transition:background var(--ease-fast),border-color var(--ease-fast),colo
 .legal-notice{margin:24px 0 0;padding:18px 0;border-top:1px solid var(--line,#33434d);font-size:11px;line-height:1.8;color:var(--muted,#9cabb5)}.legal-notice a{color:inherit;text-decoration:underline}.main-shell>.legal-notice{margin:0 50px 24px}.pause-card>.legal-notice{margin-top:20px}.target-speed-options{display:flex;gap:8px;flex-wrap:wrap}.target-speed-options button{border:1px solid #40515b;padding:9px 12px;background:#15212a;color:#e6eeee}.target-speed-options button[aria-pressed=true]{border-color:#ff626a;background:#38262e}
 
 .tactical-map-selection > .tactical-map-grid + header { margin-top: 1.5rem; }
+
+/* 12.25 fundamentals map buttons */
+.fundamentals-map-grid .fundamentals-skill{display:inline-block;margin:0 6px 4px 0;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;color:var(--on-accent,#fff);background:var(--accent)}

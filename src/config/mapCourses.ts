@@ -1,14 +1,25 @@
 import type {SurfaceId} from './surfaces';
 export type CourseTheme='urban'|'courtyard'|'facility'|'research';
+/** Fundamentals drills (12.25): what the targets on a drill map do. */
+export type FundamentalsDrillKind='preaim'|'angles'|'flick'|'micro';
 export interface MapCourse {
  id:string;title:string;description:string;style:CourseTheme;landmark:string;wall:SurfaceId;floor:SurfaceId;
  palette:readonly [number,number,number];cell:number;height:number;entryYaw:number;rows:readonly string[];
+ /** Present on the fundamentals maps; absent on the tactical course maps. */
+ drill?:FundamentalsDrillKind;skill?:string;
 }
 // Each plan is independently drawn. Rows run north to south; the builder adds the perimeter.
-// # wall, * landmark base, + cover, S start, A/B/C defenders, lowercase raised defenders,
+// # wall, * landmark base, + cover, S start, A-G/I-R target positions (H is the deck),
+// lowercase a-g/i-o raised target positions,
 // H deck, ^ north-rising ramp, p transfer entrance, t receiving pad.
+// Course titles are original VALOPRAC names that describe each layout (12.27).
+// The ids stay unchanged so saved settings, history and replays keep working.
+/** Titles before 12.27. The title is part of the replay checksum state, so
+ * replays recorded under rules v2-v5 are verified with the title they were
+ * recorded with. Never displayed. */
+export const HISTORICAL_COURSE_TITLES:Readonly<Record<string,string>>=Object.freeze({split:'스플릿',bind:'바인드',haven:'헤이븐',ascent:'어센트',icebox:'아이스박스',breeze:'브리즈',fracture:'프랙처',pearl:'펄',lotus:'로터스',sunset:'선셋',abyss:'어비스',corrode:'코로드',summit:'서밋'});
 export const MAP_COURSES = [
- {id:"split",title:"스플릿",description:"중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
+ {id:"split",title:"발코니 골목",description:"중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
   style:"urban",landmark:"antenna",wall:"plasteredConcrete",floor:"rawConcrete",palette:[0xddd6c9,0x618b83,0xc86949],cell:4.6,height:2.4,entryYaw:-5,rows:[
    '.A..##cHH..B.',
    '..+.##^##.+..',
@@ -20,7 +31,7 @@ export const MAP_COURSES = [
    '.###.##...#..',
    '...........S.',
   ]},
- {id:"bind",title:"바인드",description:"사암 작업장의 두 마당을 단방향 전이문으로 연결합니다.",
+ {id:"bind",title:"전이문 마당",description:"사암 작업장의 두 마당을 단방향 전이문으로 연결합니다.",
   style:"courtyard",landmark:"cistern",wall:"stone",floor:"stone",palette:[0xe7bf8c,0xa07857,0x42afad],cell:4.9,height:1.8,entryYaw:-45,rows:[
    '.A...###...B.',
    '.+.t.#*#..+..',
@@ -32,7 +43,7 @@ export const MAP_COURSES = [
    '.###.#.#...#.',
    '........S....',
   ]},
- {id:"haven",title:"헤이븐",description:"목조 회랑을 따라 서쪽 뜰, 중앙 전각, 동쪽 정원으로 갈라집니다.",
+ {id:"haven",title:"세 갈래 정원",description:"목조 회랑을 따라 서쪽 뜰, 중앙 전각, 동쪽 정원으로 갈라집니다.",
   style:"courtyard",landmark:"pagoda",wall:"plasteredConcrete",floor:"stone",palette:[0xe3d7ad,0x8b6151,0x70a989],cell:4.7,height:2,entryYaw:-55,rows:[
    '.A..#..B.#..C..',
    '.+..#..+.#...+.',
@@ -44,7 +55,7 @@ export const MAP_COURSES = [
    '...#.......#...',
    '.....S.........',
   ]},
- {id:"ascent",title:"어센트",description:"벽돌 아케이드 사이의 열린 광장을 장악하고 양쪽 회랑으로 진입합니다.",
+ {id:"ascent",title:"아케이드 광장",description:"벽돌 아케이드 사이의 열린 광장을 장악하고 양쪽 회랑으로 진입합니다.",
   style:"urban",landmark:"campanile",wall:"brick",floor:"stone",palette:[0xf0cba7,0xa77464,0x6c96a0],cell:5.1,height:2,entryYaw:-15,rows:[
    '..A..##..B...',
    '.+.#....#.+..',
@@ -56,7 +67,7 @@ export const MAP_COURSES = [
    '...#.#.#...S.',
    '.............',
   ]},
- {id:"icebox",title:"아이스박스",description:"냉동 화물 적재장 위의 통로와 컨테이너 사이 하단 통로를 오갑니다.",
+ {id:"icebox",title:"냉동 적재장",description:"냉동 화물 적재장 위의 통로와 컨테이너 사이 하단 통로를 오갑니다.",
   style:"facility",landmark:"gantry",wall:"paintedMetal",floor:"steel",palette:[0xd9e9eb,0x638195,0xe0a358],cell:4.4,height:2.65,entryYaw:55,rows:[
    '.aHH..##...B.',
    '.^##..##.+...',
@@ -68,7 +79,7 @@ export const MAP_COURSES = [
    '..##.+..#....',
    '.......S.....',
   ]},
- {id:"breeze",title:"브리즈",description:"해안 성채의 넓은 뜰과 돌탑 사이로 긴 시야가 열립니다.",
+ {id:"breeze",title:"해안 성채",description:"해안 성채의 넓은 뜰과 돌탑 사이로 긴 시야가 열립니다.",
   style:"courtyard",landmark:"windmill",wall:"stone",floor:"stone",palette:[0xe1d3a8,0x638e82,0x5db4b4],cell:6.2,height:1.8,entryYaw:-20,rows:[
    '..A......#..B..',
    '....#....#...+.',
@@ -80,7 +91,7 @@ export const MAP_COURSES = [
    '..#.+.#.....+..',
    '............S..',
   ]},
- {id:"fracture",title:"프랙처",description:"끊어진 연구동을 돌아 두 방향으로 진입하는 순환 통로입니다.",
+ {id:"fracture",title:"순환 연구동",description:"끊어진 연구동을 돌아 두 방향으로 진입하는 순환 통로입니다.",
   style:"research",landmark:"reactor",wall:"rawConcrete",floor:"concrete",palette:[0xc6d1b8,0x6e8273,0xe2a452],cell:4.8,height:2.2,entryYaw:5,rows:[
    '...A.....##..',
    '.#.+.###..#.B',
@@ -92,7 +103,7 @@ export const MAP_COURSES = [
    '.#S...#..+...',
    '.............',
   ]},
- {id:"pearl",title:"펄",description:"돔 아래 타일 광장과 굽은 골목이 긴 해저 회랑에 이어집니다.",
+ {id:"pearl",title:"돔 회랑",description:"돔 아래 타일 광장과 굽은 골목이 긴 해저 회랑에 이어집니다.",
   style:"urban",landmark:"dome",wall:"plasteredConcrete",floor:"stone",palette:[0xb4d1cd,0x527989,0xc0a472],cell:4.8,height:1.9,entryYaw:-5,rows:[
    '.A...#.....B.',
    '..+#.#.###...',
@@ -104,7 +115,7 @@ export const MAP_COURSES = [
    '.##....#.#...',
    '.......#..S..',
   ]},
- {id:"lotus",title:"로터스",description:"돌기둥 뜰과 세 개의 정원이 나선형 참배로로 이어집니다.",
+ {id:"lotus",title:"나선 참배로",description:"돌기둥 뜰과 세 개의 정원이 나선형 참배로로 이어집니다.",
   style:"courtyard",landmark:"lotus",wall:"stone",floor:"stone",palette:[0xdcccaa,0x7b9582,0xc58486],cell:4.8,height:2.2,entryYaw:-55,rows:[
    '.A..##...bH..C.',
    '..+....##^#....',
@@ -116,7 +127,7 @@ export const MAP_COURSES = [
    '...#....#...#..',
    '.........S.....',
   ]},
- {id:"sunset",title:"선셋",description:"상가와 차고 사이의 교차로를 지나 낮은 시장 가판대를 돌아갑니다.",
+ {id:"sunset",title:"시장 교차로",description:"상가와 차고 사이의 교차로를 지나 낮은 시장 가판대를 돌아갑니다.",
   style:"urban",landmark:"marquee",wall:"brick",floor:"rawConcrete",palette:[0xe3b79c,0x986d68,0x5ba8a1],cell:4.6,height:2,entryYaw:-15,rows:[
    '...A...#..B..',
    '.#..+..#....#',
@@ -128,7 +139,7 @@ export const MAP_COURSES = [
    '.#S....#.....',
    '.............',
   ]},
- {id:"abyss",title:"어비스",description:"연구 시설의 높은 잔교와 낮은 정비 통로가 나란히 뻗습니다.",
+ {id:"abyss",title:"잔교 연구소",description:"연구 시설의 높은 잔교와 낮은 정비 통로가 나란히 뻗습니다.",
   style:"research",landmark:"beacon",wall:"composite",floor:"steel",palette:[0xbfcfd4,0x58677b,0x66c4c7],cell:4.7,height:3,entryYaw:55,rows:[
    '.A...##cH..B.',
    '..+.###HH..+.',
@@ -140,7 +151,7 @@ export const MAP_COURSES = [
    '.##.#.+...#..',
    '........S....',
   ]},
- {id:"corrode",title:"코로드",description:"부식된 성벽의 꺾인 성문과 제련소 안마당이 맞닿아 있습니다.",
+ {id:"corrode",title:"제련소 성문",description:"부식된 성벽의 꺾인 성문과 제련소 안마당이 맞닿아 있습니다.",
   style:"facility",landmark:"chimneys",wall:"brick",floor:"rawConcrete",palette:[0xd9b988,0x846c60,0x92a683],cell:5,height:2,entryYaw:20,rows:[
    '...A.###....B',
    '.#.+.###.##..',
@@ -152,7 +163,7 @@ export const MAP_COURSES = [
    '.S..##..+.##.',
    '.............',
   ]},
- {id:"summit",title:"서밋",description:"산악 관측소의 두 경사로가 서로 다른 고도의 전망대로 이어집니다.",
+ {id:"summit",title:"고지 관측소",description:"산악 관측소의 두 경사로가 서로 다른 고도의 전망대로 이어집니다.",
   style:"facility",landmark:"radar",wall:"stone",floor:"rawConcrete",palette:[0xd7dce0,0x69798b,0xd79257],cell:4.8,height:2.6,entryYaw:-5,rows:[
    '.aHH..*..bHH.',
    '.^##..##.^##.',
@@ -164,7 +175,65 @@ export const MAP_COURSES = [
    '.+.#....#....',
    '...#.......S.',
   ]},
+
+ /* ---- 12.25 fundamentals maps: original layouts built around one skill each ---- */
+ {id:"fd-preaim",title:"프리에임 회랑",description:"꺾인 회랑 일곱 모서리마다 적이 머리 높이로 기다립니다. 모서리를 돌기 전에 조준점을 미리 맞춰 두세요.",
+  skill:"프리에임",drill:"preaim",style:"facility",landmark:"gantry",wall:"plasteredConcrete",floor:"rawConcrete",palette:[0xd3d8d6,0x4f7f86,0xd08a4e],cell:3.2,height:2.2,entryYaw:0,rows:[
+   '*##########',
+   '#..E......#',
+   '#.#######D#',
+   '#.#######.#',
+   '#F###....C#',
+   '#.###B#####',
+   '#.###.#####',
+   '#.###.A...#',
+   '#..G#####.#',
+   '#########.#',
+   '#########S#',
+  ]},
+ {id:"fd-angles",title:"각 체크 정원",description:"입구에서 깊은 코너, 기둥 뒤, 상자 옆, 높은 단까지 일곱 각을 하나씩 확인합니다. 적은 짧게 어깨를 내밀며 버팁니다.",
+  skill:"각 체크",drill:"angles",style:"courtyard",landmark:"beacon",wall:"stone",floor:"stone",palette:[0xe4d3b4,0x8a6e57,0x3f9e9a],cell:4.2,height:2.2,entryYaw:0,rows:[
+   '.A..#..HgH..B',
+   '....#..H^H...',
+   '..+.......+..',
+   '#...##*##...#',
+   '#..C.....D..#',
+   '##..##.##..##',
+   '....#...#..E.',
+   '.F#.......#..',
+   '......S......',
+  ]},
+ {id:"fd-flick",title:"플릭 광장",description:"광장 한가운데에서 사방에 하나씩 나타나는 적을 큰 각도로 빠르게 끊어 칩니다. 등 뒤에서도 나타납니다.",
+  skill:"플릭",drill:"flick",style:"research",landmark:"radar",wall:"paintedMetal",floor:"rawConcrete",palette:[0xd6dde2,0x5b7480,0xe0a24f],cell:3.4,height:2.2,entryYaw:0,rows:[
+   'A...I.B...J',
+   '...........',
+   '.K..+...+..',
+   '..........C',
+   'D.#.....#..',
+   '.....S....L',
+   'E.#.....#..',
+   '..........M',
+   '..+.....+.F',
+   '...........',
+   'G.....*...N',
+  ]},
+ {id:"fd-micro",title:"미세조정 레인",description:"25~36미터 떨어진 세 레인에서 작게 좌우로 움직이는 머리를 미세하게 따라가 맞힙니다.",
+  skill:"미세조정",drill:"micro",style:"facility",landmark:"reactor",wall:"paintedMetal",floor:"rawConcrete",palette:[0xcfd6d9,0x50707a,0x4fb0a6],cell:3.6,height:2.2,entryYaw:0,rows:[
+   'A.I.#.B.#.J.C',
+   '....#...#....',
+   '.D..#.+.#..E.',
+   '....#...#....',
+   '....#...#....',
+   '....#...#....',
+   '....#...#....',
+   '.............',
+   '...+.....+...',
+   '*............',
+   '......S......',
+  ]},
 ] as const satisfies readonly MapCourse[];
+export const TACTICAL_COURSES=MAP_COURSES.filter(course=>!('drill' in course));
+export const FUNDAMENTAL_COURSES=MAP_COURSES.filter((course):course is Extract<typeof MAP_COURSES[number],{drill:FundamentalsDrillKind}>=>'drill' in course);
 export type CourseId=typeof MAP_COURSES[number]['id'];
 const coursesById=new Map<string,typeof MAP_COURSES[number]>(MAP_COURSES.map(course=>[course.id,course]));
 export const courseFor=(id:string)=>coursesById.get(id);

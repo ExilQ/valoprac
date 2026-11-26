@@ -30,8 +30,9 @@ describe('Audio identities follow the authoritative session, not retained render
   const {audio,c}=await setup();
   const play=(id:number)=>{audio.shot(shot);audio.enemyShot('rifleA',{x:0,y:1,z:-10},.1,3);audio.footstep({...step,id});audio.landing({...step,id,kind:'landing',impactSpeed:5});audio.botFootstep(3,{...step,id});};
   try{
-   play(7);expect(c.sources).toHaveLength(5);const buffers=c.sources.map(s=>s.buffer);
-   audio.stop();audio.sync(0);play(7);expect(c.sources).toHaveLength(5);expect(audio.activeVoiceCount).toBe(0);
+   // Contact IDs 5 and 1 select the same round-robin variant (id % 4).
+   play(5);expect(c.sources).toHaveLength(5);const buffers=c.sources.map(s=>s.buffer);
+   audio.stop();audio.sync(0);play(5);expect(c.sources).toHaveLength(5);expect(audio.activeVoiceCount).toBe(0);
    c.currentTime=200;audio.resetSession(0);play(1);
    expect(c.sources).toHaveLength(10);expect(c.sources.slice(5).map(s=>s.buffer)).toEqual(buffers);
    expect(c.sources.slice(5).every(s=>s.starts[0]===200.1)).toBe(true);expect(c.sources.slice(0,5).every(s=>s.stopped===1&&s.disconnected)).toBe(true);

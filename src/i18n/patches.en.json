@@ -1,11 +1,91 @@
 {
+  "12.30": {
+    "title": "Map reverb restored on 44.1 kHz audio devices",
+    "description": "Map room reverb was missing on computers whose audio device does not run at 48 kHz.",
+    "changes": [
+      "Room responses were prepared only at 48 kHz, which the reverb rejects on devices running at 44.1 kHz or other rates, so those sessions had no reverb. Responses are now rendered at the device's sample rate."
+    ]
+  },
+  "12.29": {
+    "title": "Cloudflare deployment security fix",
+    "description": "Fixed a security problem in the deployment settings for the move to Cloudflare. The current site is not affected.",
+    "changes": [
+      "The Cloudflare entry point exposed the GPU streaming grant API, which trusts a user identity header; a forged header could obtain a grant token. The API is only safe behind ChatGPT Sites authentication, so it is not served on Cloudflare."
+    ]
+  },
+  "12.28": {
+    "title": "Review fixes: replay compatibility, reverb volume, knife reach",
+    "description": "Three problems found in code review before the site deployment are fixed.",
+    "changes": [
+      "Replays recorded before 12.27 on the renamed courses failed verification; earlier replays are now checked with the course name they were recorded with.",
+      "Room reverb stayed audible when the firing, handling, feedback or footstep volume was set to zero; the reverb now follows each volume.",
+      "A knife swing could hit a target hidden behind a wall edge; the blade now needs a clear line to the target (earlier replays keep their recorded result)."
+    ]
+  },
+  "12.27": {
+    "title": "Original course names and current weapon values",
+    "description": "The 13 tactical courses now have original names that describe each layout, and weapon values follow the official wiki and the latest patches.",
+    "changes": [
+      "Course names: Balcony Alleys, Gateway Yards, Three Gardens, Arcade Square, Cold Storage Yard, Coastal Fort, Ring Laboratory, Dome Corridor, Spiral Shrine, Market Crossing, Catwalk Laboratory, Smelter Gate, Ridge Observatory. Saved settings and records carry over.",
+      "Reserve ammunition now matches patch 6.11: Vandal 50, Phantom 60 (applies when unlimited reserve is off).",
+      "Airborne firing error now matches the official wiki: Vandal and Phantom +10°, Sheriff +7°.",
+      "Official patch notes up to 13.10 were reviewed. The recent rifle buff (13.09) targets the Warden, which VALOPRAC does not have; the last Vandal and Phantom change is the 11.08 spray update (0.6 s yaw switch, protected bullets Vandal 6 / Phantom 8), already in place.",
+      "Replays recorded with earlier versions keep playing back with the weapon values they were recorded with."
+    ]
+  },
+  "12.26": {
+    "title": "Full audit and quality fixes",
+    "description": "The site, gameplay, design, sound and interface were checked end to end, and the confirmed problems are fixed.",
+    "changes": [
+      "The English interface no longer mixes Korean into the knife, graphics settings, benchmark and fundamentals map text.",
+      "Knife swings were as loud as a rifle shot; they are now quieter, and drawing the knife matches the other weapons.",
+      "Footstep variants on the same floor differed by up to 4 dB and are now matched; gunshot variants are closer in loudness too.",
+      "Guide tables on phones can be scrolled with the keyboard, and some guide pages have a corrected page structure.",
+      "Fixed the Cloudflare deployment settings, where the security policy blocked the theme script and unknown addresses showed the home screen instead of a 404.",
+      "Restored missing validation images and baseline files so the full build verification passes end to end."
+    ]
+  },
+  "12.25": {
+    "title": "Fundamentals training maps",
+    "description": "Four original maps each train one aiming fundamental: pre-aiming, checking angles, flicking and micro-adjusting. Targets do not shoot back and only fall to headshots.",
+    "changes": [
+      "Pre-aim Hallway: seven corners each hide an enemy at head height; the HUD shows how far your crosshair was from the head when it first appeared.",
+      "Angle Garden: clear seven angles, including a raised deck, while defenders make short shoulder peeks.",
+      "Flick Plaza: one target at a time appears at least 35 degrees from your crosshair, sometimes behind you.",
+      "Micro Lanes: small heads 25-36 m away strafe a few decimetres either way."
+    ]
+  },
+  "12.24": {
+    "title": "Sound overhaul",
+    "description": "Every sound was rebuilt the way shooter audio is layered: gunshots, reloads, hit and kill feedback, footsteps, impacts and the room you hear them in.",
+    "changes": [
+      "Gunshots combine a mechanism click, a sharp crack, a mid body, a deep punch and a tail, in four variations so automatic fire never repeats one sample. Your own shots are in stereo.",
+      "Headshots ring with a short metallic dink, body hits thud, and every elimination plays a confirm that rises with consecutive kills.",
+      "Reloads are full sequences: magazine out, seat, charging handle; the Sheriff ejects its cases and snaps shut.",
+      "Footsteps land heel then toe with the floor's own sound and stay easy to hear; each map has its own room echo, and distant shots sound farther away."
+    ]
+  },
+  "12.23": {
+    "title": "Graphics quality tiers and Ultra performance",
+    "description": "Ultra now renders as efficiently as High, quality tiers are laid out like a shooter's video menu, and the game can measure your computer and recommend a tier.",
+    "changes": [
+      "Ultra no longer turns on bloom and ambient occlusion. Every tier draws the scene once straight to the screen; in measurements Ultra's frame time dropped by about 40%.",
+      "Settings → Graphics shows a table of what each tier changes. Bloom and ambient occlusion are optional, and ambient occlusion now keeps the image sharp.",
+      "Shows which graphics device your browser actually uses and warns when hardware acceleration is off.",
+      "Measure on this computer: tries each tier at your screen size and recommends the highest one that keeps up with your monitor."
+    ]
+  },
   "12.22": {
-    "title": "Graphics options and performance",
-    "description": "The main causes of low frame rates at high quality are reduced, and the graphics options now prioritise clarity and frame rate like competitive shooters.",
+    "title": "Graphics options, performance and a knife slot",
+    "description": "The main causes of low frame rates at high quality are reduced, graphics options prioritise clarity and frame rate, number keys hold a fixed loadout with a new knife, and switching weapons no longer stops you.",
     "changes": [
       "Ultra no longer renders at 1.25× scale, and the rendering resolution never exceeds 4K.",
       "Medium and High use native anti-aliasing only, with no full-screen post-processing. Ambient occlusion and bloom remain on Ultra only.",
-      "Ambient occlusion uses half as many samples, and a per-frame crosshair style write that caused hitches is fixed."
+      "Ambient occlusion uses half as many samples, and a per-frame crosshair style write that caused hitches is fixed.",
+      "Fixed a bug where switching weapons with a number key stopped the player even though a movement key was still held.",
+      "1 draws your primary (Vandal, Phantom or Operator, whichever you picked last), 2 the Sheriff and 3 the knife.",
+      "The knife slashes with left click and stabs with right click, and you run faster with it out.",
+      "Six original knife designs, from real field knives to fantasy blades, can be chosen on the Weapons page."
     ]
   },
   "12.21": {
@@ -49,7 +129,7 @@
     "description": "Choose an original course with its own floor plan and terrain in Maps.",
     "changes": [
       "Inspect the starting point, route and three defender positions on each course plan.",
-      "Bind includes a one-way transfer gate. Elevated courses include traversable ramps and upper decks."
+      "Gateway Yards includes a one-way transfer gate. Elevated courses include traversable ramps and upper decks."
     ]
   },
   "12.16": {

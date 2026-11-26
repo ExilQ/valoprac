@@ -14832,19 +14832,9 @@
       "en": "Transfer exit"
     },
     {
-      "id": "msg_1d55537ceb5a",
-      "source": "스플릿",
-      "en": "Split"
-    },
-    {
       "id": "msg_fa4acd7fbe42",
       "source": "중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
       "en": "A central ramp links a raised balcony with two city alleys."
-    },
-    {
-      "id": "msg_136f36dc7be0",
-      "source": "바인드",
-      "en": "Bind"
     },
     {
       "id": "msg_310a6162a440",
@@ -14852,19 +14842,9 @@
       "en": "Two sandstone yards connect through a one-way transfer gate."
     },
     {
-      "id": "msg_1d967564c344",
-      "source": "헤이븐",
-      "en": "Haven"
-    },
-    {
       "id": "msg_0407fef49117",
       "source": "목조 회랑을 따라 서쪽 뜰, 중앙 전각, 동쪽 정원으로 갈라집니다.",
       "en": "Timber galleries branch toward a west court, central hall and east garden."
-    },
-    {
-      "id": "msg_d0719d30a8bd",
-      "source": "어센트",
-      "en": "Ascent"
     },
     {
       "id": "msg_111f06ece8f2",
@@ -14872,19 +14852,9 @@
       "en": "Cross an open piazza between brick arcades, then enter the side galleries."
     },
     {
-      "id": "msg_3636b28158e5",
-      "source": "아이스박스",
-      "en": "Icebox"
-    },
-    {
       "id": "msg_fbe8bde4de55",
       "source": "냉동 화물 적재장 위의 통로와 컨테이너 사이 하단 통로를 오갑니다.",
       "en": "Move between a raised freight deck and tight container aisles."
-    },
-    {
-      "id": "msg_5b23b6604151",
-      "source": "브리즈",
-      "en": "Breeze"
     },
     {
       "id": "msg_d8c2a17475a0",
@@ -14892,19 +14862,9 @@
       "en": "Long views open across a coastal fort courtyard between stone towers."
     },
     {
-      "id": "msg_5cce5b049df2",
-      "source": "프랙처",
-      "en": "Fracture"
-    },
-    {
       "id": "msg_3b4d3e9f4ed9",
       "source": "끊어진 연구동을 돌아 두 방향으로 진입하는 순환 통로입니다.",
       "en": "Loop around a divided research block to enter from opposite sides."
-    },
-    {
-      "id": "msg_fa5d4e7e0156",
-      "source": "펄",
-      "en": "Pearl"
     },
     {
       "id": "msg_c4e7c272f171",
@@ -14912,19 +14872,9 @@
       "en": "Tiled courts and winding alleys meet a long gallery beneath a dome."
     },
     {
-      "id": "msg_731b54f868fd",
-      "source": "로터스",
-      "en": "Lotus"
-    },
-    {
       "id": "msg_40e5f698688e",
       "source": "돌기둥 뜰과 세 개의 정원이 나선형 참배로로 이어집니다.",
       "en": "A winding processional path joins a pillared court and three gardens."
-    },
-    {
-      "id": "msg_173753e63312",
-      "source": "선셋",
-      "en": "Sunset"
     },
     {
       "id": "msg_702cb3bcbf2b",
@@ -14932,29 +14882,14 @@
       "en": "Cross the market junction between storefronts and garages, using low stalls for cover."
     },
     {
-      "id": "msg_690c3714546c",
-      "source": "어비스",
-      "en": "Abyss"
-    },
-    {
       "id": "msg_3a3504708848",
       "source": "연구 시설의 높은 잔교와 낮은 정비 통로가 나란히 뻗습니다.",
       "en": "An elevated research causeway runs beside a lower maintenance passage."
     },
     {
-      "id": "msg_572cc091a1fa",
-      "source": "코로드",
-      "en": "Corrode"
-    },
-    {
       "id": "msg_ec1e87a3fad7",
       "source": "부식된 성벽의 꺾인 성문과 제련소 안마당이 맞닿아 있습니다.",
       "en": "An offset gate in a weathered wall opens into a foundry yard."
-    },
-    {
-      "id": "msg_ef0605a04822",
-      "source": "서밋",
-      "en": "Summit"
     },
     {
       "id": "msg_77fa0447488c",
@@ -15015,6 +14950,711 @@
       "id": "msg_b8f185b975f6",
       "source": "높음까지는 화면 전체 후처리 없이 기본 안티에일리어싱만 사용해 프레임을 우선합니다. 최고는 주변광 차폐와 빛 번짐을 더하므로 부하가 큽니다. 화면 해상도는 4K 크기를 넘지 않도록 자동으로 제한합니다.",
       "en": "Up to High, only native anti-aliasing is used, with no full-screen post-processing, to prioritise frame rate. Ultra adds ambient occlusion and bloom, so it is much heavier. Rendering resolution is automatically limited to 4K."
+    },
+    {
+      "id": "msg_971a071a6ca8",
+      "source": "3번 슬롯 · 근접 무기",
+      "en": "Slot 3 · Melee weapon"
+    },
+    {
+      "id": "msg_4eaedee29619",
+      "source": "칼",
+      "en": "Knife"
+    },
+    {
+      "id": "msg_10f31acaa4fb",
+      "source": "칼을 들고 시작",
+      "en": "Start with the knife"
+    },
+    {
+      "id": "msg_78a14258fe3d",
+      "source": "칼로 시작",
+      "en": "Knife selected"
+    },
+    {
+      "id": "msg_e5dc6d1a0310",
+      "source": "주무기 ·",
+      "en": "primary ·"
+    },
+    {
+      "id": "msg_d34606e94d95",
+      "source": "보조무기 ·",
+      "en": "secondary ·"
+    },
+    {
+      "id": "msg_18fd417caff7",
+      "source": "칼. 칼을 들면 6.75미터/초로 더 빨리 달립니다. 좌클릭 베기 50 · 우클릭 찌르기 75 피해.",
+      "en": "knife. With the knife out you run faster, at 6.75 m/s. Left-click slash 50 · right-click stab 75 damage."
+    },
+    {
+      "id": "msg_4bb83a5e2d81",
+      "source": "필드 나이프",
+      "en": "Field knife"
+    },
+    {
+      "id": "msg_1cacf896c9fc",
+      "source": "탄토",
+      "en": "Tanto"
+    },
+    {
+      "id": "msg_27ab29d00cc9",
+      "source": "카람빗",
+      "en": "Karambit"
+    },
+    {
+      "id": "msg_950f7f244955",
+      "source": "쿠나이",
+      "en": "Kunai"
+    },
+    {
+      "id": "msg_001d261a3f06",
+      "source": "에테르 블레이드",
+      "en": "Aether blade"
+    },
+    {
+      "id": "msg_c60b78a907e1",
+      "source": "흑요석 송곳니",
+      "en": "Obsidian fang"
+    },
+    {
+      "id": "msg_ba458a60bab3",
+      "source": "실제형",
+      "en": "Realistic"
+    },
+    {
+      "id": "msg_0bef9d1c5113",
+      "source": "판타지",
+      "en": "Fantasy"
+    },
+    {
+      "id": "msg_fb22cb88d7b1",
+      "source": "실제형 · 검은 코팅 날 · 파라코드 손잡이",
+      "en": "Realistic · black-coated blade · paracord grip"
+    },
+    {
+      "id": "msg_fe8c56ac608a",
+      "source": "실제형 · 각진 끝 · 청록 실 감기",
+      "en": "Realistic · angled tip · teal cord wrap"
+    },
+    {
+      "id": "msg_c8685c8c8401",
+      "source": "실제형 · 손가락 고리 · 갈고리형 곡도",
+      "en": "Realistic · finger ring · hooked curved blade"
+    },
+    {
+      "id": "msg_d7f409fc34fa",
+      "source": "실제형 · 고리 손잡이 · 가벼운 단검",
+      "en": "Realistic · ring pommel · light dagger"
+    },
+    {
+      "id": "msg_23b8d4584a37",
+      "source": "판타지 · 떠 있는 청록 에너지 날",
+      "en": "Fantasy · floating teal energy blade"
+    },
+    {
+      "id": "msg_16afc7d6618b",
+      "source": "판타지 · 용암 균열이 빛나는 흑요석",
+      "en": "Fantasy · obsidian with glowing lava cracks"
+    },
+    {
+      "id": "msg_fa2d2841a8cf",
+      "source": "검은 코팅 날 · 파라코드 손잡이",
+      "en": "Black-coated blade · paracord grip"
+    },
+    {
+      "id": "msg_a5fc2b2fa641",
+      "source": "각진 끝 · 청록 실 감기",
+      "en": "Angled tip · teal cord wrap"
+    },
+    {
+      "id": "msg_9c9eb9f362af",
+      "source": "손가락 고리 · 갈고리형 곡도",
+      "en": "Finger ring · hooked curved blade"
+    },
+    {
+      "id": "msg_7d3530ec74e5",
+      "source": "고리 손잡이 · 가벼운 단검",
+      "en": "Ring pommel · light dagger"
+    },
+    {
+      "id": "msg_4d03114a078b",
+      "source": "떠 있는 청록 에너지 날",
+      "en": "Floating teal energy blade"
+    },
+    {
+      "id": "msg_4b2edfb730f9",
+      "source": "용암 균열이 빛나는 흑요석",
+      "en": "Obsidian with glowing lava cracks"
+    },
+    {
+      "id": "msg_41071fe4177e",
+      "source": "칼 디자인",
+      "en": "Knife design"
+    },
+    {
+      "id": "msg_dfe017ee8041",
+      "source": "장착: 필드 나이프",
+      "en": "Equipped: Field knife"
+    },
+    {
+      "id": "msg_3bd3e3105077",
+      "source": "장착: 탄토",
+      "en": "Equipped: Tanto"
+    },
+    {
+      "id": "msg_41f9ec8998fc",
+      "source": "장착: 카람빗",
+      "en": "Equipped: Karambit"
+    },
+    {
+      "id": "msg_9ff4d736229e",
+      "source": "장착: 쿠나이",
+      "en": "Equipped: Kunai"
+    },
+    {
+      "id": "msg_b9f0d52e45e8",
+      "source": "장착: 에테르 블레이드",
+      "en": "Equipped: Aether blade"
+    },
+    {
+      "id": "msg_403b3882b3aa",
+      "source": "장착: 흑요석 송곳니",
+      "en": "Equipped: Obsidian fang"
+    },
+    {
+      "id": "msg_e3fa79a21aef",
+      "source": "1 주무기 · 2 보조 · 3 칼",
+      "en": "1 primary · 2 secondary · 3 knife"
+    },
+    {
+      "id": "msg_081a40b3236f",
+      "source": "무기를 바꿔도 감도와 훈련 설정은 유지됩니다. 1번 키는 마지막으로 고른 주무기(밴달·팬텀·오퍼레이터)를 꺼냅니다.",
+      "en": "Switching weapons keeps your sensitivity and training settings. Key 1 draws the primary you chose last (Vandal, Phantom or Operator)."
+    },
+    {
+      "id": "msg_70eb28a7ee8e",
+      "source": "훈련 중 1 주무기 · 2 보조무기 · 3 칼. 무기 교체에는 장착 시간이 적용됩니다.",
+      "en": "In training: 1 primary · 2 secondary · 3 knife. Switching applies the equip time."
+    },
+    {
+      "id": "msg_8cba0e848ebb",
+      "source": "주무기·보조·칼",
+      "en": "primary·secondary·knife"
+    },
+    {
+      "id": "msg_cd3c4480a077",
+      "source": "무기 슬롯",
+      "en": "Weapon slots"
+    },
+    {
+      "id": "msg_cc685db1205a",
+      "source": "근접",
+      "en": "Melee"
+    },
+    {
+      "id": "msg_84972db57597",
+      "source": "근접 무기",
+      "en": "Melee weapon"
+    },
+    {
+      "id": "msg_81d952385c5f",
+      "source": "좌클릭 베기 · 우클릭 찌르기",
+      "en": "Left-click slash · right-click stab"
+    },
+    {
+      "id": "msg_74acf3c3c70c",
+      "source": "칼 · 좌클릭 베기 · 우클릭 찌르기",
+      "en": "Knife · left-click slash · right-click stab"
+    },
+    {
+      "id": "msg_998413943385",
+      "source": "전술 나이프",
+      "en": "Tactical knife"
+    },
+    {
+      "id": "msg_d89c374788bc",
+      "source": "1번 슬롯",
+      "en": "Slot 1"
+    },
+    {
+      "id": "msg_9972eff8a20f",
+      "source": "자체 제작 · 단단한 파열음과 묵직한 저음 펀치",
+      "en": "Original · hard crack with a heavy low punch"
+    },
+    {
+      "id": "msg_0197c7b4577c",
+      "source": "자체 제작 · 소음기 공기음과 또렷한 노리쇠 소리",
+      "en": "Original · suppressed air puff with a crisp bolt"
+    },
+    {
+      "id": "msg_c3f14ca0efc9",
+      "source": "자체 제작 · 거대한 저음 충격과 긴 잔향, 볼트 조작음",
+      "en": "Original · huge low boom, long tail and bolt handling"
+    },
+    {
+      "id": "msg_a39a9e0cfba9",
+      "source": "자체 제작 · 큰 폭발음과 짧게 울리는 총신",
+      "en": "Original · loud blast with a short barrel ring"
+    },
+    {
+      "id": "msg_d7cd1f7ed73a",
+      "source": "기본기 훈련 맵",
+      "en": "Fundamentals maps"
+    },
+    {
+      "id": "msg_85c0a0a00247",
+      "source": "프리에임, 각 체크, 플릭, 미세조정을 하나씩 따로 연습하는 VALOPRAC 오리지널 맵입니다. 표적은 반격하지 않고 머리 명중으로만 쓰러집니다.",
+      "en": "Original VALOPRAC maps that each train one skill on its own: pre-aiming, angle checks, flicks and micro-adjustment. Targets never shoot back and fall only to headshots."
+    },
+    {
+      "id": "msg_0cdfbcfcb2df",
+      "source": "프리에임",
+      "en": "Pre-aim"
+    },
+    {
+      "id": "msg_208cd4c406c7",
+      "source": "프리에임 회랑",
+      "en": "Pre-aim Hallway"
+    },
+    {
+      "id": "msg_a748781b9a5d",
+      "source": "꺾인 회랑 일곱 모서리마다 적이 머리 높이로 기다립니다. 모서리를 돌기 전에 조준점을 미리 맞춰 두세요.",
+      "en": "At each of the seven corners of a winding corridor an enemy waits at head height. Set your crosshair before you turn each corner."
+    },
+    {
+      "id": "msg_7f2835264c41",
+      "source": "각 체크",
+      "en": "Angle checks"
+    },
+    {
+      "id": "msg_d06a31b68fe4",
+      "source": "각 체크 정원",
+      "en": "Angle Garden"
+    },
+    {
+      "id": "msg_dee09f1e6d62",
+      "source": "입구에서 깊은 코너, 기둥 뒤, 상자 옆, 높은 단까지 일곱 각을 하나씩 확인합니다. 적은 짧게 어깨를 내밀며 버팁니다.",
+      "en": "Clear seven angles one by one, from the deep corner at the entrance to behind the pillar, beside the crates and up on the high deck. Enemies hold with short shoulder peeks."
+    },
+    {
+      "id": "msg_a1c871bf4b77",
+      "source": "플릭",
+      "en": "Flicks"
+    },
+    {
+      "id": "msg_2de45443a8dd",
+      "source": "플릭 광장",
+      "en": "Flick Plaza"
+    },
+    {
+      "id": "msg_29da79af9d83",
+      "source": "광장 한가운데에서 사방에 하나씩 나타나는 적을 큰 각도로 빠르게 끊어 칩니다. 등 뒤에서도 나타납니다.",
+      "en": "From the middle of the plaza, snap to enemies that appear one at a time all around you, at wide angles. Some appear behind you."
+    },
+    {
+      "id": "msg_3aaa801106c7",
+      "source": "미세조정",
+      "en": "Micro-adjust"
+    },
+    {
+      "id": "msg_348a053de312",
+      "source": "미세조정 레인",
+      "en": "Micro Lanes"
+    },
+    {
+      "id": "msg_bd85a83487da",
+      "source": "25~36미터 떨어진 세 레인에서 작게 좌우로 움직이는 머리를 미세하게 따라가 맞힙니다.",
+      "en": "Follow and hit heads that make small side-to-side moves in three lanes 25–36 m away."
+    },
+    {
+      "id": "msg_70f7927890d5",
+      "source": "모서리를 돌기 전에 머리 높이에 조준점을 두세요",
+      "en": "Hold your crosshair at head height before each corner"
+    },
+    {
+      "id": "msg_0a75a783223d",
+      "source": "각을 하나씩 확인하고 어깨를 내미는 순간을 노리세요",
+      "en": "Clear one angle at a time and punish the shoulder peek"
+    },
+    {
+      "id": "msg_edad1e17fa9c",
+      "source": "멀리 나타나는 표적을 한 번에 끊어 치세요",
+      "en": "Snap to each new target in one motion"
+    },
+    {
+      "id": "msg_aa4e02acd36c",
+      "source": "작게 움직이는 머리를 미세하게 따라가세요",
+      "en": "Follow small head movements with fine adjustments"
+    },
+    {
+      "id": "msg_118e42c511a6",
+      "source": "기록 대기 중",
+      "en": "Waiting for data"
+    },
+    {
+      "id": "msg_0fcb288d12d9",
+      "source": "라운드",
+      "en": "Round"
+    },
+    {
+      "id": "msg_096137d8461a",
+      "source": "명 처치",
+      "en": "eliminations"
+    },
+    {
+      "id": "msg_799b37e66817",
+      "source": "첫 노출 조준 오차",
+      "en": "First-sight aim error"
+    },
+    {
+      "id": "msg_4324b70bf53d",
+      "source": "평균 플릭",
+      "en": "Avg flick"
+    },
+    {
+      "id": "msg_47d283c77f7d",
+      "source": "평균 처치",
+      "en": "Avg time to kill"
+    },
+    {
+      "id": "msg_d062b4b1fedf",
+      "source": "놓침",
+      "en": "Missed"
+    },
+    {
+      "id": "msg_575d05aff212",
+      "source": "그래픽 품질",
+      "en": "Graphics quality"
+    },
+    {
+      "id": "msg_e4d053b2b134",
+      "source": "그래픽 품질 단계",
+      "en": "Graphics quality tier"
+    },
+    {
+      "id": "msg_cb54f826f888",
+      "source": "품질 단계별 설정",
+      "en": "Settings by quality tier"
+    },
+    {
+      "id": "msg_962f286b1490",
+      "source": "항목",
+      "en": "Setting"
+    },
+    {
+      "id": "msg_ce22e94483cb",
+      "source": "품질",
+      "en": "Quality"
+    },
+    {
+      "id": "msg_2900210ecfeb",
+      "source": "안티에일리어싱",
+      "en": "Anti-aliasing"
+    },
+    {
+      "id": "msg_f6f09acac65b",
+      "source": "그림자",
+      "en": "Shadows"
+    },
+    {
+      "id": "msg_02a4bdfb2b65",
+      "source": "재질 해상도",
+      "en": "Material resolution"
+    },
+    {
+      "id": "msg_1dfa77aede61",
+      "source": "노멀",
+      "en": "normal maps"
+    },
+    {
+      "id": "msg_0b69bfb75f44",
+      "source": "텍스처 필터링",
+      "en": "Texture filtering"
+    },
+    {
+      "id": "msg_911598654453",
+      "source": "이방성",
+      "en": "anisotropic"
+    },
+    {
+      "id": "msg_f17002a4ca36",
+      "source": "탄흔·파편",
+      "en": "Bullet marks · debris"
+    },
+    {
+      "id": "msg_bd93ce933c4d",
+      "source": "빛 번짐 · 주변광 차폐",
+      "en": "Bloom · ambient occlusion"
+    },
+    {
+      "id": "msg_c5b155fae6d6",
+      "source": "선택 사항",
+      "en": "Optional"
+    },
+    {
+      "id": "msg_a6cb3be53bce",
+      "source": "모든 단계는 장면을 한 번만 그려 화면에 바로 출력합니다. 단계를 올리면 그림자 해상도, 재질 세부와 필터링, 탄흔 수만 늘어나며, 화면은 4K 크기를 넘지 않게 제한됩니다.",
+      "en": "Every tier draws the scene once and outputs it directly. Higher tiers only raise shadow resolution, material detail and filtering, and the number of bullet marks. Rendering is capped at 4K size."
+    },
+    {
+      "id": "msg_60604330e274",
+      "source": "세부 설정",
+      "en": "Detailed settings"
+    },
+    {
+      "id": "msg_7baeeb14a49a",
+      "source": "화면 전체 후처리가 추가되어 부하가 늘어납니다",
+      "en": "Adds a full-screen post-processing pass, which raises the load"
+    },
+    {
+      "id": "msg_e231d1e3ee11",
+      "source": "장면을 한 번 더 그립니다 · 부하 큼",
+      "en": "Draws the scene a second time · heavy load"
+    },
+    {
+      "id": "msg_0934a6f5eb36",
+      "source": "사용자 지정 · 아래에서 바꾼 항목이 있습니다. 단계를 누르면 그 단계의 값으로 돌아갑니다.",
+      "en": "Custom · you changed settings below. Choose a tier to return to its values."
+    },
+    {
+      "id": "msg_df4a6a7c3c25",
+      "source": "재질·텍스처 품질",
+      "en": "Material and texture quality"
+    },
+    {
+      "id": "msg_776553b8e5ca",
+      "source": "그래픽 실행 환경",
+      "en": "Graphics environment"
+    },
+    {
+      "id": "msg_9321a517a572",
+      "source": "브라우저가 그래픽카드 대신 CPU로 그리고 있습니다.",
+      "en": "Your browser is drawing with the CPU instead of the graphics card."
+    },
+    {
+      "id": "msg_c6f1ff2b4db1",
+      "source": "이 상태에서는 고사양 PC에서도 높은 품질이 매우 느립니다. 브라우저 설정에서 하드웨어 가속을 켜고 브라우저를 다시 시작하세요. Chrome·Edge: 설정 → 시스템 → \"가능한 경우 그래픽 가속 사용\".",
+      "en": "In this state even a high-end PC runs the higher tiers very slowly. Turn on hardware acceleration in your browser settings and restart the browser. Chrome/Edge: Settings → System → \"Use graphics acceleration when available\"."
+    },
+    {
+      "id": "msg_a24e0480de89",
+      "source": "내장 그래픽으로 실행 중일 수 있습니다.",
+      "en": "This may be running on integrated graphics."
+    },
+    {
+      "id": "msg_0069581623a4",
+      "source": "별도 그래픽카드가 있는 노트북이라면 Windows 설정 → 디스플레이 → 그래픽에서 브라우저를 \"고성능\"으로 지정하세요.",
+      "en": "On a laptop with a separate graphics card, set your browser to \"High performance\" in Windows Settings → Display → Graphics."
+    },
+    {
+      "id": "msg_95ee9a88f38e",
+      "source": "그래픽 장치",
+      "en": "Graphics device"
+    },
+    {
+      "id": "msg_2fa00a66c191",
+      "source": "브라우저가 이름을 알려 주지 않음",
+      "en": "Not reported by the browser"
+    },
+    {
+      "id": "msg_9e83a4abdee9",
+      "source": "하드웨어 가속",
+      "en": "Hardware acceleration"
+    },
+    {
+      "id": "msg_eb55c59a0340",
+      "source": "꺼짐 (CPU 렌더링)",
+      "en": "Off (CPU rendering)"
+    },
+    {
+      "id": "msg_f4a53b277b13",
+      "source": "켜짐",
+      "en": "On"
+    },
+    {
+      "id": "msg_23a75640f17b",
+      "source": "렌더링 해상도",
+      "en": "Render resolution"
+    },
+    {
+      "id": "msg_ba2b42bb967b",
+      "source": "창 크기",
+      "en": "Window"
+    },
+    {
+      "id": "msg_56e6e1bc3832",
+      "source": "배율",
+      "en": "scale"
+    },
+    {
+      "id": "msg_5ebee1605de4",
+      "source": "내 컴퓨터로 측정",
+      "en": "Measure on this computer"
+    },
+    {
+      "id": "msg_668aa70b7c90",
+      "source": "네 가지 품질을 이 화면 크기로 직접 그려 보고, 모니터 주사율을 유지하는 가장 높은 품질을 추천합니다. 약 10초 걸리며 훈련 기록에는 영향이 없습니다.",
+      "en": "Draws all four tiers at this window size and recommends the highest one that holds your monitor's refresh rate. Takes about 10 seconds and does not affect your training records."
+    },
+    {
+      "id": "msg_399da0b22f5d",
+      "source": "성능 측정",
+      "en": "Benchmark"
+    },
+    {
+      "id": "msg_24ef18601d40",
+      "source": "성능 측정 시작",
+      "en": "Start benchmark"
+    },
+    {
+      "id": "msg_19fe3710e1d4",
+      "source": "측정 준비 중",
+      "en": "Preparing the benchmark"
+    },
+    {
+      "id": "msg_1ad664995209",
+      "source": "측정하지 못했습니다. 다른 탭을 닫고 다시 시도하세요.",
+      "en": "The benchmark could not finish. Close other tabs and try again."
+    },
+    {
+      "id": "msg_401701722a74",
+      "source": "예상 프레임",
+      "en": "Expected frame rate"
+    },
+    {
+      "id": "msg_d50d8426116d",
+      "source": "상위 10% 프레임 시간",
+      "en": "Slowest 10% frame time"
+    },
+    {
+      "id": "msg_2a9db5dfd148",
+      "source": "약",
+      "en": "about"
+    },
+    {
+      "id": "msg_09559efd5dab",
+      "source": "매우 느림",
+      "en": "very slow"
+    },
+    {
+      "id": "msg_b8e78b25bb3f",
+      "source": "측정 생략 (아래 단계가 이미 느림)",
+      "en": "Skipped (a lower tier is already slow)"
+    },
+    {
+      "id": "msg_ebd4ea099e7f",
+      "source": "모니터",
+      "en": "monitor"
+    },
+    {
+      "id": "msg_9fe418bf6cff",
+      "source": "프레임 예산",
+      "en": "frame budget"
+    },
+    {
+      "id": "msg_a666bbb2c210",
+      "source": "매 프레임 그래픽카드가 끝날 때까지 기다려 재므로 실제 훈련보다 조금 낮게 나옵니다.",
+      "en": "Each frame waits for the graphics card to finish, so results are slightly lower than in real training."
+    },
+    {
+      "id": "msg_65fe9209bddc",
+      "source": "CPU 렌더링 상태에서 측정되었습니다. 하드웨어 가속을 켠 뒤 다시 측정하세요.",
+      "en": "This was measured with CPU rendering. Turn on hardware acceleration and measure again."
+    },
+    {
+      "id": "msg_df634a2d1dc5",
+      "source": "추천 품질(낮음) 적용",
+      "en": "Apply recommended tier (Low)"
+    },
+    {
+      "id": "msg_60bcd0d4c4f0",
+      "source": "추천 품질(보통) 적용",
+      "en": "Apply recommended tier (Normal)"
+    },
+    {
+      "id": "msg_e5cb2856cd61",
+      "source": "추천 품질(높음) 적용",
+      "en": "Apply recommended tier (High)"
+    },
+    {
+      "id": "msg_ff1808360125",
+      "source": "추천 품질(최고) 적용",
+      "en": "Apply recommended tier (Ultra)"
+    },
+    {
+      "id": "msg_75be60513290",
+      "source": "품질 측정 중",
+      "en": "tier — measuring"
+    },
+    {
+      "id": "msg_ca7b97f46223",
+      "source": "· 각 체크",
+      "en": "· Angle checks"
+    },
+    {
+      "id": "msg_d812a742bd56",
+      "source": "발코니 골목",
+      "en": "Balcony Alleys"
+    },
+    {
+      "id": "msg_84551ea9a03f",
+      "source": "전이문 마당",
+      "en": "Gateway Yards"
+    },
+    {
+      "id": "msg_2899ab21ccf1",
+      "source": "세 갈래 정원",
+      "en": "Three Gardens"
+    },
+    {
+      "id": "msg_b398a493c910",
+      "source": "아케이드 광장",
+      "en": "Arcade Square"
+    },
+    {
+      "id": "msg_6bb02803eee1",
+      "source": "냉동 적재장",
+      "en": "Cold Storage Yard"
+    },
+    {
+      "id": "msg_d425cd4a0332",
+      "source": "해안 성채",
+      "en": "Coastal Fort"
+    },
+    {
+      "id": "msg_6e9bb9237f65",
+      "source": "순환 연구동",
+      "en": "Ring Laboratory"
+    },
+    {
+      "id": "msg_68968c3355db",
+      "source": "돔 회랑",
+      "en": "Dome Corridor"
+    },
+    {
+      "id": "msg_16f9b30612e0",
+      "source": "나선 참배로",
+      "en": "Spiral Shrine"
+    },
+    {
+      "id": "msg_76ffb470cfe2",
+      "source": "시장 교차로",
+      "en": "Market Crossing"
+    },
+    {
+      "id": "msg_1241ba0cbead",
+      "source": "잔교 연구소",
+      "en": "Catwalk Laboratory"
+    },
+    {
+      "id": "msg_f68e04c23b58",
+      "source": "제련소 성문",
+      "en": "Smelter Gate"
+    },
+    {
+      "id": "msg_0ed490dab590",
+      "source": "고지 관측소",
+      "en": "Ridge Observatory"
     }
   ]
 }

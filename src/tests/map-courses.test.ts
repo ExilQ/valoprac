@@ -1,5 +1,6 @@
 import {describe,it,expect} from 'vitest';
-import {MAP_COURSES} from '../config/mapCourses';
+import {TACTICAL_COURSES as MAP_COURSES} from '../config/mapCourses';
+// The 12.25 fundamentals drill maps are covered by fundamentals-maps.test.ts.
 import {DEFAULT_SETTINGS,sanitizeSettings} from '../config/settings';
 import {levelFor,standingSpace,visibleBetween} from '../engine/tactical/levels';
 import {emptyInput} from '../engine/types';

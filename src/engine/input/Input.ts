@@ -1,5 +1,6 @@
 import {movementActionForKey,type MovementAction,type MovementActionResult} from '../../training/movementTools/types';
 import { emptyInput, type WeaponId } from '../types';
+const SLOT_KEYS=['Digit1','Digit2','Digit3'];
 import type { Settings } from '../types';
 import {InputDiagnostics} from './InputDiagnostics';
 import {monotonicEventTime} from './sensitivity';
@@ -11,7 +12,7 @@ export class BrowserInput {
   state=emptyInput();private keys=new Set<string>();private destroyed=false;private fallbackAttempted=false;private lockAttempt=0;private lockPending=false;private legacyLock=false;private deferredLockError:ReturnType<typeof setTimeout>|null=null;
   readonly diagnostics=new InputDiagnostics();rawConfirmation:'unverified'|'accepted'|'fallback'|'denied'='unverified';keyboardStatus:'unsupported'|'idle'|'locked'|'denied'='idle';private rightDown=false;private crouchToggle=false;private captureElement:HTMLElement|null=null;
   rawMode:'requested'|'fallback'|'unknown'='unknown';observer:InputObserver|null=null;
-  constructor(private canvas:HTMLCanvasElement,private simulation:InputTarget,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onWeapons:()=>void=()=>{},private onWeapon:(id:WeaponId)=>void=()=>{},private onTrainingAction?:(action:MovementAction)=>void){
+  constructor(private canvas:HTMLCanvasElement,private simulation:InputTarget,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onWeapons:()=>void=()=>{},private onSlot:(slot:1|2|3)=>void=()=>{},private onTrainingAction?:(action:MovementAction)=>void){
     document.addEventListener('fullscreenchange',this.fullscreenChange);document.addEventListener('keydown',this.keyDown);document.addEventListener('keyup',this.keyUp);
     document.addEventListener('wheel',this.wheel,{passive:false});document.addEventListener('mousemove',this.move);document.addEventListener('mousedown',this.mouseDown);document.addEventListener('mouseup',this.mouseUp);
     document.addEventListener('pointerlockchange',this.lockChange);document.addEventListener('pointerlockerror',this.lockError);
@@ -41,13 +42,17 @@ export class BrowserInput {
   }
   private recordAxes(event:Event){const now=performance.now();this.movementCommands.setAxes(monotonicEventTime(event.timeStamp,now)/1000,{forward:this.state.forward,strafe:this.state.strafe,walk:this.state.walk,crouch:this.state.crouch,jumpHeld:!!this.state.jumpHeld,yaw:this.simulation.yaw??this.simulation.viewYaw});}
   reset(){this.movementCommands.reset(performance.now()/1000,this.simulation.yaw??this.simulation.viewYaw);this.movementClock=false;this.lastWheelAt=-Infinity;this.simulation.clearFireView?.();this.simulation.clearMovementInput?.();this.rightDown=false;this.crouchToggle=false;this.keys.clear();Object.assign(this.state,emptyInput());this.state.jumpHeld=false;this.state.jumpPresses=0;delete this.state.jumpRequestedAt;delete this.state.movementYaw;}
+  /** A weapon swap drops trigger, aim and scope intent but keeps held movement
+   * keys: browsers stop auto-repeating a held key once another key is pressed,
+   * so clearing them would leave the player standing still while W is down. */
+  releaseCombat(){this.simulation.clearFireView?.();Object.assign(this.state,{fire:false,ads:false,firePresses:0,scopePresses:0,zoomPresses:0,scopeHeld:false,reload:false});this.rightDown=false;}
   private keyDown=(event:KeyboardEvent)=>{
     if(!this.locked)return;const b=this.simulation.settings.bindings;
     if(event.code==='Escape'){this.reset();document.exitPointerLock();return;}
     const tool=movementActionForKey(this.simulation.settings,event.code);if(tool){event.preventDefault();if(!event.repeat&&!this.keys.has(event.code)){this.keys.add(event.code);if(this.onTrainingAction)this.onTrainingAction(tool);else this.simulation.trainingAction?.(tool);}return;}
-    if(Object.values(b).includes(event.code)||['KeyC','ControlLeft','ControlRight','ShiftRight'].includes(event.code)||['Digit1','Digit2','Digit3','Digit4'].includes(event.code))event.preventDefault();
+    if(Object.values(b).includes(event.code)||['KeyC','ControlLeft','ControlRight','ShiftRight'].includes(event.code)||SLOT_KEYS.includes(event.code))event.preventDefault();
     if(event.code===b.weapons&&!event.repeat){this.reset();document.exitPointerLock();this.onWeapons();return;}
-    if(!event.repeat&&['Digit1','Digit2','Digit3','Digit4'].includes(event.code)){this.reset();this.onWeapon((['rifleA','rifleB','sheriff','operator'] as const)[Number(event.code.slice(-1))-1]);return;}
+    if(SLOT_KEYS.includes(event.code)){if(!event.repeat){this.releaseCombat();this.onSlot(Number(event.code.slice(-1)) as 1|2|3);}return;}
     if(this.simulation.weaponId==='operator'&&event.code===this.simulation.settings.operatorZoomBinding&&!event.repeat){event.preventDefault();this.state.zoomPresses=(this.state.zoomPresses??0)+1;}
     const newPress=!event.repeat&&!this.keys.has(event.code);
     if(this.isCrouch(event.code)&&newPress&&this.simulation.settings.crouchMode==='toggle')this.crouchToggle=!this.crouchToggle;this.keys.add(event.code);if(event.code===b.jump&&newPress){this.state.jump=true;this.state.jumpPresses=(this.state.jumpPresses??0)+1;const now=performance.now();this.movementCommands.jump(monotonicEventTime(event.timeStamp,now)/1000);}if(event.code===b.reload&&newPress)this.state.reload=true;this.updateAxes();this.recordAxes(event);
@@ -61,7 +66,7 @@ export class BrowserInput {
   private held(code:string){return this.keys.has(code)||code.endsWith('Left')&&this.keys.has(code.replace('Left','Right'))||code.endsWith('Right')&&this.keys.has(code.replace('Right','Left'));}
   private updateAxes(){const b=this.simulation.settings.bindings;this.state.forward=Number(this.keys.has(b.forward))-Number(this.keys.has(b.backward));this.state.strafe=Number(this.keys.has(b.right))-Number(this.keys.has(b.left));this.state.walk=this.held(b.walk);this.state.crouch=this.simulation.settings.crouchMode==='toggle'?this.crouchToggle:[...this.keys].some(k=>this.isCrouch(k));this.state.jumpHeld=this.keys.has(b.jump);}
   private move=(event:MouseEvent)=>{if(this.locked&&this.simulation.running&&Number.isFinite(event.movementX)&&Number.isFinite(event.movementY)){const now=performance.now(),stamp=monotonicEventTime(event.timeStamp,now),y=this.simulation.viewYaw,p=this.simulation.viewPitch;this.simulation.look(event.movementX,event.movementY);this.movementCommands.setYaw(stamp/1000,this.simulation.yaw??this.simulation.viewYaw);this.observer?.sample(0,event.movementX,event.movementY,stamp,now,y,p);this.diagnostics.record(stamp,now,performance.now()-now,event.movementX,event.movementY);}};
-  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0){const now=performance.now(),stamp=monotonicEventTime(event.timeStamp,now);if(this.simulation.running)this.simulation.captureFireView?.(stamp);if(this.observer&&this.simulation.running){this.observer.sample(1,0,0,stamp,now,this.simulation.viewYaw,this.simulation.viewPitch);}this.state.fire=true;this.state.firePresses=(this.state.firePresses??0)+1;}if(event.button===2&&!this.rightDown){this.rightDown=true;event.preventDefault();if(this.simulation.weaponId==='operator'){this.state.scopeHeld=true;this.state.scopePresses=(this.state.scopePresses??0)+1;}else this.state.ads=this.simulation.settings.adsMode==='toggle'?!this.state.ads:true;}};
+  private mouseDown=(event:MouseEvent)=>{if(!this.locked)return;if(event.button===0){const now=performance.now(),stamp=monotonicEventTime(event.timeStamp,now);if(this.simulation.running)this.simulation.captureFireView?.(stamp);if(this.observer&&this.simulation.running){this.observer.sample(1,0,0,stamp,now,this.simulation.viewYaw,this.simulation.viewPitch);}this.state.fire=true;this.state.firePresses=(this.state.firePresses??0)+1;}if(event.button===2&&!this.rightDown){this.rightDown=true;event.preventDefault();if(this.simulation.weaponId==='operator'||this.simulation.weaponId==='knife'){this.state.scopeHeld=true;this.state.scopePresses=(this.state.scopePresses??0)+1;}else this.state.ads=this.simulation.settings.adsMode==='toggle'?!this.state.ads:true;}};
   private mouseUp=(event:MouseEvent)=>{if(event.button===0)this.state.fire=false;if(event.button===2){this.rightDown=false;this.state.scopeHeld=false;if(this.simulation.settings.adsMode==='hold')this.state.ads=false;}};
   private lockChange=()=>{if(this.deferredLockError!==null){clearTimeout(this.deferredLockError);this.deferredLockError=null;}this.lockPending=false;this.reset();if(!this.locked)this.releaseKeyboard();else this.onError('');this.onLock(this.locked);};
   private lockError=()=>{if(this.destroyed||this.locked)return;const attempt=this.lockAttempt;
