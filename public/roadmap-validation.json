@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.28",
-  "patchLabel": "12.28",
-  "generatedAt": "2026-11-26T12:34:23.037Z",
+  "release": "12.0.29",
+  "patchLabel": "12.29",
+  "generatedAt": "2026-11-26T12:43:03.811Z",
   "tests": {
     "application": 1575,
     "broker": 28,
@@ -17331,7 +17331,7 @@
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7786,
+      "gzipBytes": 7785,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3106
+        "replayGzipBytes": 3107
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18245,7 +18245,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 2954
+        "replayGzipBytes": 2956
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 2999
+        "replayGzipBytes": 3000
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4503
+        "replayGzipBytes": 4504
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18421,7 +18421,7 @@
         "routeSamples": 421,
         "maxThreats": 1,
         "codeBytes": 866,
-        "replayGzipBytes": 5322
+        "replayGzipBytes": 5321
       }
     ],
     "browser": {

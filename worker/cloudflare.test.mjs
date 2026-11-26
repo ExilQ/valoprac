@@ -42,6 +42,9 @@ test('configuration files, bad paths and other methods are refused with security
  const bad=await request('/%FF');assert.equal(bad.status,400);assert.equal(bad.headers.get('x-content-type-options'),'nosniff');
  const post=await request('/',{method:'POST'});assert.equal(post.status,405);assert.equal(post.headers.get('allow'),'GET, HEAD');
 });
-test('usage and GPU admission APIs are routed to their handlers, not to static assets',async()=>{
- for(const p of ['/api/usage','/api/gpu/grant']){const r=await request(p,{method:'POST',body:'{}',headers:{'content-type':'application/json'}});assert.notEqual(r.status,405);assert.notEqual(await r.clone().text(),'not found');}
+test('the usage API is routed to its handler; GPU grants are not served without Sites authentication',async()=>{
+ const forged={method:'POST',body:'{}',headers:{'content-type':'application/json','oai-authenticated-user-id':'user-allowlisted',origin:'https://valoprac.trade','sec-fetch-site':'same-origin'}};
+ const secrets={...env,VALOPRAC_GPU_GRANT_SECRET:'x'.repeat(64),VALOPRAC_GPU_ALLOWED_USERS:'user-allowlisted',VALOPRAC_GPU_ORIGIN:'https://gpu.example'};
+ const grant=await worker.fetch(new Request('https://valoprac.trade/api/gpu/grant',forged),secrets);assert.equal(grant.status,404);assert.doesNotMatch(await grant.text(),/token/i);
+ for(const p of ['/api/usage']){const r=await request(p,{method:'POST',body:'{}',headers:{'content-type':'application/json'}});assert.notEqual(r.status,405);assert.notEqual(await r.clone().text(),'not found');}
 });

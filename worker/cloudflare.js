@@ -5,10 +5,11 @@
 // - Inline scripts (theme bootstrap, guide scripts) are authorised by their
 //   SHA-256 hashes, computed from the served document, under a strict CSP.
 // - Unknown documents get a real 404 page instead of the SPA shell.
-// - Only the homepage is indexable; the usage and GPU admission APIs keep
-//   their routes.
+// - Only the homepage is indexable; the usage API keeps its route.
+// - The GPU admission API is NOT served here: it trusts the
+//   oai-authenticated-user-id header, which only ChatGPT Sites sets and
+//   overwrites. On Cloudflare any client could send it and mint grants.
 import {handleUsage} from './usage.js';
-import {handleGPUGrant} from './admission.js';
 
 export const SECURITY_HEADERS={
  'X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin',
@@ -38,7 +39,7 @@ export default {
  async fetch(request,env){
   const url=new URL(request.url);
   if(url.pathname==='/api/usage'||url.pathname==='/api/usage/session')return handleUsage(request,env);
-  if(url.pathname==='/api/gpu/grant')return handleGPUGrant(request,env);
+  if(url.pathname==='/api/gpu/grant')return plain(404,'이 주소에서는 제공하지 않는 기능입니다.',request.method);
   let path;try{path=decodeURIComponent(url.pathname);}catch{return plain(400,'잘못된 주소입니다.',request.method);}
   if(!['GET','HEAD'].includes(request.method))return plain(405,'허용하지 않는 요청입니다.',request.method,{Allow:'GET, HEAD'});
   const documentRequest=(request.headers.get('accept')??'').includes('text/html')||request.headers.get('sec-fetch-dest')==='document';

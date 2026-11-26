@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.28",
-  "patchLabel": "12.28",
-  "generatedAt": "2026-11-26T12:34:23.037Z",
+  "release": "12.0.29",
+  "patchLabel": "12.29",
+  "generatedAt": "2026-11-26T12:43:03.811Z",
   "captureRelease": "11.0.0",
   "capturePatchLabel": "11.00",
   "captureEvidenceDirectory": "docs/interface-11.00",

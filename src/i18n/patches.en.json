@@ -1,4 +1,11 @@
 {
+  "12.29": {
+    "title": "Cloudflare deployment security fix",
+    "description": "Fixed a security problem in the deployment settings for the move to Cloudflare. The current site is not affected.",
+    "changes": [
+      "The Cloudflare entry point exposed the GPU streaming grant API, which trusts a user identity header; a forged header could obtain a grant token. The API is only safe behind ChatGPT Sites authentication, so it is not served on Cloudflare."
+    ]
+  },
   "12.28": {
     "title": "Review fixes: replay compatibility, reverb volume, knife reach",
     "description": "Three problems found in code review before the site deployment are fixed.",

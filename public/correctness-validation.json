@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.28",
-  "patchLabel": "12.28",
-  "generatedAt": "2026-11-26T12:34:23.037Z",
+  "release": "12.0.29",
+  "patchLabel": "12.29",
+  "generatedAt": "2026-11-26T12:43:03.811Z",
   "tests": {
     "application": 1575,
     "broker": 28,
@@ -36,8 +36,8 @@
     "casts": 20000,
     "triangles": 2883,
     "bvhNodes": 789,
-    "elapsedMilliseconds": 409.30175800000006,
-    "meanMicroseconds": 20.465087900000004,
+    "elapsedMilliseconds": 479.4498409999999,
+    "meanMicroseconds": 23.972492049999996,
     "gpuTested": false,
     "inputLatencyMeasured": false
   },

@@ -10,6 +10,12 @@ export type PatchSize='major'|'minor';
 
 export const entries:PatchEntry[]=[
  {
+  version:"12.29",date:"2026-11-26",
+  title:"Cloudflare 배포 보안 수정",
+  description:"Cloudflare로 옮길 때 쓸 배포 설정에서 보안 문제 하나를 고쳤습니다. 현재 사이트에는 영향이 없습니다.",
+  changes:["Cloudflare 배포 진입점이 GPU 스트리밍 허가 API를 그대로 열어 두어, 사용자 식별 헤더를 위조하면 허가 토큰을 받을 수 있었습니다. 이 API는 ChatGPT Sites의 인증이 있어야만 안전하므로 Cloudflare에서는 제공하지 않습니다."]
+ },
+ {
   version:"12.28",date:"2026-11-26",
   title:"리뷰 반영: 리플레이 호환, 잔향 볼륨, 칼 판정",
   description:"사이트 반영 전 코드 리뷰에서 확인된 세 가지 문제를 고쳤습니다.",
