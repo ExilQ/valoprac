@@ -1,4 +1,14 @@
 {
+  "12.23": {
+    "title": "Graphics quality tiers and Ultra performance",
+    "description": "Ultra now renders as efficiently as High, quality tiers are laid out like a shooter's video menu, and the game can measure your computer and recommend a tier.",
+    "changes": [
+      "Ultra no longer turns on bloom and ambient occlusion. Every tier draws the scene once straight to the screen; in measurements Ultra's frame time dropped by about 40%.",
+      "Settings → Graphics shows a table of what each tier changes. Bloom and ambient occlusion are optional, and ambient occlusion now keeps the image sharp.",
+      "Shows which graphics device your browser actually uses and warns when hardware acceleration is off.",
+      "Measure on this computer: tries each tier at your screen size and recommends the highest one that keeps up with your monitor."
+    ]
+  },
   "12.22": {
     "title": "Graphics options, performance and a knife slot",
     "description": "The main causes of low frame rates at high quality are reduced, graphics options prioritise clarity and frame rate, number keys hold a fixed loadout with a new knife, and switching weapons no longer stops you.",

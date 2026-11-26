@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "release": "12.0.22",
-  "patchLabel": "12.22",
+  "release": "12.0.23",
+  "patchLabel": "12.23",
   "algorithm": "aim-2.0.0",
-  "generatedAt": "2026-11-26T03:56:41.054Z",
+  "generatedAt": "2026-11-26T04:46:34.228Z",
   "tests": {
-    "application": 1540,
+    "application": 1544,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -66,7 +66,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.5816220000000385
+        "cpuMilliseconds": 2.1687329999999747
       },
       {
         "profile": "low-sensitivity-precision",
@@ -87,7 +87,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.2189989999999398
+        "cpuMilliseconds": 1.1532439999999724
       },
       {
         "profile": "low-sensitivity-precision",
@@ -108,7 +108,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.6576930000001653
+        "cpuMilliseconds": 2.6594740000000456
       },
       {
         "profile": "low-sensitivity-precision",
@@ -129,7 +129,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 1,
-        "cpuMilliseconds": 43.85605999999996
+        "cpuMilliseconds": 42.440034000000026
       },
       {
         "profile": "high-sensitivity-tracking",
@@ -150,7 +150,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.3211699999998814
+        "cpuMilliseconds": 1.9704100000000722
       },
       {
         "profile": "high-sensitivity-tracking",
@@ -171,7 +171,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.1758110000000102
+        "cpuMilliseconds": 1.1652349999999956
       },
       {
         "profile": "high-sensitivity-tracking",
@@ -192,7 +192,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.1625589999999875
+        "cpuMilliseconds": 2.152202999999986
       },
       {
         "profile": "high-sensitivity-tracking",
@@ -213,7 +213,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 1,
-        "cpuMilliseconds": 42.589920000000006
+        "cpuMilliseconds": 46.03323799999998
       },
       {
         "profile": "broad-plateau",
@@ -234,7 +234,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 0.9144459999999413
+        "cpuMilliseconds": 0.988749999999925
       },
       {
         "profile": "broad-plateau",
@@ -255,7 +255,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 0.9049320000000307
+        "cpuMilliseconds": 0.8189899999999852
       },
       {
         "profile": "broad-plateau",
@@ -276,7 +276,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.0079430000001253
+        "cpuMilliseconds": 3.0209989999999607
       },
       {
         "profile": "broad-plateau",
@@ -297,7 +297,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 1,
-        "cpuMilliseconds": 40.90817800000002
+        "cpuMilliseconds": 39.961298
       },
       {
         "profile": "narrow-optimum",
@@ -318,7 +318,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.350354999999979
+        "cpuMilliseconds": 1.7111060000000293
       },
       {
         "profile": "narrow-optimum",
@@ -339,7 +339,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.1804389999999216
+        "cpuMilliseconds": 1.0585310000000732
       },
       {
         "profile": "narrow-optimum",
@@ -360,7 +360,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.5612610000001155
+        "cpuMilliseconds": 2.392091999999991
       },
       {
         "profile": "narrow-optimum",
@@ -381,7 +381,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 0.7380952380952381,
-        "cpuMilliseconds": 40.268776999999886
+        "cpuMilliseconds": 42.33752299999975
       },
       {
         "profile": "multiple-equivalent-regions",
@@ -402,7 +402,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.034162999999978
+        "cpuMilliseconds": 1.8380909999998494
       },
       {
         "profile": "multiple-equivalent-regions",
@@ -423,7 +423,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.677389999999832
+        "cpuMilliseconds": 1.6578449999998384
       },
       {
         "profile": "multiple-equivalent-regions",
@@ -444,7 +444,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.2625270000002047
+        "cpuMilliseconds": 2.4108759999999165
       },
       {
         "profile": "multiple-equivalent-regions",
@@ -465,7 +465,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 0.626984126984127,
-        "cpuMilliseconds": 41.930376999999964
+        "cpuMilliseconds": 42.21013100000005
       },
       {
         "profile": "high-noise",
@@ -486,7 +486,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.1474249999998847
+        "cpuMilliseconds": 1.7957230000000663
       },
       {
         "profile": "high-noise",
@@ -507,7 +507,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.1065790000000106
+        "cpuMilliseconds": 2.085373000000118
       },
       {
         "profile": "high-noise",
@@ -528,7 +528,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.010545999999863
+        "cpuMilliseconds": 2.090213000000176
       },
       {
         "profile": "high-noise",
@@ -549,7 +549,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 0.6626984126984127,
-        "cpuMilliseconds": 44.847023000000036
+        "cpuMilliseconds": 40.906013000000144
       },
       {
         "profile": "learning",
@@ -570,7 +570,7 @@
         "heldoutIntervalCoverage": 0.9583333333333334,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.5541290000001027
+        "cpuMilliseconds": 2.640979999999786
       },
       {
         "profile": "learning",
@@ -591,7 +591,7 @@
         "heldoutIntervalCoverage": 0.9583333333333334,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.023384999999962
+        "cpuMilliseconds": 1.0964890000001333
       },
       {
         "profile": "learning",
@@ -612,7 +612,7 @@
         "heldoutIntervalCoverage": 0.9583333333333334,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.164348999999902
+        "cpuMilliseconds": 2.1572939999997516
       },
       {
         "profile": "learning",
@@ -633,7 +633,7 @@
         "heldoutIntervalCoverage": 0.9583333333333334,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 1,
-        "cpuMilliseconds": 40.4862989999998
+        "cpuMilliseconds": 41.51628000000005
       },
       {
         "profile": "fatigue",
@@ -654,7 +654,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.9928079999999682
+        "cpuMilliseconds": 1.8364589999999907
       },
       {
         "profile": "fatigue",
@@ -675,7 +675,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 1.1736710000001267
+        "cpuMilliseconds": 1.0771170000000438
       },
       {
         "profile": "fatigue",
@@ -696,7 +696,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 2.0103820000000496
+        "cpuMilliseconds": 2.141482999999994
       },
       {
         "profile": "fatigue",
@@ -717,7 +717,7 @@
         "heldoutIntervalCoverage": 1,
         "heldoutIntervals": 24,
         "gpLatentIntervalCoverage": 1,
-        "cpuMilliseconds": 39.92138100000011
+        "cpuMilliseconds": 46.24495600000034
       },
       {
         "profile": "insufficient-data",
@@ -738,7 +738,7 @@
         "heldoutIntervalCoverage": null,
         "heldoutIntervals": 0,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 0.6564380000000938
+        "cpuMilliseconds": 0.7173710000001847
       },
       {
         "profile": "insufficient-data",
@@ -759,7 +759,7 @@
         "heldoutIntervalCoverage": null,
         "heldoutIntervals": 0,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 0.6655240000002323
+        "cpuMilliseconds": 0.7183210000001736
       },
       {
         "profile": "insufficient-data",
@@ -780,7 +780,7 @@
         "heldoutIntervalCoverage": null,
         "heldoutIntervals": 0,
         "gpLatentIntervalCoverage": null,
-        "cpuMilliseconds": 0.6377539999997452
+        "cpuMilliseconds": 0.7225539999999455
       },
       {
         "profile": "insufficient-data",
@@ -801,7 +801,7 @@
         "heldoutIntervalCoverage": null,
         "heldoutIntervals": 0,
         "gpLatentIntervalCoverage": 0.9325396825396826,
-        "cpuMilliseconds": 1.1494000000001279
+        "cpuMilliseconds": 1.1969329999998308
       }
     ]
   },
@@ -819,7 +819,7 @@
   "telemetry": {
     "benchmark": "aim-telemetry-cpu",
     "events": 200000,
-    "elapsedMs": 18.56864200000001,
+    "elapsedMs": 29.915591000000006,
     "bytes": 2883584,
     "columns": 22,
     "hardwareInputLatencyMeasured": false,

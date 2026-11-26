@@ -5,15 +5,8 @@ import type {Quality} from '../types';
 import {generateSurfacePixels} from './ProceduralSurfaces';
 export type {VisualMaterialId} from '../../config/materials';
 
-export const SURFACE_QUALITY:Readonly<Record<Quality,{size:number;normal:boolean;roughness:boolean;anisotropy:number}>>={
-  low:{size:32,normal:false,roughness:false,anisotropy:1},
-  medium:{size:64,normal:false,roughness:true,anisotropy:2},
-  // 12.21: High gains Ultra's 256px maps so joints and trims stay crisp at arm's
-  // length; the complete library stays inside the 16 MiB budget. Ultra adds
-  // sharper oblique filtering instead of larger maps.
-  high:{size:256,normal:true,roughness:true,anisotropy:8},
-  ultra:{size:256,normal:true,roughness:true,anisotropy:16},
-};
+export {SURFACE_QUALITY} from '../../config/surfaceQuality';
+import {SURFACE_QUALITY} from '../../config/surfaceQuality';
 export interface SurfaceMaterialOptions extends ArenaPatternSpec {
   tint?:T.ColorRepresentation;
   vertexColors?:boolean;

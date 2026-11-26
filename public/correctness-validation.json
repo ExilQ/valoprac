@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.22",
-  "patchLabel": "12.22",
-  "generatedAt": "2026-11-26T03:56:41.054Z",
+  "release": "12.0.23",
+  "patchLabel": "12.23",
+  "generatedAt": "2026-11-26T04:46:34.228Z",
   "tests": {
-    "application": 1540,
+    "application": 1544,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -36,8 +36,8 @@
     "casts": 20000,
     "triangles": 2883,
     "bvhNodes": 789,
-    "elapsedMilliseconds": 441.36347200000023,
-    "meanMicroseconds": 22.068173600000012,
+    "elapsedMilliseconds": 434.2142040000001,
+    "meanMicroseconds": 21.710710200000005,
     "gpuTested": false,
     "inputLatencyMeasured": false
   },

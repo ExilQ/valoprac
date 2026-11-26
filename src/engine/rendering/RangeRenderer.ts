@@ -26,7 +26,7 @@ import type { Settings, ShotEvent, WeaponId } from '../types';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
+import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { WEAPON_ORDER } from '../../config/weapons';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -66,7 +66,7 @@ export class RangeRenderer {
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
   private entryMarker:THREE.Mesh|null=null;
-  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:SSAOPass|null=null;private adsBlend=0;private settingsKey='';
+  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:GTAOPass|null=null;private adsBlend=0;private settingsKey='';
   private materialLibrary!:SurfaceMaterialLibrary;
   private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
@@ -83,7 +83,7 @@ export class RangeRenderer {
     this.recordFrames=options.recordFrames??true;
     // 12.22: native canvas MSAA when no full-screen pass is needed; with a composer,
     // the composer's own multisampled target antialiases instead (no FXAA blur).
-    this.renderer=new THREE.WebGLRenderer({antialias:settings.antialias&&!settings.ambientOcclusion&&!settings.postProcessing,powerPreference:'high-performance',alpha:false});
+    this.renderer=new THREE.WebGLRenderer({antialias:settings.antialias,powerPreference:'high-performance',alpha:false});
     this.capabilities=detectGraphicsCapabilities(this.renderer.getContext());
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};this.settings=settings;
     this.materialLibrary=new SurfaceMaterialLibrary({quality:settings.textureQuality,anisotropy:this.renderer.capabilities.getMaxAnisotropy(),scalarLow:this.capabilities.kind==='software'});
@@ -471,8 +471,11 @@ export class RangeRenderer {
       if(settings.postProcessing||settings.ambientOcclusion||(settings.antialias&&!nativeMSAA)){
         const target=new THREE.WebGLRenderTarget(1,1,{type:THREE.HalfFloatType,samples:settings.antialias?4:0});
         this.composer=new EffectComposer(this.renderer,target);this.composer.addPass(new RenderPass(this.scene,this.camera));
-        // Half-resolution SSAO with 16 samples (was full resolution, 32 samples).
-        if(settings.ambientOcclusion){this.ao=new SSAOPass(this.scene,this.camera,1,1,16);this.ao.kernelRadius=3;this.ao.minDistance=0.001;this.ao.maxDistance=0.08;const fullSize=this.ao.setSize.bind(this.ao);this.ao.setSize=(width:number,height:number)=>fullSize(Math.max(1,Math.ceil(width/2)),Math.max(1,Math.ceil(height/2)));this.composer.addPass(this.ao);}
+        // Optional ambient occlusion: GTAO renders one normal/depth pass and
+        // blends half-resolution occlusion over the full-resolution image.
+        // (SSAO re-rendered the beauty image as well and replaced it with its
+        // own half-resolution copy.)
+        if(settings.ambientOcclusion){const ao=this.ao=new GTAOPass(this.scene,this.camera,1,1);ao.updateGtaoMaterial({radius:.6,distanceExponent:1.5,thickness:1,scale:1,samples:8});ao.updatePdMaterial({lumaPhi:10,depthPhi:2,normalPhi:3,radius:4,rings:2,samples:8});ao.blendIntensity=.85;const fullSize=ao.setSize.bind(ao);ao.setSize=(width:number,height:number)=>fullSize(Math.max(1,Math.ceil(width/2)),Math.max(1,Math.ceil(height/2)));this.composer.addPass(ao);}
         if(settings.postProcessing){this.bloom=new UnrealBloomPass(new THREE.Vector2(1,1),0.12,0.3,1.4);this.composer.addPass(this.bloom);}
         const weaponPass=new RenderPass(this.weaponScene,this.weaponCamera);weaponPass.clear=false;weaponPass.clearDepth=true;this.composer.addPass(weaponPass);
         this.composer.addPass(new OutputPass());
@@ -483,9 +486,9 @@ export class RangeRenderer {
     this.resize();
   }
   private disposeComposer(){if(this.composer){
-    // Three r180 SSAOPass.dispose omits its generated noise texture and the
-    // main SSAO material. Release both when changing presets or leaving a map.
-    this.ao?.noiseTexture.dispose();this.ao?.ssaoMaterial.dispose();
+    // Three r180 GTAOPass.dispose leaves its AO and blend materials and the
+    // depth texture it created; release them when changing settings.
+    this.ao?.gtaoMaterial.dispose();this.ao?.blendMaterial.dispose();this.ao?.depthTexture?.dispose();
     for(const pass of this.composer.passes)pass.dispose();this.composer.dispose();
   }this.composer=null;this.ao=null;this.bloom=null;}
   private buildImpacts(){

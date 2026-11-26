@@ -109,17 +109,21 @@ export function loadSettings(storage?:Pick<Storage,'getItem'>&Partial<Pick<Stora
 export function persistSettings(settings:Settings,storage?:Pick<Storage,'setItem'>):boolean{try{(storage??localStorage).setItem(SETTINGS_KEY,JSON.stringify(sanitizeSettings(settings)));return true;}catch{return false;}}
 
 /**
- * 12.22 presets follow competitive-shooter practice: clarity and frame rate
- * first. Native MSAA replaces FXAA, bloom and ambient occlusion are Ultra-only
- * (both cost a full-screen pass, AO also re-renders the scene), and no preset
- * supersamples — a 1.25x render scale on a HiDPI display multiplied pixel work
- * by up to 6x. See docs/GRAPHICS_PERFORMANCE_12.22.md.
+ * Presets follow competitive-shooter practice: clarity and frame rate first.
+ * Every preset renders one forward pass straight to the screen with native
+ * MSAA; quality tiers change shadow resolution, texture detail/filtering and
+ * effect budgets, never the render pipeline. Bloom and ambient occlusion are
+ * optional extras outside the presets, and no preset supersamples.
+ * See docs/GRAPHICS_PERFORMANCE_12.23.md (and _12.22.md for the history).
  */
 export const GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={
   low:{graphicsPreset:'low',shadowQuality:'off',textureQuality:'low',postProcessing:false,ambientOcclusion:false,antialias:false,effectsQuality:'low',renderScale:0.8},
   medium:{graphicsPreset:'medium',shadowQuality:'medium',textureQuality:'medium',postProcessing:false,ambientOcclusion:false,antialias:true,effectsQuality:'medium',renderScale:1},
   high:{graphicsPreset:'high',shadowQuality:'high',textureQuality:'high',postProcessing:false,ambientOcclusion:false,antialias:true,effectsQuality:'high',renderScale:1},
-  ultra:{graphicsPreset:'ultra',shadowQuality:'ultra',textureQuality:'ultra',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'ultra',renderScale:1}
+  // 12.23: Ultra stays on the single forward pass with native MSAA. Bloom and
+  // ambient occlusion need an HDR multisampled offscreen target plus extra
+  // full-screen passes; they remain optional toggles, off in every preset.
+  ultra:{graphicsPreset:'ultra',shadowQuality:'ultra',textureQuality:'ultra',postProcessing:false,ambientOcclusion:false,antialias:true,effectsQuality:'ultra',renderScale:1}
 };
 /** Preset bundles shipped up to 12.21, used once to upgrade untouched profiles. */
 export const LEGACY_GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={
@@ -128,11 +132,17 @@ export const LEGACY_GRAPHICS_PRESETS:Record<Quality,Partial<Settings>>={
   high:{graphicsPreset:'high',shadowQuality:'high',textureQuality:'high',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'high',renderScale:1},
   ultra:{graphicsPreset:'ultra',shadowQuality:'ultra',textureQuality:'ultra',postProcessing:true,ambientOcclusion:true,antialias:true,effectsQuality:'ultra',renderScale:1.25}
 };
-const GRAPHICS_MIGRATION_KEY='valoprac-graphics-presets-v2';
+/** The 12.22 bundles (Ultra still enabled bloom and SSAO). */
+export const GRAPHICS_PRESETS_1222:Record<Quality,Partial<Settings>>={
+  ...GRAPHICS_PRESETS,
+  ultra:{...GRAPHICS_PRESETS.ultra,postProcessing:true,ambientOcclusion:true}
+};
+const PREVIOUS_GRAPHICS_PRESETS=[LEGACY_GRAPHICS_PRESETS,GRAPHICS_PRESETS_1222] as const;
+const GRAPHICS_MIGRATION_KEY='valoprac-graphics-presets-v3';
 /**
  * Application start-up only (store initialisation). loadSettings stays a pure
  * round-trip of the stored profile. New profiles and untouched old preset
- * bundles move to the 12.22 bundles once; customised profiles are kept.
+ * bundles move to the current bundles once; customised profiles are kept.
  */
 export function loadSettingsForApplication(storage?:Pick<Storage,'getItem'|'setItem'>):Settings{
   const settings=loadSettings(storage);
@@ -145,12 +155,14 @@ export function loadSettingsForApplication(storage?:Pick<Storage,'getItem'|'setI
 }
 /**
  * One-time, load-only upgrade (never inside sanitizeSettings, so replay
- * headers validate unchanged). A profile that still matches its old preset
- * bundle exactly moves to the new bundle; any customised field is kept.
+ * headers validate unchanged). A profile that still matches one of its
+ * preset's earlier bundles exactly moves to the current bundle; any
+ * customised field is kept.
  */
 export function upgradeGraphicsPreset(settings:Settings):Settings{
-  const legacy=LEGACY_GRAPHICS_PRESETS[settings.graphicsPreset];
-  if(!legacy)return settings;
-  const untouched=Object.entries(legacy).every(([key,value])=>settings[key as keyof Settings]===value);
-  return untouched?{...settings,...GRAPHICS_PRESETS[settings.graphicsPreset]}:settings;
+  const current=GRAPHICS_PRESETS[settings.graphicsPreset];
+  if(!current)return settings;
+  const matches=(bundle:Partial<Settings>)=>Object.entries(bundle).every(([key,value])=>settings[key as keyof Settings]===value);
+  const untouched=PREVIOUS_GRAPHICS_PRESETS.some(history=>matches(history[settings.graphicsPreset]));
+  return untouched&&!matches(current)?{...settings,...current}:settings;
 }
