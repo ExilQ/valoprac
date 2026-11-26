@@ -90,8 +90,10 @@ describe('12.31 infinite magazine option',()=>{
 
 describe('12.31 training-v7 replays',()=>{
  it('records and verifies a real elimination, the respawn, gunfire alerts and an air crouch exactly',async()=>{
+  // Recorded under the 12.31 rules (still accepted) and under the current rules.
+  for(const rules of ['training-v7','audio-v8'] as const){let verified=false;
   for(const map of ['site','mid','multi','bind'] as const){
-   const s=make({practiceMap:map as never,botRespawnDelay:1,botDifficulty:'easy'}),recorder=new ReplayRecorder(s),level=s.level!;let victim:Target|undefined,count=0;
+   const s=make({practiceMap:map as never,botRespawnDelay:1,botDifficulty:'easy'},rules),recorder=new ReplayRecorder(s),level=s.level!;let victim:Target|undefined,count=0;
    for(const destination of level.route.slice(1)){
     while(!victim&&Math.hypot(destination.x-s.movement.position.x,destination.z-s.movement.position.z)>.1&&count++<3000){
      const dx=destination.x-s.movement.position.x,dz=destination.z-s.movement.position.z;s.step(DT,{...emptyInput(),forward:1,movementYaw:Math.atan2(-dx,-dz)});
@@ -108,11 +110,11 @@ describe('12.31 training-v7 replays',()=>{
    const generation=victim.generation;
    run(s,1.6,n=>({jump:n===20,jumpHeld:n>=20&&n<23,crouch:n>=32&&n<90}));
    expect(victim.generation).toBe(generation+1);
-   const record=recorder.finish()!;expect(record.header.simulationRules).toBe('training-v7');
+   const record=recorder.finish()!;expect(record.header.simulationRules).toBe(rules);
    const result=await new ReplayPlayer(record).verify();expect(result.passed).toBe(true);expect(result.checksum).toBe(simulationChecksum(s));
-   return;
+   verified=true;break;
   }
-  throw new Error('no map produced a clean first-shot elimination');
+  if(!verified)throw new Error(`no map produced a clean first-shot elimination under ${rules}`);}
  });
 });
 

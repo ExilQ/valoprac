@@ -1,0 +1,1433 @@
+{
+ "schema": 1,
+ "rules": "audio-v8",
+ "tickHz": 120,
+ "speeds": [
+  {
+   "weapon": "rifleA",
+   "state": "run",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "walk",
+   "steadySpeed": 2.592,
+   "timeTo90": 0.067,
+   "timeTo99": 0.075,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.108,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "crouch",
+   "steadySpeed": 1.944,
+   "timeTo90": 0.05,
+   "timeTo99": 0.058,
+   "stopToAccurate": 0.058,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "crouchWalk",
+   "steadySpeed": 0.933,
+   "timeTo90": 0.025,
+   "timeTo99": 0.025,
+   "stopToAccurate": 0.017,
+   "stopToRest": 0.042,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "backward",
+   "steadySpeed": 4.968,
+   "timeTo90": 0.125,
+   "timeTo99": 0.133,
+   "stopToAccurate": 0.15,
+   "stopToRest": 0.175,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.443,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.322,
+    "stepsPerSecond": 3.1,
+    "maxGauge": 1
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "strafe",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "diagonal",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "ads",
+   "steadySpeed": 4.104,
+   "timeTo90": 0.1,
+   "timeTo99": 0.108,
+   "stopToAccurate": 0.125,
+   "stopToRest": 0.158,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.512,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.39,
+    "stepsPerSecond": 2.56,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "rifleA",
+   "state": "adsWalk",
+   "steadySpeed": 1.97,
+   "timeTo90": 0.05,
+   "timeTo99": 0.058,
+   "stopToAccurate": 0.058,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "run",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "walk",
+   "steadySpeed": 2.592,
+   "timeTo90": 0.067,
+   "timeTo99": 0.075,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.108,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "crouch",
+   "steadySpeed": 1.944,
+   "timeTo90": 0.05,
+   "timeTo99": 0.058,
+   "stopToAccurate": 0.058,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "crouchWalk",
+   "steadySpeed": 0.933,
+   "timeTo90": 0.025,
+   "timeTo99": 0.025,
+   "stopToAccurate": 0.017,
+   "stopToRest": 0.042,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "backward",
+   "steadySpeed": 4.968,
+   "timeTo90": 0.125,
+   "timeTo99": 0.133,
+   "stopToAccurate": 0.15,
+   "stopToRest": 0.175,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.443,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.322,
+    "stepsPerSecond": 3.1,
+    "maxGauge": 1
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "strafe",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "diagonal",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "ads",
+   "steadySpeed": 4.104,
+   "timeTo90": 0.1,
+   "timeTo99": 0.108,
+   "stopToAccurate": 0.125,
+   "stopToRest": 0.158,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.512,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.39,
+    "stepsPerSecond": 2.56,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "rifleB",
+   "state": "adsWalk",
+   "steadySpeed": 1.97,
+   "timeTo90": 0.05,
+   "timeTo99": 0.058,
+   "stopToAccurate": 0.058,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "run",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "walk",
+   "steadySpeed": 2.592,
+   "timeTo90": 0.067,
+   "timeTo99": 0.075,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.108,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "crouch",
+   "steadySpeed": 1.944,
+   "timeTo90": 0.05,
+   "timeTo99": 0.058,
+   "stopToAccurate": 0.058,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "crouchWalk",
+   "steadySpeed": 0.933,
+   "timeTo90": 0.025,
+   "timeTo99": 0.025,
+   "stopToAccurate": 0.017,
+   "stopToRest": 0.042,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "backward",
+   "steadySpeed": 4.968,
+   "timeTo90": 0.125,
+   "timeTo99": 0.133,
+   "stopToAccurate": 0.15,
+   "stopToRest": 0.175,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.443,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.322,
+    "stepsPerSecond": 3.1,
+    "maxGauge": 1
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "strafe",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "diagonal",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "ads",
+   "steadySpeed": 5.4,
+   "timeTo90": 0.133,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.192,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.418,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.296,
+    "stepsPerSecond": 3.37,
+    "maxGauge": 0.999
+   }
+  },
+  {
+   "weapon": "sheriff",
+   "state": "adsWalk",
+   "steadySpeed": 2.592,
+   "timeTo90": 0.067,
+   "timeTo99": 0.075,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.108,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "run",
+   "steadySpeed": 5.13,
+   "timeTo90": 0.125,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.183,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": 0.433,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.312,
+    "stepsPerSecond": 3.21,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "walk",
+   "steadySpeed": 2.462,
+   "timeTo90": 0.058,
+   "timeTo99": 0.067,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.1,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "crouch",
+   "steadySpeed": 1.847,
+   "timeTo90": 0.05,
+   "timeTo99": 0.05,
+   "stopToAccurate": 0.05,
+   "stopToRest": 0.083,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "crouchWalk",
+   "steadySpeed": 0.886,
+   "timeTo90": 0.025,
+   "timeTo99": 0.025,
+   "stopToAccurate": 0.017,
+   "stopToRest": 0.042,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "backward",
+   "steadySpeed": 4.72,
+   "timeTo90": 0.117,
+   "timeTo99": 0.125,
+   "stopToAccurate": 0.142,
+   "stopToRest": 0.175,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": 0.459,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.339,
+    "stepsPerSecond": 2.95,
+    "maxGauge": 0.997
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "strafe",
+   "steadySpeed": 5.13,
+   "timeTo90": 0.125,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.183,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": 0.433,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.312,
+    "stepsPerSecond": 3.21,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "diagonal",
+   "steadySpeed": 5.13,
+   "timeTo90": 0.125,
+   "timeTo99": 0.142,
+   "stopToAccurate": 0.158,
+   "stopToRest": 0.183,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": 0.433,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.312,
+    "stepsPerSecond": 3.21,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "ads",
+   "steadySpeed": 3.694,
+   "timeTo90": 0.092,
+   "timeTo99": 0.1,
+   "stopToAccurate": 0.117,
+   "stopToRest": 0.142,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": 0.558,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.433,
+    "stepsPerSecond": 2.31,
+    "maxGauge": 0.984
+   }
+  },
+  {
+   "weapon": "operator",
+   "state": "adsWalk",
+   "steadySpeed": 1.773,
+   "timeTo90": 0.05,
+   "timeTo99": 0.05,
+   "stopToAccurate": 0.05,
+   "stopToRest": 0.075,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 2.565,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "run",
+   "steadySpeed": 6.75,
+   "timeTo90": 0.167,
+   "timeTo99": 0.183,
+   "stopToAccurate": 0.192,
+   "stopToRest": 0.225,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": 0.373,
+    "firstStepMeters": 1.945,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.237,
+    "stepsPerSecond": 4.22,
+    "maxGauge": 0.997
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "walk",
+   "steadySpeed": 3.24,
+   "timeTo90": 0.083,
+   "timeTo99": 0.092,
+   "stopToAccurate": 0.1,
+   "stopToRest": 0.125,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "crouch",
+   "steadySpeed": 2.43,
+   "timeTo90": 0.058,
+   "timeTo99": 0.067,
+   "stopToAccurate": 0.075,
+   "stopToRest": 0.1,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "crouchWalk",
+   "steadySpeed": 1.166,
+   "timeTo90": 0.033,
+   "timeTo99": 0.033,
+   "stopToAccurate": 0.025,
+   "stopToRest": 0.058,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "backward",
+   "steadySpeed": 6.21,
+   "timeTo90": 0.15,
+   "timeTo99": 0.167,
+   "stopToAccurate": 0.183,
+   "stopToRest": 0.208,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": 0.391,
+    "firstStepMeters": 1.945,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.258,
+    "stepsPerSecond": 3.88,
+    "maxGauge": 0.998
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "strafe",
+   "steadySpeed": 6.75,
+   "timeTo90": 0.167,
+   "timeTo99": 0.183,
+   "stopToAccurate": 0.192,
+   "stopToRest": 0.225,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": 0.373,
+    "firstStepMeters": 1.945,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.237,
+    "stepsPerSecond": 4.22,
+    "maxGauge": 0.997
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "diagonal",
+   "steadySpeed": 6.75,
+   "timeTo90": 0.167,
+   "timeTo99": 0.183,
+   "stopToAccurate": 0.192,
+   "stopToRest": 0.225,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": 0.373,
+    "firstStepMeters": 1.945,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.237,
+    "stepsPerSecond": 4.22,
+    "maxGauge": 0.997
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "ads",
+   "steadySpeed": 6.75,
+   "timeTo90": 0.167,
+   "timeTo99": 0.183,
+   "stopToAccurate": 0.192,
+   "stopToRest": 0.225,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": 0.373,
+    "firstStepMeters": 1.945,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.237,
+    "stepsPerSecond": 4.22,
+    "maxGauge": 0.997
+   }
+  },
+  {
+   "weapon": "knife",
+   "state": "adsWalk",
+   "steadySpeed": 3.24,
+   "timeTo90": 0.083,
+   "timeTo99": 0.092,
+   "stopToAccurate": 0.1,
+   "stopToRest": 0.125,
+   "footsteps": {
+    "audible": false,
+    "audibleAbove": 3.375,
+    "firstStepSeconds": null,
+    "firstStepMeters": null,
+    "intervalMeters": null,
+    "intervalSeconds": null,
+    "stepsPerSecond": null,
+    "maxGauge": 0
+   }
+  }
+ ],
+ "jumps": [
+  {
+   "weapon": "rifleA",
+   "variant": "standing",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 5.4
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "crouch-same-tick",
+   "apexFeet": 1.631,
+   "apexEyes": 1.111,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "crouch-94ms-before",
+   "apexFeet": 1.265,
+   "apexEyes": 1.126,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "crouch-102ms-before",
+   "apexFeet": 1.231,
+   "apexEyes": 1.127,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "crouched-before",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleA",
+   "variant": "crouch-in-air-100ms",
+   "apexFeet": 1.665,
+   "apexEyes": 1.145,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "standing",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 5.4
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "crouch-same-tick",
+   "apexFeet": 1.631,
+   "apexEyes": 1.111,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "crouch-94ms-before",
+   "apexFeet": 1.265,
+   "apexEyes": 1.126,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "crouch-102ms-before",
+   "apexFeet": 1.231,
+   "apexEyes": 1.127,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "crouched-before",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "rifleB",
+   "variant": "crouch-in-air-100ms",
+   "apexFeet": 1.665,
+   "apexEyes": 1.145,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "standing",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 5.4
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "crouch-same-tick",
+   "apexFeet": 1.631,
+   "apexEyes": 1.111,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "crouch-94ms-before",
+   "apexFeet": 1.265,
+   "apexEyes": 1.126,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "crouch-102ms-before",
+   "apexFeet": 1.231,
+   "apexEyes": 1.127,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "crouched-before",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "sheriff",
+   "variant": "crouch-in-air-100ms",
+   "apexFeet": 1.665,
+   "apexEyes": 1.145,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "standing",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 5.13
+  },
+  {
+   "weapon": "operator",
+   "variant": "crouch-same-tick",
+   "apexFeet": 1.631,
+   "apexEyes": 1.111,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "crouch-94ms-before",
+   "apexFeet": 1.265,
+   "apexEyes": 1.126,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "crouch-102ms-before",
+   "apexFeet": 1.231,
+   "apexEyes": 1.127,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "crouched-before",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "operator",
+   "variant": "crouch-in-air-100ms",
+   "apexFeet": 1.665,
+   "apexEyes": 1.145,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "standing",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 6.75
+  },
+  {
+   "weapon": "knife",
+   "variant": "crouch-same-tick",
+   "apexFeet": 1.631,
+   "apexEyes": 1.111,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "crouch-94ms-before",
+   "apexFeet": 1.265,
+   "apexEyes": 1.126,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "crouch-102ms-before",
+   "apexFeet": 1.231,
+   "apexEyes": 1.127,
+   "airtime": 0.692,
+   "landingImpact": 7.24,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "crouched-before",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 0
+  },
+  {
+   "weapon": "knife",
+   "variant": "crouch-in-air-100ms",
+   "apexFeet": 1.665,
+   "apexEyes": 1.145,
+   "airtime": 0.742,
+   "landingImpact": 8.27,
+   "landingSounds": 1,
+   "takeoffSounds": 1,
+   "horizontalSpeedAtLanding": 0
+  }
+ ],
+ "gauge": [
+  {
+   "weapon": "rifleA",
+   "scenario": "distance before the gauge moves",
+   "value": 0.317,
+   "unit": "m"
+  },
+  {
+   "weapon": "rifleA",
+   "scenario": "stop at 90 % → gauge empty",
+   "value": 0.192,
+   "unit": "s"
+  },
+  {
+   "weapon": "rifleA",
+   "scenario": "run → walk at 90 %: gauge after 2 s walking",
+   "value": 0,
+   "unit": "gauge"
+  },
+  {
+   "weapon": "rifleA",
+   "scenario": "run → walk at 90 %: steps while slowing down",
+   "value": 1,
+   "unit": "steps"
+  },
+  {
+   "weapon": "rifleA",
+   "scenario": "shortest forward tap from rest that is heard",
+   "value": 0.367,
+   "unit": "s"
+  },
+  {
+   "weapon": "rifleB",
+   "scenario": "distance before the gauge moves",
+   "value": 0.317,
+   "unit": "m"
+  },
+  {
+   "weapon": "rifleB",
+   "scenario": "stop at 90 % → gauge empty",
+   "value": 0.192,
+   "unit": "s"
+  },
+  {
+   "weapon": "rifleB",
+   "scenario": "run → walk at 90 %: gauge after 2 s walking",
+   "value": 0,
+   "unit": "gauge"
+  },
+  {
+   "weapon": "rifleB",
+   "scenario": "run → walk at 90 %: steps while slowing down",
+   "value": 1,
+   "unit": "steps"
+  },
+  {
+   "weapon": "rifleB",
+   "scenario": "shortest forward tap from rest that is heard",
+   "value": 0.367,
+   "unit": "s"
+  },
+  {
+   "weapon": "sheriff",
+   "scenario": "distance before the gauge moves",
+   "value": 0.317,
+   "unit": "m"
+  },
+  {
+   "weapon": "sheriff",
+   "scenario": "stop at 90 % → gauge empty",
+   "value": 0.192,
+   "unit": "s"
+  },
+  {
+   "weapon": "sheriff",
+   "scenario": "run → walk at 90 %: gauge after 2 s walking",
+   "value": 0,
+   "unit": "gauge"
+  },
+  {
+   "weapon": "sheriff",
+   "scenario": "run → walk at 90 %: steps while slowing down",
+   "value": 1,
+   "unit": "steps"
+  },
+  {
+   "weapon": "sheriff",
+   "scenario": "shortest forward tap from rest that is heard",
+   "value": 0.367,
+   "unit": "s"
+  },
+  {
+   "weapon": "operator",
+   "scenario": "distance before the gauge moves",
+   "value": 0.317,
+   "unit": "m"
+  },
+  {
+   "weapon": "operator",
+   "scenario": "stop at 90 % → gauge empty",
+   "value": 0.183,
+   "unit": "s"
+  },
+  {
+   "weapon": "operator",
+   "scenario": "run → walk at 90 %: gauge after 2 s walking",
+   "value": 0,
+   "unit": "gauge"
+  },
+  {
+   "weapon": "operator",
+   "scenario": "run → walk at 90 %: steps while slowing down",
+   "value": 1,
+   "unit": "steps"
+  },
+  {
+   "weapon": "operator",
+   "scenario": "shortest forward tap from rest that is heard",
+   "value": 0.383,
+   "unit": "s"
+  },
+  {
+   "weapon": "knife",
+   "scenario": "distance before the gauge moves",
+   "value": 0.359,
+   "unit": "m"
+  },
+  {
+   "weapon": "knife",
+   "scenario": "stop at 90 % → gauge empty",
+   "value": 0.258,
+   "unit": "s"
+  },
+  {
+   "weapon": "knife",
+   "scenario": "run → walk at 90 %: gauge after 2 s walking",
+   "value": 0.061,
+   "unit": "gauge"
+  },
+  {
+   "weapon": "knife",
+   "scenario": "run → walk at 90 %: steps while slowing down",
+   "value": 1,
+   "unit": "steps"
+  },
+  {
+   "weapon": "knife",
+   "scenario": "shortest forward tap from rest that is heard",
+   "value": 0.317,
+   "unit": "s"
+  }
+ ],
+ "before": {
+  "knifeWalk": {
+   "weapon": "knife",
+   "state": "walk",
+   "steadySpeed": 3.24,
+   "timeTo90": 0.083,
+   "timeTo99": 0.092,
+   "stopToAccurate": 0.1,
+   "stopToRest": 0.125,
+   "footsteps": {
+    "audible": true,
+    "audibleAbove": 2.7,
+    "firstStepSeconds": 0.623,
+    "firstStepMeters": 1.895,
+    "intervalMeters": 1.6,
+    "intervalSeconds": 0.494,
+    "stepsPerSecond": 2.03,
+    "maxGauge": 0.999
+   }
+  },
+  "knifeRunningJump": {
+   "weapon": "knife",
+   "variant": "running",
+   "apexFeet": 1.165,
+   "apexEyes": 1.165,
+   "airtime": 0.683,
+   "landingImpact": 7.07,
+   "landingSounds": 1,
+   "takeoffSounds": 0,
+   "horizontalSpeedAtLanding": 5.67
+  }
+ }
+}

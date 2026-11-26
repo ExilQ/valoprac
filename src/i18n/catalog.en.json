@@ -15760,6 +15760,36 @@
       "id": "msg_64701be60061",
       "source": "· 각 유지",
       "en": "· Holding the angle"
+    },
+    {
+      "id": "msg_5a0f7409ba2e",
+      "source": "아직 들리는 소리 없음",
+      "en": "No audible sound yet"
+    },
+    {
+      "id": "msg_9734d68f387a",
+      "source": "발소리·착지·점프 소리 위치 표시",
+      "en": "Showing where steps, landings and jumps were heard"
+    },
+    {
+      "id": "msg_4982035581bc",
+      "source": "점프 소리",
+      "en": "Jump sound"
+    },
+    {
+      "id": "msg_39b3bf8ee804",
+      "source": "착지와 점프(앉지 않은 상태)는 게이지와 별도로 항상 소리가 납니다",
+      "en": "Landings and jumps (unless already crouched) always make a sound, separately from the gauge"
+    },
+    {
+      "id": "msg_bd9f6261e3a7",
+      "source": "미터보다 빠르게 이동한 거리만 누적 · 걷기와 앉아 걷기는 무기와 관계없이 조용함",
+      "en": "m/s fills the gauge · walking and crouch-walking are silent with every weapon"
+    },
+    {
+      "id": "msg_0713209961c4",
+      "source": "초속",
+      "en": "Only movement faster than"
     }
   ]
 }

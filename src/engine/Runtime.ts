@@ -57,6 +57,7 @@ export class Runtime {
     if(this.simulation.defenders){this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,e.origin,e.time,e.bot);this.audio.impacts(e.penetration??[],e.time,.55);const floor=floorImpactSurfaceAt(this.simulation.practiceMap,e.impact,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,e.impact,e.time,.55,`enemy-floor:${e.bot}`);}this.renderer.addDefenderShot({...e,segments:e.penetration});};this.simulation.defenders.onFootstep=event=>this.audio.botFootstep(event.bot,event);}
     this.simulation.onFootstep=e=>this.audio.footstep(e);
     this.simulation.onLanding=e=>this.audio.landing(e);
+    this.simulation.onJump=e=>this.audio.jump(e);
     this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);const floor=floorImpactSurface(this.simulation.practiceMap,s,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,s.impact,s.timestamp);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>this.deliverSession();

@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.31",
-  "patchLabel": "12.31",
-  "generatedAt": "2026-11-26T16:30:31.943Z",
+  "release": "12.0.32",
+  "patchLabel": "12.32",
+  "generatedAt": "2026-11-26T16:52:14.327Z",
   "tests": {
-    "application": 1591,
+    "application": 1600,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -17,8 +17,8 @@
   },
   "simulation": {
     "gameVersion": "12.0.0",
-    "version": "valoprac-replay-simulation-7",
-    "rules": "training-v7",
+    "version": "valoprac-replay-simulation-8",
+    "rules": "audio-v8",
     "fixedHz": 120,
     "movementVersion": "dual-movement-1.4.0",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
@@ -48,6 +48,11 @@
         "gameVersion": "12.0.0",
         "simulationVersion": "valoprac-replay-simulation-6",
         "rules": "weapons-v6"
+      },
+      {
+        "gameVersion": "12.0.0",
+        "simulationVersion": "valoprac-replay-simulation-7",
+        "rules": "training-v7"
       }
     ]
   },

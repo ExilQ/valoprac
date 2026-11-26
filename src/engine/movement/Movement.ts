@@ -3,7 +3,7 @@ import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,type SimulationRulesId} from '../simulation/rules';
 import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
@@ -73,8 +73,13 @@ export class Movement {
   const momentumLimit=takeoff.horizontalSpeed+(p.airTakeoffAllowance??.75);
   const run=this.hopRunningSpeed(takeoff);
   const weaponLimit=run>0?run*VALORANT_BUNNY_HOP.runningSpeedCap:takeoff.weaponRunSpeed*(p.airWeaponRunFactor??1.05);
-  return Math.min(momentumLimit,weaponLimit,p.hopSpeedCap??Infinity,p.airSpeedLimit??Infinity);
+  const scale=this.capScale(takeoff.weaponRunSpeed);
+  return Math.min(momentumLimit,weaponLimit,(p.hopSpeedCap??Infinity)*scale,(p.airSpeedLimit??Infinity)*scale);
  }
+ /** audio-v8: the rifle-based air caps (1.05-1.10 x 5.4 m/s) scale up for a
+  * faster weapon, so knife jumps keep the knife's speed. Slower weapons and
+  * ADS are already limited by their own run speed. */
+ private capScale(runSpeed:number){return usesAudioRules(this.rules)?Math.max(1,runSpeed/this.weaponSpeedReference):1;}
  private recordTakeoff(time:number,kind:TakeoffState['kind']){
   const p=this.profile,speed=Math.hypot(this.velocity.x,this.velocity.z),weaponRun=this.weaponContext?.runSpeed??p.maxSpeed*Math.min(1,this.speedModifier),tactical=p.airModel==='tactical';
   const takeoff:TakeoffState={kind,time,position:plain(this.position),velocity:plain(this.velocity),horizontalSpeed:speed,movementState:speed<.01?'stationary':this.activeInput.crouch?(this.activeInput.walk?'crouch-walking':'crouching'):this.activeInput.walk?'walking':'running',weapon:this.weaponContext?.id??null,weaponRunSpeed:weaponRun,ads:this.weaponContext?.ads??false,speedCap:null,calibration:tactical?'report-provisional':'source-profile'};
@@ -102,7 +107,7 @@ export class Movement {
   if(p.jumpSpeedLimit!==null){
    const run=this.weaponContext?.runSpeed??p.maxSpeed*Math.min(1,this.speedModifier);
    const max=chain&&usesBunnyHopCalibration(this.rules)&&p.airModel==='tactical'&&!this.activeInput.walk&&!this.activeInput.crouch&&!this.weaponContext?.ads
-    ?Math.min(run*VALORANT_BUNNY_HOP.runningSpeedCap,p.hopSpeedCap??Infinity,p.airSpeedLimit??Infinity):p.jumpSpeedLimit*Math.min(1,this.speedModifier);
+    ?Math.min(run*VALORANT_BUNNY_HOP.runningSpeedCap,(p.hopSpeedCap??Infinity)*this.capScale(run),(p.airSpeedLimit??Infinity)*this.capScale(run)):p.jumpSpeedLimit*(usesAudioRules(this.rules)?this.speedModifier:Math.min(1,this.speedModifier));
    limitContactSpeed(this.velocity,max);
   }
   this.recordTakeoff(time,'jump');this.velocity.y=p.jumpImpulse;this.grounded=false;this.jumps.consume(time,p);this.lastTakeoff=time;this.landingPenaltyPending=false;
@@ -219,6 +224,9 @@ export class Movement {
   this.takeoff=!pose.grounded&&takeoff?{...takeoff,time:Math.max(0,time-(pose.capturedAt-takeoff.time)),position:plain(takeoff.position),velocity:plain(takeoff.velocity)}:null;
   this.activeInput={walk:false,crouch:pose.crouch>.5};return{ok:true,yaw:pose.yaw,pitch:pose.pitch};
  }
+ /** Jumps launched so far, and the latest launch (time, position, speed). */
+ get jumpCount(){return this.hops.jumps;}
+ lastJump(){for(let i=this.hops.events.length-1;i>=0;i--){const e=this.hops.events[i];if(e.kind==='jump'||e.kind==='chain')return e;}return null;}
  hopSnapshot():HopSnapshot{const h=this.hops;return{jumps:h.jumps,chainedJumps:h.chainedJumps,missedInputs:h.missedInputs,landings:h.landings,peakSpeed:h.peakSpeed,lastLandingInterval:h.lastLandingInterval,lastInputTimingMs:h.lastInputTimingMs,timingMeanMs:h.timingCount?h.timingMean:null,timingDeviationMs:h.timingCount>1?Math.sqrt(h.timingM2/(h.timingCount-1)):null,groundContactSeconds:this.groundContact,speedPreservation:h.speedPreservation,events:h.events.map(e=>({...e,position:plain(e.position)}))};}
  physicsSnapshot(){const takeoff=this.takeoff?{...this.takeoff,position:plain(this.takeoff.position),velocity:plain(this.takeoff.velocity)}:null;const speed=Math.hypot(this.velocity.x,this.velocity.z),p=this.profile;return{takeoff,profile:p.id,label:p.label,preset:p.preset,horizontalSpeed:speed,verticalSpeed:this.velocity.y,velocity:plain(this.velocity),velocityDirection:{x:speed>EPS?this.velocity.x/speed:0,y:0,z:speed>EPS?this.velocity.z/speed:0},acceleration:plain(this.acceleration),airAcceleration:plain(this.airAcceleration),wishDirection:plain(this.desiredDirection),groundNormal:plain(this.groundNormal),supportHeight:this.supportHeight,grounded:this.grounded,lastJumpAt:Number.isFinite(this.lastTakeoff)?this.lastTakeoff:null,lastLandingAt:Number.isFinite(this.lastLanding)?this.lastLanding:null,jumpTimingMs:this.hops.lastInputTimingMs,chainedJumps:this.hops.chainedJumps,landingRetention:this.hops.speedPreservation,effectiveJumpBufferMs:this.buffer*1000,landingWindowMs:p.landingWindow*1000,jumpSpamBlockedUntil:Number.isFinite(this.jumps.blockedUntil)?this.jumps.blockedUntil:null};}
  estimateReadyTime(input:InputState,yaw:number,dt=1/120,threshold=this.profile.accuracyVelocityThreshold){

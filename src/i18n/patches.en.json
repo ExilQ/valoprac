@@ -1,4 +1,16 @@
 {
+  "12.32": {
+    "title": "Jump sound, silent knife walking, precise movement and footstep measurement",
+    "description": "Jumps now push off audibly unless you were already crouched about 0.1 s before. Knife walking no longer makes footsteps, and knife jumps keep their speed.",
+    "changes": [
+      "Jump sound: a jump now makes a push-off sound that bots hear like a footstep. If crouch was pressed at least 100 ms before the jump, the jump is silent (92 ms or less is heard), matching a community study of VALORANT replays (94 ms heard, 101-102 ms silent). Landing sounds are unchanged.",
+      "Knife walking: walking with the knife (3.24 m/s) was faster than the 2.7 m/s footstep threshold, so it made a footstep every 1.6 m. The threshold now scales with the weapon's run speed (3.375 m/s with the knife), so walking and crouch-walking are silent with every weapon.",
+      "Knife jumps: a running knife jump dropped from 6.75 to 5.67 m/s; it now keeps the knife speed.",
+      "Footstep gauge: landing and jump sounds now appear in the alert and on the sound map, and the gauge shows the current weapon's footstep threshold.",
+      "Movement and footstep measurement: speeds for 5 weapons x 9 movement states, acceleration and stopping times, footstep intervals and gauge recovery were measured and published. Run and aim-down-sights speeds match the official wiki.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 8); earlier replays play with the rules they were recorded with."
+    ]
+  },
   "12.31": {
     "title": "Bots return, bot-view replays, air crouch and infinite magazine",
     "description": "Eliminated bots now come back on the training maps, and bots react to gunfire. Replays can be watched through a bot's eyes, and crouching mid-air now raises your legs.",

@@ -20,7 +20,8 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,usesTrainingRules,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesCurrentWeapons,usesTrainingRules,type SimulationRulesId} from './rules';
+import {AUDIO_RULES} from './audioRules';
 import {TRAINING_RULES} from './trainingRules';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {footstepProfile} from '../../config/footsteps';
@@ -42,6 +43,8 @@ import { LifetimeStats } from '../../training/analytics/LifetimeStats';
 import {emptyInput} from '../types';
 export const DETAIL_LIMIT=2048;
 const DEG=Math.PI/180;
+/** audio-v8: the push-off of a jump, heard like a footstep. */
+export interface JumpSoundEvent extends FootstepEvent {kind:'jump';}
 export class Simulation {
   readonly options:SimulationOptions;readonly scenario:CompiledScenario|null;exercise:Exercises|null=null;readonly movementPractice=new MovementPractice();private practiceBounds:readonly number[]=[];
   readonly renderedTargets=new RenderedTargets();private pendingFireFrame:RenderedTargetFrame|undefined;private pendingFireStamp:number|null=null;
@@ -56,6 +59,8 @@ export class Simulation {
   drill:FundamentalsDrill|null=null;exposure:Exposure;tap:TapDrill;adsChangedAt=0;stoppedAt:number|null=null;readonly obstacles;footsteps:Footsteps;hearing:TacticalHearing|null=null;
   onFootstep:((event:FootstepEvent)=>void)|null=null;
   landings=new Landings();onLanding:((event:LandingSoundEvent)=>void)|null=null;
+  /** audio-v8 jump push-off sounds (display journal; bots hear them through `hear`). */
+  onJump:((event:JumpSoundEvent)=>void)|null=null;jumpSounds:JumpSoundEvent[]=[];jumpSoundEvents=0;silentJumps=0;
 
   operatorStats={scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,holdingSeconds:0,scopeTransitions:0,recoverySamples:0,recoverySum:0,highGroundShots:0,highGroundHits:0,missedRecoverySeconds:0};private operatorLastShot:number|null=null;
   private emptySummary=summarize([],[],[],{samples:0,onHead:0,errorSquared:0});
@@ -162,6 +167,20 @@ export class Simulation {
   /** training-v7: gunfire is loud. Bots that cannot see the player hear the
    * shot at the shooter's position (the suppressed Phantom carries less far)
    * and react through the same sound memory as footsteps. */
+  /** Footstep audibility threshold for this tick. audio-v8 scales it with the
+   * held weapon's run speed, so walking is silent with every weapon (knife
+   * walking is 3.24 m/s, above the rifle-based 2.7 m/s). */
+  get footstepAudibleVelocity(){const base=this.footsteps.profile.audibleVelocity;if(!usesAudioRules(this.rules))return base;const reference=this.movement.weaponSpeedReference;return base*(this.weapon.profile.movementSpeed??reference)/reference;}
+  /** audio-v8: a jump pushes off audibly, unless the player was already
+   * crouched (depth at takeoff >= silentTakeoffCrouch). */
+  private emitJumpSound(){
+    const hop=this.movement.lastJump();if(!hop)return;
+    if(this.movement.crouch>=AUDIO_RULES.silentTakeoffCrouch){this.silentJumps++;return;}
+    const position={...hop.position},surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,position,this.rules,this.movement.profile);
+    const e:JumpSoundEvent={kind:'jump',id:++this.jumpSoundEvents,timestamp:hop.time,position,radius:this.settings.stepHearingRadius,speed:hop.speed,surfaceId,material:SURFACES[surfaceId].footstepSoundProfile};
+    this.jumpSounds.push(e);if(this.jumpSounds.length>16)this.jumpSounds.shift();
+    this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onJump?.(e);
+  }
   private hearGunfire(){
     if(!usesTrainingRules(this.rules)||!(this.defenders||this.angles))return;
     const p=this.movement.position,radius=this.weaponId==='rifleB'?TRAINING_RULES.suppressedGunfireRadius:TRAINING_RULES.gunfireRadius;
@@ -208,6 +227,7 @@ export class Simulation {
     const movementYaw=input.movementYaw??this.yaw;
     this.braking.update(input,movementYaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
     if(this.settings.movementTools?.enabled)this.movementPractice.beforeStep(this.movementContext());
+    const jumpsBefore=this.movement.jumpCount;
     this.movement.step(input,movementYaw,dt,this.time);
     const transfer=this.level?.transfer,position=this.movement.position;
     if(transfer&&position.y<1.2&&Math.hypot(position.x-transfer.entry.x,position.z-transfer.entry.z)<.86){
@@ -222,7 +242,8 @@ export class Simulation {
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
     this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius);
     this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
-    this.footsteps.step(this.movement,input.walk,dt,this.time);
+    this.footsteps.step(this.movement,input.walk,dt,this.time,this.footstepAudibleVelocity);
+    if(this.movement.jumpCount>jumpsBefore&&usesAudioRules(this.rules))this.emitJumpSound();
     const pending=this.pendingBrakeShot,b=this.braking;
     if(pending&&pending.releaseTime===b.releaseTime){
       pending.brakingKind=b.kind;

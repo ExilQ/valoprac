@@ -15,17 +15,18 @@ export class Footsteps {
  constructor(public profile:FootstepProfile={...FOOTSTEP_BASELINE}){this.graceRemaining=profile.firstStepGraceDistance;}
  configure(profile:FootstepProfile){this.profile={...profile};this.footstepAccumulation=Math.min(this.footstepAccumulation,profile.threshold);this.graceRemaining=Math.min(this.graceRemaining,profile.firstStepGraceDistance);}
  // Called after collision resolution. Input selects labels/slow recovery, never distance or reset.
- step(m:FootstepMovement,walking:boolean,dt:number,time:number){
+ // `audibleVelocity` overrides the profile's (audio-v8: scaled to the weapon's run speed).
+ step(m:FootstepMovement,walking:boolean,dt:number,time:number,audibleVelocity=this.profile.audibleVelocity){
   if(!(dt>0)||!Number.isFinite(dt))return;
-  const p=this.profile,dx=m.position.x-m.previous.x,dz=m.position.z-m.previous.z,distance=Math.hypot(dx,dz),speed=distance/dt;
+  const audible=audibleVelocity,p=this.profile,dx=m.position.x-m.previous.x,dz=m.position.z-m.previous.z,distance=Math.hypot(dx,dz),speed=distance/dt;
   this.actualSpeed=speed;this.recoveryRate=0;this.brakingRecoveryActive=false;
   const oldSpeed=m.previousVelocity?Math.hypot(m.previousVelocity.x,m.previousVelocity.z):0,newSpeed=m.velocity?Math.hypot(m.velocity.x,m.velocity.z):speed;
   const power=m.previousVelocity&&m.acceleration?m.previousVelocity.x*m.acceleration.x+m.previousVelocity.z*m.acceleration.z:0;
   const actualBraking=m.braking===true&&oldSpeed>.08&&oldSpeed-newSpeed>.0001&&power<-.01;
   if(newSpeed>oldSpeed+.0001)this.brakingUntil=-Infinity;
-  if(actualBraking&&speed<=p.audibleVelocity)this.brakingUntil=time+.12;
-  const quiet=Math.max(speed,newSpeed)<=p.audibleVelocity,brakeWindow=quiet&&time<=this.brakingUntil+EPS;
-  const quietFactor=Math.max(0,1-Math.max(speed,newSpeed)/Math.max(.001,p.audibleVelocity));
+  if(actualBraking&&speed<=audible)this.brakingUntil=time+.12;
+  const quiet=Math.max(speed,newSpeed)<=audible,brakeWindow=quiet&&time<=this.brakingUntil+EPS;
+  const quietFactor=Math.max(0,1-Math.max(speed,newSpeed)/Math.max(.001,audible));
   const brakeRate=brakeWindow?(p.brakingDecay??1.4)*(.35+.65*quietFactor*quietFactor):0;
   const grounded=m.grounded&&this.wasGrounded;this.wasGrounded=m.grounded;
   if(!grounded){this.state='airborne';this.stationaryTime=0;this.brakingUntil=-Infinity;return;}
@@ -39,7 +40,7 @@ export class Footsteps {
    return;
   }
   this.stationaryTime=0;
-  const eligible=speed>p.audibleVelocity;
+  const eligible=speed>audible;
   this.state=eligible?(walking||m.crouch>.5?'transition':'running'):m.crouch>.5?'crouching':walking?'walking':'slow';
   if(!eligible){
    if(walking||m.crouch>.5)this.footstepAccumulation=Math.max(0,Math.min(p.threshold,this.footstepAccumulation+distance*p.accumulationPerMeter*p.walkingAccumulationMultiplier-p.walkingDecay*dt));
