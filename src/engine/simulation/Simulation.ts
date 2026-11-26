@@ -12,6 +12,8 @@ import {BOT_DIFFICULTY} from '../targets/locomotion';
 import {TapDrill} from '../../training/modes/TapDrill';
 import {levelFor,standingSpace,type TacticalLevel} from '../tactical/levels';
 import {AngleTraining} from '../tactical/AngleTraining';
+import {FundamentalsDrill} from '../tactical/FundamentalsDrill';
+import {courseFor} from '../../config/mapCourses';
 import {Exposure} from '../tactical/Exposure';
 import {spreadDirection} from '../weapons/trajectory';
 import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
@@ -48,7 +50,9 @@ export class Simulation {
   clearMovementInput(){this.movement.clearJumpInput();}
  get scopeZoom(){return this.weaponId==='operator'?this.weapon.scopeZoom:1+(this.weapon.profile.adsZoom-1)*this.adsAmount;}
  get scopeLevel(){return this.weaponId==='operator'?this.weapon.scopeLevel:0;}
- readonly practiceMap:PracticeMap;level:TacticalLevel|null=null;angles:AngleTraining|null=null;exposure:Exposure;tap:TapDrill;adsChangedAt=0;stoppedAt:number|null=null;readonly obstacles;footsteps:Footsteps;hearing:TacticalHearing|null=null;
+ readonly practiceMap:PracticeMap;level:TacticalLevel|null=null;angles:AngleTraining|null=null;
+  /** Fundamentals drill on the 12.25 drill maps (replaces angle/defender logic there). */
+  drill:FundamentalsDrill|null=null;exposure:Exposure;tap:TapDrill;adsChangedAt=0;stoppedAt:number|null=null;readonly obstacles;footsteps:Footsteps;hearing:TacticalHearing|null=null;
   onFootstep:((event:FootstepEvent)=>void)|null=null;
   landings=new Landings();onLanding:((event:LandingSoundEvent)=>void)|null=null;
 
@@ -90,10 +94,12 @@ export class Simulation {
       const behavior=mode==='tracking'||mode==='free'||settings.drill==='stopMoving'?settings.behavior:'stationary';const t=new Target(i,behavior,new SeededRandom(settings.seed+i*139+1),this.characterGeometry);this.targets.push(t);if(this.practiceMap!=='tactical')this.spawn(t);if(mode==='free'){t.enabled=i<Math.min(settings.targetCount,settings.behavior==='peek'?1:12)&&!settings.analysisWall;t.active=t.enabled;}
     }
     this.exposure=new Exposure(this.targets.length);
-    if(this.level&&!this.scenario&&this.practiceMap!=='complex'){this.angles=new AngleTraining(this.level,this.targets,new SeededRandom(settings.seed^0xA661),this.settings);this.resetTargets();}
+    const drillKind=(courseFor(this.practiceMap) as {drill?:import('../../config/mapCourses').FundamentalsDrillKind}|undefined)?.drill;
+    if(this.level&&!this.scenario&&drillKind){this.drill=new FundamentalsDrill(drillKind,this.level,this.targets,new SeededRandom(settings.seed^0xD411));this.drill.onRoundReset=()=>this.restartDrillRound();this.drill.reset(this.time);}
+    if(this.level&&!this.scenario&&!this.drill&&this.practiceMap!=='complex'){this.angles=new AngleTraining(this.level,this.targets,new SeededRandom(settings.seed^0xA661),this.settings);this.resetTargets();}
     if(!this.scenario&&this.practiceMap==='complex'){const zone=zoneForScenario(settings.peekScenario);if(zone){this.movement.position.set(zone.entry.x,zone.entry.y,zone.entry.z);this.movement.previous.copy(this.movement.position);this.yaw=zone.center.z>0?Math.PI:0;}this.resetTargets();this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.level!.spawn,settings.seed,activeAngles(settings.peekScenario).slice(0,settings.targetCount));}
     if(this.practiceMap==='tactical'){this.hearing=new TacticalHearing(this.targets,new SeededRandom(settings.seed^0xF007));this.resetTargets();}
-    if(this.level&&!this.scenario&&this.level.angles.length&&this.practiceMap!=='complex')this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.level.spawn,settings.seed,this.level.angles);
+    if(this.level&&!this.scenario&&!this.drill&&this.level.angles.length&&this.practiceMap!=='complex')this.defenders=new DefenderAI(this.targets,this.obstacles,this.settings,this.level.spawn,settings.seed,this.level.angles);
     const minX=Math.min(...this.obstacles.map(o=>o.box.min.x)),minZ=Math.min(...this.obstacles.map(o=>o.box.min.z));
     this.practiceBounds=this.level?.bounds??[minX,minZ,Math.max(...this.obstacles.map(o=>o.box.max.x))-minX,Math.max(...this.obstacles.map(o=>o.box.max.z))-minZ];
     if(this.scenario){this.angles=null;this.hearing=null;this.movement.reset(this.scenario.spawn,0,true);this.yaw=this.scenario.yaw;this.pitch=this.scenario.pitch;this.applyScenarioTargets();}
@@ -200,13 +206,14 @@ export class Simulation {
       if(pending.thresholdDelta!==null&&pending.decelerationDuration!==null){this.stats.settleBrake(pending);this.pendingBrakeShot=null;}
     }else if(pending){this.stats.settleBrake(pending);this.pendingBrakeShot=null;}
     this.exercise?.beforeTargets(this,dt);
-    for(const t of this.targets){t.difficulty=this.settings.botDifficulty;if(!t.enabled)continue;
+    if(this.drill){this.origin.copy(this.movement.position);this.origin.y+=this.movement.eyeHeight;this.drill.step({time:this.time,eye:this.origin,direction:this.viewDirection(this.direction)},dt);}
+    for(const t of this.targets){if(this.drill)break;t.difficulty=this.settings.botDifficulty;if(!t.enabled)continue;
       if(this.mode==='free'&&t.behavior==='appearing'&&t.active&&this.time-t.spawnAt>2){t.eliminate(this.time);}
       if(!this.exercise&&!this.defenders&&!this.angles&&!t.active&&this.time-t.deadAt>(this.mode==='free'?this.settings.spawnInterval:0.55))this.spawn(t);if(this.defenders)continue;if(this.angles)this.angles.step(t,this.time,dt);else if(this.hearing)this.hearing.step(t,this.time,dt);else {t.step(this.time,dt);if(!standingSpace(this.obstacles,t.position,.4*t.scale)){t.position.copy(t.previous);t.velocity.set(0,0,0);t.direction*=-1;t.updatePose(this.time);}}
     }
     this.exercise?.afterTargets(this,dt);
     if(this.defenders){this.defenders.step(dt,this.time,{position:this.movement.position,velocity:this.movement.velocity,eyeHeight:this.movement.eyeHeight,crouch:this.movement.crouch,grounded:this.movement.grounded,yaw:this.viewYaw,pitch:this.viewPitch,scoped:this.weaponId==='operator'&&this.ads});for(let i=0;i<this.defenders.memories.length;i++){const value=this.defenders.memories[i].exposure;this.exposure.values[i]=value;this.exposure.max=Math.max(this.exposure.max,value);}if(this.defenders.death){const d=this.defenders.death;this.exposure.death={bot:d.bot,angle:`${d.weapon} · ${d.region}`,duration:d.duration,time:d.time,player:d.player,defender:d.defender};this.exposure.deaths=this.defenders.report.deaths;this.running=false;return;}}
-    if(this.level&&!this.defenders){this.exposure.step(this.targets,this.movement.position,this.movement.eyeHeight,this.obstacles,this.settings,dt,this.time,this.exposureLabels,this.readyAt,this.rules);if(this.exposure.death){this.running=false;return;}}
+    if(this.level&&!this.defenders&&!this.drill){this.exposure.step(this.targets,this.movement.position,this.movement.eyeHeight,this.obstacles,this.settings,dt,this.time,this.exposureLabels,this.readyAt,this.rules);if(this.exposure.death){this.running=false;return;}}
     this.currentInput=input;if(this.weaponId==='knife')this.stepKnife(input);else{const originalAds=input.ads;input.ads=this.ads;this.weapon.step(this.time,dt,input,this.fireShot);input.ads=originalAds;}this.clearFireView();
     for(const id of WEAPON_ORDER){if(id!==this.weaponId){const w=this.weapons[id];w.recoil.recover(dt,w.profile,this.time-w.lastShot);w.bloom=Math.max(0,w.bloom-w.profile.bloomRecovery*dt);}}
     if(this.mode==='tracking'||this.mode==='free')this.sampleTracking();
@@ -250,7 +257,7 @@ export class Simulation {
     this.onShot?.(s);
   };
   private eliminateTarget(t:Target){
-    const kill={timestamp:this.time,targetId:t.id,generation:t.generation,elapsed:this.time-t.spawnAt,firstShot:t.shotsReceived===0};this.kills.push(kill);this.stats.kill(kill);if(this.kills.length>256)this.kills.shift();t.eliminate(this.time);this.angles?.eliminated(t.id);this.defenders?.eliminated(t.id);if(this.options.scenario?.rules.arrival==='after-clear')this.activateScenarioTarget(t.id+1);this.onKill?.();
+    const kill={timestamp:this.time,targetId:t.id,generation:t.generation,elapsed:this.time-t.spawnAt,firstShot:t.shotsReceived===0};this.kills.push(kill);this.stats.kill(kill);if(this.kills.length>256)this.kills.shift();t.eliminate(this.time);this.angles?.eliminated(t.id);this.drill?.eliminated(t,this.time);this.defenders?.eliminated(t.id);if(this.options.scenario?.rules.arrival==='after-clear')this.activateScenarioTarget(t.id+1);this.onKill?.();
   }
   /** Hold primary fire to keep slashing; secondary fire (the scope input) stabs.
    * Both wait for the equip animation and the previous attack's recovery. */
@@ -288,6 +295,12 @@ export class Simulation {
     const event:MeleeEvent={serial:++this.meleeSerial,timestamp:this.time,kind,hit:target?zone:impact?'wall':'miss',targetId:target?.id??null,damage:target?spec.damage:0,killed,impact,lifeGeneration:this.lifeGeneration};
     this.lastMelee=event;this.onMelee?.(event);
   }
+  /** A cleared pre-aim/angles round restarts from the map's start. */
+  private restartDrillRound(){
+    const level=this.level;if(!level)return;
+    this.movement.reset(level.spawn,this.time,true);this.footsteps.resetEncounter();this.landings.resetEncounter(this.movement);
+    this.yaw=level.entryYaw??0;this.pitch=0;this.braking=new Braking();this.pendingBrakeShot=null;this.stoppedAt=this.time;this.clearFireView();this.renderedTargets.clear();
+  }
   private sampleTracking(){
     this.origin.copy(this.movement.position);this.origin.y+=this.movement.eyeHeight;this.viewDirection(this.direction);this.ray.set(this.origin,this.direction);
     let nearestError=Infinity;
@@ -314,7 +327,7 @@ export class Simulation {
     }else if(bufferChanged)this.movement.clearJumpInput();
     this.settings.practiceMap=this.practiceMap;this.footsteps.configure(footstepProfile(this.settings));this.configureAmmo();this.weapon.configureScope(this.settings);if(this.mode==='free'&&targetChange)this.resetTargets();
   }
-  resetTargets(){this.clearFireView();this.renderedTargets.clear();if(this.exercise){this.exercise.resetTargets(this);return;}if(this.scenario){this.applyScenarioTargets();return;}if(this.practiceMap==='complex'){const sectors=activeAngles(this.settings.peekScenario).slice(0,this.settings.targetCount);for(const t of this.targets){const a=sectors[t.id];t.enabled=!!a;t.active=!!a;if(!a)continue;const base=this.settings.randomDefenders&&a.alternatives?.length?a.alternatives[Math.floor(this.rng.next()*a.alternatives.length)]:a.position;const jitter=this.settings.randomDefenders?this.rng.range(-a.jitter,a.jitter):0;t.scale=1;t.spawn(base.x+jitter,base.z,this.time,base.y);}this.defenders?.setSectors(sectors);this.defenders?.retry();this.exposure?.reset();return;}this.exposure?.reset();this.angles?.reset();for(const t of this.targets){if(this.mode==='free'){t.behavior=this.settings.behavior;t.enabled=t.id<Math.min(this.settings.targetCount,this.hearing?5:this.settings.behavior==='peek'?1:12)&&!(this.settings.analysisWall&&!this.hearing);}if(this.angles)t.enabled=t.id<this.level!.angles.length;if(t.enabled)this.spawn(t);else t.active=false;}this.defenders?.retry();}
+  resetTargets(){this.clearFireView();this.renderedTargets.clear();if(this.drill){this.drill.reset(this.time);return;}if(this.exercise){this.exercise.resetTargets(this);return;}if(this.scenario){this.applyScenarioTargets();return;}if(this.practiceMap==='complex'){const sectors=activeAngles(this.settings.peekScenario).slice(0,this.settings.targetCount);for(const t of this.targets){const a=sectors[t.id];t.enabled=!!a;t.active=!!a;if(!a)continue;const base=this.settings.randomDefenders&&a.alternatives?.length?a.alternatives[Math.floor(this.rng.next()*a.alternatives.length)]:a.position;const jitter=this.settings.randomDefenders?this.rng.range(-a.jitter,a.jitter):0;t.scale=1;t.spawn(base.x+jitter,base.z,this.time,base.y);}this.defenders?.setSectors(sectors);this.defenders?.retry();this.exposure?.reset();return;}this.exposure?.reset();this.angles?.reset();for(const t of this.targets){if(this.mode==='free'){t.behavior=this.settings.behavior;t.enabled=t.id<Math.min(this.settings.targetCount,this.hearing?5:this.settings.behavior==='peek'?1:12)&&!(this.settings.analysisWall&&!this.hearing);}if(this.angles)t.enabled=t.id<this.level!.angles.length;if(t.enabled)this.spawn(t);else t.active=false;}this.defenders?.retry();}
   retryTactical(){
     const signature=`${this.ticks}:${this.settings.peekScenario}:${this.weaponId}`;
     if(!this.level||!this.running&&this.retrySignature===signature)return;

@@ -1,11 +1,16 @@
 import type {SurfaceId} from './surfaces';
 export type CourseTheme='urban'|'courtyard'|'facility'|'research';
+/** Fundamentals drills (12.25): what the targets on a drill map do. */
+export type FundamentalsDrillKind='preaim'|'angles'|'flick'|'micro';
 export interface MapCourse {
  id:string;title:string;description:string;style:CourseTheme;landmark:string;wall:SurfaceId;floor:SurfaceId;
  palette:readonly [number,number,number];cell:number;height:number;entryYaw:number;rows:readonly string[];
+ /** Present on the fundamentals maps; absent on the tactical course maps. */
+ drill?:FundamentalsDrillKind;skill?:string;
 }
 // Each plan is independently drawn. Rows run north to south; the builder adds the perimeter.
-// # wall, * landmark base, + cover, S start, A/B/C defenders, lowercase raised defenders,
+// # wall, * landmark base, + cover, S start, A-G/I-R target positions (H is the deck),
+// lowercase a-g/i-o raised target positions,
 // H deck, ^ north-rising ramp, p transfer entrance, t receiving pad.
 export const MAP_COURSES = [
  {id:"split",title:"스플릿",description:"중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
@@ -164,7 +169,65 @@ export const MAP_COURSES = [
    '.+.#....#....',
    '...#.......S.',
   ]},
+
+ /* ---- 12.25 fundamentals maps: original layouts built around one skill each ---- */
+ {id:"fd-preaim",title:"프리에임 회랑",description:"꺾인 회랑 일곱 모서리마다 적이 머리 높이로 기다립니다. 모서리를 돌기 전에 조준점을 미리 맞춰 두세요.",
+  skill:"프리에임",drill:"preaim",style:"facility",landmark:"gantry",wall:"plasteredConcrete",floor:"rawConcrete",palette:[0xd3d8d6,0x4f7f86,0xd08a4e],cell:3.2,height:2.2,entryYaw:0,rows:[
+   '*##########',
+   '#..E......#',
+   '#.#######D#',
+   '#.#######.#',
+   '#F###....C#',
+   '#.###B#####',
+   '#.###.#####',
+   '#.###.A...#',
+   '#..G#####.#',
+   '#########.#',
+   '#########S#',
+  ]},
+ {id:"fd-angles",title:"각 체크 정원",description:"입구에서 깊은 코너, 기둥 뒤, 상자 옆, 높은 단까지 일곱 각을 하나씩 확인합니다. 적은 짧게 어깨를 내밀며 버팁니다.",
+  skill:"각 체크",drill:"angles",style:"courtyard",landmark:"beacon",wall:"stone",floor:"stone",palette:[0xe4d3b4,0x8a6e57,0x3f9e9a],cell:4.2,height:2.2,entryYaw:0,rows:[
+   '.A..#..HgH..B',
+   '....#..H^H...',
+   '..+.......+..',
+   '#...##*##...#',
+   '#..C.....D..#',
+   '##..##.##..##',
+   '....#...#..E.',
+   '.F#.......#..',
+   '......S......',
+  ]},
+ {id:"fd-flick",title:"플릭 광장",description:"광장 한가운데에서 사방에 하나씩 나타나는 적을 큰 각도로 빠르게 끊어 칩니다. 등 뒤에서도 나타납니다.",
+  skill:"플릭",drill:"flick",style:"research",landmark:"radar",wall:"paintedMetal",floor:"rawConcrete",palette:[0xd6dde2,0x5b7480,0xe0a24f],cell:3.4,height:2.2,entryYaw:0,rows:[
+   'A...I.B...J',
+   '...........',
+   '.K..+...+..',
+   '..........C',
+   'D.#.....#..',
+   '.....S....L',
+   'E.#.....#..',
+   '..........M',
+   '..+.....+.F',
+   '...........',
+   'G.....*...N',
+  ]},
+ {id:"fd-micro",title:"미세조정 레인",description:"25~36미터 떨어진 세 레인에서 작게 좌우로 움직이는 머리를 미세하게 따라가 맞힙니다.",
+  skill:"미세조정",drill:"micro",style:"facility",landmark:"reactor",wall:"paintedMetal",floor:"rawConcrete",palette:[0xcfd6d9,0x50707a,0x4fb0a6],cell:3.6,height:2.2,entryYaw:0,rows:[
+   'A.I.#.B.#.J.C',
+   '....#...#....',
+   '.D..#.+.#..E.',
+   '....#...#....',
+   '....#...#....',
+   '....#...#....',
+   '....#...#....',
+   '.............',
+   '...+.....+...',
+   '*............',
+   '......S......',
+  ]},
 ] as const satisfies readonly MapCourse[];
+export const TACTICAL_COURSES=MAP_COURSES.filter(course=>!('drill' in course));
+export const FUNDAMENTAL_COURSES=MAP_COURSES.filter((course):course is Extract<typeof MAP_COURSES[number],{drill:FundamentalsDrillKind}>=>'drill' in course);
 export type CourseId=typeof MAP_COURSES[number]['id'];
 const coursesById=new Map<string,typeof MAP_COURSES[number]>(MAP_COURSES.map(course=>[course.id,course]));
 export const courseFor=(id:string)=>coursesById.get(id);

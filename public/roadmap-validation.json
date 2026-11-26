@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.24",
-  "patchLabel": "12.24",
-  "generatedAt": "2026-11-26T06:14:01.318Z",
+  "release": "12.0.25",
+  "patchLabel": "12.25",
+  "generatedAt": "2026-11-26T07:17:45.355Z",
   "tests": {
-    "application": 1552,
+    "application": 1559,
     "broker": 28,
     "hosting": 30,
     "passed": true,
@@ -17331,7 +17331,7 @@
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7802,
+      "gzipBytes": 7803,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18229,7 +18229,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 752,
-        "replayGzipBytes": 3109
+        "replayGzipBytes": 3110
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18341,7 +18341,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1436,
-        "replayGzipBytes": 4514
+        "replayGzipBytes": 4513
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 4509
+        "replayGzipBytes": 4508
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18389,7 +18389,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 5468
+        "replayGzipBytes": 5467
       },
       {
         "benchmark": "scenario-common-replay",

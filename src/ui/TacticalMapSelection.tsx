@@ -1,4 +1,4 @@
-import {MAP_COURSES} from '../config/mapCourses';
+import {FUNDAMENTAL_COURSES,TACTICAL_COURSES} from '../config/mapCourses';
 import {useApp} from '../app/store';
 import {LEVEL_IDS,LEVEL_SPECS} from '../config/tactical';
 
@@ -12,7 +12,11 @@ export function TacticalMapSelection({includeBase=false}:{includeBase?:boolean})
  {LEVEL_IDS.map(id=><button key={id} aria-pressed={s.practiceMap===id} onClick={()=>{setMode('free');update({practiceMap:id,drill:['mid','tower','multi'].includes(id)?'vertical':'corner',analysisWall:false,targetCount:3,exposureEnabled:true,eliminationRule:'damage'});}}>{LEVEL_SPECS[id].title}<small>{LEVEL_SPECS[id].family} · {LEVEL_SPECS[id].description}</small></button>)}
  {includeBase&&<><button aria-pressed={s.practiceMap==='range'} onClick={()=>{setMode('free');update({practiceMap:'range',drill:'none',analysisWall:false});}}>기본 사격장<small>무제한 자유 훈련</small></button><button aria-pressed={s.practiceMap==='tactical'} onClick={()=>{setMode('free');update({practiceMap:'tactical',drill:'none',analysisWall:false});}}>기존 코너 피킹<small>이전 발소리 시제품 · 노출 사망 미지원</small></button></>}
  </div><header><h2>맵별 전술 훈련</h2><p>맵의 특징을 살려 직접 설계한 VALOPRAC 훈련 코스입니다.</p></header>
- <div className="tactical-map-grid">{MAP_COURSES.map(course=><button key={course.id} aria-pressed={s.practiceMap===course.id} onClick={()=>{
+ <div className="tactical-map-grid">{TACTICAL_COURSES.map(course=><button key={course.id} aria-pressed={s.practiceMap===course.id} onClick={()=>{
   setMode('free');update({practiceMap:course.id,drill:'corner',targetCount:3,analysisWall:false,exposureEnabled:true,eliminationRule:'damage'});
- }}>{course.title}<small>{course.description}</small></button>)}</div></section>;
+ }}>{course.title}<small>{course.description}</small></button>)}</div>
+ <header><h2>기본기 훈련 맵</h2><p>프리에임, 각 체크, 플릭, 미세조정을 하나씩 따로 연습하는 VALOPRAC 오리지널 맵입니다. 표적은 반격하지 않고 머리 명중으로만 쓰러집니다.</p></header>
+ <div className="tactical-map-grid fundamentals-map-grid">{FUNDAMENTAL_COURSES.map(course=><button key={course.id} aria-pressed={s.practiceMap===course.id} onClick={()=>{
+  setMode('free');update({practiceMap:course.id,drill:'none',targetCount:12,analysisWall:false,exposureEnabled:false,eliminationRule:'head'});
+ }}><span className="fundamentals-skill">{course.skill}</span>{course.title}<small>{course.description}</small></button>)}</div></section>;
 }

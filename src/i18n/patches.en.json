@@ -1,4 +1,14 @@
 {
+  "12.25": {
+    "title": "Fundamentals training maps",
+    "description": "Four original maps each train one aiming fundamental: pre-aiming, checking angles, flicking and micro-adjusting. Targets do not shoot back and only fall to headshots.",
+    "changes": [
+      "Pre-aim Hallway: seven corners each hide an enemy at head height; the HUD shows how far your crosshair was from the head when it first appeared.",
+      "Angle Garden: clear seven angles, including a raised deck, while defenders make short shoulder peeks.",
+      "Flick Plaza: one target at a time appears at least 35 degrees from your crosshair, sometimes behind you.",
+      "Micro Lanes: small heads 25-36 m away strafe a few decimetres either way."
+    ]
+  },
   "12.24": {
     "title": "Sound overhaul",
     "description": "Every sound was rebuilt the way shooter audio is layered: gunshots, reloads, hit and kill feedback, footsteps, impacts and the room you hear them in.",
