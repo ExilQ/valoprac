@@ -1,4 +1,17 @@
 {
+  "12.31": {
+    "title": "Bots return, bot-view replays, air crouch and infinite magazine",
+    "description": "Eliminated bots now come back on the training maps, and bots react to gunfire. Replays can be watched through a bot's eyes, and crouching mid-air now raises your legs.",
+    "changes": [
+      "Bots return: on the tactical courses, tactical maps and the peeking lab, an eliminated bot comes back after 3 seconds (adjustable from 0.5 to 10 seconds, or off). It returns at its original angle or at another verified spot for that angle, so you cannot memorise a single position.",
+      "Bot AI: bots hear gunfire. When you fire within 60 m (40 m for the suppressed Phantom, 70% of that through cover), bots that cannot see you turn their aim towards the sound and stay alert.",
+      "Bot-view replays: choose \"Bot view\" in a replay to watch from a bot's eyes along its actual aim, recoil included. You can pick the bot, its state (holding the angle, checking a sound, alert, tracking, firing and so on) is shown, and your position appears as a translucent silhouette.",
+      "Air crouch: crouching during a jump now raises your legs instead of lowering your head. Your feet rise by up to 0.5 m, so you land about 0.06 s later and can reach higher ledges.",
+      "Infinite magazine: the ammunition settings gain \"Infinite magazine · no reloading\". Fire rate and recoil stay the same.",
+      "Movement speed by weapon already matches the official values: Vandal, Phantom and Sheriff 5.4 m/s, Operator 5.13 m/s, knife 6.75 m/s. The Sheriff officially runs at rifle speed, so switching between slots 1 and 2 keeps the same speed.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 7). Earlier replays still play and verify with the rules they were recorded with."
+    ]
+  },
   "12.30": {
     "title": "Map reverb restored on 44.1 kHz audio devices",
     "description": "Map room reverb was missing on computers whose audio device does not run at 48 kHz.",

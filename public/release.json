@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.30",
+  "version": "12.0.31",
   "calibration": "dual-movement-1.4.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -197,7 +197,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.30",
+  "patchLabel": "12.31",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -407,7 +407,7 @@
     "optionalLanguage": null,
     "replay": {
       "schema": 1,
-      "simulationVersion": "valoprac-replay-simulation-6",
+      "simulationVersion": "valoprac-replay-simulation-7",
       "strictVersionCompatibility": true,
       "videoRecording": false,
       "localOnly": true,
@@ -431,6 +431,11 @@
           "gameVersion": "12.0.0",
           "simulationVersion": "valoprac-replay-simulation-5",
           "rules": "bunny-hop-v5"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-6",
+          "rules": "weapons-v6"
         }
       ],
       "materialPhysicsVersion": "physical-surfaces-1.0.0"
@@ -482,8 +487,8 @@
   },
   "physicsMaterials": {
     "validation": "/physics-materials-validation.json",
-    "simulationRules": "weapons-v6",
-    "simulationVersion": "valoprac-replay-simulation-6",
+    "simulationRules": "training-v7",
+    "simulationVersion": "valoprac-replay-simulation-7",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "visualFamilies": 15,
     "physicalSurfaces": 22,

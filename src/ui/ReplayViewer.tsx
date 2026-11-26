@@ -16,11 +16,25 @@ import {replayRulesFor} from '../engine/replay/integrity';
 import type {Simulation} from '../engine/simulation/Simulation';
 import {SessionHighlights} from './SessionHighlights';
 import {trainingTitle} from './trainingPresentation';
-import {inspectionCamera,inspectionCutawayHeight,ReplayTransport,REPLAY_SPEEDS,replayTime,timelineMarkers,type ReplayCamera} from './replayTransport';
+import {BOT_STATE_LABELS,botViewCamera,inspectionCamera,inspectionCutawayHeight,ReplayTransport,REPLAY_SPEEDS,replayTime,timelineMarkers,type ReplayCamera} from './replayTransport';
 import './replayViewer.css';
 
 export interface ReplayViewerProps {recording:ReplayRecording;initialTime?:number;initialCamera?:ReplayCamera;session?:SessionData;onClose?:()=>void;}
-interface ViewerState {time:number;playing:boolean;seeking:boolean;ready:boolean;preparation:string;score:number;shots:number;weapon:WeaponId;ads:boolean;scopeAmount:number;scopeZoom:number;scopeState:string;settings:Settings;}
+interface ViewerState {time:number;playing:boolean;seeking:boolean;ready:boolean;preparation:string;score:number;shots:number;weapon:WeaponId;ads:boolean;scopeAmount:number;scopeZoom:number;scopeState:string;settings:Settings;bots:ReplayBot[];}
+interface ReplayBot {id:number;active:boolean;state?:string;}
+/** Course and scenario bots whose eyes a replay can be watched through. */
+export function replayBots(s:Pick<Simulation,'targets'|'defenders'|'angles'>):ReplayBot[]{
+ if(!s.defenders&&!s.angles)return[];
+ return s.targets.filter(t=>t.enabled).map(t=>({id:t.id,active:t.active,state:s.defenders?.memories[t.id]?.state}));
+}
+const botView=new Vector3(),botAim=new Vector3();
+/** Display-only camera at a bot's eyes for the replay viewer; null when that bot is not in the recording. */
+export function replayBotCamera(s:Pick<Simulation,'targets'|'defenders'|'movement'>,id:number){
+ const t=s.targets.find(target=>target.id===id&&target.enabled);if(!t)return null;
+ t.headPosition(botView);const m=s.defenders?.memories[t.id],p=s.movement.position;
+ const direction=m&&m.generation===t.generation?m.motor.direction(botAim,m.gun.recoil.pitch,m.gun.recoil.yaw):null;
+ return{index:s.targets.indexOf(t),camera:botViewCamera(botView,{x:p.x,y:p.y+s.movement.eyeHeight,z:p.z},direction)};
+}
 const PHASES:Record<string,string>={idle:'그래픽 준비 대기',compiling:'셰이더 준비',warming:'렌더링 경로 예열',gpu:'그래픽 처리 완료 대기',ready:'준비 완료',failed:'그래픽 준비 실패',disposed:'종료'};
 
 function envelope(recording:unknown):recording is ReplayRecording {
@@ -56,11 +70,11 @@ export function ReplayViewer(props:ReplayViewerProps){
 }
 function ReplayViewerContent({recording,initialTime=0,initialCamera='first-person',session,onClose}:ReplayViewerProps){
  const host=useRef<HTMLDivElement>(null),transport=useRef<ReplayTransport|null>(null),renderer=useRef<RangeRenderer|null>(null);
- const cameraRef=useRef<ReplayCamera>(initialCamera),initialTimeRef=useRef(initialTime),seenInitialTime=useRef(initialTime),verifyEpoch=useRef(0),verificationAbort=useRef<AbortController|null>(null);
+ const cameraRef=useRef<ReplayCamera>(initialCamera),botRef=useRef(0),initialTimeRef=useRef(initialTime),seenInitialTime=useRef(initialTime),verifyEpoch=useRef(0),verificationAbort=useRef<AbortController|null>(null);
  initialTimeRef.current=initialTime;
- const [camera,setCamera]=useState<ReplayCamera>(initialCamera),[speed,setSpeed]=useState<number>(1),[message,setMessage]=useState(''),[verification,setVerification]=useState<ReplayVerification|null>(null),[verifying,setVerifying]=useState(true),[exporting,setExporting]=useState(false);
- const [ui,setUi]=useState<ViewerState>(()=>({time:0,playing:false,seeking:false,ready:false,preparation:'그래픽 준비 대기',score:0,shots:0,weapon:recording.header.initial.weapon,ads:false,scopeAmount:0,scopeZoom:1,scopeState:'unscoped',settings:sanitizeSettings(recording.header.initial.settings)}));
- const update=()=>{const t=transport.current,r=renderer.current;if(!t||!r)return;const s=(t.player as ReplayPlayer).simulation;setUi({time:t.time,playing:t.playing,seeking:t.seeking,ready:r.preparationReady,preparation:PHASES[r.preparationStatus.stage]??'그래픽 준비 중',score:s.exercise?.snapshot().score??s.stats.eliminations,shots:s.stats.shots,weapon:s.weaponId,ads:s.ads,scopeAmount:s.weapon.scopeAmount,scopeZoom:s.scopeZoom,scopeState:s.weapon.operatorState,settings:s.settings});};
+ const [camera,setCamera]=useState<ReplayCamera>(initialCamera),[botId,setBotId]=useState(0),[speed,setSpeed]=useState<number>(1),[message,setMessage]=useState(''),[verification,setVerification]=useState<ReplayVerification|null>(null),[verifying,setVerifying]=useState(true),[exporting,setExporting]=useState(false);
+ const [ui,setUi]=useState<ViewerState>(()=>({time:0,playing:false,seeking:false,ready:false,preparation:'그래픽 준비 대기',score:0,shots:0,weapon:recording.header.initial.weapon,ads:false,scopeAmount:0,scopeZoom:1,scopeState:'unscoped',settings:sanitizeSettings(recording.header.initial.settings),bots:[]}));
+ const update=()=>{const t=transport.current,r=renderer.current;if(!t||!r)return;const s=(t.player as ReplayPlayer).simulation;setUi({time:t.time,playing:t.playing,seeking:t.seeking,ready:r.preparationReady,preparation:PHASES[r.preparationStatus.stage]??'그래픽 준비 중',score:s.exercise?.snapshot().score??s.stats.eliminations,shots:s.stats.shots,weapon:s.weaponId,ads:s.ads,scopeAmount:s.weapon.scopeAmount,scopeZoom:s.scopeZoom,scopeState:s.weapon.operatorState,settings:s.settings,bots:replayBots(s)});};
  const seek=async(seconds:number)=>{const t=transport.current;if(!t)return;setMessage('');const pending=t.seek(seconds);update();try{if(await pending){const r=renderer.current;if(r){r.simulation=(t.player as ReplayPlayer).simulation;r.clearImpacts();}update();}}catch(error){setMessage(`탐색을 중단했습니다. ${errorMessage(error)}`);update();}};
  const verify=async()=>{const t=transport.current;if(!t)return;const epoch=++verifyEpoch.current;verificationAbort.current?.abort();const controller=verificationAbort.current=new AbortController();t.pause();setVerifying(true);setMessage('');update();try{const result=await(t.player as ReplayPlayer).verify({signal:controller.signal});if(epoch!==verifyEpoch.current)return;setVerification(result);if(!result.passed)setMessage('기록된 체크포인트와 재실행 결과가 다릅니다. 이 점수를 검증된 기록으로 사용할 수 없습니다.');}catch(error){if(epoch===verifyEpoch.current&&!controller.signal.aborted)setMessage(`기록을 검증하지 못했습니다. ${errorMessage(error)}`);}finally{if(epoch===verifyEpoch.current){verificationAbort.current=null;setVerifying(false);}}};
  useEffect(()=>{
@@ -98,7 +112,7 @@ function ReplayViewerContent({recording,initialTime=0,initialCamera='first-perso
     if(!localTransport.seeking&&key!==configuration){configuration=key;localRenderer.applySettings(replayDisplaySettings(s.settings,localRenderer.capabilities.recommendLow));}
     if(!localRenderer.preparationReady)void prepare();
     else if(!localTransport.seeking){
-     const view=cameraRef.current;localRenderer.inspectionCamera=inspectionCamera(s.movement.position,view,{targets:s.targets.filter(target=>target.enabled).map(target=>target.position),aspect:localRenderer.camera.aspect,yaw:s.viewYaw,obstacles:s.obstacles});cutaway.constant=view==='top-down'?inspectionCutawayHeight(s.movement.position,s.targets):1e6;marker.visible=view!=='first-person';arrow.visible=view==='top-down';bodyMarker.visible=view==='third-person';bodyMarker.scale.y=1-.3*s.movement.crouch;marker.position.copy(s.movement.position);marker.position.y+=.035;marker.rotation.y=s.viewYaw;
+     const view=cameraRef.current,bot=view==='bot'?replayBotCamera(s,botRef.current):null;localRenderer.inspectionCamera=bot?bot.camera:inspectionCamera(s.movement.position,view,{targets:s.targets.filter(target=>target.enabled).map(target=>target.position),aspect:localRenderer.camera.aspect,yaw:s.viewYaw,obstacles:s.obstacles});localRenderer.hiddenTarget=bot?bot.index:null;cutaway.constant=view==='top-down'?inspectionCutawayHeight(s.movement.position,s.targets):1e6;marker.visible=view!=='first-person';arrow.visible=view==='top-down';bodyMarker.visible=view==='third-person'||view==='bot';bodyMarker.scale.y=1-.3*s.movement.crouch;marker.position.copy(s.movement.position);marker.position.y+=.035;marker.rotation.y=s.viewYaw;
      localRenderer.render(localTransport.alpha,elapsed,false,s.ads);
     }
     if(now-lastPublish>=100){lastPublish=now;update();}
@@ -113,11 +127,14 @@ function ReplayViewerContent({recording,initialTime=0,initialCamera='first-perso
  useEffect(()=>{if(initialTime===seenInitialTime.current)return;seenInitialTime.current=initialTime;void seek(initialTime);},[initialTime]);
  const togglePlay=async()=>{const t=transport.current;if(!t)return;if(t.playing)t.pause();else{if(t.time>=recording.duration)await seek(0);t.play();}update();};
  const changeCamera=(mode:ReplayCamera)=>{cameraRef.current=mode;setCamera(mode);};
+ const changeBot=(id:number)=>{botRef.current=id;setBotId(id);};
+ const watchedBot=ui.bots.find(bot=>bot.id===botId),botNumber=ui.bots.findIndex(bot=>bot.id===botId)+1;
+ useEffect(()=>{if(ui.bots.length&&!watchedBot)changeBot(ui.bots[0].id);},[ui.bots.length,watchedBot]);
  const save=async()=>{setExporting(true);try{await downloadReplay(recording);}catch(error){setMessage(`파일을 저장하지 못했습니다. ${errorMessage(error)}`);}finally{setExporting(false);}};
  const markers=timelineMarkers(recording.events,recording.duration),failed=!!verification&&!verification.passed;
  return <section className="replay-viewer" aria-label="훈련 리플레이">
   <header className="replay-heading"><div><h2>훈련 리플레이</h2><p>{trainingTitle(recording.header.initial.mode,recording.header.initial.settings,recording.header.initial.options)} · {recording.header.gameVersion} · 시드 {recording.header.seed}</p></div>{onClose&&<button type="button" onClick={onClose}>닫기</button>}</header>
-  <div className="replay-viewport"><div className="replay-canvas-host" ref={host}/><span className="replay-viewport-label">{camera==='first-person'?'1인칭':camera==='third-person'?'3인칭 검토':'위에서 보기'} · 재실행 화면</span>
+  <div className="replay-viewport"><div className="replay-canvas-host" ref={host}/><span className="replay-viewport-label">{camera==='bot'?`봇 ${botNumber} 시점 · ${watchedBot?.active===false?'쓰러짐 · 다시 나타날 때까지 대기':BOT_STATE_LABELS[watchedBot?.state??'']??'표적'}`:camera==='first-person'?'1인칭':camera==='third-person'?'3인칭 검토':'위에서 보기'} · 재실행 화면</span>
    {camera==='first-person'&&ui.weapon==='operator'&&<ScopeOverlay amount={ui.scopeAmount} zoom={ui.scopeZoom} state={ui.scopeState} zoomBinding={ui.settings.operatorZoomBinding}/>}
    {camera==='first-person'&&(ui.weapon!=='operator'||ui.scopeAmount<.1)&&<Crosshair settings={ui.settings} ads={ui.ads} weapon={ui.weapon}/>}
    {!ui.ready&&<div className="replay-preparing" role="status">{ui.preparation}</div>}
@@ -126,7 +143,7 @@ function ReplayViewerContent({recording,initialTime=0,initialCamera='first-perso
    <button type="button" disabled={!ui.ready||ui.seeking||verifying||!verification?.passed||recording.duration===0} onClick={()=>{void togglePlay();}}>{ui.playing?'일시정지':ui.time>=recording.duration?'처음부터 재생':'재생'}</button>
    <button type="button" disabled={ui.seeking} onClick={()=>{void seek(0);}}>처음으로</button>
    <label>재생 속도<select aria-label="리플레이 재생 속도" value={speed} onChange={e=>{const value=+e.target.value;transport.current?.setSpeed(value);setSpeed(value);}}>{REPLAY_SPEEDS.map(n=><option key={n} value={n}>{n}배</option>)}</select></label>
-   <button type="button" aria-pressed={camera==='first-person'} onClick={()=>changeCamera('first-person')}>1인칭</button><button type="button" aria-pressed={camera==='top-down'} onClick={()=>changeCamera('top-down')}>위에서 보기</button><button type="button" aria-pressed={camera==='third-person'} onClick={()=>changeCamera('third-person')}>3인칭 검토</button>
+   <button type="button" aria-pressed={camera==='first-person'} onClick={()=>changeCamera('first-person')}>1인칭</button><button type="button" aria-pressed={camera==='top-down'} onClick={()=>changeCamera('top-down')}>위에서 보기</button><button type="button" aria-pressed={camera==='third-person'} onClick={()=>changeCamera('third-person')}>3인칭 검토</button>{ui.bots.length>0&&<button type="button" aria-pressed={camera==='bot'} onClick={()=>changeCamera('bot')}>봇 시점</button>}{camera==='bot'&&ui.bots.length>1&&<label>봇<select aria-label="시점을 볼 봇" value={botId} onChange={e=>changeBot(+e.target.value)}>{ui.bots.map((bot,index)=><option key={bot.id} value={bot.id}>봇 {index+1}</option>)}</select></label>}
    <span className="replay-clock"><strong>{replayTime(ui.time)}</strong> / {replayTime(recording.duration)}{ui.seeking?' · 탐색 중':''}</span>
   </div>
   <div className="replay-timeline"><input type="range" aria-label="리플레이 시간 탐색" min={0} max={Math.max(recording.duration,1/120)} step={1/120} value={ui.time} onChange={e=>{void seek(+e.target.value);}}/><div className="replay-marker-track">{markers.map(event=><button type="button" key={event.id} className="replay-marker" data-kind={event.kind} style={{left:`${event.percent}%`}} title={`${event.label} · ${replayTime(event.time)}`} aria-label={`${event.label} ${replayTime(event.time)}로 이동`} onClick={()=>{void seek(event.time);}}/>)}</div></div>

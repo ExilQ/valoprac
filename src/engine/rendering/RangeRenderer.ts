@@ -51,6 +51,8 @@ export class RangeRenderer {
   /** Viewer-only camera. It never writes back into the authoritative movement,
    * aim, hit registration or submitted target-frame history. */
   inspectionCamera:{position:Vec3;target:Vec3;fov?:number}|null=null;
+  /** Display-only: a replay bot-view hides the bot whose eyes the camera uses. */
+  hiddenTarget:number|null=null;
   readonly capabilities:GraphicsCapabilities;
   renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.05,180);
   private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
@@ -567,7 +569,7 @@ export class RangeRenderer {
     for(let i=0;i<s.targets.length;i++){
       const t=s.targets[i],death=THREE.MathUtils.clamp((s.time-t.deadAt)/0.4,0,1),dx=(t.previous.x+(t.position.x-t.previous.x)*alpha)-t.position.x,dz=(t.previous.z+(t.position.z-t.previous.z)*alpha)-t.position.z;
       for(let j=0;j<t.parts.length;j++){
-        const p=t.parts[j],mesh=this.targetMeshes[i][j];mesh.visible=t.enabled&&(t.active||death<1);mesh.castShadow=this.settings.shadowQuality!=='off';mesh.matrix.copy(p.node.matrixWorld);
+        const p=t.parts[j],mesh=this.targetMeshes[i][j];mesh.visible=t.enabled&&(t.active||death<1)&&i!==this.hiddenTarget;mesh.castShadow=this.settings.shadowQuality!=='off';mesh.matrix.copy(p.node.matrixWorld);
         mesh.matrix.elements[12]+=dx;mesh.matrix.elements[14]+=dz;
         mesh.matrix.scale(p.size);
         if(!t.active){mesh.matrix.elements[13]-=death*0.85;mesh.matrix.scale(this.size.setScalar(1-death*0.45));}

@@ -3,7 +3,8 @@ import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,type SimulationRulesId} from '../simulation/rules';
+import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
 
@@ -114,7 +115,17 @@ export class Movement {
   this.previous.copy(this.position);this.previousEyeHeight=this.eyeHeight;this.previousVelocity.copy(this.velocity);this.previousSpeed=Math.hypot(this.velocity.x,this.velocity.z);const wasGrounded=this.grounded;
   this.jumps.update(input,time,p);
   let crouchTarget=input.crouch?1:0;if(!crouchTarget&&this.crouch>.5&&!this.collision.canStand(this.position,1.35,1.85,p.radius))crouchTarget=1;
+  const crouchBefore=this.crouch;
   this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*8);this.eyeHeight=p.standingEyeHeight+(p.crouchingEyeHeight-p.standingEyeHeight)*this.crouch;
+  // training-v7: crouching in the air tucks the legs. The feet rise (the eyes
+  // stay where they were), so the body falls further and lands later, and the
+  // player can clear a higher ledge. Uncrouching in the air lowers the feet
+  // again, never below the floor under them.
+  if(!wasGrounded&&usesTrainingRules(this.rules)&&this.crouch!==crouchBefore){
+   const shift=TRAINING_RULES.airCrouchTuck*(this.crouch-crouchBefore);
+   if(shift>0)this.position.y+=shift;
+   else{const floor=this.supportContact(this.position.y+.01);this.position.y=Math.max(floor.height,this.position.y+shift);}
+  }
   const forward=input.forward,side=input.strafe,modifier=(input.walk?p.walkModifier:1)*(1+(p.crouchModifier-1)*this.crouch)*(forward<0?p.backwardModifier:1)*(Math.abs(side)>0?p.lateralModifier:1)*this.speedModifier;
   const wish=wishMovement(forward,side,yaw,p.maxSpeed,modifier);this.desiredDirection.set(wish.x*wish.amount,0,wish.z*wish.amount);this.opposedInput=wish.amount>0&&wish.x*this.previousVelocity.x+wish.z*this.previousVelocity.z<-.05;
   const supportBefore=this.supportContact(this.position.y+.01);

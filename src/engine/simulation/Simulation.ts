@@ -20,7 +20,8 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,usesTrainingRules,type SimulationRulesId} from './rules';
+import {TRAINING_RULES} from './trainingRules';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
@@ -143,6 +144,30 @@ export class Simulation {
     target.speedMultiplier=1;
     target.spawn(sector.position.x,sector.position.z,this.time,sector.position.y);
   }
+  /** training-v7: on training maps eliminated bots come back after the set
+   * delay (scenario drills and exercises keep their own rules). */
+  get botsReturn(){return usesTrainingRules(this.rules)&&this.settings.botRespawn&&!this.scenario&&!this.exercise&&!this.drill&&!!(this.defenders||this.angles);}
+  /** A returning bot takes its post or one of the post's alternative spots,
+   * so the player cannot pre-aim the exact same pixel every time. */
+  private respawnBot(t:Target){
+    // Angle-only maps reuse their own spawn, which also resets the bot's memory.
+    if(!this.defenders&&this.angles){this.angles.spawn(t,this.time,this.rules);if(!t.active&&t.enabled){const a=this.level!.angles[t.id];t.spawn(a.position.x,a.position.z,this.time,a.position.y);}return;}
+    const post=this.practiceMap==='complex'?activeAngles(this.settings.peekScenario).slice(0,this.settings.targetCount)[t.id]:this.level?.angles[t.id];
+    if(!post){t.enabled=false;return;}
+    const options=[post.position,...(post.alternatives??[])].filter(p=>standingSpace(this.obstacles,p,.4));
+    const spot=options.length?options[Math.floor(this.rng.next()*options.length)]:post.position;
+    // Scale and speed stay as the map placed them (e.g. the target size setting).
+    t.difficulty=this.settings.botDifficulty;t.spawn(spot.x,spot.z,this.time,spot.y);
+  }
+  /** training-v7: gunfire is loud. Bots that cannot see the player hear the
+   * shot at the shooter's position (the suppressed Phantom carries less far)
+   * and react through the same sound memory as footsteps. */
+  private hearGunfire(){
+    if(!usesTrainingRules(this.rules)||!(this.defenders||this.angles))return;
+    const p=this.movement.position,radius=this.weaponId==='rifleB'?TRAINING_RULES.suppressedGunfireRadius:TRAINING_RULES.gunfireRadius;
+    const e={id:-1,timestamp:this.time,position:{x:p.x,y:p.y,z:p.z},radius,kind:'gunfire'} as unknown as FootstepEvent;
+    if(this.defenders)this.defenders.hear(e);else this.angles?.hear(e);
+  }
   private spawn(t:Target){
     t.difficulty=this.settings.botDifficulty;t.scale=this.mode==='free'?this.settings.targetSize:1;t.speedMultiplier=this.mode==='free'?this.settings.targetSpeed:1;
     if(this.angles){this.angles.spawn(t,this.time,this.rules);return;}
@@ -209,6 +234,7 @@ export class Simulation {
     if(this.drill){this.origin.copy(this.movement.position);this.origin.y+=this.movement.eyeHeight;this.drill.step({time:this.time,eye:this.origin,direction:this.viewDirection(this.direction)},dt);}
     for(const t of this.targets){if(this.drill)break;t.difficulty=this.settings.botDifficulty;if(!t.enabled)continue;
       if(this.mode==='free'&&t.behavior==='appearing'&&t.active&&this.time-t.spawnAt>2){t.eliminate(this.time);}
+      if(!t.active&&this.botsReturn&&this.time-t.deadAt>=this.settings.botRespawnDelay)this.respawnBot(t);
       if(!this.exercise&&!this.defenders&&!this.angles&&!t.active&&this.time-t.deadAt>(this.mode==='free'?this.settings.spawnInterval:0.55))this.spawn(t);if(this.defenders)continue;if(this.angles)this.angles.step(t,this.time,dt);else if(this.hearing)this.hearing.step(t,this.time,dt);else {t.step(this.time,dt);if(!standingSpace(this.obstacles,t.position,.4*t.scale)){t.position.copy(t.previous);t.velocity.set(0,0,0);t.direction*=-1;t.updatePose(this.time);}}
     }
     this.exercise?.afterTargets(this,dt);
@@ -249,7 +275,7 @@ export class Simulation {
       movementDirection:{x:m.desiredDirection.x,z:m.desiredDirection.z},angularError};
     if(episode){b.shotRecorded=true;if(s.thresholdDelta===null||s.decelerationDuration===null)this.pendingBrakeShot=s;else this.stats.settleBrake(s);}
     if(this.weaponId==='operator'){const o=this.operatorStats,hit=Number(['head','torso','arm','leg'].includes(s.hit));if(s.ads){o.scopedShots++;o.scopedHits+=hit;}else{o.unscopedShots++;o.unscopedHits+=hit;}if(this.operatorLastShot!==null){o.recoverySamples++;o.recoverySum+=this.time-this.operatorLastShot;}this.operatorLastShot=this.time;if(!hit)o.missedRecoverySeconds+=1/w.profile.fireRate;if((s.targetElevation??0)>.4){o.highGroundShots++;o.highGroundHits+=hit;}}
-    this.defenders?.shot(s);this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
+    this.defenders?.shot(s);this.hearGunfire();this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
     if(!m.accurate)this.lastEarlyAt=this.time;
     if(t){if(!t.reactionRecorded&&this.time-t.changeAt>=0&&this.time-t.changeAt<2){this.reactions.push({targetId:t.id,changeTime:t.changeAt,latency:this.time-t.changeAt});if(this.reactions.length>256)this.reactions.shift();t.reactionRecorded=true;}this.lastHitAt=this.time;this.lastHit=s.hit;t.health-=s.damage??0;const rule=this.mode==='free'?this.settings.eliminationRule:'head';if(s.hit==='head'&&(this.weaponId!=='operator'||rule!=='damage'||t.health<=0)||rule==='any'||rule==='damage'&&t.health<=0){
       this.eliminateTarget(t);
@@ -315,7 +341,7 @@ export class Simulation {
     }
     if(Number.isFinite(nearestError)){this.tracking.samples++;this.tracking.errorSquared+=nearestError**2;if(onHead)this.tracking.onHead++;}
   }
-  configureAmmo(){for(const id of WEAPON_ORDER){this.weapons[id].infiniteReserve=this.settings.infiniteReserve;this.weapons[id].autoReload=this.settings.autoReload;}}
+  configureAmmo(){for(const id of WEAPON_ORDER){const w=this.weapons[id];w.infiniteReserve=this.settings.infiniteReserve;w.autoReload=this.settings.autoReload;if(this.settings.infiniteMagazine){w.infiniteMagazine=true;w.ammo=w.profile.magazine;w.reloadingUntil=null;}else delete w.infiniteMagazine;}}
   switchWeapon(id:WeaponId){this.clearFireView();if(id===this.weaponId)return;this.meleeReadyAt=0;const old=this.weapon;old.reloadingUntil=null;this.weaponId=id;this.weapon=this.weapons[id];this.ads=false;this.weapon.equip(this.time);}
   configure(patch:Partial<Settings>){
     const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);

@@ -23,7 +23,10 @@ export class Weapon {
  }
 
   ammo:number;reserve:number;reloadingUntil:number|null=null;reloadStarted=0;equipUntil=0;lastShot=-100;nextShot=0;shotIndex=0;magazineShot=0;bloom=0;firedAt=0;
-  infiniteReserve=true;autoReload=true;ads=false;private wasFire=false;private lastInterval=0;
+  infiniteReserve=true;autoReload=true;ads=false;
+  /** Set only while the option is on: an absent value keeps the replay checksum
+   * state of every earlier recording unchanged. */
+  infiniteMagazine?:true;private wasFire=false;private lastInterval=0;
   recoil=new Recoil();rng:SeededRandom;recoilRng:SeededRandom;
   onAction:((action:'reload'|'equip'|'bolt'|'scope')=>void)|null=null;
   spread={base:0,movement:0,bloom:0,air:0,landing:0,total:0,x:0,y:0};
@@ -58,7 +61,7 @@ export class Weapon {
     const scopeReady=this.profile.id!=='operator'||this.scopeLevel===0||time+1e-9>=this.scopeReadyAt;
     if(wants&&scopeReady&&this.reloadingUntil===null&&time+1e-9>=this.equipUntil&&this.ammo>0&&time+1e-9>=this.nextShot&&time+1e-9>=this.boltUntil){
       const due=this.nextShot;this.firedAt=time-due>1/120+1e-9||this.lastShot<0?time:due;this.nextShot=this.firedAt+interval;
-      onShot();if(this.profile.id==='operator'){this.boltStarted=time;this.boltUntil=time+interval;this.rescope=this.autoRescope?this.scopeLevel:0;this.scopeLevel=0;this.onAction?.('bolt');}this.lastShot=time;this.ammo--;this.shotIndex++;this.magazineShot++;
+      onShot();if(this.profile.id==='operator'){this.boltStarted=time;this.boltUntil=time+interval;this.rescope=this.autoRescope?this.scopeLevel:0;this.scopeLevel=0;this.onAction?.('bolt');}this.lastShot=time;if(!this.infiniteMagazine)this.ammo--;this.shotIndex++;this.magazineShot++;
       this.bloom=Math.min(this.profile.maxBloom,this.bloom+this.profile.bloomPerShot);
     }
   }

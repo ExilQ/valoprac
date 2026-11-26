@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "release": "12.0.30",
-  "patchLabel": "12.30",
-  "generatedAt": "2026-11-26T15:26:13.372Z",
+  "release": "12.0.31",
+  "patchLabel": "12.31",
+  "generatedAt": "2026-11-26T16:30:31.943Z",
   "captureRelease": "11.0.0",
   "capturePatchLabel": "11.00",
   "captureEvidenceDirectory": "docs/interface-11.00",
   "direction": "Precision Utility",
   "tests": {
-    "application": 1576,
+    "application": 1591,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -676,8 +676,8 @@
   },
   "currentSimulation": {
     "gameVersion": "12.0.0",
-    "simulationVersion": "valoprac-replay-simulation-6",
-    "rules": "weapons-v6",
+    "simulationVersion": "valoprac-replay-simulation-7",
+    "rules": "training-v7",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "validation": "/physics-materials-validation.json"
   },

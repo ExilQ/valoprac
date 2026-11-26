@@ -15655,6 +15655,111 @@
       "id": "msg_0ed490dab590",
       "source": "고지 관측소",
       "en": "Ridge Observatory"
+    },
+    {
+      "id": "msg_f79c22b7bab7",
+      "source": "봇 시점",
+      "en": "Bot view"
+    },
+    {
+      "id": "msg_7cca49579b5a",
+      "source": "시점",
+      "en": "view"
+    },
+    {
+      "id": "msg_bfbda8d548f6",
+      "source": "시점을 볼 봇",
+      "en": "Bot to watch"
+    },
+    {
+      "id": "msg_34b56a355830",
+      "source": "소리 확인",
+      "en": "Checking a sound"
+    },
+    {
+      "id": "msg_195d3018013f",
+      "source": "반동 회복",
+      "en": "Recovering from recoil"
+    },
+    {
+      "id": "msg_b77c57758fa6",
+      "source": "자리 이동",
+      "en": "Repositioning"
+    },
+    {
+      "id": "msg_8e7632e2e27b",
+      "source": "다시 피킹",
+      "en": "Re-peeking"
+    },
+    {
+      "id": "msg_8a1e645b87f7",
+      "source": "제자리 복귀",
+      "en": "Returning to post"
+    },
+    {
+      "id": "msg_c09609842d68",
+      "source": "쓰러짐",
+      "en": "Down"
+    },
+    {
+      "id": "msg_7ab8c7a1c6b0",
+      "source": "표적",
+      "en": "Target"
+    },
+    {
+      "id": "msg_0b3259fad4fd",
+      "source": "쓰러짐 · 다시 나타날 때까지 대기",
+      "en": "Down · waiting to return"
+    },
+    {
+      "id": "msg_10884b7c0059",
+      "source": "쓰러진 봇 다시 등장",
+      "en": "Bring eliminated bots back"
+    },
+    {
+      "id": "msg_0af612fb42bc",
+      "source": "다시 등장까지",
+      "en": "Return after"
+    },
+    {
+      "id": "msg_3aaeb218f182",
+      "source": "봇이 다시 등장할 때까지 걸리는 시간",
+      "en": "Time before an eliminated bot returns"
+    },
+    {
+      "id": "msg_17a3e2c02ecb",
+      "source": "봇은 원래 방어각이나 그 각의 다른 검증된 위치 중 한 곳에 다시 나타납니다. 총소리를 들은 봇은 소리가 난 쪽을 경계합니다.",
+      "en": "Bots return at their original angle or at another verified spot for that angle. Bots that hear gunfire watch the direction it came from."
+    },
+    {
+      "id": "msg_79e6793e07e7",
+      "source": "탄창 무한 · 재장전 없음",
+      "en": "Infinite magazine · no reloading"
+    },
+    {
+      "id": "msg_3ba8cbc48cd3",
+      "source": "쏴도 탄창이 줄지 않아 재장전 없이 계속 쏩니다. 연사 속도와 반동은 그대로입니다.",
+      "en": "Firing never empties the magazine, so you keep shooting without reloading. Fire rate and recoil stay the same."
+    },
+    {
+      "id": "msg_1264367df588",
+      "source": "고정 방어각 3개 · 각마다 한 봇 · 쓰러진 봇은",
+      "en": "Three fixed defensive angles · one bot per angle · eliminated bots return after"
+    },
+    {
+      "id": "msg_4d3e086fbc09",
+      "source": "초 뒤 다시 나타납니다",
+      "en": "s"
+    },
+    {
+      "id": "msg_f7895448ab54",
+      "source": "모든 각 정리 완료 · 봇이 곧 다시 나타납니다",
+      "en": "All angles cleared · the bots return shortly"
+    },
+    {
+      "id": "msg_64701be60061",
+      "source": "· 각 유지",
+      "en": "· Holding the angle"
     }
   ]
 }

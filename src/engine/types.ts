@@ -33,7 +33,7 @@ export interface Settings {
   graphicsPreset:Quality; shadowQuality:Quality|'off'; textureQuality:Quality; postProcessing:boolean; ambientOcclusion:boolean; effectsQuality:Quality; premiumTheme:boolean;
   firingVolume:number; handlingVolume:number; feedbackVolume:number;
   targetCount:number; targetSize:number; targetSpeed:number; targetDistance:number; spawnInterval:number;
-  eliminationRule:'head'|'any'|'damage'; infiniteReserve:boolean; autoReload:boolean; practiceHud:boolean; recoilAnalysis:boolean; analysisWall:boolean;
+  eliminationRule:'head'|'any'|'damage'; infiniteReserve:boolean; autoReload:boolean; infiniteMagazine:boolean; botRespawn:boolean; botRespawnDelay:number; practiceHud:boolean; recoilAnalysis:boolean; analysisWall:boolean;
 
   sensitivity: number; degreesPerCount: number; dpi: number; fov: number; duration: number; seed: number;
   crosshairColor: string; crosshairThickness: number; crosshairGap: number; crosshairLength: number;
