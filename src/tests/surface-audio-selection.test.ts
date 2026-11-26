@@ -26,9 +26,10 @@ describe('Playback consumes physical contact surfaces',()=>{
   vi.stubGlobal('AudioContext',AudioContextMock);vi.stubGlobal('indexedDB',indexedDB);
   const audio=new TrainingAudio();await audio.unlock();
   const e={...step(1),material:'concrete' as const,surfaceId:'thinMetal' as const};audio.footstep(e);const steelStep=sources.at(-1)!.buffer;
-  audio.footstep({...step(3),material:'steel'});expect(sources.at(-1)!.buffer).toBe(steelStep);
-  audio.footstep({...step(5),surfaceId:'rubber'});expect(sources.at(-1)!.buffer).not.toBe(steelStep);
-  audio.footstep({...step(5),surfaceId:'glass'});expect(sources).toHaveLength(3);
+  // IDs 1 and 5 select the same round-robin variant (id % 4).
+  audio.footstep({...step(5),material:'steel'});expect(sources.at(-1)!.buffer).toBe(steelStep);
+  audio.footstep({...step(9),surfaceId:'rubber'});expect(sources.at(-1)!.buffer).not.toBe(steelStep);
+  audio.footstep({...step(9),surfaceId:'glass'});expect(sources).toHaveLength(3);
   const landing:LandingSoundEvent={...step(1),kind:'landing',impactSpeed:6,material:'concrete',surfaceId:'thinMetal'};
   audio.landing(landing);const steelLanding=sources.at(-1)!.buffer;expect(steelLanding).not.toBe(steelStep);
   audio.landing({...landing,id:2,surfaceId:undefined,material:'steel'});expect(sources.at(-1)!.buffer).toBe(steelLanding);

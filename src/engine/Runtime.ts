@@ -8,6 +8,7 @@ import { FixedClock } from './simulation/FixedClock';
 import { RangeRenderer } from './rendering/RangeRenderer';
 import { BrowserInput } from './input/Input';
 import { TrainingAudio } from './audio/Audio';
+import {spaceForMap} from './audio/soundBank';
 import {ReplayRecorder} from './replay/recording';
 import type {ReplayRecording} from './replay/types';
 import {MovementReview} from './rendering/MovementReview';
@@ -38,6 +39,8 @@ export class Runtime {
     private onTelemetry:(t:Telemetry)=>void,private onLock:(locked:boolean)=>void,private onError:(message:string)=>void,private onFinish:(data:SessionData)=>void,private onWeapon:(id:WeaponId)=>void=()=>{},private assessment?:CombatAssessmentContext,options:SimulationOptions={}){
     this.preview=preview;if(isPrimary(weapon))this.primary=weapon;this.simulation=new Simulation(mode,weapon,settings,options);this.renderer=new RangeRenderer(host,this.simulation,settings);
     this.audio.setOcclusionResolver((source,listener)=>!visibleBetween(this.simulation.obstacles,listener,source));
+    // Sounds render in a worker while the briefing is open; the map picks the room.
+    if(!preview)this.audio.prefetch(weapon,spaceForMap(this.simulation.practiceMap));this.audio.setSpace(spaceForMap(this.simulation.practiceMap));
     if(!preview){this.movementReview=new MovementReview();this.renderer.scene.add(this.movementReview.root);}
     this.bindSimulation();
     this.renderer.canvas.addEventListener('webglcontextlost',this.contextLost);
@@ -57,6 +60,7 @@ export class Runtime {
     this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);const floor=floorImpactSurface(this.simulation.practiceMap,s,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,s.impact,s.timestamp);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>this.deliverSession();
+    this.simulation.onKill=()=>this.audio.kill(this.simulation.time);
     this.simulation.onMelee=e=>{if(e.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addMelee(e);this.audio.melee(e);};
   }
   private unbindSimulation(){

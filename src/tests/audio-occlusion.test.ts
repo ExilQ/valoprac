@@ -1,6 +1,6 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {indexedDB} from 'fake-indexeddb';
-import {TrainingAudio} from '../engine/audio/Audio';
+import {TrainingAudio,AUDIO_MIX} from '../engine/audio/Audio';
 import {AUDIBLE_OCCLUSION} from '../engine/audio/occlusion';
 
 class Node {
@@ -28,14 +28,15 @@ describe('I1 audible-only positional occlusion',()=>{
     audio.enemyShot('rifleA',{x:-10,y:1.5,z:-18},0,1);
     expect(query).toHaveBeenCalledWith({x:-10,y:1.5,z:-18},{x:2,y:1.64,z:3});
     expect(c.filters[0].type).toBe('lowpass');expect(c.filters[0].frequency.value).toBe(AUDIBLE_OCCLUSION.cutoffHz);
-    expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*.65*AUDIBLE_OCCLUSION.gain);
+    expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*AUDIO_MIX.remoteFireGain*AUDIBLE_OCCLUSION.gain);
     expect(c.panners[0].panningModel).toBe('HRTF');audio.dispose();expect(c.filters[0].disconnected).toBe(true);
   });
   it('refreshes living tails at15Hz and restores an uncovered path without compounded attenuation',async()=>{
     const{audio,c}=await setup();let covered=true;const query=vi.fn(()=>covered);audio.setOcclusionResolver(query);audio.enemyShot('rifleA',{x:-8,y:1,z:-10},0,1);
     for(let i=0;i<6;i++)audio.listener({x:i/10,y:1.6,z:0},0);expect(query).toHaveBeenCalledTimes(1);
     c.currentTime=.07;covered=false;audio.listener({x:1,y:1.6,z:0},0);expect(query).toHaveBeenCalledTimes(2);
-    expect(c.filters[0].frequency.value).toBe(c.sampleRate/2);expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*.65);
+    // Uncovered: only air absorption over the source distance remains.
+    expect(c.filters[0].frequency.value).toBeCloseTo(Math.min(c.sampleRate/2,AUDIO_MIX.airCutoff(Math.hypot(9,.6,10))));expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*AUDIO_MIX.remoteFireGain);
     audio.setOcclusionResolver(null);audio.dispose();
   });
   it('positions actual landing contact cues and keeps footstep/landing ID streams separate',async()=>{
@@ -45,13 +46,13 @@ describe('I1 audible-only positional occlusion',()=>{
   });
   it('uses a safe open path when a resolver fails and ignores nonfinite source coordinates',async()=>{
     const{audio,c}=await setup(),query=vi.fn(()=>{throw new Error('temporary geometry unavailable');});audio.setOcclusionResolver(query);
-    expect(()=>audio.enemyShot('rifleA',{x:0,y:0,z:-10},0,1)).not.toThrow();expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*.65);
+    expect(()=>audio.enemyShot('rifleA',{x:0,y:0,z:-10},0,1)).not.toThrow();expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*AUDIO_MIX.remoteFireGain);
     audio.enemyShot('rifleA',{x:NaN,y:0,z:0},0,2);expect(query).toHaveBeenCalledTimes(1);expect(c.panners).toHaveLength(1);
     expect(()=>audio.listener({x:0,y:0,z:0},0)).not.toThrow();audio.dispose();
   });
   for(const backend of['stereo','mono']as const)it(`${backend}: applies distance and cover exactly once and updates through listener movement`,async()=>{
     class Fallback extends Context {createPanner=undefined as unknown as Context['createPanner'];createStereoPanner=backend==='stereo'?()=>{const n=new Node();this.panners.push(n);return n;}:undefined;}
     const{audio,c}=await setup(Fallback);audio.setOcclusionResolver(()=>true);audio.enemyShot('rifleA',{x:18,y:0,z:0},0,1);
-    expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*.65*.5*.45);audio.listener({x:9,y:0,z:0},0);expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*.65*.45);audio.dispose();
+    expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*AUDIO_MIX.remoteFireGain*.5*.45);audio.listener({x:9,y:0,z:0},0);expect(c.gains.at(-1)!.gain.value).toBeCloseTo(.84*AUDIO_MIX.remoteFireGain*.45);audio.dispose();
   });
 });

@@ -1,4 +1,14 @@
 {
+  "12.24": {
+    "title": "Sound overhaul",
+    "description": "Every sound was rebuilt the way shooter audio is layered: gunshots, reloads, hit and kill feedback, footsteps, impacts and the room you hear them in.",
+    "changes": [
+      "Gunshots combine a mechanism click, a sharp crack, a mid body, a deep punch and a tail, in four variations so automatic fire never repeats one sample. Your own shots are in stereo.",
+      "Headshots ring with a short metallic dink, body hits thud, and every elimination plays a confirm that rises with consecutive kills.",
+      "Reloads are full sequences: magazine out, seat, charging handle; the Sheriff ejects its cases and snaps shut.",
+      "Footsteps land heel then toe with the floor's own sound and stay easy to hear; each map has its own room echo, and distant shots sound farther away."
+    ]
+  },
   "12.23": {
     "title": "Graphics quality tiers and Ultra performance",
     "description": "Ultra now renders as efficiently as High, quality tiers are laid out like a shooter's video menu, and the game can measure your computer and recommend a tier.",
