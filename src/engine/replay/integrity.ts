@@ -1,4 +1,4 @@
-import {courseFor} from '../../config/mapCourses';
+import {courseFor,HISTORICAL_COURSE_TITLES} from '../../config/mapCourses';
 import {GAME_VERSION} from '../../aim/types';
 import {MOVEMENT_PHYSICS_VERSION,MATERIALS_MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,VALORANT_AIR_STEERING,VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS} from '../../config/movement';
 import {WEAPONS,LEGACY_WEAPONS,WEAPON_ORDER} from '../../config/weapons';
@@ -53,7 +53,7 @@ export function deterministicState(s:Simulation){
  const raw=s as unknown as Record<string,unknown>,frame=s.renderedTargets.latest;
  const legacy=s.rules===LEGACY_SIMULATION_RULES,serialize=(v:unknown)=>state(v,0,new Set<object>(),legacy),profile={...s.movement.profile};
  if(legacy)delete profile.stepMinLandingWidth;
- return{...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
+ const result={...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
   ...(s.characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
   aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:s.settings,
   movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(firearms(s.weapons)),targets:s.targets.map(t=>serialize(t)),
@@ -66,6 +66,11 @@ export function deterministicState(s:Simulation){
   ...(s.meleeSerial>0||s.weaponId==='knife'?{melee:{knife:serialize(s.weapons.knife),serial:s.meleeSerial,readyAt:s.meleeReadyAt,last:s.lastMelee}}:{}),
   rendered:{attached:s.renderedTargets.isAttached,size:s.renderedTargets.size,latest:frame?{id:frame.id,stamp:frame.submittedAt,targets:frame.targets.map(p=>p?{generation:p.generation,active:p.active,position:p.position.toArray(),matrices:p.active?p.matrices.map(m=>m.toArray()):[]}:null)}:null},
  };
+ // 12.27 renamed the tactical courses. Rules v2-v5 replays keep the title they
+ // were recorded with inside the checksum state.
+ const historical=!usesCurrentWeapons(s.rules)?HISTORICAL_COURSE_TITLES[s.practiceMap]:undefined;
+ if(historical)for(const key of ['angles','drill'] as const){const level=(result as Record<string,unknown>)[key] as {level?:{title?:unknown}}|undefined;if(level?.level&&typeof level.level.title==='string')level.level.title=historical;}
+ return result;
 }
 export function simulationChecksum(s:Simulation){return integrityHash(deterministicState(s));}
 export function replayOutcome(s:Simulation):ReplayOutcome{return{checksum:simulationChecksum(s),score:s.exercise?.snapshot().score??s.stats.eliminations,shots:s.stats.shots,hits:s.stats.heads+s.stats.bodies+s.stats.limbs,deaths:s.exposure.deaths,tick:s.ticks,time:s.time};}

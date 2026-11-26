@@ -1,3 +1,4 @@
+import {Box3,Vector3} from 'three';
 import {describe,expect,it} from 'vitest';
 import {Simulation} from '../engine/simulation/Simulation';
 import {DEFAULT_SETTINGS} from '../config/settings';
@@ -70,5 +71,27 @@ describe('Knife replays',()=>{
     const record=recorder.finish()!;expect(record).toBeTruthy();
     expect(()=>validateReplay(structuredClone(record))).not.toThrow();
     expect(await new ReplayPlayer(record).verify()).toMatchObject({passed:true});
+  });
+});
+
+describe('12.27 melee line of sight (weapons-v6)',()=>{
+  // A target inside the slash cone but behind a wall edge that the
+  // crosshair ray itself does not touch.
+  function cornered(wall:boolean,rules?:'bunny-hop-v5'){
+    const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),behavior:'stationary',targetCount:1,eliminationRule:'any'},{},rules);
+    s.running=true;s.step(DT,emptyInput());
+    const p=s.movement.position,t=s.targets[0];
+    t.position.set(p.x+.26,p.y,p.z-1.8);t.previous.copy(t.position);t.anchor.copy(t.position);t.updatePose(s.time);
+    if(wall)(s as unknown as {obstacles:unknown[]}).obstacles=[...s.obstacles,{box:new Box3(new Vector3(p.x+.1,p.y-1,p.z-1.4),new Vector3(p.x+.25,p.y+3,p.z-1)),color:0,kind:'wall',surfaceId:'concrete'}];
+    s.switchWeapon('knife');run(s,.7);run(s,DT,{fire:true,firePresses:1});return s;
+  }
+  it('does not slash a target hidden behind a wall edge',()=>{
+    const s=cornered(true);expect(s.meleeSerial).toBe(1);expect(s.lastMelee?.targetId).toBeNull();
+  });
+  it('keeps the recorded behaviour for rules before weapons-v6',()=>{
+    expect(cornered(true,'bunny-hop-v5').lastMelee?.targetId).toBe(0);
+  });
+  it('still slashes the same target with a clear line',()=>{
+    expect(cornered(false).lastMelee?.targetId).toBe(0);
   });
 });

@@ -34,7 +34,7 @@ export const AUDIO_MIX={
 
 export class TrainingAudio {
   private context:AudioContext|null=null;private channels:Record<Channel,GainNode>|null=null;private master:GainNode|null=null;private compressor:DynamicsCompressorNode|null=null;private limiter:DynamicsCompressorNode|null=null;
-  private reverbIn:GainNode|null=null;private convolver:ConvolverNode|null=null;private space:AcousticSpace='range';private spaceLoaded:AcousticSpace|null=null;
+  private reverbIn:GainNode|null=null;private sends:Record<Channel,GainNode>|null=null;private convolver:ConvolverNode|null=null;private space:AcousticSpace='range';private spaceLoaded:AcousticSpace|null=null;
   private buffers=new Map<string,AudioBuffer>();private voices=new Set<Voice>();private loading:Promise<void>|null=null;private disposed=false;private lastShot='';private anchor=0;private weapon:WeaponId='rifleA';
   private lastFootstep=0;footstepEvents=0;private lastLanding=0;landingEvents=0;
   private botSteps=new Map<number,number>();botFootstepEvents=0;
@@ -91,7 +91,9 @@ export class TrainingAudio {
       for(const [name,value] of [['threshold',-1.5],['knee',0],['ratio',20],['attack',.001],['release',.08]] as const)setParam(this.limiter,name,value);
       this.master.connect(this.compressor).connect(this.limiter).connect(c.destination);
       this.channels={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.channels))g.connect(this.master);
-      if(typeof c.createConvolver==='function'){this.reverbIn=c.createGain();this.convolver=c.createConvolver();const wet=c.createGain();setParam(wet,'gain',.9);this.reverbIn.connect(this.convolver).connect(wet).connect(this.master);}
+      if(typeof c.createConvolver==='function'){this.reverbIn=c.createGain();this.convolver=c.createConvolver();const wet=c.createGain();setParam(wet,'gain',.9);this.reverbIn.connect(this.convolver).connect(wet).connect(this.master);
+        // Each channel's room send passes its own volume, so a muted channel has no tail either.
+        this.sends={firing:c.createGain(),handling:c.createGain(),feedback:c.createGain(),footsteps:c.createGain()};for(const g of Object.values(this.sends))g.connect(this.reverbIn);}
       this.spatialBackend=typeof c.createPanner==='function'?'hrtf':typeof c.createStereoPanner==='function'?'stereo':'mono';this.listener(this.pose.position,this.pose.yaw,this.pose.pitch);
       this.applySpace();
       this.loading=this.preload(c);
@@ -129,7 +131,9 @@ export class TrainingAudio {
   }
   /** Far sources are heard more through the room than directly. */
   private distanceSend(distance:number){return .55+Math.min(1,distance/35)*.9;}
-  levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;this.channels.firing.gain.value=s.firingVolume;this.channels.handling.gain.value=s.handlingVolume;this.channels.feedback.gain.value=s.feedbackVolume;this.channels.footsteps.gain.value=s.footstepVolume;}
+  levels(s:Settings){if(!this.master||!this.channels)return;this.master.gain.value=s.volume;
+    const volume:Record<Channel,number>={firing:s.firingVolume,handling:s.handlingVolume,feedback:s.feedbackVolume,footsteps:s.footstepVolume};
+    for(const channel of Object.keys(volume) as Channel[]){this.channels[channel].gain.value=volume[channel];if(this.sends)this.sends[channel].gain.value=volume[channel];}}
   selectWeapon(id:WeaponId){if(this.weapon!==id){this.stop();this.weapon=id;}}
   /** Imported (custom) recordings replace every procedural variant. */
   private fireKey(id:WeaponId,variant:number,third:boolean){
@@ -203,7 +207,7 @@ export class TrainingAudio {
       }else{gain.gain.value*=spatialCue(position,this.pose).gain;output.connect(this.channels[channel]);spatialMode='mono';}
     }else gain.connect(this.channels[channel]);
     // Room send: the convolution reverb gives every map its own tail.
-    if(this.reverbIn&&sendBase>0){send=c.createGain();send.gain.value=sendBase*(remote?this.distanceSend(distance):1)*(occluded?.6:1);(filter??gain).connect(send).connect(this.reverbIn);}
+    if(this.reverbIn&&sendBase>0){send=c.createGain();send.gain.value=sendBase*(remote?this.distanceSend(distance):1)*(occluded?.6:1);(filter??gain).connect(send).connect(this.sends?.[channel]??this.reverbIn);}
     const v:Voice={source,gain,channel,spatial,filter,send,spatialMode,occluded,startsAt,timestamp:time,emitter,position:position?{...position}:undefined,baseGain:scale,sendBase};
     this.voices.add(v);source.onended=()=>this.release(v);source.start(startsAt);
   }
@@ -213,6 +217,6 @@ export class TrainingAudio {
    * changes retain those identities, so only an authority replacement resets
    * them. Synthesized/imported buffers and the existing context stay reusable. */
   resetSession(time=0){this.stop();this.lastShot='';this.lastMelee=0;this.lastFootstep=0;this.lastLanding=0;this.killStreak={step:0,last:-Infinity};this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
-  dispose(){this.disposed=true;this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
+  dispose(){this.disposed=true;this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();for(const g of Object.values(this.sends??{}))g.disconnect();this.sends=null;this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
 }
 export type {AudioAction};

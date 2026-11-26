@@ -14,6 +14,10 @@ export interface MapCourse {
 // H deck, ^ north-rising ramp, p transfer entrance, t receiving pad.
 // Course titles are original VALOPRAC names that describe each layout (12.27).
 // The ids stay unchanged so saved settings, history and replays keep working.
+/** Titles before 12.27. The title is part of the replay checksum state, so
+ * replays recorded under rules v2-v5 are verified with the title they were
+ * recorded with. Never displayed. */
+export const HISTORICAL_COURSE_TITLES:Readonly<Record<string,string>>=Object.freeze({split:'스플릿',bind:'바인드',haven:'헤이븐',ascent:'어센트',icebox:'아이스박스',breeze:'브리즈',fracture:'프랙처',pearl:'펄',lotus:'로터스',sunset:'선셋',abyss:'어비스',corrode:'코로드',summit:'서밋'});
 export const MAP_COURSES = [
  {id:"split",title:"발코니 골목",description:"중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
   style:"urban",landmark:"antenna",wall:"plasteredConcrete",floor:"rawConcrete",palette:[0xddd6c9,0x618b83,0xc86949],cell:4.6,height:2.4,entryYaw:-5,rows:[

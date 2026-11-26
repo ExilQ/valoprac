@@ -7,6 +7,9 @@ import {ReplayPlayer} from '../engine/replay/playback';
 import {replayCompatibility} from '../engine/replay/integrity';
 import {emptyInput} from '../engine/types';
 import {CURRENT_SIMULATION_RULES} from '../engine/simulation/rules';
+import {HISTORICAL_COURSE_TITLES,MAP_COURSES} from '../config/mapCourses';
+import courseReplays from './fixtures/replay-12.26-courses.json';
+import type {ReplayRecording} from '../engine/replay/types';
 
 describe('12.27 firearm values (weapons-v6) and replay compatibility',()=>{
  it('uses the official wiki values from v6 and keeps the recorded values for older rules',()=>{
@@ -42,5 +45,18 @@ describe('12.27 firearm values (weapons-v6) and replay compatibility',()=>{
    const s=new Simulation('free','rifleA',structuredClone(settings),{},rules);
    expect(s.defenders?.memories.length).toBeGreaterThan(0);for(const m of s.defenders!.memories)expect(m.gun.profile.reserve).toBe(reserve);
   }
+ });
+ it('verifies replays recorded on renamed courses before 12.27 (fixture from 12.26)',async()=>{
+  expect(courseReplays.fixtures.map(f=>[f.map,f.title])).toEqual([['bind','바인드'],['haven','헤이븐'],['icebox','아이스박스']]);
+  for(const f of courseReplays.fixtures){
+   const record=f.recording as unknown as ReplayRecording,player=new ReplayPlayer(record);expect(player.rules).toBe('bunny-hop-v5');
+   const verification=await player.verify();expect(verification.passed,f.map).toBe(true);expect(verification.checksum).toBe(record.final.checksum);
+  }
+  for(const course of MAP_COURSES.filter(c=>!('drill' in c)))expect(HISTORICAL_COURSE_TITLES[course.id],course.id).toBeTruthy();
+ });
+ it('records and verifies new replays on renamed courses under weapons-v6',async()=>{
+  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'bind' as never}),recorder=new ReplayRecorder(s);s.running=true;
+  for(let n=0;n<240;n++)s.step(1/120,{...emptyInput(),forward:1,fire:n%50<6});
+  expect(s.level?.title).toBe('전이문 마당');expect((await new ReplayPlayer(recorder.finish()!).verify()).passed).toBe(true);
  });
 });

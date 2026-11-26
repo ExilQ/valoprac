@@ -1,4 +1,13 @@
 {
+  "12.28": {
+    "title": "Review fixes: replay compatibility, reverb volume, knife reach",
+    "description": "Three problems found in code review before the site deployment are fixed.",
+    "changes": [
+      "Replays recorded before 12.27 on the renamed courses failed verification; earlier replays are now checked with the course name they were recorded with.",
+      "Room reverb stayed audible when the firing, handling, feedback or footstep volume was set to zero; the reverb now follows each volume.",
+      "A knife swing could hit a target hidden behind a wall edge; the blade now needs a clear line to the target (earlier replays keep their recorded result)."
+    ]
+  },
   "12.27": {
     "title": "Original course names and current weapon values",
     "description": "The 13 tactical courses now have original names that describe each layout, and weapon values follow the official wiki and the latest patches.",

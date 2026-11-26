@@ -10,7 +10,7 @@ import {DefenderAI} from '../tactical/DefenderAI';
 import {activeAngles,zoneForScenario,zoneAt} from '../tactical/complex';
 import {BOT_DIFFICULTY} from '../targets/locomotion';
 import {TapDrill} from '../../training/modes/TapDrill';
-import {levelFor,standingSpace,type TacticalLevel} from '../tactical/levels';
+import {levelFor,standingSpace,visibleBetween,type TacticalLevel} from '../tactical/levels';
 import {AngleTraining} from '../tactical/AngleTraining';
 import {FundamentalsDrill} from '../tactical/FundamentalsDrill';
 import {courseFor} from '../../config/mapCourses';
@@ -282,6 +282,9 @@ export class Simulation {
         this.targetPoint.y-=.25*candidate.scale;const d=this.targetPoint.distanceTo(this.origin);if(d>spec.range||d>=distance)continue;
         this.targetDirection.copy(this.targetPoint).sub(this.origin).normalize();if(this.targetDirection.dot(this.direction)<limit)continue;
         if(this.hit.zone==='wall'&&this.hit.distance<d)continue;
+        // weapons-v6: the blade must reach the candidate itself, not just miss
+        // the wall under the crosshair (a target behind a wall edge stays safe).
+        if(usesCurrentWeapons(this.rules)&&!visibleBetween(this.obstacles,this.origin,this.targetPoint,this.rules))continue;
         target=candidate;zone='torso';distance=d;}
     }
     let killed=false;
