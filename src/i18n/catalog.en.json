@@ -14832,19 +14832,9 @@
       "en": "Transfer exit"
     },
     {
-      "id": "msg_1d55537ceb5a",
-      "source": "스플릿",
-      "en": "Split"
-    },
-    {
       "id": "msg_fa4acd7fbe42",
       "source": "중앙 경사로 위 발코니와 양옆 골목을 잇는 도심 구역",
       "en": "A central ramp links a raised balcony with two city alleys."
-    },
-    {
-      "id": "msg_136f36dc7be0",
-      "source": "바인드",
-      "en": "Bind"
     },
     {
       "id": "msg_310a6162a440",
@@ -14852,19 +14842,9 @@
       "en": "Two sandstone yards connect through a one-way transfer gate."
     },
     {
-      "id": "msg_1d967564c344",
-      "source": "헤이븐",
-      "en": "Haven"
-    },
-    {
       "id": "msg_0407fef49117",
       "source": "목조 회랑을 따라 서쪽 뜰, 중앙 전각, 동쪽 정원으로 갈라집니다.",
       "en": "Timber galleries branch toward a west court, central hall and east garden."
-    },
-    {
-      "id": "msg_d0719d30a8bd",
-      "source": "어센트",
-      "en": "Ascent"
     },
     {
       "id": "msg_111f06ece8f2",
@@ -14872,19 +14852,9 @@
       "en": "Cross an open piazza between brick arcades, then enter the side galleries."
     },
     {
-      "id": "msg_3636b28158e5",
-      "source": "아이스박스",
-      "en": "Icebox"
-    },
-    {
       "id": "msg_fbe8bde4de55",
       "source": "냉동 화물 적재장 위의 통로와 컨테이너 사이 하단 통로를 오갑니다.",
       "en": "Move between a raised freight deck and tight container aisles."
-    },
-    {
-      "id": "msg_5b23b6604151",
-      "source": "브리즈",
-      "en": "Breeze"
     },
     {
       "id": "msg_d8c2a17475a0",
@@ -14892,19 +14862,9 @@
       "en": "Long views open across a coastal fort courtyard between stone towers."
     },
     {
-      "id": "msg_5cce5b049df2",
-      "source": "프랙처",
-      "en": "Fracture"
-    },
-    {
       "id": "msg_3b4d3e9f4ed9",
       "source": "끊어진 연구동을 돌아 두 방향으로 진입하는 순환 통로입니다.",
       "en": "Loop around a divided research block to enter from opposite sides."
-    },
-    {
-      "id": "msg_fa5d4e7e0156",
-      "source": "펄",
-      "en": "Pearl"
     },
     {
       "id": "msg_c4e7c272f171",
@@ -14912,19 +14872,9 @@
       "en": "Tiled courts and winding alleys meet a long gallery beneath a dome."
     },
     {
-      "id": "msg_731b54f868fd",
-      "source": "로터스",
-      "en": "Lotus"
-    },
-    {
       "id": "msg_40e5f698688e",
       "source": "돌기둥 뜰과 세 개의 정원이 나선형 참배로로 이어집니다.",
       "en": "A winding processional path joins a pillared court and three gardens."
-    },
-    {
-      "id": "msg_173753e63312",
-      "source": "선셋",
-      "en": "Sunset"
     },
     {
       "id": "msg_702cb3bcbf2b",
@@ -14932,29 +14882,14 @@
       "en": "Cross the market junction between storefronts and garages, using low stalls for cover."
     },
     {
-      "id": "msg_690c3714546c",
-      "source": "어비스",
-      "en": "Abyss"
-    },
-    {
       "id": "msg_3a3504708848",
       "source": "연구 시설의 높은 잔교와 낮은 정비 통로가 나란히 뻗습니다.",
       "en": "An elevated research causeway runs beside a lower maintenance passage."
     },
     {
-      "id": "msg_572cc091a1fa",
-      "source": "코로드",
-      "en": "Corrode"
-    },
-    {
       "id": "msg_ec1e87a3fad7",
       "source": "부식된 성벽의 꺾인 성문과 제련소 안마당이 맞닿아 있습니다.",
       "en": "An offset gate in a weathered wall opens into a foundry yard."
-    },
-    {
-      "id": "msg_ef0605a04822",
-      "source": "서밋",
-      "en": "Summit"
     },
     {
       "id": "msg_77fa0447488c",
@@ -15655,6 +15590,71 @@
       "id": "msg_ca7b97f46223",
       "source": "· 각 체크",
       "en": "· Angle checks"
+    },
+    {
+      "id": "msg_d812a742bd56",
+      "source": "발코니 골목",
+      "en": "Balcony Alleys"
+    },
+    {
+      "id": "msg_84551ea9a03f",
+      "source": "전이문 마당",
+      "en": "Gateway Yards"
+    },
+    {
+      "id": "msg_2899ab21ccf1",
+      "source": "세 갈래 정원",
+      "en": "Three Gardens"
+    },
+    {
+      "id": "msg_b398a493c910",
+      "source": "아케이드 광장",
+      "en": "Arcade Square"
+    },
+    {
+      "id": "msg_6bb02803eee1",
+      "source": "냉동 적재장",
+      "en": "Cold Storage Yard"
+    },
+    {
+      "id": "msg_d425cd4a0332",
+      "source": "해안 성채",
+      "en": "Coastal Fort"
+    },
+    {
+      "id": "msg_6e9bb9237f65",
+      "source": "순환 연구동",
+      "en": "Ring Laboratory"
+    },
+    {
+      "id": "msg_68968c3355db",
+      "source": "돔 회랑",
+      "en": "Dome Corridor"
+    },
+    {
+      "id": "msg_16f9b30612e0",
+      "source": "나선 참배로",
+      "en": "Spiral Shrine"
+    },
+    {
+      "id": "msg_76ffb470cfe2",
+      "source": "시장 교차로",
+      "en": "Market Crossing"
+    },
+    {
+      "id": "msg_1241ba0cbead",
+      "source": "잔교 연구소",
+      "en": "Catwalk Laboratory"
+    },
+    {
+      "id": "msg_f68e04c23b58",
+      "source": "제련소 성문",
+      "en": "Smelter Gate"
+    },
+    {
+      "id": "msg_0ed490dab590",
+      "source": "고지 관측소",
+      "en": "Ridge Observatory"
     }
   ]
 }

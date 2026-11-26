@@ -20,7 +20,7 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from './rules';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
@@ -33,7 +33,7 @@ import { Braking } from '../movement/Braking';
 import { Weapon } from '../weapons/Weapon';
 import { Target } from '../targets/Target';
 import { SeededRandom } from './random';
-import { WEAPONS, damageAt, WEAPON_ORDER, EQUIP_ORDER, KNIFE_ATTACKS, type KnifeAttack } from '../../config/weapons';
+import { damageAt, WEAPON_ORDER, EQUIP_ORDER, KNIFE_ATTACKS, weaponProfilesFor, type KnifeAttack } from '../../config/weapons';
 import { MODES } from '../../training/modes/modes';
 import { castWeaponShot,castShot, type HitResult } from '../collision/shoot';
 import { summarize } from '../../training/analytics/statistics';
@@ -89,7 +89,7 @@ export class Simulation {
 
     this.level=levelFor(this.practiceMap);this.exposureLabels=this.level?.angles.map(a=>a.label)??[];if(this.level){this.yaw=this.level.entryYaw??0;this.movement.position.set(this.level.spawn.x,this.level.spawn.y,this.level.spawn.z);this.movement.previous.copy(this.movement.position);}
     this.tap=new TapDrill(settings.drill);
-    this.weapons=Object.fromEntries(EQUIP_ORDER.map((id,i)=>[id,new Weapon(WEAPONS[id],settings.seed+i*907)])) as Record<WeaponId,Weapon>;this.weapon=this.weapons[weaponId];this.configureAmmo();this.rng=new SeededRandom(settings.seed^0xF91);
+    const profiles=weaponProfilesFor(usesCurrentWeapons(rules));this.weapons=Object.fromEntries(EQUIP_ORDER.map((id,i)=>[id,new Weapon(profiles[id],settings.seed+i*907)])) as Record<WeaponId,Weapon>;this.weapon=this.weapons[weaponId];this.configureAmmo();this.rng=new SeededRandom(settings.seed^0xF91);
     for(let i=0;i<(mode==='free'?12:mode==='tracking'&&settings.behavior==='peek'?1:MODES[mode].count);i++){
       const behavior=mode==='tracking'||mode==='free'||settings.drill==='stopMoving'?settings.behavior:'stationary';const t=new Target(i,behavior,new SeededRandom(settings.seed+i*139+1),this.characterGeometry);this.targets.push(t);if(this.practiceMap!=='tactical')this.spawn(t);if(mode==='free'){t.enabled=i<Math.min(settings.targetCount,settings.behavior==='peek'?1:12)&&!settings.analysisWall;t.active=t.enabled;}
     }

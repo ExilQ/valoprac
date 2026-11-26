@@ -1,4 +1,15 @@
 {
+  "12.27": {
+    "title": "Original course names and current weapon values",
+    "description": "The 13 tactical courses now have original names that describe each layout, and weapon values follow the official wiki and the latest patches.",
+    "changes": [
+      "Course names: Balcony Alleys, Gateway Yards, Three Gardens, Arcade Square, Cold Storage Yard, Coastal Fort, Ring Laboratory, Dome Corridor, Spiral Shrine, Market Crossing, Catwalk Laboratory, Smelter Gate, Ridge Observatory. Saved settings and records carry over.",
+      "Reserve ammunition now matches patch 6.11: Vandal 50, Phantom 60 (applies when unlimited reserve is off).",
+      "Airborne firing error now matches the official wiki: Vandal and Phantom +10°, Sheriff +7°.",
+      "Official patch notes up to 13.10 were reviewed. The recent rifle buff (13.09) targets the Warden, which VALOPRAC does not have; the last Vandal and Phantom change is the 11.08 spray update (0.6 s yaw switch, protected bullets Vandal 6 / Phantom 8), already in place.",
+      "Replays recorded with earlier versions keep playing back with the weapon values they were recorded with."
+    ]
+  },
   "12.26": {
     "title": "Full audit and quality fixes",
     "description": "The site, gameplay, design, sound and interface were checked end to end, and the confirmed problems are fixed.",
@@ -95,7 +106,7 @@
     "description": "Choose an original course with its own floor plan and terrain in Maps.",
     "changes": [
       "Inspect the starting point, route and three defender positions on each course plan.",
-      "Bind includes a one-way transfer gate. Elevated courses include traversable ramps and upper decks."
+      "Gateway Yards includes a one-way transfer gate. Elevated courses include traversable ramps and upper decks."
     ]
   },
   "12.16": {

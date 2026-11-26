@@ -17,9 +17,9 @@ import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES} from '../../config/surfaces';
 import {zoneAt} from './complex';
 import {SeededRandom} from '../simulation/random';
-import {CURRENT_SIMULATION_RULES,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from '../simulation/rules';
 import {staticBroadphaseFor} from '../collision/StaticBroadphase';
-import {WEAPONS,damageAt} from '../../config/weapons';
+import {damageAt,weaponProfilesFor} from '../../config/weapons';
 
 export type DefenderState='holding'|'listening'|'alert'|'tracking'|'firing'|'recovering'|'repositioning'|'re-peeking'|'returning'|'eliminated';
 export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch:number;grounded:boolean;yaw:number;pitch:number;scoped?:boolean;}
@@ -96,14 +96,17 @@ export class DefenderAI {
  private controlValues:unknown[]=[];private lastPlayerShotVelocity:number|null=null;private lastPlayerShotAt=-100;private combatTotals={timingContacts:0,shots:0,hits:0,firstShots:0,firstHits:0,damage:0,reaction:0,acquisition:0,firstShotDelay:0,recoilSquared:0,residualSquared:0};private epoch=0;private clock=0;private seed:number;private rng:SeededRandom;private current:PeekEpisode|null=null;private episodeOrigin:Vec3|null=null;private episodeLow=0;private episodeHigh=0;private returningAt:number|null=null;private last:Vec3|null=null;private pathAt=0;private perceptionAt=0;private head=new Vector3();private ray=new Ray();private hit=new Vector3();private sequence=0;private usedBaits=new Set<number>();private usedRecoveries=new Set<number>();
  constructor(public targets:Target[],public obstacles:Obstacle[],public settings:Settings,private holdingPoint:Vec3,seed=1947,private sectors:readonly DefenderSector[]=[],private readonly policy?:DefenderPolicy){this.seed=seed;this.rng=new SeededRandom(seed^0xd3f3);this.retry();}
  setSectors(sectors:readonly DefenderSector[]){this.sectors=sectors;}
- setSimulationRules(rules:SimulationRulesId){this.rules=rules;for(const m of this.memories)m.movement.setSimulationRules(rules);}
+ setSimulationRules(rules:SimulationRulesId){this.rules=rules;const profiles=weaponProfilesFor(usesCurrentWeapons(rules));
+  // Memories (and their guns) are built in the constructor under the default
+  // rules; a replayed ruleset must also restore that ruleset's firearm values.
+  for(const m of this.memories){m.movement.setSimulationRules(rules);if(m.gun.profile!==profiles[m.weapon]){m.gun.profile=profiles[m.weapon];m.gun.reserve=m.gun.profile.reserve;}}}
  retry(){
   this.epoch++;this.lastPlayerShotVelocity=null;this.lastPlayerShotAt=-100;this.health=150;this.death=null;this.current=null;this.last=null;this.episodeOrigin=null;this.returningAt=null;this.pathAt=0;this.perceptionAt=0;this.shots.length=0;this.report.health=150;this.report.path=[];this.report.observedRecoveryUntil=0;this.usedBaits.clear();this.usedRecoveries.clear();
   this.memories=this.targets.map((t,i)=>this.newMemory(t,i));
  }
  private newMemory(t:Target,i:number):Memory{
   const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)},weapon=this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon;
-  const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(WEAPONS[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
+  const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(weaponProfilesFor(usesCurrentWeapons(this.rules))[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
   gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;
   const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;if(this.rules==='legacy-v2')this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});else{const surfaceId=resolveGroundSurface(this.settings.practiceMap,this.obstacles,e.position,this.rules);this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:SURFACES[surfaceId].footstepSoundProfile,surfaceId,bot:i,encounterGeneration:this.epoch,kind:'bot-step'});}};
   const movement=new Movement(undefined,this.obstacles);movement.setSimulationRules(this.rules);
