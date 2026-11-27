@@ -1,4 +1,17 @@
 {
+  "12.37": {
+    "title": "Crouch speed and the braking system",
+    "description": "Crouching now takes 0.275 s, as measured in VALORANT replays, and slowing down to a walk, aim or crouch speed brakes like releasing the keys. Tap braking, crouch braking and deadzone movement were measured and checked.",
+    "changes": [
+      "Crouch speed: crouching and standing take 0.275 s instead of 0.125 s, derived from VALORANT replays (crouch depth grows 72.8 units/s and a full crouch is 20 units).",
+      "Walk and aim braking: when the top speed drops, the player brakes like releasing the keys, as in Unreal Engine. Down to walk speed in 0.067 s instead of 0.142 s; to aim speed in 0.033 s instead of 0.067 s.",
+      "Crouch braking: the speed limit drops with the crouch, reaching crouch speed when fully crouched (0.275 s).",
+      "Tap braking: a short opposite-key tap never stops later than releasing the key and never pushes you back; a very short tap used to stop one tick later. Holding it for 0.2 s or more starts moving the other way.",
+      "Deadzone movement: crouch-walking (0.93 m/s) and aimed crouch-moving (1.48 m/s) stay within the deadzone (1.485 m/s), so shots while moving have no movement penalty. Taps of up to 67 ms from a standstill stay in the deadzone.",
+      "Crouch jumps: a full-crouch takeoff jumps 2.5% slower (replay: 109.32 instead of 115 units), crouching in the air raises the feet 0.2 m (was 0.5 m), and the silent jump and landing thresholds were recalibrated to the new crouch speed.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 12); earlier replays play with the rules they were recorded with."
+    ]
+  },
   "12.36": {
     "title": "Full physics check against official VALORANT values",
     "description": "Every physics parameter was compared with the official wiki and Riot's published figures, and every value they confirm now matches. Accuracy follows the official tables and braking follows Riot's stop timings.",

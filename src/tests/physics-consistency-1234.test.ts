@@ -40,7 +40,8 @@ describe('12.34 consistency-v9: every jump scenario',()=>{
 
 describe('12.34 consistency-v9: silent crouch-jump landing',()=>{
  it('lands a crouched takeoff stood up in the air below the threshold, and every other jump above it',()=>{
-  const normal=jumpCase('rifleA','run','none'),crouched=jumpCase('rifleA','crouchRun','none'),stood=jumpCase('rifleA','crouchRun','stand'),tucked=jumpCase('rifleA','run','crouch');
+  // The 12.34 calibration (0.5 m tuck, 6.0 m/s); braking-v12 recalibrates both (braking-1237).
+  const R='reference-v11',normal=jumpCase('rifleA','run','none',R),crouched=jumpCase('rifleA','crouchRun','none',R),stood=jumpCase('rifleA','crouchRun','stand',R),tucked=jumpCase('rifleA','run','crouch',R);
   expect(normal.impact!).toBeGreaterThan(CONSISTENCY_RULES.silentLandingBelow);expect(crouched.impact!).toBeGreaterThan(CONSISTENCY_RULES.silentLandingBelow);expect(tucked.impact!).toBeGreaterThan(CONSISTENCY_RULES.silentLandingBelow);
   expect(stood.landingSounds).toBe(0);expect(stood.impact).toBeNull();expect(stood.airtime).toBeLessThan(normal.airtime-.05);
   // Earlier rules hear every landing.

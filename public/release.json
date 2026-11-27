@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.36",
+  "version": "12.0.37",
   "calibration": "dual-movement-1.4.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -197,7 +197,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.36",
+  "patchLabel": "12.37",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -407,7 +407,7 @@
     "optionalLanguage": null,
     "replay": {
       "schema": 1,
-      "simulationVersion": "valoprac-replay-simulation-11",
+      "simulationVersion": "valoprac-replay-simulation-12",
       "strictVersionCompatibility": true,
       "videoRecording": false,
       "localOnly": true,
@@ -456,6 +456,11 @@
           "gameVersion": "12.0.0",
           "simulationVersion": "valoprac-replay-simulation-10",
           "rules": "acceleration-v10"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-11",
+          "rules": "reference-v11"
         }
       ],
       "materialPhysicsVersion": "physical-surfaces-1.0.0"
@@ -507,8 +512,8 @@
   },
   "physicsMaterials": {
     "validation": "/physics-materials-validation.json",
-    "simulationRules": "reference-v11",
-    "simulationVersion": "valoprac-replay-simulation-11",
+    "simulationRules": "braking-v12",
+    "simulationVersion": "valoprac-replay-simulation-12",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "visualFamilies": 15,
     "physicalSurfaces": 22,

@@ -65,7 +65,7 @@ describe('12.36 reference-v11: knife back hits and replays',()=>{
   expect(front.damage).toBe(KNIFE_ATTACKS.slash.damage);expect(back.damage).toBe(KNIFE_ATTACKS.slash.damage*REF.knifeBackMultiplier);
  });
  it('records and verifies a session with movement, shots and landings exactly',async()=>{
-  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'range' as never}),recorder=new ReplayRecorder(s);s.running=true;
+  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'range' as never},{},'reference-v11'),recorder=new ReplayRecorder(s);s.running=true;
   for(let n=0;n<480;n++)s.step(DT,{...emptyInput(),strafe:n<100?1:n<130?-1:0,forward:n>=200&&n<320?1:0,walk:n>=260,jump:n===340,jumpHeld:n===340,jumpPresses:n===340?1:0,fire:n%30<3,firePresses:n%30===0?1:0});
   const record=recorder.finish()!;expect(record.header.simulationRules).toBe('reference-v11');expect((await new ReplayPlayer(record).verify()).passed).toBe(true);
  });
@@ -85,16 +85,16 @@ describe('12.36 reference-v11: Counter-Strike 2 option uses the CS2 server defau
 });
 
 describe('12.36 reference-v11: the portable C++ core matches the browser simulation',()=>{
- it('reproduces braking, counter-strafing, bloom and the official spread exactly at every frame rate',async()=>{
+ for(const mode of ['reference','braking'] as const)it(`${mode}: reproduces braking, counter-strafing, bloom and the official spread exactly at every frame rate`,async()=>{
   const {spawnSync}=await import('node:child_process'),{mkdtempSync,rmSync}=await import('node:fs'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
   const {Movement}=await import('../engine/movement/Movement'),{Weapon}=await import('../engine/weapons/Weapon'),{WEAPONS,WEAPON_ORDER}=await import('../config/weapons');
   const dir=mkdtempSync(join(tmpdir(),'valoprac-reference-')),exe=join(dir,'core');
   try{
    const build=spawnSync('g++',['-std=c++20','-O2','-Wall','-Wextra','-Werror','-Iunreal/VALOPRAC/Source/VALOPRAC/Core','unreal/tests/core_probe.cpp','-o',exe],{encoding:'utf8'});expect(build.stderr).toBe('');expect(build.status).toBe(0);
    for(const fps of [30,60,144,240])for(const [id,weapon] of WEAPON_ORDER.filter(w=>w!=='operator').entries()){
-    const native=JSON.parse(spawnSync(exe,[String(fps),String(id),'reference'],{encoding:'utf8'}).stdout);
-    const m=new Movement(),w=new Weapon(WEAPONS[weapon],1947),input=emptyInput(),ref=REF.spread[weapon as 'rifleA'];w.autoReload=false;w.holdBloomWhileFiring=true;let time=0,count=0,sx=0,sy=0;
-    for(let tick=0;tick<600;tick++){input.forward=0;input.strafe=0;if(tick<120)input.strafe=-1;else if(tick>=160&&tick<200)input.strafe=1;else if(tick>=220&&tick<300){input.forward=1;input.strafe=1;}input.fire=tick>=320&&tick<560;input.firePresses=tick===320?1:0;input.ads=tick>=400;time+=DT;m.step(input,0,DT,time);
+    const native=JSON.parse(spawnSync(exe,[String(fps),String(id),mode],{encoding:'utf8'}).stdout);
+    const m=new Movement();m.setSimulationRules(mode==='braking'?'braking-v12':'reference-v11');const w=new Weapon(WEAPONS[weapon],1947),input=emptyInput(),ref=REF.spread[weapon as 'rifleA'];w.autoReload=false;w.holdBloomWhileFiring=true;let time=0,count=0,sx=0,sy=0;
+    for(let tick=0;tick<600;tick++){input.forward=0;input.strafe=0;if(tick<120)input.strafe=-1;else if(tick>=160&&tick<200)input.strafe=1;else if(tick>=220&&tick<300){input.forward=1;input.strafe=1;}if(mode==='braking'){input.crouch=tick>=100&&tick<150;input.walk=tick>=250&&tick<300;}input.fire=tick>=320&&tick<560;input.firePresses=tick===320?1:0;input.ads=tick>=400;time+=DT;m.step(input,0,DT,time);
      w.step(time,DT,input,()=>{const s=w.calculateReferenceSpread(m,input.ads,false,ref,false);sx+=s.x;sy+=s.y;w.recoil.kick(w.shotIndex,w.profile,w.recoilRng,m.crouch,time);count++;});}
     expect(native.position[0],`${weapon} ${fps}`).toBeCloseTo(m.position.x,10);expect(native.position[1]).toBeCloseTo(m.position.z,10);expect(native.speed).toBeCloseTo(m.speed,10);expect(native.shots).toBe(count);expect(native.spread[0]).toBeCloseTo(sx,10);expect(native.spread[1]).toBeCloseTo(sy,10);
    }

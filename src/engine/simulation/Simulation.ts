@@ -20,8 +20,8 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesConsistencyRules,usesCurrentWeapons,usesReferenceRules,usesTrainingRules,type SimulationRulesId} from './rules';
-import {VALORANT_REFERENCE} from '../../config/valorantReference';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesBrakingRules,usesConsistencyRules,usesCurrentWeapons,usesReferenceRules,usesTrainingRules,type SimulationRulesId} from './rules';
+import {CROUCH_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
 import {CONSISTENCY_RULES} from './consistencyRules';
 import {AUDIO_RULES} from './audioRules';
 import {TRAINING_RULES} from './trainingRules';
@@ -177,7 +177,7 @@ export class Simulation {
    * crouched (depth at takeoff >= silentTakeoffCrouch). */
   private emitJumpSound(){
     const hop=this.movement.lastJump();if(!hop)return;
-    if(this.movement.crouch>=AUDIO_RULES.silentTakeoffCrouch){this.silentJumps++;return;}
+    if(this.movement.crouch>=(usesBrakingRules(this.rules)?CROUCH_REFERENCE.silentTakeoffCrouch:AUDIO_RULES.silentTakeoffCrouch)){this.silentJumps++;return;}
     const position={...hop.position},surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,position,this.rules,this.movement.profile);
     const e:JumpSoundEvent={kind:'jump',id:++this.jumpSoundEvents,timestamp:hop.time,position,radius:this.settings.stepHearingRadius,speed:hop.speed,surfaceId,material:SURFACES[surfaceId].footstepSoundProfile};
     this.jumpSounds.push(e);if(this.jumpSounds.length>16)this.jumpSounds.shift();
@@ -246,7 +246,7 @@ export class Simulation {
       for(let index=0;index<count;index++)this.activateScenarioTarget(index);
     }
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
-    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius,usesConsistencyRules(this.rules)?CONSISTENCY_RULES.silentLandingBelow:.35);
+    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius,usesBrakingRules(this.rules)?CROUCH_REFERENCE.silentLandingBelow:usesConsistencyRules(this.rules)?CONSISTENCY_RULES.silentLandingBelow:.35);
     this.braking.observe(this.movement,this.time,this.accuracyThreshold);
     if(usesReferenceRules(this.rules)){
       // Patch 0.50: slowing from a run keeps running accuracy down to the deadzone.

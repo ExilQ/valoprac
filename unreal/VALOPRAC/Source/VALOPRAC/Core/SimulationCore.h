@@ -19,7 +19,9 @@ struct Random {
 struct Input {double forward=0,strafe=0;bool walk=false,crouch=false,jump=false,fire=false,ads=false,reload=false;int presses=0;};
 struct MovementTuning {double maxSpeed=5.4,groundAcceleration=38,groundDeceleration=20,friction=3.5,reverseAcceleration=45,lateralModifier=1,backwardModifier=.92,walkModifier=.48,crouchModifier=.36,airAcceleration=3.5,airMaxSpeed=5.4,jumpImpulse=5.2,gravity=18,accuracyVelocityThreshold=.65,standingEyeHeight=1.64,crouchingEyeHeight=1.12,radius=.28;
  /* reference-v11 (12.36): counter-strafe braking and the official deadzone; negative = disabled. */
- double counterFriction=-1,counterDeceleration=0,deadzone=-1,weaponRun=5.4;};
+ double counterFriction=-1,counterDeceleration=0,deadzone=-1,weaponRun=5.4;
+ /* braking-v12 (12.37): crouch time (negative = 0.125 s) and Unreal over-max braking. */
+ double crouchSeconds=-1;bool overMaxBraking=false;};
 /* Official VALORANT spread table for one weapon (reference-v11); adsFirst < 0 = no aim-down-sights spread. */
 struct ReferenceSpread {double first=0,max=0,adsFirst=-1,adsMax=-1,crouch=1,penaltyCrouch=0,penaltyWalk=0,penaltyRun=0,penaltyAir=0;};
 struct ReferenceRules {double deadzone=.275,walkAccuracy=.61,landingSpread=7,landingSeconds=.225,brakeFriction=5.7,brakeDeceleration=18.8,counterFriction=4.1,counterDeceleration=24.2;};
@@ -27,17 +29,28 @@ struct Movement {MovementTuning config;
  Vec position{0,0,5},previous{0,0,5},velocity;double crouch=0,speed=0,landedAt=-100,modifier=1;bool grounded=true;
  bool accurate()const{return grounded&&speed<=(config.deadzone>=0?config.deadzone*config.weaponRun:config.accuracyVelocityThreshold);}
  void step(const Input& in,double yaw,double dt,double time){
-  previous=position;crouch=approach(crouch,in.crouch?1:0,dt*8);
+  previous=position;crouch=approach(crouch,in.crouch?1:0,dt*(config.crouchSeconds>0?1/config.crouchSeconds:8));
   double f=in.forward,s=in.strafe,len=std::hypot(f,s);if(len>1){f/=len;s/=len;}
   double dx=s*std::cos(yaw)-f*std::sin(yaw),dz=-f*std::cos(yaw)-s*std::sin(yaw);
   double target=config.maxSpeed*(in.walk?config.walkModifier:1)*(1+(config.crouchModifier-1)*crouch)*(f<0?config.backwardModifier:1)*(std::abs(s)>0?config.lateralModifier:1)*modifier;
   if(grounded){
    if(len>0&&config.counterFriction>=0&&dx*velocity.x+dz*velocity.z<0){
     /* reference-v11 counter-strafe: brake the current motion, then accelerate any input across it. */
-    double v=std::hypot(velocity.x,velocity.z),ux=velocity.x/v,uz=velocity.z/v,next=std::max(0.0,v-(config.counterDeceleration+config.counterFriction*v)*dt);velocity.x*=next/v;velocity.z*=next/v;
+    double v=std::hypot(velocity.x,velocity.z),ux=velocity.x/v,uz=velocity.z/v,counter=config.counterDeceleration+config.counterFriction*v,release=config.groundDeceleration+config.friction*v;
+    /* braking-v12: counter-strafing never brakes less than releasing the key. */
+    double next=std::max(0.0,v-(config.overMaxBraking&&release>counter?release:counter)*dt);velocity.x*=next/v;velocity.z*=next/v;
     double across=dx*(-uz)+dz*ux;if(std::abs(across)>1e-9){double add=std::min(config.groundAcceleration*dt*std::abs(across),target*std::abs(across));velocity.x+=-uz*std::copysign(add,across);velocity.z+=ux*std::copysign(add,across);}
    }
-   else if(len>0){double acceleration=dx*velocity.x+dz*velocity.z<0?config.reverseAcceleration:config.groundAcceleration;double tx=dx*target-velocity.x,tz=dz*target-velocity.z,d=std::hypot(tx,tz),amount=std::min(d,acceleration*dt);if(d>1e-9){velocity.x+=tx/d*amount;velocity.z+=tz/d*amount;}}
+   else if(len>0){
+    bool done=false;
+    if(config.overMaxBraking){
+     /* braking-v12: above the wished speed, brake like releasing the keys; input only turns the motion. */
+     double v=std::hypot(velocity.x,velocity.z);
+     if(v>target+1e-9&&dx*velocity.x+dz*velocity.z>0){double ox=velocity.x/v,oz=velocity.z/v,next=std::max(0.0,v-(config.groundDeceleration+config.friction*v)*dt);velocity.x*=next/v;velocity.z*=next/v;
+      if(next<=target){velocity.x=ox*target;velocity.z=oz*target;}
+      else{double nx=velocity.x+dx*config.groundAcceleration*dt,nz=velocity.z+dz*config.groundAcceleration*dt,l=std::hypot(nx,nz);if(l>1e-12){velocity.x=nx/l*next;velocity.z=nz/l*next;}done=true;}}
+    }
+    if(!done){double acceleration=dx*velocity.x+dz*velocity.z<0?config.reverseAcceleration:config.groundAcceleration;double tx=dx*target-velocity.x,tz=dz*target-velocity.z,d=std::hypot(tx,tz),amount=std::min(d,acceleration*dt);if(d>1e-9){velocity.x+=tx/d*amount;velocity.z+=tz/d*amount;}}}
    else {double v=std::hypot(velocity.x,velocity.z),next=std::max(0.0,v-(config.groundDeceleration+config.friction*v)*dt);if(v>0){velocity.x*=next/v;velocity.z*=next/v;}}
    if(in.jump){velocity.y=config.jumpImpulse;grounded=false;}
   }else if(len>0){double along=velocity.x*dx+velocity.z*dz,add=std::min(config.airAcceleration*dt,std::max(0.0,config.airMaxSpeed-along));velocity.x+=dx*add;velocity.z+=dz*add;double v=std::hypot(velocity.x,velocity.z);if(v>config.airMaxSpeed){velocity.x*=config.airMaxSpeed/v;velocity.z*=config.airMaxSpeed/v;}}

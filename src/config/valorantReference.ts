@@ -51,3 +51,24 @@ export const VALORANT_REFERENCE=Object.freeze({
  * (800), accelerate (5.5), friction (5.2), airaccelerate (12) and the duck
  * speed (0.34) already matched. */
 export const CS2_REFERENCE=Object.freeze({jumpImpulse:301.993378*.0254,airWishSpeedCap:30*.0254,groundStopSpeed:80*.0254,stepHeight:18*.0254});
+
+/** braking-v12 (12.37), derived from the VALORANT 13.06 replay study
+ * (BuddyKang/Valo_Study_SlientJump): crouch depth 6.25 / 6.82 / 7.39 units at
+ * 86 / 94 / 101 ms of crouch (72.8 units/s, linear from zero) and a full crouch
+ * that lowers the takeoff by 20.00 units (554.47-115.00 vs 528.79-109.32), so a
+ * full crouch takes 20 / 72.8 = 0.275 s. A crouched takeoff rises 109.32 instead
+ * of 115.00 units: jump speed x sqrt(0.9506) = 0.975. */
+export const CROUCH_REFERENCE=Object.freeze({
+  crouchSeconds:.275,
+  /** Crouching in the air raises the feet by the 20-unit crouch depth. */
+  airCrouchTuck:.2,
+  crouchedJumpScale:.975,
+  /** Jumps are silent from this crouch depth at takeoff: the study heard 6.82
+   * units (0.341) and not 7.39 (0.370); at 120 Hz the jump tick also crouches,
+   * so 0.38 keeps 94 ms of crouch audible and 101 ms silent. */
+  silentTakeoffCrouch:.38,
+  /** Silent landing below this impact (m/s): a crouched takeoff stood up in the
+   * air lands at 6.09, a crouched landing at 6.73, a standing jump at 6.90.
+   * Equivalent drop: 1.0 m. */
+  silentLandingBelow:6.4,
+});

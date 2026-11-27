@@ -49,7 +49,8 @@ describe('12.31 training-v7: crouching in the air tucks the legs',()=>{
   return {landedAt:landedAt!,peakFeet,eyes,crouch:s.movement.crouch};
  };
  it('raises the feet so the jump lands later, without a sudden drop of the eyes',()=>{
-  const plain=jump(false),tucked=jump(true);
+  // 12.31 tuck (0.5 m); braking-v12 tucks 0.2 m (see braking-1237).
+  const plain=jump(false,'reference-v11'),tucked=jump(true,'reference-v11');
   expect(tucked.crouch).toBeGreaterThan(.9);
   expect(tucked.peakFeet-plain.peakFeet).toBeGreaterThan(TRAINING_RULES.airCrouchTuck*.9);
   expect(tucked.landedAt-plain.landedAt).toBeGreaterThan(.05);

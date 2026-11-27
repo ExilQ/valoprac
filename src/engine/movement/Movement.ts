@@ -1,11 +1,11 @@
-import {CS2_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
+import {CROUCH_REFERENCE,CS2_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
 import {RECOVERY_GROUND_ACCELERATION} from '../simulation/consistencyRules';
 import {Vector3} from 'three';
 import {CS2_PHYSICS,MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,MATERIALS_MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,usesReferenceRules,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,usesReferenceRules,usesBrakingRules,type SimulationRulesId} from '../simulation/rules';
 import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
@@ -64,6 +64,7 @@ export class Movement {
    for(const key of ['jumpImpulse','airWishSpeedCap','groundStopSpeed','stepHeight'] as const)if(v[key]===base[key]||v[key]===CS2_REFERENCE[key])v[key]=on?CS2_REFERENCE[key]:base[key];
   }
   if(this.profile.airModel==='tactical'){const v=this.profile,ref=VALORANT_REFERENCE;
+   if(usesBrakingRules(this.rules))v.overMaxBraking=true;else delete v.overMaxBraking;
    if(usesReferenceRules(this.rules)){v.counterFriction=ref.counterStrafe.friction;v.counterDeceleration=ref.counterStrafe.deceleration;}else{delete v.counterFriction;delete v.counterDeceleration;}
   }
  }
@@ -129,7 +130,7 @@ export class Movement {
     ?Math.min(run*VALORANT_BUNNY_HOP.runningSpeedCap,(p.hopSpeedCap??Infinity)*this.capScale(run),(p.airSpeedLimit??Infinity)*this.capScale(run)):p.jumpSpeedLimit*(usesAudioRules(this.rules)?this.speedModifier:Math.min(1,this.speedModifier));
    limitContactSpeed(this.velocity,max);
   }
-  this.recordTakeoff(time,'jump');this.velocity.y=p.jumpImpulse;this.grounded=false;this.jumps.consume(time,p);this.lastTakeoff=time;this.landingPenaltyPending=false;
+  this.recordTakeoff(time,'jump');this.velocity.y=p.jumpImpulse*(usesBrakingRules(this.rules)&&p.airModel==='tactical'?1-(1-CROUCH_REFERENCE.crouchedJumpScale)*this.crouch:1);this.grounded=false;this.jumps.consume(time,p);this.lastTakeoff=time;this.landingPenaltyPending=false;
   this.hops.jumps++;if(chain){this.hops.chainedJumps++;this.hops.lastInputTimingMs=timing;this.hops.speedPreservation=this.landingSpeed>1e-6?Math.hypot(this.velocity.x,this.velocity.z)/this.landingSpeed:null;if(timing!==null){const h=this.hops;h.timingCount++;const delta=timing-h.timingMean;h.timingMean+=delta/h.timingCount;h.timingM2+=delta*(timing-h.timingMean);}}
   this.hopEvent(chain?'chain':'jump',time,chain?timing:null);this.groundContact=0;return true;
  }
@@ -140,13 +141,13 @@ export class Movement {
   this.jumps.update(input,time,p);
   let crouchTarget=input.crouch?1:0;if(!crouchTarget&&this.crouch>.5&&!this.collision.canStand(this.position,1.35,1.85,p.radius))crouchTarget=1;
   const crouchBefore=this.crouch;
-  this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*8);this.eyeHeight=p.standingEyeHeight+(p.crouchingEyeHeight-p.standingEyeHeight)*this.crouch;
+  this.crouch+=Math.sign(crouchTarget-this.crouch)*Math.min(Math.abs(crouchTarget-this.crouch),dt*(usesBrakingRules(this.rules)?1/CROUCH_REFERENCE.crouchSeconds:8));this.eyeHeight=p.standingEyeHeight+(p.crouchingEyeHeight-p.standingEyeHeight)*this.crouch;
   // training-v7: crouching in the air tucks the legs. The feet rise (the eyes
   // stay where they were), so the body falls further and lands later, and the
   // player can clear a higher ledge. Uncrouching in the air lowers the feet
   // again, never below the floor under them.
   if(!wasGrounded&&usesTrainingRules(this.rules)&&this.crouch!==crouchBefore){
-   const shift=TRAINING_RULES.airCrouchTuck*(this.crouch-crouchBefore);
+   const shift=(usesBrakingRules(this.rules)?CROUCH_REFERENCE.airCrouchTuck:TRAINING_RULES.airCrouchTuck)*(this.crouch-crouchBefore);
    if(shift>0)this.position.y+=shift;
    else{const floor=this.supportContact(this.position.y+.01);this.position.y=Math.max(floor.height,this.position.y+shift);}
   }
