@@ -27,6 +27,13 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
  if(w.amount<=0){friction(v,dt,p.friction,0,p.groundDeceleration);return;}
  // A short press within a tick receives only its fraction of the impulse.
  if(w.amount<1)friction(v,dt*(1-w.amount),p.friction,0,p.groundDeceleration);
+ if(p.counterFriction!==undefined&&p.counterDeceleration!==undefined&&w.x*v.x+w.z*v.z<0){
+  // reference-v11 counter-strafe: brake the current motion (fitted to Riot's
+  // timings), then any part of the input across the old motion accelerates.
+  const speed=Math.hypot(v.x,v.z),ux=v.x/speed,uz=v.z/speed;friction(v,dt*w.amount,p.counterFriction,0,p.counterDeceleration);
+  const across=w.x*(-uz)+w.z*ux;if(Math.abs(across)>1e-9){const add=Math.min(p.groundAcceleration*dt*w.amount*Math.abs(across),w.speed*Math.abs(across));v.x+=-uz*Math.sign(across)*add;v.z+=ux*Math.sign(across)*add;}
+  return;
+ }
  const dot=w.x*v.x+w.z*v.z,acceleration=dot<0?p.reverseAcceleration:p.groundAcceleration,tx=w.x*w.speed-v.x,tz=w.z*w.speed-v.z,length=Math.hypot(tx,tz),amount=Math.min(length,acceleration*dt*w.amount);
  if(length>1e-12){v.x+=tx/length*amount;v.z+=tz/length*amount;}
 }

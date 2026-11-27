@@ -10,6 +10,9 @@ import {spreadDirection} from '../engine/weapons/trajectory';
 import {Target} from '../engine/targets/Target';
 import type {Obstacle} from '../engine/collision/environment';
 import type {Settings,GunId,WeaponId} from '../engine/types';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const dt=1/120;
 const body=(x=0,vx=0):PlayerBody=>({position:{x,y:0,z:0},velocity:{x:vx,y:0,z:0},eyeHeight:1.64,crouch:0,grounded:true,yaw:0,pitch:0});

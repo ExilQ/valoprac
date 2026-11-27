@@ -1,8 +1,11 @@
-import { describe,it,expect } from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import { Movement } from '../engine/movement/Movement';
 import { Braking } from '../engine/movement/Braking';
 import { FixedClock,FIXED_DT } from '../engine/simulation/FixedClock';
 import { emptyInput } from '../engine/types';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 const simulate=(m:Movement,seconds:number,forward=0,strafe=0)=>{const input={...emptyInput(),forward,strafe};for(let i=0;i<Math.round(seconds/FIXED_DT);i++)m.step(input,0,FIXED_DT,i*FIXED_DT);return m;};
 describe('Acceleration, inertia, friction, and direction reversal',()=>{
   it('accelerates progressively and respects the provisional speed cap',()=>{const m=new Movement();m.step({...emptyInput(),forward:1},0,FIXED_DT,0);expect(m.speed).toBeGreaterThan(0);expect(m.speed).toBeLessThan(m.profile.maxSpeed);simulate(m,1,1);expect(m.speed).toBeCloseTo(m.profile.maxSpeed,10);});

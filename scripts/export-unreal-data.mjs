@@ -18,7 +18,12 @@ for(const [i,w] of WEAPON_ORDER.map(id=>WEAPONS[id]).entries()){header+=`case ${
 // The disabled portable staging core has a smaller tuning schema. Browser-only
 // takeoff budgets and ballistic integration are not a native-engine port.
 const portableMovementFields=['maxSpeed','groundAcceleration','groundDeceleration','friction','reverseAcceleration','lateralModifier','backwardModifier','walkModifier','crouchModifier','airAcceleration','airMaxSpeed','jumpImpulse','gravity','accuracyVelocityThreshold','standingEyeHeight','crouchingEyeHeight','radius'];
-header+='default:break;}return p;}\ninline MovementTuning movementProfile(){MovementTuning p;\n';for(const key of portableMovementFields)header+=`p.${key}=${PORTABLE_MOVEMENT[key]};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
+header+='default:break;}return p;}\n';
+// reference-v11 (12.36): official spread tables and movement reference values.
+const {VALORANT_REFERENCE:REF}=await module('src/config/valorantReference.ts');
+header+='inline ReferenceSpread referenceSpread(int id){ReferenceSpread r;switch(id){\n';for(const [i,id] of WEAPON_ORDER.entries()){const r=REF.spread[id];if(!r)continue;header+=`case ${i}:r.first=${r.first};r.max=${r.max};r.adsFirst=${r.adsFirst??-1};r.adsMax=${r.adsMax??-1};r.crouch=${r.crouch};r.penaltyCrouch=${r.penalties.crouch};r.penaltyWalk=${r.penalties.walk};r.penaltyRun=${r.penalties.run};r.penaltyAir=${r.penalties.air};break;\n`;}header+='default:break;}return r;}\n';
+header+=`inline ReferenceRules referenceRules(){ReferenceRules r;r.deadzone=${REF.deadzone};r.walkAccuracy=${REF.walkAccuracy};r.landingSpread=${REF.landing.spread};r.landingSeconds=${REF.landing.seconds};r.brakeFriction=${REF.braking.friction};r.brakeDeceleration=${REF.braking.deceleration};r.counterFriction=${REF.counterStrafe.friction};r.counterDeceleration=${REF.counterStrafe.deceleration};return r;}\n`;
+header+='inline MovementTuning movementProfile(){MovementTuning p;\n';for(const key of portableMovementFields)header+=`p.${key}=${PORTABLE_MOVEMENT[key]};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
 if(process.argv.includes('--profiles-only')){rmSync(cache,{recursive:true});console.log('Exported portable calibration profiles; Unreal runtime remains disabled');process.exit(0);}
 const {createWeaponView}=await module('src/engine/rendering/WeaponView.ts');
 const models={schema:1,license:'Original VALOPRAC geometry; no Riot assets',weapons:{}};

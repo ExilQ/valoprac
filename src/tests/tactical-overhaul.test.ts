@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import {Box3,Vector3,Ray,PerspectiveCamera,Raycaster,Vector2,BufferGeometry,Material} from 'three';
 import {DEFAULT_SETTINGS,sanitizeSettings} from '../config/settings';
 import {FOOTSTEP_BASELINE} from '../config/footsteps';
@@ -19,6 +19,9 @@ import {nearestEnvironmentHit,surfaceHeight} from '../engine/collision/environme
 import {createWeaponView} from '../engine/rendering/WeaponView';
 import {poseViewmodel,VIEWMODEL_HFOV} from '../engine/rendering/viewmodel';
 import {TapDrill} from '../training/modes/TapDrill';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 const dt=1/120;
 function accelerate(m:Movement,strafe:number,n=90){for(let i=0;i<n;i++)m.step({...emptyInput(),strafe},0,dt,i*dt);}
 describe('Actual velocity accuracy and physically coherent tap braking',()=>{

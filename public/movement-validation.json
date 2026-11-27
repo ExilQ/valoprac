@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "release": "12.0.35",
-  "patchLabel": "12.35",
-  "generatedAt": "2026-11-27T08:10:30.580Z",
+  "release": "12.0.36",
+  "patchLabel": "12.36",
+  "generatedAt": "2026-11-27T08:34:39.368Z",
   "calibration": "dual-movement-1.4.0-provisional",
   "historicalBrowserCaptureRelease": "9.0.0",
   "tests": {
-    "application": 1622,
+    "application": 1639,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -140,32 +140,32 @@
         "scenario": "A",
         "airDuration": 0.18,
         "displacement": [
-          -0.1445,
-          0.9686111111111113,
+          -0.13784999999999994,
+          1.0182269413311111,
           -0.9899999999999984
         ],
         "velocity": [
-          -0.8,
-          3.5053333333333336,
+          -0.762,
+          3.775965134533333,
           -5.4
         ],
-        "headingRadians": -0.1470783553884025
+        "headingRadians": -0.14018552679038912
       },
       {
         "profile": "counterStrike",
         "scenario": "B",
         "airDuration": 0.18,
         "displacement": [
-          0.1445,
-          0.9686111111111113,
+          0.13784999999999994,
+          1.0182269413311111,
           -0.9899999999999984
         ],
         "velocity": [
-          0.8,
-          3.5053333333333336,
+          0.762,
+          3.775965134533333,
           -5.4
         ],
-        "headingRadians": 0.1470783553884025
+        "headingRadians": 0.14018552679038912
       },
       {
         "profile": "counterStrike",
@@ -174,17 +174,17 @@
         "yawChangeRadians": 0.65,
         "airDuration": 0.2,
         "position": [
-          -0.5158225259214293,
-          1.0830555555555557,
-          -3.907279263549706
+          -0.5082701502992463,
+          1.1394371808055557,
+          -3.90432736987482
         ],
         "velocity": [
-          -4.169757264754967,
-          3.166666666666667,
-          -4.163140775261498
+          -4.126062133700771,
+          3.4372984678666665,
+          -4.168453211333763
         ],
-        "headingRadians": -0.7861921834455997,
-        "positionDifferenceFromFixedYaw": 0.36997559796936547
+        "headingRadians": -0.7802874719590973,
+        "positionDifferenceFromFixedYaw": 0.3695630992086542
       },
       {
         "profile": "counterStrike",
@@ -193,49 +193,49 @@
         "yawChangeRadians": -0.65,
         "airDuration": 0.2,
         "position": [
-          0.5158225259214293,
-          1.0830555555555557,
-          -3.907279263549706
+          0.5082701502992463,
+          1.1394371808055557,
+          -3.90432736987482
         ],
         "velocity": [
-          4.169757264754967,
-          3.166666666666667,
-          -4.163140775261498
+          4.126062133700771,
+          3.4372984678666665,
+          -4.168453211333763
         ],
-        "headingRadians": 0.7861921834455997,
-        "positionDifferenceFromFixedYaw": 0.36997559796936547
+        "headingRadians": 0.7802874719590973,
+        "positionDifferenceFromFixedYaw": 0.3695630992086542
       },
       {
         "profile": "counterStrike",
         "scenario": "D",
-        "beforeLateralVelocity": -0.8,
-        "afterLateralVelocity": 0.8,
+        "beforeLateralVelocity": -0.762,
+        "afterLateralVelocity": 0.762,
         "position": [
-          0.015666666666666686,
-          1.2433666666666667,
-          -4.3606906176931535
+          0.01535,
+          1.3177904119966668,
+          -4.357134580621562
         ],
         "velocity": [
-          0.8,
-          1.8120000000000003,
+          0.762,
+          2.0826318012,
           -5.4
         ]
       },
       {
         "profile": "counterStrike",
         "scenario": "E",
-        "apexHeight": 1.3167555555555557,
+        "apexHeight": 1.4159869254500002,
         "horizontalVelocity": [
           0,
           0,
           -5.4
         ],
-        "landingTime": 1.4199899981814876,
-        "landingImpactSpeed": 7.332,
+        "landingTime": 1.4466277041320241,
+        "landingImpactSpeed": 7.5693681988,
         "position": [
           0,
           0,
-          -6.7906906176931505
+          -6.922134580621558
         ]
       },
       {
@@ -246,34 +246,34 @@
         "landings": 3,
         "speed": 5.4,
         "heldSpaceJumps": 1,
-        "lastInputTimingMs": -3.323331514820893
+        "lastInputTimingMs": 3.3722958679756054
       },
       {
         "profile": "valorant",
         "scenario": "G",
         "position": [
-          -2.2185165221926573,
+          -2.1712976773846955,
           0,
-          -6.728168572284661
+          -6.661915469295743
         ],
         "landingHeadingRadians": -0.6192012837871829,
         "airTime": 0.675,
         "landingSpeed": 5.670000000000001,
-        "afterLanding": 3.2695793713748666,
-        "stopSeconds": 0.125
+        "afterLanding": 2.7778887438408977,
+        "stopSeconds": 0.10833333333333334
       },
       {
         "profile": "counterStrike",
         "scenario": "G",
         "position": [
-          -0.6742929354285441,
+          -0.6608633940861683,
           0,
-          -7.486792931835823
+          -7.613528711940855
         ],
-        "landingHeadingRadians": -0.1470783553884025,
-        "airTime": 0.7166666666666666,
-        "landingSpeed": 5.458937625582473,
-        "afterLanding": 3.2989056974966364,
+        "landingHeadingRadians": -0.14018552679038912,
+        "airTime": 0.7416666666666665,
+        "landingSpeed": 5.453498326762373,
+        "afterLanding": 3.288353037076851,
         "stopSeconds": 0.2833333333333333
       }
     ],

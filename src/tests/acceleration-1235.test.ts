@@ -32,11 +32,12 @@ describe('12.35 acceleration-v10: speed recovers with a delay',()=>{
   }
  });
  it('keeps the stop and counter-strafe timings (Riot: 25 % in 0.11 s, stop in 0.17 s)',()=>{
-  for(const [counter,limit] of [[false,1.35],[false,.035],[true,1.35],[true,.65]] as const)expect(stop(undefined,counter,limit)).toBe(stop('consistency-v9',counter,limit));
-  expect(stop(undefined,false,1.35)).toBeLessThan(150);expect(stop(undefined,false,.035)).toBeLessThan(200);
+  // 12.36 (reference-v11) refits braking to Riot's timings; acceleration-v10 kept the 12.34 braking.
+  for(const [counter,limit] of [[false,1.35],[false,.035],[true,1.35],[true,.65]] as const)expect(stop('acceleration-v10',counter,limit)).toBe(stop('consistency-v9',counter,limit));
+  expect(stop('acceleration-v10',false,1.35)).toBeLessThan(150);expect(stop('acceleration-v10',false,.035)).toBeLessThan(200);
  });
  it('replays the new acceleration exactly',async()=>{
-  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'range' as never}),recorder=new ReplayRecorder(s);s.running=true;for(let n=0;n<240;n++)s.step(DT,{...emptyInput(),forward:n<120?1:0,strafe:n>=150?1:0,walk:n>=200});
+  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'range' as never},{},'acceleration-v10'),recorder=new ReplayRecorder(s);s.running=true;for(let n=0;n<240;n++)s.step(DT,{...emptyInput(),forward:n<120?1:0,strafe:n>=150?1:0,walk:n>=200});
   const record=recorder.finish()!;expect(record.header.simulationRules).toBe('acceleration-v10');expect((await new ReplayPlayer(record).verify()).passed).toBe(true);
  });
 });

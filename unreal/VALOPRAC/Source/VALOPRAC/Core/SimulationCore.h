@@ -17,17 +17,27 @@ struct Random {
  double range(double a,double b){return a+(b-a)*next();}
 };
 struct Input {double forward=0,strafe=0;bool walk=false,crouch=false,jump=false,fire=false,ads=false,reload=false;int presses=0;};
-struct MovementTuning {double maxSpeed=5.4,groundAcceleration=38,groundDeceleration=20,friction=3.5,reverseAcceleration=45,lateralModifier=1,backwardModifier=.92,walkModifier=.48,crouchModifier=.36,airAcceleration=3.5,airMaxSpeed=5.4,jumpImpulse=5.2,gravity=18,accuracyVelocityThreshold=.65,standingEyeHeight=1.64,crouchingEyeHeight=1.12,radius=.28;};
+struct MovementTuning {double maxSpeed=5.4,groundAcceleration=38,groundDeceleration=20,friction=3.5,reverseAcceleration=45,lateralModifier=1,backwardModifier=.92,walkModifier=.48,crouchModifier=.36,airAcceleration=3.5,airMaxSpeed=5.4,jumpImpulse=5.2,gravity=18,accuracyVelocityThreshold=.65,standingEyeHeight=1.64,crouchingEyeHeight=1.12,radius=.28;
+ /* reference-v11 (12.36): counter-strafe braking and the official deadzone; negative = disabled. */
+ double counterFriction=-1,counterDeceleration=0,deadzone=-1,weaponRun=5.4;};
+/* Official VALORANT spread table for one weapon (reference-v11); adsFirst < 0 = no aim-down-sights spread. */
+struct ReferenceSpread {double first=0,max=0,adsFirst=-1,adsMax=-1,crouch=1,penaltyCrouch=0,penaltyWalk=0,penaltyRun=0,penaltyAir=0;};
+struct ReferenceRules {double deadzone=.275,walkAccuracy=.61,landingSpread=7,landingSeconds=.225,brakeFriction=5.7,brakeDeceleration=18.8,counterFriction=4.1,counterDeceleration=24.2;};
 struct Movement {MovementTuning config;
  Vec position{0,0,5},previous{0,0,5},velocity;double crouch=0,speed=0,landedAt=-100,modifier=1;bool grounded=true;
- bool accurate()const{return grounded&&speed<=config.accuracyVelocityThreshold;}
+ bool accurate()const{return grounded&&speed<=(config.deadzone>=0?config.deadzone*config.weaponRun:config.accuracyVelocityThreshold);}
  void step(const Input& in,double yaw,double dt,double time){
   previous=position;crouch=approach(crouch,in.crouch?1:0,dt*8);
   double f=in.forward,s=in.strafe,len=std::hypot(f,s);if(len>1){f/=len;s/=len;}
   double dx=s*std::cos(yaw)-f*std::sin(yaw),dz=-f*std::cos(yaw)-s*std::sin(yaw);
   double target=config.maxSpeed*(in.walk?config.walkModifier:1)*(1+(config.crouchModifier-1)*crouch)*(f<0?config.backwardModifier:1)*(std::abs(s)>0?config.lateralModifier:1)*modifier;
   if(grounded){
-   if(len>0){double acceleration=dx*velocity.x+dz*velocity.z<0?config.reverseAcceleration:config.groundAcceleration;double tx=dx*target-velocity.x,tz=dz*target-velocity.z,d=std::hypot(tx,tz),amount=std::min(d,acceleration*dt);if(d>1e-9){velocity.x+=tx/d*amount;velocity.z+=tz/d*amount;}}
+   if(len>0&&config.counterFriction>=0&&dx*velocity.x+dz*velocity.z<0){
+    /* reference-v11 counter-strafe: brake the current motion, then accelerate any input across it. */
+    double v=std::hypot(velocity.x,velocity.z),ux=velocity.x/v,uz=velocity.z/v,next=std::max(0.0,v-(config.counterDeceleration+config.counterFriction*v)*dt);velocity.x*=next/v;velocity.z*=next/v;
+    double across=dx*(-uz)+dz*ux;if(std::abs(across)>1e-9){double add=std::min(config.groundAcceleration*dt*std::abs(across),target*std::abs(across));velocity.x+=-uz*std::copysign(add,across);velocity.z+=ux*std::copysign(add,across);}
+   }
+   else if(len>0){double acceleration=dx*velocity.x+dz*velocity.z<0?config.reverseAcceleration:config.groundAcceleration;double tx=dx*target-velocity.x,tz=dz*target-velocity.z,d=std::hypot(tx,tz),amount=std::min(d,acceleration*dt);if(d>1e-9){velocity.x+=tx/d*amount;velocity.z+=tz/d*amount;}}
    else {double v=std::hypot(velocity.x,velocity.z),next=std::max(0.0,v-(config.groundDeceleration+config.friction*v)*dt);if(v>0){velocity.x*=next/v;velocity.z*=next/v;}}
    if(in.jump){velocity.y=config.jumpImpulse;grounded=false;}
   }else if(len>0){double along=velocity.x*dx+velocity.z*dz,add=std::min(config.airAcceleration*dt,std::max(0.0,config.airMaxSpeed-along));velocity.x+=dx*add;velocity.z+=dz*add;double v=std::hypot(velocity.x,velocity.z);if(v>config.airMaxSpeed){velocity.x*=config.airMaxSpeed/v;velocity.z*=config.airMaxSpeed/v;}}
@@ -64,10 +74,10 @@ struct Recoil {
   return {dp,dy};
  }
 };
-struct Spread {double base=0,movement=0,bloom=0,air=0,total=0,x=0,y=0;};
+struct Spread {double base=0,movement=0,bloom=0,air=0,landing=0,total=0,x=0,y=0;};
 struct Weapon {
  Profile p;int ammo=0,reserve=0,index=0,magazineShot=0;double reloadUntil=-1,reloadStarted=0,equipUntil=0,lastShot=-100,nextShot=0,bloom=0,firedAt=0,lastInterval=0;
- bool infinite=true,autoReload=true,ads=false,wasFire=false;Recoil recoil;Random spreadRng,recoilRng;
+ bool infinite=true,autoReload=true,ads=false,wasFire=false,holdBloom=false;Recoil recoil;Random spreadRng,recoilRng;
  explicit Weapon(Profile profile={},uint32_t seed=1947):p(profile),ammo(int(p.magazine)),reserve(int(p.reserve)),spreadRng(seed),recoilRng(seed^0xa91e){}
  bool reload(double time){if(reloadUntil<0&&time>=equipUntil&&ammo<p.magazine&&(infinite||reserve>0)){reloadStarted=time;reloadUntil=time+p.reloadTime;return true;}return false;}
  void equip(double time){reloadUntil=-1;equipUntil=time+p.equipTime;wasFire=true;ads=false;}
@@ -75,7 +85,8 @@ struct Weapon {
   ads=in.ads&&p.adsZoom>1;bool pressed=in.presses>0||(in.fire&&!wasFire);wasFire=in.fire;
   if(in.reload)reload(time);
   if(reloadUntil>=0&&time+1e-9>=reloadUntil){int n=std::min(int(p.magazine)-ammo,infinite?int(p.magazine):reserve);ammo+=n;if(!infinite)reserve-=n;magazineShot=0;reloadUntil=-1;}
-  bloom=std::max(0.0,bloom-p.bloomRecovery*dt);recoil.recover(dt,p,time-lastShot);if(time-lastShot>p.resetTime)index=0;
+  if(!holdBloom||time-lastShot>1.5/(ads?p.adsFireRate:p.fireRate)){bloom=std::max(0.0,bloom-p.bloomRecovery*dt);}
+  recoil.recover(dt,p,time-lastShot);if(time-lastShot>p.resetTime)index=0;
   double interval=1/(ads?p.adsFireRate:p.fireRate);if(lastInterval&&interval!=lastInterval)nextShot=firedAt+interval;lastInterval=interval;
   if(ammo==0&&autoReload)reload(time);
   bool wants=p.semi?pressed:(in.fire||pressed);
@@ -83,6 +94,13 @@ struct Weapon {
    double due=nextShot;firedAt=time-due>Dt+1e-9||lastShot<0?time:due;nextShot=firedAt+interval;fire();lastShot=time;ammo--;index++;magazineShot++;bloom=std::min(p.maxBloom,bloom+p.bloomPerShot);
   }
  }
+ /* reference-v11: official first/max spread scaled by crouch, plus additive movement, airborne and landing penalties. */
+ Spread referenceSpread(const Movement& m,bool landing,const ReferenceSpread& r,const ReferenceRules& rules,bool running){Spread s;
+  bool scoped=ads&&r.adsFirst>=0;double first=scoped?r.adsFirst:r.first,max=scoped?r.adsMax:r.max,c=1+(r.crouch-1)*std::min(1.0,std::max(0.0,m.crouch));
+  double run=m.config.weaponRun,fraction=run>0?m.speed/run:0;
+  double penalty=!m.grounded?0:fraction<=rules.deadzone+1e-9?0:m.crouch>.5?r.penaltyCrouch:(fraction<=rules.walkAccuracy&&!running)?r.penaltyWalk:r.penaltyRun;
+  double fired=std::min(max,first+bloom);s.base=first*c;s.bloom=std::max(0.0,fired*c-s.base);s.movement=penalty;s.air=m.grounded?0:r.penaltyAir;s.landing=m.grounded&&landing?rules.landingSpread:0;
+  s.total=s.base+s.bloom+s.movement+s.air+s.landing;double theta=spreadRng.next()*Pi*2,radius=std::sqrt(spreadRng.next())*s.total;s.x=std::cos(theta)*radius;s.y=std::sin(theta)*radius;return s;}
  Spread spread(const Movement& m,bool landing){Spread s;double c=1+(p.crouchSpread-1)*m.crouch,a=ads?p.adsSpread:1;s.base=p.firstSpread*c*a;double f=std::max(0.0,(m.speed-m.config.accuracyVelocityThreshold)/(m.config.maxSpeed-m.config.accuracyVelocityThreshold));s.movement=p.movementSpread*std::pow(std::min(1.5,f),1.3)*c*a;s.bloom=bloom*c*a;s.air=m.grounded?(landing?.35:0):p.airSpread;s.total=s.base+s.movement+s.bloom+s.air;double theta=spreadRng.next()*Pi*2,r=std::sqrt(spreadRng.next())*s.total;s.x=std::cos(theta)*r;s.y=std::sin(theta)*r;return s;}
 };
 struct Clock {double debt=0;template<class Step>void advance(double elapsed,Step&& step){debt+=std::max(0.0,elapsed);int n=0;while(debt+1e-12>=Dt&&n++<240){step(Dt);debt-=Dt;}}};

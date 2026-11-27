@@ -4,6 +4,9 @@ import {LEVEL_IDS} from '../config/tactical';
 import {Simulation} from '../engine/simulation/Simulation';
 import {emptyInput,type InputState,type Settings} from '../engine/types';
 import {activeAngles,zoneForScenario} from '../engine/tactical/complex';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const dt=1/120;
 function simulation(patch:Partial<Settings>={}){

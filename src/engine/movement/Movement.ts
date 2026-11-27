@@ -1,10 +1,11 @@
+import {CS2_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
 import {RECOVERY_GROUND_ACCELERATION} from '../simulation/consistencyRules';
 import {Vector3} from 'three';
-import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,MATERIALS_MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
+import {CS2_PHYSICS,MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,MATERIALS_MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,usesReferenceRules,type SimulationRulesId} from '../simulation/rules';
 import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
@@ -52,6 +53,18 @@ export class Movement {
     v.airSpeedLimit=usesBunnyHopCalibration(this.rules)?calibratedCap:VALORANT_PHYSICS.airSpeedLimit;
    if(v.groundAcceleration===MOVEMENT.groundAcceleration||v.groundAcceleration===RECOVERY_GROUND_ACCELERATION)
     v.groundAcceleration=usesRecoveryAcceleration(this.rules)?RECOVERY_GROUND_ACCELERATION:MOVEMENT.groundAcceleration;
+   // reference-v11: braking fitted to Riot's published stop timings.
+   const ref=VALORANT_REFERENCE,standardBrake=v.friction===MOVEMENT.friction&&v.groundDeceleration===MOVEMENT.groundDeceleration,referenceBrake=v.friction===ref.braking.friction&&v.groundDeceleration===ref.braking.deceleration;
+   if(standardBrake||referenceBrake){const on=usesReferenceRules(this.rules);v.friction=on?ref.braking.friction:MOVEMENT.friction;v.groundDeceleration=on?ref.braking.deceleration:MOVEMENT.groundDeceleration;}
+  }
+  if(this.profile.preset==='cs2'){
+   // reference-v11: Counter-Strike 2 server defaults for the CS2 option (the
+   // classic Source preset keeps its own deliberately different air control).
+   const v=this.profile,on=usesReferenceRules(this.rules),base=CS2_PHYSICS;
+   for(const key of ['jumpImpulse','airWishSpeedCap','groundStopSpeed','stepHeight'] as const)if(v[key]===base[key]||v[key]===CS2_REFERENCE[key])v[key]=on?CS2_REFERENCE[key]:base[key];
+  }
+  if(this.profile.airModel==='tactical'){const v=this.profile,ref=VALORANT_REFERENCE;
+   if(usesReferenceRules(this.rules)){v.counterFriction=ref.counterStrafe.friction;v.counterDeceleration=ref.counterStrafe.deceleration;}else{delete v.counterFriction;delete v.counterDeceleration;}
   }
  }
  get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:this.rules==='materials-v3'?MATERIALS_MOVEMENT_PHYSICS_VERSION:this.rules==='air-steering-v4'?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
@@ -90,7 +103,10 @@ export class Movement {
   this.takeoff=takeoff;
  }
  get profileBaseMaxSpeed(){return this.baseSpeed;}
- get accurate(){return this.grounded&&this.speed<=this.profile.accuracyVelocityThreshold;}
+ /** Speed at or below which shots carry no movement penalty. reference-v11: the
+  * official deadzone, 27.5% of the held weapon's run speed. */
+ get accuracyLimit(){return usesReferenceRules(this.rules)&&this.profile.id==='valorant'?VALORANT_REFERENCE.deadzone*(this.weaponContext?.runSpeed??this.weaponSpeedReference):this.profile.accuracyVelocityThreshold;}
+ get accurate(){return this.grounded&&this.speed<=this.accuracyLimit;}
  private get buffer(){return Math.max(0,Math.min(.14,this.profile.jumpBufferSeconds??.08));}
  private bodyHeight(){return this.crouch>.5?1.35:1.85;}
  /** Profile changes are controlled horizontal resets at the current position.

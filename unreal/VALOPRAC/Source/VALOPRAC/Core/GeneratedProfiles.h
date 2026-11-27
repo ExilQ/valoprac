@@ -172,6 +172,13 @@ p.pattern.reserve(1);
 p.pattern.push_back({2.5,0.05});
 break;
 default:break;}return p;}
+inline ReferenceSpread referenceSpread(int id){ReferenceSpread r;switch(id){
+case 0:r.first=0.25;r.max=1;r.adsFirst=0.157;r.adsMax=1.02;r.crouch=0.85;r.penaltyCrouch=0.8;r.penaltyWalk=3;r.penaltyRun=6;r.penaltyAir=10;break;
+case 1:r.first=0.2;r.max=0.9;r.adsFirst=0.11;r.adsMax=0.91;r.crouch=0.85;r.penaltyCrouch=0.8;r.penaltyWalk=3;r.penaltyRun=6;r.penaltyAir=10;break;
+case 2:r.first=0.25;r.max=2.75;r.adsFirst=-1;r.adsMax=-1;r.crouch=0.75;r.penaltyCrouch=0.5;r.penaltyWalk=1.2;r.penaltyRun=3;r.penaltyAir=7;break;
+case 3:r.first=5;r.max=5;r.adsFirst=0;r.adsMax=0;r.crouch=0.9;r.penaltyCrouch=7.5;r.penaltyWalk=10;r.penaltyRun=15;r.penaltyAir=15;break;
+default:break;}return r;}
+inline ReferenceRules referenceRules(){ReferenceRules r;r.deadzone=0.275;r.walkAccuracy=0.61;r.landingSpread=7;r.landingSeconds=0.225;r.brakeFriction=5.7;r.brakeDeceleration=18.8;r.counterFriction=4.1;r.counterDeceleration=24.2;return r;}
 inline MovementTuning movementProfile(){MovementTuning p;
 p.maxSpeed=5.4;
 p.groundAcceleration=20.48;

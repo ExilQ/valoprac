@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import {Box3,Vector3} from 'three';
 import {DEFAULT_SETTINGS} from '../config/settings';
 import {DefenderAI,type PlayerBody} from '../engine/tactical/DefenderAI';
@@ -8,6 +8,9 @@ import {Movement} from '../engine/movement/Movement';
 import {emptyInput,type Settings} from '../engine/types';
 import type {Obstacle} from '../engine/collision/environment';
 import evidence from '../../docs/roadmap/F4_MEASUREMENTS.json';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const dt=1/120,skills=['beginner','normal','advanced','expert'] as const;
 const median=(values:number[])=>{const n=values.slice().sort((a,b)=>a-b);return(n[(n.length-1)>>1]+n[n.length>>1])/2;};

@@ -1,4 +1,19 @@
 {
+  "12.36": {
+    "title": "Full physics check against official VALORANT values",
+    "description": "Every physics parameter was compared with the official wiki and Riot's published figures, and every value they confirm now matches. Accuracy follows the official tables and braking follows Riot's stop timings.",
+    "changes": [
+      "Accuracy: first-shot spread, crouch multiplier, maximum spread, aim-down-sights values and movement penalties (crouch-moving, walking, running, airborne) follow each weapon's official table. Movement penalties add to the first-shot spread, and sustained fire now grows to the official maximum (before, spread recovered during fire and barely grew).",
+      "Deadzone: no movement penalty at or below 27.5% of the weapon's run speed (patch 3.0; previously 12%). Up to 61% is walking accuracy, above it running accuracy, and slowing down from a run skips the walking state (patch 0.50).",
+      "Every weapon gets +7° for 0.225 s after landing (patch 1.09); previously +0.35° for 0.09 s except the Operator.",
+      "Braking: releasing reaches 25% in 0.108 s and stops in 0.167 s; counter-strafing reaches 61% in 0.050 s, 25% in 0.108 s and stops in 0.158 s, within one 120 Hz tick of Riot's published timings.",
+      "Knife: hits on an enemy's back deal double damage (100/150).",
+      "Counter-Strike physics option: jump 7.67 m/s, air wish speed 0.762 m/s, stop speed 2.032 m/s and 0.457 m steps, matching the CS2 server defaults.",
+      "The portable C++ core for the Unreal port carries the same model and matches the browser simulation to 10 decimal places.",
+      "Values with no official source (walk, crouch and backward ratios, spread growth per shot, recoil patterns, footstep thresholds, tagging duration) are marked as calibration.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 11); earlier replays play with the rules they were recorded with."
+    ]
+  },
   "12.35": {
     "title": "Speed recovers with a realistic delay",
     "description": "Getting back to full speed from a standstill, walking, crouching or aiming was too quick; ground acceleration now uses the Unreal Engine character default.",

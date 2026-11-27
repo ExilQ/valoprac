@@ -1,3 +1,4 @@
+import {VALORANT_REFERENCE} from '../../config/valorantReference';
 import {motionPose,type RecordedMotion} from '../../training/scenarios/recordedMotion';
 import type {DefenderPolicy} from '../../training/scenarios/defenderPolicy';
 import {Box3,Matrix4,Ray,Sphere,Vector3} from 'three';
@@ -17,7 +18,7 @@ import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES} from '../../config/surfaces';
 import {zoneAt} from './complex';
 import {SeededRandom} from '../simulation/random';
-import {CURRENT_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesCurrentWeapons,usesReferenceRules,type SimulationRulesId} from '../simulation/rules';
 import {staticBroadphaseFor} from '../collision/StaticBroadphase';
 import {damageAt,weaponProfilesFor} from '../../config/weapons';
 
@@ -99,7 +100,7 @@ export class DefenderAI {
  setSimulationRules(rules:SimulationRulesId){this.rules=rules;const profiles=weaponProfilesFor(usesCurrentWeapons(rules));
   // Memories (and their guns) are built in the constructor under the default
   // rules; a replayed ruleset must also restore that ruleset's firearm values.
-  for(const m of this.memories){m.movement.setSimulationRules(rules);if(m.gun.profile!==profiles[m.weapon]){m.gun.profile=profiles[m.weapon];m.gun.reserve=m.gun.profile.reserve;}}}
+  for(const m of this.memories){m.movement.setSimulationRules(rules);if(usesReferenceRules(rules))m.gun.holdBloomWhileFiring=true;else delete m.gun.holdBloomWhileFiring;if(m.gun.profile!==profiles[m.weapon]){m.gun.profile=profiles[m.weapon];m.gun.reserve=m.gun.profile.reserve;}}}
  retry(){
   this.epoch++;this.lastPlayerShotVelocity=null;this.lastPlayerShotAt=-100;this.health=150;this.death=null;this.current=null;this.last=null;this.episodeOrigin=null;this.returningAt=null;this.pathAt=0;this.perceptionAt=0;this.shots.length=0;this.report.health=150;this.report.path=[];this.report.observedRecoveryUntil=0;this.usedBaits.clear();this.usedRecoveries.clear();
   this.memories=this.targets.map((t,i)=>this.newMemory(t,i));
@@ -107,7 +108,7 @@ export class DefenderAI {
  private newMemory(t:Target,i:number):Memory{
   const sector=this.sectors[i],yaw=sector?.facingYaw??(t.position.z>7?Math.PI:0),face={x:Math.sin(yaw),y:0,z:Math.cos(yaw)},weapon=this.settings.defenderWeapon==='mixed'?(sector?.weapon??(['rifleA','operator','sheriff','rifleB'] as WeaponId[])[i%4]):this.settings.defenderWeapon;
   const rng=new SeededRandom(this.seed^Math.imul(i+1,0x45d9f3b)^Math.imul(this.epoch,0x19a1)),gun=new Weapon(weaponProfilesFor(usesCurrentWeapons(this.rules))[weapon],this.seed^Math.imul(i+1,0x1f123bb5)^Math.imul(this.epoch,0x4417));
-  gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;
+  gun.scopeMode='hold';gun.autoRescope=true;gun.infiniteReserve=this.settings.infiniteReserve;gun.autoReload=true;if(usesReferenceRules(this.rules))gun.holdBloomWhileFiring=true;
   const footsteps=new Footsteps();footsteps.onStep=e=>{if(this.memories[i]?.footsteps!==footsteps||!t.enabled||!t.active)return;if(this.rules==='legacy-v2')this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:this.settings.practiceMap==='complex'?zoneAt(e.position)?.material??'concrete':'concrete',bot:i,encounterGeneration:this.epoch,kind:'bot-step'});else{const surfaceId=resolveGroundSurface(this.settings.practiceMap,this.obstacles,e.position,this.rules);this.onFootstep?.({...e,id:++this.footstepSequence,position:vec(e.position),material:SURFACES[surfaceId].footstepSoundProfile,surfaceId,bot:i,encounterGeneration:this.epoch,kind:'bot-step'});}};
   const movement=new Movement(undefined,this.obstacles);movement.setSimulationRules(this.rules);
   return{state:'holding',weapon,visible:0,exposure:0,acquired:0,nextShot:0,lastSeen:-100,known:null,alertUntil:0,destination:null,repeats:0,lastExposed:-100,face,holdingFace:{...face},decision:0,aim:null,path:[],pathIndex:0,burst:0,lastShot:null,pose:0,
@@ -325,7 +326,8 @@ export class DefenderAI {
  }
  private fire(t:Target,m:Memory,p:PlayerBody,time:number,information:'visual'|'memory'|'sound',desiredYaw:number,desiredPitch:number){
   const gun=m.gun,profile=gun.profile,recoilBefore={pitch:gun.recoil.pitch,yaw:gun.recoil.yaw};
-  const spread={...gun.calculateSpread(m.movement,gun.ads,time-m.movement.landedAt<.16)};
+  const reference=usesReferenceRules(this.rules)?VALORANT_REFERENCE.spread[m.weapon as keyof typeof VALORANT_REFERENCE.spread]:undefined;
+  const spread={...(reference?gun.calculateReferenceSpread(m.movement,gun.ads,time-m.movement.landedAt<VALORANT_REFERENCE.landing.seconds,reference,false):gun.calculateSpread(m.movement,gun.ads,time-m.movement.landedAt<.16))};
   const direction=spreadDirection(m.motor.yaw+m.motor.compensationYaw+recoilBefore.yaw*Math.PI/180,m.motor.pitch+m.motor.compensationPitch+recoilBefore.pitch*Math.PI/180,spread.x,spread.y,new Vector3());
   t.headPosition(this.head);const origin=this.head.clone();this.ray.set(origin,direction);const playerHit=intersectPlayerBody(this.ray,p,this.hit),trace=traceBallisticRay(this.ray,profile,playerHit?{distance:playerHit.distance,zone:playerHit.region,point:vec(this.hit)}:null,this.obstacles,150,this.rules);
   const detail=trace.zone==='head'||trace.zone==='torso'||trace.zone==='arm'||trace.zone==='leg'?trace.zone:undefined,region:DefenderShot['hit']=detail==='head'?'head':detail==='leg'?'leg':detail?'body':'miss';
