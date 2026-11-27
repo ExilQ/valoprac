@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "release": "12.0.32",
-  "patchLabel": "12.32",
-  "generatedAt": "2026-11-26T16:52:14.327Z",
+  "release": "12.0.33",
+  "patchLabel": "12.33",
+  "generatedAt": "2026-11-27T02:14:48.007Z",
   "calibration": "dual-movement-1.4.0-provisional",
   "historicalBrowserCaptureRelease": "9.0.0",
   "tests": {
-    "application": 1600,
+    "application": 1610,
     "broker": 28,
     "hosting": 36,
     "passed": true,

@@ -1,4 +1,17 @@
 {
+  "12.33": {
+    "title": "Knife grips, aim pose and attack motion redesigned",
+    "description": "After researching well-received approaches in other FPS games and real knife grips, the knife was rebuilt with a grip for each design, an aim pose toward the crosshair and attacks that reach it at the moment of the hit.",
+    "changes": [
+      "A grip for each design: the field knife, aether blade and obsidian fang in a forward grip, the tanto in a saber grip with the thumb on the spine, the kunai in a reverse grip with the thumb over the ring, and the karambit in a reverse grip with the index finger through the ring.",
+      "Aim pose: the point is canted toward the crosshair and the edge faces the target, without covering the crosshair (checked at 4:3, 16:9 and 21:9). The flat of the blade is visible, so each knife is easy to recognise.",
+      "Contact at the moment of the hit: knife hits resolve on the press, so the tip now reaches the crosshair 0.041 s into a slash and 0.074 s into a stab, instead of about 0.1 s late.",
+      "Three-swing combo: consecutive slashes cycle through three different directions; a stab or a short pause starts again. Reverse grips hook and drive the stab down from above.",
+      "Draw: the karambit spins once round the index finger through its ring and the kunai flips into the reverse grip. The knife is ready at the same time as before.",
+      "The arm stays anchored at the lower right during attacks and pumps with the stride while running.",
+      "Damage, range, recovery and hit detection are unchanged. Only the view changed, so replays stay compatible."
+    ]
+  },
   "12.32": {
     "title": "Jump sound, silent knife walking, precise movement and footstep measurement",
     "description": "Jumps now push off audibly unless you were already crouched about 0.1 s before. Knife walking no longer makes footsteps, and knife jumps keep their speed.",
