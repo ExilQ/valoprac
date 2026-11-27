@@ -20,7 +20,8 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesCurrentWeapons,usesTrainingRules,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesConsistencyRules,usesCurrentWeapons,usesTrainingRules,type SimulationRulesId} from './rules';
+import {CONSISTENCY_RULES} from './consistencyRules';
 import {AUDIO_RULES} from './audioRules';
 import {TRAINING_RULES} from './trainingRules';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
@@ -240,7 +241,7 @@ export class Simulation {
       for(let index=0;index<count;index++)this.activateScenarioTarget(index);
     }
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
-    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius);
+    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius,usesConsistencyRules(this.rules)?CONSISTENCY_RULES.silentLandingBelow:.35);
     this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
     this.footsteps.step(this.movement,input.walk,dt,this.time,this.footstepAudibleVelocity);
     if(this.movement.jumpCount>jumpsBefore&&usesAudioRules(this.rules))this.emitJumpSound();

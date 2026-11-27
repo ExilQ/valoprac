@@ -12,13 +12,13 @@ export class Landings {
  totalEvents=0;onLanding:((event:LandingSoundEvent)=>void)|null=null;
  private serial=0;private encounterStartEvent=0;private journal:LandingSoundEvent[]=[];
  constructor(movement?:LandingMovement){this.serial=movement?.landingSerial??0;}
- step(m:LandingMovement,time:number,dt:number,materialAt?:(position:FootstepEvent['position'])=>FootstepMaterial|undefined,baseRadius=20):LandingSoundEvent|null {
+ step(m:LandingMovement,time:number,dt:number,materialAt?:(position:FootstepEvent['position'])=>FootstepMaterial|undefined,baseRadius=20,minImpact=.35):LandingSoundEvent|null {
   if(m.landingSerial===this.serial)return null;
   this.serial=m.landingSerial;
   // An invalid or near-zero contact is not an audible impact. Its serial is
   // consumed once, so later frames cannot manufacture a louder stale landing.
   const impact=m.lastLandingImpactSpeed,stamp=m.lastLandingTime;
-  if(!Number.isFinite(stamp)||!Number.isFinite(impact)||impact<.35)return null;
+  if(!Number.isFinite(stamp)||!Number.isFinite(impact)||impact<minImpact)return null;
   const fraction=dt>0&&Number.isFinite(dt)?Math.max(0,Math.min(1,(stamp-(time-dt))/dt)):1;
   const position={x:m.previous.x+(m.position.x-m.previous.x)*fraction,y:m.supportHeight,z:m.previous.z+(m.position.z-m.previous.z)*fraction};
   const event:LandingSoundEvent={kind:'landing',id:++this.totalEvents,timestamp:stamp,position,

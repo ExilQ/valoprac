@@ -53,10 +53,13 @@ describe('12.32 audio-v8: knife jumps keep the knife speed',()=>{
   expect(measureJump('rifleA',JUMP_VARIANTS[1]).horizontalSpeedAtLanding).toBeCloseTo(5.4,2);
  });
  it('replays jump sounds, knife jumps and knife walking exactly',async()=>{
-  const s=make({practiceMap:'bind' as never},undefined,'knife'),recorder=new ReplayRecorder(s);
+  // Recorded under the 12.32 rules (still accepted) and under the current rules.
+  for(const rules of ['audio-v8','consistency-v9'] as const){
+  const s=make({practiceMap:'bind' as never},rules,'knife'),recorder=new ReplayRecorder(s);
   run(s,360,n=>({forward:1,walk:n>=200,crouch:n>=260&&n<300,jump:n===100||n===320,jumpHeld:n===100||n===320,jumpPresses:n===100||n===320?1:0}));
   expect(s.jumpSoundEvents+s.silentJumps).toBe(2);
-  const record=recorder.finish()!;expect(record.header.simulationRules).toBe('audio-v8');expect((await new ReplayPlayer(record).verify()).passed).toBe(true);
+  const record=recorder.finish()!;expect(record.header.simulationRules).toBe(rules);expect((await new ReplayPlayer(record).verify()).passed).toBe(true);
+  }
  });
 });
 

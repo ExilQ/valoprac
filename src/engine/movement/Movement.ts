@@ -3,7 +3,7 @@ import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,type SimulationRulesId} from '../simulation/rules';
 import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
@@ -151,7 +151,7 @@ export class Movement {
    if(p.airModel==='tactical'&&(this.rules==='air-steering-v4'||usesBunnyHopCalibration(this.rules))){
     const run=this.hopRunningSpeed(takeoff),diagonal=run>0&&!input.walk&&!input.crouch&&!this.weaponContext?.ads
      ?Math.sign(side)*Math.max(0,Math.min(forward,Math.abs(side))):0;
-    steerTacticalAir(this.velocity,wish,p,dt,this.airAcceleration,takeoff.speedCap,diagonal,run);
+    steerTacticalAir(this.velocity,wish,p,dt,this.airAcceleration,takeoff.speedCap,diagonal,run,usesConsistencyRules(this.rules)?this.capScale(takeoff.weaponRunSpeed):1);
    }else solveAirMovement(this.velocity,wish,p,dt,this.airAcceleration,takeoff.speedCap);
   }
   const beforeVertical=this.velocity.y;

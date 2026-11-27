@@ -1,4 +1,15 @@
 {
+  "12.34": {
+    "title": "Movement physics consistency: knife jump speed, silent landing",
+    "description": "After repeated checks of 360 jump scenarios, 208 ground transitions, chained hops and random sessions, the air speed caps that were computed differently now follow one rule, and a crouched jump stood up in the air lands silently.",
+    "changes": [
+      "Knife jump speed: jumping backwards or crouching on the jump with the knife cut speed to 5.94 m/s (on the live 12.22 site every knife jump and hop was cut to 5.67 m/s). Every air speed cap now scales with the weapon's run speed, so the knife keeps its ground speed on any jump.",
+      "Silent landing: jumping while already crouched and standing up in the air extends the legs, so you land earlier and softer (about 5.4 m/s) and without a sound. Landings below 6.0 m/s are silent, so drops lower than 0.88 m are quiet too. A normal standing jump on flat ground is still heard.",
+      "Aim-down-sights movement (Vandal and Phantom 76%, Operator 72%) matches the official values, and reaches the same speed whatever the order of aiming, or aiming in the air.",
+      "Results: under the new rules 0 violations across 360 jump scenarios, ground transitions, weapon switches, chained hops and 64 random sessions, with exact replay playback.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 9); earlier replays play with the rules they were recorded with."
+    ]
+  },
   "12.33": {
     "title": "Knife grips, aim pose and attack motion redesigned",
     "description": "After researching well-received approaches in other FPS games and real knife grips, the knife was rebuilt with a grip for each design, an aim pose toward the crosshair and attacks that reach it at the moment of the hit.",

@@ -33,9 +33,11 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
 /** Steer the existing horizontal momentum with a bounded lateral acceleration
  * expressed as a turn rate. Only the component along the velocity adds speed
  * or brakes. Thus a sideways input can curve a run at its speed cap. */
-export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null,diagonalStrafe=0,runSpeed=0){
+export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null,diagonalStrafe=0,runSpeed=0,capScale=1){
  const beforeX=v.x,beforeZ=v.z,speed=Math.hypot(beforeX,beforeZ);
- const standardCap=Math.min(takeoffCap??Infinity,p.airSpeedLimit??Infinity,p.hopSpeedCap??Infinity);
+ // capScale (consistency-v9): the profile's rifle-based caps scale with the
+ // takeoff weapon's run speed, so a faster weapon is not cut to rifle speed.
+ const standardCap=Math.min(takeoffCap??Infinity,(p.airSpeedLimit??Infinity)*capScale,(p.hopSpeedCap??Infinity)*capScale);
  const cap=runSpeed>0?(takeoffCap??standardCap):standardCap;
  if(w.amount>0){
   const wishSpeed=Math.min(p.airMaxSpeed*w.amount,w.speed),impulse=p.airAcceleration*w.amount*dt;
