@@ -12,9 +12,15 @@ export function createBroker({pool,origin,publicOrigin,trustProxy=false,now=Date
  origin=httpsOrigin(origin);publicOrigin=httpsOrigin(publicOrigin);
  const reply=(res,status,body={})=>{if(res.destroyed)return;res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store','Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'POST, DELETE, OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization','Vary':'Origin'});res.end(JSON.stringify(body));};
  const requests=new Map();
- function permit(req){
-  // Only a controlled reverse proxy may supply the client address; direct clients cannot spoof it.
-  const address=trustProxy?String(req.headers['x-forwarded-for']||req.socket.remoteAddress).split(',').at(-1).trim():req.socket.remoteAddress;
+ function clientAddress(req){
+  const peer=req.socket.remoteAddress;
+  // The shipped proxy connects over loopback and overwrites this header.
+  // Never trust forwarding headers from other peers or guess an address in a chain.
+  if(!trustProxy||!['127.0.0.1','::1','::ffff:127.0.0.1'].includes(peer))return peer;
+  const forwarded=req.headers['x-forwarded-for'];
+  return typeof forwarded==='string'&&net.isIP(forwarded)?forwarded:null;
+ }
+ function permit(address){
   const time=now();let rate=requests.get(address);
   if(!rate||time-rate.at>=60000){
    if(requests.size>=4096){for(const [key,value] of requests)if(time-value.at>=60000)requests.delete(key);if(!requests.has(address)&&requests.size>=4096)return false;}
@@ -28,7 +34,8 @@ export function createBroker({pool,origin,publicOrigin,trustProxy=false,now=Date
   if(req.headers.origin!==origin)return reply(res,403,{error:'origin'});if(req.method==='OPTIONS')return reply(res,204);
   try{
    if(req.method==='POST'&&path==='/sessions'){
-    if(!permit(req))return reply(res,429,{error:'rate'});
+    const address=clientAddress(req);if(!address)return reply(res,400,{error:'client-address'});
+    if(!permit(address))return reply(res,429,{error:'rate'});
     const abort=new AbortController(),closed=()=>{if(!res.writableFinished)abort.abort();};res.once('close',closed);
     try{
      const l=await pool.allocate({signal:abort.signal});
@@ -70,7 +77,7 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
  const worker=createWorker({engineLauncher:process.env.VALOPRAC_ENGINE_LAUNCHER||'',infraRoot:process.env.VALOPRAC_INFRA_ROOT||''});
  const onError=()=>console.error('GPU worker cleanup failed; capacity remains reserved');
  const pool=new LeasePool({worker,capacity:Number(process.env.VALOPRAC_CAPACITY||1),onError});
- const server=createBroker({pool,origin,publicOrigin});server.listen(4242,'127.0.0.1');
+ const server=createBroker({pool,origin,publicOrigin,trustProxy:true});server.listen(4242,'127.0.0.1');
  const timer=setInterval(()=>void pool.reap().catch(onError),10000);timer.unref();let closing=false;
  const shutdown=async()=>{if(closing)return;closing=true;clearInterval(timer);const closed=new Promise(resolve=>server.close(resolve));server.closeIdleConnections();try{await pool.close();await closed;process.exitCode=0;}catch{onError();process.exitCode=1;}};
  process.on('SIGINT',()=>void shutdown());process.on('SIGTERM',()=>void shutdown());

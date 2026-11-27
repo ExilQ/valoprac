@@ -7,6 +7,9 @@
   Referrer-Policy "no-referrer"
  }
  request_body { max_size 1KB }
- reverse_proxy 127.0.0.1:4242
+ reverse_proxy 127.0.0.1:4242 {
+  # Replace any caller-supplied chain; the broker trusts only this local hop.
+  header_up X-Forwarded-For {remote_host}
+ }
  # Access logging deliberately disabled: signalling paths contain ephemeral tickets.
 }
