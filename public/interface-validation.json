@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "release": "12.0.34",
-  "patchLabel": "12.34",
-  "generatedAt": "2026-11-27T04:56:10.401Z",
+  "release": "12.0.35",
+  "patchLabel": "12.35",
+  "generatedAt": "2026-11-27T08:10:30.580Z",
   "captureRelease": "11.0.0",
   "capturePatchLabel": "11.00",
   "captureEvidenceDirectory": "docs/interface-11.00",
   "direction": "Precision Utility",
   "tests": {
-    "application": 1617,
+    "application": 1622,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -676,8 +676,8 @@
   },
   "currentSimulation": {
     "gameVersion": "12.0.0",
-    "simulationVersion": "valoprac-replay-simulation-9",
-    "rules": "consistency-v9",
+    "simulationVersion": "valoprac-replay-simulation-10",
+    "rules": "acceleration-v10",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "validation": "/physics-materials-validation.json"
   },

@@ -15790,6 +15790,11 @@
       "id": "msg_0713209961c4",
       "source": "초속",
       "en": "Only movement faster than"
+    },
+    {
+      "id": "msg_0ad667873c71",
+      "source": "착지 소리",
+      "en": "Landing sound"
     }
   ]
 }

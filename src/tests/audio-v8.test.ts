@@ -68,9 +68,10 @@ describe('12.32 movement and footstep audit',()=>{
  // from the simulation and must match it exactly.
  it('matches the published measurement',()=>{
   const audit={schema:1,rules:'audio-v8',tickHz:120,
-   speeds:AUDIT_WEAPONS.flatMap(w=>AUDIT_STATES.map(st=>measureState(w,st))),
-   jumps:AUDIT_WEAPONS.flatMap(w=>JUMP_VARIANTS.map(v=>measureJump(w,v))),
-   gauge:AUDIT_WEAPONS.flatMap(w=>measureGauge(w)),
+   // Pinned to the 12.32 rules the published document describes.
+   speeds:AUDIT_WEAPONS.flatMap(w=>AUDIT_STATES.map(st=>measureState(w,st,'audio-v8'))),
+   jumps:AUDIT_WEAPONS.flatMap(w=>JUMP_VARIANTS.map(v=>measureJump(w,v,'audio-v8'))),
+   gauge:AUDIT_WEAPONS.flatMap(w=>measureGauge(w,'audio-v8')),
    before:{knifeWalk:measureState('knife','walk','training-v7'),knifeRunningJump:measureJump('knife',JUMP_VARIANTS[1],'training-v7')}};
   const path='docs/movement-audit-12.32.json';
   if(process.env.VALOPRAC_UPDATE_AUDIT)writeFileSync(path,JSON.stringify(audit,null,1)+'\n');

@@ -5,6 +5,8 @@ const cache='.sites-runtime/unreal-export';mkdirSync(cache,{recursive:true});
 async function module(path){let output=ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;output=output.replace("'../simulation/random'","'./random.mjs'").replace("'../engine/rendering/projection'","'./projection.mjs'");const file=`${cache}/${path.split('/').at(-1).replace('.ts','.mjs')}`;writeFileSync(file,output);return import(new URL(`../${file}`,import.meta.url));}
 await module('src/engine/rendering/projection.ts');
 const {WEAPONS,WEAPON_ORDER}=await module('src/config/weapons.ts'),{MOVEMENT}=await module('src/config/movement.ts');
+// The portable core follows the current ruleset's ground acceleration (acceleration-v10, 12.35).
+const {RECOVERY_GROUND_ACCELERATION}=await module('src/engine/simulation/consistencyRules.ts'),PORTABLE_MOVEMENT={...MOVEMENT,groundAcceleration:RECOVERY_GROUND_ACCELERATION};
 // The Unreal staging port is firearms-only; the browser knife (12.21) is not exported.
 const GUNS=Object.keys(WEAPONS).filter(id=>id!=='knife'),FIREARMS=Object.fromEntries(GUNS.map(id=>[id,WEAPONS[id]]));
 const dir='unreal/VALOPRAC/Content/Data';mkdirSync(dir,{recursive:true});
@@ -16,7 +18,7 @@ for(const [i,w] of WEAPON_ORDER.map(id=>WEAPONS[id]).entries()){header+=`case ${
 // The disabled portable staging core has a smaller tuning schema. Browser-only
 // takeoff budgets and ballistic integration are not a native-engine port.
 const portableMovementFields=['maxSpeed','groundAcceleration','groundDeceleration','friction','reverseAcceleration','lateralModifier','backwardModifier','walkModifier','crouchModifier','airAcceleration','airMaxSpeed','jumpImpulse','gravity','accuracyVelocityThreshold','standingEyeHeight','crouchingEyeHeight','radius'];
-header+='default:break;}return p;}\ninline MovementTuning movementProfile(){MovementTuning p;\n';for(const key of portableMovementFields)header+=`p.${key}=${MOVEMENT[key]};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
+header+='default:break;}return p;}\ninline MovementTuning movementProfile(){MovementTuning p;\n';for(const key of portableMovementFields)header+=`p.${key}=${PORTABLE_MOVEMENT[key]};\n`;header+='return p;}\n}\n';writeFileSync('unreal/VALOPRAC/Source/VALOPRAC/Core/GeneratedProfiles.h',header);
 if(process.argv.includes('--profiles-only')){rmSync(cache,{recursive:true});console.log('Exported portable calibration profiles; Unreal runtime remains disabled');process.exit(0);}
 const {createWeaponView}=await module('src/engine/rendering/WeaponView.ts');
 const models={schema:1,license:'Original VALOPRAC geometry; no Riot assets',weapons:{}};

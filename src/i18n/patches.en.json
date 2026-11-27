@@ -1,4 +1,15 @@
 {
+  "12.35": {
+    "title": "Speed recovers with a realistic delay",
+    "description": "Getting back to full speed from a standstill, walking, crouching or aiming was too quick; ground acceleration now uses the Unreal Engine character default.",
+    "changes": [
+      "Standstill to 95% of run speed: 0.14 s → 0.26 s with a rifle, matching a community estimate fitted to VALORANT movement (0.258 s) and the Unreal Engine character's default maximum acceleration (2048 cm/s², 20.48 m/s²). Operator 0.24 s, knife 0.32 s.",
+      "Releasing walk, crouch or aim also eases back to full speed with the same acceleration (rifle to 95%: walk 0.13 s, crouch 0.16 s, aim 0.06 s).",
+      "Stopping is unchanged: releasing a key reaches 25% in 0.133 s and stops in 0.192 s, and counter-strafing is unchanged too.",
+      "The portable C++ core for the Unreal port was regenerated with the current rules (acceleration and the 12.27 weapon values).",
+      "The new behaviour applies only under the new simulation rules (replay simulation 10); earlier replays play with the rules they were recorded with."
+    ]
+  },
   "12.34": {
     "title": "Movement physics consistency: knife jump speed, silent landing",
     "description": "After repeated checks of 360 jump scenarios, 208 ground transitions, chained hops and random sessions, the air speed caps that were computed differently now follow one rule, and a crouched jump stood up in the air lands silently.",

@@ -1,9 +1,10 @@
+import {RECOVERY_GROUND_ACCELERATION} from '../simulation/consistencyRules';
 import {Vector3} from 'three';
 import {MOVEMENT,MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,MATERIALS_MOVEMENT_PHYSICS_VERSION,LEGACY_MOVEMENT_PHYSICS_VERSION,VALORANT_PHYSICS,resolveMovementPhysics,type MovementProfile,type MovementPhysicsProfile,type MovementPhysicsSettings} from '../../config/movement';
 import type {InputState,Vec3,WeaponId} from '../types';
 import {ENVIRONMENT,type Obstacle} from '../collision/environment';
 import {CollisionController} from './CollisionController';
-import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,type SimulationRulesId} from '../simulation/rules';
+import {CURRENT_SIMULATION_RULES,usesBunnyHopCalibration,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,type SimulationRulesId} from '../simulation/rules';
 import {TRAINING_RULES} from '../simulation/trainingRules';
 import {JumpController} from './JumpController';
 import {wishMovement,solveGroundMovement,solveAirMovement,steerTacticalAir,limitContactSpeed,landingRetention} from './MovementSolvers';
@@ -49,6 +50,8 @@ export class Movement {
     v.hopSpeedCap=usesBunnyHopCalibration(this.rules)?calibratedCap:VALORANT_PHYSICS.hopSpeedCap;
    if(v.airSpeedLimit===VALORANT_PHYSICS.airSpeedLimit||v.airSpeedLimit===calibratedCap)
     v.airSpeedLimit=usesBunnyHopCalibration(this.rules)?calibratedCap:VALORANT_PHYSICS.airSpeedLimit;
+   if(v.groundAcceleration===MOVEMENT.groundAcceleration||v.groundAcceleration===RECOVERY_GROUND_ACCELERATION)
+    v.groundAcceleration=usesRecoveryAcceleration(this.rules)?RECOVERY_GROUND_ACCELERATION:MOVEMENT.groundAcceleration;
   }
  }
  get physicsVersion(){return this.rules==='legacy-v2'?LEGACY_MOVEMENT_PHYSICS_VERSION:this.rules==='materials-v3'?MATERIALS_MOVEMENT_PHYSICS_VERSION:this.rules==='air-steering-v4'?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION;}
