@@ -55,7 +55,7 @@ function state(value:unknown,depth=0,parents=new Set<object>(),legacy=false):unk
  * are covered. Render-only THREE objects and wall-clock UUIDs are excluded. */
 /** Menu music (12.38) never affects the simulation, so it stays out of the
  * checksum: the same session hashes the same whatever track was playing. */
-const PRESENTATION_ONLY=['musicTrack','musicVolume','musicInTraining'] as const;
+const PRESENTATION_ONLY=['musicTrack','musicVolume','musicInTraining','botAppearance'] as const;
 function withoutPresentation(settings:Simulation['settings']){const copy:Record<string,unknown>={...settings};for(const k of PRESENTATION_ONLY)delete copy[k];return copy as unknown as Simulation['settings'];}
 export function deterministicState(s:Simulation){
  const raw=s as unknown as Record<string,unknown>,frame=s.renderedTargets.latest;

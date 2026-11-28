@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.39",
-  "patchLabel": "12.39",
-  "generatedAt": "2026-11-28T03:36:54.336Z",
+  "release": "12.0.40",
+  "patchLabel": "12.40",
+  "generatedAt": "2026-11-28T06:26:39.654Z",
   "tests": {
-    "application": 1661,
+    "application": 1668,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -58,36 +58,36 @@
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 125,
       "events": 125,
-      "elapsedMs": 1.4366130000000226,
+      "elapsedMs": 1.691283999999996,
       "dropped": 0,
-      "callbackP95": 0.008324000000015985,
+      "callbackP95": 0.008342999999968015,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 500,
       "events": 500,
-      "elapsedMs": 2.5992140000000177,
+      "elapsedMs": 4.04664600000001,
       "dropped": 0,
-      "callbackP95": 0.003026000000033946,
+      "callbackP95": 0.004274000000009437,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 1000,
       "events": 1000,
-      "elapsedMs": 8.356988000000001,
+      "elapsedMs": 4.054075000000012,
       "dropped": 0,
-      "callbackP95": 0.001772999999957392,
+      "callbackP95": 0.002283000000034008,
       "physicalDeviceTest": false
     },
     {
       "benchmark": "input-delivery-cpu",
       "syntheticHz": 4000,
       "events": 4000,
-      "elapsedMs": 14.203867000000002,
+      "elapsedMs": 21.831285999999977,
       "dropped": 0,
-      "callbackP95": 0.0017579999999952634,
+      "callbackP95": 0.0021189999999933207,
       "physicalDeviceTest": false
     }
   ],

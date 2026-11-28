@@ -15900,6 +15900,166 @@
       "id": "msg_26ab5dcbdfb7",
       "source": "메뉴 음악",
       "en": "Menu music"
+    },
+    {
+      "id": "msg_79f401455dae",
+      "source": "빠른 템포 근접 교전",
+      "en": "Fast close-range fight"
+    },
+    {
+      "id": "msg_1555cec534ec",
+      "source": "거리를 좁히며 짧게 좌우로 끊고, 가까우면 앉아서 연사합니다.",
+      "en": "Closes the distance with short strafes and crouch-sprays up close."
+    },
+    {
+      "id": "msg_621ae6a056a2",
+      "source": "엄폐물에서 넓게 크게 튀어나온 뒤 멈춰서 쏩니다.",
+      "en": "Swings wide out of cover, then stops to shoot."
+    },
+    {
+      "id": "msg_00a9b50925c2",
+      "source": "지글 후 앉아 피킹",
+      "en": "Jiggle, then crouch peek"
+    },
+    {
+      "id": "msg_16ad0a41894b",
+      "source": "짧게 2~3번 흔들어 보고, 다음 피킹에서 앉으며 쏩니다.",
+      "en": "Jiggles two or three times, then crouches as it stops on the next peek."
+    },
+    {
+      "id": "msg_6a2bd12ed9cc",
+      "source": "썸띵 스타일 (불규칙 ADAD)",
+      "en": "Something style (irregular ADAD)"
+    },
+    {
+      "id": "msg_5170b701a53c",
+      "source": "길이가 들쭉날쭉한 좌우 무빙에 짧은 앉기를 섞습니다.",
+      "en": "Strafes of uneven length with short crouch taps."
+    },
+    {
+      "id": "msg_410ce8189a30",
+      "source": "프리미 스타일 (앉았다 일어서기)",
+      "en": "Primmie style (crouch bobbing)"
+    },
+    {
+      "id": "msg_313d0b9a6f95",
+      "source": "좌우로 움직이며 쏠 때마다 앉았다 일어서기를 번갈아 합니다.",
+      "en": "Strafes and alternates crouching and standing on each shot."
+    },
+    {
+      "id": "msg_6c1d2c0b8289",
+      "source": "플래시백 스타일 (앉아서 좌우 이동)",
+      "en": "FlashBack style (crouch strafing)"
+    },
+    {
+      "id": "msg_9d51ab49ef0a",
+      "source": "앉은 채 좌우로 움직이며 쏩니다.",
+      "en": "Strafes while crouched and shoots."
+    },
+    {
+      "id": "msg_8ec2570a7004",
+      "source": "텍스처 스타일 (빠른 템포 선사격)",
+      "en": "Texture style (fast-tempo pre-fire)"
+    },
+    {
+      "id": "msg_3116a807dd3f",
+      "source": "숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.",
+      "en": "Re-peeks with almost no pause and fires the moment it stops."
+    },
+    {
+      "id": "msg_a4c9923e396e",
+      "source": "카론 스타일 (브레이킹 때 앉기)",
+      "en": "Karon style (crouch on braking)"
+    },
+    {
+      "id": "msg_ff9e1c7b0829",
+      "source": "서서 움직이다 멈출 때 앉아서 헤드라인을 피하며 쏩니다.",
+      "en": "Moves standing and crouches as it brakes, dodging the head line."
+    },
+    {
+      "id": "msg_357abae3909b",
+      "source": "팝핀 스윙",
+      "en": "Poppin swing"
+    },
+    {
+      "id": "msg_84d3e4e6fc92",
+      "source": "한 방향으로 아주 넓게 계속 달리며, 짧게 멈춰 쏘고 다시 같은 방향으로 갑니다.",
+      "en": "Keeps running very wide in one direction, taps a short stop to shoot, then carries on."
+    },
+    {
+      "id": "msg_a461755f5459",
+      "source": "상대 봇 무빙 · 외형",
+      "en": "Opponent bot movement · look"
+    },
+    {
+      "id": "msg_2020fbc481ee",
+      "source": "봇 무빙",
+      "en": "Bot movement"
+    },
+    {
+      "id": "msg_eeffd583cc3f",
+      "source": "기본 (각 고정 · 재배치)",
+      "en": "Default (hold and reposition)"
+    },
+    {
+      "id": "msg_d3c39dcdb7b8",
+      "source": "무작위 (봇마다 다른 무빙)",
+      "en": "Random (each bot differs)"
+    },
+    {
+      "id": "msg_c2901c7ffb98",
+      "source": "피킹 방법",
+      "en": "Peeks"
+    },
+    {
+      "id": "msg_d7ebfc3fe8cb",
+      "source": "프로 선수 무빙 참고",
+      "en": "Pro-inspired movement"
+    },
+    {
+      "id": "msg_0f7187da48d0",
+      "source": "봇마다 ",
+      "en": "Each bot picks one of "
+    },
+    {
+      "id": "msg_6fa1f7b5333a",
+      "source": "가지 무빙 중 하나를 골라 엄폐물에서 피킹하고 교전합니다. 마지막 제거 분석에 상대 무빙이 표시됩니다.",
+      "en": " movement styles, peeks from cover and fights. The last-death analysis names the style."
+    },
+    {
+      "id": "msg_372d408e8f00",
+      "source": "봇이 자리를 지키다 재배치합니다(이전과 같음).",
+      "en": "Bots hold their angle and reposition (as before)."
+    },
+    {
+      "id": "msg_01bb1b07206a",
+      "source": "봇도 플레이어와 같은 규칙을 따릅니다. 멈춰서 데드존(달리기 속도의 27.5%) 아래로 느려지거나 앉아서 걸을 때만 정확히 쏩니다. 선수 무빙은 공개된 설명을 바탕으로 만든 연습용 근사이며, 해당 선수와 관련이 없습니다.",
+      "en": "Bots follow the player's rules: they shoot accurately only once slowed below the deadzone (27.5% of run speed) or while crouch-walking. Pro styles are training approximations from public descriptions, not affiliated with the players."
+    },
+    {
+      "id": "msg_a87024e39758",
+      "source": "봇 외형",
+      "en": "Bot look"
+    },
+    {
+      "id": "msg_ddd9e5c98274",
+      "source": "연습 봇 · 눈에 잘 띄는 색",
+      "en": "Training bot · high visibility"
+    },
+    {
+      "id": "msg_f679d2f78aff",
+      "source": "기존 요원",
+      "en": "Original agent"
+    },
+    {
+      "id": "msg_311205f5a80f",
+      "source": "외형은 다음 훈련부터 적용됩니다. 판정 범위는 같습니다.",
+      "en": "The look applies from the next session. Hit areas are unchanged."
+    },
+    {
+      "id": "msg_8e47e60d1991",
+      "source": " · 상대 무빙 ",
+      "en": " · opponent movement "
     }
   ]
 }

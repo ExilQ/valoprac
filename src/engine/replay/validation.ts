@@ -18,7 +18,7 @@ function safeTree(value:unknown,depth=0){if(depth>24)fail();if(value===null||typ
  * their defaults reproduce the earlier behaviour (or act only under newer
  * simulation rules), so they are filled in instead of rejecting the file. */
 /** Settings added after a replay format froze; older files simply lack them. Music (12.38) is presentation only. */
-const LATER_SETTINGS=['infiniteMagazine','botRespawn','botRespawnDelay','musicTrack','musicVolume','musicInTraining'] as const;
+const LATER_SETTINGS=['infiniteMagazine','botRespawn','botRespawnDelay','musicTrack','musicVolume','musicInTraining','botAppearance','botMovement'] as const;
 function settings(raw:unknown,partial=false){if(!obj(raw)||Object.keys(raw).some(k=>!Object.hasOwn(DEFAULT_SETTINGS,k)))fail();
  const sanitized=sanitizeSettings({...DEFAULT_SETTINGS,...raw});if(partial){for(const k of Object.keys(raw))if(!same(raw[k],(sanitized as unknown as Record<string,unknown>)[k]))fail();}
  else{const expected={...(sanitized as unknown as Record<string,unknown>)};for(const k of LATER_SETTINGS)if(!Object.hasOwn(raw,k))delete expected[k];if(!same(raw,expected))fail();}

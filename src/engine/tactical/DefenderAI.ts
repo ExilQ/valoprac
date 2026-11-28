@@ -21,6 +21,7 @@ import {SeededRandom} from '../simulation/random';
 import {CURRENT_SIMULATION_RULES,usesCurrentWeapons,usesReferenceRules,type SimulationRulesId} from '../simulation/rules';
 import {staticBroadphaseFor} from '../collision/StaticBroadphase';
 import {damageAt,weaponProfilesFor} from '../../config/weapons';
+import {BotMovementController,chooseStyle,type BotMovementStyleId} from './botMovementStyles';
 
 export type DefenderState='holding'|'listening'|'alert'|'tracking'|'firing'|'recovering'|'repositioning'|'re-peeking'|'returning'|'eliminated';
 export interface PlayerBody {position:Vec3;velocity:Vec3;eyeHeight:number;crouch:number;grounded:boolean;yaw:number;pitch:number;scoped?:boolean;}
@@ -39,7 +40,7 @@ export interface DefenderShot {
  damage?:number;penetratedLayers?:number;penetration?:PenetrationSegment[];reactionTime?:number;aimAcquisitionTime?:number;detectedAt?:number;
  timing?:FirstShotTiming;
 }
-export interface DefenderDeath {bot:number;weapon:WeaponId;region:string;cause:'shot'|'exposure';time:number;duration:number;player:Vec3;defender:Vec3;line:Vec3[];path:Vec3[];reactionTime?:number;aimAcquisitionTime?:number;shotsFired?:number;hits?:number;penetratedLayers?:number;playerVisible?:boolean;playerShotVelocity?:number|null;}
+export interface DefenderDeath {/** 12.40: the bot's movement style, when one was active. */style?:BotMovementStyleId;bot:number;weapon:WeaponId;region:string;cause:'shot'|'exposure';time:number;duration:number;player:Vec3;defender:Vec3;line:Vec3[];path:Vec3[];reactionTime?:number;aimAcquisitionTime?:number;shotsFired?:number;hits?:number;penetratedLayers?:number;playerVisible?:boolean;playerShotVelocity?:number|null;}
 export interface PeekEpisode {started:number;ended:number;duration:number;distance:number;peakSpeed:number;peakVisibleFraction:number;verticalDisplacement:number;shots:number;hits:number;shotVelocity:number|null;acquisitionTime:number|null;returnToCover:number|null;timeToCover?:number|null;}
 export interface CombatSummary {shots:number;hits:number;firstShots:number;firstHits:number;followupShots:number;followupHits:number;damage:number;firstHitRate:number;followupHitRate:number;meanReaction:number;meanAcquisition:number;meanFirstShotDelay:number;recoilRms:number;residualRecoilRms:number;}
 export interface PeekReport {combatSummary?:CombatSummary;health:number;deaths:number;clears:number;baits:number;recoveryExploits:number;heardEvents:number;enemyShots:number;exposure:number;maxVisibleFraction:number;distance:number;peakSpeed:number;episodes:PeekEpisode[];lastDeath:DefenderDeath|null;path:Vec3[];currentTime?:number;observedRecoveryUntil?:number;visibilityMethod?:string;totalAngles?:number;currentClears?:number;unclearedAngles?:number;operator:{scopedShots:number;scopedHits:number;unscopedShots:number;unscopedHits:number;scopeTransitionSum:number;holdingSeconds:number;firstShots:number;firstHits:number;};}
@@ -53,6 +54,8 @@ export interface DefenderMemory {
  perceptionPhase:PerceptionPhase;detectedAt:number;recognizedAt:number;reactionUntil:number;aimStartedAt:number;acquisitionUntil:number;triggerAt:number;firstShotAt:number;
  preaimed:boolean;contactAngleDegrees:number;
  observations:Observation[];recoilHistory:RecoilObservation[];nextRecoilObservation:number;lastHeard:number;lastHeardPoint:Vec3|null;
+ /** 12.40 movement style controller (undefined when styles are off). */
+ style?:BotMovementController;
  preferHead:boolean;burstGoal:number;burstRemaining:number;pauseUntil:number;engagementShots:number;engagementHits:number;speculativeShots:number;pressureUntil:number;consecutiveMisses:number;uncertainty:Vec3;uncertaintyAt:number;
 }
 type Memory=DefenderMemory;
@@ -197,7 +200,7 @@ export class DefenderAI {
    m.face={x:-Math.sin(m.motor.yaw),y:0,z:-Math.cos(m.motor.yaw)};
    const feedbackAt=time-m.profile.compensationDelay;let feedback:RecoilObservation|undefined;for(const sample of m.recoilHistory){if(sample.time>feedbackAt)break;feedback=sample;}m.motor.compensate(dt,feedback?.pitch??0,feedback?.yaw??0,m.profile);
    const recovering=time<m.nextShot||m.gun.reloadingUntil!==null;
-   if(recovering){m.state='recovering';if(time>=m.decision&&!m.destination&&!this.sectors[t.id]?.motion){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}}
+   if(recovering){m.state='recovering';if(time>=m.decision&&!m.destination&&!this.sectors[t.id]?.motion&&!this.styleFor(t,m)){m.decision=time+.5;if(this.rng.next()<this.settings.defenderReposition)this.reposition(t,m,time);}}
    else if(seen)m.state='tracking';else if(m.destination)m.state=time-m.lastSeen<3?'repositioning':'returning';else m.state=m.alertUntil>time?'alert':'holding';
    this.move(t,m,dt,time);
    this.controlWeapon(t,m,p,time,dt,look,yaw,pitch);
@@ -225,7 +228,9 @@ export class DefenderAI {
   const ready=(time>=m.triggerAt||m.visible===0&&heardReady)&&time>=m.pauseUntil&&time>=m.nextShot&&gun.reloadingUntil===null&&time>=gun.equipUntil&&time>=gun.boltUntil;
   const angularError=m.motor.error(yaw,pitch),tolerance=Math.max(.8*Math.PI/180,Math.atan2(.22,Math.max(1,distance)));
   let information:'visual'|'memory'|'sound'='visual',admit=false;
-  if(this.settings.combatMode==='gunfight'&&look&&ready&&speed<(m.weapon==='operator'?.5:m.profile.tactics<.4?1.4:.55)){
+  const style=m.style,run=gun.profile.movementSpeed??5.4,deadzone=usesReferenceRules(this.rules)?VALORANT_REFERENCE.deadzone*run:.55;
+  const settled=style?style.canShoot(speed,t.crouch,deadzone,run):speed<(m.weapon==='operator'?.5:m.profile.tactics<.4?1.4:.55);
+  if(this.settings.combatMode==='gunfight'&&look&&ready&&settled){
    if(m.visible>0&&time>=m.acquisitionUntil&&angularError<tolerance*(m.burstRemaining?1.6:1)){
     // Fresh LOS gates ordinary shots. A memory wallbang has a separate explicit
     // admission path below and never changes this perception result.
@@ -287,9 +292,25 @@ export class DefenderAI {
   const routes=candidates.flatMap(p=>{if(distance2(t.position,p)<.25||!standingSpace(this.obstacles,p,.3))return[];const path=this.route(t.position,p);return path?[{p,path}]:[];});if(!routes.length)return;
   const hidden=routes.filter(({p})=>!visibleBetween(this.obstacles,{x:p.x,y:p.y+1.5,z:p.z},{x:m.known!.x,y:m.known!.y+1.4,z:m.known!.z},this.rules));const list=hidden.length?hidden:routes,selected=list[Math.floor(this.rng.next()*list.length)];m.path=selected.path;m.pathIndex=0;m.destination=vec(selected.p);
  }
+ /** The bot's movement style for this life, chosen once (null: classic holding AI).
+  * Recorded motions and scenario policies keep their own movement. */
+ private styleFor(t:Target,m:Memory){
+  if(m.style)return m.style;
+  // Nothing is stored when styles are off: memory is part of the replay checksum.
+  const choice=this.settings.botMovement;
+  if(!choice||choice==='off'||this.sectors[t.id]?.motion||this.policy)return null;
+  const style=chooseStyle(choice,m.rng);if(style)m.style=new BotMovementController(style);return m.style??null;
+ }
+ /** Style of a bot, for the HUD and death replay. */
+ styleOf(id:number):BotMovementStyleId|null{return this.memories[id]?.style?.style.id??null;}
  private move(t:Target,m:Memory,dt:number,time:number){
-  const motion=this.sectors[t.id]?.motion,posture=m.posture;
-  if(posture&&!motion){
+  const motion=this.sectors[t.id]?.motion,posture=m.posture,style=this.styleFor(t,m);
+  if(style){
+   const gun=m.gun,run=gun.profile.movementSpeed??5.4;
+   style.step(t,{time,dt,runSpeed:run,rng:m.rng,face:m.holdingFace,known:m.known,seen:m.visible>0,
+    wantsShot:m.aimStartedAt>=0&&time>=m.acquisitionUntil&&time>=m.triggerAt&&time>=m.nextShot&&gun.reloadingUntil===null},
+    {ground:(x,z,y)=>this.ground(x,z,y),standing:p=>standingSpace(this.obstacles,p,.3),clear:(a,b)=>visibleBetween(this.obstacles,a,b,this.rules)});
+  }else if(posture&&!motion){
    const crouch=time>=posture.crouchAt&&time<posture.crouchUntil?1:0;
    t.crouch+=clamp(crouch-t.crouch,-dt*7,dt*7);
   }
@@ -298,7 +319,8 @@ export class DefenderAI {
    const y=this.ground(pose.x,pose.z,pose.y)??pose.y;
    t.velocity.set((pose.x-t.position.x)/dt,(y-t.position.y)/dt,(pose.z-t.position.z)/dt);
    t.position.set(pose.x,y,pose.z);t.crouch=pose.crouch;
-  }else if(m.destination){let goal=m.path[m.pathIndex]??m.destination,d=distance2(t.position,goal);if(d<.008){m.pathIndex++;goal=m.path[m.pathIndex]??m.destination;d=distance2(t.position,goal);}
+  }else if(style){/* Position and velocity come from the movement style. */}
+  else if(m.destination){let goal=m.path[m.pathIndex]??m.destination,d=distance2(t.position,goal);if(d<.008){m.pathIndex++;goal=m.path[m.pathIndex]??m.destination;d=distance2(t.position,goal);}
    if(d<.008&&m.pathIndex>=m.path.length){m.destination=null;m.path=[];m.state='re-peeking';t.velocity.set(0,0,0);}else{
     // Braking distance keeps turns at validated waypoints. Interpolating velocity
     // across a corner would cut through cover; each segment instead slows before
@@ -371,7 +393,7 @@ export class DefenderAI {
   * behind botDiagnostics so concealed opponent knowledge is not disclosed. */
  diagnostics():BotDiagnostic[]{return this.targets.filter(t=>t.active&&t.enabled).flatMap(t=>{const m=this.memories[t.id];if(!m)return[];return[{bot:t.id,state:m.state,phase:m.perceptionPhase,weapon:m.weapon,visible:m.visible,known:m.known?vec(m.known):null,lastSeen:m.lastSeen,lastHeard:m.lastHeard,uncertaintyMetres:m.visible>0?0:Math.max(0,this.clock-Math.max(m.lastSeen,m.lastHeard))*.8,detectedAt:m.detectedAt,recognizedAt:m.recognizedAt,reactionUntil:m.reactionUntil,aimStartedAt:m.aimStartedAt,acquisitionUntil:m.acquisitionUntil,triggerAt:m.triggerAt,preaimed:m.preaimed,contactAngleDegrees:m.contactAngleDegrees,ammo:m.gun.ammo,reserve:m.gun.reserve,reloadingUntil:m.gun.reloadingUntil,nextShot:m.nextShot,burstRemaining:m.burstRemaining,recoil:{pitch:m.gun.recoil.pitch,yaw:m.gun.recoil.yaw},motor:m.motor.snapshot()}];});}
  private kill(t:Target,m:Memory,p:PlayerBody,time:number,cause:'shot'|'exposure',region:string,shot?:DefenderShot){
-  if(this.death)return;const path=[...this.report.path.slice(-59).map(vec),vec(p.position)];this.death={bot:t.id,weapon:m.weapon,region,cause,time,playerVisible:m.visible>0,playerShotVelocity:time-this.lastPlayerShotAt<3?this.lastPlayerShotVelocity:null,duration:m.exposure,player:vec(p.position),defender:vec(t.position),reactionTime:shot?.reactionTime,aimAcquisitionTime:shot?.aimAcquisitionTime,shotsFired:m.engagementShots,hits:m.engagementHits,penetratedLayers:shot?.penetratedLayers,line:shot?[vec(shot.origin),vec(shot.impact)]:[{x:t.position.x,y:t.position.y+1.68,z:t.position.z},{x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z}],path};this.report.lastDeath=this.death;this.report.deaths++;
+  if(this.death)return;const path=[...this.report.path.slice(-59).map(vec),vec(p.position)];this.death={...(m.style?{style:m.style.style.id}:{}),bot:t.id,weapon:m.weapon,region,cause,time,playerVisible:m.visible>0,playerShotVelocity:time-this.lastPlayerShotAt<3?this.lastPlayerShotVelocity:null,duration:m.exposure,player:vec(p.position),defender:vec(t.position),reactionTime:shot?.reactionTime,aimAcquisitionTime:shot?.aimAcquisitionTime,shotsFired:m.engagementShots,hits:m.engagementHits,penetratedLayers:shot?.penetratedLayers,line:shot?[vec(shot.origin),vec(shot.impact)]:[{x:t.position.x,y:t.position.y+1.68,z:t.position.z},{x:p.position.x,y:p.position.y+p.eyeHeight,z:p.position.z}],path};this.report.lastDeath=this.death;this.report.deaths++;
  }
  private closeEpisode(time:number,covered:boolean){if(!this.current)return;const e=this.current;e.ended=time;e.duration=Math.max(0,time-e.started);e.timeToCover=covered?e.duration:null;e.returnToCover=covered&&this.returningAt!==null?time-this.returningAt:null;this.report.episodes.push({...e});if(this.report.episodes.length>64)this.report.episodes.shift();
   if(covered&&this.health>0)for(const shot of this.shots){const id=shot.id??0;if(shot.time<e.started||shot.time>time||shot.hit!=='miss'||shot.weapon!=='operator'||!shot.observed||shot.recoveryUntil<=time||this.usedBaits.has(id))continue;this.usedBaits.add(id);this.report.baits++;}this.current=null;this.episodeOrigin=null;this.returningAt=null;

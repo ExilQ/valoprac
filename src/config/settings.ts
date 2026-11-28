@@ -1,5 +1,6 @@
 import {courseFor} from './mapCourses';
 import {MUSIC_TRACK_IDS,type MusicTrackId} from '../engine/audio/music/composition';
+import {BOT_MOVEMENT_STYLE_IDS,type BotMovementStyleId} from '../engine/tactical/botMovementStyles';
 import {defaultMovementTools,sanitizeMovementTools} from '../training/movementTools/types';
 import type { Settings, Quality } from '../engine/types';
 import {defaultCrosshairAdvanced,sanitizeCrosshairAdvanced} from './crosshair';
@@ -12,7 +13,7 @@ export const DEFAULT_SETTINGS: Settings = {
   practiceMap:'range',drill:'none',crouchMode:'hold',inputDiagnostics:false,adsDotSize:2,botDifficulty:'normal',exposureEnabled:true,exposureLimit:3,exposureMode:'continuous',footstepHud:true,soundMinimap:true,footstepVolume:.7,
   stepPerMeter:.625,stepWalkingGain:0,stepWalkingDecay:.02,stepStationaryDecay:3.5,stepStationaryVelocity:.035,stepStationaryDelay:.12,stepAudibleVelocity:2.7,stepThreshold:1,stepGraceDistance:.2,stepHearingRadius:20,
 
-  frameLimit:0,hudScale:1,showHeadshotConfirmation:true,showControlHints:true,interfaceVolume:0.2,musicTrack:'nightRange',musicVolume:0.55,musicInTraining:false,
+  frameLimit:0,hudScale:1,showHeadshotConfirmation:true,showControlHints:true,interfaceVolume:0.2,musicTrack:'nightRange',musicVolume:0.55,musicInTraining:false,botAppearance:'trainingBot',botMovement:'off',
   adsSensitivity:1,scopeSensitivity25:1,scopeSensitivity5:1,autoGraphics:true,adsMode:'toggle',bindings:{forward:'KeyW',backward:'KeyS',left:'KeyA',right:'KeyD',walk:'ShiftLeft',crouch:'KeyC',jump:'Space',reload:'KeyR',weapons:'KeyB'},
   graphicsPreset:'medium',shadowQuality:'medium',textureQuality:'medium',postProcessing:true,ambientOcclusion:false,effectsQuality:'medium',premiumTheme:true,
   firingVolume:0.85,handlingVolume:0.65,feedbackVolume:0.7,
@@ -42,6 +43,8 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(typeof o.scopeSensitivity5!=='number'||!Number.isFinite(o.scopeSensitivity5))s.scopeSensitivity5=s.adsSensitivity;
   if(['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].includes(String(o.practiceMap))||courseFor(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
   for(const k of ['autoGraphics','physicsDiagnostics','botDiagnostics','penetrationDiagnostics','peekingTimed','operatorAutoRescope','randomDefenders','inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','infiniteMagazine','botRespawn','musicInTraining','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
+  if(o.botAppearance==='trainingBot'||o.botAppearance==='agent')s.botAppearance=o.botAppearance;
+  if(o.botMovement==='off'||o.botMovement==='random'||BOT_MOVEMENT_STYLE_IDS.includes(o.botMovement as BotMovementStyleId))s.botMovement=o.botMovement as Settings['botMovement'];
   if(o.musicTrack==='off'||o.musicTrack==='shuffle'||MUSIC_TRACK_IDS.includes(o.musicTrack as MusicTrackId))s.musicTrack=o.musicTrack as Settings['musicTrack'];
   if(o.movementPhysics==='valorant'||o.movementPhysics==='counterStrike')s.movementPhysics=o.movementPhysics;
   if(o.csMovementPreset==='cs2'||o.csMovementPreset==='sourceClassic')s.csMovementPreset=o.csMovementPreset;

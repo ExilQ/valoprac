@@ -1,4 +1,5 @@
 import type {MusicChoice} from './audio/music/composition';
+import type {BotMovementChoice} from './tactical/botMovementStyles';
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
 /** Firearms carried by the player and by defenders. */
 export type GunId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
@@ -32,6 +33,8 @@ export interface Settings {
   frameLimit:number; hudScale:number; showHeadshotConfirmation:boolean; showControlHints:boolean; interfaceVolume:number;
   /** Menu music (12.38): track, own volume, and whether it keeps playing in training. */
   musicTrack:MusicChoice; musicVolume:number; musicInTraining:boolean;
+  /** 12.40: bot finish (appearance only) and bot movement style. */
+  botAppearance:'trainingBot'|'agent'; botMovement:BotMovementChoice;
   adsSensitivity:number;scopeSensitivity25:number;scopeSensitivity5:number;autoGraphics:boolean; adsMode:'hold'|'toggle'; bindings:Bindings;
   graphicsPreset:Quality; shadowQuality:Quality|'off'; textureQuality:Quality; postProcessing:boolean; ambientOcclusion:boolean; effectsQuality:Quality; premiumTheme:boolean;
   firingVolume:number; handlingVolume:number; feedbackVolume:number;

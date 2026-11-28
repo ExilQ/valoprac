@@ -384,7 +384,7 @@ export class Simulation {
   configureAmmo(){for(const id of WEAPON_ORDER){const w=this.weapons[id];if(usesReferenceRules(this.rules))w.holdBloomWhileFiring=true;else delete w.holdBloomWhileFiring;w.infiniteReserve=this.settings.infiniteReserve;w.autoReload=this.settings.autoReload;if(this.settings.infiniteMagazine){w.infiniteMagazine=true;w.ammo=w.profile.magazine;w.reloadingUntil=null;}else delete w.infiniteMagazine;}}
   switchWeapon(id:WeaponId){this.clearFireView();if(id===this.weaponId)return;this.meleeReadyAt=0;const old=this.weapon;old.reloadingUntil=null;this.weaponId=id;this.weapon=this.weapons[id];this.ads=false;this.weapon.equip(this.time);}
   configure(patch:Partial<Settings>){
-    const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);
+    const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon','botMovement'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);
     const bufferChanged=patch.jumpBufferMs!==undefined&&patch.jumpBufferMs!==this.settings.jumpBufferMs;
     Object.assign(this.settings,patch);this.tap.drill=this.settings.drill;
     if(this.movement.configurePhysics(this.settings,this.time)){

@@ -13,6 +13,7 @@ import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
+import {applyBotAppearance} from './BotAppearance';
 import {createEnemyRim,setEnemyRim,useCharacterFinishes,useEnemyRim,type EnemyHighlight} from './CharacterMaterial';
 import {ENEMY_HIGHLIGHT_CHANGED,loadEnemyHighlight} from '../../config/enemyHighlight';
 import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
@@ -297,7 +298,7 @@ export class RangeRenderer {
     const byFamily=new Map<VisualMaterialId,THREE.MeshStandardMaterial>(),geometries:THREE.BufferGeometry[]=[],perPart:THREE.MeshStandardMaterial[]=[];
     const count=this.simulation.targets.length;
     for(let j=0;j<11;j++){
-      const family=familyFor(j),geometry=characterPartGeometry(j,version),part=this.simulation.targets[0]?.parts[j];
+      const family=familyFor(j),geometry=applyBotAppearance(characterPartGeometry(j,version),this.settings.botAppearance),part=this.simulation.targets[0]?.parts[j];
       let material=byFamily.get(family);
       if(!material){
         const options=field?{tint:0xffffff,vertexColors:true,roughness:1,normalStrength:.12}:{tint:0xffffff,vertexColors:true};

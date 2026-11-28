@@ -1,4 +1,17 @@
 {
+  "12.40": {
+    "title": "Nine opponent bot movement styles and a high-visibility training bot",
+    "description": "Bots peek from cover and fight with nine movement styles, chosen by you or at random. The bot look now reads clearly on every map, and every scene was checked for graphics regressions after the 12.39 optimisation.",
+    "changes": [
+      "Bot movement (tactical maps): fast close-range fight, wide peek, jiggle then crouch peek, Poppin swing, and pro-inspired Something, Primmie, FlashBack, Texture and Karon styles. 'Random' gives each bot a different style.",
+      "Bots find their cover side, hide, peek, and when they see you fight with each style's strafe windows, stop (shooting) windows and crouch use. Acceleration, braking and crouch time match the player's.",
+      "Bots follow the accuracy rules: they shoot only once slowed below the deadzone or while crouch-walking.",
+      "The last-death analysis names the opponent's movement style.",
+      "Training-bot look: dark body, orange shoulders and yellow trim, grey mannequin face, dark helmet with bright eyes. Brightness contrast against the background at 8 m is 19–33% higher. Hit areas are unchanged; the original agent look stays selectable.",
+      "Graphics check: 32 scenes (8 maps × 4 quality levels) match 12.38 pixel for pixel, with no WebGL or console errors.",
+      "The 'Default' movement is unchanged and earlier replays play as before."
+    ]
+  },
   "12.39": {
     "title": "CPU, GPU and memory optimisation",
     "description": "Still screens are no longer redrawn, shadows and character data update only when they change, and idle audio stops. Training frames look pixel-identical.",
