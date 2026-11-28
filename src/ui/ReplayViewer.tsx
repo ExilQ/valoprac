@@ -101,6 +101,7 @@ function ReplayViewerContent({recording,initialTime=0,initialCamera='first-perso
   const bindSimulation=(simulation:Simulation)=>{if(bound===simulation)return;if(bound)bound.onShot=null;bound=simulation;localRenderer.simulation=simulation;localRenderer.clearImpacts();simulation.onShot=shot=>{if(!disposed&&localRenderer.simulation===simulation)localRenderer.addShot(shot);};};
   bindSimulation((localTransport.player as ReplayPlayer).simulation);
   const prepare=async()=>{if(preparing||disposed)return;preparing=true;try{await localRenderer.prepare();if(!disposed){lastFrame=0;update();}}catch(error){if(!disposed){localTransport.pause();setMessage(`그래픽을 준비하지 못했습니다. ${errorMessage(error)}`);}}finally{preparing=false;}};
+  let stillSignature='',stillDrawnAt=0;
   const render=(now:number)=>{
    if(disposed)return;const elapsed=lastFrame?(now-lastFrame)/1000:0;lastFrame=now;
    try{
@@ -111,7 +112,11 @@ function ReplayViewerContent({recording,initialTime=0,initialCamera='first-perso
     const key=[s.settings.fov,s.settings.graphicsPreset,s.settings.shadowQuality,s.settings.textureQuality,s.settings.postProcessing,s.settings.ambientOcclusion,s.settings.antialias,s.settings.effectsQuality,s.settings.renderScale].join(':');
     if(!localTransport.seeking&&key!==configuration){configuration=key;localRenderer.applySettings(replayDisplaySettings(s.settings,localRenderer.capabilities.recommendLow));}
     if(!localRenderer.preparationReady)void prepare();
-    else if(!localTransport.seeking){
+    else if(!localTransport.seeking&&!(()=>{
+     // 12.39: a paused replay redraws only when its frame, camera or view changes.
+     const signature=`${s.ticks}|${localTransport.alpha}|${cameraRef.current}|${botRef.current}|${configuration}|${localRenderer.camera.aspect}`;
+     const still=!localTransport.playing&&signature===stillSignature&&!localRenderer.drawRequested&&now-stillDrawnAt<1000;
+     if(!still){stillSignature=signature;stillDrawnAt=now;}return still;})()){
      const view=cameraRef.current,bot=view==='bot'?replayBotCamera(s,botRef.current):null;localRenderer.inspectionCamera=bot?bot.camera:inspectionCamera(s.movement.position,view,{targets:s.targets.filter(target=>target.enabled).map(target=>target.position),aspect:localRenderer.camera.aspect,yaw:s.viewYaw,obstacles:s.obstacles});localRenderer.hiddenTarget=bot?bot.index:null;cutaway.constant=view==='top-down'?inspectionCutawayHeight(s.movement.position,s.targets):1e6;marker.visible=view!=='first-person';arrow.visible=view==='top-down';bodyMarker.visible=view==='third-person'||view==='bot';bodyMarker.scale.y=1-.3*s.movement.crouch;marker.position.copy(s.movement.position);marker.position.y+=.035;marker.rotation.y=s.viewYaw;
      localRenderer.render(localTransport.alpha,elapsed,false,s.ads);
     }

@@ -88,8 +88,16 @@ export class TrainingAudio {
     pcm.channels.forEach((data,ch)=>b.copyToChannel(data,ch));
     this.buffers.set(key,b);return b;
   }
+  private idleTimer:ReturnType<typeof setTimeout>|null=null;
+  /** 12.39: while training is paused nothing plays, so the audio thread is
+   * suspended after the release tails; unlock() resumes it. */
+  idle(after=.4){
+    if(this.idleTimer)clearTimeout(this.idleTimer);
+    this.idleTimer=setTimeout(()=>{this.idleTimer=null;const c=this.context;if(c&&!this.disposed&&c.state==='running'&&typeof c.suspend==='function')void c.suspend().catch(()=>{});},after*1000);
+  }
   async unlock(){
     if(this.disposed)return;
+    if(this.idleTimer){clearTimeout(this.idleTimer);this.idleTimer=null;}
     if(!this.context){const c=this.context=new AudioContext({latencyHint:'interactive'});
       // channels -> master volume -> glue compressor -> brick-wall limiter.
       this.master=c.createGain();this.compressor=c.createDynamicsCompressor();this.limiter=c.createDynamicsCompressor();
@@ -225,6 +233,6 @@ export class TrainingAudio {
    * changes retain those identities, so only an authority replacement resets
    * them. Synthesized/imported buffers and the existing context stay reusable. */
   resetSession(time=0){this.stop();this.lastShot='';this.lastMelee=0;this.lastFootstep=0;this.lastLanding=0;this.lastJump=0;this.killStreak={step:0,last:-Infinity};this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
-  dispose(){this.disposed=true;this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();for(const g of Object.values(this.sends??{}))g.disconnect();this.sends=null;this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
+  dispose(){this.disposed=true;if(this.idleTimer)clearTimeout(this.idleTimer);this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();for(const g of Object.values(this.sends??{}))g.disconnect();this.sends=null;this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
 }
 export type {AudioAction};

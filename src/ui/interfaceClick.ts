@@ -59,11 +59,13 @@ export function interfaceSoundFor(element:Element):InterfaceSound|null{
  if(control.matches('summary'))return (control.parentElement as HTMLDetailsElement|null)?.open?'toggleOff':'toggleOn';
  return 'click';
 }
+/** Suspend the interface audio context after this long without a sound. */
+export const INTERFACE_IDLE_MS=4000;
 const MIN_GAP:Record<InterfaceSound,number>={click:.055,hover:.045,nav:.08,start:.25,back:.08,toggleOn:.05,toggleOff:.05,tick:.035,denied:.15};
 
 type Levels={volume:number;interfaceVolume:number};
 export function installInterfaceAudio(target:Document,readLevels:()=>Levels){
- let context:AudioContext|null=null,disposed=false,resuming=false,lastHover:Element|null=null;
+ let context:AudioContext|null=null,disposed=false,resuming=false,lastHover:Element|null=null,idleTimer:ReturnType<typeof setTimeout>|null=null;
  const buffers=new Map<InterfaceSound,AudioBuffer>(),last=new Map<InterfaceSound,number>();
  const voices=new Set<{source:AudioBufferSourceNode;gain:GainNode;endsAt:number}>();
  const play=async(kind:InterfaceSound,create:boolean,rate=1)=>{
@@ -93,6 +95,9 @@ export function installInterfaceAudio(target:Document,readLevels:()=>Levels){
    source.connect(gain).connect(context.destination);voices.add(voice);
    source.onended=()=>{source.disconnect();gain.disconnect();voices.delete(voice);};
    source.start();last.set(kind,now);
+   // 12.39: an idle interface keeps no audio thread running; the next click resumes it.
+   if(idleTimer)clearTimeout(idleTimer);
+   idleTimer=setTimeout(()=>{idleTimer=null;if(!disposed&&context?.state==='running'&&typeof context.suspend==='function')void context.suspend().catch(()=>{});},INTERFACE_IDLE_MS);
   }catch{/* Browser audio policy must never block a button action. */}
  };
  const click=(event:MouseEvent)=>{
@@ -122,7 +127,7 @@ export function installInterfaceAudio(target:Document,readLevels:()=>Levels){
  target.addEventListener('input',input,{passive:true});
  target.addEventListener('change',change,{passive:true});
  return()=>{
-  disposed=true;target.removeEventListener('click',click);target.removeEventListener('pointerover',hover as EventListener);target.removeEventListener('pointerout',out as EventListener);
+  disposed=true;if(idleTimer)clearTimeout(idleTimer);target.removeEventListener('click',click);target.removeEventListener('pointerover',hover as EventListener);target.removeEventListener('pointerout',out as EventListener);
   target.removeEventListener('input',input);target.removeEventListener('change',change);
   for(const voice of voices){try{voice.source.stop();}catch{/* Already ended. */}voice.source.disconnect();voice.gain.disconnect();}
   voices.clear();if(context)void context.close().catch(()=>{});

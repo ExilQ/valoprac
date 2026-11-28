@@ -1,4 +1,17 @@
 {
+  "12.39": {
+    "title": "CPU, GPU and memory optimisation",
+    "description": "Still screens are no longer redrawn, shadows and character data update only when they change, and idle audio stops. Training frames look pixel-identical.",
+    "changes": [
+      "Paused and briefing screens redraw only when something changes: measured CPU 124–136% → 0–12%, about 1,500 → 50 draw calls per second.",
+      "The 3D preview in the menu no longer redraws 30 times a second.",
+      "A paused replay redraws only when its frame, camera or view changes.",
+      "Shadows are redrawn only when a character moves, at most 60 times a second even on high-refresh monitors, and static buildings cast shadows as one merged mesh: 79 → 54–59 draw calls per frame at 144 Hz with an identical image.",
+      "Character and bot-weapon transforms are uploaded to the GPU only when they change.",
+      "Audio: game audio is suspended while paused, and interface sounds stop their audio thread after 4 idle seconds.",
+      "While paused the HUD updates 2 instead of 11 times a second; the FPS readout now counts only training frames."
+    ]
+  },
   "12.38": {
     "title": "Menu music and interface sounds",
     "description": "Five original menu tracks, with track selection and a separate music volume. Interface sounds are now nine distinct sounds, following UI sound practice in other games.",

@@ -12,11 +12,11 @@ vi.mock('../engine/rendering/RangeRenderer',async()=>{
   preparationStatus={stage:'ready',revision:0,requestedRevision:0,elapsedMs:0,completedPrograms:1,totalPrograms:1};
   constructor(_host:unknown,public simulation:any,_settings:unknown){simulation.renderedTargets.attach();tracked.renderers.push(this);}
   prepare(){return Promise.resolve({revision:0,milliseconds:0,programs:1,method:'synchronous',disposed:false});}
-  clearImpacts(){this.clears++;}applySettings(){}addShot(){}addDefenderShot(){}render(){}dispose(){this.disposed++;}
+  clearImpacts(){this.clears++;}invalidate(){this.drawRequested=true;}drawRequested=true;applySettings(){}addShot(){}addDefenderShot(){}render(){this.drawRequested=false;}dispose(){this.disposed++;}
  }};
 });
 vi.mock('../engine/audio/Audio',()=>({TrainingAudio:class{
- stop=vi.fn();resetSession=vi.fn();dispose=vi.fn();prefetch=vi.fn();setSpace=vi.fn();kill=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
+ stop=vi.fn();idle=vi.fn();resetSession=vi.fn();dispose=vi.fn();prefetch=vi.fn();setSpace=vi.fn();kill=vi.fn();trainingCue=vi.fn();levels=vi.fn();sync=vi.fn();setOcclusionResolver=vi.fn();listener=vi.fn();shot=vi.fn();action=vi.fn();landing=vi.fn();footstep=vi.fn();enemyShot=vi.fn();impacts=vi.fn();botFootstep=vi.fn();
  constructor(){tracked.audios.push(this);}unlock(){return Promise.resolve();}
 }}));
 vi.mock('../aim/CombatCapture',()=>({CombatCapture:class{sample(){}shot(){}frame(){}dispose(){}flush(){return Promise.resolve([]);}}}));
@@ -66,6 +66,19 @@ describe('Platform runtime retains rendering resources and replaces authoritativ
    const frame=(r as unknown as {renderFrame:(now:number)=>void}).renderFrame;for(let i=0;i<240;i++)frame(1000+i*1000/240);
    const result={draws:render.mock.calls.length,ticks:r.simulation.ticks,time:r.simulation.time,setting:r.simulation.settings.frameLimit};r.dispose();return result;};
   const full=run(0),limited=run(60);expect(full.draws).toBe(240);expect(limited.draws).toBe(60);expect(limited.ticks).toBeGreaterThan(100);expect(limited.ticks).toBe(full.ticks);expect(limited.time).toBe(full.time);expect(limited.setting).toBe(0);
+ });
+ it('12.39: redraws a still (paused) view only on change or every 5 s, polls instead of every frame, and idles audio',()=>{
+  const {runtime:r}=setup(),render=vi.spyOn(r.renderer,'render');r.simulation.running=false;
+  const frame=(r as unknown as {renderFrame:(now:number)=>void}).renderFrame,raf=globalThis.requestAnimationFrame as unknown as {mock:{calls:unknown[]}};
+  for(let i=0;i<180;i++)frame(1000+i*1000/60);
+  expect(render.mock.calls.length).toBeLessThanOrEqual(2);
+  const before=render.mock.calls.length;r.renderer.invalidate();frame(4000);expect(render.mock.calls.length).toBe(before+1);frame(4016);expect(render.mock.calls.length).toBe(before+1);
+  // A still view schedules its next check with a timer, not every animation frame.
+  const rafCalls=raf.mock.calls.length;frame(4032);expect(raf.mock.calls.length).toBe(rafCalls);
+  r.simulation.running=true;frame(4048);expect(raf.mock.calls.length).toBe(rafCalls+1);
+  for(let i=1;i<=60;i++)frame(4048+i*1000/60);expect(render.mock.calls.length).toBeGreaterThanOrEqual(before+60);
+  (r as unknown as {handleLock:(l:boolean)=>void}).handleLock(false);expect(tracked.audios[0].idle).toHaveBeenCalled();
+  r.dispose();
  });
  it('keeps the authored reaction cue finite, short and below clipping',()=>{
   const a=synthesizeTrainingCue(48000),b=synthesizeTrainingCue(48000);expect(a).toEqual(b);expect(a.length).toBe(6720);expect(a.every(Number.isFinite)).toBe(true);expect(Math.max(...a.map(Math.abs))).toBeLessThan(.31);

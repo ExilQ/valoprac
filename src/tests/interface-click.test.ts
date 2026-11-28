@@ -23,6 +23,7 @@ class ContextMock {
  createBufferSource(){const node=new NodeMock();this.sources.push(node);return node;}
  createGain(){const node=new NodeMock();this.gains.push(node);return node;}
  resume(){this.state='running';return Promise.resolve();}
+ suspended=0;suspend(){this.suspended++;this.state='suspended';return Promise.resolve();}
  close(){this.state='closed';return Promise.resolve();}
 }
 function setup(){
@@ -63,6 +64,13 @@ describe('Interface feedback waveform and activation (no physical listening clai
   expect(context.sources.filter(source=>!source.disconnected)).toHaveLength(2);
   dispose();expect(context.state).toBe('closed');expect(context.sources.every(source=>source.disconnected)).toBe(true);
   const count=context.sources.length;click();expect(context.sources).toHaveLength(count);
+ });
+ it('12.39: suspends the interface audio thread after a few idle seconds and wakes it on the next click',async()=>{
+  vi.useFakeTimers();try{
+   const {click,dispose}=setup();click();const context=ContextMock.instances[0];expect(context.sources).toHaveLength(1);
+   vi.advanceTimersByTime(3900);expect(context.suspended).toBe(0);vi.advanceTimersByTime(200);expect(context.suspended).toBe(1);expect(context.state).toBe('suspended');
+   context.currentTime=5;click();await Promise.resolve();await Promise.resolve();expect(context.state).toBe('running');expect(context.sources).toHaveLength(2);dispose();
+  }finally{vi.useRealTimers();}
  });
  it('reads master and interface volume again on every activation, including mute',()=>{
   const {click,levels,dispose}=setup();click();const context=ContextMock.instances[0];
