@@ -18,7 +18,9 @@ describe('Character mesh selection is preserved with replay authority',()=>{
   expect(await player.verify()).toMatchObject({passed:true,checksum:'354098319fe11413'});
  });
  it('preserves the 12.06 headshot session fingerprint, checksum and articulated geometry',async()=>{
-  const sim=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),behavior:'stationary',targetCount:1,targetDistance:8},{},'materials-v3',PREVIOUS_FIELD_GEOMETRY);
+  // The 12.06 session had no 12.31 settings keys; they are part of the checksum state.
+  const settings:Partial<typeof DEFAULT_SETTINGS>={...structuredClone(DEFAULT_SETTINGS),behavior:'stationary',targetCount:1,targetDistance:8};for(const key of ['infiniteMagazine','botRespawn','botRespawnDelay','botMovement','botAppearance'] as const)delete settings[key];
+  const sim=new Simulation('free','rifleA',settings as typeof DEFAULT_SETTINGS,{},'materials-v3',PREVIOUS_FIELD_GEOMETRY);
   sim.renderedTargets.attach();
   const recorder=new ReplayRecorder(sim);
   sim.running=true;captureReplayFrame(sim,1,1000,.65,sim.ticks);sim.captureFireView(1000);

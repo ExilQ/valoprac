@@ -1,4 +1,6 @@
 import {courseFor} from './mapCourses';
+import {MUSIC_TRACK_IDS,type MusicTrackId} from '../engine/audio/music/composition';
+import {BOT_MOVEMENT_STYLE_IDS,type BotMovementStyleId} from '../engine/tactical/botMovementStyles';
 import {defaultMovementTools,sanitizeMovementTools} from '../training/movementTools/types';
 import type { Settings, Quality } from '../engine/types';
 import {defaultCrosshairAdvanced,sanitizeCrosshairAdvanced} from './crosshair';
@@ -11,11 +13,11 @@ export const DEFAULT_SETTINGS: Settings = {
   practiceMap:'range',drill:'none',crouchMode:'hold',inputDiagnostics:false,adsDotSize:2,botDifficulty:'normal',exposureEnabled:true,exposureLimit:3,exposureMode:'continuous',footstepHud:true,soundMinimap:true,footstepVolume:.7,
   stepPerMeter:.625,stepWalkingGain:0,stepWalkingDecay:.02,stepStationaryDecay:3.5,stepStationaryVelocity:.035,stepStationaryDelay:.12,stepAudibleVelocity:2.7,stepThreshold:1,stepGraceDistance:.2,stepHearingRadius:20,
 
-  frameLimit:0,hudScale:1,showHeadshotConfirmation:true,showControlHints:true,interfaceVolume:0.2,
+  frameLimit:0,hudScale:1,showHeadshotConfirmation:true,showControlHints:true,interfaceVolume:0.2,musicTrack:'nightRange',musicVolume:0.55,musicInTraining:false,botAppearance:'trainingBot',botMovement:'off',
   adsSensitivity:1,scopeSensitivity25:1,scopeSensitivity5:1,autoGraphics:true,adsMode:'toggle',bindings:{forward:'KeyW',backward:'KeyS',left:'KeyA',right:'KeyD',walk:'ShiftLeft',crouch:'KeyC',jump:'Space',reload:'KeyR',weapons:'KeyB'},
   graphicsPreset:'medium',shadowQuality:'medium',textureQuality:'medium',postProcessing:true,ambientOcclusion:false,effectsQuality:'medium',premiumTheme:true,
   firingVolume:0.85,handlingVolume:0.65,feedbackVolume:0.7,
-  targetCount:5,targetSize:1,targetSpeed:1,targetDistance:20,spawnInterval:0.6,eliminationRule:'head',infiniteReserve:true,autoReload:true,practiceHud:true,recoilAnalysis:false,analysisWall:false,
+  targetCount:5,targetSize:1,targetSpeed:1,targetDistance:20,spawnInterval:0.6,eliminationRule:'head',infiniteReserve:true,autoReload:true,infiniteMagazine:false,botRespawn:true,botRespawnDelay:3,practiceHud:true,recoilAnalysis:false,analysisWall:false,
   sensitivity:0.35,degreesPerCount:0.07,dpi:800,fov:103,duration:60,seed:1947,
   crosshairColor:'#e8fcf3',crosshairThickness:2,crosshairGap:5,crosshairLength:7,
   crosshairAdvanced:defaultCrosshairAdvanced(),
@@ -33,14 +35,17 @@ export function sanitizeSettings(raw: unknown): Settings {
   if(typeof o.hudScale==='number'&&Number.isFinite(o.hudScale))s.hudScale=Math.max(0.75,Math.min(1.25,o.hudScale));
   if(typeof o.interfaceVolume==='number'&&Number.isFinite(o.interfaceVolume))s.interfaceVolume=Math.max(0,Math.min(1,o.interfaceVolume));
   for(const k of ['showHeadshotConfirmation','showControlHints'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
-  const ranges:Partial<Record<keyof Settings,[number,number]>>={defenderAimSpeed:[30,480],defenderAimAcceleration:[100,4000],defenderStability:[.1,.98],defenderFirstShotError:[.05,4],defenderRecoilControl:[0,.98],defenderTactics:[0,1],jumpBufferMs:[0,140],defenderReaction:[.15,1.5],defenderAccuracy:[.1,.98],defenderReposition:[0,1],adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[0,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],scopeSensitivity25:[0.1,2],scopeSensitivity5:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10]};
+  const ranges:Partial<Record<keyof Settings,[number,number]>>={defenderAimSpeed:[30,480],defenderAimAcceleration:[100,4000],defenderStability:[.1,.98],defenderFirstShotError:[.05,4],defenderRecoilControl:[0,.98],defenderTactics:[0,1],jumpBufferMs:[0,140],defenderReaction:[.15,1.5],defenderAccuracy:[.1,.98],defenderReposition:[0,1],adsDotSize:[1,4],exposureLimit:[.5,5],footstepVolume:[0,1],musicVolume:[0,1],stepPerMeter:[.1,4],stepWalkingGain:[0,.5],stepWalkingDecay:[0,.1],stepStationaryDecay:[.2,4],stepStationaryVelocity:[.001,.1],stepStationaryDelay:[0,.5],stepAudibleVelocity:[2.6,4],stepThreshold:[.5,1],stepGraceDistance:[0,1],stepHearingRadius:[5,40],sensitivity:[0.01,5],degreesPerCount:[0.005,0.3],dpi:[100,32000],fov:[60,120],duration:[15,600],seed:[1,2147483647],crosshairThickness:[1,6],crosshairGap:[0,20],crosshairLength:[0,20],volume:[0,1],renderScale:[0.5,1.5],adsSensitivity:[0.1,2],scopeSensitivity25:[0.1,2],scopeSensitivity5:[0.1,2],firingVolume:[0,1],handlingVolume:[0,1],feedbackVolume:[0,1],targetCount:[1,12],targetSize:[0.5,2],targetSpeed:[0,1],targetDistance:[5,32],spawnInterval:[0.1,10],botRespawnDelay:[.5,10]};
   for(const [k,range] of Object.entries(ranges)){const v=o[k];if(typeof v==='number'&&Number.isFinite(v))(s as unknown as Record<string,unknown>)[k]=Math.min(range[1],Math.max(range[0],v));}
   // Preserve the former shared scoped preference when new independent fields
   // were absent; explicit new per-zoom values always win.
   if(typeof o.scopeSensitivity25!=='number'||!Number.isFinite(o.scopeSensitivity25))s.scopeSensitivity25=s.adsSensitivity;
   if(typeof o.scopeSensitivity5!=='number'||!Number.isFinite(o.scopeSensitivity5))s.scopeSensitivity5=s.adsSensitivity;
   if(['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].includes(String(o.practiceMap))||courseFor(String(o.practiceMap)))s.practiceMap=o.practiceMap as Settings['practiceMap'];
-  for(const k of ['autoGraphics','physicsDiagnostics','botDiagnostics','penetrationDiagnostics','peekingTimed','operatorAutoRescope','randomDefenders','inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
+  for(const k of ['autoGraphics','physicsDiagnostics','botDiagnostics','penetrationDiagnostics','peekingTimed','operatorAutoRescope','randomDefenders','inputDiagnostics','exposureEnabled','aimTelemetry','footstepHud','soundMinimap','dynamicCrosshair','brakingHud','idealCompensation','antialias','showPerformance','postProcessing','ambientOcclusion','premiumTheme','infiniteReserve','autoReload','infiniteMagazine','botRespawn','musicInTraining','practiceHud','recoilAnalysis','analysisWall'] as const)if(typeof o[k]==='boolean')s[k]=o[k];
+  if(o.botAppearance==='trainingBot'||o.botAppearance==='agent')s.botAppearance=o.botAppearance;
+  if(o.botMovement==='off'||o.botMovement==='random'||BOT_MOVEMENT_STYLE_IDS.includes(o.botMovement as BotMovementStyleId))s.botMovement=o.botMovement as Settings['botMovement'];
+  if(o.musicTrack==='off'||o.musicTrack==='shuffle'||MUSIC_TRACK_IDS.includes(o.musicTrack as MusicTrackId))s.musicTrack=o.musicTrack as Settings['musicTrack'];
   if(o.movementPhysics==='valorant'||o.movementPhysics==='counterStrike')s.movementPhysics=o.movementPhysics;
   if(o.csMovementPreset==='cs2'||o.csMovementPreset==='sourceClassic')s.csMovementPreset=o.csMovementPreset;
   if(['off','up','down'].includes(String(o.wheelJump)))s.wheelJump=o.wheelJump as Settings['wheelJump'];

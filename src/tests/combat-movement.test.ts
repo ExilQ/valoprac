@@ -11,6 +11,9 @@ import {DEFAULT_SETTINGS} from '../config/settings';
 import {WEAPONS} from '../config/weapons';
 import {Weapon} from '../engine/weapons/Weapon';
 import {LEVELS} from '../engine/tactical/levels';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 const fresh=()=>new Movement({...MOVEMENT},[]);
 const input=(patch:Partial<InputState>={}):InputState=>({...emptyInput(),...patch});
 function run(m:Movement,ticks:number,action:(tick:number,m:Movement)=>Partial<InputState>=()=>({}),start=0,f?:Footsteps){for(let tick=0;tick<ticks;tick++){const i=input(action(tick,m)),time=(start+tick)*dt;m.step(i,0,dt,time);f?.step(m,i.walk,dt,time);}return m;}

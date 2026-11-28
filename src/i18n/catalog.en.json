@@ -15655,6 +15655,451 @@
       "id": "msg_0ed490dab590",
       "source": "고지 관측소",
       "en": "Ridge Observatory"
+    },
+    {
+      "id": "msg_f79c22b7bab7",
+      "source": "봇 시점",
+      "en": "Bot view"
+    },
+    {
+      "id": "msg_7cca49579b5a",
+      "source": "시점",
+      "en": "view"
+    },
+    {
+      "id": "msg_bfbda8d548f6",
+      "source": "시점을 볼 봇",
+      "en": "Bot to watch"
+    },
+    {
+      "id": "msg_34b56a355830",
+      "source": "소리 확인",
+      "en": "Checking a sound"
+    },
+    {
+      "id": "msg_195d3018013f",
+      "source": "반동 회복",
+      "en": "Recovering from recoil"
+    },
+    {
+      "id": "msg_b77c57758fa6",
+      "source": "자리 이동",
+      "en": "Repositioning"
+    },
+    {
+      "id": "msg_8e7632e2e27b",
+      "source": "다시 피킹",
+      "en": "Re-peeking"
+    },
+    {
+      "id": "msg_8a1e645b87f7",
+      "source": "제자리 복귀",
+      "en": "Returning to post"
+    },
+    {
+      "id": "msg_c09609842d68",
+      "source": "쓰러짐",
+      "en": "Down"
+    },
+    {
+      "id": "msg_7ab8c7a1c6b0",
+      "source": "표적",
+      "en": "Target"
+    },
+    {
+      "id": "msg_0b3259fad4fd",
+      "source": "쓰러짐 · 다시 나타날 때까지 대기",
+      "en": "Down · waiting to return"
+    },
+    {
+      "id": "msg_10884b7c0059",
+      "source": "쓰러진 봇 다시 등장",
+      "en": "Bring eliminated bots back"
+    },
+    {
+      "id": "msg_0af612fb42bc",
+      "source": "다시 등장까지",
+      "en": "Return after"
+    },
+    {
+      "id": "msg_3aaeb218f182",
+      "source": "봇이 다시 등장할 때까지 걸리는 시간",
+      "en": "Time before an eliminated bot returns"
+    },
+    {
+      "id": "msg_17a3e2c02ecb",
+      "source": "봇은 원래 방어각이나 그 각의 다른 검증된 위치 중 한 곳에 다시 나타납니다. 총소리를 들은 봇은 소리가 난 쪽을 경계합니다.",
+      "en": "Bots return at their original angle or at another verified spot for that angle. Bots that hear gunfire watch the direction it came from."
+    },
+    {
+      "id": "msg_79e6793e07e7",
+      "source": "탄창 무한 · 재장전 없음",
+      "en": "Infinite magazine · no reloading"
+    },
+    {
+      "id": "msg_3ba8cbc48cd3",
+      "source": "쏴도 탄창이 줄지 않아 재장전 없이 계속 쏩니다. 연사 속도와 반동은 그대로입니다.",
+      "en": "Firing never empties the magazine, so you keep shooting without reloading. Fire rate and recoil stay the same."
+    },
+    {
+      "id": "msg_1264367df588",
+      "source": "고정 방어각 3개 · 각마다 한 봇 · 쓰러진 봇은",
+      "en": "Three fixed defensive angles · one bot per angle · eliminated bots return after"
+    },
+    {
+      "id": "msg_4d3e086fbc09",
+      "source": "초 뒤 다시 나타납니다",
+      "en": "s"
+    },
+    {
+      "id": "msg_f7895448ab54",
+      "source": "모든 각 정리 완료 · 봇이 곧 다시 나타납니다",
+      "en": "All angles cleared · the bots return shortly"
+    },
+    {
+      "id": "msg_64701be60061",
+      "source": "· 각 유지",
+      "en": "· Holding the angle"
+    },
+    {
+      "id": "msg_5a0f7409ba2e",
+      "source": "아직 들리는 소리 없음",
+      "en": "No audible sound yet"
+    },
+    {
+      "id": "msg_9734d68f387a",
+      "source": "발소리·착지·점프 소리 위치 표시",
+      "en": "Showing where steps, landings and jumps were heard"
+    },
+    {
+      "id": "msg_4982035581bc",
+      "source": "점프 소리",
+      "en": "Jump sound"
+    },
+    {
+      "id": "msg_39b3bf8ee804",
+      "source": "착지와 점프(앉지 않은 상태)는 게이지와 별도로 항상 소리가 납니다",
+      "en": "Landings and jumps (unless already crouched) always make a sound, separately from the gauge"
+    },
+    {
+      "id": "msg_bd9f6261e3a7",
+      "source": "미터보다 빠르게 이동한 거리만 누적 · 걷기와 앉아 걷기는 무기와 관계없이 조용함",
+      "en": "m/s fills the gauge · walking and crouch-walking are silent with every weapon"
+    },
+    {
+      "id": "msg_0713209961c4",
+      "source": "초속",
+      "en": "Only movement faster than"
+    },
+    {
+      "id": "msg_0ad667873c71",
+      "source": "착지 소리",
+      "en": "Landing sound"
+    },
+    {
+      "id": "msg_a2e9be3eb70e",
+      "source": "야간 사격장",
+      "en": "Night Range"
+    },
+    {
+      "id": "msg_3ba098743fd5",
+      "source": "잔잔한 앰비언트",
+      "en": "Calm ambient"
+    },
+    {
+      "id": "msg_03a19c7d5be9",
+      "source": "네온 질주",
+      "en": "Neon Run"
+    },
+    {
+      "id": "msg_f361de6f5141",
+      "source": "신스웨이브",
+      "en": "Synthwave"
+    },
+    {
+      "id": "msg_1dde65f5074b",
+      "source": "로파이 집중",
+      "en": "Lo-fi Focus"
+    },
+    {
+      "id": "msg_ade2c52ef926",
+      "source": "로파이 비트",
+      "en": "Lo-fi beat"
+    },
+    {
+      "id": "msg_f04671b1a9a7",
+      "source": "압박",
+      "en": "Pressure"
+    },
+    {
+      "id": "msg_503d756f8f7c",
+      "source": "긴장감 있는 전자음",
+      "en": "Tense electronic"
+    },
+    {
+      "id": "msg_77f909dad2b2",
+      "source": "새벽 순찰",
+      "en": "Dawn Patrol"
+    },
+    {
+      "id": "msg_ccccca987b51",
+      "source": "밝은 하우스",
+      "en": "Bright house"
+    },
+    {
+      "id": "msg_dfc148209939",
+      "source": "음악 끔",
+      "en": "Music off"
+    },
+    {
+      "id": "msg_fdd19b650985",
+      "source": "무작위 재생",
+      "en": "Shuffle"
+    },
+    {
+      "id": "msg_0c73b0b91c12",
+      "source": "재생 중",
+      "en": "Playing"
+    },
+    {
+      "id": "msg_80645ef7f7f7",
+      "source": "곡 선택",
+      "en": "Track"
+    },
+    {
+      "id": "msg_61bedff41388",
+      "source": "곡마다 약 2~3분씩 이어서 재생",
+      "en": "Plays each track for about 2–3 minutes"
+    },
+    {
+      "id": "msg_a7e7042143c5",
+      "source": "메뉴 음악을 재생하지 않음",
+      "en": "No menu music"
+    },
+    {
+      "id": "msg_3e5182df44cf",
+      "source": "음악 음량",
+      "en": "Music volume"
+    },
+    {
+      "id": "msg_bbfd1300dc38",
+      "source": "훈련 중에도 재생 (발소리를 위해 작게)",
+      "en": "Keep playing in training (quieter, for footsteps)"
+    },
+    {
+      "id": "msg_27b924d67c45",
+      "source": "화면을 한 번 누르면 재생됩니다. ",
+      "en": "Click anywhere once to start the music. "
+    },
+    {
+      "id": "msg_beb8b27b20b1",
+      "source": "모든 곡은 VALOPRAC가 직접 만든 곡이며, 브라우저에서 실시간으로 연주됩니다. 전체 음량과 음악 음량을 곱한 크기로 재생됩니다.",
+      "en": "Every track is an original VALOPRAC composition, played live in the browser. It plays at overall volume × music volume."
+    },
+    {
+      "id": "msg_26ab5dcbdfb7",
+      "source": "메뉴 음악",
+      "en": "Menu music"
+    },
+    {
+      "id": "msg_79f401455dae",
+      "source": "빠른 템포 근접 교전",
+      "en": "Fast close-range fight"
+    },
+    {
+      "id": "msg_1555cec534ec",
+      "source": "거리를 좁히며 짧게 좌우로 끊고, 가까우면 앉아서 연사합니다.",
+      "en": "Closes the distance with short strafes and crouch-sprays up close."
+    },
+    {
+      "id": "msg_621ae6a056a2",
+      "source": "엄폐물에서 넓게 크게 튀어나온 뒤 멈춰서 쏩니다.",
+      "en": "Swings wide out of cover, then stops to shoot."
+    },
+    {
+      "id": "msg_00a9b50925c2",
+      "source": "지글 후 앉아 피킹",
+      "en": "Jiggle, then crouch peek"
+    },
+    {
+      "id": "msg_16ad0a41894b",
+      "source": "짧게 2~3번 흔들어 보고, 다음 피킹에서 앉으며 쏩니다.",
+      "en": "Jiggles two or three times, then crouches as it stops on the next peek."
+    },
+    {
+      "id": "msg_6a2bd12ed9cc",
+      "source": "썸띵 스타일 (불규칙 ADAD)",
+      "en": "Something style (irregular ADAD)"
+    },
+    {
+      "id": "msg_5170b701a53c",
+      "source": "길이가 들쭉날쭉한 좌우 무빙에 짧은 앉기를 섞습니다.",
+      "en": "Strafes of uneven length with short crouch taps."
+    },
+    {
+      "id": "msg_410ce8189a30",
+      "source": "프리미 스타일 (앉았다 일어서기)",
+      "en": "Primmie style (crouch bobbing)"
+    },
+    {
+      "id": "msg_313d0b9a6f95",
+      "source": "좌우로 움직이며 쏠 때마다 앉았다 일어서기를 번갈아 합니다.",
+      "en": "Strafes and alternates crouching and standing on each shot."
+    },
+    {
+      "id": "msg_6c1d2c0b8289",
+      "source": "플래시백 스타일 (앉아서 좌우 이동)",
+      "en": "FlashBack style (crouch strafing)"
+    },
+    {
+      "id": "msg_9d51ab49ef0a",
+      "source": "앉은 채 좌우로 움직이며 쏩니다.",
+      "en": "Strafes while crouched and shoots."
+    },
+    {
+      "id": "msg_8ec2570a7004",
+      "source": "텍스처 스타일 (빠른 템포 선사격)",
+      "en": "Texture style (fast-tempo pre-fire)"
+    },
+    {
+      "id": "msg_3116a807dd3f",
+      "source": "숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.",
+      "en": "Re-peeks with almost no pause and fires the moment it stops."
+    },
+    {
+      "id": "msg_a4c9923e396e",
+      "source": "카론 스타일 (브레이킹 때 앉기)",
+      "en": "Karon style (crouch on braking)"
+    },
+    {
+      "id": "msg_ff9e1c7b0829",
+      "source": "서서 움직이다 멈출 때 앉아서 헤드라인을 피하며 쏩니다.",
+      "en": "Moves standing and crouches as it brakes, dodging the head line."
+    },
+    {
+      "id": "msg_357abae3909b",
+      "source": "팝핀 스윙",
+      "en": "Poppin swing"
+    },
+    {
+      "id": "msg_84d3e4e6fc92",
+      "source": "한 방향으로 아주 넓게 계속 달리며, 짧게 멈춰 쏘고 다시 같은 방향으로 갑니다.",
+      "en": "Keeps running very wide in one direction, taps a short stop to shoot, then carries on."
+    },
+    {
+      "id": "msg_a461755f5459",
+      "source": "상대 봇 무빙 · 외형",
+      "en": "Opponent bot movement · look"
+    },
+    {
+      "id": "msg_2020fbc481ee",
+      "source": "봇 무빙",
+      "en": "Bot movement"
+    },
+    {
+      "id": "msg_eeffd583cc3f",
+      "source": "기본 (각 고정 · 재배치)",
+      "en": "Default (hold and reposition)"
+    },
+    {
+      "id": "msg_d3c39dcdb7b8",
+      "source": "무작위 (봇마다 다른 무빙)",
+      "en": "Random (each bot differs)"
+    },
+    {
+      "id": "msg_c2901c7ffb98",
+      "source": "피킹 방법",
+      "en": "Peeks"
+    },
+    {
+      "id": "msg_d7ebfc3fe8cb",
+      "source": "프로 선수 무빙 참고",
+      "en": "Pro-inspired movement"
+    },
+    {
+      "id": "msg_0f7187da48d0",
+      "source": "봇마다 ",
+      "en": "Each bot picks one of "
+    },
+    {
+      "id": "msg_6fa1f7b5333a",
+      "source": "가지 무빙 중 하나를 골라 엄폐물에서 피킹하고 교전합니다. 마지막 제거 분석에 상대 무빙이 표시됩니다.",
+      "en": " movement styles, peeks from cover and fights. The last-death analysis names the style."
+    },
+    {
+      "id": "msg_372d408e8f00",
+      "source": "봇이 자리를 지키다 재배치합니다(이전과 같음).",
+      "en": "Bots hold their angle and reposition (as before)."
+    },
+    {
+      "id": "msg_01bb1b07206a",
+      "source": "봇도 플레이어와 같은 규칙을 따릅니다. 멈춰서 데드존(달리기 속도의 27.5%) 아래로 느려지거나 앉아서 걸을 때만 정확히 쏩니다. 선수 무빙은 공개된 설명을 바탕으로 만든 연습용 근사이며, 해당 선수와 관련이 없습니다.",
+      "en": "Bots follow the player's rules: they shoot accurately only once slowed below the deadzone (27.5% of run speed) or while crouch-walking. Pro styles are training approximations from public descriptions, not affiliated with the players."
+    },
+    {
+      "id": "msg_a87024e39758",
+      "source": "봇 외형",
+      "en": "Bot look"
+    },
+    {
+      "id": "msg_ddd9e5c98274",
+      "source": "연습 봇 · 눈에 잘 띄는 색",
+      "en": "Training bot · high visibility"
+    },
+    {
+      "id": "msg_f679d2f78aff",
+      "source": "기존 요원",
+      "en": "Original agent"
+    },
+    {
+      "id": "msg_311205f5a80f",
+      "source": "외형은 다음 훈련부터 적용됩니다. 판정 범위는 같습니다.",
+      "en": "The look applies from the next session. Hit areas are unchanged."
+    },
+    {
+      "id": "msg_8e47e60d1991",
+      "source": " · 상대 무빙 ",
+      "en": " · opponent movement "
+    },
+    {
+      "id": "msg_e9ed2af7e125",
+      "source": "썸띵 스타일 (대충 브레이킹 한 발 → 와이드)",
+      "en": "Something style (rough-brake tap → wide swipe)"
+    },
+    {
+      "id": "msg_d7b5db1d1fbe",
+      "source": "짧게 나와 브레이킹을 대충 걸고 한 발 쏜 뒤, 멈추지 않고 같은 방향으로 와이드를 긁고 다시 멈춰 쏩니다.",
+      "en": "Peeks briefly, brakes only roughly for one tap, then swipes wide the same way without settling and stops to shoot again."
+    },
+    {
+      "id": "msg_ed7a2905d2b2",
+      "source": "케인제라 스타일 (방향 전환 데드존 원탭)",
+      "en": "Canezerra style (deadzone tap on direction change)"
+    },
+    {
+      "id": "msg_277a66a4d777",
+      "source": "멈추지 않고 빠르게 좌우로 흔들다가, 방향을 바꾸며 속도가 데드존 아래로 떨어지는 순간 한 발씩 쏩니다. 짧게·길게 리듬을 섞고 가끔 같은 방향으로 다시 나갑니다.",
+      "en": "Strafes fast without settling and taps once as its speed drops through the deadzone on each direction change, mixing short and long strafes and sometimes going the same way again."
+    },
+    {
+      "id": "msg_401a1d51f96f",
+      "source": "케인제라 스타일 (첫발 뒤 판단)",
+      "en": "Canezerra style (decide after the first shot)"
+    },
+    {
+      "id": "msg_f22975085996",
+      "source": "빠르게 짧게 나와 데드존에서 한 발. 맞으면 멈춘 채 이어 쏘고, 빗나가면 가까운 엄폐물 뒤로 완전히 빠졌다가 다시 나오며, 엄폐물이 없으면 한 방향으로 한 번만 옮겨 다시 쏩니다.",
+      "en": "Peeks fast and short and taps in the deadzone. On a hit it stays and keeps shooting; on a miss it falls fully behind nearby cover and re-peeks, or with no cover moves once one way and shoots again."
+    },
+    {
+      "id": "msg_daf49fc44e88",
+      "source": "케인제라 스타일 (빠른 좌우·앉기·데드존·서서 스프레이)",
+      "en": "Canezerra style (fast strafes · crouch · deadzone · standing spray)"
+    },
+    {
+      "id": "msg_ebac85f2a558",
+      "source": "빠른 템포로 좌우로 흔들며 방향을 바꾸는 데드존에서 쏘고, 가끔 앉아 헤드라인을 피합니다. 맞히면 서서 멈춰 스프레이로 마무리하고, 엄폐로 빠지지 않고 계속 교전합니다.",
+      "en": "Strafes at a fast tempo and shoots in the deadzone of each direction change, crouching now and then to dodge the head line. Once it hits it stops standing and sprays to finish, and keeps fighting instead of falling back."
     }
   ]
 }

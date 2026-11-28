@@ -20,7 +20,8 @@ export interface CharacterBatches {
   setPartMatrix(targetId:number,partId:number,matrix:THREE.Matrix4,visible:boolean):void;
   /** Stored transform by stable target ID, including hidden or uncommitted parts. */
   getPartMatrix(targetId:number,partId:number,output:THREE.Matrix4):THREE.Matrix4;
-  commit():void;
+  /** Upload changed transforms; true when anything moved or changed visibility. */
+  commit():boolean;
   setShadow(enabled:boolean):void;
   getStats():CharacterBatchStats;
   dispose():void;
@@ -44,6 +45,10 @@ export function createCharacterBatches(
   if(!Number.isSafeInteger(targetCount*geometries.length))throw new RangeError('Character instance capacity is too large');
   const backend=multiDrawSupported?'batched':'instanced',objects:CharacterBatchObject[]=[],slots:PartSlot[]=[];
   const dirty=new Set<InstancedPartSlot>(),identity=new THREE.Matrix4();
+  // Last written transform and visibility per (part, target): unchanged parts
+  // are skipped, so still characters cost no upload and no shadow pass.
+  const written=new Float32Array(Math.max(1,targetCount*geometries.length*16)),shown=new Uint8Array(Math.max(1,targetCount*geometries.length));
+  let changed=true;
   let disposed=false;
 
   const dispose=()=>{
@@ -96,7 +101,11 @@ export function createCharacterBatches(
   return{
     objects,backend,
     setPartMatrix(targetId,partId,matrix,visible){
-      const slot=partSlot(targetId,partId);
+      const slot=partSlot(targetId,partId),index=partId*targetCount+targetId,base=index*16,e=matrix.elements;
+      let same=shown[index]===(visible?1:0);
+      for(let i=0;same&&i<16;i++)if(written[base+i]!==Math.fround(e[i]))same=false;
+      if(same)return;
+      for(let i=0;i<16;i++)written[base+i]=e[i];shown[index]=visible?1:0;changed=true;
       if('matrices' in slot){matrix.toArray(slot.matrices,targetId*16);slot.visible[targetId]=visible?1:0;dirty.add(slot);}
       else{const instanceId=targetId*slot.stride+slot.offset;slot.object.setMatrixAt(instanceId,matrix);slot.object.setVisibleAt(instanceId,visible);}
     },
@@ -105,6 +114,7 @@ export function createCharacterBatches(
       return 'matrices' in slot?output.fromArray(slot.matrices,targetId*16):slot.object.getMatrixAt(targetId*slot.stride+slot.offset,output);
     },
     commit(){
+      const moved=changed;changed=false;
       for(const slot of dirty){
         const array=slot.object.instanceMatrix.array;
         let count=0;
@@ -116,7 +126,7 @@ export function createCharacterBatches(
         }
         slot.object.count=count;slot.object.instanceMatrix.needsUpdate=true;
       }
-      dirty.clear();
+      dirty.clear();return moved;
     },
     setShadow(enabled){for(const object of objects)object.castShadow=enabled;},
     getStats(){return{backend,targetCount,partCount:geometries.length,batchCount:objects.length,instanceCount:targetCount*geometries.length,instanceCapacity:objects.reduce((count,object)=>count+(object instanceof THREE.BatchedMesh?object.maxInstanceCount:object.instanceMatrix.count),0)};},

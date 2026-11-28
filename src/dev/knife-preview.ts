@@ -16,8 +16,8 @@ let renderer:RangeRenderer|null=null,sim:Simulation|null=null;
  },
  show({skin,kind,phase}:{skin:KnifeSkinId;kind?:'slash'|'stab';phase?:number}){
   if(!renderer||!sim)throw Error('prepare first');equipKnifeSkin(skin);
-  const r=renderer as unknown as {meleeSwing:{kind:'slash'|'stab';start:number}|null};
-  r.meleeSwing=kind?{kind,start:sim.time-(phase??0)*KNIFE_SWING_SECONDS[kind]}:null;
+  const r=renderer as unknown as {meleeSwing:{kind:'slash'|'stab';start:number;combo:number}|null};
+  r.meleeSwing=kind?{kind,start:sim.time-(phase??0)*KNIFE_SWING_SECONDS[kind],combo:0}:null;
   renderer.render(1,1/60,false,false);status.textContent=`${skin}${kind?` · ${kind} ${phase}`:''}`;return true;
  }
 };

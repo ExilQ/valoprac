@@ -1,4 +1,4 @@
-import { afterAll,beforeAll,describe,it,expect } from 'vitest';
+import {afterAll,beforeAll,describe,it,expect,vi} from 'vitest';
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync,rmSync,readFileSync } from 'node:fs';
 import {tmpdir} from 'node:os';
@@ -16,6 +16,9 @@ import {parseRoute} from '../app/navigation';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {WeaponSelection} from '../ui/WeaponSelection';
 import {SettingsPanel} from '../ui/SettingsPanel';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 const state={v:1,session:'session',type:'ack',ack:1,revision:1,weapon:'rifleA',mode:'free',ammo:25,reserve:-1,reloading:false,paused:true,time:0,shots:0,hits:0,heads:0,eliminations:0,speed:0,accurate:true,recoilPitch:0,recoilYaw:0};
 describe('Authoritative streaming state protocol',()=>{
  it('rejects foreign sessions, malformed and non-finite telemetry',()=>{expect(parseEngineState(JSON.stringify(state),'foreign')).toBeNull();expect(parseEngineState('{','session')).toBeNull();expect(parseEngineState(JSON.stringify({...state,ammo:'25'}),'session')).toBeNull();expect(parseEngineState(JSON.stringify({...state,revision:-1}),'session')).toBeNull();});

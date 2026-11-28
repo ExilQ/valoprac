@@ -17,6 +17,9 @@ with zipfile.ZipFile(sys.argv[1],'w',zipfile.ZIP_DEFLATED) as z:
    # Optional QA screenshots are served separately. Avoid embedding
    # those binary copies twice in the self-contained response Worker.
    dirs[:]=[d for d in dirs if d not in skip and not (current=='public' and d in {'downloads','interface-comparison','validation','movement-ui','corrections-ui','physics-comparison','modern-web-comparison'})]
+   # Per-release report screenshots (12.33 knife, 12.40 bots) also stay in the repository only.
+   if current in {'docs/knife-12.33','docs/bots-12.40'}:
+    files=[f for f in files if os.path.splitext(f)[1].lower() not in {'.png','.webp','.jpg','.jpeg'}]
    if current.startswith('docs/roadmap/') and current.split('/')[2] in capture_dirs:
     files=[f for f in files if os.path.splitext(f)[1].lower() not in {'.png','.webp','.jpg','.jpeg'}]
    for f in sorted(files):z.write(os.path.join(current,f))

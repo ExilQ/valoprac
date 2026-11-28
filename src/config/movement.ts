@@ -10,6 +10,10 @@ export interface MovementProfile {
   reverseAirThresholdDegrees?:number; reverseAirSteeringMultiplier?:number;
   verticalIntegration?:'ballistic'|'semi-implicit';
   standingEyeHeight:number; crouchingEyeHeight:number; radius:number;
+  /** reference-v11: braking while the input opposes the velocity, dv/dt = -(counterFriction*v + counterDeceleration). */
+  counterFriction?:number; counterDeceleration?:number;
+  /** braking-v12: above the wished speed, brake like releasing the keys (Unreal CalcVelocity). */
+  overMaxBraking?:boolean;
 }
 export const MOVEMENT: MovementProfile = {
   maxSpeed:5.4, groundAcceleration:38, groundDeceleration:20, friction:3.5, reverseAcceleration:45,

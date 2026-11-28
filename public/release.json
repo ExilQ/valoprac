@@ -1,6 +1,6 @@
 {
   "application": "VALOPRAC",
-  "version": "12.0.30",
+  "version": "12.0.44",
   "calibration": "dual-movement-1.4.0-physical-surfaces-1.0.0-provisional",
   "features": [
     "free-practice",
@@ -197,7 +197,7 @@
     "browserImplemented": true,
     "unrealPortImplemented": false
   },
-  "patchLabel": "12.30",
+  "patchLabel": "12.44",
   "aimScience": {
     "algorithm": "aim-2.0.0",
     "browserImplemented": true,
@@ -407,7 +407,7 @@
     "optionalLanguage": null,
     "replay": {
       "schema": 1,
-      "simulationVersion": "valoprac-replay-simulation-6",
+      "simulationVersion": "valoprac-replay-simulation-12",
       "strictVersionCompatibility": true,
       "videoRecording": false,
       "localOnly": true,
@@ -431,6 +431,36 @@
           "gameVersion": "12.0.0",
           "simulationVersion": "valoprac-replay-simulation-5",
           "rules": "bunny-hop-v5"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-6",
+          "rules": "weapons-v6"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-7",
+          "rules": "training-v7"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-8",
+          "rules": "audio-v8"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-9",
+          "rules": "consistency-v9"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-10",
+          "rules": "acceleration-v10"
+        },
+        {
+          "gameVersion": "12.0.0",
+          "simulationVersion": "valoprac-replay-simulation-11",
+          "rules": "reference-v11"
         }
       ],
       "materialPhysicsVersion": "physical-surfaces-1.0.0"
@@ -482,8 +512,8 @@
   },
   "physicsMaterials": {
     "validation": "/physics-materials-validation.json",
-    "simulationRules": "weapons-v6",
-    "simulationVersion": "valoprac-replay-simulation-6",
+    "simulationRules": "braking-v12",
+    "simulationVersion": "valoprac-replay-simulation-12",
     "materialPhysicsVersion": "physical-surfaces-1.0.0",
     "visualFamilies": 15,
     "physicalSurfaces": 22,

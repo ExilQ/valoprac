@@ -1,3 +1,5 @@
+import type {MusicChoice} from './audio/music/composition';
+import type {BotMovementChoice} from './tactical/botMovementStyles';
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
 /** Firearms carried by the player and by defenders. */
 export type GunId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
@@ -29,11 +31,15 @@ export interface Settings {
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
 
   frameLimit:number; hudScale:number; showHeadshotConfirmation:boolean; showControlHints:boolean; interfaceVolume:number;
+  /** Menu music (12.38): track, own volume, and whether it keeps playing in training. */
+  musicTrack:MusicChoice; musicVolume:number; musicInTraining:boolean;
+  /** 12.40: bot finish (appearance only) and bot movement style. */
+  botAppearance:'trainingBot'|'agent'; botMovement:BotMovementChoice;
   adsSensitivity:number;scopeSensitivity25:number;scopeSensitivity5:number;autoGraphics:boolean; adsMode:'hold'|'toggle'; bindings:Bindings;
   graphicsPreset:Quality; shadowQuality:Quality|'off'; textureQuality:Quality; postProcessing:boolean; ambientOcclusion:boolean; effectsQuality:Quality; premiumTheme:boolean;
   firingVolume:number; handlingVolume:number; feedbackVolume:number;
   targetCount:number; targetSize:number; targetSpeed:number; targetDistance:number; spawnInterval:number;
-  eliminationRule:'head'|'any'|'damage'; infiniteReserve:boolean; autoReload:boolean; practiceHud:boolean; recoilAnalysis:boolean; analysisWall:boolean;
+  eliminationRule:'head'|'any'|'damage'; infiniteReserve:boolean; autoReload:boolean; infiniteMagazine:boolean; botRespawn:boolean; botRespawnDelay:number; practiceHud:boolean; recoilAnalysis:boolean; analysisWall:boolean;
 
   sensitivity: number; degreesPerCount: number; dpi: number; fov: number; duration: number; seed: number;
   crosshairColor: string; crosshairThickness: number; crosshairGap: number; crosshairLength: number;

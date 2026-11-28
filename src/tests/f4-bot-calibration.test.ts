@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+import {describe,it,expect,vi} from 'vitest';
 import {Box3,Vector3} from 'three';
 import {DEFAULT_SETTINGS} from '../config/settings';
 import {DefenderAI,type PlayerBody} from '../engine/tactical/DefenderAI';
@@ -8,6 +8,9 @@ import {Movement} from '../engine/movement/Movement';
 import {emptyInput,type Settings} from '../engine/types';
 import type {Obstacle} from '../engine/collision/environment';
 import evidence from '../../docs/roadmap/F4_MEASUREMENTS.json';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const dt=1/120,skills=['beginner','normal','advanced','expert'] as const;
 const median=(values:number[])=>{const n=values.slice().sort((a,b)=>a-b);return(n[(n.length-1)>>1]+n[n.length>>1])/2;};
@@ -21,7 +24,8 @@ function first(settings:Partial<Settings>,seed:number,x=0){const{ai}=fixture(set
 function timingRows(){return[false,true].flatMap(minimum=>skills.map(defenderSkill=>{const samples=Array.from({length:64},(_,i)=>first({defenderSkill,...minimum?{defenderReaction:.15}:{}},i+1).shots[0]?.time??Infinity);return{skill:defenderSkill,minimum,count:samples.length,median:median(samples),min:Math.min(...samples),max:Math.max(...samples),samples};}));}
 const cover:Obstacle={box:new Box3(new Vector3(-10,0,-1.2),new Vector3(0,4,-.8)),kind:'wall',material:'concrete',color:0};
 function movementRoute(kind:'jiggle'|'wide-return'|'overstay'){
- const movement=new Movement(undefined,[cover]);movement.reset({x:kind==='jiggle'?-.65:-1,y:0,z:0});
+ // The recorded F4 evidence was measured with the 12.34 player acceleration (38 m/s^2).
+ const movement=new Movement(undefined,[cover]);movement.setSimulationRules('consistency-v9');movement.reset({x:kind==='jiggle'?-.65:-1,y:0,z:0});
  const out:PlayerBody[]=[],outTime=kind==='jiggle'?.2:.34,hold=kind==='overstay'?.9:0,start=movement.position.x;let returned=false;
  for(let i=0;i<Math.ceil((outTime*2+hold+.7)/dt);i++){
   const time=i*dt,input=emptyInput();if(time>=outTime+hold&&movement.position.x<=start)returned=true;input.strafe=time<outTime?1:time<outTime+hold?0:returned?0:-1;

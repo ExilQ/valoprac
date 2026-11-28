@@ -5,7 +5,7 @@ import type {ReplayEvent,ReplayProgress} from '../engine/replay/types';
 
 export const REPLAY_SPEEDS=[.25,.5,1,2] as const;
 export type ReplaySpeed=typeof REPLAY_SPEEDS[number];
-export type ReplayCamera='first-person'|'top-down'|'third-person';
+export type ReplayCamera='first-person'|'top-down'|'third-person'|'bot';
 export interface SeekableReplay {
  readonly time:number;readonly ended:boolean;
  advanceToTick(tick:number):ReplayProgress;
@@ -62,7 +62,7 @@ export function timelineMarkers(events:readonly ReplayEvent[],duration:number,li
 }
 
 export function inspectionCamera(position:Vec3,mode:ReplayCamera,framing?:{targets:readonly Vec3[];aspect:number;yaw?:number;obstacles?:Obstacle[]}){
- if(mode==='first-person')return null;
+ if(mode==='first-person'||mode==='bot')return null;
  if(mode==='third-person'){
   const yaw=Number.isFinite(framing?.yaw)?framing!.yaw!:0,target={x:position.x,y:position.y+1.3,z:position.z},desired={x:position.x+Math.sin(yaw)*4,y:position.y+2.4,z:position.z+Math.cos(yaw)*4};
   // Inspect from behind the recorded view, keeping the display camera inside
@@ -80,6 +80,19 @@ export function inspectionCamera(position:Vec3,mode:ReplayCamera,framing?:{targe
  }
  return{position:{x:position.x,y:position.y+24,z:position.z+.001},target:{...position},fov:55};
 }
+
+/** Display-only view from a recorded bot's eyes. `direction` is the bot's
+ * aim (its aim motor with recoil) when it has one; otherwise the camera faces
+ * the player's eyes, which is where static course bots hold. The camera sits
+ * just in front of the head so the bot's own model never fills the frame. */
+export function botViewCamera(head:Vec3,player:Vec3,direction?:Vec3|null){
+ let d=direction&&[direction.x,direction.y,direction.z].every(Number.isFinite)&&Math.hypot(direction.x,direction.y,direction.z)>1e-6?direction:{x:player.x-head.x,y:player.y-head.y,z:player.z-head.z};
+ const length=Math.hypot(d.x,d.y,d.z);d=length>1e-6?{x:d.x/length,y:d.y/length,z:d.z/length}:{x:0,y:0,z:-1};
+ const position={x:head.x+d.x*BOT_VIEW_OFFSET,y:head.y+d.y*BOT_VIEW_OFFSET,z:head.z+d.z*BOT_VIEW_OFFSET};
+ return{position,target:{x:position.x+d.x*10,y:position.y+d.y*10,z:position.z+d.z*10},fov:BOT_VIEW_FOV};
+}
+export const BOT_VIEW_OFFSET=.22,BOT_VIEW_FOV=103;
+export const BOT_STATE_LABELS:Record<string,string>={holding:'각 유지',listening:'소리 확인',alert:'경계',tracking:'추적',firing:'사격',recovering:'반동 회복',repositioning:'자리 이동','re-peeking':'다시 피킹',returning:'제자리 복귀',eliminated:'쓰러짐'};
 
 /** Show active human silhouettes in a cutaway view, including scaled targets
  * and elevated sectors. This is a render plane, never a collision boundary. */

@@ -29,6 +29,8 @@ export const AUDIO_MIX={
   playerFireGain:.95,remoteFireGain:.8,killStreakSeconds:2.5,
   /** A knife swing sits about 8 dB under a rifle shot and the knife draw
    * matches gun equips (12.26: the swing was as loud as a Vandal shot). */
+  /** Jump push-off: a firm footstep, between a step (.6) and a hard landing. */
+  jumpPushOffGain:.7,
   knifeSlashGain:.3,knifeStabGain:.45,knifeEquipGain:.5,
 };
 
@@ -36,7 +38,7 @@ export class TrainingAudio {
   private context:AudioContext|null=null;private channels:Record<Channel,GainNode>|null=null;private master:GainNode|null=null;private compressor:DynamicsCompressorNode|null=null;private limiter:DynamicsCompressorNode|null=null;
   private reverbIn:GainNode|null=null;private sends:Record<Channel,GainNode>|null=null;private convolver:ConvolverNode|null=null;private space:AcousticSpace='range';private spaceLoaded:AcousticSpace|null=null;
   private buffers=new Map<string,AudioBuffer>();private voices=new Set<Voice>();private loading:Promise<void>|null=null;private disposed=false;private lastShot='';private anchor=0;private weapon:WeaponId='rifleA';
-  private lastFootstep=0;footstepEvents=0;private lastLanding=0;landingEvents=0;
+  private lastFootstep=0;footstepEvents=0;private lastLanding=0;landingEvents=0;private lastJump=0;jumpEvents=0;
   private botSteps=new Map<number,number>();botFootstepEvents=0;
   private pose:ListenerPose={position:{x:0,y:0,z:0},yaw:0,pitch:0};
   private firingTimeline=new FiringTimeline();readonly scheduling={staleDropped:0,futureDropped:0,lateCoalesced:0,lateRescheduled:0,queueDropped:0};
@@ -86,8 +88,16 @@ export class TrainingAudio {
     pcm.channels.forEach((data,ch)=>b.copyToChannel(data,ch));
     this.buffers.set(key,b);return b;
   }
+  private idleTimer:ReturnType<typeof setTimeout>|null=null;
+  /** 12.39: while training is paused nothing plays, so the audio thread is
+   * suspended after the release tails; unlock() resumes it. */
+  idle(after=.4){
+    if(this.idleTimer)clearTimeout(this.idleTimer);
+    this.idleTimer=setTimeout(()=>{this.idleTimer=null;const c=this.context;if(c&&!this.disposed&&c.state==='running'&&typeof c.suspend==='function')void c.suspend().catch(()=>{});},after*1000);
+  }
   async unlock(){
     if(this.disposed)return;
+    if(this.idleTimer){clearTimeout(this.idleTimer);this.idleTimer=null;}
     if(!this.context){const c=this.context=new AudioContext({latencyHint:'interactive'});
       // channels -> master volume -> glue compressor -> brick-wall limiter.
       this.master=c.createGain();this.compressor=c.createDynamicsCompressor();this.limiter=c.createDynamicsCompressor();
@@ -156,6 +166,8 @@ export class TrainingAudio {
   }
   footstep(e:FootstepEvent){if(e.id<=this.lastFootstep)return;this.lastFootstep=e.id;this.footstepEvents++;this.playKey(`step:${e.surfaceId?SURFACES[e.surfaceId].footstepSoundProfile:e.material??'concrete'}:${e.id%STEP_VARIANTS}`,'footsteps',e.timestamp,.6);}
   landing(e:LandingSoundEvent){if(e.id<=this.lastLanding)return;this.lastLanding=e.id;this.landingEvents++;this.playKey(`land:${e.surfaceId?SURFACES[e.surfaceId].footstepSoundProfile:e.material??'concrete'}`,'footsteps',e.timestamp,Math.max(.15,Math.min(.85,e.impactSpeed/9)),e.position);}
+  /** audio-v8 jump push-off: a firm footstep on the takeoff surface. */
+  jump(e:FootstepEvent){if(e.id<=this.lastJump)return;this.lastJump=e.id;this.jumpEvents++;this.playKey(`step:${e.surfaceId?SURFACES[e.surfaceId].footstepSoundProfile:e.material??'concrete'}:${e.id%STEP_VARIANTS}`,'footsteps',e.timestamp,AUDIO_MIX.jumpPushOffGain,e.position);}
   enemyShot(id:WeaponId,origin:number|Vec3,time?:number,sourceId?:number|string){
     const variant=Math.abs(Math.round((time??0)*120))%THIRD_PERSON_VARIANTS,key=this.fireKey(id,variant,true),gain=AUDIO_MIX.remoteFireGain*(id!=='knife'?AUDIO_PROFILES[id].gain:1);
     if(typeof origin==='number'){this.playKey(key,'firing',time,gain*Math.max(.12,Math.min(1,9/Math.max(9,origin))),undefined,`enemy:${sourceId??id}`);return;}
@@ -220,7 +232,7 @@ export class TrainingAudio {
   /** A fresh Simulation restarts event IDs and timestamps. Pauses and weapon
    * changes retain those identities, so only an authority replacement resets
    * them. Synthesized/imported buffers and the existing context stay reusable. */
-  resetSession(time=0){this.stop();this.lastShot='';this.lastMelee=0;this.lastFootstep=0;this.lastLanding=0;this.killStreak={step:0,last:-Infinity};this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
-  dispose(){this.disposed=true;this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();for(const g of Object.values(this.sends??{}))g.disconnect();this.sends=null;this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
+  resetSession(time=0){this.stop();this.lastShot='';this.lastMelee=0;this.lastFootstep=0;this.lastLanding=0;this.lastJump=0;this.killStreak={step:0,last:-Infinity};this.botSteps.clear();this.latestFire.clear();this.lastOcclusionUpdate=-Infinity;this.sync(time);}
+  dispose(){this.disposed=true;if(this.idleTimer)clearTimeout(this.idleTimer);this.stop();this.worker?.terminate();this.worker=null;this.pending.clear();for(const g of Object.values(this.channels??{}))g.disconnect();this.master?.disconnect();this.compressor?.disconnect();this.limiter?.disconnect();for(const g of Object.values(this.sends??{}))g.disconnect();this.sends=null;this.reverbIn?.disconnect();this.convolver?.disconnect();void this.context?.close();this.context=null;this.channels=null;this.reverbIn=null;this.convolver=null;this.buffers.clear();this.botSteps.clear();this.latestFire.clear();this.occlusionResolver=null;this.custom.clear();this.spatialBackend='unavailable';}
 }
 export type {AudioAction};

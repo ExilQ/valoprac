@@ -1,3 +1,4 @@
+import {mergeGeometries} from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {arenaPattern,loadArenaPatterns,type ArenaPatternSpec} from '../../config/arenaPatterns';
 import {arenaLight,arenaPalette} from '../../config/arenaAppearance';
 import {arenaSky} from './ArenaAtmosphere';
@@ -12,6 +13,7 @@ import {defenderWeaponGeometry} from './DefenderWeaponGeometry';
 import {tacticalArchitecture,updateTacticalArchitecture} from './TacticalArchitecture';
 import {PEEK_ZONES,zoneForScenario} from '../tactical/complex';
 import {characterPartGeometry} from './CharacterGeometry';
+import {applyBotAppearance} from './BotAppearance';
 import {createEnemyRim,setEnemyRim,useCharacterFinishes,useEnemyRim,type EnemyHighlight} from './CharacterMaterial';
 import {ENEMY_HIGHLIGHT_CHANGED,loadEnemyHighlight} from '../../config/enemyHighlight';
 import {LEGACY_CHARACTER_GEOMETRY} from '../targets/characterProfile';
@@ -35,7 +37,7 @@ import {GroundContacts} from './GroundContacts';
 import {createCharacterBatches,useMultiDrawCharacters,type CharacterBatches,type CharacterBatchObject} from './CharacterBatches';
 import { loadWeaponFinishes, loadKnifeSkin, KNIFE_SKIN_EVENT, WEAPON_FINISHES } from '../../config/weaponFinishes';
 import { createWeaponView, type WeaponVisual } from './WeaponView';
-import { createKnifeView, KNIFE_SWING_SECONDS, type KnifeVisual } from './KnifeView';
+import { createKnifeView, KNIFE_SWING_SECONDS, nextKnifeCombo, type KnifeVisual } from './KnifeView';
 import {detectGraphicsCapabilities,type GraphicsCapabilities} from './GraphicsCapabilities';
 import {automaticGraphicsPatch,renderPixelRatio} from '../../config/graphicsPolicy';
 import {cameraVerticalFov} from './projection';
@@ -44,6 +46,10 @@ const DEG=Math.PI/180;
 interface Impact {mesh:THREE.Mesh;shot:ShotEvent|null}
 export interface ShaderPreparationReport {revision:number;milliseconds:number;programs:number;method:'parallel'|'synchronous';disposed:boolean;}
 export interface ShaderPreparationStatus {stage:'idle'|'compiling'|'warming'|'gpu'|'ready'|'failed'|'disposed';revision:number;requestedRevision:number;elapsedMs:number;completedPrograms:number|null;totalPrograms:number;}
+/** Layer of the merged static shadow casters: in the shadow pass only. */
+export const SHADOW_PROXY_LAYER=7;
+/** 12.39: the sun's shadow map is redrawn only when a caster moved, at most this often. */
+export const SHADOW_REFRESH_HZ=60;
 export class RangeRenderer {
   private localizedSigns:(()=>void)[]=[];
   private unsubscribeLocale:(()=>void)|undefined;
@@ -51,6 +57,8 @@ export class RangeRenderer {
   /** Viewer-only camera. It never writes back into the authoritative movement,
    * aim, hit registration or submitted target-frame history. */
   inspectionCamera:{position:Vec3;target:Vec3;fov?:number}|null=null;
+  /** Display-only: a replay bot-view hides the bot whose eyes the camera uses. */
+  hiddenTarget:number|null=null;
   readonly capabilities:GraphicsCapabilities;
   renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(75,1,0.05,180);
   private weaponScene=new THREE.Scene();private weaponCamera=new THREE.PerspectiveCamera(55,1,.03,4);
@@ -66,20 +74,26 @@ export class RangeRenderer {
   private lastRenderedShot=-1;private lastShotAt=-100;private previousViewYaw=0;private previousViewPitch=0;
   private environmentTarget:THREE.WebGLRenderTarget|null=null;private sparks:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private sparkIndex=0;
   private entryMarker:THREE.Mesh|null=null;
-  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:GTAOPass|null=null;private adsBlend=0;private settingsKey='';
+  private visuals={} as Record<WeaponId,WeaponVisual>;private sun!:THREE.DirectionalLight;private readonly enemyRim=createEnemyRim(loadEnemyHighlight());private readonly onEnemyHighlight=(event:Event)=>{setEnemyRim(this.enemyRim,(event as CustomEvent<EnemyHighlight>).detail);this.needsDraw=true;};private composer:EffectComposer|null=null;private bloom:UnrealBloomPass|null=null;private ao:GTAOPass|null=null;private adsBlend=0;private settingsKey='';
   private materialLibrary!:SurfaceMaterialLibrary;
   private readonly patterns=loadArenaPatterns();private environmentSize=0;
   private surfaceMaterials:THREE.MeshStandardMaterial[]=[];
   private shells:{mesh:THREE.Mesh;velocity:THREE.Vector3;until:number}[]=[];private shellIndex=0;
-  private knife:KnifeVisual|null=null;private meleeSwing:{kind:'slash'|'stab';start:number}|null=null;
+  private knife:KnifeVisual|null=null;private meleeSwing:{kind:'slash'|'stab';start:number;combo:number}|null=null;private lastMelee:{kind:'slash'|'stab';start:number;combo:number}|null=null;
   private onKnifeSkin=()=>this.refreshKnifeSkin();
   private gunSlide=0;private observer:ResizeObserver;private mounted=true;
   private viewport={ width:0, height:0, ratio:0, composer:null as EffectComposer|null };
+  /** 12.39: a still frame (paused, briefing, preview) is redrawn only when
+   * something visible changed; the shadow map only when a caster moved. */
+  private needsDraw=true;private shadowDirty=true;private shadowForce=true;private shadowAge=Infinity;
+  /** Request a redraw of a still frame (settings, resize, weapon, effects). */
+  invalidate(){this.needsDraw=true;}
+  get drawRequested(){return this.needsDraw;}
   private materialRevision=0;private preparedRevision=-1;private shaderKey='';private preparationPromise:Promise<ShaderPreparationReport>|null=null;
   private canvasWarmHidden=false;private canvasVisibility='';
   private preparationPhase:ShaderPreparationStatus['stage']='idle';private preparationStarted=0;private preparationRevision=-1;private completedPrograms:number|null=null;
   private preparationReport:ShaderPreparationReport={revision:-1,milliseconds:0,programs:0,method:'synchronous',disposed:false};
-  constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings,options:{recordFrames?:boolean}={}){
+  constructor(private host:HTMLElement,public simulation:Simulation,private settings:Settings,options:{recordFrames?:boolean;/** Verification only: keep per-mesh static shadow casters. */shadowProxy?:boolean}={}){
     this.recordFrames=options.recordFrames??true;
     // 12.22: native canvas MSAA when no full-screen pass is needed; with a composer,
     // the composer's own multisampled target antialiases instead (no FXAA blur).
@@ -90,7 +104,7 @@ export class RangeRenderer {
     const light=arenaLight(simulation.practiceMap),sky=arenaSky(light.zenith,light.horizon);
     this.textures.add(sky);
     this.scene.background=sky;
-    this.renderer.info.autoReset=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.NeutralToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(renderPixelRatio(window.devicePixelRatio,settings.renderScale,host.clientWidth,host.clientHeight));
+    this.renderer.info.autoReset=false;this.renderer.shadowMap.autoUpdate=false;this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.toneMapping=THREE.NeutralToneMapping;this.renderer.toneMappingExposure=light.exposure;this.renderer.shadowMap.type=THREE.PCFShadowMap;this.renderer.setClearColor(light.horizon);this.renderer.setPixelRatio(renderPixelRatio(window.devicePixelRatio,settings.renderScale,host.clientWidth,host.clientHeight));
     if(this.recordFrames)simulation.renderedTargets.attach();this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));host.appendChild(this.renderer.domElement);
     this.ensureEnvironment(settings.graphicsPreset);this.scene.environmentIntensity=light.environmentIntensity;
     this.scene.fog=new THREE.Fog(light.horizon,light.fogNear,light.fogFar);this.camera.rotation.order='YXZ';this.scene.add(this.camera);
@@ -98,13 +112,13 @@ export class RangeRenderer {
     const sun=this.sun=new THREE.DirectionalLight(light.sun,light.sunIntensity);sun.position.set(-8,14,8);sun.target.position.set(0,0,-16);this.scene.add(sun,sun.target);sun.shadow.camera.left=-18;sun.shadow.camera.right=18;sun.shadow.camera.top=26;sun.shadow.camera.bottom=-26;sun.shadow.camera.near=1;sun.shadow.camera.far=65;sun.shadow.bias=-0.00025;sun.shadow.normalBias=0.025;sun.shadow.radius=2;
     const fill=new THREE.DirectionalLight(light.fill,light.fillIntensity);fill.position.set(4,5,-18);this.scene.add(fill);
     if(typeof window!=='undefined')window.addEventListener(ENEMY_HIGHLIGHT_CHANGED,this.onEnemyHighlight);
-    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildGroundPaint();this.buildEntryMarker();this.batchStaticArchitecture();this.applySettings(settings);
-    this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
+    this.buildEnvironment();this.buildTargets();this.buildDefenderWeapons();this.buildWeapon();this.buildImpacts();this.buildShells();this.buildPolish();this.buildGroundPaint();this.buildEntryMarker();this.shadowProxyAllowed=options.shadowProxy!==false;this.batchStaticArchitecture();this.applySettings(settings);
+    this.observer=new ResizeObserver(()=>{this.resize();this.needsDraw=true;});this.observer.observe(host);this.resize();
     // A browser may reject WebGL construction entirely. Subscribe only after
     // initialization succeeds so failed attempts do not retain the renderer.
     this.unsubscribeLocale=subscribeLocale(()=>{
       this.renderer.domElement.setAttribute('aria-label',translateText('전술 사격 훈련장'));
-      for(const paint of this.localizedSigns)paint();
+      for(const paint of this.localizedSigns)paint();this.needsDraw=true;
     });
   }
   get canvas(){return this.renderer.domElement;}
@@ -284,7 +298,7 @@ export class RangeRenderer {
     const byFamily=new Map<VisualMaterialId,THREE.MeshStandardMaterial>(),geometries:THREE.BufferGeometry[]=[],perPart:THREE.MeshStandardMaterial[]=[];
     const count=this.simulation.targets.length;
     for(let j=0;j<11;j++){
-      const family=familyFor(j),geometry=characterPartGeometry(j,version),part=this.simulation.targets[0]?.parts[j];
+      const family=familyFor(j),geometry=applyBotAppearance(characterPartGeometry(j,version),this.settings.botAppearance),part=this.simulation.targets[0]?.parts[j];
       let material=byFamily.get(family);
       if(!material){
         const options=field?{tint:0xffffff,vertexColors:true,roughness:1,normalStrength:.12}:{tint:0xffffff,vertexColors:true};
@@ -313,6 +327,7 @@ export class RangeRenderer {
     const material=this.materialLibrary.material('painted-metal',{tint:0xffffff,vertexColors:true});this.materials.add(material);
     for(const id of WEAPON_ORDER){const geometry=defenderWeaponGeometry(id);writeWorldScaleUV(geometry,VISUAL_MATERIALS['painted-metal'].metersPerTile);this.geometries.add(geometry);const batch=new THREE.InstancedMesh(geometry,material,this.simulation.targets.length);batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);batch.frustumCulled=false;batch.name=`${id} defender equipment`;this.scene.add(batch);this.defenderWeapons.set(id,batch);}
   }
+  private defenderWeaponPoses=new Map<string,Float32Array>();private defenderWeaponsMoved=false;
   private updateDefenderWeapons(alpha:number){
     const ai=this.simulation.defenders;if(!ai)return;
     for(const [id,batch] of this.defenderWeapons){
@@ -323,7 +338,11 @@ export class RangeRenderer {
         const pose=(memory as {pose?:number}).pose??.35;this.heldPose.position.set(.13,.9+.37*pose,.1+.35*pose);const pitch=memory.motor.pitch+memory.motor.compensationPitch+memory.gun.recoil.pitch*DEG;this.heldPose.rotation.set((1-pose)*.75-pitch*pose,memory.motor.compensationYaw+memory.gun.recoil.yaw*DEG,0);this.heldPose.scale.setScalar(1);this.heldPose.updateMatrix();
         this.heldMatrix.multiplyMatrices(t.root.matrixWorld,this.heldPose.matrix);this.heldMatrix.elements[12]+=(t.previous.x-t.position.x)*(1-alpha);this.heldMatrix.elements[14]+=(t.previous.z-t.position.z)*(1-alpha);batch.setMatrixAt(slot,this.heldMatrix);
       }
-      batch.count=equipped;batch.visible=equipped>0;batch.instanceMatrix.needsUpdate=true;batch.castShadow=this.settings.shadowQuality!=='off';
+      // Upload only when a held weapon moved: an unchanged pose needs no buffer write or shadow pass.
+      const array=batch.instanceMatrix.array as Float32Array,previous=this.defenderWeaponPoses.get(id),length=equipped*16;
+      let changed=!previous||batch.count!==equipped;if(!changed)for(let i=0;i<length;i++)if(previous![i]!==array[i]){changed=true;break;}
+      if(changed){this.defenderWeaponPoses.set(id,array.slice(0,length));batch.instanceMatrix.needsUpdate=true;this.defenderWeaponsMoved=true;}
+      batch.count=equipped;batch.visible=equipped>0;batch.castShadow=this.settings.shadowQuality!=='off';
     }
   }
   private buildWeapon(){
@@ -339,10 +358,11 @@ export class RangeRenderer {
     this.knife.root.visible=this.simulation.weaponId==='knife';this.weapon.add(this.knife.root);
     if(typeof window!=='undefined')window.addEventListener(KNIFE_SKIN_EVENT,this.onKnifeSkin);
   }
-  refreshKnifeSkin(){const skin=loadKnifeSkin();if(this.knife&&this.knife.skin!==skin)this.knife.setSkin(skin);}
+  refreshKnifeSkin(){this.needsDraw=true;const skin=loadKnifeSkin();if(this.knife&&this.knife.skin!==skin)this.knife.setSkin(skin);}
   /** Start the viewmodel swing; wall contact throws a few sparks. */
-  addMelee(e:import('../types').MeleeEvent){
-    this.meleeSwing={kind:e.kind,start:e.timestamp};
+  addMelee(e:import('../types').MeleeEvent){this.needsDraw=true;
+    // Slashes in quick succession run the three-swing combo; a stab or a pause restarts it.
+    this.meleeSwing=this.lastMelee={kind:e.kind,start:e.timestamp,combo:nextKnifeCombo(this.lastMelee,e.kind,e.timestamp)};
     if(e.hit==='wall'&&e.impact&&this.settings.effectsQuality!=='low'){for(let i=0;i<3;i++){const p=this.sparks[this.sparkIndex++%this.sparks.length];p.mesh.position.set(e.impact.x,e.impact.y,e.impact.z);(p.mesh.material as THREE.MeshBasicMaterial).color.setHex(0xffd7a4);p.mesh.geometry=this.debrisGeometries['metal-sparks'];p.mesh.scale.setScalar(.8);p.velocity.set((i-1)*.35,.5+i*.15,.3);p.until=this.simulation.time+.16;p.mesh.visible=true;}}
   }
   private buildShells(){
@@ -352,7 +372,7 @@ export class RangeRenderer {
     const particleGeometry=this.debrisGeometries['metal-sparks'];this.geometries.add(particleGeometry);const particleMaterial=new THREE.MeshBasicMaterial({color:0xffd7a4});this.materials.add(particleMaterial);
     for(let i=0;i<32;i++){const pm=particleMaterial.clone();this.materials.add(pm);const mesh=new THREE.Mesh(particleGeometry,pm);mesh.visible=false;this.scene.add(mesh);this.sparks.push({mesh,velocity:new THREE.Vector3(),until:0});}
   }
-  clearImpacts(){this.meleeSwing=null;this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
+  clearImpacts(){this.invalidate();this.shadowDirty=this.shadowForce=true;this.meleeSwing=null;this.lastMelee=null;this.previousViewYaw=this.simulation.viewYaw;this.previousViewPitch=this.simulation.viewPitch;this.adsBlend=0;this.lastShotAt=-100;this.lastRenderedShot=-1;this.gunSlide=0;for(const p of [...this.sparks,...this.shells])p.mesh.visible=false;for(const p of this.surfaceImpacts)p.visible=false;this.decalsDirty=true;for(const entry of this.impacts){entry.shot=null;entry.mesh.visible=false;}for(const tracer of this.tracers)tracer.visible=false;}
   private tacticalSurface(obstacle:Obstacle){
     const {family,tint,glass}=tacticalSurfaceStyle(obstacle,this.simulation.practiceMap);
     const pattern=obstacle.material||glass||obstacle.ramp||obstacle.kind==='cover'?{}:arenaPattern(this.simulation.practiceMap,false,this.patterns);
@@ -448,18 +468,49 @@ export class RangeRenderer {
       this.addSign('VALOPRAC  /  전술 훈련 단지',x,5,bounds[1]+1.05,8);
     }
   }
+  /** 12.39: every static shadow caster merged into one position-only mesh per
+   * face side, drawn only in the shadow pass (about 25 draws become 1-2). */
+  private shadowProxies:THREE.Mesh[]=[];private shadowProxyAllowed=true;private shadowProxyBuilt=false;
+  private buildShadowProxy(){
+    if(this.shadowProxyBuilt||!this.shadowProxyAllowed)return;this.shadowProxyBuilt=true;
+    this.scene.updateMatrixWorld(true);const groups=new Map<string,{side:THREE.Side;shadowSide:THREE.Side|null;parts:THREE.BufferGeometry[]}>(),sources:THREE.Mesh[]=[];
+    this.scene.traverse(object=>{
+      if(!(object instanceof THREE.Mesh)||object instanceof THREE.InstancedMesh||(object as {isBatchedMesh?:boolean}).isBatchedMesh||!object.castShadow||object.morphTargetInfluences)return;
+      const materials=(Array.isArray(object.material)?object.material:[object.material]) as THREE.Material[],first=materials[0],position=object.geometry.getAttribute('position');
+      if(!first||!position||materials.some(m=>m.transparent||m.alphaTest>0||(m as THREE.MeshStandardMaterial).alphaMap||(m as THREE.MeshStandardMaterial).displacementMap||m.side!==first.side||m.shadowSide!==first.shadowSide||m.clippingPlanes?.length))return;
+      const positions=new Float32Array(position.count*3);for(let i=0;i<position.count;i++){positions[i*3]=position.getX(i);positions[i*3+1]=position.getY(i);positions[i*3+2]=position.getZ(i);}
+      const part=new THREE.BufferGeometry();part.setAttribute('position',new THREE.BufferAttribute(positions,3));
+      const index=object.geometry.index;part.setIndex(index?Array.from(index.array as ArrayLike<number>):Array.from({length:position.count},(_,i)=>i));part.applyMatrix4(object.matrixWorld);
+      const key=`${first.side}|${first.shadowSide}`,group=groups.get(key)??{side:first.side,shadowSide:first.shadowSide,parts:[]};group.parts.push(part);groups.set(key,group);sources.push(object);
+    });
+    if(!sources.length)return;
+    for(const {side,shadowSide,parts} of groups.values()){
+      const merged=mergeGeometries(parts,false);for(const part of parts)part.dispose();if(!merged)continue;merged.computeBoundingSphere();this.geometries.add(merged);
+      const material=new THREE.MeshBasicMaterial({side,colorWrite:false,depthWrite:false});material.shadowSide=shadowSide;this.materials.add(material);
+      const proxy=new THREE.Mesh(merged,material);proxy.name='static shadow casters';proxy.castShadow=true;proxy.receiveShadow=false;proxy.layers.set(SHADOW_PROXY_LAYER);proxy.matrixAutoUpdate=false;
+      this.scene.add(proxy);this.shadowProxies.push(proxy);
+    }
+    for(const source of sources)source.castShadow=false;
+    // Three builds the colour render list before the shadow pass, so the proxy
+    // layer is visible to the camera only while the shadow map renders.
+    const shadowMap=this.renderer.shadowMap,render=shadowMap.render.bind(shadowMap);
+    shadowMap.render=(lights,scene,camera)=>{const mask=camera.layers.mask;camera.layers.enable(SHADOW_PROXY_LAYER);try{render(lights,scene,camera);}finally{camera.layers.mask=mask;}};
+  }
   private batchStaticArchitecture(){
     this.scene.updateMatrixWorld(true);const groups=new Map<string,{material:THREE.Material;list:THREE.Mesh[];palette:boolean}>();
     for(const child of this.scene.children){if(!(child instanceof THREE.Mesh)||!child.userData.staticRange||Array.isArray(child.material))continue;const signature=colorBatchSignature(child.material),key=signature??child.material.uuid;const group=groups.get(key)??{material:child.material,list:[] as THREE.Mesh[],palette:signature!==null};group.list.push(child);groups.set(key,group);}
     for(const {material,list,palette} of groups.values()){if(list.length<2)continue;const merged=mergeStaticArchitecture(list,'world',palette);if(!merged)continue;let surface=material;if(palette){const family=material.userData.visualMaterialId as VisualMaterialId|undefined;const source=material as THREE.MeshStandardMaterial;const tinted=family?this.materialLibrary.material(family,{tint:0xffffff,vertexColors:true,roughness:source.roughness,metalness:source.metalness,normalStrength:source.normalScale.x,surfacePattern:source.userData.surfacePattern,metersPerTile:source.userData.surfaceMetersPerTile,polygonOffset:source.polygonOffset,polygonOffsetFactor:source.polygonOffsetFactor,polygonOffsetUnits:source.polygonOffsetUnits}):material.clone() as THREE.MeshStandardMaterial;tinted.color.setHex(0xffffff);tinted.vertexColors=true;surface=tinted;this.materials.add(surface);}this.geometries.add(merged);merged.computeBoundingSphere();const mesh=new THREE.Mesh(merged,surface);mesh.name='batched structural palette';mesh.castShadow=true;mesh.receiveShadow=true;this.scene.add(mesh);for(const item of list){this.scene.remove(item);this.geometries.delete(item.geometry);item.geometry.dispose();}}
   }
   applySettings(settings:Settings){
+    this.invalidate();this.shadowDirty=this.shadowForce=true;
     settings={...settings,...automaticGraphicsPatch(settings,this.capabilities.recommendLow,this.capabilities.kind)};
     const shaderKey=[settings.graphicsPreset,settings.shadowQuality,settings.textureQuality,settings.postProcessing,settings.ambientOcclusion,settings.antialias,settings.effectsQuality,settings.renderScale].join(':');
     if(shaderKey!==this.shaderKey){this.shaderKey=shaderKey;this.materialRevision++;}
     this.settings={...settings};this.materialLibrary.setQuality(settings.textureQuality);this.ensureEnvironment(settings.graphicsPreset);
     this.syncPixelRatio();
     const shadows=settings.shadowQuality!=='off';this.renderer.shadowMap.enabled=shadows;this.sun.castShadow=shadows;
+    // Built only once shadows are on: the low preset keeps no extra geometry.
+    if(shadows)this.buildShadowProxy();
     for(const batch of [...this.targetBatches,...this.defenderWeapons.values()])batch.castShadow=shadows;
     const resolution={off:256,low:512,medium:1024,high:2048,ultra:2048}[settings.shadowQuality];
     if(this.sun.shadow.mapSize.x!==resolution){this.sun.shadow.map?.dispose();this.sun.shadow.map=null;this.sun.shadow.mapSize.set(resolution,resolution);}
@@ -567,7 +618,7 @@ export class RangeRenderer {
     for(let i=0;i<s.targets.length;i++){
       const t=s.targets[i],death=THREE.MathUtils.clamp((s.time-t.deadAt)/0.4,0,1),dx=(t.previous.x+(t.position.x-t.previous.x)*alpha)-t.position.x,dz=(t.previous.z+(t.position.z-t.previous.z)*alpha)-t.position.z;
       for(let j=0;j<t.parts.length;j++){
-        const p=t.parts[j],mesh=this.targetMeshes[i][j];mesh.visible=t.enabled&&(t.active||death<1);mesh.castShadow=this.settings.shadowQuality!=='off';mesh.matrix.copy(p.node.matrixWorld);
+        const p=t.parts[j],mesh=this.targetMeshes[i][j];mesh.visible=t.enabled&&(t.active||death<1)&&i!==this.hiddenTarget;mesh.castShadow=this.settings.shadowQuality!=='off';mesh.matrix.copy(p.node.matrixWorld);
         mesh.matrix.elements[12]+=dx;mesh.matrix.elements[14]+=dz;
         mesh.matrix.scale(p.size);
         if(!t.active){mesh.matrix.elements[13]-=death*0.85;mesh.matrix.scale(this.size.setScalar(1-death*0.45));}
@@ -577,7 +628,8 @@ export class RangeRenderer {
     }
     this.groundContacts.update(s.targets,alpha,this.camera);
     this.updateDefenderWeapons(alpha);
-    this.characterBatches?.commit();this.characterBatches?.setShadow(this.settings.shadowQuality!=='off');
+    const moved=this.characterBatches?.commit()??false;this.characterBatches?.setShadow(this.settings.shadowQuality!=='off');
+    if(moved||this.defenderWeaponsMoved){this.shadowDirty=true;this.defenderWeaponsMoved=false;}
   }
   render(alpha:number,elapsed:number,preview:boolean,_ads:boolean){
     if(this.entryMarker)this.entryMarker.visible=!this.simulation.targets[0].enabled;
@@ -600,7 +652,7 @@ export class RangeRenderer {
       const w=s.weapon,reload=w.reloadingUntil===null?0:THREE.MathUtils.clamp((s.time-w.reloadStarted)/w.profile.reloadTime,0,1),reloadPose=Math.sin(reload*Math.PI),equip=THREE.MathUtils.clamp((w.equipUntil-s.time)/w.profile.equipTime,0,1);
       poseViewmodel(s.weaponId,this.adsBlend,this.gunSlide,equip,reloadPose,s.time,m.speed,swayX,swayY,this.weapon);
       for(const id of WEAPON_ORDER){const v=this.visuals[id];v.root.visible=id===s.weaponId;if(id!==s.weaponId)continue;v.magazine.position.y=-0.06-reloadPose*0.18;v.cylinder.position.x=-reloadPose*0.09;v.cylinder.rotation.z=-w.magazineShot*Math.PI/3+reloadPose*4;v.hammer.rotation.x=-this.gunSlide*0.45;v.sights.visible=id==='operator'||this.adsBlend>.1;v.animateBolt?.(s.weapon.boltProgress);v.muzzle.scale.setScalar(1-this.adsBlend*.5);v.muzzle.visible=s.time-w.lastShot<0.027&&this.settings.effectsQuality!=='low';v.muzzle.rotation.z=w.magazineShot*1.7;v.animate?.(s.time,m.speed,reloadPose,this.gunSlide,this.adsBlend);}
-      if(this.knife){const knife=s.weaponId==='knife';this.knife.root.visible=knife;if(knife){const swing=this.meleeSwing,phase=swing?(s.time-swing.start)/KNIFE_SWING_SECONDS[swing.kind]:2;if(phase>=1)this.meleeSwing=null;this.knife.animate(s.time,m.speed,swing&&phase<1&&phase>=0?{kind:swing.kind,phase}:null);}}
+      if(this.knife){const knife=s.weaponId==='knife';this.knife.root.visible=knife;if(knife){const swing=this.meleeSwing,phase=swing?(s.time-swing.start)/KNIFE_SWING_SECONDS[swing.kind]:2;if(phase>=1)this.meleeSwing=null;this.knife.animate(s.time,m.speed,swing&&phase<1&&phase>=0?{kind:swing.kind,phase,combo:swing.combo}:null,equip);}}
       this.weapon.visible=!(s.weaponId==='operator'&&s.weapon.scopeAmount>.75);this.previousViewYaw=s.viewYaw;this.previousViewPitch=s.viewPitch;
     }
     const inspection=this.inspectionCamera;
@@ -612,6 +664,15 @@ export class RangeRenderer {
     for(const shell of this.shells){if(!shell.mesh.visible)continue;if(s.time>=shell.until){shell.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;shell.velocity.y-=9.8*dt;shell.mesh.position.addScaledVector(shell.velocity,dt);shell.mesh.rotation.x+=dt*12;shell.mesh.rotation.z+=dt*8;}
     for(const p of this.sparks){if(!p.mesh.visible)continue;if(s.time>=p.until){p.mesh.visible=false;continue;}const dt=s.running?Math.min(elapsed,0.05):0;p.velocity.y-=5*dt;p.mesh.position.addScaledVector(p.velocity,dt);}
     this.updateSurfaceDecals();
+    // Moving characters refresh the shadow map at most SHADOW_REFRESH_HZ; a
+    // settings or scene change refreshes it at once.
+    this.shadowAge+=Math.max(0,elapsed);
+    const interval=1/SHADOW_REFRESH_HZ;
+    if(this.shadowDirty&&(this.shadowForce||this.shadowAge>=interval-1e-4)){
+      this.shadowDirty=this.shadowForce=false;this.shadowAge=Number.isFinite(this.shadowAge)?Math.max(0,Math.min(interval,this.shadowAge-interval)):0;
+      this.renderer.shadowMap.needsUpdate=true;
+    }
+    this.needsDraw=false;
     if(this.composer)this.composer.render();else this.renderer.render(this.scene,this.camera);
     if(!preview&&!this.composer&&!inspection){this.renderer.autoClear=false;this.renderer.clearDepth();this.renderer.render(this.weaponScene,this.weaponCamera);this.renderer.autoClear=true;}
     if(!preview&&this.recordFrames)s.renderedTargets.capture(s.targets,this.targetMatrices,performance.now(),this.renderedTargetPositions,{tick:s.ticks,alpha});

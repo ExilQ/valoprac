@@ -1,3 +1,4 @@
+import {VALORANT_REFERENCE,type ReferenceSpread} from '../../config/valorantReference';
 import type { InputState,Settings } from '../types';
 import type { Movement } from '../movement/Movement';
 import type { WeaponProfile } from '../../config/weapons';
@@ -23,10 +24,15 @@ export class Weapon {
  }
 
   ammo:number;reserve:number;reloadingUntil:number|null=null;reloadStarted=0;equipUntil=0;lastShot=-100;nextShot=0;shotIndex=0;magazineShot=0;bloom=0;firedAt=0;
-  infiniteReserve=true;autoReload=true;ads=false;private wasFire=false;private lastInterval=0;
+  infiniteReserve=true;autoReload=true;ads=false;
+  /** Set only while the option is on: an absent value keeps the replay checksum
+   * state of every earlier recording unchanged. */
+  infiniteMagazine?:true;private wasFire=false;private lastInterval=0;
   recoil=new Recoil();rng:SeededRandom;recoilRng:SeededRandom;
   onAction:((action:'reload'|'equip'|'bolt'|'scope')=>void)|null=null;
   spread={base:0,movement:0,bloom:0,air:0,landing:0,total:0,x:0,y:0};
+  /** reference-v11 only (undefined otherwise, so earlier checksums are unchanged). */
+  holdBloomWhileFiring?:true;
   constructor(public profile:WeaponProfile,seed:number){this.ammo=profile.magazine;this.reserve=profile.reserve;this.rng=new SeededRandom(seed);this.recoilRng=new SeededRandom(seed^0xA91E);}
   /** Start a new life without carrying chamber, reload, input or recoil state.
    * RNG streams and user options remain session-scoped. Bots may start ready. */
@@ -47,7 +53,9 @@ export class Weapon {
     const pressed=(input.firePresses??0)>0||input.fire&&!this.wasFire;this.wasFire=input.fire;
     if(input.reload)this.requestReload(time);
     if(this.reloadingUntil!==null&&time+1e-9>=this.reloadingUntil){const n=Math.min(this.profile.magazine-this.ammo,this.infiniteReserve?this.profile.magazine:this.reserve);this.ammo+=n;if(!this.infiniteReserve)this.reserve-=n;this.magazineShot=0;this.reloadingUntil=null;}
-    this.bloom=Math.max(0,this.bloom-this.profile.bloomRecovery*dt);
+    // reference-v11: spread keeps growing while the trigger keeps firing and
+    // recovers once a shot interval and a half passes without a shot.
+    if(!this.holdBloomWhileFiring||time-this.lastShot>1.5/(this.ads?this.profile.adsFireRate:this.profile.fireRate))this.bloom=Math.max(0,this.bloom-this.profile.bloomRecovery*dt);
     this.recoil.recover(dt,this.profile,time-this.lastShot);
     if(time-this.lastShot>this.profile.resetTime)this.shotIndex=0;
     const interval=1/(this.ads?this.profile.adsFireRate:this.profile.fireRate);
@@ -58,9 +66,24 @@ export class Weapon {
     const scopeReady=this.profile.id!=='operator'||this.scopeLevel===0||time+1e-9>=this.scopeReadyAt;
     if(wants&&scopeReady&&this.reloadingUntil===null&&time+1e-9>=this.equipUntil&&this.ammo>0&&time+1e-9>=this.nextShot&&time+1e-9>=this.boltUntil){
       const due=this.nextShot;this.firedAt=time-due>1/120+1e-9||this.lastShot<0?time:due;this.nextShot=this.firedAt+interval;
-      onShot();if(this.profile.id==='operator'){this.boltStarted=time;this.boltUntil=time+interval;this.rescope=this.autoRescope?this.scopeLevel:0;this.scopeLevel=0;this.onAction?.('bolt');}this.lastShot=time;this.ammo--;this.shotIndex++;this.magazineShot++;
+      onShot();if(this.profile.id==='operator'){this.boltStarted=time;this.boltUntil=time+interval;this.rescope=this.autoRescope?this.scopeLevel:0;this.scopeLevel=0;this.onAction?.('bolt');}this.lastShot=time;if(!this.infiniteMagazine)this.ammo--;this.shotIndex++;this.magazineShot++;
       this.bloom=Math.min(this.profile.maxBloom,this.bloom+this.profile.bloomPerShot);
     }
+  }
+  /** reference-v11 spread from the official VALORANT tables: first-shot spread
+   * plus firing bloom capped at the official maximum, both scaled by the crouch
+   * multiplier, plus additive movement, airborne and landing penalties.
+   * `running` keeps running accuracy while slowing from a run (patch 0.50). */
+  calculateReferenceSpread(m:Movement,ads:boolean,landing:boolean,ref:ReferenceSpread,running:boolean){
+    const s=this.spread,r=VALORANT_REFERENCE,scoped=this.profile.id==='operator'?ads&&this.scopeLevel>0&&this.lastTime>=this.scopeReadyAt&&this.scopeAmount>.98:ads&&ref.adsFirst!==undefined;
+    const first=scoped?ref.adsFirst!:ref.first,max=scoped?ref.adsMax!:ref.max,crouch=1+(ref.crouch-1)*Math.min(1,Math.max(0,m.crouch));
+    const run=m.accuracyLimit/r.deadzone,fraction=run>0?m.speed/run:0;
+    const penalty=!m.grounded?0:fraction<=r.deadzone+1e-9?0:m.crouch>.5?ref.penalties.crouch:fraction<=r.walkAccuracy&&!running?ref.penalties.walk:ref.penalties.run;
+    const fired=Math.min(max,first+this.bloom);
+    s.base=first*crouch;s.bloom=Math.max(0,fired*crouch-s.base);s.movement=penalty;s.air=m.grounded?0:ref.penalties.air;s.landing=m.grounded&&landing?r.landing.spread:0;
+    s.total=s.base+s.bloom+s.movement+s.air+s.landing;
+    const theta=this.rng.next()*Math.PI*2,radius=Math.sqrt(this.rng.next())*s.total;
+    s.x=Math.cos(theta)*radius;s.y=Math.sin(theta)*radius;return s;
   }
   calculateSpread(m:Movement,ads:boolean,landingPenalty:boolean){
     const p=this.profile,s=this.spread;

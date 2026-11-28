@@ -1,3 +1,7 @@
+import {TRAINING_RULES} from '../simulation/trainingRules';
+import {AUDIO_RULES} from '../simulation/audioRules';
+import {CONSISTENCY_RULES,RECOVERY_GROUND_ACCELERATION} from '../simulation/consistencyRules';
+import {CROUCH_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
 import {courseFor,HISTORICAL_COURSE_TITLES} from '../../config/mapCourses';
 import {GAME_VERSION} from '../../aim/types';
 import {MOVEMENT_PHYSICS_VERSION,MATERIALS_MOVEMENT_PHYSICS_VERSION,AIR_STEERING_MOVEMENT_PHYSICS_VERSION,VALORANT_BUNNY_HOP,VALORANT_AIR_STEERING,VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS} from '../../config/movement';
@@ -19,8 +23,8 @@ import {PROJECTION_CALIBRATION} from '../rendering/projection';
 import {HELD_ANGLE_TIMING_CALIBRATION} from '../tactical/BotAimMotor';
 import type {Simulation} from '../simulation/Simulation';
 import type {ReplayHeader,ReplayOutcome} from './types';
-import {CURRENT_SIMULATION_RULES,BUNNY_HOP_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from '../simulation/rules';
-import {LEGACY_REPLAY_SIMULATION_VERSION,MATERIALS_REPLAY_SIMULATION_VERSION,AIR_STEERING_REPLAY_SIMULATION_VERSION,BUNNY_HOP_REPLAY_SIMULATION_VERSION,REPLAY_INPUT_VERSION,REPLAY_SIMULATION_VERSION,REPLAY_WEAPON_VERSION,ReplayError} from './types';
+import {CURRENT_SIMULATION_RULES,REFERENCE_SIMULATION_RULES,ACCELERATION_SIMULATION_RULES,CONSISTENCY_SIMULATION_RULES,AUDIO_SIMULATION_RULES,TRAINING_SIMULATION_RULES,WEAPONS_SIMULATION_RULES,BUNNY_HOP_SIMULATION_RULES,AIR_STEERING_SIMULATION_RULES,MATERIALS_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,usesTrainingRules,usesAudioRules,usesConsistencyRules,usesRecoveryAcceleration,usesReferenceRules,usesBrakingRules,type SimulationRulesId} from '../simulation/rules';
+import {LEGACY_REPLAY_SIMULATION_VERSION,MATERIALS_REPLAY_SIMULATION_VERSION,AIR_STEERING_REPLAY_SIMULATION_VERSION,BUNNY_HOP_REPLAY_SIMULATION_VERSION,WEAPONS_REPLAY_SIMULATION_VERSION,TRAINING_REPLAY_SIMULATION_VERSION,AUDIO_REPLAY_SIMULATION_VERSION,CONSISTENCY_REPLAY_SIMULATION_VERSION,ACCELERATION_REPLAY_SIMULATION_VERSION,REFERENCE_REPLAY_SIMULATION_VERSION,REPLAY_INPUT_VERSION,REPLAY_SIMULATION_VERSION,REPLAY_WEAPON_VERSION,ReplayError} from './types';
 
 /** Non-cryptographic reproducibility checksum. It never authenticates an online
  * score: verification always re-executes the complete compatible simulation. */
@@ -41,7 +45,7 @@ function state(value:unknown,depth=0,parents=new Set<object>(),legacy=false):unk
  const result:Record<string,unknown>={};for(const key of Object.keys(o).sort()){
   // Only the new engine selector is absent from historical state. Scenario
   // definitions already had a rules object, which remains checksum-bearing.
-  const rulesSelector=key==='rules'&&(o[key]===LEGACY_SIMULATION_RULES||o[key]===CURRENT_SIMULATION_RULES||o[key]===MATERIALS_SIMULATION_RULES||o[key]===AIR_STEERING_SIMULATION_RULES||o[key]===BUNNY_HOP_SIMULATION_RULES);
+  const rulesSelector=key==='rules'&&(o[key]===LEGACY_SIMULATION_RULES||o[key]===CURRENT_SIMULATION_RULES||o[key]===MATERIALS_SIMULATION_RULES||o[key]===AIR_STEERING_SIMULATION_RULES||o[key]===BUNNY_HOP_SIMULATION_RULES||o[key]===WEAPONS_SIMULATION_RULES);
   if(commonOmit.has(key)||legacy&&(rulesSelector||key==='stepMinLandingWidth'))continue;
   const v=state(o[key],depth+1,next,legacy);if(v!==undefined)result[key]=v;
  }return result;
@@ -49,13 +53,17 @@ function state(value:unknown,depth=0,parents=new Set<object>(),legacy=false):unk
 /** Version-pinned internal state is intentionally richer than the result card:
  * RNG streams, movement timers, all guns, target generations and defender memory
  * are covered. Render-only THREE objects and wall-clock UUIDs are excluded. */
+/** Menu music (12.38) never affects the simulation, so it stays out of the
+ * checksum: the same session hashes the same whatever track was playing. */
+const PRESENTATION_ONLY=['musicTrack','musicVolume','musicInTraining','botAppearance'] as const;
+function withoutPresentation(settings:Simulation['settings']){const copy:Record<string,unknown>={...settings};for(const k of PRESENTATION_ONLY)delete copy[k];return copy as unknown as Simulation['settings'];}
 export function deterministicState(s:Simulation){
  const raw=s as unknown as Record<string,unknown>,frame=s.renderedTargets.latest;
  const legacy=s.rules===LEGACY_SIMULATION_RULES,serialize=(v:unknown)=>state(v,0,new Set<object>(),legacy),profile={...s.movement.profile};
  if(legacy)delete profile.stepMinLandingWidth;
  const result={...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
   ...(s.characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
-  aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:s.settings,
+  aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:withoutPresentation(s.settings),
   movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(firearms(s.weapons)),targets:s.targets.map(t=>serialize(t)),
   rng:serialize(raw.rng),defenders:s.defenders?serialize(s.defenders):null,
   ...(s.drill?{drill:serialize(s.drill)}:{}),angles:serialize(s.angles),hearing:serialize(s.hearing),exposure:serialize(s.exposure),
@@ -82,14 +90,14 @@ export function replayCompatibility(rules:SimulationRulesId=CURRENT_SIMULATION_R
  if(rules===LEGACY_SIMULATION_RULES)return{...LEGACY_COMPATIBILITY};
  const surfaces=Object.entries(SURFACES).map(([id,s])=>({id,collisionFriction:s.collisionFriction,penetrationResistance:s.penetrationResistance,penetrationRetention:s.penetrationRetention,opaque:!!s.opaque,blocksSight:s.blocksSight,footstepSoundProfile:s.footstepSoundProfile}));
  const maps=['range','tactical','long','garage','site','mid','tower','multi','complex','bunny','wallbang'].map(id=>({id,obstacles:obstaclesFor(id).map(o=>({min:o.box.min.toArray(),max:o.box.max.toArray(),kind:o.kind,ramp:o.ramp,material:o.material,surfaceId:o.surfaceId,groundSurfaceId:o.groundSurfaceId}))}));
- const materials=rules===MATERIALS_SIMULATION_RULES,steering=rules===AIR_STEERING_SIMULATION_RULES,bunnyHop=rules===BUNNY_HOP_SIMULATION_RULES;
+ const materials=rules===MATERIALS_SIMULATION_RULES,steering=rules===AIR_STEERING_SIMULATION_RULES,bunnyHop=rules===BUNNY_HOP_SIMULATION_RULES,weaponsV6=rules===WEAPONS_SIMULATION_RULES,trainingV7=rules===TRAINING_SIMULATION_RULES,audioV8=rules===AUDIO_SIMULATION_RULES,consistencyV9=rules===CONSISTENCY_SIMULATION_RULES,accelerationV10=rules===ACCELERATION_SIMULATION_RULES,referenceV11=rules===REFERENCE_SIMULATION_RULES;
  const course=mapId?courseFor(mapId):undefined;
  const ground={base:BASE_GROUND_SURFACE,themed:THEMED_FLOOR_SURFACES,rangeMat:RANGE_MAT_SURFACE,complex:PEEK_ZONES.map(z=>({bounds:z.bounds,center:z.center,material:z.material}))};
  const characterIdentity=characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:characterGeometry}:{};
- return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:materials?MATERIALS_REPLAY_SIMULATION_VERSION:steering?AIR_STEERING_REPLAY_SIMULATION_VERSION:bunnyHop?BUNNY_HOP_REPLAY_SIMULATION_VERSION:REPLAY_SIMULATION_VERSION,movementVersion:materials?MATERIALS_MOVEMENT_PHYSICS_VERSION:steering?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({...(!materials&&!steering?{tacticalBunnyHop:VALORANT_BUNNY_HOP}:{}),...(materials?{}:{tacticalAirSteering:VALORANT_AIR_STEERING}),...(course?{courseRules:1,entryYaw:course.entryYaw,coursePlan:course.rows,cell:course.cell,height:course.height,wall:course.wall,floor:course.floor,...('drill' in course?{drill:course.drill,drillVersion:1}:{})}:{}),weapons:usesCurrentWeapons(rules)?FIREARM_PROFILES:LEGACY_FIREARM_PROFILES,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
+ return{...characterIdentity,gameVersion:GAME_VERSION,simulationVersion:materials?MATERIALS_REPLAY_SIMULATION_VERSION:steering?AIR_STEERING_REPLAY_SIMULATION_VERSION:bunnyHop?BUNNY_HOP_REPLAY_SIMULATION_VERSION:weaponsV6?WEAPONS_REPLAY_SIMULATION_VERSION:trainingV7?TRAINING_REPLAY_SIMULATION_VERSION:audioV8?AUDIO_REPLAY_SIMULATION_VERSION:consistencyV9?CONSISTENCY_REPLAY_SIMULATION_VERSION:accelerationV10?ACCELERATION_REPLAY_SIMULATION_VERSION:referenceV11?REFERENCE_REPLAY_SIMULATION_VERSION:REPLAY_SIMULATION_VERSION,movementVersion:materials?MATERIALS_MOVEMENT_PHYSICS_VERSION:steering?AIR_STEERING_MOVEMENT_PHYSICS_VERSION:MOVEMENT_PHYSICS_VERSION,projectionVersion:PROJECTION_CALIBRATION.version,calibrationFingerprint:integrityHash({...(!materials&&!steering?{tacticalBunnyHop:VALORANT_BUNNY_HOP}:{}),...(materials?{}:{tacticalAirSteering:VALORANT_AIR_STEERING}),...(course?{courseRules:1,entryYaw:course.entryYaw,coursePlan:course.rows,cell:course.cell,height:course.height,wall:course.wall,floor:course.floor,...('drill' in course?{drill:course.drill,drillVersion:1}:{})}:{}),...(usesTrainingRules(rules)?{trainingRules:TRAINING_RULES}:{}),...(usesAudioRules(rules)?{audioRules:AUDIO_RULES}:{}),...(usesConsistencyRules(rules)?{consistencyRules:CONSISTENCY_RULES}:{}),...(usesRecoveryAcceleration(rules)?{groundAcceleration:RECOVERY_GROUND_ACCELERATION}:{}),...(usesReferenceRules(rules)?{valorantReference:VALORANT_REFERENCE}:{}),...(usesBrakingRules(rules)?{crouchReference:CROUCH_REFERENCE}:{}),weapons:usesCurrentWeapons(rules)?FIREARM_PROFILES:LEGACY_FIREARM_PROFILES,physics:[VALORANT_PHYSICS,CS2_PHYSICS,SOURCE_CLASSIC_PHYSICS],bot:HELD_ANGLE_TIMING_CALIBRATION,surfaces,maps,ground,penetrationWeapons:PENETRATION_WEAPONS,footsteps:FOOTSTEP_BASELINE,...characterIdentity}),simulationRules:rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION,inputVersion:REPLAY_INPUT_VERSION,weaponVersion:REPLAY_WEAPON_VERSION};
 }
 export function replayRulesFor(header:ReplayHeader):SimulationRulesId {
- const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:header.simulationVersion===MATERIALS_REPLAY_SIMULATION_VERSION?MATERIALS_SIMULATION_RULES:header.simulationVersion===AIR_STEERING_REPLAY_SIMULATION_VERSION?AIR_STEERING_SIMULATION_RULES:header.simulationVersion===BUNNY_HOP_REPLAY_SIMULATION_VERSION?BUNNY_HOP_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header),header.map);
+ const rules=header.simulationVersion===LEGACY_REPLAY_SIMULATION_VERSION?LEGACY_SIMULATION_RULES:header.simulationVersion===MATERIALS_REPLAY_SIMULATION_VERSION?MATERIALS_SIMULATION_RULES:header.simulationVersion===AIR_STEERING_REPLAY_SIMULATION_VERSION?AIR_STEERING_SIMULATION_RULES:header.simulationVersion===BUNNY_HOP_REPLAY_SIMULATION_VERSION?BUNNY_HOP_SIMULATION_RULES:header.simulationVersion===WEAPONS_REPLAY_SIMULATION_VERSION?WEAPONS_SIMULATION_RULES:header.simulationVersion===TRAINING_REPLAY_SIMULATION_VERSION?TRAINING_SIMULATION_RULES:header.simulationVersion===AUDIO_REPLAY_SIMULATION_VERSION?AUDIO_SIMULATION_RULES:header.simulationVersion===CONSISTENCY_REPLAY_SIMULATION_VERSION?CONSISTENCY_SIMULATION_RULES:header.simulationVersion===ACCELERATION_REPLAY_SIMULATION_VERSION?ACCELERATION_SIMULATION_RULES:header.simulationVersion===REFERENCE_REPLAY_SIMULATION_VERSION?REFERENCE_SIMULATION_RULES:CURRENT_SIMULATION_RULES,expected=replayCompatibility(rules,replayCharacterGeometry(header),header.map);
  for(const key of Object.keys(expected) as (keyof typeof expected)[])if(header[key]!==expected[key])throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');
  // A simulation-2 file cannot opt into new mechanics through optional metadata.
  if(rules===LEGACY_SIMULATION_RULES&&(header.simulationRules!==undefined&&header.simulationRules!==rules||header.materialPhysicsVersion!==undefined||header.inputVersion!==undefined||header.weaponVersion!==undefined||header.characterGeometryVersion!==undefined))throw new ReplayError('현재 게임·물리·보정 버전과 호환되지 않는 리플레이입니다.');

@@ -1,6 +1,6 @@
 {
   "name": "valoprac",
-  "version": "12.0.30",
+  "version": "12.0.44",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.25.0",

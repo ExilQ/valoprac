@@ -20,6 +20,12 @@ import type { Mode, Settings, WeaponId, GunId, SessionData, SessionSummary } fro
 import {isPrimary,weaponForSlot} from '../config/weapons';
 export interface Telemetry {ghostStatus?:'idle'|'preparing'|'ready'|'failed';ghostError?:string;exercise?:ExerciseReport;movementPractice?:MovementPracticeSnapshot;replayStatus?:'recording'|'complete'|'unavailable'|'preview';replayIssue?:string;graphicsPreparation?:RangeRenderer['preparationStatus'];graphicsReady?:boolean;scopeZoom?:number;scopeLevel?:number;scopeAmount?:number;operatorState?:string;peeking?:import('./tactical/DefenderAI').PeekReport;health?:number;weapon:WeaponId;reserve:number;ads:boolean;summary:SessionSummary|null;time:number;ammo:number;reloading:number|null;score:number;shots:number;speed:number;accurate:boolean;release:number|null;ready:number|null;thresholdDelta:number|null;early:boolean;hit:string;hitAge:number;fps:number;p95:number;calls:number;debt:number;spread:number;recoil:number;grounded:boolean}
 export const INITIAL_TELEMETRY:Telemetry={graphicsReady:false,weapon:'rifleA',reserve:50,ads:false,summary:null,time:0,ammo:25,reloading:null,score:0,shots:0,speed:0,accurate:true,release:null,ready:0,thresholdDelta:null,early:false,hit:'miss',hitAge:100,fps:0,p95:0,calls:0,debt:0,spread:0,recoil:0,grounded:true};
+/** A still frame is refreshed this often even if nothing reported a change. */
+export const STILL_REFRESH_MS=5000;
+/** HUD telemetry while paused: values only change through explicit actions. */
+export const STILL_HUD_MS=500;
+/** How often a still view checks for changes (no rendering unless something changed). */
+export const STILL_POLL_MS=50;
 export class Runtime {
   graphicsReady=false;private preparationEpoch=0;
   private aimCapture:CombatCapture|null=null;
@@ -57,6 +63,7 @@ export class Runtime {
     if(this.simulation.defenders){this.simulation.defenders.onShot=e=>{if(this.simulation.defenders?.memories[e.bot]?.lastShot!==e)return;if(e.observed){this.audio.enemyShot(e.weapon,e.origin,e.time,e.bot);this.audio.impacts(e.penetration??[],e.time,.55);const floor=floorImpactSurfaceAt(this.simulation.practiceMap,e.impact,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,e.impact,e.time,.55,`enemy-floor:${e.bot}`);}this.renderer.addDefenderShot({...e,segments:e.penetration});};this.simulation.defenders.onFootstep=event=>this.audio.botFootstep(event.bot,event);}
     this.simulation.onFootstep=e=>this.audio.footstep(e);
     this.simulation.onLanding=e=>this.audio.landing(e);
+    this.simulation.onJump=e=>this.audio.jump(e);
     this.simulation.onShot=s=>{if(s.lifeGeneration!==undefined&&s.lifeGeneration!==this.simulation.lifeGeneration)return;this.renderer.addShot(s);this.audio.shot(s);const floor=floorImpactSurface(this.simulation.practiceMap,s,this.simulation.rules);if(floor)this.audio.surfaceImpact(floor,s.impact,s.timestamp);this.aimCapture?.shot(s);};
     for(const w of Object.values(this.simulation.weapons))w.onAction=action=>this.audio.action(w.profile.id,action);
     this.simulation.onFinish=()=>this.deliverSession();
@@ -69,7 +76,7 @@ export class Runtime {
   }
   private probeMouse=(e:MouseEvent)=>{if(this.input.locked)this.latency.mark('look',e.timeStamp,performance.now());};
   private probeClick=(e:MouseEvent)=>{if(this.input.locked&&e.button===0)this.latency.mark('click',e.timeStamp,performance.now());};
-  private handleLock=(locked:boolean)=>{if(this.preview)return;this.simulation.running=locked&&!this.simulation.completed;this.previousTime=0;if(!locked){this.audio.stop();this.latency.clearPending();}else this.audio.sync(this.simulation.time);this.onLock(locked);};
+  private handleLock=(locked:boolean)=>{if(this.preview)return;if(locked)this.wake();this.simulation.running=locked&&!this.simulation.completed;this.previousTime=0;if(!locked){this.audio.stop();this.audio.idle();this.latency.clearPending();}else this.audio.sync(this.simulation.time);this.onLock(locked);};
   prepareGraphics(){if(this.renderer.preparationReady)return;const epoch=++this.preparationEpoch;this.graphicsReady=false;void this.renderer.prepare().then(()=>{if(this.disposed||epoch!==this.preparationEpoch)return;this.graphicsReady=false;this.previousTime=0;this.publishTelemetry();}).catch(error=>{if(this.disposed||epoch!==this.preparationEpoch)return;console.error(error);this.onError('훈련 그래픽을 준비하지 못했습니다. 다시 준비하거나 하드웨어 가속 설정을 확인하세요.');this.publishTelemetry();});}
   async resume(capture=false){if(this.disposed||this.preview)return;if(!this.graphicsReady){this.onError('훈련 그래픽을 준비하고 있습니다. 준비가 끝나면 시작하세요.');this.prepareGraphics();return;}void this.audio.unlock().then(()=>{this.audio.levels(this.simulation.settings);this.audio.sync(this.simulation.time);}).catch(()=>this.onError('소리를 활성화하지 못했습니다. 소리 없이 훈련을 진행합니다.'));this.audio.levels(this.simulation.settings);if(capture)await this.input.captureKeyboard(this.renderer.canvas.closest('.game-stage') as HTMLElement??this.renderer.canvas);await this.input.lock();}
   flushAimAssessment(){return this.aimCapture?.flush()??Promise.resolve([]);}
@@ -131,23 +138,36 @@ export class Runtime {
     if(this.simulation.exposure.death&&this.input.locked){this.input.reset();document.exitPointerLock();this.audio.stop();this.onLock(false);}
     if(this.simulation.running&&elapsed>0.5){this.audio.stop();this.simulation.running=false;this.input.reset();if(this.input.locked)document.exitPointerLock();this.onLock(false);this.onError('긴 화면 정지를 감지해 일시정지했습니다. 클릭하면 이어서 훈련합니다.');}
     let alpha=1;if(this.simulation.running)alpha=this.clock.advance(elapsed,this.step);
-    if(this.renderer.preparationReady&&this.cadence.shouldDraw(now,this.preview?30:this.renderer.effectiveFrameLimit??this.simulation.settings.frameLimit)){
+    // 12.39: a still view (paused, briefing, menu preview) redraws only when
+    // something changed, plus once a second; a running session keeps its cadence.
+    const still=!this.simulation.running;
+    if(this.renderer.preparationReady&&(still?this.renderer.drawRequested||!this.lastDraw||now-this.lastDraw>=STILL_REFRESH_MS:this.cadence.shouldDraw(now,this.renderer.effectiveFrameLimit??this.simulation.settings.frameLimit))){
+      // Frame-time statistics describe running frames only; a still refresh is not a frame rate.
+      if(!still&&this.wasStill){this.lastDraw=0;this.wasStill=false;}
       const drawElapsed=this.lastDraw?(now-this.lastDraw)/1000:elapsed;this.lastDraw=now;
-      this.frameTimes[this.sampleIndex++%this.frameTimes.length]=drawElapsed*1000;this.sampleCount=Math.min(this.sampleCount+1,this.frameTimes.length);
+      if(still)this.wasStill=true;else{this.frameTimes[this.sampleIndex++%this.frameTimes.length]=drawElapsed*1000;this.sampleCount=Math.min(this.sampleCount+1,this.frameTimes.length);}
       const tools=this.simulation.settings.movementTools;if(this.movementReview&&tools){const start=this.movementVisual?.current?.startTime??this.ghostStartTime;this.movementReview.update(tools,this.movementVisual,this.movementGhost,this.movementGhost?sampleMovementGhost(this.movementGhost,this.simulation.time-start):null);}
       this.renderer.render(alpha,drawElapsed,this.preview,this.simulation.ads);if(!this.graphicsReady){this.graphicsReady=true;this.publishTelemetry();}this.aimCapture?.frame(performance.now());this.latency.submitted(performance.now());
     }
     const root=this.renderer.canvas.parentElement;
     if(root){const w=this.simulation.weapon,m=this.simulation.movement;const error=(m.accurate?0:Math.min(22,m.speed*3))+(this.simulation.settings.dynamicCrosshair?w.bloom*10:0);const gap=this.simulation.settings.dynamicCrosshair?Math.round(error*4)/4:0;if(gap!==this.movementGap){this.movementGap=gap;root.style.setProperty('--movement-gap',`${gap}px`);}}
-    if(!this.preview&&now-this.hudAt>=90){this.hudAt=now;this.publishTelemetry();}
-    this.frame=requestAnimationFrame(this.animate);
+    if(!this.preview&&now-this.hudAt>=(this.simulation.running?90:STILL_HUD_MS)){this.hudAt=now;this.publishTelemetry(false);}
+    this.schedule();
   };
+  /** Running: every animation frame. Still: poll at STILL_POLL_MS; wake() on resume. */
+  private idleTimer:ReturnType<typeof setTimeout>|null=null;private wasStill=false;
+  private schedule(){
+    if(this.disposed)return;
+    if(this.simulation.running)this.frame=requestAnimationFrame(this.animate);
+    else this.idleTimer=setTimeout(()=>{this.idleTimer=null;if(!this.disposed)this.frame=requestAnimationFrame(this.animate);},STILL_POLL_MS);
+  }
+  private wake(){if(this.idleTimer&&!this.disposed){clearTimeout(this.idleTimer);this.idleTimer=null;this.frame=requestAnimationFrame(this.animate);}}
   private step=(dt:number)=>{const s=this.simulation,landing=s.movement.landingSerial,jump=s.movement.jumpSerial;s.step(dt,this.input.consumeMovementTick(dt,s.time));if(s.movement.jumpSerial!==jump)this.ghostStartTime=s.time;const cue=s.exercise?.currentCue;if(cue&&cue.id!==this.lastExerciseCue){this.lastExerciseCue=cue.id;this.audio.trainingCue(cue.source,cue.cueTime);}
     if(s.settings.movementTools?.enabled&&s.movement.landingSerial!==landing){const attempt=s.movementPractice.snapshot().last;if(attempt&&attempt.id!==this.ghostCandidateId&&attempt.endTick>attempt.startTick){this.ghostCandidateId=attempt.id;this.ghostCandidate=null;const count=this.replayRecorder?.status.commands??Infinity;if(count<=120000){const recording=this.replaySnapshot();if(recording)this.ghostCandidate={recording,startTick:attempt.startTick,endTick:attempt.endTick};}else{this.ghostError='고스트 복원용 입력 한도에 도달했습니다. 새 훈련에서 시도하세요.';if(!this.movementGhost)this.ghostState='failed';}}}
   };
-  private publishTelemetry(){
-    this.pollRecording();const s=this.simulation,w=s.weapon,b=s.braking;const times=Array.from(this.frameTimes.subarray(0,this.sampleCount)).filter(t=>t>0).sort((a,b)=>a-b);const average=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
-    const movementReady=s.movement.estimateReadyTime(this.input.state,this.input.state.movementYaw??s.yaw,1/120,s.weaponId==='operator'?5.13*.72*.15:s.movement.profile.accuracyVelocityThreshold);const ready=s.weaponId==='operator'?(!s.ads||movementReady===null?null:Math.max(movementReady,w.scopeReadyAt-s.time,.225-(s.time-s.movement.landedAt),0)):movementReady;
+  private publishTelemetry(changed=true){
+    if(changed){this.renderer.invalidate();this.wake();}this.pollRecording();const s=this.simulation,w=s.weapon,b=s.braking;const times=Array.from(this.frameTimes.subarray(0,this.sampleCount)).filter(t=>t>0).sort((a,b)=>a-b);const average=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
+    const movementReady=s.movement.estimateReadyTime(this.input.state,this.input.state.movementYaw??s.yaw,1/120,s.accuracyThreshold);const ready=s.weaponId==='operator'?(!s.ads||movementReady===null?null:Math.max(movementReady,w.scopeReadyAt-s.time,.225-(s.time-s.movement.landedAt),0)):movementReady;
     const last=s.shots[s.shots.length-1];this.movementVisual=s.settings.movementTools?.enabled?s.movementPractice.snapshot():null;this.onTelemetry({ghostStatus:this.ghostState,ghostError:this.ghostError,exercise:s.exercise?.snapshot(),movementPractice:this.movementVisual??undefined,replayStatus:this.replayState,replayIssue:this.replayIssue,graphicsPreparation:this.renderer.preparationStatus,graphicsReady:this.graphicsReady,scopeZoom:s.scopeZoom,scopeLevel:s.scopeLevel,scopeAmount:s.weaponId==='operator'?w.scopeAmount:0,operatorState:s.weaponId==='operator'?w.operatorState:undefined,peeking:s.defenders?.snapshot(),health:s.defenders?.health,weapon:s.weaponId,reserve:w.reserve,ads:s.ads,summary:s.hudSummary(),time:s.time,ammo:w.ammo,reloading:w.reloadingUntil===null?null:Math.max(0,w.reloadingUntil-s.time),score:s.stats.eliminations,shots:s.stats.shots,speed:s.movement.speed,accurate:s.weaponId==='operator'?s.ads&&w.scopeAmount>.98&&s.time>=w.scopeReadyAt&&s.movement.grounded&&s.movement.speed<=5.13*.72*.15&&s.time-s.movement.landedAt>=.225:s.movement.accurate,release:b.releaseTime===null?null:s.time-b.releaseTime,ready,thresholdDelta:last?.thresholdDelta??null,early:s.time-s.lastEarlyAt<0.3,hit:s.lastHit,hitAge:s.time-s.lastHitAt,fps:average?1000/average:0,p95:times[Math.floor(times.length*0.95)]??0,calls:this.renderer.calls,debt:this.clock.deferredTicks,spread:w.spread.total,recoil:w.recoil.pitch,grounded:s.movement.grounded});
   }
   /** Weapon swaps keep held movement keys; only trigger/aim intent is released. */
@@ -163,5 +183,5 @@ export class Runtime {
   retryTactical(){this.input.reset();this.audio.stop();this.simulation.retryTactical();this.clock=new FixedClock();this.previousTime=0;this.renderer.clearImpacts();this.latency.clearPending();this.publishTelemetry();}
   resetTargets(){this.simulation.resetTargets();this.publishTelemetry();}
   resetStatistics(){this.simulation.resetStatistics();this.renderer.clearImpacts();this.publishTelemetry();}
-  dispose(){this.disposed=true;this.clearMovementReview();this.movementReview?.dispose();this.movementReview=null;cancelAnimationFrame(this.frame);this.renderer.canvas.removeEventListener('webglcontextlost',this.contextLost);this.renderer.canvas.removeEventListener('mousemove',this.probeMouse);this.renderer.canvas.removeEventListener('mousedown',this.probeClick);this.unbindSimulation();this.audio.dispose();this.renderer.dispose();}
+  dispose(){this.disposed=true;if(this.idleTimer)clearTimeout(this.idleTimer);this.idleTimer=null;this.clearMovementReview();this.movementReview?.dispose();this.movementReview=null;cancelAnimationFrame(this.frame);this.renderer.canvas.removeEventListener('webglcontextlost',this.contextLost);this.renderer.canvas.removeEventListener('mousemove',this.probeMouse);this.renderer.canvas.removeEventListener('mousedown',this.probeClick);this.unbindSimulation();this.audio.dispose();this.renderer.dispose();}
 }

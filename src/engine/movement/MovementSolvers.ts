@@ -27,15 +27,44 @@ export function solveGroundMovement(v:Vector3,w:WishMovement,p:MovementPhysicsPr
  if(w.amount<=0){friction(v,dt,p.friction,0,p.groundDeceleration);return;}
  // A short press within a tick receives only its fraction of the impulse.
  if(w.amount<1)friction(v,dt*(1-w.amount),p.friction,0,p.groundDeceleration);
+ if(p.counterFriction!==undefined&&p.counterDeceleration!==undefined&&w.x*v.x+w.z*v.z<0){
+  // reference-v11 counter-strafe: brake the current motion (fitted to Riot's
+  // timings), then any part of the input across the old motion accelerates.
+  const speed=Math.hypot(v.x,v.z),ux=v.x/speed,uz=v.z/speed;
+  // braking-v12: counter-strafing never brakes less than releasing the key.
+  const weaker=p.overMaxBraking&&p.friction*speed+p.groundDeceleration>p.counterFriction*speed+p.counterDeceleration;
+  friction(v,dt*w.amount,weaker?p.friction:p.counterFriction,0,weaker?p.groundDeceleration:p.counterDeceleration);
+  const across=w.x*(-uz)+w.z*ux;if(Math.abs(across)>1e-9){const add=Math.min(p.groundAcceleration*dt*w.amount*Math.abs(across),w.speed*Math.abs(across));v.x+=-uz*Math.sign(across)*add;v.z+=ux*Math.sign(across)*add;}
+  return;
+ }
+ if(p.overMaxBraking){
+  // braking-v12 (Unreal CalcVelocity): faster than the wished speed, brake as
+  // when releasing the keys, never below that speed while still moving its way.
+  const speed=Math.hypot(v.x,v.z);
+  if(speed>w.speed+1e-9&&w.x*v.x+w.z*v.z>0){
+   const ox=v.x/speed,oz=v.z/speed;friction(v,dt,p.friction,0,p.groundDeceleration);
+   const braked=Math.hypot(v.x,v.z);
+   if(braked<=w.speed){v.x=ox*w.speed;v.z=oz*w.speed;}
+   else{
+    // Still above the wished speed: input only turns the motion, clamped to
+    // the current speed (Unreal clamps input acceleration to it).
+    const nx=v.x+w.x*p.groundAcceleration*dt*w.amount,nz=v.z+w.z*p.groundAcceleration*dt*w.amount,length=Math.hypot(nx,nz);
+    if(length>1e-12){v.x=nx/length*braked;v.z=nz/length*braked;}
+    return;
+   }
+  }
+ }
  const dot=w.x*v.x+w.z*v.z,acceleration=dot<0?p.reverseAcceleration:p.groundAcceleration,tx=w.x*w.speed-v.x,tz=w.z*w.speed-v.z,length=Math.hypot(tx,tz),amount=Math.min(length,acceleration*dt*w.amount);
  if(length>1e-12){v.x+=tx/length*amount;v.z+=tz/length*amount;}
 }
 /** Steer the existing horizontal momentum with a bounded lateral acceleration
  * expressed as a turn rate. Only the component along the velocity adds speed
  * or brakes. Thus a sideways input can curve a run at its speed cap. */
-export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null,diagonalStrafe=0,runSpeed=0){
+export function steerTacticalAir(v:Vector3,w:WishMovement,p:MovementPhysicsProfile,dt:number,out:Vector3,takeoffCap:number|null,diagonalStrafe=0,runSpeed=0,capScale=1){
  const beforeX=v.x,beforeZ=v.z,speed=Math.hypot(beforeX,beforeZ);
- const standardCap=Math.min(takeoffCap??Infinity,p.airSpeedLimit??Infinity,p.hopSpeedCap??Infinity);
+ // capScale (consistency-v9): the profile's rifle-based caps scale with the
+ // takeoff weapon's run speed, so a faster weapon is not cut to rifle speed.
+ const standardCap=Math.min(takeoffCap??Infinity,(p.airSpeedLimit??Infinity)*capScale,(p.hopSpeedCap??Infinity)*capScale);
  const cap=runSpeed>0?(takeoffCap??standardCap):standardCap;
  if(w.amount>0){
   const wishSpeed=Math.min(p.airMaxSpeed*w.amount,w.speed),impulse=p.airAcceleration*w.amount*dt;

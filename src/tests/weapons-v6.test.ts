@@ -13,7 +13,7 @@ import type {ReplayRecording} from '../engine/replay/types';
 
 describe('12.27 firearm values (weapons-v6) and replay compatibility',()=>{
  it('uses the official wiki values from v6 and keeps the recorded values for older rules',()=>{
-  expect(CURRENT_SIMULATION_RULES).toBe('weapons-v6');
+  expect(CURRENT_SIMULATION_RULES).toBe('braking-v12');
   expect([WEAPONS.rifleA.reserve,WEAPONS.rifleB.reserve]).toEqual([50,60]);
   expect([WEAPONS.rifleA.airSpread,WEAPONS.rifleB.airSpread,WEAPONS.sheriff.airSpread]).toEqual([10,10,7]);
   expect([LEGACY_WEAPONS.rifleA.reserve,LEGACY_WEAPONS.rifleB.reserve]).toEqual([75,90]);

@@ -1,4 +1,170 @@
 {
+  "12.44": {
+    "title": "Canezerra style: fast strafes, crouch, deadzone, standing spray",
+    "description": "The Canezerra style is rebuilt from what you saw: fast-tempo strafing, crouching, deadzone movement, standing sprays and 1-vs-many fights.",
+    "changes": [
+      "Fast strafes of 0.12–0.22 s (sometimes 0.26–0.36 s), tapping once as it passes through the deadzone on each direction change.",
+      "Crouch: 30% of direction changes crouch for 0.22–0.35 s to dodge the head line.",
+      "Spray: after a hit within 18 m it stops standing and sprays 6–9 shots, returning to strafing after two misses.",
+      "It keeps fighting instead of falling back to cover (the 12.43 retreat is removed).",
+      "Measured: crouched 17–24% of the fight; every spray shot is fired standing below the deadzone speed."
+    ]
+  },
+  "12.43": {
+    "title": "Canezerra style matched to the video analysis",
+    "description": "Following the shared video analysis, the Canezerra style now decides after each shot whether to keep shooting, cut the line behind cover or move once, instead of strafing constantly.",
+    "changes": [
+      "Canezerra style: a fast short peek and a deadzone tap; on a hit it stays and keeps shooting.",
+      "On a miss with cover nearby it falls fully behind cover and re-peeks, and does not fight while falling back.",
+      "With no cover it moves once one way and stops to shoot; it never reverses again before the next shot and never shoots while moving.",
+      "All bot styles: cover search widened from 0.9 m to 2 m."
+    ]
+  },
+  "12.42": {
+    "title": "Canezerra-style bot movement",
+    "description": "Adds a Canezerra-style bot that strafes fast without settling and taps once on each direction change.",
+    "changes": [
+      "Canezerra style: never fully stops; as it reverses, its speed passes under the deadzone and it fires one shot.",
+      "Mixes short (0.12–0.2 s) and long (0.3–0.42 s) strafes; 25% of the time it brakes roughly the same way, taps, and keeps going.",
+      "Measured: about 0.11 s of low speed per change, every shot a single tap at 0.4–1.4 m/s, 4.6 m of lateral range.",
+      "Based on the shared ChatGPT conversation (fast strafing + deadzone one-taps + irregular rhythm); there is no public analysis of the player, so it is a training approximation."
+    ]
+  },
+  "12.41": {
+    "title": "Something movement reworked",
+    "description": "The Something-style bot now brakes only roughly for one tap, then swipes wide and shoots.",
+    "changes": [
+      "Something style: short peek (0.14–0.2 s) → rough brake to the deadzone for one tap → wide swipe the same way without settling (0.42–0.58 s) → full stop and shoot → repeat from the other side.",
+      "Measured: it brakes from 3.9–4.4 m/s, taps at 1.35 m/s (under the deadzone), then swipes wide at 5.4 m/s the same way.",
+      "The tap is a single shot; without a shot it moves on after 0.07 s under the deadzone."
+    ]
+  },
+  "12.40": {
+    "title": "Nine opponent bot movement styles and a high-visibility training bot",
+    "description": "Bots peek from cover and fight with nine movement styles, chosen by you or at random. The bot look now reads clearly on every map, and every scene was checked for graphics regressions after the 12.39 optimisation.",
+    "changes": [
+      "Bot movement (tactical maps): fast close-range fight, wide peek, jiggle then crouch peek, Poppin swing, and pro-inspired Something, Primmie, FlashBack, Texture and Karon styles. 'Random' gives each bot a different style.",
+      "Bots find their cover side, hide, peek, and when they see you fight with each style's strafe windows, stop (shooting) windows and crouch use. Acceleration, braking and crouch time match the player's.",
+      "Bots follow the accuracy rules: they shoot only once slowed below the deadzone or while crouch-walking.",
+      "The last-death analysis names the opponent's movement style.",
+      "Training-bot look: dark body, orange shoulders and yellow trim, grey mannequin face, dark helmet with bright eyes. Brightness contrast against the background at 8 m is 19–33% higher. Hit areas are unchanged; the original agent look stays selectable.",
+      "Graphics check: 32 scenes (8 maps × 4 quality levels) match 12.38 pixel for pixel, with no WebGL or console errors.",
+      "The 'Default' movement is unchanged and earlier replays play as before."
+    ]
+  },
+  "12.39": {
+    "title": "CPU, GPU and memory optimisation",
+    "description": "Still screens are no longer redrawn, shadows and character data update only when they change, and idle audio stops. Training frames look pixel-identical.",
+    "changes": [
+      "Paused and briefing screens redraw only when something changes: measured CPU 124–136% → 0–12%, about 1,500 → 50 draw calls per second.",
+      "The 3D preview in the menu no longer redraws 30 times a second.",
+      "A paused replay redraws only when its frame, camera or view changes.",
+      "Shadows are redrawn only when a character moves, at most 60 times a second even on high-refresh monitors, and static buildings cast shadows as one merged mesh: 79 → 54–59 draw calls per frame at 144 Hz with an identical image.",
+      "Character and bot-weapon transforms are uploaded to the GPU only when they change.",
+      "Audio: game audio is suspended while paused, and interface sounds stop their audio thread after 4 idle seconds.",
+      "While paused the HUD updates 2 instead of 11 times a second; the FPS readout now counts only training frames."
+    ]
+  },
+  "12.38": {
+    "title": "Menu music and interface sounds",
+    "description": "Five original menu tracks, with track selection and a separate music volume. Interface sounds are now nine distinct sounds, following UI sound practice in other games.",
+    "changes": [
+      "Five menu tracks: Night Range (ambient), Neon Run (synthwave), Lo-fi Focus (lo-fi), Pressure (tense electronic) and Dawn Patrol (house). All composed for VALOPRAC and played live by the browser.",
+      "Choose a track, shuffle or off from the music button at the top or in Settings → Audio.",
+      "Music has its own volume; it plays at overall volume × music volume.",
+      "Music stops in training so footsteps stay clear. Turn on 'Keep playing in training' to keep it at 45% volume.",
+      "Nine interface sounds: hover, click, tab, back/close, on/off, slider, start training and disabled button, all tuned to the music's key (A and E).",
+      "Added a report comparing VALOPRAC with VALORANT, CS2, Aim Lab and KovaaK's."
+    ]
+  },
+  "12.37": {
+    "title": "Crouch speed and the braking system",
+    "description": "Crouching now takes 0.275 s, as measured in VALORANT replays, and slowing down to a walk, aim or crouch speed brakes like releasing the keys. Tap braking, crouch braking and deadzone movement were measured and checked.",
+    "changes": [
+      "Crouch speed: crouching and standing take 0.275 s instead of 0.125 s, derived from VALORANT replays (crouch depth grows 72.8 units/s and a full crouch is 20 units).",
+      "Walk and aim braking: when the top speed drops, the player brakes like releasing the keys, as in Unreal Engine. Down to walk speed in 0.067 s instead of 0.142 s; to aim speed in 0.033 s instead of 0.067 s.",
+      "Crouch braking: the speed limit drops with the crouch, reaching crouch speed when fully crouched (0.275 s).",
+      "Tap braking: a short opposite-key tap never stops later than releasing the key and never pushes you back; a very short tap used to stop one tick later. Holding it for 0.2 s or more starts moving the other way.",
+      "Deadzone movement: crouch-walking (0.93 m/s) and aimed crouch-moving (1.48 m/s) stay within the deadzone (1.485 m/s), so shots while moving have no movement penalty. Taps of up to 67 ms from a standstill stay in the deadzone.",
+      "Crouch jumps: a full-crouch takeoff jumps 2.5% slower (replay: 109.32 instead of 115 units), crouching in the air raises the feet 0.2 m (was 0.5 m), and the silent jump and landing thresholds were recalibrated to the new crouch speed.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 12); earlier replays play with the rules they were recorded with."
+    ]
+  },
+  "12.36": {
+    "title": "Full physics check against official VALORANT values",
+    "description": "Every physics parameter was compared with the official wiki and Riot's published figures, and every value they confirm now matches. Accuracy follows the official tables and braking follows Riot's stop timings.",
+    "changes": [
+      "Accuracy: first-shot spread, crouch multiplier, maximum spread, aim-down-sights values and movement penalties (crouch-moving, walking, running, airborne) follow each weapon's official table. Movement penalties add to the first-shot spread, and sustained fire now grows to the official maximum (before, spread recovered during fire and barely grew).",
+      "Deadzone: no movement penalty at or below 27.5% of the weapon's run speed (patch 3.0; previously 12%). Up to 61% is walking accuracy, above it running accuracy, and slowing down from a run skips the walking state (patch 0.50).",
+      "Every weapon gets +7° for 0.225 s after landing (patch 1.09); previously +0.35° for 0.09 s except the Operator.",
+      "Braking: releasing reaches 25% in 0.108 s and stops in 0.167 s; counter-strafing reaches 61% in 0.050 s, 25% in 0.108 s and stops in 0.158 s, within one 120 Hz tick of Riot's published timings.",
+      "Knife: hits on an enemy's back deal double damage (100/150).",
+      "Counter-Strike physics option: jump 7.67 m/s, air wish speed 0.762 m/s, stop speed 2.032 m/s and 0.457 m steps, matching the CS2 server defaults.",
+      "The portable C++ core for the Unreal port carries the same model and matches the browser simulation to 10 decimal places.",
+      "Values with no official source (walk, crouch and backward ratios, spread growth per shot, recoil patterns, footstep thresholds, tagging duration) are marked as calibration.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 11); earlier replays play with the rules they were recorded with."
+    ]
+  },
+  "12.35": {
+    "title": "Speed recovers with a realistic delay",
+    "description": "Getting back to full speed from a standstill, walking, crouching or aiming was too quick; ground acceleration now uses the Unreal Engine character default.",
+    "changes": [
+      "Standstill to 95% of run speed: 0.14 s → 0.26 s with a rifle, matching a community estimate fitted to VALORANT movement (0.258 s) and the Unreal Engine character's default maximum acceleration (2048 cm/s², 20.48 m/s²). Operator 0.24 s, knife 0.32 s.",
+      "Releasing walk, crouch or aim also eases back to full speed with the same acceleration (rifle to 95%: walk 0.13 s, crouch 0.16 s, aim 0.06 s).",
+      "Stopping is unchanged: releasing a key reaches 25% in 0.133 s and stops in 0.192 s, and counter-strafing is unchanged too.",
+      "The portable C++ core for the Unreal port was regenerated with the current rules (acceleration and the 12.27 weapon values).",
+      "The new behaviour applies only under the new simulation rules (replay simulation 10); earlier replays play with the rules they were recorded with."
+    ]
+  },
+  "12.34": {
+    "title": "Movement physics consistency: knife jump speed, silent landing",
+    "description": "After repeated checks of 360 jump scenarios, 208 ground transitions, chained hops and random sessions, the air speed caps that were computed differently now follow one rule, and a crouched jump stood up in the air lands silently.",
+    "changes": [
+      "Knife jump speed: jumping backwards or crouching on the jump with the knife cut speed to 5.94 m/s (on the live 12.22 site every knife jump and hop was cut to 5.67 m/s). Every air speed cap now scales with the weapon's run speed, so the knife keeps its ground speed on any jump.",
+      "Silent landing: jumping while already crouched and standing up in the air extends the legs, so you land earlier and softer (about 5.4 m/s) and without a sound. Landings below 6.0 m/s are silent, so drops lower than 0.88 m are quiet too. A normal standing jump on flat ground is still heard.",
+      "Aim-down-sights movement (Vandal and Phantom 76%, Operator 72%) matches the official values, and reaches the same speed whatever the order of aiming, or aiming in the air.",
+      "Results: under the new rules 0 violations across 360 jump scenarios, ground transitions, weapon switches, chained hops and 64 random sessions, with exact replay playback.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 9); earlier replays play with the rules they were recorded with."
+    ]
+  },
+  "12.33": {
+    "title": "Knife grips, aim pose and attack motion redesigned",
+    "description": "After researching well-received approaches in other FPS games and real knife grips, the knife was rebuilt with a grip for each design, an aim pose toward the crosshair and attacks that reach it at the moment of the hit.",
+    "changes": [
+      "A grip for each design: the field knife, aether blade and obsidian fang in a forward grip, the tanto in a saber grip with the thumb on the spine, the kunai in a reverse grip with the thumb over the ring, and the karambit in a reverse grip with the index finger through the ring.",
+      "Aim pose: the point is canted toward the crosshair and the edge faces the target, without covering the crosshair (checked at 4:3, 16:9 and 21:9). The flat of the blade is visible, so each knife is easy to recognise.",
+      "Contact at the moment of the hit: knife hits resolve on the press, so the tip now reaches the crosshair 0.041 s into a slash and 0.074 s into a stab, instead of about 0.1 s late.",
+      "Three-swing combo: consecutive slashes cycle through three different directions; a stab or a short pause starts again. Reverse grips hook and drive the stab down from above.",
+      "Draw: the karambit spins once round the index finger through its ring and the kunai flips into the reverse grip. The knife is ready at the same time as before.",
+      "The arm stays anchored at the lower right during attacks and pumps with the stride while running.",
+      "Damage, range, recovery and hit detection are unchanged. Only the view changed, so replays stay compatible."
+    ]
+  },
+  "12.32": {
+    "title": "Jump sound, silent knife walking, precise movement and footstep measurement",
+    "description": "Jumps now push off audibly unless you were already crouched about 0.1 s before. Knife walking no longer makes footsteps, and knife jumps keep their speed.",
+    "changes": [
+      "Jump sound: a jump now makes a push-off sound that bots hear like a footstep. If crouch was pressed at least 100 ms before the jump, the jump is silent (92 ms or less is heard), matching a community study of VALORANT replays (94 ms heard, 101-102 ms silent). Landing sounds are unchanged.",
+      "Knife walking: walking with the knife (3.24 m/s) was faster than the 2.7 m/s footstep threshold, so it made a footstep every 1.6 m. The threshold now scales with the weapon's run speed (3.375 m/s with the knife), so walking and crouch-walking are silent with every weapon.",
+      "Knife jumps: a running knife jump dropped from 6.75 to 5.67 m/s; it now keeps the knife speed.",
+      "Footstep gauge: landing and jump sounds now appear in the alert and on the sound map, and the gauge shows the current weapon's footstep threshold.",
+      "Movement and footstep measurement: speeds for 5 weapons x 9 movement states, acceleration and stopping times, footstep intervals and gauge recovery were measured and published. Run and aim-down-sights speeds match the official wiki.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 8); earlier replays play with the rules they were recorded with."
+    ]
+  },
+  "12.31": {
+    "title": "Bots return, bot-view replays, air crouch and infinite magazine",
+    "description": "Eliminated bots now come back on the training maps, and bots react to gunfire. Replays can be watched through a bot's eyes, and crouching mid-air now raises your legs.",
+    "changes": [
+      "Bots return: on the tactical courses, tactical maps and the peeking lab, an eliminated bot comes back after 3 seconds (adjustable from 0.5 to 10 seconds, or off). It returns at its original angle or at another verified spot for that angle, so you cannot memorise a single position.",
+      "Bot AI: bots hear gunfire. When you fire within 60 m (40 m for the suppressed Phantom, 70% of that through cover), bots that cannot see you turn their aim towards the sound and stay alert.",
+      "Bot-view replays: choose \"Bot view\" in a replay to watch from a bot's eyes along its actual aim, recoil included. You can pick the bot, its state (holding the angle, checking a sound, alert, tracking, firing and so on) is shown, and your position appears as a translucent silhouette.",
+      "Air crouch: crouching during a jump now raises your legs instead of lowering your head. Your feet rise by up to 0.5 m, so you land about 0.06 s later and can reach higher ledges.",
+      "Infinite magazine: the ammunition settings gain \"Infinite magazine · no reloading\". Fire rate and recoil stay the same.",
+      "Movement speed by weapon already matches the official values: Vandal, Phantom and Sheriff 5.4 m/s, Operator 5.13 m/s, knife 6.75 m/s. The Sheriff officially runs at rifle speed, so switching between slots 1 and 2 keeps the same speed.",
+      "The new behaviour applies only under the new simulation rules (replay simulation 7). Earlier replays still play and verify with the rules they were recorded with."
+    ]
+  },
   "12.30": {
     "title": "Map reverb restored on 44.1 kHz audio devices",
     "description": "Map room reverb was missing on computers whose audio device does not run at 48 kHz.",

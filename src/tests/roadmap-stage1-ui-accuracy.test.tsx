@@ -1,4 +1,4 @@
-import {afterAll,afterEach,describe,expect,it} from 'vitest';
+import {afterAll,afterEach,describe,expect,it,vi} from 'vitest';
 import {writeFileSync} from 'node:fs';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {PerspectiveCamera,Vector3} from 'three';
@@ -17,6 +17,9 @@ import {Results} from '../ui/Results';
 import {History} from '../ui/History';
 import {GameStage} from '../components/GameStage';
 import {INITIAL_TELEMETRY} from '../engine/Runtime';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const initial={...useApp.getInitialState()};
 const measurements:{projection:unknown[];spread:unknown[];labels:unknown[]}={projection:[],spread:[],labels:[]};

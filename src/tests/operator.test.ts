@@ -6,6 +6,9 @@ import {Movement} from '../engine/movement/Movement';
 import {Simulation} from '../engine/simulation/Simulation';
 import {BrowserInput} from '../engine/input/Input';
 import {emptyInput,type InputState,type Settings} from '../engine/types';
+// These tests verify the calibration evidence recorded for the 12.35 rules
+// (acceleration-v10); reference-v11 behaviour is covered by its own tests.
+vi.mock('../engine/simulation/rules',async original=>({...await original<typeof import('../engine/simulation/rules')>(),CURRENT_SIMULATION_RULES:'acceleration-v10'}));
 
 const dt=1/120;
 function gun(settings:Partial<Settings>={},magazine=5){

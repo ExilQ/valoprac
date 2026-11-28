@@ -14,13 +14,19 @@ function text(v:unknown,max=160):v is string{return typeof v==='string'&&v.lengt
 function sorted(v:unknown):unknown{return Array.isArray(v)?v.map(sorted):obj(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,sorted(v[k])])):v;}
 function same(a:unknown,b:unknown){return integrityHash(sorted(a))===integrityHash(sorted(b));}
 function safeTree(value:unknown,depth=0){if(depth>24)fail();if(value===null||typeof value==='boolean')return;if(typeof value==='string'){if(value.length>4096)fail();return;}if(typeof value==='number'){if(!Number.isFinite(value))fail();return;}if(Array.isArray(value)){if(value.length>MAX_REPLAY_COMMANDS)fail();for(const x of value)safeTree(x,depth+1);return;}if(!obj(value))fail();for(const[k,v]of Object.entries(value)){if(['__proto__','prototype','constructor'].includes(k)||k.length>80)fail();safeTree(v,depth+1);}}
+/** Settings added after a recording was made. A file without them is complete:
+ * their defaults reproduce the earlier behaviour (or act only under newer
+ * simulation rules), so they are filled in instead of rejecting the file. */
+/** Settings added after a replay format froze; older files simply lack them. Music (12.38) is presentation only. */
+const LATER_SETTINGS=['infiniteMagazine','botRespawn','botRespawnDelay','musicTrack','musicVolume','musicInTraining','botAppearance','botMovement'] as const;
 function settings(raw:unknown,partial=false){if(!obj(raw)||Object.keys(raw).some(k=>!Object.hasOwn(DEFAULT_SETTINGS,k)))fail();
- const sanitized=sanitizeSettings({...DEFAULT_SETTINGS,...raw});if(partial){for(const k of Object.keys(raw))if(!same(raw[k],(sanitized as unknown as Record<string,unknown>)[k]))fail();}else if(!same(raw,sanitized))fail();
+ const sanitized=sanitizeSettings({...DEFAULT_SETTINGS,...raw});if(partial){for(const k of Object.keys(raw))if(!same(raw[k],(sanitized as unknown as Record<string,unknown>)[k]))fail();}
+ else{const expected={...(sanitized as unknown as Record<string,unknown>)};for(const k of LATER_SETTINGS)if(!Object.hasOwn(raw,k))delete expected[k];if(!same(raw,expected))fail();}
 }
 export function validateReplay(value:unknown):asserts value is ReplayRecording {
  if(!obj(value)||value.schema!==1)fail();safeTree(value);const r=value as unknown as ReplayRecording,h=r.header;
  if(!obj(h)||!text(h.gameVersion,40)||!text(h.simulationVersion,80)||!text(h.movementVersion,80)||!text(h.projectionVersion,80)||!text(h.calibrationFingerprint,32)||!integer(h.createdAt,0,Number.MAX_SAFE_INTEGER)||h.fixedHz!==120||!text(h.map,40)||!text(h.physics,80)||!integer(h.seed,1,2147483647)||!obj(h.initial)||!MODES.includes(h.initial.mode)||!WEAPONS.includes(h.initial.weapon)||typeof h.initial.attached!=='boolean')fail();settings(h.initial.settings);
- if(h.simulationRules!==undefined&&!['legacy-v2','materials-v3','air-steering-v4','bunny-hop-v5','weapons-v6'].includes(h.simulationRules)||h.materialPhysicsVersion!==undefined&&!text(h.materialPhysicsVersion,80)||h.inputVersion!==undefined&&!text(h.inputVersion,80)||h.weaponVersion!==undefined&&!text(h.weaponVersion,80))fail();
+ if(h.simulationRules!==undefined&&!['legacy-v2','materials-v3','air-steering-v4','bunny-hop-v5','weapons-v6','training-v7','audio-v8','consistency-v9','acceleration-v10','reference-v11','braking-v12'].includes(h.simulationRules)||h.materialPhysicsVersion!==undefined&&!text(h.materialPhysicsVersion,80)||h.inputVersion!==undefined&&!text(h.inputVersion,80)||h.weaponVersion!==undefined&&!text(h.weaponVersion,80))fail();
  if(h.characterGeometryVersion!==undefined&&h.characterGeometryVersion!==FIELD_CHARACTER_GEOMETRY&&h.characterGeometryVersion!==PREVIOUS_FIELD_GEOMETRY&&h.characterGeometryVersion!==TAILORED_FIELD_GEOMETRY)fail();
  if(!obj(h.initial.options))fail();const options=validateSessionOptions(h.initial.options);if(!same(options,h.initial.options))fail();
  const initial=h.initial.settings,expectedMap=h.initial.mode==='free'?initial.practiceMap:'range',expectedPhysics=initial.movementPhysics==='counterStrike'?`counterStrike/${initial.csMovementPreset}`:'valorant';

@@ -20,7 +20,11 @@ import {Footsteps,type FootstepEvent} from '../footsteps/Footsteps';
 import {Landings,type LandingSoundEvent} from '../footsteps/Landings';
 import {resolveGroundSurface} from '../footsteps/surfaceSelection';
 import {SURFACES,SURFACE_CALIBRATION_VERSION} from '../../config/surfaces';
-import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesCurrentWeapons,type SimulationRulesId} from './rules';
+import {CURRENT_SIMULATION_RULES,LEGACY_SIMULATION_RULES,usesAudioRules,usesBrakingRules,usesConsistencyRules,usesCurrentWeapons,usesReferenceRules,usesTrainingRules,type SimulationRulesId} from './rules';
+import {CROUCH_REFERENCE,VALORANT_REFERENCE} from '../../config/valorantReference';
+import {CONSISTENCY_RULES} from './consistencyRules';
+import {AUDIO_RULES} from './audioRules';
+import {TRAINING_RULES} from './trainingRules';
 import {FIELD_CHARACTER_GEOMETRY,LEGACY_CHARACTER_GEOMETRY,type CharacterGeometryVersion} from '../targets/characterProfile';
 import {footstepProfile} from '../../config/footsteps';
 import {angularGain} from '../input/sensitivity';
@@ -41,6 +45,8 @@ import { LifetimeStats } from '../../training/analytics/LifetimeStats';
 import {emptyInput} from '../types';
 export const DETAIL_LIMIT=2048;
 const DEG=Math.PI/180;
+/** audio-v8: the push-off of a jump, heard like a footstep. */
+export interface JumpSoundEvent extends FootstepEvent {kind:'jump';}
 export class Simulation {
   readonly options:SimulationOptions;readonly scenario:CompiledScenario|null;exercise:Exercises|null=null;readonly movementPractice=new MovementPractice();private practiceBounds:readonly number[]=[];
   readonly renderedTargets=new RenderedTargets();private pendingFireFrame:RenderedTargetFrame|undefined;private pendingFireStamp:number|null=null;
@@ -55,6 +61,8 @@ export class Simulation {
   drill:FundamentalsDrill|null=null;exposure:Exposure;tap:TapDrill;adsChangedAt=0;stoppedAt:number|null=null;readonly obstacles;footsteps:Footsteps;hearing:TacticalHearing|null=null;
   onFootstep:((event:FootstepEvent)=>void)|null=null;
   landings=new Landings();onLanding:((event:LandingSoundEvent)=>void)|null=null;
+  /** audio-v8 jump push-off sounds (display journal; bots hear them through `hear`). */
+  onJump:((event:JumpSoundEvent)=>void)|null=null;jumpSounds:JumpSoundEvent[]=[];jumpSoundEvents=0;silentJumps=0;
 
   operatorStats={scopedShots:0,scopedHits:0,unscopedShots:0,unscopedHits:0,holdingSeconds:0,scopeTransitions:0,recoverySamples:0,recoverySum:0,highGroundShots:0,highGroundHits:0,missedRecoverySeconds:0};private operatorLastShot:number|null=null;
   private emptySummary=summarize([],[],[],{samples:0,onHead:0,errorSquared:0});
@@ -143,6 +151,48 @@ export class Simulation {
     target.speedMultiplier=1;
     target.spawn(sector.position.x,sector.position.z,this.time,sector.position.y);
   }
+  /** training-v7: on training maps eliminated bots come back after the set
+   * delay (scenario drills and exercises keep their own rules). */
+  get botsReturn(){return usesTrainingRules(this.rules)&&this.settings.botRespawn&&!this.scenario&&!this.exercise&&!this.drill&&!!(this.defenders||this.angles);}
+  /** A returning bot takes its post or one of the post's alternative spots,
+   * so the player cannot pre-aim the exact same pixel every time. */
+  private respawnBot(t:Target){
+    // Angle-only maps reuse their own spawn, which also resets the bot's memory.
+    if(!this.defenders&&this.angles){this.angles.spawn(t,this.time,this.rules);if(!t.active&&t.enabled){const a=this.level!.angles[t.id];t.spawn(a.position.x,a.position.z,this.time,a.position.y);}return;}
+    const post=this.practiceMap==='complex'?activeAngles(this.settings.peekScenario).slice(0,this.settings.targetCount)[t.id]:this.level?.angles[t.id];
+    if(!post){t.enabled=false;return;}
+    const options=[post.position,...(post.alternatives??[])].filter(p=>standingSpace(this.obstacles,p,.4));
+    const spot=options.length?options[Math.floor(this.rng.next()*options.length)]:post.position;
+    // Scale and speed stay as the map placed them (e.g. the target size setting).
+    t.difficulty=this.settings.botDifficulty;t.spawn(spot.x,spot.z,this.time,spot.y);
+  }
+  /** training-v7: gunfire is loud. Bots that cannot see the player hear the
+   * shot at the shooter's position (the suppressed Phantom carries less far)
+   * and react through the same sound memory as footsteps. */
+  /** Footstep audibility threshold for this tick. audio-v8 scales it with the
+   * held weapon's run speed, so walking is silent with every weapon (knife
+   * walking is 3.24 m/s, above the rifle-based 2.7 m/s). */
+  get footstepAudibleVelocity(){const base=this.footsteps.profile.audibleVelocity;if(!usesAudioRules(this.rules))return base;const reference=this.movement.weaponSpeedReference;return base*(this.weapon.profile.movementSpeed??reference)/reference;}
+  /** audio-v8: a jump pushes off audibly, unless the player was already
+   * crouched (depth at takeoff >= silentTakeoffCrouch). */
+  private emitJumpSound(){
+    const hop=this.movement.lastJump();if(!hop)return;
+    if(this.movement.crouch>=(usesBrakingRules(this.rules)?CROUCH_REFERENCE.silentTakeoffCrouch:AUDIO_RULES.silentTakeoffCrouch)){this.silentJumps++;return;}
+    const position={...hop.position},surfaceId=resolveGroundSurface(this.practiceMap,this.obstacles,position,this.rules,this.movement.profile);
+    const e:JumpSoundEvent={kind:'jump',id:++this.jumpSoundEvents,timestamp:hop.time,position,radius:this.settings.stepHearingRadius,speed:hop.speed,surfaceId,material:SURFACES[surfaceId].footstepSoundProfile};
+    this.jumpSounds.push(e);if(this.jumpSounds.length>16)this.jumpSounds.shift();
+    this.hearing?.hear(e);this.angles?.hear(e);this.defenders?.hear(e);this.onJump?.(e);
+  }
+  /** Speed below which shots have no movement penalty (counter-strafe analysis). */
+  get accuracyThreshold(){return usesReferenceRules(this.rules)?this.movement.accuracyLimit:this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold;}
+  /** reference-v11: true while slowing from above the walking band (patch 0.50). */
+  private runningAccuracy=false;
+  private hearGunfire(){
+    if(!usesTrainingRules(this.rules)||!(this.defenders||this.angles))return;
+    const p=this.movement.position,radius=this.weaponId==='rifleB'?TRAINING_RULES.suppressedGunfireRadius:TRAINING_RULES.gunfireRadius;
+    const e={id:-1,timestamp:this.time,position:{x:p.x,y:p.y,z:p.z},radius,kind:'gunfire'} as unknown as FootstepEvent;
+    if(this.defenders)this.defenders.hear(e);else this.angles?.hear(e);
+  }
   private spawn(t:Target){
     t.difficulty=this.settings.botDifficulty;t.scale=this.mode==='free'?this.settings.targetSize:1;t.speedMultiplier=this.mode==='free'?this.settings.targetSpeed:1;
     if(this.angles){this.angles.spawn(t,this.time,this.rules);return;}
@@ -181,8 +231,9 @@ export class Simulation {
     this.movement.setWeaponContext(this.weaponId,this.weapon.profile.movementSpeed??this.movement.weaponSpeedReference,this.ads);
     this.movement.speedModifier=(this.weapon.profile.movementSpeed??this.movement.weaponSpeedReference)/this.movement.weaponSpeedReference*(this.ads?this.weapon.profile.adsMoveModifier:1);
     const movementYaw=input.movementYaw??this.yaw;
-    this.braking.update(input,movementYaw,this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);
+    this.braking.update(input,movementYaw,this.movement,this.time,this.accuracyThreshold);
     if(this.settings.movementTools?.enabled)this.movementPractice.beforeStep(this.movementContext());
+    const jumpsBefore=this.movement.jumpCount;
     this.movement.step(input,movementYaw,dt,this.time);
     const transfer=this.level?.transfer,position=this.movement.position;
     if(transfer&&position.y<1.2&&Math.hypot(position.x-transfer.entry.x,position.z-transfer.entry.z)<.86){
@@ -195,9 +246,15 @@ export class Simulation {
       for(let index=0;index<count;index++)this.activateScenarioTarget(index);
     }
     if(this.settings.movementTools?.enabled)this.movementPractice.afterStep(this.movementContext());
-    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius);
-    this.braking.observe(this.movement,this.time,this.weaponId==='operator'?5.13*.72*.15:this.movement.profile.accuracyVelocityThreshold);if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
-    this.footsteps.step(this.movement,input.walk,dt,this.time);
+    this.landings.step(this.movement,this.time,dt,this.rules==='legacy-v2'?p=>this.practiceMap==='complex'?zoneAt(p)?.material:undefined:undefined,this.settings.stepHearingRadius,usesBrakingRules(this.rules)?CROUCH_REFERENCE.silentLandingBelow:usesConsistencyRules(this.rules)?CONSISTENCY_RULES.silentLandingBelow:.35);
+    this.braking.observe(this.movement,this.time,this.accuracyThreshold);
+    if(usesReferenceRules(this.rules)){
+      // Patch 0.50: slowing from a run keeps running accuracy down to the deadzone.
+      const m=this.movement,run=m.accuracyLimit/VALORANT_REFERENCE.deadzone,fraction=run>0?m.speed/run:0,slowing=m.desiredDirection.lengthSq()<1e-12||m.opposedInput;
+      if(fraction>VALORANT_REFERENCE.walkAccuracy)this.runningAccuracy=true;else if(fraction<=VALORANT_REFERENCE.deadzone||!slowing)this.runningAccuracy=false;
+    }if(this.movement.speed<=.035&&this.movement.grounded){this.stoppedAt??=this.time;}else this.stoppedAt=null;
+    this.footsteps.step(this.movement,input.walk,dt,this.time,this.footstepAudibleVelocity);
+    if(this.movement.jumpCount>jumpsBefore&&usesAudioRules(this.rules))this.emitJumpSound();
     const pending=this.pendingBrakeShot,b=this.braking;
     if(pending&&pending.releaseTime===b.releaseTime){
       pending.brakingKind=b.kind;
@@ -209,6 +266,7 @@ export class Simulation {
     if(this.drill){this.origin.copy(this.movement.position);this.origin.y+=this.movement.eyeHeight;this.drill.step({time:this.time,eye:this.origin,direction:this.viewDirection(this.direction)},dt);}
     for(const t of this.targets){if(this.drill)break;t.difficulty=this.settings.botDifficulty;if(!t.enabled)continue;
       if(this.mode==='free'&&t.behavior==='appearing'&&t.active&&this.time-t.spawnAt>2){t.eliminate(this.time);}
+      if(!t.active&&this.botsReturn&&this.time-t.deadAt>=this.settings.botRespawnDelay)this.respawnBot(t);
       if(!this.exercise&&!this.defenders&&!this.angles&&!t.active&&this.time-t.deadAt>(this.mode==='free'?this.settings.spawnInterval:0.55))this.spawn(t);if(this.defenders)continue;if(this.angles)this.angles.step(t,this.time,dt);else if(this.hearing)this.hearing.step(t,this.time,dt);else {t.step(this.time,dt);if(!standingSpace(this.obstacles,t.position,.4*t.scale)){t.position.copy(t.previous);t.velocity.set(0,0,0);t.direction*=-1;t.updatePose(this.time);}}
     }
     this.exercise?.afterTargets(this,dt);
@@ -227,7 +285,8 @@ export class Simulation {
     const w=this.weapon,m=this.movement;const first=w.profile.fireMode==='bolt'||w.shotIndex===0;
     if(first){w.recoil.compensationPitch=0;w.recoil.compensationYaw=0;}
     const compensationPitch=w.recoil.compensationPitch,compensationYaw=w.recoil.compensationYaw;
-    const spread=w.calculateSpread(m,this.currentInput.ads,this.time-m.landedAt<(this.weaponId==='operator'?.225:.09));
+    const reference=usesReferenceRules(this.rules)?VALORANT_REFERENCE.spread[this.weaponId as keyof typeof VALORANT_REFERENCE.spread]:undefined;
+    const spread=reference?w.calculateReferenceSpread(m,this.currentInput.ads,this.time-m.landedAt<VALORANT_REFERENCE.landing.seconds,reference,this.runningAccuracy):w.calculateSpread(m,this.currentInput.ads,this.time-m.landedAt<(this.weaponId==='operator'?.225:.09));
     const yaw=this.bulletYaw,pitch=this.bulletPitch;
     this.origin.copy(m.position);this.origin.y+=m.eyeHeight;
     spreadDirection(yaw,pitch,spread.x,spread.y,this.direction);
@@ -245,11 +304,11 @@ export class Simulation {
     const s:ShotEvent={timestamp:this.time,lifeGeneration:this.lifeGeneration,targetPoseSource:frame?'rendered-frame':'simulation',renderedFrameTime:frame?.submittedAt,inputTime:this.pendingFireStamp??undefined,weapon:this.weaponId as GunId,damage:damageAt(w.profile,this.hit.zone,this.hit.distance)*(this.hit.penetrationScale??1),penetratedLayers:this.hit.penetratedLayers??0,penetrationSegments:this.hit.segments??[],penetrationStop:this.hit.stopReason,ads:this.ads,scopeZoom:this.scopeZoom,recoveryUntil:this.time+1/w.profile.fireRate,accuracyState:!m.grounded?'airborne':this.time-m.landedAt<(this.weaponId==='operator'?.225:.09)?'landing':(this.weaponId==='operator'?m.speed<=5.13*.72*.15:m.accurate)?(m.crouch>0.5?'crouching':'stationary'):m.crouch>0.5?'crouchMoving':this.braking.active?'braking':this.currentInput.walk?'walking':'running',horizontalDirection:w.recoil.horizontalDirection,shotIndex:w.shotIndex,magazineShot:w.magazineShot,firstShot:first,
       adsTransition:this.ads?this.time-this.adsChangedAt:undefined,targetElevation:targetPosition?targetPosition.y-m.position.y:undefined,stoppedFor:this.stoppedAt===null?0:this.time-this.stoppedAt,position:{x:m.position.x,y:m.position.y,z:m.position.z},velocity:{x:m.velocity.x,y:m.velocity.y,z:m.velocity.z},direction:{x:this.direction.x,y:this.direction.y,z:this.direction.z},aim:{yaw:this.yaw,pitch:this.pitch},
       recoil:{pitch:w.recoil.pitch,yaw:w.recoil.yaw},spread:{...spread},hit:this.hit.zone,impact:{x:this.hit.point.x,y:this.hit.point.y,z:this.hit.point.z},targetId:t?.id??null,targetPosition:targetPosition?{x:targetPosition.x,y:targetPosition.y,z:targetPosition.z}:null,targetState:t?.behavior??null,targetGeneration:t?.generation??null,
-      playerCompensation:{pitch:compensationPitch,yaw:compensationYaw},accurate:this.weaponId==='operator'?this.ads&&w.scopeAmount>.98&&m.grounded&&m.speed<=5.13*.72*.15&&this.time-m.landedAt>=.225:m.accurate,releaseTime:episode?b.releaseTime:null,thresholdDelta:episode&&b.thresholdTime!==null?this.time-b.thresholdTime:null,brakingKind:episode?b.kind:null,initialSpeed:episode?b.initialSpeed:null,brakingDuration:episode?b.duration:null,decelerationDuration:episode?b.fullDuration:null,
+      playerCompensation:{pitch:compensationPitch,yaw:compensationYaw},accurate:reference?m.accurate&&this.time-m.landedAt>=VALORANT_REFERENCE.landing.seconds&&(this.weaponId!=='operator'||this.ads&&w.scopeAmount>.98):this.weaponId==='operator'?this.ads&&w.scopeAmount>.98&&m.grounded&&m.speed<=5.13*.72*.15&&this.time-m.landedAt>=.225:m.accurate,releaseTime:episode?b.releaseTime:null,thresholdDelta:episode&&b.thresholdTime!==null?this.time-b.thresholdTime:null,brakingKind:episode?b.kind:null,initialSpeed:episode?b.initialSpeed:null,brakingDuration:episode?b.duration:null,decelerationDuration:episode?b.fullDuration:null,
       movementDirection:{x:m.desiredDirection.x,z:m.desiredDirection.z},angularError};
     if(episode){b.shotRecorded=true;if(s.thresholdDelta===null||s.decelerationDuration===null)this.pendingBrakeShot=s;else this.stats.settleBrake(s);}
     if(this.weaponId==='operator'){const o=this.operatorStats,hit=Number(['head','torso','arm','leg'].includes(s.hit));if(s.ads){o.scopedShots++;o.scopedHits+=hit;}else{o.unscopedShots++;o.unscopedHits+=hit;}if(this.operatorLastShot!==null){o.recoverySamples++;o.recoverySum+=this.time-this.operatorLastShot;}this.operatorLastShot=this.time;if(!hit)o.missedRecoverySeconds+=1/w.profile.fireRate;if((s.targetElevation??0)>.4){o.highGroundShots++;o.highGroundHits+=hit;}}
-    this.defenders?.shot(s);this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
+    this.defenders?.shot(s);this.hearGunfire();this.tap.shot(s,b.initialVX);this.stats.shot(s);this.shots.push(s);if(this.shots.length>DETAIL_LIMIT)this.shots.splice(0,512);this.lastShotAt=this.time;
     if(!m.accurate)this.lastEarlyAt=this.time;
     if(t){if(!t.reactionRecorded&&this.time-t.changeAt>=0&&this.time-t.changeAt<2){this.reactions.push({targetId:t.id,changeTime:t.changeAt,latency:this.time-t.changeAt});if(this.reactions.length>256)this.reactions.shift();t.reactionRecorded=true;}this.lastHitAt=this.time;this.lastHit=s.hit;t.health-=s.damage??0;const rule=this.mode==='free'?this.settings.eliminationRule:'head';if(s.hit==='head'&&(this.weaponId!=='operator'||rule!=='damage'||t.health<=0)||rule==='any'||rule==='damage'&&t.health<=0){
       this.eliminateTarget(t);
@@ -288,14 +347,21 @@ export class Simulation {
         target=candidate;zone='torso';distance=d;}
     }
     let killed=false;
+    let damage:number=spec.damage;
+    if(target&&usesReferenceRules(this.rules)){
+      // Melee page: hits on the target's back deal double damage. The back is
+      // the half-plane behind the direction a defender faces.
+      const face=this.defenders?.memories[target.id]?.face;
+      if(face){const dx=m.position.x-target.position.x,dz=m.position.z-target.position.z;if(face.x*dx+face.z*dz<0)damage*=VALORANT_REFERENCE.knifeBackMultiplier;}
+    }
     if(target){
-      target.health-=spec.damage;this.lastHitAt=this.time;this.lastHit=zone;
+      target.health-=damage;this.lastHitAt=this.time;this.lastHit=zone;
       const rule=this.mode==='free'?this.settings.eliminationRule:'head';
       if(target.health<=0||rule==='any'){this.eliminateTarget(target);killed=true;}
       target.shotsReceived++;
     }
     const impact=target?{x:this.origin.x+this.direction.x*distance,y:this.origin.y+this.direction.y*distance,z:this.origin.z+this.direction.z*distance}:this.hit.zone==='wall'&&this.hit.distance<=spec.range?{x:this.hit.point.x,y:this.hit.point.y,z:this.hit.point.z}:null;
-    const event:MeleeEvent={serial:++this.meleeSerial,timestamp:this.time,kind,hit:target?zone:impact?'wall':'miss',targetId:target?.id??null,damage:target?spec.damage:0,killed,impact,lifeGeneration:this.lifeGeneration};
+    const event:MeleeEvent={serial:++this.meleeSerial,timestamp:this.time,kind,hit:target?zone:impact?'wall':'miss',targetId:target?.id??null,damage:target?damage:0,killed,impact,lifeGeneration:this.lifeGeneration};
     this.lastMelee=event;this.onMelee?.(event);
   }
   /** A cleared pre-aim/angles round restarts from the map's start. */
@@ -315,10 +381,10 @@ export class Simulation {
     }
     if(Number.isFinite(nearestError)){this.tracking.samples++;this.tracking.errorSquared+=nearestError**2;if(onHead)this.tracking.onHead++;}
   }
-  configureAmmo(){for(const id of WEAPON_ORDER){this.weapons[id].infiniteReserve=this.settings.infiniteReserve;this.weapons[id].autoReload=this.settings.autoReload;}}
+  configureAmmo(){for(const id of WEAPON_ORDER){const w=this.weapons[id];if(usesReferenceRules(this.rules))w.holdBloomWhileFiring=true;else delete w.holdBloomWhileFiring;w.infiniteReserve=this.settings.infiniteReserve;w.autoReload=this.settings.autoReload;if(this.settings.infiniteMagazine){w.infiniteMagazine=true;w.ammo=w.profile.magazine;w.reloadingUntil=null;}else delete w.infiniteMagazine;}}
   switchWeapon(id:WeaponId){this.clearFireView();if(id===this.weaponId)return;this.meleeReadyAt=0;const old=this.weapon;old.reloadingUntil=null;this.weaponId=id;this.weapon=this.weapons[id];this.ads=false;this.weapon.equip(this.time);}
   configure(patch:Partial<Settings>){
-    const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);
+    const targetChange=['targetCount','targetSize','targetSpeed','targetDistance','spawnInterval','behavior','analysisWall','peekScenario','randomDefenders','defenderWeapon','botMovement'].some(k=>k in patch&&(patch as unknown as Record<string,unknown>)[k]!== (this.settings as unknown as Record<string,unknown>)[k]);
     const bufferChanged=patch.jumpBufferMs!==undefined&&patch.jumpBufferMs!==this.settings.jumpBufferMs;
     Object.assign(this.settings,patch);this.tap.drill=this.settings.drill;
     if(this.movement.configurePhysics(this.settings,this.time)){

@@ -1,0 +1,5 @@
+/* 12.40 bot movement and look controls: one column, descriptions under each choice. */
+.operator-configuration.bot-style-configuration{grid-template-columns:1fr;gap:6px}
+.bot-style-configuration .practice-select{max-width:none;margin:6px 0}
+.bot-style-configuration .practice-select select{width:auto;max-width:min(320px,62%);flex:0 1 320px}
+.bot-style-configuration .field-note{margin:0 0 6px;line-height:1.6}
