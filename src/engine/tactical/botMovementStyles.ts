@@ -11,18 +11,18 @@ export const BOT_MOVEMENT_STYLE_IDS=['closeRush','wideSwing','jiggleCrouch','som
 export type BotMovementStyleId=typeof BOT_MOVEMENT_STYLE_IDS[number];
 export type BotMovementChoice='off'|'random'|BotMovementStyleId;
 type Range=readonly [number,number];
-export type CrouchUse='never'|'onStop'|'moving'|'bob'|'spray'|'finalPeek'|'taps';
+export type CrouchUse='never'|'onStop'|'moving'|'bob'|'spray'|'finalPeek'|'taps'|'reversal';
 export interface BotMovementStyle {
   id:BotMovementStyleId;name:string;summary:string;
   /** Strafe segment and stop (shooting) window lengths in seconds. */
   strafe:Range;stop:Range;
   /** adad: alternate direction; continuous: keep one direction to the leash end;
    * tapWide: short peek, rough brake for one tap, then a wide swipe the same way and a full stop. */
-  pattern:'adad'|'continuous'|'tapWide'|'decisive';
-  /** tapWide: the wide swipe after the tap. decisive: the one-way shift after a miss in the open. */
+  pattern:'adad'|'continuous'|'tapWide'|'cane';
+  /** tapWide: the wide swipe after the tap. cane: the occasional longer strafe and its share. */
   wide?:{strafe:Range;stop:Range};
-  /** decisive: how long the bot keeps shooting after a hit before re-checking (s). */
-  follow?:Range;
+  /** cane: standing spray after a hit within sprayRange (m): its length (s) and burst size. */
+  spray?:{seconds:Range;burst:Range;range:number};
   /** Lateral half-width of the fight around the held angle (m). */
   leash:number;
   /** Peek from cover: distance of the first swing (m); jiggles before it. */
@@ -42,7 +42,7 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
   flashback:{id:'flashback',name:'플래시백 스타일 (앉아서 좌우 이동)',summary:'앉은 채 좌우로 움직이며 쏩니다.',strafe:[.3,.5],stop:[.1,.18],pattern:'adad',leash:1.5,peek:1.8,jiggles:0,crouch:'moving',crouchChance:1,hidden:[.4,1],advance:0,minDistance:0},
   texture:{id:'texture',name:'텍스처 스타일 (빠른 템포 선사격)',summary:'숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.',strafe:[.22,.34],stop:[.08,.12],pattern:'adad',leash:2.4,peek:2.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:.3,minDistance:7},
   karon:{id:'karon',name:'카론 스타일 (브레이킹 때 앉기)',summary:'서서 움직이다 멈출 때 앉아서 헤드라인을 피하며 쏩니다.',strafe:[.22,.36],stop:[.22,.32],pattern:'adad',leash:2,peek:2,jiggles:0,crouch:'onStop',crouchChance:1,hidden:[.5,1.1],advance:0,minDistance:0},
-  canezerra:{id:'canezerra',name:'케인제라 스타일 (첫발 뒤 판단)',summary:'빠르게 짧게 나와 데드존에서 한 발. 맞으면 멈춘 채 이어 쏘고, 빗나가면 가까운 엄폐물 뒤로 완전히 빠졌다가 다시 나오며, 엄폐물이 없으면 한 방향으로 한 번만 옮겨 다시 쏩니다.',strafe:[.14,.22],stop:[.06,.09],pattern:'decisive',wide:{strafe:[.24,.34],stop:[.1,.16]},follow:[.3,.5],leash:2.6,peek:1.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:0,minDistance:0},
+  canezerra:{id:'canezerra',name:'케인제라 스타일 (빠른 좌우·앉기·데드존·서서 스프레이)',summary:'빠른 템포로 좌우로 흔들며 방향을 바꾸는 데드존에서 쏘고, 가끔 앉아 헤드라인을 피합니다. 맞히면 서서 멈춰 스프레이로 마무리하고, 엄폐로 빠지지 않고 계속 교전합니다.',strafe:[.12,.22],stop:[.06,.09],pattern:'cane',wide:{strafe:[.26,.36],stop:[.25,0]},spray:{seconds:[.45,.75],burst:[6,9],range:18},leash:2.4,peek:1.6,jiggles:0,crouch:'reversal',crouchChance:.3,hidden:[.15,.35],advance:0,minDistance:0},
   poppin:{id:'poppin',name:'팝핀 스윙',summary:'한 방향으로 아주 넓게 계속 달리며, 짧게 멈춰 쏘고 다시 같은 방향으로 갑니다.',strafe:[.4,.55],stop:[.1,.14],pattern:'continuous',leash:4.2,peek:4.2,jiggles:0,crouch:'never',crouchChance:0,hidden:[.6,1.4],advance:0,minDistance:0},
 };
 /** VALORANT movement used by the bots: crouch 0.275 s, crouch speed 36%,
@@ -51,8 +51,6 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
 export const UNAWARE_WAIT=2.5;
 /** Something-style tap: at most this long braking for the tap, and this long under the deadzone without a shot. */
 export const TAP_MAX_SECONDS=.22,TAP_SETTLE_SECONDS=.07;
-/** Decisive style: longest hold on a peek while the aim settles. */
-export const HOLD_MAX_SECONDS=1,READY_GRACE_SECONDS=.15;
 /** Lateral distances (m) searched for the side that hides the bot from its held angle. */
 export const COVER_SEARCH=[.9,1.4,2] as const;
 export const BOT_KINEMATICS={acceleration:22,braking:32,counterBraking:40,crouchSeconds:.275,crouchSpeed:.36};
@@ -81,11 +79,13 @@ export class BotMovementController {
   /** Committed peeks so far (diagnostics and tests). */
   get stops(){return this.stopCount;}
   /** tapWide: true during the rough-brake tap window (one shot). */
-  get tapping(){return this.phase==='fight'&&!this.moving&&(this.style.pattern==='tapWide'&&this.tapStep===1||this.style.pattern==='decisive'&&this.step2!=='follow');}
-  /** decisive: peek → tap → (hit) follow | (miss, cover) back to cover | (miss, open) one-way shift → tap. */
-  private step2:'peek'|'tap'|'follow'|'shift'='peek';private lastHit:boolean|null=null;private readySeen=false;private readyAt=0;private tapStarted=0;private coverDistance=.9;
-  /** Decisive style: no shot while shifting or peeking out; it shoots once it brakes. */
-  get holdFire(){return this.style.pattern==='decisive'&&(this.phase==='fight'&&this.moving||this.phase==='return');}
+  get tapping(){return this.phase==='fight'&&(this.style.pattern==='tapWide'&&this.tapStep===1&&!this.moving||this.style.pattern==='cane'&&this.caneState==='strafe');}
+  /** cane: strafing with deadzone taps, or a standing spray after a hit. */
+  private caneState:'strafe'|'spray'='strafe';private lastHit:boolean|null=null;private misses=0;private sprayBurst=6;private crouchUntil=-1;private coverDistance=.9;
+  /** No style holds fire beyond the accuracy rules (kept for the AI's check). */
+  get holdFire(){return false;}
+  /** Burst size this style wants for the next shot (null: the AI's own choice). */
+  burstFor():number|null{return this.style.pattern==='cane'&&this.phase==='fight'&&this.caneState==='spray'?this.sprayBurst:this.tapping?1:null;}
   /** Called by the AI with the result of the bot's shot. */
   shotResult(hit:boolean){this.lastHit=hit;}
   constructor(readonly style:BotMovementStyle){}
@@ -105,8 +105,7 @@ export class BotMovementController {
     const s=this.style,lat=this.axis(ctx.face),t=ctx.time;
     const lateral=(body.position.x-this.origin.x)*lat.x+(body.position.z-this.origin.z)*lat.z;
     // Phase changes use only what the bot perceives (seen / known), never a hidden player position.
-    // A bot falling back behind cover finishes the move before it fights again.
-    if(ctx.seen&&!(this.phase==='return'&&s.pattern==='decisive')){this.lostAt=-1;if(this.phase!=='fight'){this.phase='fight';this.moving=false;this.step2='tap';this.lastHit=null;this.readySeen=false;this.tapStarted=t;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);this.jiggle=false;}}
+    if(ctx.seen){this.lostAt=-1;if(this.phase!=='fight'){this.phase='fight';this.moving=false;this.caneState='strafe';this.lastHit=null;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);this.jiggle=false;}}
     else if(this.phase==='fight'){if(this.lostAt<0)this.lostAt=t;if(t-this.lostAt>.8){this.phase='return';this.lostAt=-1;}}
     let wishLateral=0,wishForward=0;
     const home=this.cover*this.coverDistance,toHome=Math.abs(lateral-home)>.06?Math.sign(home-lateral):0,outward=this.cover?-this.cover:this.dir;
@@ -117,28 +116,23 @@ export class BotMovementController {
     }else if(this.phase==='peek'){
       if(this.moving){wishLateral=this.dir;if(t>=this.segmentEnds||Math.abs(lateral-home)>=s.peek){this.moving=false;this.segmentEnds=t+(this.jiggle?s.stop[0]*.5:ctx.rng.range(s.stop[0],s.stop[1])+.4);}}
       else if(t>=this.segmentEnds){this.phase='return';}
-    }else if(this.phase==='fight'&&s.pattern==='decisive'){
-      // After each shot the bot decides from the result: keep shooting a held line, cut the
-      // sight line behind nearby cover, or move once the same way and shoot again. It never
-      // reverses again before the next shot (analysis of canezerra's recorded fights).
-      const speed=Math.hypot(body.velocity.x,body.velocity.z),dz=ctx.deadzone??.275*ctx.runSpeed;
-      const decide=()=>{const hit=this.lastHit;this.lastHit=null;this.tapShot=false;this.slowSince=-1;
-        if(hit){this.step2='follow';this.moving=false;this.segmentEnds=t+ctx.rng.range(s.follow![0],s.follow![1]);}
-        else if(this.cover&&Math.abs(lateral-this.cover*this.coverDistance)<2.6){this.phase='return';this.step2='peek';this.moving=false;}
-        else{this.step2='shift';this.moving=true;const pastLeash=Math.abs(lateral)>=s.leash*.8;if(pastLeash)this.dir=-Math.sign(lateral)||-this.dir;this.segmentStart=t;this.segmentEnds=t+ctx.rng.range(s.wide!.strafe[0],s.wide!.strafe[1]);}};
-      if(this.step2==='peek'||this.step2==='shift'){
-        if(this.moving){wishLateral=this.dir;const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash;
-          if(t>=this.segmentEnds||pastLeash){this.moving=false;this.step2='tap';this.stopCount++;this.tapShot=false;this.lastHit=null;this.slowSince=-1;this.readySeen=false;this.tapStarted=t;this.segmentEnds=t+TAP_MAX_SECONDS;}}
-        else{this.moving=true;this.segmentStart=t;this.segmentEnds=t+ctx.rng.range(s.strafe[0],s.strafe[1]);if(this.step2==='peek'&&this.cover)this.dir=-this.cover;}
-      }else if(this.step2==='tap'){
-        // Hold the line until the shot is ready (the aim is still settling); a ready bot that
-        // could not get its tap off treats it as a miss.
-        if(speed<=dz){if(this.slowSince<0)this.slowSince=t;}else this.slowSince=-1;if(ctx.wantsShot&&!this.readySeen){this.readySeen=true;this.readyAt=t;}
-        if(this.lastHit!==null)decide();
-        else if(this.readySeen&&t-this.readyAt>=READY_GRACE_SECONDS&&(t>=this.segmentEnds||this.slowSince>=0&&t-this.slowSince>=TAP_SETTLE_SECONDS*2)||t-this.tapStarted>=HOLD_MAX_SECONDS){this.lastHit=false;decide();}
-      }else{ // follow: stay stopped and keep shooting while it hits
-        if(this.lastHit===false)decide();
-        else if(t>=this.segmentEnds){this.lastHit=null;this.segmentEnds=t+ctx.rng.range(s.follow![0],s.follow![1]);}
+    }else if(this.phase==='fight'&&s.pattern==='cane'){
+      // Fast ADAD that reverses through zero speed (taps land in the deadzone), crouch taps on
+      // some reversals, and a standing spray to finish once a shot connects. It keeps fighting
+      // instead of falling back (described from canezerra's 1-vs-many fights).
+      const near=ctx.known?Math.hypot(ctx.known.x-body.position.x,ctx.known.z-body.position.z)<=s.spray!.range:false;
+      if(this.caneState==='spray'){
+        wishLateral=0;this.moving=false;
+        if(this.lastHit===false){this.misses++;this.lastHit=null;}else if(this.lastHit){this.misses=0;this.lastHit=null;}
+        if(t>=this.segmentEnds||this.misses>=2){this.caneState='strafe';this.misses=0;this.moving=true;this.segmentStart=t;this.dir=-this.dir;this.segmentEnds=t+ctx.rng.range(s.strafe[0],s.strafe[1]);}
+      }else{
+        if(this.lastHit&&near){this.caneState='spray';this.lastHit=null;this.misses=0;this.moving=false;this.crouchUntil=-1;
+          this.sprayBurst=Math.round(ctx.rng.range(s.spray!.burst[0],s.spray!.burst[1]));this.segmentEnds=t+ctx.rng.range(s.spray!.seconds[0],s.spray!.seconds[1]);}
+        else{this.lastHit=null;this.moving=true;wishLateral=this.dir;
+          const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash;
+          if(t>=this.segmentEnds||pastLeash){this.stopCount++;this.dir=pastLeash?-Math.sign(lateral)||-this.dir:-this.dir;wishLateral=this.dir;this.segmentStart=t;
+            const long=ctx.rng.next()<.25&&s.wide;this.segmentEnds=t+(long?ctx.rng.range(s.wide!.strafe[0],s.wide!.strafe[1]):ctx.rng.range(s.strafe[0],s.strafe[1]));
+            if(ctx.rng.next()<s.crouchChance)this.crouchUntil=t+ctx.rng.range(.22,.35);}}
       }
     }else if(this.phase==='fight'){
       if(this.moving){wishLateral=this.dir;
@@ -180,6 +174,7 @@ export class BotMovementController {
       case'bob':if(stopped&&this.phase==='fight')this.crouchTarget=this.stopCount%2;else if(!stopped)this.crouchTarget=0;break;
       case'spray':{const near=ctx.known&&Math.hypot(ctx.known.x-body.position.x,ctx.known.z-body.position.z)<7;this.crouchTarget=stopped&&near?1:0;break;}
       case'finalPeek':this.crouchTarget=(this.phase==='peek'&&!this.jiggle||this.phase==='fight')&&stopped&&this.segmentEnds-t>.1?1:0;break;
+      case'reversal':this.crouchTarget=this.phase==='fight'&&this.caneState==='strafe'&&t<this.crouchUntil?1:0;break;
       case'taps':if(stopped&&this.phase==='fight'&&this.segmentEnds-t>.08&&ctx.rng.next()<s.crouchChance*ctx.dt*8)this.crouchTarget=1;if(!stopped)this.crouchTarget=0;break;
       default:this.crouchTarget=0;
     }

@@ -248,11 +248,13 @@ export class DefenderAI {
   // Operator only fires when its real scope transition is complete. Cadence,
   // bolt state, magazine and reload restrictions are still enforced by Weapon.
   if(gun.ammo===0||m.style?.holdFire)admit=false;
+  // A style that switches to single taps also ends a longer burst still in progress.
+  const wanted=m.style?.burstFor();if(wanted!=null&&m.burstRemaining>wanted)m.burstRemaining=wanted;
   if(m.weapon==='operator'&&(!gun.ads||gun.scopeAmount<.985||time<gun.scopeReadyAt))admit=false;
   const residual=Math.hypot(gun.recoil.pitch+m.motor.compensationPitch*180/Math.PI,gun.recoil.yaw+m.motor.compensationYaw*180/Math.PI);
   if(admit&&gun.profile.fireMode==='auto'&&(residual>(distance>18?2.2:6)||m.consecutiveMisses>=4&&distance>12)){m.burstRemaining=0;m.pauseUntil=time+gun.profile.resetTime+.06;m.consecutiveMisses=0;admit=false;}
   if(admit){
-   if(m.burstRemaining<=0){m.burstGoal=m.style?.tapping?1:this.burstSize(m,distance,angularError,time);m.burstRemaining=m.burstGoal;m.burst=0;}
+   if(m.burstRemaining<=0){m.burstGoal=Math.min(gun.ammo,m.style?.burstFor()??this.burstSize(m,distance,angularError,time));m.burstRemaining=m.burstGoal;m.burst=0;}
    input.fire=true;input.firePresses=gun.profile.fireMode==='auto'?0:1;m.state='firing';
   }
   const epoch=this.epoch;

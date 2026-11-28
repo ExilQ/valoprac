@@ -1,4 +1,15 @@
 {
+  "12.44": {
+    "title": "Canezerra style: fast strafes, crouch, deadzone, standing spray",
+    "description": "The Canezerra style is rebuilt from what you saw: fast-tempo strafing, crouching, deadzone movement, standing sprays and 1-vs-many fights.",
+    "changes": [
+      "Fast strafes of 0.12–0.22 s (sometimes 0.26–0.36 s), tapping once as it passes through the deadzone on each direction change.",
+      "Crouch: 30% of direction changes crouch for 0.22–0.35 s to dodge the head line.",
+      "Spray: after a hit within 18 m it stops standing and sprays 6–9 shots, returning to strafing after two misses.",
+      "It keeps fighting instead of falling back to cover (the 12.43 retreat is removed).",
+      "Measured: crouched 17–24% of the fight; every spray shot is fired standing below the deadzone speed."
+    ]
+  },
   "12.43": {
     "title": "Canezerra style matched to the video analysis",
     "description": "Following the shared video analysis, the Canezerra style now decides after each shot whether to keep shooting, cut the line behind cover or move once, instead of strafing constantly.",

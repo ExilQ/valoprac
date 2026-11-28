@@ -16090,6 +16090,16 @@
       "id": "msg_f22975085996",
       "source": "빠르게 짧게 나와 데드존에서 한 발. 맞으면 멈춘 채 이어 쏘고, 빗나가면 가까운 엄폐물 뒤로 완전히 빠졌다가 다시 나오며, 엄폐물이 없으면 한 방향으로 한 번만 옮겨 다시 쏩니다.",
       "en": "Peeks fast and short and taps in the deadzone. On a hit it stays and keeps shooting; on a miss it falls fully behind nearby cover and re-peeks, or with no cover moves once one way and shoots again."
+    },
+    {
+      "id": "msg_daf49fc44e88",
+      "source": "케인제라 스타일 (빠른 좌우·앉기·데드존·서서 스프레이)",
+      "en": "Canezerra style (fast strafes · crouch · deadzone · standing spray)"
+    },
+    {
+      "id": "msg_ebac85f2a558",
+      "source": "빠른 템포로 좌우로 흔들며 방향을 바꾸는 데드존에서 쏘고, 가끔 앉아 헤드라인을 피합니다. 맞히면 서서 멈춰 스프레이로 마무리하고, 엄폐로 빠지지 않고 계속 교전합니다.",
+      "en": "Strafes at a fast tempo and shoots in the deadzone of each direction change, crouching now and then to dodge the head line. Once it hits it stops standing and sprays to finish, and keeps fighting instead of falling back."
     }
   ]
 }
