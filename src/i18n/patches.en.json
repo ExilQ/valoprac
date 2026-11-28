@@ -1,4 +1,13 @@
 {
+  "12.41": {
+    "title": "Something movement reworked",
+    "description": "The Something-style bot now brakes only roughly for one tap, then swipes wide and shoots.",
+    "changes": [
+      "Something style: short peek (0.14–0.2 s) → rough brake to the deadzone for one tap → wide swipe the same way without settling (0.42–0.58 s) → full stop and shoot → repeat from the other side.",
+      "Measured: it brakes from 3.9–4.4 m/s, taps at 1.35 m/s (under the deadzone), then swipes wide at 5.4 m/s the same way.",
+      "The tap is a single shot; without a shot it moves on after 0.07 s under the deadzone."
+    ]
+  },
   "12.40": {
     "title": "Nine opponent bot movement styles and a high-visibility training bot",
     "description": "Bots peek from cover and fight with nine movement styles, chosen by you or at random. The bot look now reads clearly on every map, and every scene was checked for graphics regressions after the 12.39 optimisation.",

@@ -16,8 +16,11 @@ export interface BotMovementStyle {
   id:BotMovementStyleId;name:string;summary:string;
   /** Strafe segment and stop (shooting) window lengths in seconds. */
   strafe:Range;stop:Range;
-  /** adad: alternate direction; continuous: keep one direction to the leash end. */
-  pattern:'adad'|'continuous';
+  /** adad: alternate direction; continuous: keep one direction to the leash end;
+   * tapWide: short peek, rough brake for one tap, then a wide swipe the same way and a full stop. */
+  pattern:'adad'|'continuous'|'tapWide';
+  /** tapWide only: the wide swipe after the tap. */
+  wide?:{strafe:Range;stop:Range};
   /** Lateral half-width of the fight around the held angle (m). */
   leash:number;
   /** Peek from cover: distance of the first swing (m); jiggles before it. */
@@ -32,7 +35,7 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
   closeRush:{id:'closeRush',name:'빠른 템포 근접 교전',summary:'거리를 좁히며 짧게 좌우로 끊고, 가까우면 앉아서 연사합니다.',strafe:[.16,.26],stop:[.12,.2],pattern:'adad',leash:1.6,peek:1.6,jiggles:0,crouch:'spray',crouchChance:1,hidden:[.2,.5],advance:.7,minDistance:3.5},
   wideSwing:{id:'wideSwing',name:'와이드 피킹',summary:'엄폐물에서 넓게 크게 튀어나온 뒤 멈춰서 쏩니다.',strafe:[.55,.75],stop:[.28,.4],pattern:'adad',leash:3.2,peek:3.2,jiggles:0,crouch:'never',crouchChance:0,hidden:[.7,1.6],advance:0,minDistance:0},
   jiggleCrouch:{id:'jiggleCrouch',name:'지글 후 앉아 피킹',summary:'짧게 2~3번 흔들어 보고, 다음 피킹에서 앉으며 쏩니다.',strafe:[.12,.17],stop:[.22,.32],pattern:'adad',leash:1.4,peek:1.2,jiggles:3,crouch:'finalPeek',crouchChance:1,hidden:[.5,1.1],advance:0,minDistance:0},
-  something:{id:'something',name:'썸띵 스타일 (불규칙 ADAD)',summary:'길이가 들쭉날쭉한 좌우 무빙에 짧은 앉기를 섞습니다.',strafe:[.08,.32],stop:[.09,.15],pattern:'adad',leash:1.8,peek:1.8,jiggles:1,crouch:'taps',crouchChance:.25,hidden:[.3,.8],advance:0,minDistance:0},
+  something:{id:'something',name:'썸띵 스타일 (대충 브레이킹 한 발 → 와이드)',summary:'짧게 나와 브레이킹을 대충 걸고 한 발 쏜 뒤, 멈추지 않고 같은 방향으로 와이드를 긁고 다시 멈춰 쏩니다.',strafe:[.14,.2],stop:[.08,.11],pattern:'tapWide',wide:{strafe:[.42,.58],stop:[.2,.3]},leash:3.2,peek:1.4,jiggles:0,crouch:'never',crouchChance:0,hidden:[.4,.9],advance:0,minDistance:0},
   primmie:{id:'primmie',name:'프리미 스타일 (앉았다 일어서기)',summary:'좌우로 움직이며 쏠 때마다 앉았다 일어서기를 번갈아 합니다.',strafe:[.18,.3],stop:[.16,.26],pattern:'adad',leash:2,peek:2,jiggles:0,crouch:'bob',crouchChance:1,hidden:[.4,1],advance:0,minDistance:0},
   flashback:{id:'flashback',name:'플래시백 스타일 (앉아서 좌우 이동)',summary:'앉은 채 좌우로 움직이며 쏩니다.',strafe:[.3,.5],stop:[.1,.18],pattern:'adad',leash:1.5,peek:1.8,jiggles:0,crouch:'moving',crouchChance:1,hidden:[.4,1],advance:0,minDistance:0},
   texture:{id:'texture',name:'텍스처 스타일 (빠른 템포 선사격)',summary:'숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.',strafe:[.22,.34],stop:[.08,.12],pattern:'adad',leash:2.4,peek:2.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:.3,minDistance:7},
@@ -43,6 +46,8 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
  * accelerate to run in about 0.25 s, release-stop about 0.17 s, counter-strafe faster. */
 /** Without any sight or sound of the player, a bot waits this much longer in cover between peeks. */
 export const UNAWARE_WAIT=2.5;
+/** Something-style tap: at most this long braking for the tap, and this long under the deadzone without a shot. */
+export const TAP_MAX_SECONDS=.22,TAP_SETTLE_SECONDS=.07;
 export const BOT_KINEMATICS={acceleration:22,braking:32,counterBraking:40,crouchSeconds:.275,crouchSpeed:.36};
 export interface StyleWorld {
   /** Floor height at (x,z) reachable from y, or null when blocked. */
@@ -55,14 +60,21 @@ export interface StyleBody {position:{x:number;y:number;z:number;set(x:number,y:
 export interface StyleContext {time:number;dt:number;runSpeed:number;rng:{next():number;range(a:number,b:number):number};
   /** Bot's held direction (unit, xz). */face:Vec3;
   /** Last observed or heard player position (null when unknown). */known:Vec3|null;seen:boolean;
-  /** Ready to shoot this tick (aim settled, gun ready): the stop window should be now. */wantsShot:boolean;}
+  /** Ready to shoot this tick (aim settled, gun ready): the stop window should be now. */wantsShot:boolean;
+  /** Accurate speed for this weapon (deadzone, m/s). */deadzone?:number;}
 type Phase='hide'|'peek'|'fight'|'return';
 /** Per-bot movement controller. Deterministic for a given RNG sequence. */
 export class BotMovementController {
   phase:Phase='hide';private until=0;private dir=1;private moving=false;private segmentEnds=0;private crouchTarget=0;private cover=0;private initialized=false;
+  /** tapWide: 0 short peek, 1 rough-brake tap, 2 wide swipe, 3 full stop. */
+  private tapStep=0;private tapShot=false;private slowSince=-1;
+  /** Called by the AI when this bot fires. */
+  shotFired(){if(this.tapping)this.tapShot=true;}
   private jigglesLeft=0;private stopCount=0;private lostAt=-1;private origin:Vec3={x:0,y:0,z:0};private jiggle=false;private segmentStart=0;
   /** Committed peeks so far (diagnostics and tests). */
   get stops(){return this.stopCount;}
+  /** tapWide: true during the rough-brake tap window (one shot). */
+  get tapping(){return this.style.pattern==='tapWide'&&this.phase==='fight'&&this.tapStep===1&&!this.moving;}
   constructor(readonly style:BotMovementStyle){}
   /** Signed lateral side with cover (−1/1), or 0 in the open. */
   get coverSide(){return this.cover;}
@@ -92,7 +104,20 @@ export class BotMovementController {
     }else if(this.phase==='fight'){
       if(this.moving){wishLateral=this.dir;
         const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash,minimum=t>=this.segmentStart+Math.max(.12,s.strafe[0]);
-        if(t>=this.segmentEnds||pastLeash||ctx.wantsShot&&minimum){this.moving=false;this.stopCount++;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);}
+        if(s.pattern==='tapWide'){
+          if(t>=this.segmentEnds||pastLeash){this.moving=false;this.stopCount++;const tap=this.tapStep===0;this.tapStep=tap?1:3;const w=!tap&&s.wide?s.wide.stop:s.stop;this.segmentEnds=t+ctx.rng.range(w[0],w[1]);}
+        }else if(t>=this.segmentEnds||pastLeash||ctx.wantsShot&&minimum){this.moving=false;this.stopCount++;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);}
+        if(this.tapStep===1){this.tapShot=false;this.slowSince=-1;this.segmentEnds=t+TAP_MAX_SECONDS;}
+      }else if(s.pattern==='tapWide'&&this.tapStep===1&&t<this.segmentEnds){
+        // Rough brake: only down to the deadzone, one tap, then swipe on without settling.
+        const speed=Math.hypot(body.velocity.x,body.velocity.z),dz=ctx.deadzone??.275*ctx.runSpeed;
+        if(speed<=dz){if(this.slowSince<0)this.slowSince=t;}else this.slowSince=-1;
+        if(this.tapShot||this.slowSince>=0&&t-this.slowSince>=TAP_SETTLE_SECONDS)this.segmentEnds=t;
+      }else if(t>=this.segmentEnds&&s.pattern==='tapWide'){
+        // Tap: the brake is cut short and the swipe continues the same way; after the full stop the next cycle starts from the other side.
+        this.moving=true;this.segmentStart=t;this.tapStep=this.tapStep===1?2:0;
+        if(this.tapStep===0){this.dir=Math.abs(lateral)>s.leash*.5?-Math.sign(lateral)||-this.dir:-this.dir;}
+        const w=this.tapStep===2&&s.wide?s.wide.strafe:s.strafe;this.segmentEnds=t+ctx.rng.range(w[0],w[1]);
       }else if(t>=this.segmentEnds){
         this.moving=true;this.segmentStart=t;const atEdge=Math.abs(lateral)>=s.leash*.95&&Math.sign(lateral)===this.dir;
         if(s.pattern==='adad'||atEdge)this.dir=-this.dir;

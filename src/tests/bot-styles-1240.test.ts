@@ -44,13 +44,28 @@ describe('12.40 bot movement styles',()=>{
   expect(r.closeRush.closest).toBeLessThan(5);expect(r.closeRush.moveSegment).toBeLessThan(.3);expect(r.closeRush.crouchStill).toBeGreaterThan(.3);
   expect(r.wideSwing.moveSegment).toBeGreaterThan(.45);expect(r.wideSwing.lateralRange).toBeGreaterThan(2.5);
   expect(r.poppin.lateralRange).toBeGreaterThan(6);expect(r.poppin.flipsPerSecond).toBeLessThan(1);expect(r.poppin.stop).toBeLessThan(.15);
-  expect(r.something.flipsPerSecond).toBeGreaterThan(3);
   expect(r.flashback.crouchMoving).toBeGreaterThan(.9);
   expect(r.karon.crouchStill).toBeGreaterThan(.8);expect(r.karon.crouchMoving).toBeLessThan(.4);
   expect(r.primmie.crouchStill).toBeGreaterThan(.2);expect(r.primmie.crouchStill).toBeLessThan(.8);
   expect(r.texture.stop).toBeLessThan(.14);expect(r.texture.closest).toBeGreaterThan(6.4);expect(r.texture.closest).toBeLessThan(10.5);
   expect(r.jiggleCrouch.lateralRange).toBeLessThan(1.2);expect(r.jiggleCrouch.crouchStill).toBeGreaterThan(.1);
   for(const id of ['wideSwing','poppin','texture'] as const)expect(results[id].crouchStill+results[id].crouchMoving,id).toBe(0);
+ });
+ it('12.41 Something style: short peek, rough-brake tap, then a wide swipe the same way and a full stop',()=>{
+  const {s,bot,m}=arena('something'),lx=-m.holdingFace.z,lz=m.holdingFace.x;
+  const cycles:{peekSign:number;peekTime:number;swipeSign:number;swipeTime:number}[]=[];let current:{peekSign:number;peekTime:number;swipeSign:number;swipeTime:number}|null=null;
+  for(let i=0;i<120*15;i++){s.step(DT,emptyInput());const c=m.style as unknown as {tapStep:number;moving:boolean;phase:string};if(c.phase!=='fight'||!c.moving)continue;const v=bot.velocity.x*lx+bot.velocity.z*lz;
+   if(c.tapStep===0){if(!current||current.swipeTime>0){if(current)cycles.push(current);current={peekSign:0,peekTime:0,swipeSign:0,swipeTime:0};}current.peekTime+=DT;if(Math.abs(v)>1)current.peekSign=Math.sign(v);}
+   if(c.tapStep===2&&current){current.swipeTime+=DT;if(Math.abs(v)>1)current.swipeSign=Math.sign(v);}}
+  expect(cycles.length).toBeGreaterThan(8);
+  for(const k of cycles){expect(k.swipeSign).toBe(k.peekSign);expect(k.swipeTime).toBeGreaterThan(k.peekTime*1.8);expect(k.peekTime).toBeLessThan(.25);}
+  // Consecutive cycles alternate sides.
+  expect(cycles.slice(1).filter((k,i)=>k.peekSign!==cycles[i].peekSign).length).toBeGreaterThanOrEqual(cycles.length-3);
+  // In a gunfight the tap is fired while still sliding (not fully stopped) and is a single shot.
+  const g=arena('something',{combatMode:'gunfight',defenderSkill:'beginner'});let tapShots=0,tapSpeed=0;
+  g.ai.onShot=()=>{if((g.m.style as unknown as {tapping:boolean}).tapping){tapShots++;tapSpeed=Math.max(tapSpeed,Math.hypot(g.bot.velocity.x,g.bot.velocity.z));}};
+  for(let i=0;i<120*8&&!g.ai.death;i++)g.s.step(DT,emptyInput());
+  expect(tapShots).toBeGreaterThan(0);expect(tapSpeed).toBeGreaterThan(.3);expect(tapSpeed).toBeLessThanOrEqual(VALORANT_REFERENCE.deadzone*5.4+1e-6);
  });
  it('only shoots accurately: stopped below the deadzone, or crouch-walking',()=>{
   for(const id of BOT_MOVEMENT_STYLE_IDS){

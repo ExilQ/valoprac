@@ -252,11 +252,11 @@ export class DefenderAI {
   const residual=Math.hypot(gun.recoil.pitch+m.motor.compensationPitch*180/Math.PI,gun.recoil.yaw+m.motor.compensationYaw*180/Math.PI);
   if(admit&&gun.profile.fireMode==='auto'&&(residual>(distance>18?2.2:6)||m.consecutiveMisses>=4&&distance>12)){m.burstRemaining=0;m.pauseUntil=time+gun.profile.resetTime+.06;m.consecutiveMisses=0;admit=false;}
   if(admit){
-   if(m.burstRemaining<=0){m.burstGoal=this.burstSize(m,distance,angularError,time);m.burstRemaining=m.burstGoal;m.burst=0;}
+   if(m.burstRemaining<=0){m.burstGoal=m.style?.tapping?1:this.burstSize(m,distance,angularError,time);m.burstRemaining=m.burstGoal;m.burst=0;}
    input.fire=true;input.firePresses=gun.profile.fireMode==='auto'?0:1;m.state='firing';
   }
   const epoch=this.epoch;
-  gun.step(time,dt,input,()=>{if(epoch!==this.epoch||m.generation!==t.generation||this.death)return;this.fire(t,m,p,time,information,yaw,pitch);});
+  gun.step(time,dt,input,()=>{if(epoch!==this.epoch||m.generation!==t.generation||this.death)return;m.style?.shotFired();this.fire(t,m,p,time,information,yaw,pitch);});
   if(epoch!==this.epoch)return;
   if(time+1e-9>=m.nextRecoilObservation){m.nextRecoilObservation=time+.04;m.recoilHistory.push({time,pitch:gun.recoil.pitch,yaw:gun.recoil.yaw});if(m.recoilHistory.length>40)m.recoilHistory.shift();}
  }
@@ -308,7 +308,7 @@ export class DefenderAI {
   if(style){
    const gun=m.gun,run=gun.profile.movementSpeed??5.4;
    style.step(t,{time,dt,runSpeed:run,rng:m.rng,face:m.holdingFace,known:m.known,seen:m.visible>0,
-    wantsShot:m.aimStartedAt>=0&&time>=m.acquisitionUntil&&time>=m.triggerAt&&time>=m.nextShot&&gun.reloadingUntil===null},
+    wantsShot:m.aimStartedAt>=0&&time>=m.acquisitionUntil&&time>=m.triggerAt&&time>=m.nextShot&&gun.reloadingUntil===null,deadzone:usesReferenceRules(this.rules)?VALORANT_REFERENCE.deadzone*run:.55},
     {ground:(x,z,y)=>this.ground(x,z,y),standing:p=>standingSpace(this.obstacles,p,.3),clear:(a,b)=>visibleBetween(this.obstacles,a,b,this.rules)});
   }else if(posture&&!motion){
    const crouch=time>=posture.crouchAt&&time<posture.crouchUntil?1:0;

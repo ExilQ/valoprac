@@ -16060,6 +16060,16 @@
       "id": "msg_8e47e60d1991",
       "source": " · 상대 무빙 ",
       "en": " · opponent movement "
+    },
+    {
+      "id": "msg_e9ed2af7e125",
+      "source": "썸띵 스타일 (대충 브레이킹 한 발 → 와이드)",
+      "en": "Something style (rough-brake tap → wide swipe)"
+    },
+    {
+      "id": "msg_d7b5db1d1fbe",
+      "source": "짧게 나와 브레이킹을 대충 걸고 한 발 쏜 뒤, 멈추지 않고 같은 방향으로 와이드를 긁고 다시 멈춰 쏩니다.",
+      "en": "Peeks briefly, brakes only roughly for one tap, then swipes wide the same way without settling and stops to shoot again."
     }
   ]
 }

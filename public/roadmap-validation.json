@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "release": "12.0.40",
-  "patchLabel": "12.40",
-  "generatedAt": "2026-11-28T06:26:39.654Z",
+  "release": "12.0.41",
+  "patchLabel": "12.41",
+  "generatedAt": "2026-11-28T07:26:17.884Z",
   "tests": {
-    "application": 1668,
+    "application": 1669,
     "broker": 28,
     "hosting": 36,
     "passed": true,
@@ -17331,7 +17331,7 @@
         "hits": 103,
         "deaths": 0
       },
-      "gzipBytes": 7885,
+      "gzipBytes": 7886,
       "method": "Deterministic scripted test input aims at the real target; product contains no automatic aiming or movement."
     },
     "flash": {
@@ -18245,7 +18245,7 @@
         "routeSamples": 101,
         "maxThreats": 1,
         "codeBytes": 792,
-        "replayGzipBytes": 3255
+        "replayGzipBytes": 3257
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18277,7 +18277,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 742,
-        "replayGzipBytes": 3177
+        "replayGzipBytes": 3178
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18293,7 +18293,7 @@
         "routeSamples": 116,
         "maxThreats": 1,
         "codeBytes": 741,
-        "replayGzipBytes": 3179
+        "replayGzipBytes": 3180
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18325,7 +18325,7 @@
         "routeSamples": 171,
         "maxThreats": 1,
         "codeBytes": 768,
-        "replayGzipBytes": 3582
+        "replayGzipBytes": 3584
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18341,7 +18341,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1436,
-        "replayGzipBytes": 5118
+        "replayGzipBytes": 5119
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18389,7 +18389,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 6109
+        "replayGzipBytes": 6107
       },
       {
         "benchmark": "scenario-common-replay",
