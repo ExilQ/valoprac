@@ -16080,6 +16080,16 @@
       "id": "msg_277a66a4d777",
       "source": "멈추지 않고 빠르게 좌우로 흔들다가, 방향을 바꾸며 속도가 데드존 아래로 떨어지는 순간 한 발씩 쏩니다. 짧게·길게 리듬을 섞고 가끔 같은 방향으로 다시 나갑니다.",
       "en": "Strafes fast without settling and taps once as its speed drops through the deadzone on each direction change, mixing short and long strafes and sometimes going the same way again."
+    },
+    {
+      "id": "msg_401a1d51f96f",
+      "source": "케인제라 스타일 (첫발 뒤 판단)",
+      "en": "Canezerra style (decide after the first shot)"
+    },
+    {
+      "id": "msg_f22975085996",
+      "source": "빠르게 짧게 나와 데드존에서 한 발. 맞으면 멈춘 채 이어 쏘고, 빗나가면 가까운 엄폐물 뒤로 완전히 빠졌다가 다시 나오며, 엄폐물이 없으면 한 방향으로 한 번만 옮겨 다시 쏩니다.",
+      "en": "Peeks fast and short and taps in the deadzone. On a hit it stays and keeps shooting; on a miss it falls fully behind nearby cover and re-peeks, or with no cover moves once one way and shoots again."
     }
   ]
 }

@@ -1,4 +1,14 @@
 {
+  "12.43": {
+    "title": "Canezerra style matched to the video analysis",
+    "description": "Following the shared video analysis, the Canezerra style now decides after each shot whether to keep shooting, cut the line behind cover or move once, instead of strafing constantly.",
+    "changes": [
+      "Canezerra style: a fast short peek and a deadzone tap; on a hit it stays and keeps shooting.",
+      "On a miss with cover nearby it falls fully behind cover and re-peeks, and does not fight while falling back.",
+      "With no cover it moves once one way and stops to shoot; it never reverses again before the next shot and never shoots while moving.",
+      "All bot styles: cover search widened from 0.9 m to 2 m."
+    ]
+  },
   "12.42": {
     "title": "Canezerra-style bot movement",
     "description": "Adds a Canezerra-style bot that strafes fast without settling and taps once on each direction change.",

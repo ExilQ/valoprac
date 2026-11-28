@@ -18,11 +18,11 @@ export interface BotMovementStyle {
   strafe:Range;stop:Range;
   /** adad: alternate direction; continuous: keep one direction to the leash end;
    * tapWide: short peek, rough brake for one tap, then a wide swipe the same way and a full stop. */
-  pattern:'adad'|'continuous'|'tapWide'|'deadzoneTap';
-  /** tapWide: the wide swipe after the tap. deadzoneTap: the long strafes of the short/long rhythm. */
+  pattern:'adad'|'continuous'|'tapWide'|'decisive';
+  /** tapWide: the wide swipe after the tap. decisive: the one-way shift after a miss in the open. */
   wide?:{strafe:Range;stop:Range};
-  /** deadzoneTap: chance to re-move the same way (brake to the deadzone, tap, continue) instead of reversing. */
-  sameWay?:number;
+  /** decisive: how long the bot keeps shooting after a hit before re-checking (s). */
+  follow?:Range;
   /** Lateral half-width of the fight around the held angle (m). */
   leash:number;
   /** Peek from cover: distance of the first swing (m); jiggles before it. */
@@ -42,7 +42,7 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
   flashback:{id:'flashback',name:'플래시백 스타일 (앉아서 좌우 이동)',summary:'앉은 채 좌우로 움직이며 쏩니다.',strafe:[.3,.5],stop:[.1,.18],pattern:'adad',leash:1.5,peek:1.8,jiggles:0,crouch:'moving',crouchChance:1,hidden:[.4,1],advance:0,minDistance:0},
   texture:{id:'texture',name:'텍스처 스타일 (빠른 템포 선사격)',summary:'숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.',strafe:[.22,.34],stop:[.08,.12],pattern:'adad',leash:2.4,peek:2.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:.3,minDistance:7},
   karon:{id:'karon',name:'카론 스타일 (브레이킹 때 앉기)',summary:'서서 움직이다 멈출 때 앉아서 헤드라인을 피하며 쏩니다.',strafe:[.22,.36],stop:[.22,.32],pattern:'adad',leash:2,peek:2,jiggles:0,crouch:'onStop',crouchChance:1,hidden:[.5,1.1],advance:0,minDistance:0},
-  canezerra:{id:'canezerra',name:'케인제라 스타일 (방향 전환 데드존 원탭)',summary:'멈추지 않고 빠르게 좌우로 흔들다가, 방향을 바꾸며 속도가 데드존 아래로 떨어지는 순간 한 발씩 쏩니다. 짧게·길게 리듬을 섞고 가끔 같은 방향으로 다시 나갑니다.',strafe:[.12,.2],stop:[.06,.09],pattern:'deadzoneTap',wide:{strafe:[.3,.42],stop:[.06,.09]},sameWay:.25,leash:2.4,peek:1.8,jiggles:0,crouch:'never',crouchChance:0,hidden:[.3,.7],advance:0,minDistance:0},
+  canezerra:{id:'canezerra',name:'케인제라 스타일 (첫발 뒤 판단)',summary:'빠르게 짧게 나와 데드존에서 한 발. 맞으면 멈춘 채 이어 쏘고, 빗나가면 가까운 엄폐물 뒤로 완전히 빠졌다가 다시 나오며, 엄폐물이 없으면 한 방향으로 한 번만 옮겨 다시 쏩니다.',strafe:[.14,.22],stop:[.06,.09],pattern:'decisive',wide:{strafe:[.24,.34],stop:[.1,.16]},follow:[.3,.5],leash:2.6,peek:1.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:0,minDistance:0},
   poppin:{id:'poppin',name:'팝핀 스윙',summary:'한 방향으로 아주 넓게 계속 달리며, 짧게 멈춰 쏘고 다시 같은 방향으로 갑니다.',strafe:[.4,.55],stop:[.1,.14],pattern:'continuous',leash:4.2,peek:4.2,jiggles:0,crouch:'never',crouchChance:0,hidden:[.6,1.4],advance:0,minDistance:0},
 };
 /** VALORANT movement used by the bots: crouch 0.275 s, crouch speed 36%,
@@ -51,6 +51,10 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
 export const UNAWARE_WAIT=2.5;
 /** Something-style tap: at most this long braking for the tap, and this long under the deadzone without a shot. */
 export const TAP_MAX_SECONDS=.22,TAP_SETTLE_SECONDS=.07;
+/** Decisive style: longest hold on a peek while the aim settles. */
+export const HOLD_MAX_SECONDS=1,READY_GRACE_SECONDS=.15;
+/** Lateral distances (m) searched for the side that hides the bot from its held angle. */
+export const COVER_SEARCH=[.9,1.4,2] as const;
 export const BOT_KINEMATICS={acceleration:22,braking:32,counterBraking:40,crouchSeconds:.275,crouchSpeed:.36};
 export interface StyleWorld {
   /** Floor height at (x,z) reachable from y, or null when blocked. */
@@ -77,17 +81,23 @@ export class BotMovementController {
   /** Committed peeks so far (diagnostics and tests). */
   get stops(){return this.stopCount;}
   /** tapWide: true during the rough-brake tap window (one shot). */
-  get tapping(){return this.phase==='fight'&&(this.style.pattern==='deadzoneTap'||this.style.pattern==='tapWide'&&this.tapStep===1&&!this.moving);}
-  /** deadzoneTap state: the next strafe is long, and a same-way brake is in progress. */
-  private longNext=false;private sameWayBrake=false;
+  get tapping(){return this.phase==='fight'&&!this.moving&&(this.style.pattern==='tapWide'&&this.tapStep===1||this.style.pattern==='decisive'&&this.step2!=='follow');}
+  /** decisive: peek → tap → (hit) follow | (miss, cover) back to cover | (miss, open) one-way shift → tap. */
+  private step2:'peek'|'tap'|'follow'|'shift'='peek';private lastHit:boolean|null=null;private readySeen=false;private readyAt=0;private tapStarted=0;private coverDistance=.9;
+  /** Decisive style: no shot while shifting or peeking out; it shoots once it brakes. */
+  get holdFire(){return this.style.pattern==='decisive'&&(this.phase==='fight'&&this.moving||this.phase==='return');}
+  /** Called by the AI with the result of the bot's shot. */
+  shotResult(hit:boolean){this.lastHit=hit;}
   constructor(readonly style:BotMovementStyle){}
   /** Signed lateral side with cover (−1/1), or 0 in the open. */
   get coverSide(){return this.cover;}
   private axis(face:Vec3){return{x:-face.z,z:face.x};}
   private init(body:StyleBody,ctx:StyleContext,world:StyleWorld){
     this.initialized=true;this.origin={...body.anchor};const lat=this.axis(ctx.face),probe={x:body.anchor.x+ctx.face.x*10,y:body.anchor.y+1.4,z:body.anchor.z+ctx.face.z*10};
-    const hiddenAt=(side:number)=>{const p={x:body.anchor.x+lat.x*side*.9,y:body.anchor.y,z:body.anchor.z+lat.z*side*.9};return world.standing(p)&&world.ground(p.x,p.z,p.y)!==null&&!world.clear({x:p.x,y:p.y+1.55,z:p.z},probe);};
-    const left=hiddenAt(-1),right=hiddenAt(1);this.cover=left===right?0:left?-1:1;
+    const hiddenAt=(side:number,d:number)=>{const p={x:body.anchor.x+lat.x*side*d,y:body.anchor.y,z:body.anchor.z+lat.z*side*d};return world.standing(p)&&world.ground(p.x,p.z,p.y)!==null&&!world.clear({x:p.x,y:p.y+1.55,z:p.z},probe);};
+    // Nearest side that hides the bot from the held angle, up to two metres away.
+    // Both sides hidden (a doorway or a gap between boxes): either side is cover, pick one.
+    this.cover=0;for(const d of COVER_SEARCH){const left=hiddenAt(-1,d),right=hiddenAt(1,d);if(left||right){this.cover=left&&right?(ctx.rng.next()<.5?-1:1):left?-1:1;this.coverDistance=d;break;}}
     this.dir=this.cover?-this.cover:(ctx.rng.next()<.5?-1:1);this.jigglesLeft=this.style.jiggles;this.until=ctx.time+ctx.rng.range(.2,.6);
   }
   step(body:StyleBody,ctx:StyleContext,world:StyleWorld){
@@ -95,10 +105,11 @@ export class BotMovementController {
     const s=this.style,lat=this.axis(ctx.face),t=ctx.time;
     const lateral=(body.position.x-this.origin.x)*lat.x+(body.position.z-this.origin.z)*lat.z;
     // Phase changes use only what the bot perceives (seen / known), never a hidden player position.
-    if(ctx.seen){this.lostAt=-1;if(this.phase!=='fight'){this.phase='fight';this.moving=false;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);this.jiggle=false;}}
+    // A bot falling back behind cover finishes the move before it fights again.
+    if(ctx.seen&&!(this.phase==='return'&&s.pattern==='decisive')){this.lostAt=-1;if(this.phase!=='fight'){this.phase='fight';this.moving=false;this.step2='tap';this.lastHit=null;this.readySeen=false;this.tapStarted=t;this.segmentEnds=t+ctx.rng.range(s.stop[0],s.stop[1]);this.jiggle=false;}}
     else if(this.phase==='fight'){if(this.lostAt<0)this.lostAt=t;if(t-this.lostAt>.8){this.phase='return';this.lostAt=-1;}}
     let wishLateral=0,wishForward=0;
-    const home=this.cover*.9,toHome=Math.abs(lateral-home)>.06?Math.sign(home-lateral):0,outward=this.cover?-this.cover:this.dir;
+    const home=this.cover*this.coverDistance,toHome=Math.abs(lateral-home)>.06?Math.sign(home-lateral):0,outward=this.cover?-this.cover:this.dir;
     if(this.phase==='hide'){
       wishLateral=toHome;
       if(t>=this.until&&!toHome){this.phase='peek';this.moving=true;this.dir=outward;
@@ -106,22 +117,29 @@ export class BotMovementController {
     }else if(this.phase==='peek'){
       if(this.moving){wishLateral=this.dir;if(t>=this.segmentEnds||Math.abs(lateral-home)>=s.peek){this.moving=false;this.segmentEnds=t+(this.jiggle?s.stop[0]*.5:ctx.rng.range(s.stop[0],s.stop[1])+.4);}}
       else if(t>=this.segmentEnds){this.phase='return';}
-    }else if(this.phase==='fight'&&s.pattern==='deadzoneTap'){
-      // Never settle: reverse through zero speed (the tap falls in the deadzone on the way through),
-      // or now and then brake to the deadzone, tap and carry on the same way.
-      const speed=Math.hypot(body.velocity.x,body.velocity.z),dz=ctx.deadzone??.275*ctx.runSpeed,pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash;
-      if(this.sameWayBrake){
-        wishLateral=0;if(speed<=dz){if(this.slowSince<0)this.slowSince=t;}else this.slowSince=-1;
-        if(this.tapShot||this.slowSince>=0&&t-this.slowSince>=TAP_SETTLE_SECONDS||t>=this.segmentEnds){this.sameWayBrake=false;this.tapShot=false;this.slowSince=-1;this.segmentStart=t;this.segmentEnds=t+this.rhythm(ctx);}
-      }else{
-        wishLateral=this.dir;
-        if(t>=this.segmentEnds||pastLeash){
-          this.stopCount++;this.tapShot=false;
-          if(!pastLeash&&ctx.rng.next()<(s.sameWay??0)){this.sameWayBrake=true;this.slowSince=-1;this.segmentEnds=t+TAP_MAX_SECONDS;wishLateral=0;}
-          else{this.dir=pastLeash?-Math.sign(lateral)||-this.dir:-this.dir;this.segmentStart=t;this.segmentEnds=t+this.rhythm(ctx);wishLateral=this.dir;}
-        }
+    }else if(this.phase==='fight'&&s.pattern==='decisive'){
+      // After each shot the bot decides from the result: keep shooting a held line, cut the
+      // sight line behind nearby cover, or move once the same way and shoot again. It never
+      // reverses again before the next shot (analysis of canezerra's recorded fights).
+      const speed=Math.hypot(body.velocity.x,body.velocity.z),dz=ctx.deadzone??.275*ctx.runSpeed;
+      const decide=()=>{const hit=this.lastHit;this.lastHit=null;this.tapShot=false;this.slowSince=-1;
+        if(hit){this.step2='follow';this.moving=false;this.segmentEnds=t+ctx.rng.range(s.follow![0],s.follow![1]);}
+        else if(this.cover&&Math.abs(lateral-this.cover*this.coverDistance)<2.6){this.phase='return';this.step2='peek';this.moving=false;}
+        else{this.step2='shift';this.moving=true;const pastLeash=Math.abs(lateral)>=s.leash*.8;if(pastLeash)this.dir=-Math.sign(lateral)||-this.dir;this.segmentStart=t;this.segmentEnds=t+ctx.rng.range(s.wide!.strafe[0],s.wide!.strafe[1]);}};
+      if(this.step2==='peek'||this.step2==='shift'){
+        if(this.moving){wishLateral=this.dir;const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash;
+          if(t>=this.segmentEnds||pastLeash){this.moving=false;this.step2='tap';this.stopCount++;this.tapShot=false;this.lastHit=null;this.slowSince=-1;this.readySeen=false;this.tapStarted=t;this.segmentEnds=t+TAP_MAX_SECONDS;}}
+        else{this.moving=true;this.segmentStart=t;this.segmentEnds=t+ctx.rng.range(s.strafe[0],s.strafe[1]);if(this.step2==='peek'&&this.cover)this.dir=-this.cover;}
+      }else if(this.step2==='tap'){
+        // Hold the line until the shot is ready (the aim is still settling); a ready bot that
+        // could not get its tap off treats it as a miss.
+        if(speed<=dz){if(this.slowSince<0)this.slowSince=t;}else this.slowSince=-1;if(ctx.wantsShot&&!this.readySeen){this.readySeen=true;this.readyAt=t;}
+        if(this.lastHit!==null)decide();
+        else if(this.readySeen&&t-this.readyAt>=READY_GRACE_SECONDS&&(t>=this.segmentEnds||this.slowSince>=0&&t-this.slowSince>=TAP_SETTLE_SECONDS*2)||t-this.tapStarted>=HOLD_MAX_SECONDS){this.lastHit=false;decide();}
+      }else{ // follow: stay stopped and keep shooting while it hits
+        if(this.lastHit===false)decide();
+        else if(t>=this.segmentEnds){this.lastHit=null;this.segmentEnds=t+ctx.rng.range(s.follow![0],s.follow![1]);}
       }
-      this.moving=!this.sameWayBrake;
     }else if(this.phase==='fight'){
       if(this.moving){wishLateral=this.dir;
         const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash,minimum=t>=this.segmentStart+Math.max(.12,s.strafe[0]);
@@ -175,8 +193,6 @@ export class BotMovementController {
     if(ny!==null&&world.standing({x:nx,y:ny,z:nz})){body.position.set(nx,ny,nz);}
     else{body.velocity.set(0,0,0);if(this.moving){this.moving=false;this.segmentEnds=t+s.stop[0];}this.dir=-this.dir;}
   }
-  /** deadzoneTap rhythm: short, then long, then short...; a long strafe never follows a long one. */
-  private rhythm(ctx:StyleContext){const s=this.style,long=this.longNext&&!!s.wide;this.longNext=!long&&ctx.rng.next()<.55;const r=long?s.wide!.strafe:s.strafe;return ctx.rng.range(r[0],r[1]);}
   /** Inside the accuracy rules this bot may shoot: stopped to the deadzone, or crouch-moving. */
   canShoot(speed:number,crouch:number,deadzone:number,runSpeed:number){return speed<=deadzone+1e-6||crouch>.5&&speed<=runSpeed*BOT_KINEMATICS.crouchSpeed+.05;}
 }

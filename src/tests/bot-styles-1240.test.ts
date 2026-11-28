@@ -67,13 +67,24 @@ describe('12.40 bot movement styles',()=>{
   for(let i=0;i<120*8&&!g.ai.death;i++)g.s.step(DT,emptyInput());
   expect(tapShots).toBeGreaterThan(0);expect(tapSpeed).toBeGreaterThan(.3);expect(tapSpeed).toBeLessThanOrEqual(VALORANT_REFERENCE.deadzone*5.4+1e-6);
  });
- it('12.42 Canezerra style: never settles, taps once as it passes through the deadzone on each direction change',()=>{
-  const r=results.canezerra;expect(r.stop).toBeLessThan(.17);expect(r.lateralRange).toBeGreaterThan(3);expect(r.flipsPerSecond).toBeGreaterThan(1.5);expect(r.crouchMoving+r.crouchStill).toBe(0);
-  const g=arena('canezerra',{combatMode:'gunfight',defenderSkill:'beginner'});const speeds:number[]=[];
-  g.ai.onShot=()=>{expect(g.m.burstGoal).toBe(1);speeds.push(Math.hypot(g.bot.velocity.x,g.bot.velocity.z));};
-  for(let i=0;i<120*8&&!g.ai.death;i++)g.s.step(DT,emptyInput());
-  expect(speeds.length).toBeGreaterThan(1);for(const v of speeds)expect(v).toBeLessThanOrEqual(VALORANT_REFERENCE.deadzone*5.4+1e-6);
-  expect(speeds.some(v=>v>.3)).toBe(true);
+ it('12.43 Canezerra style decides after each shot: keep shooting on a hit, shift once or fall back to cover on a miss',()=>{
+  const r=results.canezerra;expect(r.crouchMoving+r.crouchStill).toBe(0);
+  type State={phase:string;step2:string;moving:boolean;coverSide:number};
+  // Open ground, a strafing player: hits hold position, misses shift one way, no shot while moving.
+  const g=arena('canezerra',{combatMode:'gunfight',defenderSkill:'beginner'}),lx=-g.m.holdingFace.z,lz=g.m.holdingFace.x;let hits=0,misses=0,shiftFlips=0,lastShiftSign=0;
+  g.ai.onShot=e=>{const c=g.m.style as unknown as State;expect(c.moving).toBe(false);if(e.hit==='miss')misses++;else hits++;};
+  for(let i=0;i<120*8&&!g.ai.death;i++){g.s.step(DT,{...emptyInput(),strafe:Math.floor(i/40)%2?1:-1});const c=g.m.style as unknown as State;
+   if(c.phase==='fight'&&c.step2==='follow')expect(Math.hypot(g.bot.velocity.x,g.bot.velocity.z)).toBeLessThan(1.5);
+   if(c.phase==='fight'&&c.step2==='shift'&&c.moving){const v=g.bot.velocity.x*lx+g.bot.velocity.z*lz;if(Math.abs(v)>1){const sg=Math.sign(v);if(lastShiftSign&&sg!==lastShiftSign)shiftFlips++;lastShiftSign=sg;}}else lastShiftSign=0;}
+  expect(hits).toBeGreaterThan(0);expect(misses).toBeGreaterThan(0);expect(shiftFlips).toBe(0);
+  // Next to cover (garage, bot 1): a miss sends it fully behind cover before it fights again.
+  const s=new Simulation('free','rifleA',{...structuredClone(DEFAULT_SETTINGS),practiceMap:'garage' as never,combatMode:'gunfight',botMovement:'canezerra',seed:3,defenderSkill:'beginner'});s.running=true;
+  for(const t of s.targets)if(t.id!==1)t.enabled=false;const bot=s.targets[1],m=s.defenders!.memories[1];
+  for(const d of [12,10,14,8]){const p={x:bot.anchor.x+m.holdingFace.x*d,y:bot.anchor.y,z:bot.anchor.z+m.holdingFace.z*d};if(standingSpace(s.obstacles,p,.3)&&visibleBetween(s.obstacles,{x:p.x,y:p.y+1.6,z:p.z},{x:bot.anchor.x,y:bot.anchor.y+1.5,z:bot.anchor.z})){s.movement.position.set(p.x,p.y,p.z);s.movement.previous.set(p.x,p.y,p.z);break;}}
+  let returns=0,reachedHide=0,prev='';
+  for(let i=0;i<120*8&&!s.defenders!.death;i++){s.step(DT,{...emptyInput(),strafe:Math.floor(i/40)%2?1:-1});const c=m.style as unknown as State;expect(c.coverSide).not.toBe(0);
+   if(c.phase!==prev){if(c.phase==='return')returns++;if(prev==='return'){expect(c.phase).toBe('hide');reachedHide++;}prev=c.phase;}}
+  expect(returns).toBeGreaterThan(0);expect(reachedHide).toBeGreaterThan(0);
  });
  it('only shoots accurately: stopped below the deadzone, or crouch-walking',()=>{
   for(const id of BOT_MOVEMENT_STYLE_IDS){

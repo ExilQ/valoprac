@@ -247,7 +247,7 @@ export class DefenderAI {
   }
   // Operator only fires when its real scope transition is complete. Cadence,
   // bolt state, magazine and reload restrictions are still enforced by Weapon.
-  if(gun.ammo===0)admit=false;
+  if(gun.ammo===0||m.style?.holdFire)admit=false;
   if(m.weapon==='operator'&&(!gun.ads||gun.scopeAmount<.985||time<gun.scopeReadyAt))admit=false;
   const residual=Math.hypot(gun.recoil.pitch+m.motor.compensationPitch*180/Math.PI,gun.recoil.yaw+m.motor.compensationYaw*180/Math.PI);
   if(admit&&gun.profile.fireMode==='auto'&&(residual>(distance>18?2.2:6)||m.consecutiveMisses>=4&&distance>12)){m.burstRemaining=0;m.pauseUntil=time+gun.profile.resetTime+.06;m.consecutiveMisses=0;admit=false;}
@@ -256,7 +256,7 @@ export class DefenderAI {
    input.fire=true;input.firePresses=gun.profile.fireMode==='auto'?0:1;m.state='firing';
   }
   const epoch=this.epoch;
-  gun.step(time,dt,input,()=>{if(epoch!==this.epoch||m.generation!==t.generation||this.death)return;m.style?.shotFired();this.fire(t,m,p,time,information,yaw,pitch);});
+  gun.step(time,dt,input,()=>{if(epoch!==this.epoch||m.generation!==t.generation||this.death)return;m.style?.shotFired();this.fire(t,m,p,time,information,yaw,pitch);if(m.style&&m.lastShot)m.style.shotResult(m.lastShot.hit!=='miss');});
   if(epoch!==this.epoch)return;
   if(time+1e-9>=m.nextRecoilObservation){m.nextRecoilObservation=time+.04;m.recoilHistory.push({time,pitch:gun.recoil.pitch,yaw:gun.recoil.yaw});if(m.recoilHistory.length>40)m.recoilHistory.shift();}
  }

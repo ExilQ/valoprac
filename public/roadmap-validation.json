@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.42",
-  "patchLabel": "12.42",
-  "generatedAt": "2026-11-28T08:06:46.025Z",
+  "release": "12.0.43",
+  "patchLabel": "12.43",
+  "generatedAt": "2026-11-28T08:26:49.662Z",
   "tests": {
     "application": 1670,
     "broker": 28,
@@ -17287,7 +17287,7 @@
       "renderedFrames": 3600,
       "commands": 70801,
       "rawBytes": 907429,
-      "gzipBytes": 134555,
+      "gzipBytes": 134557,
       "verification": {
         "passed": true,
         "mismatches": [],
@@ -18213,7 +18213,7 @@
         "routeSamples": 141,
         "maxThreats": 1,
         "codeBytes": 753,
-        "replayGzipBytes": 3561
+        "replayGzipBytes": 3562
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18357,7 +18357,7 @@
         "routeSamples": 282,
         "maxThreats": 1,
         "codeBytes": 1434,
-        "replayGzipBytes": 5122
+        "replayGzipBytes": 5121
       },
       {
         "benchmark": "scenario-common-replay",
@@ -18389,7 +18389,7 @@
         "routeSamples": 291,
         "maxThreats": 1,
         "codeBytes": 834,
-        "replayGzipBytes": 6107
+        "replayGzipBytes": 6109
       },
       {
         "benchmark": "scenario-common-replay",

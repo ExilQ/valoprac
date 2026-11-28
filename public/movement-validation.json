@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "release": "12.0.42",
-  "patchLabel": "12.42",
-  "generatedAt": "2026-11-28T08:06:46.025Z",
+  "release": "12.0.43",
+  "patchLabel": "12.43",
+  "generatedAt": "2026-11-28T08:26:49.662Z",
   "calibration": "dual-movement-1.4.0-provisional",
   "historicalBrowserCaptureRelease": "9.0.0",
   "tests": {
