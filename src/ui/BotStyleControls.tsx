@@ -3,7 +3,7 @@ import {useApp} from '../app/store';
 import {BOT_MOVEMENT_STYLES,BOT_MOVEMENT_STYLE_IDS,type BotMovementChoice} from '../engine/tactical/botMovementStyles';
 import type {Settings} from '../engine/types';
 
-const PEEKS=['closeRush','wideSwing','jiggleCrouch','poppin'] as const,PROS=['something','primmie','flashback','texture','karon'] as const;
+const PEEKS=['closeRush','wideSwing','jiggleCrouch','poppin'] as const,PROS=['something','primmie','flashback','texture','karon','canezerra'] as const;
 /** 12.40: how defenders move and peek, and what they look like. */
 export function BotStyleControls(){
  const s=useApp(x=>x.settings),update=useApp(x=>x.updateSettings),choice=s.botMovement??'off';

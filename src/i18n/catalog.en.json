@@ -16070,6 +16070,16 @@
       "id": "msg_d7b5db1d1fbe",
       "source": "짧게 나와 브레이킹을 대충 걸고 한 발 쏜 뒤, 멈추지 않고 같은 방향으로 와이드를 긁고 다시 멈춰 쏩니다.",
       "en": "Peeks briefly, brakes only roughly for one tap, then swipes wide the same way without settling and stops to shoot again."
+    },
+    {
+      "id": "msg_ed7a2905d2b2",
+      "source": "케인제라 스타일 (방향 전환 데드존 원탭)",
+      "en": "Canezerra style (deadzone tap on direction change)"
+    },
+    {
+      "id": "msg_277a66a4d777",
+      "source": "멈추지 않고 빠르게 좌우로 흔들다가, 방향을 바꾸며 속도가 데드존 아래로 떨어지는 순간 한 발씩 쏩니다. 짧게·길게 리듬을 섞고 가끔 같은 방향으로 다시 나갑니다.",
+      "en": "Strafes fast without settling and taps once as its speed drops through the deadzone on each direction change, mixing short and long strafes and sometimes going the same way again."
     }
   ]
 }

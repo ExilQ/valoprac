@@ -7,7 +7,7 @@ import type {Vec3} from '../types';
  * training approximations, not motion capture, and not affiliated with anyone.
  * Sources and gaps: docs/BOT_MOVEMENT_12.40.md.
  */
-export const BOT_MOVEMENT_STYLE_IDS=['closeRush','wideSwing','jiggleCrouch','something','primmie','flashback','texture','karon','poppin'] as const;
+export const BOT_MOVEMENT_STYLE_IDS=['closeRush','wideSwing','jiggleCrouch','something','primmie','flashback','texture','karon','canezerra','poppin'] as const;
 export type BotMovementStyleId=typeof BOT_MOVEMENT_STYLE_IDS[number];
 export type BotMovementChoice='off'|'random'|BotMovementStyleId;
 type Range=readonly [number,number];
@@ -18,9 +18,11 @@ export interface BotMovementStyle {
   strafe:Range;stop:Range;
   /** adad: alternate direction; continuous: keep one direction to the leash end;
    * tapWide: short peek, rough brake for one tap, then a wide swipe the same way and a full stop. */
-  pattern:'adad'|'continuous'|'tapWide';
-  /** tapWide only: the wide swipe after the tap. */
+  pattern:'adad'|'continuous'|'tapWide'|'deadzoneTap';
+  /** tapWide: the wide swipe after the tap. deadzoneTap: the long strafes of the short/long rhythm. */
   wide?:{strafe:Range;stop:Range};
+  /** deadzoneTap: chance to re-move the same way (brake to the deadzone, tap, continue) instead of reversing. */
+  sameWay?:number;
   /** Lateral half-width of the fight around the held angle (m). */
   leash:number;
   /** Peek from cover: distance of the first swing (m); jiggles before it. */
@@ -40,6 +42,7 @@ export const BOT_MOVEMENT_STYLES:Readonly<Record<BotMovementStyleId,BotMovementS
   flashback:{id:'flashback',name:'플래시백 스타일 (앉아서 좌우 이동)',summary:'앉은 채 좌우로 움직이며 쏩니다.',strafe:[.3,.5],stop:[.1,.18],pattern:'adad',leash:1.5,peek:1.8,jiggles:0,crouch:'moving',crouchChance:1,hidden:[.4,1],advance:0,minDistance:0},
   texture:{id:'texture',name:'텍스처 스타일 (빠른 템포 선사격)',summary:'숨는 시간 없이 빠르게 튀어나와, 멈추자마자 예상 위치에 쏩니다.',strafe:[.22,.34],stop:[.08,.12],pattern:'adad',leash:2.4,peek:2.6,jiggles:0,crouch:'never',crouchChance:0,hidden:[.15,.35],advance:.3,minDistance:7},
   karon:{id:'karon',name:'카론 스타일 (브레이킹 때 앉기)',summary:'서서 움직이다 멈출 때 앉아서 헤드라인을 피하며 쏩니다.',strafe:[.22,.36],stop:[.22,.32],pattern:'adad',leash:2,peek:2,jiggles:0,crouch:'onStop',crouchChance:1,hidden:[.5,1.1],advance:0,minDistance:0},
+  canezerra:{id:'canezerra',name:'케인제라 스타일 (방향 전환 데드존 원탭)',summary:'멈추지 않고 빠르게 좌우로 흔들다가, 방향을 바꾸며 속도가 데드존 아래로 떨어지는 순간 한 발씩 쏩니다. 짧게·길게 리듬을 섞고 가끔 같은 방향으로 다시 나갑니다.',strafe:[.12,.2],stop:[.06,.09],pattern:'deadzoneTap',wide:{strafe:[.3,.42],stop:[.06,.09]},sameWay:.25,leash:2.4,peek:1.8,jiggles:0,crouch:'never',crouchChance:0,hidden:[.3,.7],advance:0,minDistance:0},
   poppin:{id:'poppin',name:'팝핀 스윙',summary:'한 방향으로 아주 넓게 계속 달리며, 짧게 멈춰 쏘고 다시 같은 방향으로 갑니다.',strafe:[.4,.55],stop:[.1,.14],pattern:'continuous',leash:4.2,peek:4.2,jiggles:0,crouch:'never',crouchChance:0,hidden:[.6,1.4],advance:0,minDistance:0},
 };
 /** VALORANT movement used by the bots: crouch 0.275 s, crouch speed 36%,
@@ -74,7 +77,9 @@ export class BotMovementController {
   /** Committed peeks so far (diagnostics and tests). */
   get stops(){return this.stopCount;}
   /** tapWide: true during the rough-brake tap window (one shot). */
-  get tapping(){return this.style.pattern==='tapWide'&&this.phase==='fight'&&this.tapStep===1&&!this.moving;}
+  get tapping(){return this.phase==='fight'&&(this.style.pattern==='deadzoneTap'||this.style.pattern==='tapWide'&&this.tapStep===1&&!this.moving);}
+  /** deadzoneTap state: the next strafe is long, and a same-way brake is in progress. */
+  private longNext=false;private sameWayBrake=false;
   constructor(readonly style:BotMovementStyle){}
   /** Signed lateral side with cover (−1/1), or 0 in the open. */
   get coverSide(){return this.cover;}
@@ -101,6 +106,22 @@ export class BotMovementController {
     }else if(this.phase==='peek'){
       if(this.moving){wishLateral=this.dir;if(t>=this.segmentEnds||Math.abs(lateral-home)>=s.peek){this.moving=false;this.segmentEnds=t+(this.jiggle?s.stop[0]*.5:ctx.rng.range(s.stop[0],s.stop[1])+.4);}}
       else if(t>=this.segmentEnds){this.phase='return';}
+    }else if(this.phase==='fight'&&s.pattern==='deadzoneTap'){
+      // Never settle: reverse through zero speed (the tap falls in the deadzone on the way through),
+      // or now and then brake to the deadzone, tap and carry on the same way.
+      const speed=Math.hypot(body.velocity.x,body.velocity.z),dz=ctx.deadzone??.275*ctx.runSpeed,pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash;
+      if(this.sameWayBrake){
+        wishLateral=0;if(speed<=dz){if(this.slowSince<0)this.slowSince=t;}else this.slowSince=-1;
+        if(this.tapShot||this.slowSince>=0&&t-this.slowSince>=TAP_SETTLE_SECONDS||t>=this.segmentEnds){this.sameWayBrake=false;this.tapShot=false;this.slowSince=-1;this.segmentStart=t;this.segmentEnds=t+this.rhythm(ctx);}
+      }else{
+        wishLateral=this.dir;
+        if(t>=this.segmentEnds||pastLeash){
+          this.stopCount++;this.tapShot=false;
+          if(!pastLeash&&ctx.rng.next()<(s.sameWay??0)){this.sameWayBrake=true;this.slowSince=-1;this.segmentEnds=t+TAP_MAX_SECONDS;wishLateral=0;}
+          else{this.dir=pastLeash?-Math.sign(lateral)||-this.dir:-this.dir;this.segmentStart=t;this.segmentEnds=t+this.rhythm(ctx);wishLateral=this.dir;}
+        }
+      }
+      this.moving=!this.sameWayBrake;
     }else if(this.phase==='fight'){
       if(this.moving){wishLateral=this.dir;
         const pastLeash=Math.sign(lateral)===this.dir&&Math.abs(lateral)>=s.leash,minimum=t>=this.segmentStart+Math.max(.12,s.strafe[0]);
@@ -154,6 +175,8 @@ export class BotMovementController {
     if(ny!==null&&world.standing({x:nx,y:ny,z:nz})){body.position.set(nx,ny,nz);}
     else{body.velocity.set(0,0,0);if(this.moving){this.moving=false;this.segmentEnds=t+s.stop[0];}this.dir=-this.dir;}
   }
+  /** deadzoneTap rhythm: short, then long, then short...; a long strafe never follows a long one. */
+  private rhythm(ctx:StyleContext){const s=this.style,long=this.longNext&&!!s.wide;this.longNext=!long&&ctx.rng.next()<.55;const r=long?s.wide!.strafe:s.strafe;return ctx.rng.range(r[0],r[1]);}
   /** Inside the accuracy rules this bot may shoot: stopped to the deadzone, or crouch-moving. */
   canShoot(speed:number,crouch:number,deadzone:number,runSpeed:number){return speed<=deadzone+1e-6||crouch>.5&&speed<=runSpeed*BOT_KINEMATICS.crouchSpeed+.05;}
 }

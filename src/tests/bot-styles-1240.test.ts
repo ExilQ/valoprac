@@ -67,6 +67,14 @@ describe('12.40 bot movement styles',()=>{
   for(let i=0;i<120*8&&!g.ai.death;i++)g.s.step(DT,emptyInput());
   expect(tapShots).toBeGreaterThan(0);expect(tapSpeed).toBeGreaterThan(.3);expect(tapSpeed).toBeLessThanOrEqual(VALORANT_REFERENCE.deadzone*5.4+1e-6);
  });
+ it('12.42 Canezerra style: never settles, taps once as it passes through the deadzone on each direction change',()=>{
+  const r=results.canezerra;expect(r.stop).toBeLessThan(.17);expect(r.lateralRange).toBeGreaterThan(3);expect(r.flipsPerSecond).toBeGreaterThan(1.5);expect(r.crouchMoving+r.crouchStill).toBe(0);
+  const g=arena('canezerra',{combatMode:'gunfight',defenderSkill:'beginner'});const speeds:number[]=[];
+  g.ai.onShot=()=>{expect(g.m.burstGoal).toBe(1);speeds.push(Math.hypot(g.bot.velocity.x,g.bot.velocity.z));};
+  for(let i=0;i<120*8&&!g.ai.death;i++)g.s.step(DT,emptyInput());
+  expect(speeds.length).toBeGreaterThan(1);for(const v of speeds)expect(v).toBeLessThanOrEqual(VALORANT_REFERENCE.deadzone*5.4+1e-6);
+  expect(speeds.some(v=>v>.3)).toBe(true);
+ });
  it('only shoots accurately: stopped below the deadzone, or crouch-walking',()=>{
   for(const id of BOT_MOVEMENT_STYLE_IDS){
    const {s,ai,bot}=arena(id,{combatMode:'gunfight'});let shots=0;const deadzone=VALORANT_REFERENCE.deadzone*5.4;
