@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "release": "12.0.37",
-  "patchLabel": "12.37",
-  "generatedAt": "2026-11-27T08:57:41.733Z",
+  "release": "12.0.38",
+  "patchLabel": "12.38",
+  "generatedAt": "2026-11-28T00:37:25.140Z",
   "captureRelease": "11.0.0",
   "capturePatchLabel": "11.00",
   "captureEvidenceDirectory": "docs/interface-11.00",
   "direction": "Precision Utility",
   "tests": {
-    "application": 1649,
+    "application": 1658,
     "broker": 28,
     "hosting": 36,
     "passed": true,

@@ -4,8 +4,9 @@ import {bandPower} from './helpers/spectrum';
 
 class ElementMock {
  disabled=false;isButton=true;
- closest(){return this.isButton?this:null;}
- matches(){return this.disabled;}
+ closest(selector:string){return this.isButton&&selector.includes('button')?this:null;}
+ matches(selector:string){return selector.includes(':disabled')?this.disabled:false;}
+ getAttribute(){return null;}
 }
 class NodeMock {
  gain={value:1};buffer:unknown;onended:(()=>void)|null=null;stopped=0;disconnected=false;

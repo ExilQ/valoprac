@@ -1,0 +1,25 @@
+.music-control{position:relative}
+.music-button{display:inline-flex;align-items:center;gap:7px;min-height:32px;max-width:190px;padding:0 10px;border:1px solid var(--control-border,var(--line));border-radius:6px;background:transparent;color:var(--muted);font:inherit;font-size:11px;letter-spacing:.02em;cursor:pointer}
+.music-button:hover,.music-button[aria-expanded="true"]{color:var(--ink);background:var(--surface-raised,var(--surface))}
+.music-button-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.music-playing{display:inline-flex;align-items:flex-end;gap:2px;height:11px;flex:none}
+.music-playing i{display:block;width:2px;background:var(--accent);animation:music-bar 1s ease-in-out infinite}
+.music-playing i:nth-child(2){animation-delay:-.35s}.music-playing i:nth-child(3){animation-delay:-.7s}
+@keyframes music-bar{0%,100%{height:3px}50%{height:11px}}
+@media(prefers-reduced-motion:reduce){.music-playing i{animation:none;height:7px}}
+.music-panel{position:absolute;right:0;top:calc(100% + 8px);z-index:40;width:min(340px,calc(100vw - 32px));max-height:min(78vh,620px);overflow:auto;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);box-shadow:0 18px 40px #0006;letter-spacing:normal;text-transform:none}
+.music-panel h2{margin:0 0 10px;font-size:14px;color:var(--ink)}
+.music-options fieldset{margin:0;padding:0;border:0;display:grid;gap:4px}
+.music-options legend{font-size:11px;color:var(--muted);margin-bottom:6px}
+.music-option{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:8px 10px;border:1px solid transparent;border-radius:6px;cursor:pointer}
+.music-option:hover{background:var(--surface-raised,transparent)}
+.music-option.selected{border-color:var(--accent);background:var(--accent-soft,transparent)}
+.music-option input{accent-color:var(--accent);margin:0}
+.music-option-text{display:grid;gap:2px;min-width:0}
+.music-option-text strong{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--ink)}
+.music-option-text small{font-size:10px;color:var(--muted)}
+.music-options .music-volume{margin-top:12px}
+.music-options .music-volume input{width:100%}
+.music-options .toggle-field{margin-top:8px}
+.music-options .field-note{margin:10px 0 0;font-size:10px;line-height:1.6;color:var(--muted)}
+@media(max-width:700px){.music-button-label{display:none}.music-button{padding:0 8px}.music-panel{position:fixed;left:16px;right:16px;top:auto;bottom:16px;width:auto;max-height:72vh}}

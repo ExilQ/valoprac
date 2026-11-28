@@ -14,6 +14,8 @@ import {Brand} from '../components/Brand';
 import {MainMenu} from '../ui/MainMenu';
 import {GameStage} from '../components/LazyGameStage';
 import {useInterfaceAudio} from '../ui/useInterfaceAudio';
+import {useMenuMusic} from '../ui/music/useMenuMusic';
+import {MusicControl} from '../ui/music/MusicControl';
 import '../ui/homeUtility.css';
 import '../ui/modernWeb.css';
 const SettingsPanel=lazy(()=>import('../ui/SettingsPanel').then(m=>({default:m.SettingsPanel})));
@@ -35,7 +37,7 @@ const PRIMARY_NAVIGATION=[
 const SECTION_TITLES={training:'훈련',maps:'맵',weapons:'무기',aim:'정밀 감도 연구실',history:'훈련 기록',settings:'설정',tools:'훈련 도구와 시나리오',stream:'렌더링 환경'} as const;
 
 export function App(){
- const locale=useLocale();useNavigation();useInterfaceAudio();
+ const locale=useLocale();useNavigation();useInterfaceAudio();useMenuMusic();
  const screen=useApp(s=>s.screen),tab=useApp(s=>s.activeTab),setTab=useApp(s=>s.setTab),refresh=useApp(s=>s.refreshHistory),notice=useApp(s=>s.notice);
  const content=useRef<HTMLElement>(null),previousView=useRef(`${screen}:${tab}`);
  useEffect(()=>{void refresh();},[refresh]);
@@ -50,7 +52,7 @@ export function App(){
    <nav aria-label="주 메뉴" className="utility-primary-nav">{PRIMARY_NAVIGATION.map(({id,label,Icon},index)=><a key={id} href={TAB_PATHS[id]} className={activeSection===id?'active':''} aria-current={activeSection===id?'page':undefined} onClick={event=>{if(shouldNavigateLocally(event)){event.preventDefault();setTab(id);}}}><Icon size={18} strokeWidth={1.6}/><span className="utility-nav-label">{label}</span><span className="utility-nav-index" aria-hidden="true">{String(index+1).padStart(2,'0')}</span></a>)}</nav>
    <div className="sidebar-bottom"><button className={`utility-tool-link ${tab==='tools'?'active':''}`} onClick={()=>setTab('tools')}><Wrench size={16}/><span>훈련 도구 · 시나리오</span><ArrowUpRight size={13}/></button><a href="/guide.html" target="_blank" rel="noreferrer">조작 방법과 검증 현황<ArrowUpRight size={13}/></a><p className="utility-local-note"><i aria-hidden="true"/>기록은 이 브라우저에 저장됩니다.</p></div>
   </aside>
-  <div className="main-shell"><header className="topbar utility-topbar"><span>{screen==='results'?'훈련 결과':SECTION_TITLES[tab]}</span><div><span className="local-badge"><i/>계정 없이 바로 훈련</span><LanguageSelect/><PatchNotes/></div></header>
+  <div className="main-shell"><header className="topbar utility-topbar"><span>{screen==='results'?'훈련 결과':SECTION_TITLES[tab]}</span><div><span className="local-badge"><i/>계정 없이 바로 훈련</span><MusicControl/><LanguageSelect/><PatchNotes/></div></header>
    <GraphicsNotice/>{notice&&screen!=='results'&&<div className="global-notice" role="status">{notice}</div>}
    <main id="app-content" className="utility-content" tabIndex={-1} ref={content}><Suspense fallback={<p className="utility-loading" role="status">화면을 준비합니다…</p>}>{screen==='results'?<Results/>:tab==='training'?<MainMenu/>:tab==='maps'?<Suspense fallback={<p className="utility-loading" role="status">맵을 준비합니다…</p>}><MapLibrary/></Suspense>:tab==='tools'?<Suspense fallback={<p className="utility-loading" role="status">훈련 도구를 준비합니다…</p>}><TrainingPlatform/></Suspense>:tab==='settings'?<SettingsPanel/>:tab==='weapons'?<WeaponSelection/>:tab==='stream'?<Suspense fallback={<p className="utility-loading" role="status">연결 화면을 준비하고 있습니다…</p>}><StreamingStage/></Suspense>:tab==='aim'?<Suspense fallback={<p className="utility-loading" role="status">감도 연구실을 준비합니다…</p>}><AimDashboard/></Suspense>:<History/>}</Suspense></main>
    <LegalNotice/>

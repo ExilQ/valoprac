@@ -53,13 +53,17 @@ function state(value:unknown,depth=0,parents=new Set<object>(),legacy=false):unk
 /** Version-pinned internal state is intentionally richer than the result card:
  * RNG streams, movement timers, all guns, target generations and defender memory
  * are covered. Render-only THREE objects and wall-clock UUIDs are excluded. */
+/** Menu music (12.38) never affects the simulation, so it stays out of the
+ * checksum: the same session hashes the same whatever track was playing. */
+const PRESENTATION_ONLY=['musicTrack','musicVolume','musicInTraining'] as const;
+function withoutPresentation(settings:Simulation['settings']){const copy:Record<string,unknown>={...settings};for(const k of PRESENTATION_ONLY)delete copy[k];return copy as unknown as Simulation['settings'];}
 export function deterministicState(s:Simulation){
  const raw=s as unknown as Record<string,unknown>,frame=s.renderedTargets.latest;
  const legacy=s.rules===LEGACY_SIMULATION_RULES,serialize=(v:unknown)=>state(v,0,new Set<object>(),legacy),profile={...s.movement.profile};
  if(legacy)delete profile.stepMinLandingWidth;
  const result={...(!legacy?{simulationRules:s.rules,materialPhysicsVersion:SURFACE_CALIBRATION_VERSION}:{}),
   ...(s.characterGeometry!==LEGACY_CHARACTER_GEOMETRY?{characterGeometryVersion:s.characterGeometry}:{}),ticks:s.ticks,time:s.time,mode:s.mode,map:s.practiceMap,weapon:s.weaponId,running:s.running,completed:s.completed,life:s.lifeGeneration,
-  aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:s.settings,
+  aim:[s.yaw,s.pitch,s.ads,s.adsAmount,s.previousAdsAmount,s.adsChangedAt],settings:withoutPresentation(s.settings),
   movement:serialize(s.movement),movementProfile:profile,braking:serialize(s.braking),guns:serialize(firearms(s.weapons)),targets:s.targets.map(t=>serialize(t)),
   rng:serialize(raw.rng),defenders:s.defenders?serialize(s.defenders):null,
   ...(s.drill?{drill:serialize(s.drill)}:{}),angles:serialize(s.angles),hearing:serialize(s.hearing),exposure:serialize(s.exposure),

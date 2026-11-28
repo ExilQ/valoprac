@@ -1,3 +1,4 @@
+import type {MusicChoice} from './audio/music/composition';
 export type Mode = 'precision' | 'braking' | 'spray' | 'tracking' | 'free';
 /** Firearms carried by the player and by defenders. */
 export type GunId = 'rifleA' | 'rifleB' | 'sheriff' | 'operator';
@@ -29,6 +30,8 @@ export interface Settings {
   stepPerMeter:number;stepWalkingGain:number;stepWalkingDecay:number;stepStationaryDecay:number;stepStationaryVelocity:number;stepStationaryDelay:number;stepAudibleVelocity:number;stepThreshold:number;stepGraceDistance:number;stepHearingRadius:number;
 
   frameLimit:number; hudScale:number; showHeadshotConfirmation:boolean; showControlHints:boolean; interfaceVolume:number;
+  /** Menu music (12.38): track, own volume, and whether it keeps playing in training. */
+  musicTrack:MusicChoice; musicVolume:number; musicInTraining:boolean;
   adsSensitivity:number;scopeSensitivity25:number;scopeSensitivity5:number;autoGraphics:boolean; adsMode:'hold'|'toggle'; bindings:Bindings;
   graphicsPreset:Quality; shadowQuality:Quality|'off'; textureQuality:Quality; postProcessing:boolean; ambientOcclusion:boolean; effectsQuality:Quality; premiumTheme:boolean;
   firingVolume:number; handlingVolume:number; feedbackVolume:number;

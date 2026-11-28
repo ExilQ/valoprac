@@ -15795,6 +15795,111 @@
       "id": "msg_0ad667873c71",
       "source": "착지 소리",
       "en": "Landing sound"
+    },
+    {
+      "id": "msg_a2e9be3eb70e",
+      "source": "야간 사격장",
+      "en": "Night Range"
+    },
+    {
+      "id": "msg_3ba098743fd5",
+      "source": "잔잔한 앰비언트",
+      "en": "Calm ambient"
+    },
+    {
+      "id": "msg_03a19c7d5be9",
+      "source": "네온 질주",
+      "en": "Neon Run"
+    },
+    {
+      "id": "msg_f361de6f5141",
+      "source": "신스웨이브",
+      "en": "Synthwave"
+    },
+    {
+      "id": "msg_1dde65f5074b",
+      "source": "로파이 집중",
+      "en": "Lo-fi Focus"
+    },
+    {
+      "id": "msg_ade2c52ef926",
+      "source": "로파이 비트",
+      "en": "Lo-fi beat"
+    },
+    {
+      "id": "msg_f04671b1a9a7",
+      "source": "압박",
+      "en": "Pressure"
+    },
+    {
+      "id": "msg_503d756f8f7c",
+      "source": "긴장감 있는 전자음",
+      "en": "Tense electronic"
+    },
+    {
+      "id": "msg_77f909dad2b2",
+      "source": "새벽 순찰",
+      "en": "Dawn Patrol"
+    },
+    {
+      "id": "msg_ccccca987b51",
+      "source": "밝은 하우스",
+      "en": "Bright house"
+    },
+    {
+      "id": "msg_dfc148209939",
+      "source": "음악 끔",
+      "en": "Music off"
+    },
+    {
+      "id": "msg_fdd19b650985",
+      "source": "무작위 재생",
+      "en": "Shuffle"
+    },
+    {
+      "id": "msg_0c73b0b91c12",
+      "source": "재생 중",
+      "en": "Playing"
+    },
+    {
+      "id": "msg_80645ef7f7f7",
+      "source": "곡 선택",
+      "en": "Track"
+    },
+    {
+      "id": "msg_61bedff41388",
+      "source": "곡마다 약 2~3분씩 이어서 재생",
+      "en": "Plays each track for about 2–3 minutes"
+    },
+    {
+      "id": "msg_a7e7042143c5",
+      "source": "메뉴 음악을 재생하지 않음",
+      "en": "No menu music"
+    },
+    {
+      "id": "msg_3e5182df44cf",
+      "source": "음악 음량",
+      "en": "Music volume"
+    },
+    {
+      "id": "msg_bbfd1300dc38",
+      "source": "훈련 중에도 재생 (발소리를 위해 작게)",
+      "en": "Keep playing in training (quieter, for footsteps)"
+    },
+    {
+      "id": "msg_27b924d67c45",
+      "source": "화면을 한 번 누르면 재생됩니다. ",
+      "en": "Click anywhere once to start the music. "
+    },
+    {
+      "id": "msg_beb8b27b20b1",
+      "source": "모든 곡은 VALOPRAC가 직접 만든 곡이며, 브라우저에서 실시간으로 연주됩니다. 전체 음량과 음악 음량을 곱한 크기로 재생됩니다.",
+      "en": "Every track is an original VALOPRAC composition, played live in the browser. It plays at overall volume × music volume."
+    },
+    {
+      "id": "msg_26ab5dcbdfb7",
+      "source": "메뉴 음악",
+      "en": "Menu music"
     }
   ]
 }

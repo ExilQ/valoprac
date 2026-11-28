@@ -1,4 +1,16 @@
 {
+  "12.38": {
+    "title": "Menu music and interface sounds",
+    "description": "Five original menu tracks, with track selection and a separate music volume. Interface sounds are now nine distinct sounds, following UI sound practice in other games.",
+    "changes": [
+      "Five menu tracks: Night Range (ambient), Neon Run (synthwave), Lo-fi Focus (lo-fi), Pressure (tense electronic) and Dawn Patrol (house). All composed for VALOPRAC and played live by the browser.",
+      "Choose a track, shuffle or off from the music button at the top or in Settings → Audio.",
+      "Music has its own volume; it plays at overall volume × music volume.",
+      "Music stops in training so footsteps stay clear. Turn on 'Keep playing in training' to keep it at 45% volume.",
+      "Nine interface sounds: hover, click, tab, back/close, on/off, slider, start training and disabled button, all tuned to the music's key (A and E).",
+      "Added a report comparing VALOPRAC with VALORANT, CS2, Aim Lab and KovaaK's."
+    ]
+  },
   "12.37": {
     "title": "Crouch speed and the braking system",
     "description": "Crouching now takes 0.275 s, as measured in VALORANT replays, and slowing down to a walk, aim or crouch speed brakes like releasing the keys. Tap braking, crouch braking and deadzone movement were measured and checked.",
